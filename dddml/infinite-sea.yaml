@@ -1,0 +1,250 @@
+aggregates:
+  Player:
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      NO_MOVE_EVENT_MODULE: true
+    id:
+      name: PlayerId
+      type: address
+      generator:
+        class: signer
+        tableName: PlayerTable
+    properties:
+      #Nickname:
+      #  type: AsciiString
+      #  length: 50
+      #Intro:
+      #  type: String
+      #  length: 350
+
+  FarmingItemProduction:
+    module: "Farming"
+    id:
+      name: ItemId
+      type: u32
+      generator:
+        class: assigned
+        tableName: FarmingItemProductionTable
+    properties:
+      ItemProduction:
+        type: ItemProduction
+
+  MiningProcess:
+    module: "Mining"
+    implements:
+      - SkillProcess
+    id:
+      name: PlayerId
+      type: address
+      generator:
+        class: signer
+        tableName: MiningProcessTable
+
+  MiningItemCreation:
+    module: "Mining"
+    id:
+      name: ItemId
+      type: u32
+      generator:
+        class: assigned
+        tableName: MiningItemCreationTable
+    properties:
+      ItemCreation:
+        type: ItemCreation
+
+  SmithingProcess:
+    module: "Smithing"
+    implements:
+      - SkillProcess
+    id:
+      name: PlayerId
+      type: address
+      generator:
+        class: signer
+        tableName: SmithingProcessTable
+
+  SmithingItemProduction:
+    module: "Smithing"
+    id:
+      name: ItemId
+      type: u32
+      generator:
+        class: assigned
+        tableName: SmithingItemProductionTable
+    properties:
+      ItemProduction:
+        type: ItemProduction
+
+  SkillProcessMutex:
+    module: "Common"
+    id:
+      name: PlayerId
+      type: address
+      generator:
+        class: assigned
+        tableName: PlayerTable
+    properties:
+      ActiveSkillType:
+        type: SkillType
+        optional: true
+
+  Item:
+    module: "Common"
+    id:
+      name: ItemId
+      type: u32
+      generator:
+        class: assigned
+        tableName: ItemTable
+    properties:
+      Name:
+        type: AsciiString
+        length: 100
+      #Type:
+      #  type: ItemType
+      RequiredForCompletion:
+        type: bool
+      SellsFor:
+        type: u32
+
+
+valueObjects:
+  ExperienceTableItem:
+    module: "Common"
+    properties:
+      Level:
+        type: u16
+      Experience:
+        type: u32
+      Difference:
+        type: u32
+
+  ItemCreation:
+    module: "Common"
+    properties:
+      #RequirementsSkill:
+      #  type: SkillType
+      RequirementsLevel:
+        type: u16
+      BaseQuantity:
+        type: u32
+      BaseExperience:
+        type: u32
+      BaseCreationTime:
+        type: u64
+      EnergyCost:
+        type: u32
+
+  ItemProduction:
+    module: "Common"
+    properties:
+      RequirementsLevel:
+        type: u16
+      Materials:
+        itemType: ProductionMaterial
+        isList: true
+      BaseQuantity:
+        type: u32
+      BaseExperience:
+        type: u32
+      BaseCreationTime:
+        type: u64
+      EnergyCost:
+        type: u32
+      SuccessRate: #(percentage)
+        type: u16
+
+  ProductionMaterial:
+    module: "Common"
+    properties:
+      ItemId:
+        type: u32
+      Quantity:
+        type: u32
+        #1  Copper Ore
+        #1  Tin Ore
+
+
+enumObjects:
+  IslandResourceType:
+    module: "Common"
+    baseType: u8
+    values:
+      Seed:
+        value: 0
+      Wood:
+        value: 1
+      Fish:
+        value: 2
+      Mineral:
+        value: 3
+  SkillType:
+    module: "Common"
+    baseType: u8
+    values:
+      Farming:
+        value: 0
+      Woodcutting:
+        value: 1
+      Fishing:
+        value: 2
+      Mining:
+        value: 3
+      Smithing:
+        value: 4
+      Cooking:
+        value: 5
+      Crafting:
+        value: 6
+      Township:
+        value: 7
+      #Thieving:
+      #  value: xxx
+
+#  ItemType:
+#    module: "Common"
+#    baseType: u8
+#    values:
+#      Logs:
+#        value: 0
+
+
+singletonObjects:
+  ExperienceTable:
+    module: "Common"
+    properties:
+      Items:
+        itemType: ExperienceTableItem
+    methods:
+      "__Init__":
+        event:
+          isObjectShared: true # Share the object after initialization.
+
+
+superObjects:
+  SkillProcess:
+    properties:
+      ItemId:
+        type: u32
+      StartTime:
+        type: u64
+      EndTime:
+        type: u64
+
+
+configuration:
+  metadata:
+    NO_MOVE_EVENT_MODULE: true
+
+  defaultModule:
+    name: "Sui.InfiniteSea"
+    requiredModules: [ "Common"]
+  submodules:
+    Farming:
+      requiredModules: [ "Common" ]
+    Mining:
+      requiredModules: [ "Common" ]
+    Smithing:
+      requiredModules: [ "Common" ]
+    Common:
+      requiredModules: [ "Common" ]
