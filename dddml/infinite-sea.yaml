@@ -1,21 +1,14 @@
 aggregates:
-  Player:
-    metadata:
-      Preprocessors: ["MOVE_CRUD_IT"]
-      NO_MOVE_EVENT_MODULE: true
+  FarmingProcess:
+    module: "Farming"
+    implements:
+      - SkillProcess
     id:
       name: PlayerId
       type: address
       generator:
         class: signer
-        tableName: PlayerTable
-    properties:
-      #Nickname:
-      #  type: AsciiString
-      #  length: 50
-      #Intro:
-      #  type: String
-      #  length: 350
+        tableName: FarmingProcessTable
 
   FarmingItemProduction:
     module: "Farming"
@@ -75,6 +68,29 @@ aggregates:
       ItemProduction:
         type: ItemProduction
 
+  Player:
+    module: "Player"
+    metadata:
+      #Preprocessors: ["MOVE_CRUD_IT"]
+      NO_MOVE_EVENT_MODULE: true
+    id:
+      name: PlayerId
+      type: address
+      generator:
+        class: signer
+        tableName: PlayerTable
+    properties:
+      #Nickname:
+      #  type: AsciiString
+      #  length: 50
+      Level:
+        type: u16
+      Experience:
+        type: u32
+      #Intro:
+      #  type: String
+      #  length: 350
+
   SkillProcessMutex:
     module: "Common"
     id:
@@ -82,7 +98,7 @@ aggregates:
       type: address
       generator:
         class: assigned
-        tableName: PlayerTable
+        tableName: SkillProcessMutexTable
     properties:
       ActiveSkillType:
         type: SkillType
@@ -233,18 +249,21 @@ superObjects:
 
 
 configuration:
+  sequenceNumber: 1000
   metadata:
     NO_MOVE_EVENT_MODULE: true
 
   defaultModule:
     name: "Sui.InfiniteSea"
-    requiredModules: [ "Common"]
+    requiredModules: [ "Common", "Player" ]
   submodules:
     Farming:
-      requiredModules: [ "Common" ]
+      requiredModules: [ "Common", "Player"  ]
     Mining:
-      requiredModules: [ "Common" ]
+      requiredModules: [ "Common", "Player" ]
     Smithing:
-      requiredModules: [ "Common" ]
+      requiredModules: [ "Common", "Player" ]
+    Player:
+      requiredModules: [ ]
     Common:
-      requiredModules: [ "Common" ]
+      requiredModules: [ ]
