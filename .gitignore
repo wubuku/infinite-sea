@@ -1,2 +1,6 @@
 sui-contracts/infinite-sea-common/build
 sui-contracts/infinite-sea-farming/build
+sui-java-service
+sui-contracts/infinite-sea-mining/build
+sui-contracts/infinite-sea-player/build
+sui-contracts/infinite-sea-smithing/build
