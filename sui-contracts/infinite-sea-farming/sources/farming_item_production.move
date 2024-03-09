@@ -11,6 +11,7 @@ module infinite_sea_farming::farming_item_production {
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
+    friend infinite_sea_farming::farming_item_production_create_logic;
     friend infinite_sea_farming::farming_item_production_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -76,6 +77,39 @@ module infinite_sea_farming::farming_item_production {
             id: object::new(ctx),
             item_id,
             version: 0,
+            item_production,
+        }
+    }
+
+    struct FarmingItemProductionCreated has copy, drop {
+        id: option::Option<object::ID>,
+        item_id: u32,
+        item_production: ItemProduction,
+    }
+
+    public fun farming_item_production_created_id(farming_item_production_created: &FarmingItemProductionCreated): option::Option<object::ID> {
+        farming_item_production_created.id
+    }
+
+    public(friend) fun set_farming_item_production_created_id(farming_item_production_created: &mut FarmingItemProductionCreated, id: object::ID) {
+        farming_item_production_created.id = option::some(id);
+    }
+
+    public fun farming_item_production_created_item_id(farming_item_production_created: &FarmingItemProductionCreated): u32 {
+        farming_item_production_created.item_id
+    }
+
+    public fun farming_item_production_created_item_production(farming_item_production_created: &FarmingItemProductionCreated): ItemProduction {
+        farming_item_production_created.item_production
+    }
+
+    public(friend) fun new_farming_item_production_created(
+        item_id: u32,
+        item_production: ItemProduction,
+    ): FarmingItemProductionCreated {
+        FarmingItemProductionCreated {
+            id: option::none(),
+            item_id,
             item_production,
         }
     }
@@ -151,6 +185,11 @@ module infinite_sea_farming::farming_item_production {
             item_production: _item_production,
         } = farming_item_production;
         object::delete(id);
+    }
+
+    public(friend) fun emit_farming_item_production_created(farming_item_production_created: FarmingItemProductionCreated) {
+        assert!(std::option::is_some(&farming_item_production_created.id), EEmptyObjectID);
+        event::emit(farming_item_production_created);
     }
 
     #[test_only]

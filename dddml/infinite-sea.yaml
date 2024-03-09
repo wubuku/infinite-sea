@@ -12,6 +12,10 @@ aggregates:
 
   FarmingItemProduction:
     module: "Farming"
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
     id:
       name: ItemId
       type: u32
@@ -21,6 +25,10 @@ aggregates:
     properties:
       ItemProduction:
         type: ItemProduction
+    methods:
+      #Create:
+        #event:
+        #  name: FarmingItemProductionCreated
 
   MiningProcess:
     module: "Mining"
@@ -182,18 +190,6 @@ valueObjects:
 
 
 enumObjects:
-  IslandResourceType:
-    module: "Common"
-    baseType: u8
-    values:
-      Seed:
-        value: 0
-      Wood:
-        value: 1
-      Fish:
-        value: 2
-      Mineral:
-        value: 3
   SkillType:
     module: "Common"
     baseType: u8
@@ -216,6 +212,19 @@ enumObjects:
         value: 7
       #Thieving:
       #  value: xxx
+
+#  IslandResourceType:
+#    module: "Common"
+#    baseType: u8
+#    values:
+#      Seed:
+#        value: 0
+#      Wood:
+#        value: 1
+#      Fish:
+#        value: 2
+#      Mineral:
+#        value: 3
 
 #  ItemType:
 #    module: "Common"
