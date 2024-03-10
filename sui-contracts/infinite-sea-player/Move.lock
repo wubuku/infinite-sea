@@ -2,11 +2,12 @@
 
 [move]
 version = 0
-manifest_digest = "74DA93FE0D7C726F3A80911DCF28C929604BD31031FD26F8F966F89E9E947FDB"
-deps_digest = "F8BBB0CCB2491CA29A3DF03D6F92277A4F3574266507ACD77214D37ECA3F3082"
+manifest_digest = "61EFCC3379E034DB620DB2D1B7CBDB22CD17A5646EFD4A4CA3B5068AC79D7662"
+deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
 
 dependencies = [
   { name = "Sui" },
+  { name = "infinite_sea_common" },
 ]
 
 [[move.package]]
@@ -19,6 +20,14 @@ source = { git = "https://github.com/MystenLabs/sui.git", rev = "devnet", subdir
 
 dependencies = [
   { name = "MoveStdlib" },
+]
+
+[[move.package]]
+name = "infinite_sea_common"
+source = { local = "../infinite-sea-common" }
+
+dependencies = [
+  { name = "Sui" },
 ]
 
 [move.toolchain-version]

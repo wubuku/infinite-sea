@@ -11,7 +11,11 @@ module infinite_sea_player::player {
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
+
+    struct PLAYER has drop {}
+
     friend infinite_sea_player::player_create_logic;
+    friend infinite_sea_player::player_airdrop_logic;
     friend infinite_sea_player::player_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -30,7 +34,8 @@ module infinite_sea_player::player {
         id: object::ID,
     }
 
-    fun init(ctx: &mut TxContext) {
+    fun init(otw: PLAYER, ctx: &mut TxContext) {
+        sui::package::claim_and_keep(otw, ctx);
         let id_generator_table = PlayerTable {
             id: object::new(ctx),
             table: table::new(ctx),
@@ -163,6 +168,44 @@ module infinite_sea_player::player {
         }
     }
 
+    struct PlayerAirdropped has copy, drop {
+        id: object::ID,
+        player_id: address,
+        version: u64,
+        item_id: u32,
+        quantity: u64,
+    }
+
+    public fun player_airdropped_id(player_airdropped: &PlayerAirdropped): object::ID {
+        player_airdropped.id
+    }
+
+    public fun player_airdropped_player_id(player_airdropped: &PlayerAirdropped): address {
+        player_airdropped.player_id
+    }
+
+    public fun player_airdropped_item_id(player_airdropped: &PlayerAirdropped): u32 {
+        player_airdropped.item_id
+    }
+
+    public fun player_airdropped_quantity(player_airdropped: &PlayerAirdropped): u64 {
+        player_airdropped.quantity
+    }
+
+    public(friend) fun new_player_airdropped(
+        player: &Player,
+        item_id: u32,
+        quantity: u64,
+    ): PlayerAirdropped {
+        PlayerAirdropped {
+            id: id(player),
+            player_id: player_id(player),
+            version: version(player),
+            item_id,
+            quantity,
+        }
+    }
+
 
     public(friend) fun create_player(
         player_id: address,
@@ -213,17 +256,19 @@ module infinite_sea_player::player {
         transfer::share_object(player);
     }
 
+    #[lint_allow(freeze_wrapped)]
     public(friend) fun freeze_object(player: Player) {
         assert!(player.version == 0, EInappropriateVersion);
         transfer::freeze_object(player);
     }
 
+    #[lint_allow(freeze_wrapped)]
     public(friend) fun update_version_and_freeze_object(player: Player) {
         update_object_version(&mut player);
         transfer::freeze_object(player);
     }
 
-    fun update_object_version(player: &mut Player) {
+    public(friend) fun update_object_version(player: &mut Player) {
         player.version = player.version + 1;
         //assert!(player.version != 0, EInappropriateVersion);
     }
@@ -244,6 +289,10 @@ module infinite_sea_player::player {
     public(friend) fun emit_player_created(player_created: PlayerCreated) {
         assert!(std::option::is_some(&player_created.id), EEmptyObjectID);
         event::emit(player_created);
+    }
+
+    public(friend) fun emit_player_airdropped(player_airdropped: PlayerAirdropped) {
+        event::emit(player_airdropped);
     }
 
     #[test_only]

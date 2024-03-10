@@ -103,6 +103,6 @@ configuration:
     Smithing:
       requiredModules: [ "Common", "Player" ]
     Player:
-      requiredModules: [ ]
+      requiredModules: [ "Common" ]
     Common:
       requiredModules: [ ]

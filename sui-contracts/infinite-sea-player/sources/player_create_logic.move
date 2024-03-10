@@ -1,3 +1,4 @@
+#[allow(unused_mut_parameter)]
 module infinite_sea_player::player_create_logic {
     use infinite_sea_player::player;
     use sui::tx_context::TxContext;
