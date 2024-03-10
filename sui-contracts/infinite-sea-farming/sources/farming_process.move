@@ -14,6 +14,7 @@ module infinite_sea_farming::farming_process {
     struct FARMING_PROCESS has drop {}
 
     friend infinite_sea_farming::farming_process_create_logic;
+    friend infinite_sea_farming::farming_process_start_logic;
     friend infinite_sea_farming::farming_process_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -129,6 +130,44 @@ module infinite_sea_farming::farming_process {
         }
     }
 
+    struct FarmingProcessStarted has copy, drop {
+        id: object::ID,
+        player_id: address,
+        version: u64,
+        item_id: u32,
+        energy_cost: u64,
+    }
+
+    public fun farming_process_started_id(farming_process_started: &FarmingProcessStarted): object::ID {
+        farming_process_started.id
+    }
+
+    public fun farming_process_started_player_id(farming_process_started: &FarmingProcessStarted): address {
+        farming_process_started.player_id
+    }
+
+    public fun farming_process_started_item_id(farming_process_started: &FarmingProcessStarted): u32 {
+        farming_process_started.item_id
+    }
+
+    public fun farming_process_started_energy_cost(farming_process_started: &FarmingProcessStarted): u64 {
+        farming_process_started.energy_cost
+    }
+
+    public(friend) fun new_farming_process_started(
+        farming_process: &FarmingProcess,
+        item_id: u32,
+        energy_cost: u64,
+    ): FarmingProcessStarted {
+        FarmingProcessStarted {
+            id: id(farming_process),
+            player_id: player_id(farming_process),
+            version: version(farming_process),
+            item_id,
+            energy_cost,
+        }
+    }
+
 
     public(friend) fun create_farming_process(
         player_id: address,
@@ -185,7 +224,7 @@ module infinite_sea_farming::farming_process {
         transfer::freeze_object(farming_process);
     }
 
-    fun update_object_version(farming_process: &mut FarmingProcess) {
+    public(friend) fun update_object_version(farming_process: &mut FarmingProcess) {
         farming_process.version = farming_process.version + 1;
         //assert!(farming_process.version != 0, EInappropriateVersion);
     }
@@ -205,6 +244,10 @@ module infinite_sea_farming::farming_process {
     public(friend) fun emit_farming_process_created(farming_process_created: FarmingProcessCreated) {
         assert!(std::option::is_some(&farming_process_created.id), EEmptyObjectID);
         event::emit(farming_process_created);
+    }
+
+    public(friend) fun emit_farming_process_started(farming_process_started: FarmingProcessStarted) {
+        event::emit(farming_process_started);
     }
 
 }

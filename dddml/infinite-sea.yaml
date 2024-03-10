@@ -19,6 +19,27 @@ aggregates:
       Create:
         event:
           isObjectShared: true # Share the object after created.
+      Start:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          FarmingItemProduction:
+            referenceType: FarmingItemProduction
+            eventPropertyName: ItemId
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+          #EnergyCoin: # todo Energy Coin
+          #  referenceType: Coin<ENERGY_COIN>
+          #  eventPropertyName: EnergyCost
+        event:
+          name: FarmingProcessStarted
+          properties:
+            EnergyCost:
+              type: u64
+
 
   FarmingItemProduction:
     module: "Farming"
