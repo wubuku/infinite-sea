@@ -1,0 +1,30 @@
+aggregates:
+  Player:
+    module: "Player"
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+      NO_MOVE_EVENT_MODULE: true
+    id:
+      name: PlayerId
+      type: address
+      generator:
+        class: signer
+        tableName: PlayerTable
+    properties:
+      #Nickname:
+      #  type: AsciiString
+      #  length: 50
+      Level:
+        type: u16
+      Experience:
+        type: u32
+      #Intro:
+      #  type: String
+      #  length: 350
+    methods:
+      Create:
+        event:
+          isObjectShared: true # Share the object after created.
+

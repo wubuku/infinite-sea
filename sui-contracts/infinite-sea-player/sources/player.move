@@ -10,6 +10,7 @@ module infinite_sea_player::player {
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
+    friend infinite_sea_player::player_create_logic;
     friend infinite_sea_player::player_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -90,6 +91,46 @@ module infinite_sea_player::player {
         }
     }
 
+    struct PlayerCreated has copy, drop {
+        id: option::Option<object::ID>,
+        player_id: address,
+        level: u16,
+        experience: u32,
+    }
+
+    public fun player_created_id(player_created: &PlayerCreated): option::Option<object::ID> {
+        player_created.id
+    }
+
+    public(friend) fun set_player_created_id(player_created: &mut PlayerCreated, id: object::ID) {
+        player_created.id = option::some(id);
+    }
+
+    public fun player_created_player_id(player_created: &PlayerCreated): address {
+        player_created.player_id
+    }
+
+    public fun player_created_level(player_created: &PlayerCreated): u16 {
+        player_created.level
+    }
+
+    public fun player_created_experience(player_created: &PlayerCreated): u32 {
+        player_created.experience
+    }
+
+    public(friend) fun new_player_created(
+        player_id: address,
+        level: u16,
+        experience: u32,
+    ): PlayerCreated {
+        PlayerCreated {
+            id: option::none(),
+            player_id,
+            level,
+            experience,
+        }
+    }
+
 
     public(friend) fun create_player(
         player_id: address,
@@ -164,6 +205,11 @@ module infinite_sea_player::player {
             experience: _experience,
         } = player;
         object::delete(id);
+    }
+
+    public(friend) fun emit_player_created(player_created: PlayerCreated) {
+        assert!(std::option::is_some(&player_created.id), EEmptyObjectID);
+        event::emit(player_created);
     }
 
     #[test_only]

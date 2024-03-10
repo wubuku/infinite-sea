@@ -5,6 +5,29 @@
 
 module infinite_sea_player::player_aggregate {
     use infinite_sea_player::player;
+    use infinite_sea_player::player_create_logic;
     use sui::tx_context;
+
+    public entry fun create(
+        level: u16,
+        experience: u32,
+        player_table: &mut player::PlayerTable,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let player_created = player_create_logic::verify(
+            level,
+            experience,
+            player_table,
+            ctx,
+        );
+        let player = player_create_logic::mutate(
+            &player_created,
+            player_table,
+            ctx,
+        );
+        player::set_player_created_id(&mut player_created, player::id(&player));
+        player::share_object(player);
+        player::emit_player_created(player_created);
+    }
 
 }
