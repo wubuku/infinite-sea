@@ -13,16 +13,28 @@ aggregates:
         class: signer
         tableName: PlayerTable
     properties:
-      #Nickname:
-      #  type: AsciiString
-      #  length: 50
       Level:
         type: u16
       Experience:
         type: u32
+      Items:
+        itemType: PlayerItem
+      #Nickname:
+      #  type: AsciiString
+      #  length: 50
       #Intro:
       #  type: String
       #  length: 350
+
+    entities:
+      PlayerItem:
+        id:
+          name: ItemId
+          type: u32
+        properties:
+          Quantity:
+            type: u64
+
     methods:
       Create:
         event:

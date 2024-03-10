@@ -103,6 +103,10 @@ module infinite_sea_common::item_production {
         item_production.materials
     }
 
+    public fun borrow_materials(item_production: &ItemProduction): &vector<ProductionMaterial> {
+        &item_production.materials
+    }
+
     public fun base_quantity(item_production: &ItemProduction): u32 {
         item_production.base_quantity
     }

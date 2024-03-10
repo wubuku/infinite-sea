@@ -41,6 +41,14 @@ module infinite_sea_common::experience_table {
         experience_table.version
     }
 
+    public fun borrow_items(experience_table: &ExperienceTable): &vector<ExperienceTableItem> {
+        &experience_table.items
+    }
+
+    public(friend) fun borrow_mut_items(experience_table: &mut ExperienceTable): &mut vector<ExperienceTableItem> {
+        &mut experience_table.items
+    }
+
     public fun items(experience_table: &ExperienceTable): vector<ExperienceTableItem> {
         experience_table.items
     }
