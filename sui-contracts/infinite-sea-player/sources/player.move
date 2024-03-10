@@ -295,10 +295,4 @@ module infinite_sea_player::player {
         event::emit(player_airdropped);
     }
 
-    #[test_only]
-    /// Wrapper of module initializer for testing
-    public fun test_init(ctx: &mut TxContext) {
-        init(ctx)
-    }
-
 }

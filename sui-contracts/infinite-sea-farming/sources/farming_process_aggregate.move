@@ -5,6 +5,25 @@
 
 module infinite_sea_farming::farming_process_aggregate {
     use infinite_sea_farming::farming_process;
+    use infinite_sea_farming::farming_process_create_logic;
     use sui::tx_context;
+
+    public entry fun create(
+        farming_process_table: &mut farming_process::FarmingProcessTable,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let farming_process_created = farming_process_create_logic::verify(
+            farming_process_table,
+            ctx,
+        );
+        let farming_process = farming_process_create_logic::mutate(
+            &farming_process_created,
+            farming_process_table,
+            ctx,
+        );
+        farming_process::set_farming_process_created_id(&mut farming_process_created, farming_process::id(&farming_process));
+        farming_process::share_object(farming_process);
+        farming_process::emit_farming_process_created(farming_process_created);
+    }
 
 }

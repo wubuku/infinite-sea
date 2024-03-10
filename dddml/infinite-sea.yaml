@@ -1,6 +1,12 @@
 aggregates:
   FarmingProcess:
     module: "Farming"
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+      NO_MOVE_EVENT_MODULE: true
+      ShouldIssuePublisherObject: true
     implements:
       - SkillProcess
     id:
@@ -9,6 +15,10 @@ aggregates:
       generator:
         class: signer
         tableName: FarmingProcessTable
+    methods:
+      Create:
+        event:
+          isObjectShared: true # Share the object after created.
 
   FarmingItemProduction:
     module: "Farming"
@@ -81,10 +91,16 @@ superObjects:
     properties:
       ItemId:
         type: u32
+        defaultLogic:
+          Move: "infinite_sea_common::item_id::unused_item()"
       StartTime:
         type: u64
+        defaultLogic:
+          Move: "0"
       EndTime:
         type: u64
+        defaultLogic:
+          Move: "0"
 
 
 configuration:

@@ -1,3 +1,4 @@
+#[allow(unused_mut_parameter)]
 module infinite_sea_farming::farming_item_production_create_logic {
     use infinite_sea_common::item_production::ItemProduction;
     use infinite_sea_farming::farming_item_production;

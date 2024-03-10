@@ -287,10 +287,4 @@ module infinite_sea_common::item {
         event::emit(item_updated);
     }
 
-    #[test_only]
-    /// Wrapper of module initializer for testing
-    public fun test_init(ctx: &mut TxContext) {
-        init(ctx)
-    }
-
 }

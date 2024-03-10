@@ -10,6 +10,10 @@ module infinite_sea_farming::farming_process {
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
+
+    struct FARMING_PROCESS has drop {}
+
+    friend infinite_sea_farming::farming_process_create_logic;
     friend infinite_sea_farming::farming_process_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -27,7 +31,8 @@ module infinite_sea_farming::farming_process {
         id: object::ID,
     }
 
-    fun init(ctx: &mut TxContext) {
+    fun init(otw: FARMING_PROCESS, ctx: &mut TxContext) {
+        sui::package::claim_and_keep(otw, ctx);
         let id_generator_table = FarmingProcessTable {
             id: object::new(ctx),
             table: table::new(ctx),
@@ -86,35 +91,52 @@ module infinite_sea_farming::farming_process {
 
     fun new_farming_process(
         player_id: address,
-        item_id: u32,
-        start_time: u64,
-        end_time: u64,
         ctx: &mut TxContext,
     ): FarmingProcess {
         FarmingProcess {
             id: object::new(ctx),
             player_id,
             version: 0,
-            item_id,
-            start_time,
-            end_time,
+            item_id: infinite_sea_common::item_id::unused_item(),
+            start_time: 0,
+            end_time: 0,
+        }
+    }
+
+    struct FarmingProcessCreated has copy, drop {
+        id: option::Option<object::ID>,
+        player_id: address,
+    }
+
+    public fun farming_process_created_id(farming_process_created: &FarmingProcessCreated): option::Option<object::ID> {
+        farming_process_created.id
+    }
+
+    public(friend) fun set_farming_process_created_id(farming_process_created: &mut FarmingProcessCreated, id: object::ID) {
+        farming_process_created.id = option::some(id);
+    }
+
+    public fun farming_process_created_player_id(farming_process_created: &FarmingProcessCreated): address {
+        farming_process_created.player_id
+    }
+
+    public(friend) fun new_farming_process_created(
+        player_id: address,
+    ): FarmingProcessCreated {
+        FarmingProcessCreated {
+            id: option::none(),
+            player_id,
         }
     }
 
 
     public(friend) fun create_farming_process(
         player_id: address,
-        item_id: u32,
-        start_time: u64,
-        end_time: u64,
         farming_process_table: &mut FarmingProcessTable,
         ctx: &mut TxContext,
     ): FarmingProcess {
         let farming_process = new_farming_process(
             player_id,
-            item_id,
-            start_time,
-            end_time,
             ctx,
         );
         asset_player_id_not_exists_then_add(player_id, farming_process_table, object::uid_to_inner(&farming_process.id));
@@ -180,10 +202,9 @@ module infinite_sea_farming::farming_process {
         object::delete(id);
     }
 
-    #[test_only]
-    /// Wrapper of module initializer for testing
-    public fun test_init(ctx: &mut TxContext) {
-        init(ctx)
+    public(friend) fun emit_farming_process_created(farming_process_created: FarmingProcessCreated) {
+        assert!(std::option::is_some(&farming_process_created.id), EEmptyObjectID);
+        event::emit(farming_process_created);
     }
 
 }
