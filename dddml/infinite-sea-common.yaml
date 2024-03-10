@@ -14,6 +14,11 @@ aggregates:
 
   Item:
     module: "Common"
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      #CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+      ShouldIssuePublisherObject: true
     id:
       name: ItemId
       type: u32
@@ -30,22 +35,49 @@ aggregates:
         type: bool
       SellsFor:
         type: u32
+    methods:
+      Create:
+        requiredPermission: "__Publisher__"
+        event:
+          isObjectShared: true # Share the object after created.
+      Update:
+        requiredPermission: "__Publisher__"
 
 
 singletonObjects:
   ExperienceTable:
     module: "Common"
     properties:
-      Items:
-        itemType: ExperienceTableItem
+      Levels:
+        itemType: ExperienceLevel
     methods:
       "__Init__":
         event:
           isObjectShared: true # Share the object after initialization.
+      AddLevel:
+        parameters:
+          Level:
+            type: u16
+          Experience:
+            type: u32
+          Difference:
+            type: u32
+        event:
+          name: ExperienceLevelAdded
+      UpdateLevel:
+        parameters:
+          Level:
+            type: u16
+          Experience:
+            type: u32
+          Difference:
+            type: u32
+        event:
+          name: ExperienceLevelUpdated
 
 
 valueObjects:
-  ExperienceTableItem:
+  ExperienceLevel:
     module: "Common"
     properties:
       Level:

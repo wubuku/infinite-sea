@@ -10,6 +10,11 @@ module infinite_sea_common::item {
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
+
+    struct ITEM has drop {}
+
+    friend infinite_sea_common::item_create_logic;
+    friend infinite_sea_common::item_update_logic;
     friend infinite_sea_common::item_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -27,7 +32,8 @@ module infinite_sea_common::item {
         id: object::ID,
     }
 
-    fun init(ctx: &mut TxContext) {
+    fun init(otw: ITEM, ctx: &mut TxContext) {
+        sui::package::claim_and_keep(otw, ctx);
         let id_generator_table = ItemTable {
             id: object::new(ctx),
             table: table::new(ctx),
@@ -101,6 +107,98 @@ module infinite_sea_common::item {
         }
     }
 
+    struct ItemCreated has copy, drop {
+        id: option::Option<object::ID>,
+        item_id: u32,
+        name: std::ascii::String,
+        required_for_completion: bool,
+        sells_for: u32,
+    }
+
+    public fun item_created_id(item_created: &ItemCreated): option::Option<object::ID> {
+        item_created.id
+    }
+
+    public(friend) fun set_item_created_id(item_created: &mut ItemCreated, id: object::ID) {
+        item_created.id = option::some(id);
+    }
+
+    public fun item_created_item_id(item_created: &ItemCreated): u32 {
+        item_created.item_id
+    }
+
+    public fun item_created_name(item_created: &ItemCreated): std::ascii::String {
+        item_created.name
+    }
+
+    public fun item_created_required_for_completion(item_created: &ItemCreated): bool {
+        item_created.required_for_completion
+    }
+
+    public fun item_created_sells_for(item_created: &ItemCreated): u32 {
+        item_created.sells_for
+    }
+
+    public(friend) fun new_item_created(
+        item_id: u32,
+        name: std::ascii::String,
+        required_for_completion: bool,
+        sells_for: u32,
+    ): ItemCreated {
+        ItemCreated {
+            id: option::none(),
+            item_id,
+            name,
+            required_for_completion,
+            sells_for,
+        }
+    }
+
+    struct ItemUpdated has copy, drop {
+        id: object::ID,
+        item_id: u32,
+        version: u64,
+        name: std::ascii::String,
+        required_for_completion: bool,
+        sells_for: u32,
+    }
+
+    public fun item_updated_id(item_updated: &ItemUpdated): object::ID {
+        item_updated.id
+    }
+
+    public fun item_updated_item_id(item_updated: &ItemUpdated): u32 {
+        item_updated.item_id
+    }
+
+    public fun item_updated_name(item_updated: &ItemUpdated): std::ascii::String {
+        item_updated.name
+    }
+
+    public fun item_updated_required_for_completion(item_updated: &ItemUpdated): bool {
+        item_updated.required_for_completion
+    }
+
+    public fun item_updated_sells_for(item_updated: &ItemUpdated): u32 {
+        item_updated.sells_for
+    }
+
+    public(friend) fun new_item_updated(
+        item: &Item,
+        name: std::ascii::String,
+        required_for_completion: bool,
+        sells_for: u32,
+    ): ItemUpdated {
+        ItemUpdated {
+            id: id(item),
+            item_id: item_id(item),
+            version: version(item),
+            name,
+            required_for_completion,
+            sells_for,
+        }
+    }
+
 
     public(friend) fun create_item(
         item_id: u32,
@@ -163,7 +261,7 @@ module infinite_sea_common::item {
         transfer::freeze_object(item);
     }
 
-    fun update_object_version(item: &mut Item) {
+    public(friend) fun update_object_version(item: &mut Item) {
         item.version = item.version + 1;
         //assert!(item.version != 0, EInappropriateVersion);
     }
@@ -178,6 +276,15 @@ module infinite_sea_common::item {
             sells_for: _sells_for,
         } = item;
         object::delete(id);
+    }
+
+    public(friend) fun emit_item_created(item_created: ItemCreated) {
+        assert!(std::option::is_some(&item_created.id), EEmptyObjectID);
+        event::emit(item_created);
+    }
+
+    public(friend) fun emit_item_updated(item_updated: ItemUpdated) {
+        event::emit(item_updated);
     }
 
     #[test_only]
