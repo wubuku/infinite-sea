@@ -51,8 +51,10 @@ module infinite_sea::skill_process {
         skill_process_id: SkillTypePlayerIdPair,
         version: u64,
         item_id: u32,
-        start_time: u64,
-        end_time: u64,
+        started_at: u64,
+        creation_time: u64,
+        completed: bool,
+        ended_at: u64,
     }
 
     public fun id(skill_process: &SkillProcess): object::ID {
@@ -75,20 +77,36 @@ module infinite_sea::skill_process {
         skill_process.item_id = item_id;
     }
 
-    public fun start_time(skill_process: &SkillProcess): u64 {
-        skill_process.start_time
+    public fun started_at(skill_process: &SkillProcess): u64 {
+        skill_process.started_at
     }
 
-    public(friend) fun set_start_time(skill_process: &mut SkillProcess, start_time: u64) {
-        skill_process.start_time = start_time;
+    public(friend) fun set_started_at(skill_process: &mut SkillProcess, started_at: u64) {
+        skill_process.started_at = started_at;
     }
 
-    public fun end_time(skill_process: &SkillProcess): u64 {
-        skill_process.end_time
+    public fun creation_time(skill_process: &SkillProcess): u64 {
+        skill_process.creation_time
     }
 
-    public(friend) fun set_end_time(skill_process: &mut SkillProcess, end_time: u64) {
-        skill_process.end_time = end_time;
+    public(friend) fun set_creation_time(skill_process: &mut SkillProcess, creation_time: u64) {
+        skill_process.creation_time = creation_time;
+    }
+
+    public fun completed(skill_process: &SkillProcess): bool {
+        skill_process.completed
+    }
+
+    public(friend) fun set_completed(skill_process: &mut SkillProcess, completed: bool) {
+        skill_process.completed = completed;
+    }
+
+    public fun ended_at(skill_process: &SkillProcess): u64 {
+        skill_process.ended_at
+    }
+
+    public(friend) fun set_ended_at(skill_process: &mut SkillProcess, ended_at: u64) {
+        skill_process.ended_at = ended_at;
     }
 
     fun new_skill_process(
@@ -100,8 +118,10 @@ module infinite_sea::skill_process {
             skill_process_id,
             version: 0,
             item_id: infinite_sea_common::item_id::unused_item(),
-            start_time: 0,
-            end_time: 0,
+            started_at: 0,
+            creation_time: 0,
+            completed: false,
+            ended_at: 0,
         }
     }
 
@@ -137,6 +157,8 @@ module infinite_sea::skill_process {
         version: u64,
         item_id: u32,
         energy_cost: u64,
+        started_at: u64,
+        creation_time: u64,
     }
 
     public fun production_process_started_id(production_process_started: &ProductionProcessStarted): object::ID {
@@ -155,10 +177,20 @@ module infinite_sea::skill_process {
         production_process_started.energy_cost
     }
 
+    public fun production_process_started_started_at(production_process_started: &ProductionProcessStarted): u64 {
+        production_process_started.started_at
+    }
+
+    public fun production_process_started_creation_time(production_process_started: &ProductionProcessStarted): u64 {
+        production_process_started.creation_time
+    }
+
     public(friend) fun new_production_process_started(
         skill_process: &SkillProcess,
         item_id: u32,
         energy_cost: u64,
+        started_at: u64,
+        creation_time: u64,
     ): ProductionProcessStarted {
         ProductionProcessStarted {
             id: id(skill_process),
@@ -166,6 +198,8 @@ module infinite_sea::skill_process {
             version: version(skill_process),
             item_id,
             energy_cost,
+            started_at,
+            creation_time,
         }
     }
 
@@ -236,8 +270,10 @@ module infinite_sea::skill_process {
             skill_process_id: _skill_process_id,
             version: _version,
             item_id: _item_id,
-            start_time: _start_time,
-            end_time: _end_time,
+            started_at: _started_at,
+            creation_time: _creation_time,
+            completed: _completed,
+            ended_at: _ended_at,
         } = skill_process;
         object::delete(id);
     }

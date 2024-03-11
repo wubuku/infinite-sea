@@ -17,11 +17,19 @@ aggregates:
         type: u32
         defaultLogic:
           Move: "infinite_sea_common::item_id::unused_item()"
-      StartTime:
+      StartedAt:
         type: u64
         defaultLogic:
           Move: "0"
-      EndTime:
+      CreationTime:
+        type: u64
+        defaultLogic:
+          Move: "0"
+      Completed:
+        type: bool
+        defaultLogic:
+          Move: "false"
+      EndedAt:
         type: u64
         defaultLogic:
           Move: "0"
@@ -29,6 +37,17 @@ aggregates:
       Create:
         event:
           isObjectShared: true # Share the object after created.
+        verificationLogic:
+          Move: >
+            let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
+                    assert!(sui::tx_context::sender(ctx) == player_id, EInvalidPlayerId);
+        constants:
+          EFormNotSubmitted:
+            name: EInvalidPlayerId
+            constantExpression:
+              Move: 10
+            type: u64
+
       #StartCreation: # todo start item creation
       StartProduction:
         parameters:
@@ -52,6 +71,10 @@ aggregates:
             ItemId:
               type: u32
             EnergyCost:
+              type: u64
+            StartedAt:
+              type: u64
+            CreationTime:
               type: u64
 
   SkillProcessMutex:

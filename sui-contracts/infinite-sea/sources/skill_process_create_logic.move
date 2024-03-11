@@ -6,12 +6,17 @@ module infinite_sea::skill_process_create_logic {
 
     friend infinite_sea::skill_process_aggregate;
 
+    const EInvalidPlayerId: u64 = 10;
+
     public(friend) fun verify(
         skill_process_id: SkillTypePlayerIdPair,
         skill_process_table: &skill_process::SkillProcessTable,
         ctx: &mut TxContext,
     ): skill_process::SkillProcessCreated {
         let _ = ctx;
+        let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
+        assert!(sui::tx_context::sender(ctx) == player_id, EInvalidPlayerId);
+
         skill_process::asset_skill_process_id_not_exists(skill_process_id, skill_process_table);
         skill_process::new_skill_process_created(
             skill_process_id,

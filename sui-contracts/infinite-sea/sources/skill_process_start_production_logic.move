@@ -1,5 +1,6 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::skill_process_start_production_logic {
+    use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
     use infinite_sea_common::skill_type_item_id_pair;
@@ -24,6 +25,8 @@ module infinite_sea::skill_process_start_production_logic {
             skill_process,
             item_id,
             0,
+            clock::timestamp_ms(clock) / 1000,
+            0, //todo
         )
     }
 
