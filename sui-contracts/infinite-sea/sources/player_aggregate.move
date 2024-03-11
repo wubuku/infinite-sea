@@ -43,7 +43,7 @@ module infinite_sea::player_aggregate {
         player: &mut player::Player,
         publisher: &sui::package::Publisher,
         item_id: u32,
-        quantity: u64,
+        quantity: u32,
         ctx: &mut tx_context::TxContext,
     ) {
         assert!(sui::package::from_package<player::Player>(publisher), EInvalidPublisher);

@@ -176,7 +176,7 @@ module infinite_sea::player {
         player_id: address,
         version: u64,
         item_id: u32,
-        quantity: u64,
+        quantity: u32,
     }
 
     public fun player_airdropped_id(player_airdropped: &PlayerAirdropped): object::ID {
@@ -191,14 +191,14 @@ module infinite_sea::player {
         player_airdropped.item_id
     }
 
-    public fun player_airdropped_quantity(player_airdropped: &PlayerAirdropped): u64 {
+    public fun player_airdropped_quantity(player_airdropped: &PlayerAirdropped): u32 {
         player_airdropped.quantity
     }
 
     public(friend) fun new_player_airdropped(
         player: &Player,
         item_id: u32,
-        quantity: u64,
+        quantity: u32,
     ): PlayerAirdropped {
         PlayerAirdropped {
             id: id(player),

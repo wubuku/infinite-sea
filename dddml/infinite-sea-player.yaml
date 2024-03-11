@@ -37,7 +37,7 @@ aggregates:
           type: u32
         properties:
           Quantity:
-            type: u64
+            type: u32
 
     methods:
       Create:
@@ -51,7 +51,7 @@ aggregates:
           ItemId:
             type: u32
           Quantity:
-            type: u64
+            type: u32
         event:
           name: PlayerAirdropped
 

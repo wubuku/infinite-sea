@@ -15,24 +15,24 @@ module infinite_sea::player_item {
 
     struct PlayerItem has store {
         item_id: u32,
-        quantity: u64,
+        quantity: u32,
     }
 
     public fun item_id(player_item: &PlayerItem): u32 {
         player_item.item_id
     }
 
-    public fun quantity(player_item: &PlayerItem): u64 {
+    public fun quantity(player_item: &PlayerItem): u32 {
         player_item.quantity
     }
 
-    public(friend) fun set_quantity(player_item: &mut PlayerItem, quantity: u64) {
+    public(friend) fun set_quantity(player_item: &mut PlayerItem, quantity: u32) {
         player_item.quantity = quantity;
     }
 
     public(friend) fun new_player_item(
         item_id: u32,
-        quantity: u64,
+        quantity: u32,
     ): PlayerItem {
         PlayerItem {
             item_id,

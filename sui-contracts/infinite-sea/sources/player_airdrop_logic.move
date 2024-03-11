@@ -9,7 +9,7 @@ module infinite_sea::player_airdrop_logic {
 
     public(friend) fun verify(
         item_id: u32,
-        quantity: u64,
+        quantity: u32,
         player: &player::Player,
         ctx: &TxContext,
     ): player::PlayerAirdropped {
