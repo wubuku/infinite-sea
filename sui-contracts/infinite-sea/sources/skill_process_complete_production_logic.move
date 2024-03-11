@@ -39,13 +39,14 @@ module infinite_sea::skill_process_complete_production_logic {
         //assert!(started_at != 0, 0);
         let creation_time = skill_process::creation_time(skill_process);
         let ended_at = clock::timestamp_ms(clock);
+        let successful = true; //todo
         skill_process::new_production_process_completed(
             skill_process,
             item_id,
             started_at,
             creation_time,
             ended_at,
-            true, //todo
+            successful,
         )
     }
 
@@ -55,13 +56,18 @@ module infinite_sea::skill_process_complete_production_logic {
         skill_process: &mut skill_process::SkillProcess,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {
-        let item_id = skill_process::production_process_completed_item_id(production_process_completed);
-        let started_at = skill_process::production_process_completed_started_at(production_process_completed);
-        let creation_time = skill_process::production_process_completed_creation_time(production_process_completed);
+        //let item_id = skill_process::production_process_completed_item_id(production_process_completed);
+        //let started_at = skill_process::production_process_completed_started_at(production_process_completed);
+        //let creation_time = skill_process::production_process_completed_creation_time(production_process_completed);
         let ended_at = skill_process::production_process_completed_ended_at(production_process_completed);
-        let successful = skill_process::production_process_completed_successful(production_process_completed);
-        let skill_process_id = skill_process::skill_process_id(skill_process);
-        // ...
-        //
+        //let successful = skill_process::production_process_completed_successful(production_process_completed);
+        //let skill_process_id = skill_process::skill_process_id(skill_process);
+
+        //skill_process::set_item_id(skill_process, item_id);
+        //skill_process::set_started_at(skill_process, started_at);
+        skill_process::set_completed(skill_process, true);
+        skill_process::set_ended_at(skill_process, ended_at);
+
+        //todo handle player
     }
 }
