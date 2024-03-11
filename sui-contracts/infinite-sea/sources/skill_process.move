@@ -16,6 +16,7 @@ module infinite_sea::skill_process {
 
     friend infinite_sea::skill_process_create_logic;
     friend infinite_sea::skill_process_start_production_logic;
+    friend infinite_sea::skill_process_complete_production_logic;
     friend infinite_sea::skill_process_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -120,7 +121,7 @@ module infinite_sea::skill_process {
             item_id: infinite_sea_common::item_id::unused_item(),
             started_at: 0,
             creation_time: 0,
-            completed: false,
+            completed: true,
             ended_at: 0,
         }
     }
@@ -200,6 +201,65 @@ module infinite_sea::skill_process {
             energy_cost,
             started_at,
             creation_time,
+        }
+    }
+
+    struct ProductionProcessCompleted has copy, drop {
+        id: object::ID,
+        skill_process_id: SkillTypePlayerIdPair,
+        version: u64,
+        item_id: u32,
+        started_at: u64,
+        creation_time: u64,
+        ended_at: u64,
+        successful: bool,
+    }
+
+    public fun production_process_completed_id(production_process_completed: &ProductionProcessCompleted): object::ID {
+        production_process_completed.id
+    }
+
+    public fun production_process_completed_skill_process_id(production_process_completed: &ProductionProcessCompleted): SkillTypePlayerIdPair {
+        production_process_completed.skill_process_id
+    }
+
+    public fun production_process_completed_item_id(production_process_completed: &ProductionProcessCompleted): u32 {
+        production_process_completed.item_id
+    }
+
+    public fun production_process_completed_started_at(production_process_completed: &ProductionProcessCompleted): u64 {
+        production_process_completed.started_at
+    }
+
+    public fun production_process_completed_creation_time(production_process_completed: &ProductionProcessCompleted): u64 {
+        production_process_completed.creation_time
+    }
+
+    public fun production_process_completed_ended_at(production_process_completed: &ProductionProcessCompleted): u64 {
+        production_process_completed.ended_at
+    }
+
+    public fun production_process_completed_successful(production_process_completed: &ProductionProcessCompleted): bool {
+        production_process_completed.successful
+    }
+
+    public(friend) fun new_production_process_completed(
+        skill_process: &SkillProcess,
+        item_id: u32,
+        started_at: u64,
+        creation_time: u64,
+        ended_at: u64,
+        successful: bool,
+    ): ProductionProcessCompleted {
+        ProductionProcessCompleted {
+            id: id(skill_process),
+            skill_process_id: skill_process_id(skill_process),
+            version: version(skill_process),
+            item_id,
+            started_at,
+            creation_time,
+            ended_at,
+            successful,
         }
     }
 
@@ -285,6 +345,10 @@ module infinite_sea::skill_process {
 
     public(friend) fun emit_production_process_started(production_process_started: ProductionProcessStarted) {
         event::emit(production_process_started);
+    }
+
+    public(friend) fun emit_production_process_completed(production_process_completed: ProductionProcessCompleted) {
+        event::emit(production_process_completed);
     }
 
 }

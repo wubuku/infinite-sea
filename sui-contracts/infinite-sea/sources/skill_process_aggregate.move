@@ -7,8 +7,10 @@ module infinite_sea::skill_process_aggregate {
     use infinite_sea::item_production::ItemProduction;
     use infinite_sea::player::Player;
     use infinite_sea::skill_process;
+    use infinite_sea::skill_process_complete_production_logic;
     use infinite_sea::skill_process_create_logic;
     use infinite_sea::skill_process_start_production_logic;
+    use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::skill_type_player_id_pair::{Self, SkillTypePlayerIdPair};
     use sui::clock::Clock;
     use sui::tx_context;
@@ -61,6 +63,32 @@ module infinite_sea::skill_process_aggregate {
         );
         skill_process::update_object_version(skill_process);
         skill_process::emit_production_process_started(production_process_started);
+    }
+
+    public entry fun complete_production(
+        skill_process: &mut skill_process::SkillProcess,
+        player: &mut Player,
+        item_production: &ItemProduction,
+        experience_table: &ExperienceTable,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let production_process_completed = skill_process_complete_production_logic::verify(
+            player,
+            item_production,
+            experience_table,
+            clock,
+            skill_process,
+            ctx,
+        );
+        skill_process_complete_production_logic::mutate(
+            &production_process_completed,
+            player,
+            skill_process,
+            ctx,
+        );
+        skill_process::update_object_version(skill_process);
+        skill_process::emit_production_process_completed(production_process_completed);
     }
 
 }

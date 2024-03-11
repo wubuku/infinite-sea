@@ -28,7 +28,7 @@ aggregates:
       Completed:
         type: bool
         defaultLogic:
-          Move: "false"
+          Move: "true"
       EndedAt:
         type: u64
         defaultLogic:
@@ -37,16 +37,16 @@ aggregates:
       Create:
         event:
           isObjectShared: true # Share the object after created.
-        verificationLogic:
-          Move: >
-            let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
-                    assert!(sui::tx_context::sender(ctx) == player_id, EInvalidPlayerId);
         constants:
           EFormNotSubmitted:
             name: EInvalidPlayerId
             constantExpression:
               Move: 10
             type: u64
+        verificationLogic:
+          Move: >
+            let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
+                    assert!(sui::tx_context::sender(ctx) == player_id, EInvalidPlayerId);
 
       #StartCreation: # todo start item creation
       StartProduction:
@@ -76,6 +76,36 @@ aggregates:
               type: u64
             CreationTime:
               type: u64
+
+      CompleteProduction:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          ItemProduction:
+            referenceType: ItemProduction
+            isIgnoredInEvent: true
+          ExperienceTable:
+            referenceType: ExperienceTable
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          name: ProductionProcessCompleted
+          properties:
+            ItemId:
+              type: u32
+            StartedAt:
+              type: u64
+            CreationTime:
+              type: u64
+            EndedAt:
+              type: u64
+            Successful:
+              type: bool
+
 
   SkillProcessMutex:
     module: "Common"

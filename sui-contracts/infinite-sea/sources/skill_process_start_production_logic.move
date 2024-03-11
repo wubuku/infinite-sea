@@ -3,6 +3,7 @@ module infinite_sea::skill_process_start_production_logic {
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
+    use infinite_sea_common::item_id;
     use infinite_sea_common::skill_type_item_id_pair;
 
     use infinite_sea::item_production::{Self, ItemProduction};
@@ -11,6 +12,8 @@ module infinite_sea::skill_process_start_production_logic {
 
     friend infinite_sea::skill_process_aggregate;
 
+    const EProcessAlreadyStarted: u64 = 10;
+
     public(friend) fun verify(
         player: &mut Player,
         item_production: &ItemProduction,
@@ -18,8 +21,13 @@ module infinite_sea::skill_process_start_production_logic {
         skill_process: &skill_process::SkillProcess,
         ctx: &TxContext,
     ): skill_process::ProductionProcessStarted {
-        let skill_type_item_id = item_production::item_production_id(item_production);
-        let item_id = skill_type_item_id_pair::item_id(&skill_type_item_id);
+        assert!(
+            skill_process::item_id(skill_process) == item_id::unused_item() || skill_process::completed(skill_process),
+            EProcessAlreadyStarted
+        );
+
+        let item_production_id = item_production::item_production_id(item_production);
+        let item_id = skill_type_item_id_pair::item_id(&item_production_id);
         // todo
         skill_process::new_production_process_started(
             skill_process,
