@@ -1,6 +1,6 @@
 aggregates:
   Player:
-    module: "Player"
+    #module: "Player"
     metadata:
       Preprocessors: ["MOVE_CRUD_IT"]
       CRUD_IT_NO_UPDATE: true

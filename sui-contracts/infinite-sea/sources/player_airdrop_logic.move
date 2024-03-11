@@ -1,11 +1,11 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
-module infinite_sea_player::player_airdrop_logic {
+module infinite_sea::player_airdrop_logic {
     use sui::tx_context::TxContext;
 
-    use infinite_sea_player::player;
-    use infinite_sea_player::player_item;
+    use infinite_sea::player;
+    use infinite_sea::player_item;
 
-    friend infinite_sea_player::player_aggregate;
+    friend infinite_sea::player_aggregate;
 
     public(friend) fun verify(
         item_id: u32,

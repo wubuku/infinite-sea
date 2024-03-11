@@ -6,7 +6,6 @@ version = "0.0.1"
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "devnet" }
 #Sui = { local = "../../../MystenLabs/sui/crates/sui-framework/packages/sui-framework" }
 infinite_sea_common = { local = "../infinite-sea-common" }
-infinite_sea_player = { local = "../infinite-sea-player" }
 
 [addresses]
 infinite_sea = "0x0"

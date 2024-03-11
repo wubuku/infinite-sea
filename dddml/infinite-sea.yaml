@@ -1,114 +1,17 @@
 aggregates:
-  FarmingProcess:
-    module: "Farming"
+  SkillProcess:
     metadata:
       Preprocessors: ["MOVE_CRUD_IT"]
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
       NO_MOVE_EVENT_MODULE: true
       ShouldIssuePublisherObject: true
-    implements:
-      - SkillProcess
     id:
-      name: PlayerId
-      type: address
-      generator:
-        class: signer
-        tableName: FarmingProcessTable
-    methods:
-      Create:
-        event:
-          isObjectShared: true # Share the object after created.
-      Start:
-        parameters:
-          Player:
-            referenceType: Player
-            isMutableReference: true
-            isIgnoredInEvent: true
-          FarmingItemProduction:
-            referenceType: FarmingItemProduction
-            eventPropertyName: ItemId
-          Clock:
-            referenceType: Clock
-            isIgnoredInEvent: true
-          #EnergyCoin: # todo Energy Coin
-          #  referenceType: Coin<ENERGY_COIN>
-          #  eventPropertyName: EnergyCost
-        event:
-          name: FarmingProcessStarted
-          properties:
-            EnergyCost:
-              type: u64
-
-
-  FarmingItemProduction:
-    module: "Farming"
-    metadata:
-      Preprocessors: ["MOVE_CRUD_IT"]
-      CRUD_IT_NO_UPDATE: true
-      CRUD_IT_NO_DELETE: true
-    id:
-      name: ItemId
-      type: u32
+      name: SkillProcessId
+      type: SkillTypePlayerIdPair
       generator:
         class: assigned
-        tableName: FarmingItemProductionTable
-    properties:
-      ItemProduction:
-        type: ItemProduction
-    methods:
-      #Create:
-        #event:
-        #  name: FarmingItemProductionCreated
-
-  MiningProcess:
-    module: "Mining"
-    implements:
-      - SkillProcess
-    id:
-      name: PlayerId
-      type: address
-      generator:
-        class: signer
-        tableName: MiningProcessTable
-
-  MiningItemCreation:
-    module: "Mining"
-    id:
-      name: ItemId
-      type: u32
-      generator:
-        class: assigned
-        tableName: MiningItemCreationTable
-    properties:
-      ItemCreation:
-        type: ItemCreation
-
-  SmithingProcess:
-    module: "Smithing"
-    implements:
-      - SkillProcess
-    id:
-      name: PlayerId
-      type: address
-      generator:
-        class: signer
-        tableName: SmithingProcessTable
-
-  SmithingItemProduction:
-    module: "Smithing"
-    id:
-      name: ItemId
-      type: u32
-      generator:
-        class: assigned
-        tableName: SmithingItemProductionTable
-    properties:
-      ItemProduction:
-        type: ItemProduction
-
-superObjects:
-  SkillProcess:
+        tableName: SkillProcessTable
     properties:
       ItemId:
         type: u32
@@ -122,6 +25,98 @@ superObjects:
         type: u64
         defaultLogic:
           Move: "0"
+    methods:
+      Create:
+        event:
+          isObjectShared: true # Share the object after created.
+      #StartCreation: # todo start item creation
+      StartProduction:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          ItemProduction:
+            referenceType: ItemProduction
+            #eventPropertyName: ItemProductionId
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+          #EnergyCoin: # todo Energy Coin
+          #  referenceType: Coin<ENERGY_COIN>
+          #  eventPropertyName: EnergyCost
+        event:
+          name: ProductionProcessStarted
+          properties:
+            ItemId:
+              type: u32
+            EnergyCost:
+              type: u64
+
+  SkillProcessMutex:
+    module: "Common"
+    id:
+      name: PlayerId
+      type: address
+      generator:
+        class: assigned
+        tableName: SkillProcessMutexTable
+    properties:
+      ActiveSkillType:
+        type: SkillType
+        optional: true
+
+  ItemCreation:
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      #CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+    implements:
+      - ItemCreationOrProduction
+    id:
+      name: ItemCreationId
+      type: SkillTypeItemIdPair
+      generator:
+        class: assigned
+        tableName: ItemCreationTable
+    properties:
+
+  ItemProduction:
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      #CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+    implements:
+      - ItemCreationOrProduction
+    id:
+      name: ItemProductionId
+      type: SkillTypeItemIdPair
+      generator:
+        class: assigned
+        tableName: ItemProductionTable
+    properties:
+      ProductionMaterials:
+        type: ProductionMaterials
+
+
+superObjects:
+  ItemCreationOrProduction:
+    properties:
+      #RequirementsSkill:
+      #  type: SkillType
+      RequirementsLevel:
+        type: u16
+      BaseQuantity:
+        type: u32
+      BaseExperience:
+        type: u32
+      BaseCreationTime:
+        type: u64
+      EnergyCost:
+        type: u32
+      SuccessRate: #(percentage)
+        type: u16
 
 
 configuration:
@@ -131,15 +126,7 @@ configuration:
 
   defaultModule:
     name: "Sui.InfiniteSea"
-    requiredModules: [ "Common", "Player" ]
+    requiredModules: [ "Common" ]
   submodules:
-    Farming:
-      requiredModules: [ "Common", "Player"  ]
-    Mining:
-      requiredModules: [ "Common", "Player" ]
-    Smithing:
-      requiredModules: [ "Common", "Player" ]
-    Player:
-      requiredModules: [ "Common" ]
     Common:
       requiredModules: [ ]

@@ -2,13 +2,12 @@
 
 [move]
 version = 0
-manifest_digest = "D02532C826D034E0F99ACEBFFB2846CA44CA69D6B74F530ED9E64F8E7B63E674"
-deps_digest = "060AD7E57DFB13104F21BE5F5C3759D03F0553FC3229247D9A7A6B45F50D03A3"
+manifest_digest = "310DA4357C281D91A3523FFFCFABD9B51A6797935C654B3D0DC3CE41860B4E4C"
+deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
 
 dependencies = [
   { name = "Sui" },
   { name = "infinite_sea_common" },
-  { name = "infinite_sea_player" },
 ]
 
 [[move.package]]
@@ -29,15 +28,6 @@ source = { local = "../infinite-sea-common" }
 
 dependencies = [
   { name = "Sui" },
-]
-
-[[move.package]]
-name = "infinite_sea_player"
-source = { local = "../infinite-sea-player" }
-
-dependencies = [
-  { name = "Sui" },
-  { name = "infinite_sea_common" },
 ]
 
 [move.toolchain-version]

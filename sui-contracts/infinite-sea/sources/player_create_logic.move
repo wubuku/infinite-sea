@@ -1,9 +1,9 @@
 #[allow(unused_mut_parameter)]
-module infinite_sea_player::player_create_logic {
-    use infinite_sea_player::player;
+module infinite_sea::player_create_logic {
+    use infinite_sea::player;
     use sui::tx_context::TxContext;
 
-    friend infinite_sea_player::player_aggregate;
+    friend infinite_sea::player_aggregate;
 
     public(friend) fun verify(
         level: u16,
