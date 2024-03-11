@@ -7,6 +7,9 @@ aggregates:
       CRUD_IT_NO_DELETE: true
       NO_MOVE_EVENT_MODULE: true
       ShouldIssuePublisherObject: true
+    friends:
+      - SkillProcess.StartProduction
+      - SkillProcess.CompleteProduction
     id:
       name: PlayerId
       type: address
@@ -51,3 +54,11 @@ aggregates:
             type: u64
         event:
           name: PlayerAirdropped
+
+      DeductItems:
+        isInternal: true
+        parameters:
+          Items:
+            itemType: ProductionMaterial
+        event:
+          name: PlayerItemsDeducted

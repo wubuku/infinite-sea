@@ -6,6 +6,7 @@
 module infinite_sea::player_item {
     friend infinite_sea::player_create_logic;
     friend infinite_sea::player_airdrop_logic;
+    friend infinite_sea::player_deduct_items_logic;
     friend infinite_sea::player;
 
     #[allow(unused_const)]

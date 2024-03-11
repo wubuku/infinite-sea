@@ -7,7 +7,12 @@ module infinite_sea::player_aggregate {
     use infinite_sea::player;
     use infinite_sea::player_airdrop_logic;
     use infinite_sea::player_create_logic;
+    use infinite_sea::player_deduct_items_logic;
+    use infinite_sea_common::production_material::ProductionMaterial;
     use sui::tx_context;
+
+    friend infinite_sea::skill_process_start_production_logic;
+    friend infinite_sea::skill_process_complete_production_logic;
 
     const EInvalidPublisher: u64 = 50;
 
@@ -54,6 +59,25 @@ module infinite_sea::player_aggregate {
         );
         player::update_object_version(player);
         player::emit_player_airdropped(player_airdropped);
+    }
+
+    public(friend) fun deduct_items(
+        player: &mut player::Player,
+        items: vector<ProductionMaterial>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let player_items_deducted = player_deduct_items_logic::verify(
+            items,
+            player,
+            ctx,
+        );
+        player_deduct_items_logic::mutate(
+            &player_items_deducted,
+            player,
+            ctx,
+        );
+        player::update_object_version(player);
+        player::emit_player_items_deducted(player_items_deducted);
     }
 
 }

@@ -5,6 +5,7 @@
 
 module infinite_sea::player {
     use infinite_sea::player_item::{Self, PlayerItem};
+    use infinite_sea_common::production_material::ProductionMaterial;
     use std::option;
     use sui::event;
     use sui::object::{Self, UID};
@@ -16,6 +17,7 @@ module infinite_sea::player {
 
     friend infinite_sea::player_create_logic;
     friend infinite_sea::player_airdrop_logic;
+    friend infinite_sea::player_deduct_items_logic;
     friend infinite_sea::player_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -206,6 +208,37 @@ module infinite_sea::player {
         }
     }
 
+    struct PlayerItemsDeducted has copy, drop {
+        id: object::ID,
+        player_id: address,
+        version: u64,
+        items: vector<ProductionMaterial>,
+    }
+
+    public fun player_items_deducted_id(player_items_deducted: &PlayerItemsDeducted): object::ID {
+        player_items_deducted.id
+    }
+
+    public fun player_items_deducted_player_id(player_items_deducted: &PlayerItemsDeducted): address {
+        player_items_deducted.player_id
+    }
+
+    public fun player_items_deducted_items(player_items_deducted: &PlayerItemsDeducted): vector<ProductionMaterial> {
+        player_items_deducted.items
+    }
+
+    public(friend) fun new_player_items_deducted(
+        player: &Player,
+        items: vector<ProductionMaterial>,
+    ): PlayerItemsDeducted {
+        PlayerItemsDeducted {
+            id: id(player),
+            player_id: player_id(player),
+            version: version(player),
+            items,
+        }
+    }
+
 
     public(friend) fun create_player(
         player_id: address,
@@ -293,6 +326,10 @@ module infinite_sea::player {
 
     public(friend) fun emit_player_airdropped(player_airdropped: PlayerAirdropped) {
         event::emit(player_airdropped);
+    }
+
+    public(friend) fun emit_player_items_deducted(player_items_deducted: PlayerItemsDeducted) {
+        event::emit(player_items_deducted);
     }
 
 }
