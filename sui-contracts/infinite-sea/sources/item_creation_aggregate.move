@@ -17,7 +17,7 @@ module infinite_sea::item_creation_aggregate {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
         item_creation_table: &mut item_creation::ItemCreationTable,
         ctx: &mut tx_context::TxContext,
@@ -54,7 +54,7 @@ module infinite_sea::item_creation_aggregate {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
         ctx: &mut tx_context::TxContext,
     ) {

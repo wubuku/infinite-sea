@@ -62,3 +62,16 @@ aggregates:
             itemType: ProductionMaterial
         event:
           name: PlayerItemsDeducted
+
+      IncreaseExperienceAndItems:
+        isInternal: true
+        parameters:
+          Experience:
+            type: u32
+            description: "Increased experience value"
+          Items:
+            itemType: ProductionMaterial
+          NewLevel:
+            type: u16
+        event:
+          name: PlayerExperienceAndItemsIncreased

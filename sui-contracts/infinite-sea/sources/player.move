@@ -18,6 +18,7 @@ module infinite_sea::player {
     friend infinite_sea::player_create_logic;
     friend infinite_sea::player_airdrop_logic;
     friend infinite_sea::player_deduct_items_logic;
+    friend infinite_sea::player_increase_experience_and_items_logic;
     friend infinite_sea::player_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -239,6 +240,51 @@ module infinite_sea::player {
         }
     }
 
+    struct PlayerExperienceAndItemsIncreased has copy, drop {
+        id: object::ID,
+        player_id: address,
+        version: u64,
+        experience: u32,
+        items: vector<ProductionMaterial>,
+        new_level: u16,
+    }
+
+    public fun player_experience_and_items_increased_id(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): object::ID {
+        player_experience_and_items_increased.id
+    }
+
+    public fun player_experience_and_items_increased_player_id(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): address {
+        player_experience_and_items_increased.player_id
+    }
+
+    public fun player_experience_and_items_increased_experience(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): u32 {
+        player_experience_and_items_increased.experience
+    }
+
+    public fun player_experience_and_items_increased_items(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): vector<ProductionMaterial> {
+        player_experience_and_items_increased.items
+    }
+
+    public fun player_experience_and_items_increased_new_level(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): u16 {
+        player_experience_and_items_increased.new_level
+    }
+
+    public(friend) fun new_player_experience_and_items_increased(
+        player: &Player,
+        experience: u32,
+        items: vector<ProductionMaterial>,
+        new_level: u16,
+    ): PlayerExperienceAndItemsIncreased {
+        PlayerExperienceAndItemsIncreased {
+            id: id(player),
+            player_id: player_id(player),
+            version: version(player),
+            experience,
+            items,
+            new_level,
+        }
+    }
+
 
     public(friend) fun create_player(
         player_id: address,
@@ -330,6 +376,10 @@ module infinite_sea::player {
 
     public(friend) fun emit_player_items_deducted(player_items_deducted: PlayerItemsDeducted) {
         event::emit(player_items_deducted);
+    }
+
+    public(friend) fun emit_player_experience_and_items_increased(player_experience_and_items_increased: PlayerExperienceAndItemsIncreased) {
+        event::emit(player_experience_and_items_increased);
     }
 
 }

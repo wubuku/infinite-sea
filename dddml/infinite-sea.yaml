@@ -76,6 +76,8 @@ aggregates:
               type: u64
             CreationTime:
               type: u64
+            ProductionMaterials:
+              type: ProductionMaterials
 
       CompleteProduction:
         parameters:
@@ -105,7 +107,13 @@ aggregates:
               type: u64
             Successful:
               type: bool
-
+            Quantity:
+              type: u32
+            Experience:
+              type: u32
+              description: "Increased experience value"
+            NewLevel:
+              type: u16
 
   SkillProcessMutex:
     module: "Common"
@@ -167,7 +175,7 @@ superObjects:
       BaseCreationTime:
         type: u64
       EnergyCost:
-        type: u32
+        type: u64
       SuccessRate: #(percentage)
         type: u16
 

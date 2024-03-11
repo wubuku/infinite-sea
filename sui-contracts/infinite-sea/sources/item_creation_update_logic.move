@@ -9,7 +9,7 @@ module infinite_sea::item_creation_update_logic {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
         item_creation: &item_creation::ItemCreation,
         ctx: &TxContext,

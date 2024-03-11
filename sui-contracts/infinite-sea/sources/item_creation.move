@@ -50,7 +50,7 @@ module infinite_sea::item_creation {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
     }
 
@@ -98,11 +98,11 @@ module infinite_sea::item_creation {
         item_creation.base_creation_time = base_creation_time;
     }
 
-    public fun energy_cost(item_creation: &ItemCreation): u32 {
+    public fun energy_cost(item_creation: &ItemCreation): u64 {
         item_creation.energy_cost
     }
 
-    public(friend) fun set_energy_cost(item_creation: &mut ItemCreation, energy_cost: u32) {
+    public(friend) fun set_energy_cost(item_creation: &mut ItemCreation, energy_cost: u64) {
         item_creation.energy_cost = energy_cost;
     }
 
@@ -120,7 +120,7 @@ module infinite_sea::item_creation {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
         ctx: &mut TxContext,
     ): ItemCreation {
@@ -144,7 +144,7 @@ module infinite_sea::item_creation {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
     }
 
@@ -176,7 +176,7 @@ module infinite_sea::item_creation {
         item_creation_created.base_creation_time
     }
 
-    public fun item_creation_created_energy_cost(item_creation_created: &ItemCreationCreated): u32 {
+    public fun item_creation_created_energy_cost(item_creation_created: &ItemCreationCreated): u64 {
         item_creation_created.energy_cost
     }
 
@@ -190,7 +190,7 @@ module infinite_sea::item_creation {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
     ): ItemCreationCreated {
         ItemCreationCreated {
@@ -213,7 +213,7 @@ module infinite_sea::item_creation {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
     }
 
@@ -241,7 +241,7 @@ module infinite_sea::item_creation {
         item_creation_updated.base_creation_time
     }
 
-    public fun item_creation_updated_energy_cost(item_creation_updated: &ItemCreationUpdated): u32 {
+    public fun item_creation_updated_energy_cost(item_creation_updated: &ItemCreationUpdated): u64 {
         item_creation_updated.energy_cost
     }
 
@@ -255,7 +255,7 @@ module infinite_sea::item_creation {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
     ): ItemCreationUpdated {
         ItemCreationUpdated {
@@ -278,7 +278,7 @@ module infinite_sea::item_creation {
         base_quantity: u32,
         base_experience: u32,
         base_creation_time: u64,
-        energy_cost: u32,
+        energy_cost: u64,
         success_rate: u16,
         item_creation_table: &mut ItemCreationTable,
         ctx: &mut TxContext,

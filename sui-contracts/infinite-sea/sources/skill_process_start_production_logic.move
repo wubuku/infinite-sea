@@ -3,7 +3,9 @@ module infinite_sea::skill_process_start_production_logic {
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
+    use infinite_sea::player_aggregate;
     use infinite_sea_common::item_id;
+    use infinite_sea_common::production_materials;
     use infinite_sea_common::skill_type_item_id_pair;
     use infinite_sea_common::skill_type_player_id_pair;
 
@@ -42,13 +44,16 @@ module infinite_sea::skill_process_start_production_logic {
         let item_id = skill_type_item_id_pair::item_id(&item_production_id);
 
         let base_creation_time = item_production::base_creation_time(item_production);
+        let energy_cost = item_production::energy_cost(item_production);//todo ?
         let creation_time = base_creation_time;// todo ?
+        let production_materials = item_production::production_materials(item_production);
         skill_process::new_production_process_started(
             skill_process,
             item_id,
-            0, //todo ?
+            energy_cost,
             clock::timestamp_ms(clock) / 1000,
-            creation_time
+            creation_time,
+            production_materials,
         )
     }
 
@@ -56,18 +61,20 @@ module infinite_sea::skill_process_start_production_logic {
         production_process_started: &skill_process::ProductionProcessStarted,
         player: &mut Player,
         skill_process: &mut skill_process::SkillProcess,
-        ctx: &TxContext, // modify the reference to mutable if needed
+        ctx: &mut TxContext, // modify the reference to mutable if needed
     ) {
         let item_id = skill_process::production_process_started_item_id(production_process_started);
         let started_at = production_process_started_started_at(production_process_started);
         //let skill_process_id = skill_process::skill_process_id(skill_process);
         //let energy_cost = skill_process::production_process_started_energy_cost(production_process_started);
-
+        let production_materials = skill_process::production_process_started_production_materials(
+            production_process_started
+        );
         skill_process::set_item_id(skill_process, item_id);
         skill_process::set_started_at(skill_process, started_at);
         skill_process::set_completed(skill_process, false);
         skill_process::set_ended_at(skill_process, 0);
 
-        //todo handle player
+        player_aggregate::deduct_items(player, production_materials::items(&production_materials), ctx);
     }
 }

@@ -8,7 +8,8 @@ module infinite_sea::player_aggregate {
     use infinite_sea::player_airdrop_logic;
     use infinite_sea::player_create_logic;
     use infinite_sea::player_deduct_items_logic;
-    use infinite_sea_common::production_material::ProductionMaterial;
+    use infinite_sea::player_increase_experience_and_items_logic;
+    use infinite_sea_common::production_material::{Self, ProductionMaterial};
     use sui::tx_context;
 
     friend infinite_sea::skill_process_start_production_logic;
@@ -78,6 +79,29 @@ module infinite_sea::player_aggregate {
         );
         player::update_object_version(player);
         player::emit_player_items_deducted(player_items_deducted);
+    }
+
+    public(friend) fun increase_experience_and_items(
+        player: &mut player::Player,
+        experience: u32,
+        items: vector<ProductionMaterial>,
+        new_level: u16,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let player_experience_and_items_increased = player_increase_experience_and_items_logic::verify(
+            experience,
+            items,
+            new_level,
+            player,
+            ctx,
+        );
+        player_increase_experience_and_items_logic::mutate(
+            &player_experience_and_items_increased,
+            player,
+            ctx,
+        );
+        player::update_object_version(player);
+        player::emit_player_experience_and_items_increased(player_experience_and_items_increased);
     }
 
 }
