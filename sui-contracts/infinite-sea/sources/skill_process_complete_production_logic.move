@@ -1,8 +1,12 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::skill_process_complete_production_logic {
+    use std::vector;
+
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
+    use infinite_sea_common::experience_level;
+    use infinite_sea_common::experience_table;
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id;
     use infinite_sea_common::production_material;
@@ -21,6 +25,7 @@ module infinite_sea::skill_process_complete_production_logic {
     const EIncorrectItemId: u64 = 11;
     const EIncorrectSkillType: u64 = 12;
     const EStillInProgress: u64 = 13;
+    const EExperienceTableNotInitialized: u64 = 14;
 
     public(friend) fun verify(
         player: &mut Player,
@@ -46,10 +51,8 @@ module infinite_sea::skill_process_complete_production_logic {
 
         let successful = true; //todo
         let quantity = item_production::base_quantity(item_production);
-        let experience = item_production::base_experience(item_production);
-        let old_level = player::level(player);
-        let new_level = old_level; //todo
-
+        let added_experience = item_production::base_experience(item_production);
+        let new_level = calculate_new_level(player, experience_table, added_experience);
         skill_process::new_production_process_completed(
             skill_process,
             item_id,
@@ -58,9 +61,35 @@ module infinite_sea::skill_process_complete_production_logic {
             ended_at,
             successful,
             quantity,
-            experience,
+            added_experience,
             new_level,
         )
+    }
+
+    fun calculate_new_level(
+        player: &Player,
+        experience_table: &ExperienceTable,
+        added_experience: u32,
+    ): u16 {
+        let old_level = player::level(player);
+        let old_experience = player::experience(player);
+        let new_level = old_level;
+        let xp_levels = experience_table::borrow_levels(experience_table);
+        let xp_levels_len = vector::length(xp_levels);
+        assert!(xp_levels_len > 1, EExperienceTableNotInitialized);
+        let max_level = xp_levels_len - 1;
+        if (max_level > (old_level as u64)) {
+            let i = (old_level as u64);
+            while (i < max_level) {
+                let xp_level = vector::borrow(xp_levels, i);
+                if (old_experience + added_experience >= experience_level::experience(xp_level)) {
+                    new_level = experience_level::level(xp_level);
+                    break;
+                };
+                i = i + 1;
+            };
+        };
+        new_level
     }
 
     public(friend) fun mutate(
