@@ -65,7 +65,7 @@ module infinite_sea::skill_process_mutex {
 
     public(friend) fun set_active_skill_type(skill_process_mutex: &mut SkillProcessMutex, active_skill_type: Option<u8>) {
         if (option::is_some(&active_skill_type)) {
-            assert!(infinite_sea::skill_type::is_valid(*option::borrow(&active_skill_type)), EInvalidEnumValue);
+            assert!(infinite_sea_common::skill_type::is_valid(*option::borrow(&active_skill_type)), EInvalidEnumValue);
         };
         skill_process_mutex.active_skill_type = active_skill_type;
     }
@@ -76,7 +76,7 @@ module infinite_sea::skill_process_mutex {
         ctx: &mut TxContext,
     ): SkillProcessMutex {
         if (option::is_some(&active_skill_type)) {
-            assert!(infinite_sea::skill_type::is_valid(*option::borrow(&active_skill_type)), EInvalidEnumValue);
+            assert!(infinite_sea_common::skill_type::is_valid(*option::borrow(&active_skill_type)), EInvalidEnumValue);
         };
         SkillProcessMutex {
             id: object::new(ctx),
