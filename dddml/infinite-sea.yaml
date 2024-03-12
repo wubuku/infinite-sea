@@ -33,6 +33,9 @@ aggregates:
         type: u64
         defaultLogic:
           Move: "0"
+      EnergyVault:
+        type: "Balance<ENERGY>"
+
     methods:
       Create:
         event:
@@ -62,9 +65,9 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
-          #EnergyCoin: # todo Energy Coin
-          #  referenceType: Coin<ENERGY_COIN>
-          #  eventPropertyName: EnergyCost
+          Energy:
+            type: "Balance<ENERGY>"
+            eventPropertyName: EnergyCost
         event:
           name: ProductionProcessStarted
           properties:
@@ -180,6 +183,12 @@ superObjects:
         type: u16
 
 
+typeDefinitions:
+  ENERGY:
+    moveType: "infinite_sea_coin::energy::ENERGY"
+    droppable: true
+
+
 configuration:
   sequenceNumber: 1000
   metadata:
@@ -191,3 +200,4 @@ configuration:
   submodules:
     Common:
       requiredModules: [ ]
+

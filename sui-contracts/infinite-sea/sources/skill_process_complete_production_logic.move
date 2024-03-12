@@ -20,6 +20,7 @@ module infinite_sea::skill_process_complete_production_logic {
     const EProcessNotStarted: u64 = 10;
     const EIncorrectItemId: u64 = 11;
     const EIncorrectSkillType: u64 = 12;
+    const EStillInProgress: u64 = 13;
 
     public(friend) fun verify(
         player: &mut Player,
@@ -39,9 +40,10 @@ module infinite_sea::skill_process_complete_production_logic {
         assert!(skill_type == skill_type_player_id_pair::skill_type(&skill_process_id), EIncorrectSkillType);
 
         let started_at = skill_process::started_at(skill_process);
-        //assert!(started_at != 0, 0);
         let creation_time = skill_process::creation_time(skill_process);
         let ended_at = clock::timestamp_ms(clock) / 1000;
+        assert!(ended_at >= started_at + creation_time, EStillInProgress);
+
         let successful = true; //todo
         let quantity = item_production::base_quantity(item_production);
         let experience = item_production::base_experience(item_production);

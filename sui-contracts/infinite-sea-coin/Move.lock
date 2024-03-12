@@ -2,13 +2,11 @@
 
 [move]
 version = 0
-manifest_digest = "B69A92FAC109EE632379A3AB6EB705BD542DD7F063AC511CAC1071FFD4562C7D"
-deps_digest = "060AD7E57DFB13104F21BE5F5C3759D03F0553FC3229247D9A7A6B45F50D03A3"
+manifest_digest = "FD64F2605E5FC2A255DB0C03C77427DBFEC14338225034FEB33E88F1395D6631"
+deps_digest = "F8BBB0CCB2491CA29A3DF03D6F92277A4F3574266507ACD77214D37ECA3F3082"
 
 dependencies = [
   { name = "Sui" },
-  { name = "infinite_sea_coin" },
-  { name = "infinite_sea_common" },
 ]
 
 [[move.package]]
@@ -21,22 +19,6 @@ source = { git = "https://github.com/MystenLabs/sui.git", rev = "devnet", subdir
 
 dependencies = [
   { name = "MoveStdlib" },
-]
-
-[[move.package]]
-name = "infinite_sea_coin"
-source = { local = "../infinite-sea-coin" }
-
-dependencies = [
-  { name = "Sui" },
-]
-
-[[move.package]]
-name = "infinite_sea_common"
-source = { local = "../infinite-sea-common" }
-
-dependencies = [
-  { name = "Sui" },
 ]
 
 [move.toolchain-version]

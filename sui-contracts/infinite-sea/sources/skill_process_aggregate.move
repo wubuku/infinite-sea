@@ -10,8 +10,10 @@ module infinite_sea::skill_process_aggregate {
     use infinite_sea::skill_process_complete_production_logic;
     use infinite_sea::skill_process_create_logic;
     use infinite_sea::skill_process_start_production_logic;
+    use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::skill_type_player_id_pair::{Self, SkillTypePlayerIdPair};
+    use sui::balance::Balance;
     use sui::clock::Clock;
     use sui::tx_context;
 
@@ -41,22 +43,25 @@ module infinite_sea::skill_process_aggregate {
         skill_process::emit_skill_process_created(skill_process_created);
     }
 
-    public entry fun start_production(
+    public fun start_production(
         skill_process: &mut skill_process::SkillProcess,
         player: &mut Player,
         item_production: &ItemProduction,
         clock: &Clock,
+        energy: Balance<ENERGY>,
         ctx: &mut tx_context::TxContext,
     ) {
         let production_process_started = skill_process_start_production_logic::verify(
             player,
             item_production,
             clock,
+            &energy,
             skill_process,
             ctx,
         );
         skill_process_start_production_logic::mutate(
             &production_process_started,
+            energy,
             player,
             skill_process,
             ctx,

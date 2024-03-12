@@ -1,9 +1,10 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::skill_process_start_production_logic {
+    use sui::balance;
+    use sui::balance::Balance;
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
-    use infinite_sea::player_aggregate;
     use infinite_sea_common::item_id;
     use infinite_sea_common::production_materials;
     use infinite_sea_common::skill_type_item_id_pair;
@@ -12,6 +13,7 @@ module infinite_sea::skill_process_start_production_logic {
     use infinite_sea::item_production::{Self, ItemProduction};
     use infinite_sea::player;
     use infinite_sea::player::Player;
+    use infinite_sea::player_aggregate;
     use infinite_sea::skill_process;
     use infinite_sea::skill_process::production_process_started_started_at;
 
@@ -20,12 +22,14 @@ module infinite_sea::skill_process_start_production_logic {
     const EProcessAlreadyStarted: u64 = 10;
     const EIncorrectPlayerId: u64 = 11;
     const EIncorrectSkillType: u64 = 12;
+    const ENotEnoughEnergy: u64 = 13;
     const SenderHasNoPermission: u64 = 22;
 
     public(friend) fun verify(
         player: &mut Player,
         item_production: &ItemProduction,
         clock: &Clock,
+        energy: &Balance<infinite_sea_coin::energy::ENERGY>,
         skill_process: &skill_process::SkillProcess,
         ctx: &TxContext,
     ): skill_process::ProductionProcessStarted {
@@ -44,7 +48,8 @@ module infinite_sea::skill_process_start_production_logic {
         let item_id = skill_type_item_id_pair::item_id(&item_production_id);
 
         let base_creation_time = item_production::base_creation_time(item_production);
-        let energy_cost = item_production::energy_cost(item_production);//todo ?
+        let energy_cost = balance::value(energy);
+        assert!(energy_cost >= item_production::energy_cost(item_production), ENotEnoughEnergy);
         let creation_time = base_creation_time;// todo ?
         let production_materials = item_production::production_materials(item_production);
         skill_process::new_production_process_started(
@@ -59,6 +64,7 @@ module infinite_sea::skill_process_start_production_logic {
 
     public(friend) fun mutate(
         production_process_started: &skill_process::ProductionProcessStarted,
+        energy: Balance<infinite_sea_coin::energy::ENERGY>,
         player: &mut Player,
         skill_process: &mut skill_process::SkillProcess,
         ctx: &mut TxContext, // modify the reference to mutable if needed
@@ -74,6 +80,9 @@ module infinite_sea::skill_process_start_production_logic {
         skill_process::set_started_at(skill_process, started_at);
         skill_process::set_completed(skill_process, false);
         skill_process::set_ended_at(skill_process, 0);
+
+        let energy_vault = skill_process::borrow_mut_energy_vault(skill_process);
+        balance::join(energy_vault, energy);
 
         player_aggregate::deduct_items(player, production_materials::items(&production_materials), ctx);
     }
