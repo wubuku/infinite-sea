@@ -145,6 +145,14 @@ aggregates:
         class: assigned
         tableName: ItemCreationTable
     properties:
+    methods:
+      Create:
+        requiredPermission: "__Publisher__"
+        event:
+          isObjectShared: true # Share the object after created.
+      Update:
+        requiredPermission: "__Publisher__"
+
 
   ItemProduction:
     metadata:
@@ -162,6 +170,13 @@ aggregates:
     properties:
       ProductionMaterials:
         type: ProductionMaterials
+    methods:
+      Create:
+        requiredPermission: "__Publisher__"
+        event:
+          isObjectShared: true # Share the object after created.
+      Update:
+        requiredPermission: "__Publisher__"
 
 
 superObjects:

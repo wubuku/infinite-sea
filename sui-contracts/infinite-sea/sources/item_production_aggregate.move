@@ -12,9 +12,12 @@ module infinite_sea::item_production_aggregate {
     use std::option::Option;
     use sui::tx_context;
 
+    const EInvalidPublisher: u64 = 50;
+
     public entry fun create(
         item_production_id_skill_type: u8,
         item_production_id_item_id: u32,
+        publisher: &sui::package::Publisher,
         production_materials_material_item_id_1: u32,
         production_materials_material_quantity_1: u32,
         production_materials_material_item_id_2: Option<u32>,
@@ -34,6 +37,7 @@ module infinite_sea::item_production_aggregate {
         item_production_table: &mut item_production::ItemProductionTable,
         ctx: &mut tx_context::TxContext,
     ) {
+        assert!(sui::package::from_package<item_production::ItemProduction>(publisher), EInvalidPublisher);
         let item_production_id: SkillTypeItemIdPair = skill_type_item_id_pair::new(
             item_production_id_skill_type,
             item_production_id_item_id,
@@ -69,12 +73,13 @@ module infinite_sea::item_production_aggregate {
             ctx,
         );
         item_production::set_item_production_created_id(&mut item_production_created, item_production::id(&item_production));
-        item_production::transfer_object(item_production, tx_context::sender(ctx));
+        item_production::share_object(item_production);
         item_production::emit_item_production_created(item_production_created);
     }
 
     public entry fun update(
-        item_production: item_production::ItemProduction,
+        item_production: &mut item_production::ItemProduction,
+        publisher: &sui::package::Publisher,
         production_materials_material_item_id_1: u32,
         production_materials_material_quantity_1: u32,
         production_materials_material_item_id_2: Option<u32>,
@@ -93,6 +98,7 @@ module infinite_sea::item_production_aggregate {
         success_rate: u16,
         ctx: &mut tx_context::TxContext,
     ) {
+        assert!(sui::package::from_package<item_production::ItemProduction>(publisher), EInvalidPublisher);
         let production_materials: ProductionMaterials = production_materials::new(
             production_materials_material_item_id_1,
             production_materials_material_quantity_1,
@@ -113,15 +119,15 @@ module infinite_sea::item_production_aggregate {
             base_creation_time,
             energy_cost,
             success_rate,
-            &item_production,
+            item_production,
             ctx,
         );
-        let updated_item_production = item_production_update_logic::mutate(
+        item_production_update_logic::mutate(
             &item_production_updated,
             item_production,
             ctx,
         );
-        item_production::update_version_and_transfer_object(updated_item_production, tx_context::sender(ctx));
+        item_production::update_object_version(item_production);
         item_production::emit_item_production_updated(item_production_updated);
     }
 

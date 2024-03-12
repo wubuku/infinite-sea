@@ -28,7 +28,7 @@ module infinite_sea::player_airdrop_logic {
         let item_id = player::player_airdropped_item_id(player_airdropped);
         let quantity = player::player_airdropped_quantity(player_airdropped);
         //let player_id = player::player_id(player);
-        if (player::items_contains(player, item_id)) {
+        if (!player::items_contains(player, item_id)) {
             let player_item = player_item::new_player_item(item_id, quantity);
             player::add_item(player, player_item);
         } else {

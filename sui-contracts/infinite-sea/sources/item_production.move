@@ -367,7 +367,7 @@ module infinite_sea::item_production {
         transfer::freeze_object(item_production);
     }
 
-    fun update_object_version(item_production: &mut ItemProduction) {
+    public(friend) fun update_object_version(item_production: &mut ItemProduction) {
         item_production.version = item_production.version + 1;
         //assert!(item_production.version != 0, EInappropriateVersion);
     }

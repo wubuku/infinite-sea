@@ -42,6 +42,7 @@ singletonObjects:
         event:
           isObjectShared: true # Share the object after initialization.
       AddLevel:
+        requiredPermission: "__Publisher__"
         parameters:
           Level:
             type: u16
@@ -52,6 +53,7 @@ singletonObjects:
         event:
           name: ExperienceLevelAdded
       UpdateLevel:
+        requiredPermission: "__Publisher__"
         parameters:
           Level:
             type: u16

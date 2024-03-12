@@ -11,5 +11,5 @@ infinite_sea_coin = { local = "../infinite-sea-coin" }
 
 [addresses]
 infinite_sea = "0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d"
-infinite_sea = "0x0"
+#infinite_sea = "0x0"
 #sui = "0000000000000000000000000000000000000000000000000000000000000002"

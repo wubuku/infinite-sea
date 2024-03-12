@@ -339,7 +339,7 @@ module infinite_sea::item_creation {
         transfer::freeze_object(item_creation);
     }
 
-    fun update_object_version(item_creation: &mut ItemCreation) {
+    public(friend) fun update_object_version(item_creation: &mut ItemCreation) {
         item_creation.version = item_creation.version + 1;
         //assert!(item_creation.version != 0, EInappropriateVersion);
     }

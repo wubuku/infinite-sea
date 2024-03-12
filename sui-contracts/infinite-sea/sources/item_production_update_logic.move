@@ -31,9 +31,9 @@ module infinite_sea::item_production_update_logic {
 
     public(friend) fun mutate(
         item_production_updated: &item_production::ItemProductionUpdated,
-        item_production: item_production::ItemProduction,
+        item_production: &mut item_production::ItemProduction,
         ctx: &TxContext, // modify the reference to mutable if needed
-    ): item_production::ItemProduction {
+    ) {
         let production_materials = item_production::item_production_updated_production_materials(item_production_updated);
         let requirements_level = item_production::item_production_updated_requirements_level(item_production_updated);
         let base_quantity = item_production::item_production_updated_base_quantity(item_production_updated);
@@ -41,17 +41,16 @@ module infinite_sea::item_production_update_logic {
         let base_creation_time = item_production::item_production_updated_base_creation_time(item_production_updated);
         let energy_cost = item_production::item_production_updated_energy_cost(item_production_updated);
         let success_rate = item_production::item_production_updated_success_rate(item_production_updated);
-        let item_production_id = item_production::item_production_id(&item_production);
+        let item_production_id = item_production::item_production_id(item_production);
         let _ = ctx;
         let _ = item_production_id;
-        item_production::set_production_materials(&mut item_production, production_materials);
-        item_production::set_requirements_level(&mut item_production, requirements_level);
-        item_production::set_base_quantity(&mut item_production, base_quantity);
-        item_production::set_base_experience(&mut item_production, base_experience);
-        item_production::set_base_creation_time(&mut item_production, base_creation_time);
-        item_production::set_energy_cost(&mut item_production, energy_cost);
-        item_production::set_success_rate(&mut item_production, success_rate);
-        item_production
+        item_production::set_production_materials(item_production, production_materials);
+        item_production::set_requirements_level(item_production, requirements_level);
+        item_production::set_base_quantity(item_production, base_quantity);
+        item_production::set_base_experience(item_production, base_experience);
+        item_production::set_base_creation_time(item_production, base_creation_time);
+        item_production::set_energy_cost(item_production, energy_cost);
+        item_production::set_success_rate(item_production, success_rate);
     }
 
 }

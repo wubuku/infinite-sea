@@ -10,9 +10,12 @@ module infinite_sea::item_creation_aggregate {
     use infinite_sea_common::skill_type_item_id_pair::{Self, SkillTypeItemIdPair};
     use sui::tx_context;
 
+    const EInvalidPublisher: u64 = 50;
+
     public entry fun create(
         item_creation_id_skill_type: u8,
         item_creation_id_item_id: u32,
+        publisher: &sui::package::Publisher,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -22,6 +25,7 @@ module infinite_sea::item_creation_aggregate {
         item_creation_table: &mut item_creation::ItemCreationTable,
         ctx: &mut tx_context::TxContext,
     ) {
+        assert!(sui::package::from_package<item_creation::ItemCreation>(publisher), EInvalidPublisher);
         let item_creation_id: SkillTypeItemIdPair = skill_type_item_id_pair::new(
             item_creation_id_skill_type,
             item_creation_id_item_id,
@@ -44,12 +48,13 @@ module infinite_sea::item_creation_aggregate {
             ctx,
         );
         item_creation::set_item_creation_created_id(&mut item_creation_created, item_creation::id(&item_creation));
-        item_creation::transfer_object(item_creation, tx_context::sender(ctx));
+        item_creation::share_object(item_creation);
         item_creation::emit_item_creation_created(item_creation_created);
     }
 
     public entry fun update(
-        item_creation: item_creation::ItemCreation,
+        item_creation: &mut item_creation::ItemCreation,
+        publisher: &sui::package::Publisher,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -58,6 +63,7 @@ module infinite_sea::item_creation_aggregate {
         success_rate: u16,
         ctx: &mut tx_context::TxContext,
     ) {
+        assert!(sui::package::from_package<item_creation::ItemCreation>(publisher), EInvalidPublisher);
         let item_creation_updated = item_creation_update_logic::verify(
             requirements_level,
             base_quantity,
@@ -65,15 +71,15 @@ module infinite_sea::item_creation_aggregate {
             base_creation_time,
             energy_cost,
             success_rate,
-            &item_creation,
+            item_creation,
             ctx,
         );
-        let updated_item_creation = item_creation_update_logic::mutate(
+        item_creation_update_logic::mutate(
             &item_creation_updated,
             item_creation,
             ctx,
         );
-        item_creation::update_version_and_transfer_object(updated_item_creation, tx_context::sender(ctx));
+        item_creation::update_object_version(item_creation);
         item_creation::emit_item_creation_updated(item_creation_updated);
     }
 

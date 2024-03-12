@@ -9,13 +9,17 @@ module infinite_sea_common::experience_table_aggregate {
     use infinite_sea_common::experience_table_update_level_logic;
     use sui::tx_context;
 
+    const EInvalidPublisher: u64 = 50;
+
     public entry fun add_level(
         experience_table: &mut experience_table::ExperienceTable,
+        publisher: &sui::package::Publisher,
         level: u16,
         experience: u32,
         difference: u32,
         ctx: &mut tx_context::TxContext,
     ) {
+        assert!(sui::package::from_package<experience_table::ExperienceTable>(publisher), EInvalidPublisher);
         let experience_level_added = experience_table_add_level_logic::verify(
             level,
             experience,
@@ -34,11 +38,13 @@ module infinite_sea_common::experience_table_aggregate {
 
     public entry fun update_level(
         experience_table: &mut experience_table::ExperienceTable,
+        publisher: &sui::package::Publisher,
         level: u16,
         experience: u32,
         difference: u32,
         ctx: &mut tx_context::TxContext,
     ) {
+        assert!(sui::package::from_package<experience_table::ExperienceTable>(publisher), EInvalidPublisher);
         let experience_level_updated = experience_table_update_level_logic::verify(
             level,
             experience,
