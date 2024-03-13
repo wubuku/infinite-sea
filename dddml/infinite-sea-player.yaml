@@ -11,16 +11,19 @@ aggregates:
       - SkillProcess.StartProduction
       - SkillProcess.CompleteProduction
     id:
-      name: PlayerId
-      type: address
-      generator:
-        class: signer
-        tableName: PlayerTable
+      name: Id
+      type: UID
     properties:
+      Owner:
+        type: address
       Level:
         type: u16
+        defaultLogic:
+          Move: "1"
       Experience:
         type: u32
+        defaultLogic:
+          Move: "0"
       Items:
         itemType: PlayerItem
       #Nickname:
@@ -43,6 +46,14 @@ aggregates:
       Create:
         event:
           isObjectShared: true # Share the object after created.
+        constants:
+          ESenderHasNoPermission:
+            constantExpression:
+              Move: 22
+            type: u64
+        verificationLogic:
+          Move: >
+            assert!(sui::tx_context::sender(ctx) == owner, ESenderHasNoPermission);
 
       Airdrop:
         requiredPermission: "__Publisher__"

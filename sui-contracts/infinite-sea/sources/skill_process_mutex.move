@@ -6,7 +6,7 @@
 module infinite_sea::skill_process_mutex {
     use std::option::{Self, Option};
     use sui::event;
-    use sui::object::{Self, UID};
+    use sui::object::{Self, ID, UID};
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
@@ -21,7 +21,7 @@ module infinite_sea::skill_process_mutex {
 
     struct SkillProcessMutexTable has key {
         id: UID,
-        table: table::Table<address, object::ID>,
+        table: table::Table<ID, object::ID>,
     }
 
     struct SkillProcessMutexTableCreated has copy, drop {
@@ -42,7 +42,7 @@ module infinite_sea::skill_process_mutex {
 
     struct SkillProcessMutex has key {
         id: UID,
-        player_id: address,
+        player_id: ID,
         version: u64,
         active_skill_type: Option<u8>,
     }
@@ -51,7 +51,7 @@ module infinite_sea::skill_process_mutex {
         object::uid_to_inner(&skill_process_mutex.id)
     }
 
-    public fun player_id(skill_process_mutex: &SkillProcessMutex): address {
+    public fun player_id(skill_process_mutex: &SkillProcessMutex): ID {
         skill_process_mutex.player_id
     }
 
@@ -71,7 +71,7 @@ module infinite_sea::skill_process_mutex {
     }
 
     fun new_skill_process_mutex(
-        player_id: address,
+        player_id: ID,
         active_skill_type: Option<u8>,
         ctx: &mut TxContext,
     ): SkillProcessMutex {
@@ -88,7 +88,7 @@ module infinite_sea::skill_process_mutex {
 
 
     public(friend) fun create_skill_process_mutex(
-        player_id: address,
+        player_id: ID,
         active_skill_type: Option<u8>,
         skill_process_mutex_table: &mut SkillProcessMutexTable,
         ctx: &mut TxContext,
@@ -103,14 +103,14 @@ module infinite_sea::skill_process_mutex {
     }
 
     public(friend) fun asset_player_id_not_exists(
-        player_id: address,
+        player_id: ID,
         skill_process_mutex_table: &SkillProcessMutexTable,
     ) {
         assert!(!table::contains(&skill_process_mutex_table.table, player_id), EIdAlreadyExists);
     }
 
     fun asset_player_id_not_exists_then_add(
-        player_id: address,
+        player_id: ID,
         skill_process_mutex_table: &mut SkillProcessMutexTable,
         id: object::ID,
     ) {

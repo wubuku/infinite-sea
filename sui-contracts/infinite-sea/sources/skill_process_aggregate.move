@@ -15,11 +15,13 @@ module infinite_sea::skill_process_aggregate {
     use infinite_sea_common::skill_type_player_id_pair::{Self, SkillTypePlayerIdPair};
     use sui::balance::Balance;
     use sui::clock::Clock;
+    use sui::object::ID;
     use sui::tx_context;
 
     public entry fun create(
         skill_process_id_skill_type: u8,
-        skill_process_id_player_id: address,
+        skill_process_id_player_id: ID,
+        player: &Player,
         skill_process_table: &mut skill_process::SkillProcessTable,
         ctx: &mut tx_context::TxContext,
     ) {
@@ -30,6 +32,7 @@ module infinite_sea::skill_process_aggregate {
 
         let skill_process_created = skill_process_create_logic::verify(
             skill_process_id,
+            player,
             skill_process_table,
             ctx,
         );

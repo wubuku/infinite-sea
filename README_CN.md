@@ -98,6 +98,9 @@ default package_id: 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a9860
 
 "objectType": "0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::item_production::ItemProductionTable",
 "objectId": "0xebd24b661647357438e49bd7646d6400d5f2eb293340f8af68e31a6804fa5240",
+
+"objectType": "0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::skill_process::SkillProcessTable",
+"objectId": "0x4efc827e09fb474e944efdf4ef45846e6473343a87f82f78cf82ea08765c7050",
 ```
 
 
@@ -266,4 +269,34 @@ sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e52234
 --gas-budget 11000000
 ```
 
+### 创建一个生产流程
+
+参数：
+
+* skill_process_id_skill_type: u8,
+* skill_process_id_player_id: address,
+* skill_process_table: &mut skill_process::SkillProcessTable,
+
+```shell
+sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d --module skill_process_aggregate --function create \
+--args '1' \
+0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2 \
+0x4efc827e09fb474e944efdf4ef45846e6473343a87f82f78cf82ea08765c7050 \
+--gas-budget 11000000
+```
+
+记录下创建好的生产流程的对象 ID：
+
+```text
+│  │ ObjectID: 0x0e327a5fae9a59cb22b9b1cfc9b67f4eefea22e2c24ec087f332a91f78467c7b
+│  │ ObjectType: 0x5eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::skill_process::SkillProcess
+```
+
+### 开始生产流程
+
+TODO 
+
+### 完成生产流程
+
+TODO
 

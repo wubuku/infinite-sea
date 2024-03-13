@@ -20,11 +20,11 @@ module infinite_sea::skill_process_start_production_logic {
     friend infinite_sea::skill_process_aggregate;
 
     const EProcessAlreadyStarted: u64 = 10;
-    const EIncorrectPlayerId: u64 = 11;
+    const EInvalidPlayerId: u64 = 11;
     const EIncorrectSkillType: u64 = 12;
     const ENotEnoughEnergy: u64 = 13;
     const ELowerThanRequiredLevel: u64 = 14;
-    const SenderHasNoPermission: u64 = 22;
+    const ESenderHasNoPermission: u64 = 22;
 
     public(friend) fun verify(
         player: &mut Player,
@@ -34,14 +34,14 @@ module infinite_sea::skill_process_start_production_logic {
         skill_process: &skill_process::SkillProcess,
         ctx: &TxContext,
     ): skill_process::ProductionProcessStarted {
+        assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
         assert!(
             skill_process::item_id(skill_process) == item_id::unused_item() || skill_process::completed(skill_process),
             EProcessAlreadyStarted
         );
         let skill_process_id = skill_process::skill_process_id(skill_process);
         let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
-        assert!(player::player_id(player) == player_id, EIncorrectPlayerId);
-        assert!(sui::tx_context::sender(ctx) == player_id, SenderHasNoPermission);
+        assert!(player::id(player) == player_id, EInvalidPlayerId);
 
         let item_production_id = item_production::item_production_id(item_production);
         let skill_type = skill_type_item_id_pair::skill_type(&item_production_id);

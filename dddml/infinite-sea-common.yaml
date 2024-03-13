@@ -80,7 +80,7 @@ valueObjects:
       SkillType:
         type: SkillType
       PlayerId:
-        type: address
+        type: ID
 
   ExperienceLevel:
     module: "Common"

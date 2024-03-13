@@ -38,20 +38,28 @@ aggregates:
 
     methods:
       Create:
+        parameters:
+          Player:
+            referenceType: Player
         event:
           isObjectShared: true # Share the object after created.
         constants:
-          EFormNotSubmitted:
-            name: EInvalidPlayerId
+          EInvalidPlayerId:
             constantExpression:
               Move: 10
             type: u64
+          ESenderHasNoPermission:
+            constantExpression:
+              Move: 22
+            type: u64
         verificationLogic:
           Move: >
-            let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
-                    assert!(sui::tx_context::sender(ctx) == player_id, EInvalidPlayerId);
+            assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
+                    let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
+                    assert!(player::id(player) == player_id, EInvalidPlayerId);
 
       #StartCreation: # todo start item creation
+
       StartProduction:
         parameters:
           Player:
@@ -118,11 +126,12 @@ aggregates:
             NewLevel:
               type: u16
 
+
   SkillProcessMutex:
     module: "Common"
     id:
       name: PlayerId
-      type: address
+      type: ID
       generator:
         class: assigned
         tableName: SkillProcessMutexTable
@@ -130,6 +139,7 @@ aggregates:
       ActiveSkillType:
         type: SkillType
         optional: true
+
 
   ItemCreation:
     metadata:
@@ -196,23 +206,4 @@ superObjects:
         type: u64
       SuccessRate: #(percentage)
         type: u16
-
-
-typeDefinitions:
-  ENERGY:
-    moveType: "infinite_sea_coin::energy::ENERGY"
-    droppable: true
-
-
-configuration:
-  sequenceNumber: 1000
-  metadata:
-    NO_MOVE_EVENT_MODULE: true
-
-  defaultModule:
-    name: "Sui.InfiniteSea"
-    requiredModules: [ "Common" ]
-  submodules:
-    Common:
-      requiredModules: [ ]
 

@@ -28,32 +28,14 @@ module infinite_sea::player {
     const EEmptyObjectID: u64 = 107;
     const EIdNotFound: u64 = 111;
 
-    struct PlayerTable has key {
-        id: UID,
-        table: table::Table<address, object::ID>,
-    }
-
-    struct PlayerTableCreated has copy, drop {
-        id: object::ID,
-    }
-
     fun init(otw: PLAYER, ctx: &mut TxContext) {
         sui::package::claim_and_keep(otw, ctx);
-        let id_generator_table = PlayerTable {
-            id: object::new(ctx),
-            table: table::new(ctx),
-        };
-        let id_generator_table_id = object::uid_to_inner(&id_generator_table.id);
-        transfer::share_object(id_generator_table);
-        event::emit(PlayerTableCreated {
-            id: id_generator_table_id,
-        });
     }
 
     struct Player has key {
         id: UID,
-        player_id: address,
         version: u64,
+        owner: address,
         level: u16,
         experience: u32,
         items: table::Table<u32, PlayerItem>,
@@ -63,12 +45,16 @@ module infinite_sea::player {
         object::uid_to_inner(&player.id)
     }
 
-    public fun player_id(player: &Player): address {
-        player.player_id
-    }
-
     public fun version(player: &Player): u64 {
         player.version
+    }
+
+    public fun owner(player: &Player): address {
+        player.owner
+    }
+
+    public(friend) fun set_owner(player: &mut Player, owner: address) {
+        player.owner = owner;
     }
 
     public fun level(player: &Player): u16 {
@@ -115,27 +101,23 @@ module infinite_sea::player {
         table::length(&player.items)
     }
 
-    fun new_player(
-        player_id: address,
-        level: u16,
-        experience: u32,
+    public(friend) fun new_player(
+        owner: address,
         ctx: &mut TxContext,
     ): Player {
         Player {
             id: object::new(ctx),
-            player_id,
             version: 0,
-            level,
-            experience,
+            owner,
+            level: 1,
+            experience: 0,
             items: table::new<u32, PlayerItem>(ctx),
         }
     }
 
     struct PlayerCreated has copy, drop {
         id: option::Option<object::ID>,
-        player_id: address,
-        level: u16,
-        experience: u32,
+        owner: address,
     }
 
     public fun player_created_id(player_created: &PlayerCreated): option::Option<object::ID> {
@@ -146,34 +128,21 @@ module infinite_sea::player {
         player_created.id = option::some(id);
     }
 
-    public fun player_created_player_id(player_created: &PlayerCreated): address {
-        player_created.player_id
-    }
-
-    public fun player_created_level(player_created: &PlayerCreated): u16 {
-        player_created.level
-    }
-
-    public fun player_created_experience(player_created: &PlayerCreated): u32 {
-        player_created.experience
+    public fun player_created_owner(player_created: &PlayerCreated): address {
+        player_created.owner
     }
 
     public(friend) fun new_player_created(
-        player_id: address,
-        level: u16,
-        experience: u32,
+        owner: address,
     ): PlayerCreated {
         PlayerCreated {
             id: option::none(),
-            player_id,
-            level,
-            experience,
+            owner,
         }
     }
 
     struct PlayerAirdropped has copy, drop {
         id: object::ID,
-        player_id: address,
         version: u64,
         item_id: u32,
         quantity: u32,
@@ -181,10 +150,6 @@ module infinite_sea::player {
 
     public fun player_airdropped_id(player_airdropped: &PlayerAirdropped): object::ID {
         player_airdropped.id
-    }
-
-    public fun player_airdropped_player_id(player_airdropped: &PlayerAirdropped): address {
-        player_airdropped.player_id
     }
 
     public fun player_airdropped_item_id(player_airdropped: &PlayerAirdropped): u32 {
@@ -202,7 +167,6 @@ module infinite_sea::player {
     ): PlayerAirdropped {
         PlayerAirdropped {
             id: id(player),
-            player_id: player_id(player),
             version: version(player),
             item_id,
             quantity,
@@ -211,17 +175,12 @@ module infinite_sea::player {
 
     struct PlayerItemsDeducted has copy, drop {
         id: object::ID,
-        player_id: address,
         version: u64,
         items: vector<ProductionMaterial>,
     }
 
     public fun player_items_deducted_id(player_items_deducted: &PlayerItemsDeducted): object::ID {
         player_items_deducted.id
-    }
-
-    public fun player_items_deducted_player_id(player_items_deducted: &PlayerItemsDeducted): address {
-        player_items_deducted.player_id
     }
 
     public fun player_items_deducted_items(player_items_deducted: &PlayerItemsDeducted): vector<ProductionMaterial> {
@@ -234,7 +193,6 @@ module infinite_sea::player {
     ): PlayerItemsDeducted {
         PlayerItemsDeducted {
             id: id(player),
-            player_id: player_id(player),
             version: version(player),
             items,
         }
@@ -242,7 +200,6 @@ module infinite_sea::player {
 
     struct PlayerExperienceAndItemsIncreased has copy, drop {
         id: object::ID,
-        player_id: address,
         version: u64,
         experience: u32,
         items: vector<ProductionMaterial>,
@@ -251,10 +208,6 @@ module infinite_sea::player {
 
     public fun player_experience_and_items_increased_id(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): object::ID {
         player_experience_and_items_increased.id
-    }
-
-    public fun player_experience_and_items_increased_player_id(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): address {
-        player_experience_and_items_increased.player_id
     }
 
     public fun player_experience_and_items_increased_experience(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): u32 {
@@ -277,7 +230,6 @@ module infinite_sea::player {
     ): PlayerExperienceAndItemsIncreased {
         PlayerExperienceAndItemsIncreased {
             id: id(player),
-            player_id: player_id(player),
             version: version(player),
             experience,
             items,
@@ -285,39 +237,6 @@ module infinite_sea::player {
         }
     }
 
-
-    public(friend) fun create_player(
-        player_id: address,
-        level: u16,
-        experience: u32,
-        player_table: &mut PlayerTable,
-        ctx: &mut TxContext,
-    ): Player {
-        let player = new_player(
-            player_id,
-            level,
-            experience,
-            ctx,
-        );
-        asset_player_id_not_exists_then_add(player_id, player_table, object::uid_to_inner(&player.id));
-        player
-    }
-
-    public(friend) fun asset_player_id_not_exists(
-        player_id: address,
-        player_table: &PlayerTable,
-    ) {
-        assert!(!table::contains(&player_table.table, player_id), EIdAlreadyExists);
-    }
-
-    fun asset_player_id_not_exists_then_add(
-        player_id: address,
-        player_table: &mut PlayerTable,
-        id: object::ID,
-    ) {
-        asset_player_id_not_exists(player_id, player_table);
-        table::add(&mut player_table.table, player_id, id);
-    }
 
     public(friend) fun transfer_object(player: Player, recipient: address) {
         assert!(player.version == 0, EInappropriateVersion);
@@ -355,8 +274,8 @@ module infinite_sea::player {
     public(friend) fun drop_player(player: Player) {
         let Player {
             id,
-            player_id: _player_id,
             version: _version,
+            owner: _owner,
             level: _level,
             experience: _experience,
             items,

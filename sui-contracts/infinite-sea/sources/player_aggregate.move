@@ -18,20 +18,15 @@ module infinite_sea::player_aggregate {
     const EInvalidPublisher: u64 = 50;
 
     public entry fun create(
-        level: u16,
-        experience: u32,
-        player_table: &mut player::PlayerTable,
+        owner: address,
         ctx: &mut tx_context::TxContext,
     ) {
         let player_created = player_create_logic::verify(
-            level,
-            experience,
-            player_table,
+            owner,
             ctx,
         );
         let player = player_create_logic::mutate(
             &player_created,
-            player_table,
             ctx,
         );
         player::set_player_created_id(&mut player_created, player::id(&player));

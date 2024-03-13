@@ -1,0 +1,18 @@
+configuration:
+  sequenceNumber: 1000
+  metadata:
+    NO_MOVE_EVENT_MODULE: true
+
+  defaultModule:
+    name: "Sui.InfiniteSea"
+    requiredModules: [ "Common" ]
+  submodules:
+    Common:
+      requiredModules: [ ]
+
+typeDefinitions:
+  ENERGY:
+    moveType: "infinite_sea_coin::energy::ENERGY"
+    droppable: true
+
+
