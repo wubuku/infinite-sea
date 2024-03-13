@@ -80,7 +80,7 @@ module infinite_sea::skill_process_complete_production_logic {
         let max_level = xp_levels_len - 1;
         if (max_level > (old_level as u64)) {
             let i = (old_level as u64);
-            while (i < max_level) {
+            while (i <= max_level) {
                 let xp_level = vector::borrow(xp_levels, i);
                 if (old_experience + added_experience >= experience_level::experience(xp_level)) {
                     new_level = experience_level::level(xp_level);

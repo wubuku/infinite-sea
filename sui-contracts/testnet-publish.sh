@@ -219,7 +219,7 @@ elif [[ $line == "[package]" ]]
   then
     echo "$line" >> $move_toml_temp
     echo "published-at = \"$default_package_id\"" >> $move_toml_temp
-elif [[ $line == "infinite_sea_default ="* ]]
+elif [[ $line == "infinite_sea ="* ]]
   then
     echo "#$line" >> $move_toml_temp
 elif [[ $line == "[addresses]" ]]
