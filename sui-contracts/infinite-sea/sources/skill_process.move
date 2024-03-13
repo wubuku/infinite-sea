@@ -10,7 +10,7 @@ module infinite_sea::skill_process {
     use std::option;
     use sui::balance::Balance;
     use sui::event;
-    use sui::object::{Self, ID, UID};
+    use sui::object::{Self, UID};
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
@@ -142,7 +142,6 @@ module infinite_sea::skill_process {
     struct SkillProcessCreated has copy, drop {
         id: option::Option<object::ID>,
         skill_process_id: SkillTypePlayerIdPair,
-        player: ID,
     }
 
     public fun skill_process_created_id(skill_process_created: &SkillProcessCreated): option::Option<object::ID> {
@@ -157,18 +156,12 @@ module infinite_sea::skill_process {
         skill_process_created.skill_process_id
     }
 
-    public fun skill_process_created_player(skill_process_created: &SkillProcessCreated): ID {
-        skill_process_created.player
-    }
-
     public(friend) fun new_skill_process_created(
         skill_process_id: SkillTypePlayerIdPair,
-        player: ID,
     ): SkillProcessCreated {
         SkillProcessCreated {
             id: option::none(),
             skill_process_id,
-            player,
         }
     }
 

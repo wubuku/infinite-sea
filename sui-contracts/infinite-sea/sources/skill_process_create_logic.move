@@ -24,7 +24,6 @@ module infinite_sea::skill_process_create_logic {
         skill_process::asset_skill_process_id_not_exists(skill_process_id, skill_process_table);
         skill_process::new_skill_process_created(
             skill_process_id,
-            player::id(player),
         )
     }
 
@@ -34,7 +33,6 @@ module infinite_sea::skill_process_create_logic {
         ctx: &mut TxContext,
     ): skill_process::SkillProcess {
         let skill_process_id = skill_process::skill_process_created_skill_process_id(skill_process_created);
-        let player = skill_process::skill_process_created_player(skill_process_created);
         skill_process::create_skill_process(
             skill_process_id,
             skill_process_table,

@@ -41,6 +41,7 @@ aggregates:
         parameters:
           Player:
             referenceType: Player
+            isIgnoredInEvent: true
         event:
           isObjectShared: true # Share the object after created.
         constants:
