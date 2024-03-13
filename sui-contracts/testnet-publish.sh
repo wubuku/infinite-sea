@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# External Package IDs
-
 player_owner="0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2"
 
+# External Package IDs
+# ...
+
+# -------------------------
 # ENERGY coin object Ids
-energy_coin_object_id_1="0x4414dc3e17211ecf8b27466774309cee213befd2cd5b4f331e68ee0f050f7604"
+#energy_coin_object_id_1="0x4414dc3e17211ecf8b27466774309cee213befd2cd5b4f331e68ee0f050f7604"
 
 # The following are the object IDs of the SUI objects that are used in the following script.
 # Make sure the amounts of the following SUI objects are greater than xxx
@@ -15,70 +17,86 @@ energy_coin_object_id_1="0x4414dc3e17211ecf8b27466774309cee213befd2cd5b4f331e68e
 # -------- Constants --------
 move_toml_file="Move.toml"
 move_toml_temp="Move-temp.toml"
-#
-## ----------------------------------------------------------------------------------------
-## Publish coin package
-#cd infinite-sea-coin
-#log_file="../testnet-publish.log"
-#echo "#-------- publish coin package --------" | tee -a "$log_file"
-#publish_json_file="testnet_coin_publish.json"
-#
-#sui client publish --gas-budget 200000000 --skip-fetch-latest-git-deps --skip-dependency-verification --json > "$publish_json_file"
-#
-#publish_coin_txn_digest=$(jq -r '.digest' "$publish_json_file")
-#echo "publish coin package txn_digest: $publish_coin_txn_digest" | tee -a "$log_file"
-#
-#if [ -z "$publish_coin_txn_digest" ]
-#then
-#echo "The publish_coin_txn_digest is empty, exit the script." | tee -a "$log_file"
-#exit 1
-#fi
-#
-#coin_package_id=$(jq -r '.objectChanges[] | select(.type == "published").packageId' "$publish_json_file")
-#echo "coin package_id: $coin_package_id" | tee -a "$log_file"
-#echo "" | tee -a "$log_file"
-#
-#while read -r line
-#do
-#  objectType=$(echo "$line" | jq -r '.objectType')
-#  echo "objectType: $objectType" | tee -a "$log_file"
-#  objectId=$(echo "$line" | jq -r '.objectId')
-#  echo "objectId: $objectId" | tee -a "$log_file"
-#  echo "" | tee -a "$log_file"
-#done < <(jq -c '.objectChanges[] | select(.type == "created")' "$publish_json_file")
-#
-## -------- update coin Move.toml --------
-## read every line of Move.toml
-#while read -r line
-#do
-## if the line starts with "published-at =", then add "#" in front of it
-#if [[ $line == "published-at ="* ]]
-#  then
-#    echo "#$line" >> $move_toml_temp
-## if the line is "[package]", then add "published-at = $package_id" below it
-#elif [[ $line == "[package]" ]]
-#  then
-#    echo "$line" >> $move_toml_temp
-#    echo "published-at = \"$coin_package_id\"" >> $move_toml_temp
-#elif [[ $line == "infinite_sea_coin ="* ]]
-#  then
-#    echo "#$line" >> $move_toml_temp
-## if the line is "[addresses]", then add a line below it
-#elif [[ $line == "[addresses]" ]]
-#  then
-#    echo "$line" >> $move_toml_temp
-#    echo "infinite_sea_coin = \"$coin_package_id\"" >> $move_toml_temp
-## else, keep the line unchanged
-#else
-#  echo "$line" >> $move_toml_temp
-#fi
-#done < $move_toml_file
-#
-## replace the original file with the temp file
-#mv $move_toml_temp $move_toml_file
-#cd ..
-#
+
+# ----------------------------------------------------------------------------------------
+# Publish coin package
+cd infinite-sea-coin
+log_file="../testnet-publish.log"
+echo "#-------- publish coin package --------" | tee -a "$log_file"
+publish_json_file="testnet_coin_publish.json"
+
+sui client publish --gas-budget 200000000 --skip-fetch-latest-git-deps --skip-dependency-verification --json > "$publish_json_file"
+
+publish_coin_txn_digest=$(jq -r '.digest' "$publish_json_file")
+echo "publish coin package txn_digest: $publish_coin_txn_digest" | tee -a "$log_file"
+
+if [ -z "$publish_coin_txn_digest" ]
+then
+echo "The publish_coin_txn_digest is empty, exit the script." | tee -a "$log_file"
+exit 1
+fi
+
+coin_package_id=$(jq -r '.objectChanges[] | select(.type == "published").packageId' "$publish_json_file")
+echo "coin package_id: $coin_package_id" | tee -a "$log_file"
+echo "" | tee -a "$log_file"
+
+energy_coin_treasury_cap_object_id=""
+
+while read -r line
+do
+  objectType=$(echo "$line" | jq -r '.objectType')
+  echo "objectType: $objectType" | tee -a "$log_file"
+  objectId=$(echo "$line" | jq -r '.objectId')
+  echo "objectId: $objectId" | tee -a "$log_file"
+  echo "" | tee -a "$log_file"
+  if [[ $objectType == *::coin::TreasuryCap* ]]
+  then
+    energy_coin_treasury_cap_object_id=$objectId
+  fi
+done < <(jq -c '.objectChanges[] | select(.type == "created")' "$publish_json_file")
+echo "energy_coin_treasury_cap_object_id: $energy_coin_treasury_cap_object_id"
+
+# -------- Mint ENERGY coins --------
+sui client call --package "$coin_package_id" --module energy --function mint \
+--args "$energy_coin_treasury_cap_object_id" '1000000000' \
+--gas-budget 10000000 --json  > testnet_mint_energy_coin.json
+
+energy_coin_object_id_1=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("coin::Coin<")).objectId' testnet_mint_energy_coin.json)
+echo "energy_coin_object_id_1: $energy_coin_object_id_1" | tee -a "$log_file"
+
+# -------- update coin Move.toml --------
+# read every line of Move.toml
+while read -r line
+do
+# if the line starts with "published-at =", then add "#" in front of it
+if [[ $line == "published-at ="* ]]
+  then
+    echo "#$line" >> $move_toml_temp
+# if the line is "[package]", then add "published-at = $package_id" below it
+elif [[ $line == "[package]" ]]
+  then
+    echo "$line" >> $move_toml_temp
+    echo "published-at = \"$coin_package_id\"" >> $move_toml_temp
+elif [[ $line == "infinite_sea_coin ="* ]]
+  then
+    echo "#$line" >> $move_toml_temp
+# if the line is "[addresses]", then add a line below it
+elif [[ $line == "[addresses]" ]]
+  then
+    echo "$line" >> $move_toml_temp
+    echo "infinite_sea_coin = \"$coin_package_id\"" >> $move_toml_temp
+# else, keep the line unchanged
+else
+  echo "$line" >> $move_toml_temp
+fi
+done < $move_toml_file
+
+# replace the original file with the temp file
+mv $move_toml_temp $move_toml_file
+cd ..
+
 ##exit 1
+
 
 # ----------------------------------------------------------------------------------------
 # Publish common package

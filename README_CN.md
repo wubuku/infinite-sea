@@ -31,10 +31,9 @@ wubuku/dddappp:0.0.1 \
 sui client publish --gas-budget 200000000 --skip-dependency-verification --skip-fetch-latest-git-deps
 ```
 
-我们在 testnet 上发布了这个合约，交易摘要：`F63nQ3VW2XfFX4FkQAMYP5hGfwmbjQA1ze3J9Pznujgk`。
-Package ID：`0x0c241c19009f6523ede2a8746094d10ac9c28ae88cf5cafbf7922086c3766eab`。
+记录输出中的合约 Package ID。比如：`0x0c241c19009f6523ede2a8746094d10ac9c28ae88cf5cafbf7922086c3766eab`。
 
-这个代币的 TreasuryCap 的 Object ID 是：
+记录输出中的 TreasuryCap 的 Object ID：
 
 ```text
 │  ┌──                                                                                                                       │
@@ -50,18 +49,20 @@ sui client call --package 0x0c241c19009f6523ede2a8746094d10ac9c28ae88cf5cafbf792
 --gas-budget 19000000
 ```
 
-记录创建的能量币对象的 ID。比如：`0xba8925cea634dcadebb7b73940955ca27cf5cab6331f9f6bddf2ca864b08a147`。
+记录 mint 获得的能量币的 Object ID。比如：`0xba8925cea634dcadebb7b73940955ca27cf5cab6331f9f6bddf2ca864b08a147`。
+
 
 ### 发布 common 合约包
 
-我们在测试网上发布了这个包：
+发布 common 合约包，记录下 Package ID：
 
 ```text
-publish common package txn_digest: Bep7DbmaHLQ6DRoXdot23jUB7TSpFrerZRE8MMhwm7Gr
-common package_id: 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea2a6d397b1be8
+txn_digest: Bep7DbmaHLQ6DRoXdot23jUB7TSpFrerZRE8MMhwm7Gr
+
+package_id: 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea2a6d397b1be8
 ```
 
-记录下这些对象的 ID：
+记录下发布交易所创建的这些类型的对象的 ID：
 
 ```text
 │  │ ObjectID: 0x2a78df4a1327ecbcf68c29b38597365b6d32c3463f3a612babdd55e28e770ee7
@@ -77,16 +78,17 @@ common package_id: 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea2a6d397
 
 ### 发布默认合约包
 
-我们在测试网上发布了这个包：
+记录 default 合约项目发布的包 ID：
 
 ```text
-publish default package txn_digest: J6iEZctCYTvcSmpT8Wm5QGGQvFdhXiJZPdbraYRESkdj
-default package_id: 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d
+txn_digest: J6iEZctCYTvcSmpT8Wm5QGGQvFdhXiJZPdbraYRESkdj
+
+package_id: 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d
 ```
 
-记录下 `0x...::player::PlayerTable` 对象的 ID，比如 `0x5629b69bccf6df237058603c7c28ea6c23db0b260a52e79f0781837b6576e87a`。
+记录下类型为 `0x...::player::PlayerTable` 的对象的 ID，比如 `0x5629b69bccf6df237058603c7c28ea6c23db0b260a52e79f0781837b6576e87a`。
 
-并记录以下类型的对象 ID：
+并记录以下类型的对象的 ID：
 
 ```text
 "objectType": "0x2::package::Publisher",
@@ -138,6 +140,7 @@ sui client call --package 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea
 ```shell
 sui client object 0xcf7359ac1d3bedc92d9ae938236e68595ec768c964203bf8cc35619801f3e6e4
 ```
+
 
 ### 创建 Item
 
