@@ -5,7 +5,7 @@
 module infinite_sea_coin::energy {
     use std::option;
 
-    use sui::coin::{Self, TreasuryCap};
+    use sui::coin::{Self, Coin, TreasuryCap};
     use sui::transfer;
     use sui::tx_context::{Self, TxContext};
 
@@ -27,6 +27,12 @@ module infinite_sea_coin::energy {
     public entry fun mint(treasury_cap: &mut TreasuryCap<ENERGY>, amount: u64, ctx: &mut TxContext) {
         let coin = coin::mint<ENERGY>(treasury_cap, amount, ctx);
         transfer::public_transfer(coin, tx_context::sender(ctx));
+    }
+
+    #[lint_allow(self_transfer)]
+    public entry fun split_and_self_transfer(coin: &mut Coin<ENERGY>, split_amount: u64, ctx: &mut TxContext) {
+        let coin_s = coin::split(coin, split_amount, ctx);
+        transfer::public_transfer(coin_s, tx_context::sender(ctx));
     }
 
     #[test_only]

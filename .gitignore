@@ -9,3 +9,4 @@ sui-contracts/infinite-sea-coin/build
 sui-contracts/testnet_common_publish.json
 sui-contracts/infinite-sea/testnet_default_publish.json
 sui-contracts/infinite-sea-common/testnet_common_publish.json
+sui-contracts/testnet_*.json

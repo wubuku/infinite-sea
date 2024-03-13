@@ -52,7 +52,6 @@ sui client call --package 0x0c241c19009f6523ede2a8746094d10ac9c28ae88cf5cafbf792
 
 记录创建的能量币对象的 ID。比如：`0xba8925cea634dcadebb7b73940955ca27cf5cab6331f9f6bddf2ca864b08a147`。
 
-
 ### 发布 common 合约包
 
 我们在测试网上发布了这个包：
@@ -110,6 +109,7 @@ default package_id: 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a9860
 
 * experience_table: &mut experience_table::ExperienceTable,
 * level: u16,
+* {COMMON_PACKAGE_PUBLISHER_ID}
 * experience: u32,
 * difference: u32,
 
@@ -117,15 +117,15 @@ default package_id: 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a9860
 
 ```shell
 sui client call --package 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea2a6d397b1be8 --module experience_table_aggregate --function add_level \
---args 0xcf7359ac1d3bedc92d9ae938236e68595ec768c964203bf8cc35619801f3e6e4 '0' '0' '0' \
+--args 0xcf7359ac1d3bedc92d9ae938236e68595ec768c964203bf8cc35619801f3e6e4 {COMMON_PACKAGE_PUBLISHER_ID} '0' '0' '0' \
 --gas-budget 11000000
 
 sui client call --package 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea2a6d397b1be8 --module experience_table_aggregate --function add_level \
---args 0xcf7359ac1d3bedc92d9ae938236e68595ec768c964203bf8cc35619801f3e6e4 '1' '0' '0' \
+--args 0xcf7359ac1d3bedc92d9ae938236e68595ec768c964203bf8cc35619801f3e6e4 {COMMON_PACKAGE_PUBLISHER_ID} '1' '0' '0' \
 --gas-budget 11000000
 
 sui client call --package 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea2a6d397b1be8 --module experience_table_aggregate --function add_level \
---args 0xcf7359ac1d3bedc92d9ae938236e68595ec768c964203bf8cc35619801f3e6e4 '2' '83' '83' \
+--args 0xcf7359ac1d3bedc92d9ae938236e68595ec768c964203bf8cc35619801f3e6e4 {COMMON_PACKAGE_PUBLISHER_ID} '2' '83' '83' \
 --gas-budget 11000000
 
 sui client call --package 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea2a6d397b1be8 --module experience_table_aggregate --function add_level \
@@ -193,7 +193,7 @@ sui client call --package 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea
 
 ```shell
 sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d --module player_aggregate --function create \
---args '1' '0' 0x5629b69bccf6df237058603c7c28ea6c23db0b260a52e79f0781837b6576e87a \
+--args 0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2 \
 --gas-budget 11000000
 ```
 
@@ -274,29 +274,127 @@ sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e52234
 参数：
 
 * skill_process_id_skill_type: u8,
-* skill_process_id_player_id: address,
+* skill_process_id_player_id: ID,
+* player: &Player,
 * skill_process_table: &mut skill_process::SkillProcessTable,
 
+执行命令：
+
 ```shell
-sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d --module skill_process_aggregate --function create \
---args '1' \
-0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2 \
-0x4efc827e09fb474e944efdf4ef45846e6473343a87f82f78cf82ea08765c7050 \
+sui client call --package "$default_package_id" --module skill_process_aggregate --function create \
+--args '0' {PLAYER_ID} \
+{PLAYER_ID} \
+"$skill_process_table_object_id" \
+--gas-budget 11000000
+```
+
+示例：
+
+```shell
+sui client call --package 0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc89731fa517fb8 --module skill_process_aggregate --function create \
+--args '0' 0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
+0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
+0x5689f9e28f3bf359604de4eb85a1c7a55520bd4097b54b42e1acb23c1fc44279 \
 --gas-budget 11000000
 ```
 
 记录下创建好的生产流程的对象 ID：
 
 ```text
-│  │ ObjectID: 0x0e327a5fae9a59cb22b9b1cfc9b67f4eefea22e2c24ec087f332a91f78467c7b
-│  │ ObjectType: 0x5eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::skill_process::SkillProcess
+│  │ ObjectID: 0x657f29da2b16aa765e841bf893ff55cef2ab6d594f6a6ead4b960b389ba692c7
+│  │ ObjectType: 0x::skill_process::SkillProcess
 ```
 
 ### 开始生产流程
 
-TODO 
+参数：
+
+* skill_process: &mut SkillProcess,
+* player: &mut Player,
+* item_production: &ItemProduction,
+* clock: &Clock,
+* energy: Coin<ENERGY>, 
+
+```shell
+sui client call --package "$default_package_id" --module skill_process_service --function start_production \
+--args "$skill_process_object_id_1" \
+"$player_id" \
+"$item_production_id_1" \
+"0x6" \
+"$energy_coin_object_id_1" \
+--gas-budget 11000000
+```
+
 
 ### 完成生产流程
 
-TODO
+参数：
+
+* skill_process: &mut skill_process::SkillProcess,
+* player: &mut Player,
+* item_production: &ItemProduction, 
+* experience_table: &ExperienceTable,
+* clock: &Clock,
+
+执行：
+
+```shell
+sui client call --package "$default_package_id" --module skill_process_aggregate --function complete_production \
+--args "$skill_process_object_id_1" \
+"$player_id" \
+"$item_production_id_1" \
+"$experience_table_object_id" \
+"0x6" \
+--gas-budget 11000000 --json > testnet_complete_skill_process.json
+```
+
+接下来，我们可以检查执行结果。
+
+先获取玩家拥有的 Items 的 table ID：
+
+```shell
+sui client object {PLAYER_ID} --json
+```
+
+输出类似：
+
+```text
+      "items": {
+        "type": "0x2::table::Table<u32, 0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc89731fa517fb8::player_item::PlayerItem>",
+        "fields": {
+          "id": {
+            "id": "0x600ff5d855b5d9ff63edd9d9215457e1c1f6cbb316dc95999ac0d180c886e197"
+          },
+          "size": "2"
+        }
+      },
+```
+
+获取 table 的“动态字段”信息：
+
+```shell
+curl -X POST \
+-H "Content-Type: application/json" \
+-d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":["0x600ff5d855b5d9ff63edd9d9215457e1c1f6cbb316dc95999ac0d180c886e197"]}' \
+https://fullnode.testnet.sui.io/
+```
+
+输出类似：
+
+```text
+{"jsonrpc":"2.0","result":{"data":[
+{"name":{"type":"u32","value":1},"bcsName":"2UzHM","type":"DynamicField","objectType":"0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc89731fa517fb8::player_item::PlayerItem",
+"objectId":"0x8655ebf801c0d9f734bc09b9b6aaff781f4d18c66e8ea4e0cb6261315f7b5bee","version":26421773,"digest":"4dCkgDHtD9cbQAz7P9Lveetm7PfSC8DbABfySHYmgTgy"},
+{"name":{"type":"u32","value":2},"bcsName":"3xyZh","type":"DynamicField","objectType":"0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc89731fa517fb8::player_item::PlayerItem",
+"objectId":"0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321c739","version":26421895,"digest":"4BnmTVdyAgVT8qN7um8h1CXdWpHqjYPQsyMTmYWKaCjr"}
+],"nextCursor":"0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321c739","hasNextPage":false},"id":1}
+```
+
+获取“动态字段”的内容：
+
+```shell
+sui client object 0x8655ebf801c0d9f734bc09b9b6aaff781f4d18c66e8ea4e0cb6261315f7b5bee
+
+sui client object 0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321c739
+```
 
