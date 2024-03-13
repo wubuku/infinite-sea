@@ -10,6 +10,8 @@ module infinite_sea::item_creation_aggregate {
     use infinite_sea_common::skill_type_item_id_pair::{Self, SkillTypeItemIdPair};
     use sui::tx_context;
 
+    friend infinite_sea::skill_process_service;
+
     const EInvalidPublisher: u64 = 50;
 
     public entry fun create(

@@ -7,4 +7,6 @@ module infinite_sea::skill_process_mutex_aggregate {
     use infinite_sea::skill_process_mutex;
     use sui::tx_context;
 
+    friend infinite_sea::skill_process_service;
+
 }

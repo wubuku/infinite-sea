@@ -14,6 +14,7 @@ module infinite_sea::player_aggregate {
 
     friend infinite_sea::skill_process_start_production_logic;
     friend infinite_sea::skill_process_complete_production_logic;
+    friend infinite_sea::skill_process_service;
 
     const EInvalidPublisher: u64 = 50;
 

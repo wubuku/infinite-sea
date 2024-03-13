@@ -12,6 +12,8 @@ module infinite_sea::item_production_aggregate {
     use std::option::Option;
     use sui::tx_context;
 
+    friend infinite_sea::skill_process_service;
+
     const EInvalidPublisher: u64 = 50;
 
     public entry fun create(

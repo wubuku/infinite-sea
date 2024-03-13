@@ -129,7 +129,6 @@ aggregates:
 
 
   SkillProcessMutex:
-    module: "Common"
     id:
       name: PlayerId
       type: ID

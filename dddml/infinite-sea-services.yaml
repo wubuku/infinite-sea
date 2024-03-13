@@ -1,0 +1,20 @@
+services:
+  SkillProcessService:
+    methods:
+      #StartCreation: # todo start item creation
+
+      StartProduction:
+        parameters:
+          SkillProcess:
+            referenceType: SkillProcess
+            isMutableReference: true
+          Player:
+            referenceType: Player
+            isMutableReference: true
+          ItemProduction:
+            referenceType: ItemProduction
+          Clock:
+            referenceType: Clock
+          Energy:
+            type: "Coin<ENERGY>"
+
