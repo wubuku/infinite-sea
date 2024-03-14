@@ -7,6 +7,8 @@ aggregates:
       #CRUD_IT_NO_DELETE: true
       #NO_MOVE_EVENT_MODULE: true
       ShouldIssuePublisherObject: true
+      MOVE_AGGREGATE_MODULE_ATTRIBUTES: "#[allow(unused_mut_parameter, unused_use)]"
+
     friends:
       - SkillProcess.StartProduction
       - SkillProcess.CompleteProduction
