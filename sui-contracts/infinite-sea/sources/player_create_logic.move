@@ -1,11 +1,12 @@
 #[allow(unused_mut_parameter)]
 module infinite_sea::player_create_logic {
-    use infinite_sea::player;
     use sui::tx_context::TxContext;
+
+    use infinite_sea::player;
 
     friend infinite_sea::player_aggregate;
 
-    const ESenderHasNoPermission: u64 = 22;
+    //const ESenderHasNoPermission: u64 = 22;
 
     public(friend) fun verify(
         ctx: &mut TxContext,
@@ -28,5 +29,4 @@ module infinite_sea::player_create_logic {
             ctx,
         )
     }
-
 }

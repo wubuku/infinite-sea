@@ -10,6 +10,7 @@ module infinite_sea::skill_process_mutex {
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
+    friend infinite_sea::skill_process_mutex_create_logic;
     friend infinite_sea::skill_process_mutex_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -72,30 +73,50 @@ module infinite_sea::skill_process_mutex {
 
     fun new_skill_process_mutex(
         player_id: ID,
-        active_skill_type: Option<u8>,
         ctx: &mut TxContext,
     ): SkillProcessMutex {
-        if (option::is_some(&active_skill_type)) {
-            assert!(infinite_sea_common::skill_type::is_valid(*option::borrow(&active_skill_type)), EInvalidEnumValue);
-        };
         SkillProcessMutex {
             id: object::new(ctx),
             player_id,
             version: 0,
-            active_skill_type,
+            active_skill_type: std::option::none(),
+        }
+    }
+
+    struct SkillProcessMutexCreated has copy, drop {
+        id: option::Option<object::ID>,
+        player_id: ID,
+    }
+
+    public fun skill_process_mutex_created_id(skill_process_mutex_created: &SkillProcessMutexCreated): option::Option<object::ID> {
+        skill_process_mutex_created.id
+    }
+
+    public(friend) fun set_skill_process_mutex_created_id(skill_process_mutex_created: &mut SkillProcessMutexCreated, id: object::ID) {
+        skill_process_mutex_created.id = option::some(id);
+    }
+
+    public fun skill_process_mutex_created_player_id(skill_process_mutex_created: &SkillProcessMutexCreated): ID {
+        skill_process_mutex_created.player_id
+    }
+
+    public(friend) fun new_skill_process_mutex_created(
+        player_id: ID,
+    ): SkillProcessMutexCreated {
+        SkillProcessMutexCreated {
+            id: option::none(),
+            player_id,
         }
     }
 
 
     public(friend) fun create_skill_process_mutex(
         player_id: ID,
-        active_skill_type: Option<u8>,
         skill_process_mutex_table: &mut SkillProcessMutexTable,
         ctx: &mut TxContext,
     ): SkillProcessMutex {
         let skill_process_mutex = new_skill_process_mutex(
             player_id,
-            active_skill_type,
             ctx,
         );
         asset_player_id_not_exists_then_add(player_id, skill_process_mutex_table, object::uid_to_inner(&skill_process_mutex.id));
@@ -157,6 +178,11 @@ module infinite_sea::skill_process_mutex {
             active_skill_type: _active_skill_type,
         } = skill_process_mutex;
         object::delete(id);
+    }
+
+    public(friend) fun emit_skill_process_mutex_created(skill_process_mutex_created: SkillProcessMutexCreated) {
+        assert!(std::option::is_some(&skill_process_mutex_created.id), EEmptyObjectID);
+        event::emit(skill_process_mutex_created);
     }
 
     #[test_only]

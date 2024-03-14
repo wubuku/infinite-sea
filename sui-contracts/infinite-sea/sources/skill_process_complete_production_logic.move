@@ -86,7 +86,7 @@ module infinite_sea::skill_process_complete_production_logic {
                 if (new_experience >= experience_level::experience(xp_level)) {
                     new_level = experience_level::level(xp_level);
                 } else {
-                    break;
+                    break
                 };
                 i = i + 1;
             };

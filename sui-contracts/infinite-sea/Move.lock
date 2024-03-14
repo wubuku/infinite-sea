@@ -2,7 +2,7 @@
 
 [move]
 version = 0
-manifest_digest = "B69A92FAC109EE632379A3AB6EB705BD542DD7F063AC511CAC1071FFD4562C7D"
+manifest_digest = "DDF4F76A741706BC7A38D565FA784E96E1FA42DF8DB66568EB5B5424545C2433"
 deps_digest = "060AD7E57DFB13104F21BE5F5C3759D03F0553FC3229247D9A7A6B45F50D03A3"
 
 dependencies = [
@@ -38,3 +38,8 @@ source = { local = "../infinite-sea-common" }
 dependencies = [
   { name = "Sui" },
 ]
+
+[move.toolchain-version]
+compiler-version = "1.17.3"
+edition = "legacy"
+flavor = "sui"

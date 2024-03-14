@@ -129,6 +129,15 @@ aggregates:
 
 
   SkillProcessMutex:
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+    friends:
+#      - SkillProcess.StartMutexProduction
+#      - SkillProcess.CompleteMutexProduction
+#      - SkillProcess.StartMutexCreation
+#      - SkillProcess.CompleteMutexCreation
     id:
       name: PlayerId
       type: ID
@@ -139,4 +148,25 @@ aggregates:
       ActiveSkillType:
         type: SkillType
         optional: true
+        defaultLogic:
+          Move: "std::option::none()"
+    methods:
+      Create:
+        event:
+          isObjectShared: true # Share the object after created.
 
+#      Lock:
+#        isInternal: true
+#        parameters:
+#          SkillType:
+#            type: SkillType
+#        event:
+#          name: SkillProcessMutexLocked
+#
+#      Unlock:
+#        isInternal: true
+#        parameters:
+#          SkillType:
+#            type: SkillType
+#        event:
+#          name: SkillProcessMutexUnlocked
