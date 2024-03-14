@@ -125,6 +125,7 @@ common_publisher_object_id=""
 experience_table_object_id=""
 item_table_object_id=""
 item_production_table_object_id=""
+item_creation_table_object_id=""
 
 while read -r line
 do
@@ -145,12 +146,16 @@ do
   elif [[ $objectType == *::item_production::ItemProductionTable ]]
   then
     item_production_table_object_id=$objectId
+  elif [[ $objectType == *::item_creation::ItemCreationTable ]]
+  then
+    item_creation_table_object_id=$objectId
   fi
 done < <(jq -c '.objectChanges[] | select(.type == "created")' "$publish_json_file")
-echo "common_publisher_object_id: $common_publisher_object_id"
-echo "experience_table_object_id: $experience_table_object_id"
-echo "item_table_object_id: $item_table_object_id"
-echo "item_production_table_object_id: $item_production_table_object_id"
+echo "common_publisher_object_id: $common_publisher_object_id" | tee -a "$log_file"
+echo "experience_table_object_id: $experience_table_object_id" | tee -a "$log_file"
+echo "item_table_object_id: $item_table_object_id" | tee -a "$log_file"
+echo "item_production_table_object_id: $item_production_table_object_id" | tee -a "$log_file"
+echo "item_creation_table_object_id: $item_creation_table_object_id" | tee -a "$log_file"
 
 # -------- update common Move.toml --------
 while read -r line
@@ -202,7 +207,6 @@ echo "default package_id: $default_package_id" | tee -a "$log_file"
 echo "" | tee -a "$log_file"
 
 default_publisher_object_id=""
-item_creation_table_object_id=""
 skill_process_table_object_id=""
 
 while read -r line
@@ -215,17 +219,13 @@ do
   if [[ $objectType == *::package::Publisher ]]
   then
     default_publisher_object_id=$objectId
-  elif [[ $objectType == *::item_creation::ItemCreationTable ]]
-  then
-    item_creation_table_object_id=$objectId
   elif [[ $objectType == *::skill_process::SkillProcessTable ]]
   then
     skill_process_table_object_id=$objectId
   fi
 done < <(jq -c '.objectChanges[] | select(.type == "created")' "$publish_json_file")
-echo "default_publisher_object_id: $default_publisher_object_id"
-echo "item_creation_table_object_id: $item_creation_table_object_id"
-echo "skill_process_table_object_id: $skill_process_table_object_id"
+echo "default_publisher_object_id: $default_publisher_object_id" | tee -a "$log_file"
+echo "skill_process_table_object_id: $skill_process_table_object_id" | tee -a "$log_file"
 
 # -------- update default Move.toml --------
 while read -r line
@@ -251,6 +251,10 @@ done < $move_toml_file
 
 mv $move_toml_temp $move_toml_file
 cd ..
+
+# --------------------------------------------
+log_file="./testnet-publish.log"
+
 
 # ---------- Add XP levels -------------
 sui client call --package "$common_package_id" --module experience_table_aggregate --function add_level \
@@ -278,7 +282,9 @@ sui client call --package "$common_package_id" --module item_aggregate --functio
 'false' \
 '0' \
 "$item_table_object_id" \
---gas-budget 11000000
+--gas-budget 11000000 --json > testnet_create_item_0.json
+item_object_id_0=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("item::Item")).objectId' testnet_create_item_0.json)
+echo "item_object_id_0: $item_object_id_0" | tee -a "$log_file"
 
 sui client call --package "$common_package_id" --module item_aggregate --function create \
 --args \
@@ -288,7 +294,9 @@ sui client call --package "$common_package_id" --module item_aggregate --functio
 'false' \
 '10' \
 "$item_table_object_id" \
---gas-budget 11000000
+--gas-budget 11000000 --json > testnet_create_item_1.json
+item_object_id_1=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("item::Item")).objectId' testnet_create_item_1.json)
+echo "item_object_id_1: $item_object_id_1" | tee -a "$log_file"
 
 sui client call --package "$common_package_id" --module item_aggregate --function create \
 --args \
@@ -298,7 +306,9 @@ sui client call --package "$common_package_id" --module item_aggregate --functio
 'false' \
 '80' \
 "$item_table_object_id" \
---gas-budget 11000000
+--gas-budget 11000000 --json > testnet_create_item_2.json
+item_object_id_2=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("item::Item")).objectId' testnet_create_item_2.json)
+echo "item_object_id_2: $item_object_id_2" | tee -a "$log_file"
 
 # ------------- Add item production ----------------
 sui client call --package "$common_package_id" --module item_production_aggregate --function create \

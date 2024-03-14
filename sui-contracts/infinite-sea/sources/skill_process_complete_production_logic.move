@@ -73,17 +73,19 @@ module infinite_sea::skill_process_complete_production_logic {
     ): u16 {
         let old_level = player::level(player);
         let old_experience = player::experience(player);
+        let new_experience = old_experience + added_experience;
         let new_level = old_level;
         let xp_levels = experience_table::borrow_levels(experience_table);
         let xp_levels_len = vector::length(xp_levels);
         assert!(xp_levels_len > 1, EExperienceTableNotInitialized);
         let max_level = xp_levels_len - 1;
         if (max_level > (old_level as u64)) {
-            let i = (old_level as u64);
+            let i = (old_level as u64) + 1;
             while (i <= max_level) {
                 let xp_level = vector::borrow(xp_levels, i);
-                if (old_experience + added_experience >= experience_level::experience(xp_level)) {
+                if (new_experience >= experience_level::experience(xp_level)) {
                     new_level = experience_level::level(xp_level);
+                } else {
                     break;
                 };
                 i = i + 1;
