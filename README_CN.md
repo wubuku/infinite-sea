@@ -73,6 +73,9 @@ package_id: 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea2a6d397b1be8
 
 │  │ ObjectID: 0x73088501a23080798ef8c37f851df9add29ee2b1d9df2e2fa82da88311506afd
 │  │ ObjectType: 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea2a6d397b1be8::item::ItemTable
+
+"objectId": "0xebd24b661647357438e49bd7646d6400d5f2eb293340f8af68e31a6804fa5240",
+"objectType": "0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::item_production::ItemProductionTable",
 ```
 
 
@@ -96,9 +99,6 @@ package_id: 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d
 
 "objectType": "0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::item_creation::ItemCreationTable",
 "objectId": "0x4d0dd994bb6b1aad3ab2037947e5361c1886552eda29774ee0f47520def280f4",
-
-"objectType": "0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::item_production::ItemProductionTable",
-"objectId": "0xebd24b661647357438e49bd7646d6400d5f2eb293340f8af68e31a6804fa5240",
 
 "objectType": "0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::skill_process::SkillProcessTable",
 "objectId": "0x4efc827e09fb474e944efdf4ef45846e6473343a87f82f78cf82ea08765c7050",
@@ -192,21 +192,6 @@ sui client call --package 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea
 ```
 
 
-### 创建玩家
-
-```shell
-sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d --module player_aggregate --function create \
---args \
---gas-budget 11000000
-```
-
-记录创建的玩家对象的 ID：
-
-```text
-│  │ ObjectID: 0x51d280e198270f7fd746b174691f91950c462b126fa9db853ca7587f9053b466                        │
-│  │ ObjectType: 0x5eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::player::Player       │
-```
-
 ### 创建 Item 生产配方
 
 该函数的参数：
@@ -237,8 +222,8 @@ sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e52234
 执行命令：
 
 ```shell
-sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d --module item_production_aggregate --function create \
---args '0' '2' {PUBLISHER_ID} \
+sui client call --package {COMMON_PACKAGE_ID} --module item_production_aggregate --function create \
+--args '0' '2' {COMMON_PACKAGE_PUBLISHER_ID} \
 '1' '3' '[]' '[]' '[]' '[]' '[]' '[]' '[]' '[]' \
 '1' '10' '85' '100' '5' '100' \
 0xebd24b661647357438e49bd7646d6400d5f2eb293340f8af68e31a6804fa5240 \
@@ -250,6 +235,20 @@ sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e52234
 ```text
 │  │ ObjectID: 0x7238061fc56e8be0058046b91ba5a149b5b2d1733fa6a49a267e05e2c3faaca8                                                                                              │
 │  │ ObjectType: 0x5eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::item_production::ItemProduction                                                            │
+```
+
+### 创建玩家
+
+```shell
+sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d --module player_aggregate --function create \
+--gas-budget 11000000
+```
+
+记录创建的玩家对象的 ID：
+
+```text
+│  │ ObjectID: 0x51d280e198270f7fd746b174691f91950c462b126fa9db853ca7587f9053b466                        │
+│  │ ObjectType: 0x5eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d::player::Player       │
 ```
 
 ### 给玩家空投一些资源（Items）
