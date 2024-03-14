@@ -8,12 +8,11 @@ module infinite_sea::player_create_logic {
     const ESenderHasNoPermission: u64 = 22;
 
     public(friend) fun verify(
-        owner: address,
         ctx: &mut TxContext,
     ): player::PlayerCreated {
         let _ = ctx;
-        assert!(sui::tx_context::sender(ctx) == owner, ESenderHasNoPermission);
-
+        //assert!(sui::tx_context::sender(ctx) == owner, ESenderHasNoPermission);
+        let owner = sui::tx_context::sender(ctx);
         player::new_player_created(
             owner,
         )

@@ -196,7 +196,7 @@ sui client call --package 0x8f3814966e7b55382a2040e68d1ce7b0b0df6cb70346be1f63ea
 
 ```shell
 sui client call --package 0x05eefe8c17c8880398320157ad015348ac55550c004ae4e522342a986036357d --module player_aggregate --function create \
---args 0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2 \
+--args \
 --gas-budget 11000000
 ```
 

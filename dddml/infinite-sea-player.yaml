@@ -2,10 +2,10 @@ aggregates:
   Player:
     #module: "Player"
     metadata:
-      Preprocessors: ["MOVE_CRUD_IT"]
-      CRUD_IT_NO_UPDATE: true
-      CRUD_IT_NO_DELETE: true
-      NO_MOVE_EVENT_MODULE: true
+      #Preprocessors: ["MOVE_CRUD_IT"]
+      #CRUD_IT_NO_UPDATE: true
+      #CRUD_IT_NO_DELETE: true
+      #NO_MOVE_EVENT_MODULE: true
       ShouldIssuePublisherObject: true
     friends:
       - SkillProcess.StartProduction
@@ -44,16 +44,21 @@ aggregates:
 
     methods:
       Create:
+        isCreationCommand: true
         event:
           isObjectShared: true # Share the object after created.
-        constants:
-          ESenderHasNoPermission:
-            constantExpression:
-              Move: 22
-            type: u64
-        verificationLogic:
-          Move: >
-            assert!(sui::tx_context::sender(ctx) == owner, ESenderHasNoPermission);
+          name: PlayerCreated
+          properties:
+            Owner:
+              type: address
+        #constants:
+        #  ESenderHasNoPermission:
+        #    constantExpression:
+        #      Move: 22
+        #    type: u64
+        #verificationLogic:
+        #  Move: >
+        #    assert!(sui::tx_context::sender(ctx) == owner, ESenderHasNoPermission);
 
       Airdrop:
         requiredPermission: "__Publisher__"

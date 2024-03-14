@@ -19,11 +19,9 @@ module infinite_sea::player_aggregate {
     const EInvalidPublisher: u64 = 50;
 
     public entry fun create(
-        owner: address,
         ctx: &mut tx_context::TxContext,
     ) {
         let player_created = player_create_logic::verify(
-            owner,
             ctx,
         );
         let player = player_create_logic::mutate(

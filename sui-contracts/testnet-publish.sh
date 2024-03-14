@@ -1,6 +1,6 @@
 #!/bin/bash
 
-player_owner="0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2"
+#player_owner="0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2"
 
 # External Package IDs
 # ...
@@ -302,7 +302,7 @@ sui client call --package "$common_package_id" --module item_aggregate --functio
 
 # ------------------- Create player -------------------
 sui client call --package "$default_package_id" --module player_aggregate --function create \
---args 0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2 \
+--args \
 --gas-budget 11000000 --json > testnet_create_player.json
 
 player_id=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("player::Player")).objectId' testnet_create_player.json)
