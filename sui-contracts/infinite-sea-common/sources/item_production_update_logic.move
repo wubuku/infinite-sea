@@ -1,9 +1,9 @@
-module infinite_sea::item_production_update_logic {
-    use infinite_sea::item_production;
+module infinite_sea_common::item_production_update_logic {
+    use infinite_sea_common::item_production;
     use infinite_sea_common::production_materials::ProductionMaterials;
     use sui::tx_context::TxContext;
 
-    friend infinite_sea::item_production_aggregate;
+    friend infinite_sea_common::item_production_aggregate;
 
     public(friend) fun verify(
         production_materials: ProductionMaterials,

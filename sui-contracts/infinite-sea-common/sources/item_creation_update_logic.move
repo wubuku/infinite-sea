@@ -1,8 +1,8 @@
-module infinite_sea::item_creation_update_logic {
-    use infinite_sea::item_creation;
+module infinite_sea_common::item_creation_update_logic {
+    use infinite_sea_common::item_creation;
     use sui::tx_context::TxContext;
 
-    friend infinite_sea::item_creation_aggregate;
+    friend infinite_sea_common::item_creation_aggregate;
 
     public(friend) fun verify(
         requirements_level: u16,

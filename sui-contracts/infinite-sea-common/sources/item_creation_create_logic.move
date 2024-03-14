@@ -1,10 +1,10 @@
 #[allow(unused_mut_parameter)]
-module infinite_sea::item_creation_create_logic {
-    use infinite_sea::item_creation;
+module infinite_sea_common::item_creation_create_logic {
+    use infinite_sea_common::item_creation;
     use infinite_sea_common::skill_type_item_id_pair::SkillTypeItemIdPair;
     use sui::tx_context::TxContext;
 
-    friend infinite_sea::item_creation_aggregate;
+    friend infinite_sea_common::item_creation_aggregate;
 
     public(friend) fun verify(
         item_creation_id: SkillTypeItemIdPair,

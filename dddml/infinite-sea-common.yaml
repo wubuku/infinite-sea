@@ -31,6 +31,75 @@ aggregates:
         requiredPermission: "__Publisher__"
 
 
+  ItemCreation:
+    module: "Common"
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      #CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+    implements:
+      - ItemCreationOrProduction
+    id:
+      name: ItemCreationId
+      type: SkillTypeItemIdPair
+      generator:
+        class: assigned
+        tableName: ItemCreationTable
+    properties:
+    methods:
+      Create:
+        requiredPermission: "__Publisher__"
+        event:
+          isObjectShared: true # Share the object after created.
+      Update:
+        requiredPermission: "__Publisher__"
+
+
+  ItemProduction:
+    module: "Common"
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      #CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+    implements:
+      - ItemCreationOrProduction
+    id:
+      name: ItemProductionId
+      type: SkillTypeItemIdPair
+      generator:
+        class: assigned
+        tableName: ItemProductionTable
+    properties:
+      ProductionMaterials:
+        type: ProductionMaterials
+    methods:
+      Create:
+        requiredPermission: "__Publisher__"
+        event:
+          isObjectShared: true # Share the object after created.
+      Update:
+        requiredPermission: "__Publisher__"
+
+
+superObjects:
+  ItemCreationOrProduction:
+    properties:
+      #RequirementsSkill:
+      #  type: SkillType
+      RequirementsLevel:
+        type: u16
+      BaseQuantity:
+        type: u32
+      BaseExperience:
+        type: u32
+      BaseCreationTime:
+        type: u64
+      EnergyCost:
+        type: u64
+      SuccessRate: #(percentage)
+        type: u16
+
+
 singletonObjects:
   ExperienceTable:
     module: "Common"

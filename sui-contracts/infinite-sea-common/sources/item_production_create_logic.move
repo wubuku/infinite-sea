@@ -1,11 +1,11 @@
 #[allow(unused_mut_parameter)]
-module infinite_sea::item_production_create_logic {
-    use infinite_sea::item_production;
+module infinite_sea_common::item_production_create_logic {
+    use infinite_sea_common::item_production;
     use infinite_sea_common::production_materials::ProductionMaterials;
     use infinite_sea_common::skill_type_item_id_pair::SkillTypeItemIdPair;
     use sui::tx_context::TxContext;
 
-    friend infinite_sea::item_production_aggregate;
+    friend infinite_sea_common::item_production_aggregate;
 
     public(friend) fun verify(
         item_production_id: SkillTypeItemIdPair,

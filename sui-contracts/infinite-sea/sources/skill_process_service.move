@@ -5,7 +5,7 @@ module infinite_sea::skill_process_service {
     use sui::tx_context::Self;
     use infinite_sea_coin::energy::ENERGY;
 
-    use infinite_sea::item_production::ItemProduction;
+    use infinite_sea_common::item_production::ItemProduction;
     use infinite_sea::player::Player;
     use infinite_sea::skill_process::SkillProcess;
     use infinite_sea::skill_process_aggregate;

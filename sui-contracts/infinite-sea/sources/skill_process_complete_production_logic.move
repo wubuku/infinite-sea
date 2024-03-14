@@ -13,7 +13,7 @@ module infinite_sea::skill_process_complete_production_logic {
     use infinite_sea_common::skill_type_item_id_pair;
     use infinite_sea_common::skill_type_player_id_pair;
 
-    use infinite_sea::item_production::{Self, ItemProduction};
+    use infinite_sea_common::item_production::{Self, ItemProduction};
     use infinite_sea::player;
     use infinite_sea::player::Player;
     use infinite_sea::player_aggregate;
