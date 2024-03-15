@@ -9,7 +9,6 @@ module infinite_sea_common::item_production_aggregate {
     use infinite_sea_common::item_production_update_logic;
     use infinite_sea_common::production_materials::{Self, ProductionMaterials};
     use infinite_sea_common::skill_type_item_id_pair::{Self, SkillTypeItemIdPair};
-    use std::option::Option;
     use sui::tx_context;
 
     const EInvalidPublisher: u64 = 50;
@@ -18,16 +17,8 @@ module infinite_sea_common::item_production_aggregate {
         item_production_id_skill_type: u8,
         item_production_id_item_id: u32,
         publisher: &sui::package::Publisher,
-        production_materials_material_item_id_1: u32,
-        production_materials_material_quantity_1: u32,
-        production_materials_material_item_id_2: Option<u32>,
-        production_materials_material_quantity_2: Option<u32>,
-        production_materials_material_item_id_3: Option<u32>,
-        production_materials_material_quantity_3: Option<u32>,
-        production_materials_material_item_id_4: Option<u32>,
-        production_materials_material_quantity_4: Option<u32>,
-        production_materials_material_item_id_5: Option<u32>,
-        production_materials_material_quantity_5: Option<u32>,
+        production_materials_item_id_list: vector<u32>,
+        production_materials_item_quantity_list: vector<u32>,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -44,16 +35,8 @@ module infinite_sea_common::item_production_aggregate {
         );
 
         let production_materials: ProductionMaterials = production_materials::new(
-            production_materials_material_item_id_1,
-            production_materials_material_quantity_1,
-            production_materials_material_item_id_2,
-            production_materials_material_quantity_2,
-            production_materials_material_item_id_3,
-            production_materials_material_quantity_3,
-            production_materials_material_item_id_4,
-            production_materials_material_quantity_4,
-            production_materials_material_item_id_5,
-            production_materials_material_quantity_5,
+            production_materials_item_id_list,
+            production_materials_item_quantity_list,
         );
         let item_production_created = item_production_create_logic::verify(
             item_production_id,
@@ -80,16 +63,8 @@ module infinite_sea_common::item_production_aggregate {
     public entry fun update(
         item_production: &mut item_production::ItemProduction,
         publisher: &sui::package::Publisher,
-        production_materials_material_item_id_1: u32,
-        production_materials_material_quantity_1: u32,
-        production_materials_material_item_id_2: Option<u32>,
-        production_materials_material_quantity_2: Option<u32>,
-        production_materials_material_item_id_3: Option<u32>,
-        production_materials_material_quantity_3: Option<u32>,
-        production_materials_material_item_id_4: Option<u32>,
-        production_materials_material_quantity_4: Option<u32>,
-        production_materials_material_item_id_5: Option<u32>,
-        production_materials_material_quantity_5: Option<u32>,
+        production_materials_item_id_list: vector<u32>,
+        production_materials_item_quantity_list: vector<u32>,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -100,16 +75,8 @@ module infinite_sea_common::item_production_aggregate {
     ) {
         assert!(sui::package::from_package<item_production::ItemProduction>(publisher), EInvalidPublisher);
         let production_materials: ProductionMaterials = production_materials::new(
-            production_materials_material_item_id_1,
-            production_materials_material_quantity_1,
-            production_materials_material_item_id_2,
-            production_materials_material_quantity_2,
-            production_materials_material_item_id_3,
-            production_materials_material_quantity_3,
-            production_materials_material_item_id_4,
-            production_materials_material_quantity_4,
-            production_materials_material_item_id_5,
-            production_materials_material_quantity_5,
+            production_materials_item_id_list,
+            production_materials_item_quantity_list,
         );
         let item_production_updated = item_production_update_logic::verify(
             production_materials,

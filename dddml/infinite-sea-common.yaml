@@ -170,77 +170,35 @@ valueObjects:
     methods:
       New:
         isConstructor: true
+        constants:
+          EEmptyList:
+            constantExpression:
+              Move: 10
+            type: u64
+          EIncorrectListLength:
+            constantExpression:
+              Move: 11
+            type: u64
         parameters:
-          MaterialItemId_1:
-            type: u32
-          MaterialQuantity_1:
-            type: u32
-          MaterialItemId_2:
-            type: u32
-            optional: true
-          MaterialQuantity_2:
-            type: u32
-            optional: true
-          MaterialItemId_3:
-            type: u32
-            optional: true
-          MaterialQuantity_3:
-            type: u32
-            optional: true
-          MaterialItemId_4:
-            type: u32
-            optional: true
-          MaterialQuantity_4:
-            type: u32
-            optional: true
-          MaterialItemId_5:
-            type: u32
-            optional: true
-          MaterialQuantity_5:
-            type: u32
-            optional: true
+          ItemIdList:
+            itemType: u32
+          ItemQuantityList:
+            itemType: u32
         implementationLogic:
           Move: >-
-            let items = std::vector::empty();
-                    std::vector::push_back(
-                        &mut items,
-                        infinite_sea_common::production_material::new(material_item_id_1, material_quantity_1)
-                    );
-                    if (std::option::is_some(&material_item_id_2)) {
+            assert!(std::vector::length(&item_id_list) > 0, EEmptyList);
+                    assert!(std::vector::length(&item_id_list) == std::vector::length(&item_quantity_list), EIncorrectListLength);
+                    let items = std::vector::empty();
+                    let l = std::vector::length(&item_id_list);
+                    let i = 0;
+                    while (i < l) {
+                        let item_id = *std::vector::borrow(&item_id_list, i);
+                        let item_quantity = *std::vector::borrow(&item_quantity_list, i);
                         std::vector::push_back(
                             &mut items,
-                            infinite_sea_common::production_material::new(
-                                std::option::extract(&mut material_item_id_2),
-                                std::option::extract(&mut material_quantity_2)
-                            )
+                            infinite_sea_common::production_material::new(item_id, item_quantity)
                         );
-                    };
-                    if (std::option::is_some(&material_item_id_3)) {
-                        std::vector::push_back(
-                            &mut items,
-                            infinite_sea_common::production_material::new(
-                                std::option::extract(&mut material_item_id_3),
-                                std::option::extract(&mut material_quantity_3)
-                            )
-                        );
-                    };
-                    if (std::option::is_some(&material_item_id_4)) {
-                        std::vector::push_back(
-                            &mut items,
-                            infinite_sea_common::production_material::new(
-                                std::option::extract(&mut material_item_id_4),
-                                std::option::extract(&mut material_quantity_4)
-                            )
-                        );
-                    };
-                    if (std::option::is_some(&material_item_id_5)) {
-                        std::vector::push_back(
-                            &mut items,
-                            infinite_sea_common::production_material::new(
-                                std::option::extract(&mut material_item_id_5),
-                                std::option::extract(&mut material_quantity_5)
-                            )
-                        );
+                        i = i + 1;
                     };
                     {_INSTANTIATE_STRUCT_}
 

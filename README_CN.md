@@ -186,16 +186,8 @@ sui client call --package {COMMON_PACKAGE_ID} --module item_aggregate --function
 * item_production_id_skill_type: u8,
 * item_production_id_item_id: u32,
 * publisher: &sui::package::Publisher,
-* production_materials_material_item_id_1: u32,
-* production_materials_material_quantity_1: u32,
-* production_materials_material_item_id_2: Option<u32>,
-* production_materials_material_quantity_2: Option<u32>,
-* production_materials_material_item_id_3: Option<u32>,
-* production_materials_material_quantity_3: Option<u32>,
-* production_materials_material_item_id_4: Option<u32>,
-* production_materials_material_quantity_4: Option<u32>,
-* production_materials_material_item_id_5: Option<u32>,
-* production_materials_material_quantity_5: Option<u32>,
+* production_materials_item_id_list: vector<u32>,
+* production_materials_item_quantity_list: vector<u32>,
 * requirements_level: u16,
 * base_quantity: u32,
 * base_experience: u32,
@@ -211,7 +203,7 @@ sui client call --package {COMMON_PACKAGE_ID} --module item_aggregate --function
 ```shell
 sui client call --package {COMMON_PACKAGE_ID} --module item_production_aggregate --function create \
 --args '0' '2' {COMMON_PACKAGE_PUBLISHER_ID} \
-'1' '3' '[]' '[]' '[]' '[]' '[]' '[]' '[]' '[]' \
+'[1]' '[3]' \
 '1' '10' '85' '100' '5' '100' \
 {ITEM_PRODUCTION_TABLE_OBJECT_ID} \
 --gas-budget 11000000

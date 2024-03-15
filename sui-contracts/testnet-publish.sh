@@ -313,7 +313,7 @@ echo "item_object_id_2: $item_object_id_2" | tee -a "$log_file"
 # ------------- Add item production ----------------
 sui client call --package "$common_package_id" --module item_production_aggregate --function create \
 --args '0' '2' "$common_publisher_object_id" \
-'1' '3' '[]' '[]' '[]' '[]' '[]' '[]' '[]' '[]' \
+'[1]' '[3]' \
 '1' '10' '85' '100' '5' '100' \
 "$item_production_table_object_id" \
 --gas-budget 11000000 --json > testnet_create_item_production.json

@@ -5,66 +5,33 @@
 
 module infinite_sea_common::production_materials {
     use infinite_sea_common::production_material::ProductionMaterial;
-    use std::option::Option;
+
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
+    const EEmptyList: u64 = 10;
+    const EIncorrectListLength: u64 = 11;
 
     struct ProductionMaterials has store, drop, copy {
         items: vector<ProductionMaterial>,
     }
 
     public fun new(
-        material_item_id_1: u32,
-        material_quantity_1: u32,
-        material_item_id_2: Option<u32>,
-        material_quantity_2: Option<u32>,
-        material_item_id_3: Option<u32>,
-        material_quantity_3: Option<u32>,
-        material_item_id_4: Option<u32>,
-        material_quantity_4: Option<u32>,
-        material_item_id_5: Option<u32>,
-        material_quantity_5: Option<u32>,
+        item_id_list: vector<u32>,
+        item_quantity_list: vector<u32>,
     ): ProductionMaterials {
+        assert!(std::vector::length(&item_id_list) > 0, EEmptyList);
+        assert!(std::vector::length(&item_id_list) == std::vector::length(&item_quantity_list), EIncorrectListLength);
         let items = std::vector::empty();
-        std::vector::push_back(
-            &mut items,
-            infinite_sea_common::production_material::new(material_item_id_1, material_quantity_1)
-        );
-        if (std::option::is_some(&material_item_id_2)) {
+        let l = std::vector::length(&item_id_list);
+        let i = 0;
+        while (i < l) {
+            let item_id = *std::vector::borrow(&item_id_list, i);
+            let item_quantity = *std::vector::borrow(&item_quantity_list, i);
             std::vector::push_back(
                 &mut items,
-                infinite_sea_common::production_material::new(
-                    std::option::extract(&mut material_item_id_2),
-                    std::option::extract(&mut material_quantity_2)
-                )
+                infinite_sea_common::production_material::new(item_id, item_quantity)
             );
-        };
-        if (std::option::is_some(&material_item_id_3)) {
-            std::vector::push_back(
-                &mut items,
-                infinite_sea_common::production_material::new(
-                    std::option::extract(&mut material_item_id_3),
-                    std::option::extract(&mut material_quantity_3)
-                )
-            );
-        };
-        if (std::option::is_some(&material_item_id_4)) {
-            std::vector::push_back(
-                &mut items,
-                infinite_sea_common::production_material::new(
-                    std::option::extract(&mut material_item_id_4),
-                    std::option::extract(&mut material_quantity_4)
-                )
-            );
-        };
-        if (std::option::is_some(&material_item_id_5)) {
-            std::vector::push_back(
-                &mut items,
-                infinite_sea_common::production_material::new(
-                    std::option::extract(&mut material_item_id_5),
-                    std::option::extract(&mut material_quantity_5)
-                )
-            );
+            i = i + 1;
         };
         let production_materials = ProductionMaterials {
             items,
