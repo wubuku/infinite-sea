@@ -10,6 +10,18 @@ configuration:
     Common:
       requiredModules: [ ]
 
+  sqlTypes:
+    #ProductionMaterials: "json"
+    ProductionMaterials: "json"
+
+  hibernate:
+    hibernateTypes:
+      JsonObject:
+        mappingType: "io.hypersistence.utils.hibernate.type.json.JsonType"
+        parameters:
+          "org.hibernate.type.ParameterType": "java.util.HashMap"
+
+
 typeDefinitions:
   ENERGY:
     moveType: "infinite_sea_coin::energy::ENERGY"

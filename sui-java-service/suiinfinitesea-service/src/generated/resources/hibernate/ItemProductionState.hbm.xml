@@ -14,7 +14,12 @@
     <property name="id_">
       <column name="id" unique-key="unique_itemproduction_sid" sql-type="VARCHAR(66)" />
     </property>
-    <component name="productionMaterials" class="org.dddml.suiinfinitesea.domain.ProductionMaterials"></component>
+    <property name="productionMaterials">
+      <column name="production_materials" sql-type="json" />
+      <type name="io.hypersistence.utils.hibernate.type.json.JsonType">
+        <param name="org.hibernate.type.ParameterType">java.util.HashMap</param>
+      </type>
+    </property>
     <property name="requirementsLevel">
       <column name="requirements_level" />
     </property>

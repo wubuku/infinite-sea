@@ -164,6 +164,7 @@ valueObjects:
 
   ProductionMaterials:
     module: "Common"
+    hibernateMappingType: JsonObject
     properties:
       Items:
         itemType: ProductionMaterial

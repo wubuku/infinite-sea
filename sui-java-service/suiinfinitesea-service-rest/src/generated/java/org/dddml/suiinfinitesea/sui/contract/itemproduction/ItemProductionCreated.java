@@ -19,7 +19,7 @@ public class ItemProductionCreated {
 
     private SkillTypeItemIdPairForEvent itemProductionId;
 
-    private ProductionMaterials productionMaterials;
+    private ProductionMaterialsForEvent productionMaterials;
 
     private Integer requirementsLevel;
 
@@ -49,11 +49,11 @@ public class ItemProductionCreated {
         this.itemProductionId = itemProductionId;
     }
 
-    public ProductionMaterials getProductionMaterials() {
+    public ProductionMaterialsForEvent getProductionMaterials() {
         return productionMaterials;
     }
 
-    public void setProductionMaterials(ProductionMaterials productionMaterials) {
+    public void setProductionMaterials(ProductionMaterialsForEvent productionMaterials) {
         this.productionMaterials = productionMaterials;
     }
 
