@@ -5,6 +5,7 @@
 
 module infinite_sea_common::skill_type_player_id_pair {
     use sui::object::ID;
+
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
     const EInvalidEnumValue: u64 = 106;

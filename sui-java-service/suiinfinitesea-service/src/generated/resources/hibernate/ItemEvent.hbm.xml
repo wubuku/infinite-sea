@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.item">
+  <class name="AbstractItemEvent" table="item_event" abstract="true">
+    <composite-id name="itemEventId" class="org.dddml.suiinfinitesea.domain.item.ItemEventId">
+      <key-property name="itemId">
+        <column name="item_id" />
+      </key-property>
+      <key-property name="version">
+        <column name="version" sql-type="DECIMAL(20,0)" />
+      </key-property>
+    </composite-id>
+    <discriminator column="event_type" type="string" />
+    <property name="id_">
+      <column name="id" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="createdBy" column="created_by" />
+    <property name="createdAt" column="created_at" />
+    <property name="commandId" column="command_id" />
+    <property name="suiTimestamp">
+      <column name="sui_timestamp" />
+    </property>
+    <property name="suiTxDigest">
+      <column name="sui_tx_digest" length="50" />
+    </property>
+    <property name="suiEventSeq">
+      <column name="sui_event_seq" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="suiPackageId">
+      <column name="sui_package_id" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="suiTransactionModule">
+      <column name="sui_transaction_module" length="100" />
+    </property>
+    <property name="suiSender">
+      <column name="sui_sender" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="suiType">
+      <column name="sui_type" length="200" />
+    </property>
+    <property name="status">
+      <column name="status" sql-type="CHAR(1)" />
+    </property>
+    <property name="commandType" column="command_type" length="50" />
+    <subclass name="AbstractItemEvent$ItemClobEvent" discriminator-value="ItemClobEvent">
+      <property name="dynamicPropertiesLob">
+        <column name="dynamic_properties_lob" sql-type="VARCHAR(2000)" />
+      </property>
+      <subclass name="AbstractItemEvent$ItemCreated" discriminator-value="ItemCreated" />
+      <subclass name="AbstractItemEvent$ItemUpdated" discriminator-value="ItemUpdated" />
+    </subclass>
+  </class>
+</hibernate-mapping>

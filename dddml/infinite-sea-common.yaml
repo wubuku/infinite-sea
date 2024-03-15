@@ -106,6 +106,7 @@ singletonObjects:
     properties:
       Levels:
         itemType: ExperienceLevel
+        isList: true
     methods:
       "__Init__":
         event:

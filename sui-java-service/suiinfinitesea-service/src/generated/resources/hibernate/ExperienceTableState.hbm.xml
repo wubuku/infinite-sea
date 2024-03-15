@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.experiencetable">
+  <class name="org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableState$SimpleExperienceTableState" table="experience_table">
+    <id name="id" length="66">
+      <column name="id" sql-type="VARCHAR(66)" />
+      <generator class="assigned" />
+    </id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="version">
+      <column name="version" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+    <list name="levels" table="experience_table_levels" lazy="false">
+      <key column="Id" />
+      <index column="levels_index" />
+      <composite-element class="org.dddml.suiinfinitesea.domain.ExperienceLevel">
+        <property name="level">
+          <column name="level" not-null="true" />
+        </property>
+        <property name="experience">
+          <column name="experience" not-null="true" />
+        </property>
+        <property name="difference">
+          <column name="difference" not-null="true" />
+        </property>
+      </composite-element>
+    </list>
+  </class>
+</hibernate-mapping>

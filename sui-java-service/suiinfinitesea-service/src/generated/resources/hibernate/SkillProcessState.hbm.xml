@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.skillprocess">
+  <class name="org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessState$SimpleSkillProcessState" table="skill_process">
+    <composite-id name="skillProcessId" class="org.dddml.suiinfinitesea.domain.SkillTypePlayerIdPair">
+      <key-property name="skillType">
+        <column name="skill_process_id_skill_type" />
+      </key-property>
+      <key-property name="playerId">
+        <column name="skill_process_id_player_id" sql-type="VARCHAR(66)" />
+      </key-property>
+    </composite-id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <property name="id_">
+      <column name="id" unique-key="unique_skillprocess_sid" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="itemId">
+      <column name="item_id" />
+    </property>
+    <property name="startedAt">
+      <column name="started_at" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="creationTime">
+      <column name="creation_time" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="completed">
+      <column name="completed" />
+    </property>
+    <property name="endedAt">
+      <column name="ended_at" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="energyVault">
+      <column name="energy_vault" />
+    </property>
+    <property name="version">
+      <column name="version" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+  </class>
+</hibernate-mapping>

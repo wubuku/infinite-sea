@@ -1,13 +1,3 @@
-sui-contracts/infinite-sea-common/build
-sui-contracts/infinite-sea-farming/build
-sui-java-service
-sui-contracts/infinite-sea-mining/build
-sui-contracts/infinite-sea-player/build
-sui-contracts/infinite-sea-smithing/build
-sui-contracts/infinite-sea/build
-sui-contracts/infinite-sea-coin/build
-sui-contracts/testnet_common_publish.json
-sui-contracts/infinite-sea/testnet_default_publish.json
-sui-contracts/infinite-sea-common/testnet_common_publish.json
+sui-contracts/*/build
+sui-contracts/*/testnet_*.json
 sui-contracts/testnet_*.json
-sui-contracts/infinite-sea-coin/testnet_*.json
