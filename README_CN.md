@@ -61,7 +61,11 @@ sui client call --package {COIN_PACKAGE_ID} --module energy --function mint \
 
 ### 发布 common 合约包
 
-发布 `./sui-contracts/infinite-sea-common` 目录下的合约项目包。记录下交易摘要；以及记录下 Package ID，下面的命令使用占位符 `{COMMON_PACKAGE_ID}` 来表示它。
+发布 `./sui-contracts/infinite-sea-common` 目录下的合约项目包。
+
+记录下输出中的交易摘要，下面的命令我们使用占位符 `{COMMON_PACKAGE_PUBLISH_TRANSACTION_DIGEST}` 来表示它。
+
+记录下输出中的 Package ID，下面的命令使用占位符 `{COMMON_PACKAGE_ID}` 来表示它。
 
 记录下发布交易所创建的这些类型的对象的 ID：
 
@@ -75,22 +79,27 @@ sui client call --package {COIN_PACKAGE_ID} --module energy --function mint \
 │  │ ObjectID: {ITEM_TABLE_OBJECT_ID}
 │  │ ObjectType: {COMMON_PACKAGE_ID}::item::ItemTable
 
-│  │ ObjectID: {ITEM_PRODUCTION_TABLE_OBJECT_ID}"
-│  │ ObjectType: {COMMON_PACKAGE_ID}::item_production::ItemProductionTable"
-```
+│  │ ObjectID: {ITEM_PRODUCTION_TABLE_OBJECT_ID}
+│  │ ObjectType: {COMMON_PACKAGE_ID}::item_production::ItemProductionTable
 
-记录下类型为 `{DEFAULT_PACKAGE_ID}::item_creation::ItemCreationTable` 的对象的 ID，下面我们使用占位符 `{ITEM_CREATION_TABLE_OBJECT_ID}` 来表示它。
+│  │ ObjectID: {ITEM_CREATION_TABLE_OBJECT_ID}
+│  │ ObjectType: {DEFAULT_PACKAGE_ID}::item_creation::ItemCreationTable
+```
 
 
 ### 发布 default 合约包
 
-发布 `./sui-contracts/infinite-sea` 目录下的合约项目包。 记录该 default 合约项目发布的交易摘要；以及包 ID，下面我们使用占位符 `{DEFAULT_PACKAGE_ID}` 来表示它。
+发布 `./sui-contracts/infinite-sea` 目录下的合约项目包。 
+
+记录发布该 default 合约项目的交易摘要，下面的命令使用占位符 `{DEFAULT_PACKAGE_PUBLISH_TRANSACTION_DIGEST}` 来表示它。
+
+记录下该项目的包 ID，下面我们使用占位符 `{DEFAULT_PACKAGE_ID}` 来表示它。
 
 并记录以下类型的对象的 ID：
 
-* 记录下类型为 `0x...::player::PlayerTable` 的对象的 ID，下面我们使用占位符 `{PLAYER_ID}` 来表示它。
-* 记录下类型为 `0x2::package::Publisher` 的对象的 ID，下面我们使用占位符 `{DEFAULT_PACKAGE_PUBLISHER_ID}` 来表示它。
-* 记录下类型为 `{DEFAULT_PACKAGE_ID}::skill_process::SkillProcessTable` 的对象的 ID，下面我们使用占位符 `{SKILL_PROCESS_TABLE_OBJECT_ID}` 来表示它。
+* 类型为 `0x...::player::PlayerTable` 的对象的 ID，下面我们使用占位符 `{PLAYER_ID}` 来表示它。
+* 类型为 `0x2::package::Publisher` 的对象的 ID，下面我们使用占位符 `{DEFAULT_PACKAGE_PUBLISHER_ID}` 来表示它。
+* 类型为 `{DEFAULT_PACKAGE_ID}::skill_process::SkillProcessTable` 的对象的 ID，下面我们使用占位符 `{SKILL_PROCESS_TABLE_OBJECT_ID}` 来表示它。
 
 
 ### 初始化经验值表
@@ -394,8 +403,10 @@ After setting, it should look like this:
 sui:
   contract:
     jsonrpc:
-      url: "https://fullnode.devnet.sui.io/"
-    package-publish-transaction: "FeEj734dBM9ZK89ocAF5WuD8nsPsjbd3x7bwM3KMDTDS"
+      url: "https://fullnode.testnet.sui.io/"
+    package-publish-transactions:
+      common: "{COMMON_PACKAGE_PUBLISH_TRANSACTION_DIGEST}"
+      default: "{DEFAULT_PACKAGE_PUBLISH_TRANSACTION_DIGEST}"
 ```
 
 This is the only place where off-chain service need to be configured, and it's that simple.
