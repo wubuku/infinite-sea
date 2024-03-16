@@ -22,10 +22,14 @@ module infinite_sea::skill_process_complete_production_logic {
     friend infinite_sea::skill_process_aggregate;
 
     const EProcessNotStarted: u64 = 10;
-    const EIncorrectItemId: u64 = 11;
+    const EInvalidPlayerId: u64 = 11;
     const EIncorrectSkillType: u64 = 12;
-    const EStillInProgress: u64 = 13;
-    const EExperienceTableNotInitialized: u64 = 14;
+    //const ENotEnoughEnergy: u64 = 13;
+    const EStillInProgress: u64 = 14;
+    const EExperienceTableNotInitialized: u64 = 15;
+    const EIncorrectItemId: u64 = 22;
+    //const ELowerThanRequiredLevel: u64 = 24;
+    //const ESenderHasNoPermission: u64 = 32;
 
     public(friend) fun verify(
         player: &mut Player,
@@ -43,6 +47,8 @@ module infinite_sea::skill_process_complete_production_logic {
         let skill_type = skill_type_item_id_pair::skill_type(&item_production_id);
         let skill_process_id = skill_process::skill_process_id(skill_process);
         assert!(skill_type == skill_type_player_id_pair::skill_type(&skill_process_id), EIncorrectSkillType);
+        let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
+        assert!(player::id(player) == player_id, EInvalidPlayerId);
 
         let started_at = skill_process::started_at(skill_process);
         let creation_time = skill_process::creation_time(skill_process);
