@@ -21,7 +21,7 @@ public class PlayerExperienceAndItemsIncreased {
 
     private Long experience;
 
-    private ProductionMaterial[] items;
+    private ProductionMaterialForEvent[] items;
 
     private Integer newLevel;
 
@@ -49,11 +49,11 @@ public class PlayerExperienceAndItemsIncreased {
         this.experience = experience;
     }
 
-    public ProductionMaterial[] getItems() {
+    public ProductionMaterialForEvent[] getItems() {
         return items;
     }
 
-    public void setItems(ProductionMaterial[] items) {
+    public void setItems(ProductionMaterialForEvent[] items) {
         this.items = items;
     }
 

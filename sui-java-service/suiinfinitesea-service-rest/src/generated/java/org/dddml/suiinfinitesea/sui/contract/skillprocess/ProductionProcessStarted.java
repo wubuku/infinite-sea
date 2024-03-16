@@ -29,7 +29,7 @@ public class ProductionProcessStarted {
 
     private BigInteger creationTime;
 
-    private ProductionMaterials productionMaterials;
+    private ProductionMaterialsForEvent productionMaterials;
 
     public String getId() {
         return id;
@@ -87,11 +87,11 @@ public class ProductionProcessStarted {
         this.creationTime = creationTime;
     }
 
-    public ProductionMaterials getProductionMaterials() {
+    public ProductionMaterialsForEvent getProductionMaterials() {
         return productionMaterials;
     }
 
-    public void setProductionMaterials(ProductionMaterials productionMaterials) {
+    public void setProductionMaterials(ProductionMaterialsForEvent productionMaterials) {
         this.productionMaterials = productionMaterials;
     }
 

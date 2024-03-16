@@ -19,7 +19,7 @@ public class PlayerItemsDeducted {
 
     private BigInteger version;
 
-    private ProductionMaterial[] items;
+    private ProductionMaterialForEvent[] items;
 
     public String getId() {
         return id;
@@ -37,11 +37,11 @@ public class PlayerItemsDeducted {
         this.version = version;
     }
 
-    public ProductionMaterial[] getItems() {
+    public ProductionMaterialForEvent[] getItems() {
         return items;
     }
 
-    public void setItems(ProductionMaterial[] items) {
+    public void setItems(ProductionMaterialForEvent[] items) {
         this.items = items;
     }
 
