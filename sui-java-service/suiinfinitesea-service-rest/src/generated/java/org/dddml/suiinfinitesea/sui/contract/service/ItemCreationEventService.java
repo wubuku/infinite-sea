@@ -42,7 +42,7 @@ public class ItemCreationEventService {
 
     @Transactional
     public void pullItemCreationCreatedEvents() {
-        String packageId = getDefaultSuiPackageId();
+        String packageId = getCommonSuiPackageId();
         if (packageId == null) {
             return;
         }
@@ -82,7 +82,7 @@ public class ItemCreationEventService {
 
     @Transactional
     public void pullItemCreationUpdatedEvents() {
-        String packageId = getDefaultSuiPackageId();
+        String packageId = getCommonSuiPackageId();
         if (packageId == null) {
             return;
         }
@@ -121,8 +121,8 @@ public class ItemCreationEventService {
     }
 
 
-    private String getDefaultSuiPackageId() {
-        return suiPackageRepository.findById(ContractConstants.DEFAULT_SUI_PACKAGE_NAME)
+    private String getCommonSuiPackageId() {
+        return suiPackageRepository.findById(ContractConstants.COMMON_SUI_PACKAGE_NAME)
                 .map(SuiPackage::getObjectId).orElse(null);
     }
 }

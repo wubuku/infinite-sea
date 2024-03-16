@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SuiPackageInitializer {
 
+    private final SuiPackageInitializationService commonPackageInitializationService;
     private final SuiPackageInitializationService defaultPackageInitializationService;
 
     @Autowired
@@ -20,21 +21,32 @@ public class SuiPackageInitializer {
             MoveObjectIdGeneratorObjectRepository moveObjectIdGeneratorObjectRepository,
             SuiPackageRepository suiPackageRepository,
             SuiJsonRpcClient suiJsonRpcClient,
-            @Value("${sui.contract.package-publish-transaction}")
-            String packagePublishTransactionDigest
+            @Value("${sui.contract.package-publish-transactions.common}")
+            String commonPackagePublishTransactionDigest,
+            @Value("${sui.contract.package-publish-transactions.default}")
+            String defaultPackagePublishTransactionDigest
     ) {
+        this.commonPackageInitializationService = new SuiPackageInitializationService(
+                moveObjectIdGeneratorObjectRepository,
+                suiPackageRepository,
+                suiJsonRpcClient,
+                commonPackagePublishTransactionDigest,
+                ContractConstants.COMMON_SUI_PACKAGE_NAME,
+                ContractConstants::getCommonPackageIdGeneratorObjectTypes
+        );
         this.defaultPackageInitializationService = new SuiPackageInitializationService(
                 moveObjectIdGeneratorObjectRepository,
                 suiPackageRepository,
                 suiJsonRpcClient,
-                packagePublishTransactionDigest,
+                defaultPackagePublishTransactionDigest,
                 ContractConstants.DEFAULT_SUI_PACKAGE_NAME,
-                ContractConstants::getMoveObjectIdGeneratorObjectTypes
+                ContractConstants::getDefaultPackageIdGeneratorObjectTypes
         );
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
+        commonPackageInitializationService.init();
         defaultPackageInitializationService.init();
     }
 }

@@ -6,6 +6,7 @@
 package org.dddml.suiinfinitesea.sui.contract;
 
 public class ContractConstants {
+    public static final String COMMON_SUI_PACKAGE_NAME = "COMMON_SUI_PACKAGE";
     public static final String DEFAULT_SUI_PACKAGE_NAME = "DEFAULT_SUI_PACKAGE";
 
     public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE = "skill_process::SkillProcessTable";
@@ -53,13 +54,18 @@ public class ContractConstants {
     public static final String EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_UPDATED = "experience_table::ExperienceLevelUpdated";
 
 
-    public static String[] getMoveObjectIdGeneratorObjectTypes(String packageId) {
+    public static String[] getCommonPackageIdGeneratorObjectTypes(String packageId) {
         return new String[]{
-                packageId + "::" + SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE,
-                packageId + "::" + SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_TABLE,
                 packageId + "::" + ITEM_MODULE_ITEM_TABLE,
                 packageId + "::" + ITEM_CREATION_MODULE_ITEM_CREATION_TABLE,
                 packageId + "::" + ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_TABLE,
+        };
+    }
+
+    public static String[] getDefaultPackageIdGeneratorObjectTypes(String packageId) {
+        return new String[]{
+                packageId + "::" + SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE,
+                packageId + "::" + SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_TABLE,
         };
     }
 }
