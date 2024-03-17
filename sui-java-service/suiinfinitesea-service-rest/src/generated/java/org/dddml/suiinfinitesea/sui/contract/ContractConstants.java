@@ -47,6 +47,10 @@ public class ContractConstants {
 
     public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_CREATED = "skill_process_mutex::SkillProcessMutexCreated";
 
+    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_LOCKED = "skill_process_mutex::SkillProcessMutexLocked";
+
+    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_UNLOCKED = "skill_process_mutex::SkillProcessMutexUnlocked";
+
     public static final String EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT = "experience_table::InitExperienceTableEvent";
 
     public static final String EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_ADDED = "experience_table::ExperienceLevelAdded";

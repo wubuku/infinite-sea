@@ -133,6 +133,7 @@ aggregates:
       Preprocessors: ["MOVE_CRUD_IT"]
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
+      MOVE_AGGREGATE_MODULE_ATTRIBUTES: "#[allow(unused_mut_parameter)]"
     friends:
 #      - SkillProcess.StartMutexProduction
 #      - SkillProcess.CompleteMutexProduction
@@ -155,18 +156,18 @@ aggregates:
         event:
           isObjectShared: true # Share the object after created.
 
-#      Lock:
-#        isInternal: true
-#        parameters:
-#          SkillType:
-#            type: SkillType
-#        event:
-#          name: SkillProcessMutexLocked
-#
-#      Unlock:
-#        isInternal: true
-#        parameters:
-#          SkillType:
-#            type: SkillType
-#        event:
-#          name: SkillProcessMutexUnlocked
+      Lock:
+        isInternal: true
+        parameters:
+          SkillType:
+            type: SkillType
+        event:
+          name: SkillProcessMutexLocked
+
+      Unlock:
+        isInternal: true
+        parameters:
+          SkillType:
+            type: SkillType
+        event:
+          name: SkillProcessMutexUnlocked

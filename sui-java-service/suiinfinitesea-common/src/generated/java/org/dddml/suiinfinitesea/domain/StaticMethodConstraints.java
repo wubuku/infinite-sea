@@ -136,6 +136,22 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocessmutex.LockLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessMutexState.class, Integer.class, VerificationContext.class},
+                    new String[]{"_", "_", "skillType"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocessmutex.UnlockLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessMutexState.class, Integer.class, VerificationContext.class},
+                    new String[]{"_", "_", "skillType"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.experiencetable.__Init__Logic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, ExperienceTableState.class, VerificationContext.class},
@@ -260,6 +276,22 @@ public class StaticMethodConstraints {
                     "mutate",
                     new Class[]{SkillProcessMutexState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocessmutex.LockLogic",
+                    "mutate",
+                    new Class[]{SkillProcessMutexState.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "skillType", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocessmutex.UnlockLogic",
+                    "mutate",
+                    new Class[]{SkillProcessMutexState.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "skillType", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
             );
 
 

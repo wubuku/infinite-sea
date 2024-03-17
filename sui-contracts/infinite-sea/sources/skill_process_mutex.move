@@ -11,6 +11,8 @@ module infinite_sea::skill_process_mutex {
     use sui::transfer;
     use sui::tx_context::TxContext;
     friend infinite_sea::skill_process_mutex_create_logic;
+    friend infinite_sea::skill_process_mutex_lock_logic;
+    friend infinite_sea::skill_process_mutex_unlock_logic;
     friend infinite_sea::skill_process_mutex_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -109,6 +111,68 @@ module infinite_sea::skill_process_mutex {
         }
     }
 
+    struct SkillProcessMutexLocked has copy, drop {
+        id: object::ID,
+        player_id: ID,
+        version: u64,
+        skill_type: u8,
+    }
+
+    public fun skill_process_mutex_locked_id(skill_process_mutex_locked: &SkillProcessMutexLocked): object::ID {
+        skill_process_mutex_locked.id
+    }
+
+    public fun skill_process_mutex_locked_player_id(skill_process_mutex_locked: &SkillProcessMutexLocked): ID {
+        skill_process_mutex_locked.player_id
+    }
+
+    public fun skill_process_mutex_locked_skill_type(skill_process_mutex_locked: &SkillProcessMutexLocked): u8 {
+        skill_process_mutex_locked.skill_type
+    }
+
+    public(friend) fun new_skill_process_mutex_locked(
+        skill_process_mutex: &SkillProcessMutex,
+        skill_type: u8,
+    ): SkillProcessMutexLocked {
+        SkillProcessMutexLocked {
+            id: id(skill_process_mutex),
+            player_id: player_id(skill_process_mutex),
+            version: version(skill_process_mutex),
+            skill_type,
+        }
+    }
+
+    struct SkillProcessMutexUnlocked has copy, drop {
+        id: object::ID,
+        player_id: ID,
+        version: u64,
+        skill_type: u8,
+    }
+
+    public fun skill_process_mutex_unlocked_id(skill_process_mutex_unlocked: &SkillProcessMutexUnlocked): object::ID {
+        skill_process_mutex_unlocked.id
+    }
+
+    public fun skill_process_mutex_unlocked_player_id(skill_process_mutex_unlocked: &SkillProcessMutexUnlocked): ID {
+        skill_process_mutex_unlocked.player_id
+    }
+
+    public fun skill_process_mutex_unlocked_skill_type(skill_process_mutex_unlocked: &SkillProcessMutexUnlocked): u8 {
+        skill_process_mutex_unlocked.skill_type
+    }
+
+    public(friend) fun new_skill_process_mutex_unlocked(
+        skill_process_mutex: &SkillProcessMutex,
+        skill_type: u8,
+    ): SkillProcessMutexUnlocked {
+        SkillProcessMutexUnlocked {
+            id: id(skill_process_mutex),
+            player_id: player_id(skill_process_mutex),
+            version: version(skill_process_mutex),
+            skill_type,
+        }
+    }
+
 
     public(friend) fun create_skill_process_mutex(
         player_id: ID,
@@ -165,7 +229,7 @@ module infinite_sea::skill_process_mutex {
         transfer::freeze_object(skill_process_mutex);
     }
 
-    fun update_object_version(skill_process_mutex: &mut SkillProcessMutex) {
+    public(friend) fun update_object_version(skill_process_mutex: &mut SkillProcessMutex) {
         skill_process_mutex.version = skill_process_mutex.version + 1;
         //assert!(skill_process_mutex.version != 0, EInappropriateVersion);
     }
@@ -183,6 +247,14 @@ module infinite_sea::skill_process_mutex {
     public(friend) fun emit_skill_process_mutex_created(skill_process_mutex_created: SkillProcessMutexCreated) {
         assert!(std::option::is_some(&skill_process_mutex_created.id), EEmptyObjectID);
         event::emit(skill_process_mutex_created);
+    }
+
+    public(friend) fun emit_skill_process_mutex_locked(skill_process_mutex_locked: SkillProcessMutexLocked) {
+        event::emit(skill_process_mutex_locked);
+    }
+
+    public(friend) fun emit_skill_process_mutex_unlocked(skill_process_mutex_unlocked: SkillProcessMutexUnlocked) {
+        event::emit(skill_process_mutex_unlocked);
     }
 
     #[test_only]
