@@ -248,6 +248,7 @@ public class M {
     public static final Class ID_CLASS = org.dddml.suiinfinitesea.domain.SkillTypeItemIdPair.class;
 
     public static final String[] propertyNames = new String[] {
+            "resourceCost",
             "requirementsLevel",
             "baseQuantity",
             "baseExperience",
@@ -267,6 +268,7 @@ public class M {
     };
 
     public static final String[] propertyTypes = new String[] {
+            "Long",
             "Integer",
             "Long",
             "Long",
@@ -297,6 +299,8 @@ public class M {
     }
 
     private static  void initAliasMap() {
+        aliasMap.put("resourceCost", "resourceCost");
+        aliasMap.put("ResourceCost", "resourceCost");
         aliasMap.put("requirementsLevel", "requirementsLevel");
         aliasMap.put("RequirementsLevel", "requirementsLevel");
         aliasMap.put("baseQuantity", "baseQuantity");

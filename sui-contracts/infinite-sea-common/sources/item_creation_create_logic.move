@@ -8,6 +8,7 @@ module infinite_sea_common::item_creation_create_logic {
 
     public(friend) fun verify(
         item_creation_id: SkillTypeItemIdPair,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -21,6 +22,7 @@ module infinite_sea_common::item_creation_create_logic {
         item_creation::asset_item_creation_id_not_exists(item_creation_id, item_creation_table);
         item_creation::new_item_creation_created(
             item_creation_id,
+            resource_cost,
             requirements_level,
             base_quantity,
             base_experience,
@@ -36,6 +38,7 @@ module infinite_sea_common::item_creation_create_logic {
         ctx: &mut TxContext,
     ): item_creation::ItemCreation {
         let item_creation_id = item_creation::item_creation_created_item_creation_id(item_creation_created);
+        let resource_cost = item_creation::item_creation_created_resource_cost(item_creation_created);
         let requirements_level = item_creation::item_creation_created_requirements_level(item_creation_created);
         let base_quantity = item_creation::item_creation_created_base_quantity(item_creation_created);
         let base_experience = item_creation::item_creation_created_base_experience(item_creation_created);
@@ -44,6 +47,7 @@ module infinite_sea_common::item_creation_create_logic {
         let success_rate = item_creation::item_creation_created_success_rate(item_creation_created);
         item_creation::create_item_creation(
             item_creation_id,
+            resource_cost,
             requirements_level,
             base_quantity,
             base_experience,

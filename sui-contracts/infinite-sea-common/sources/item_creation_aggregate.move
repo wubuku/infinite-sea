@@ -16,6 +16,7 @@ module infinite_sea_common::item_creation_aggregate {
         item_creation_id_skill_type: u8,
         item_creation_id_item_id: u32,
         publisher: &sui::package::Publisher,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -33,6 +34,7 @@ module infinite_sea_common::item_creation_aggregate {
 
         let item_creation_created = item_creation_create_logic::verify(
             item_creation_id,
+            resource_cost,
             requirements_level,
             base_quantity,
             base_experience,
@@ -55,6 +57,7 @@ module infinite_sea_common::item_creation_aggregate {
     public entry fun update(
         item_creation: &mut item_creation::ItemCreation,
         publisher: &sui::package::Publisher,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -65,6 +68,7 @@ module infinite_sea_common::item_creation_aggregate {
     ) {
         assert!(sui::package::from_package<item_creation::ItemCreation>(publisher), EInvalidPublisher);
         let item_creation_updated = item_creation_update_logic::verify(
+            resource_cost,
             requirements_level,
             base_quantity,
             base_experience,

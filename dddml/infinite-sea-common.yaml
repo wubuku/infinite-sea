@@ -46,6 +46,8 @@ aggregates:
         class: assigned
         tableName: ItemCreationTable
     properties:
+      ResourceCost:
+        type: u32
     methods:
       Create:
         requiredPermission: "__Publisher__"
@@ -236,6 +238,8 @@ enumObjects:
         value: 6
       Township:
         value: 7
+      Sailing:
+        value: 8
       #Thieving:
       #  value: xxx
 

@@ -23,4 +23,6 @@ public class SkillType {
 
     public static final Integer TOWNSHIP = 7;
 
+    public static final Integer SAILING = 8;
+
 }

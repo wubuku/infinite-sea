@@ -46,6 +46,7 @@ module infinite_sea_common::item_creation {
         id: UID,
         item_creation_id: SkillTypeItemIdPair,
         version: u64,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -64,6 +65,14 @@ module infinite_sea_common::item_creation {
 
     public fun version(item_creation: &ItemCreation): u64 {
         item_creation.version
+    }
+
+    public fun resource_cost(item_creation: &ItemCreation): u32 {
+        item_creation.resource_cost
+    }
+
+    public(friend) fun set_resource_cost(item_creation: &mut ItemCreation, resource_cost: u32) {
+        item_creation.resource_cost = resource_cost;
     }
 
     public fun requirements_level(item_creation: &ItemCreation): u16 {
@@ -116,6 +125,7 @@ module infinite_sea_common::item_creation {
 
     fun new_item_creation(
         item_creation_id: SkillTypeItemIdPair,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -128,6 +138,7 @@ module infinite_sea_common::item_creation {
             id: object::new(ctx),
             item_creation_id,
             version: 0,
+            resource_cost,
             requirements_level,
             base_quantity,
             base_experience,
@@ -140,6 +151,7 @@ module infinite_sea_common::item_creation {
     struct ItemCreationCreated has copy, drop {
         id: option::Option<object::ID>,
         item_creation_id: SkillTypeItemIdPair,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -158,6 +170,10 @@ module infinite_sea_common::item_creation {
 
     public fun item_creation_created_item_creation_id(item_creation_created: &ItemCreationCreated): SkillTypeItemIdPair {
         item_creation_created.item_creation_id
+    }
+
+    public fun item_creation_created_resource_cost(item_creation_created: &ItemCreationCreated): u32 {
+        item_creation_created.resource_cost
     }
 
     public fun item_creation_created_requirements_level(item_creation_created: &ItemCreationCreated): u16 {
@@ -186,6 +202,7 @@ module infinite_sea_common::item_creation {
 
     public(friend) fun new_item_creation_created(
         item_creation_id: SkillTypeItemIdPair,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -196,6 +213,7 @@ module infinite_sea_common::item_creation {
         ItemCreationCreated {
             id: option::none(),
             item_creation_id,
+            resource_cost,
             requirements_level,
             base_quantity,
             base_experience,
@@ -209,6 +227,7 @@ module infinite_sea_common::item_creation {
         id: object::ID,
         item_creation_id: SkillTypeItemIdPair,
         version: u64,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -223,6 +242,10 @@ module infinite_sea_common::item_creation {
 
     public fun item_creation_updated_item_creation_id(item_creation_updated: &ItemCreationUpdated): SkillTypeItemIdPair {
         item_creation_updated.item_creation_id
+    }
+
+    public fun item_creation_updated_resource_cost(item_creation_updated: &ItemCreationUpdated): u32 {
+        item_creation_updated.resource_cost
     }
 
     public fun item_creation_updated_requirements_level(item_creation_updated: &ItemCreationUpdated): u16 {
@@ -251,6 +274,7 @@ module infinite_sea_common::item_creation {
 
     public(friend) fun new_item_creation_updated(
         item_creation: &ItemCreation,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -262,6 +286,7 @@ module infinite_sea_common::item_creation {
             id: id(item_creation),
             item_creation_id: item_creation_id(item_creation),
             version: version(item_creation),
+            resource_cost,
             requirements_level,
             base_quantity,
             base_experience,
@@ -274,6 +299,7 @@ module infinite_sea_common::item_creation {
 
     public(friend) fun create_item_creation(
         item_creation_id: SkillTypeItemIdPair,
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -285,6 +311,7 @@ module infinite_sea_common::item_creation {
     ): ItemCreation {
         let item_creation = new_item_creation(
             item_creation_id,
+            resource_cost,
             requirements_level,
             base_quantity,
             base_experience,
@@ -349,6 +376,7 @@ module infinite_sea_common::item_creation {
             id,
             item_creation_id: _item_creation_id,
             version: _version,
+            resource_cost: _resource_cost,
             requirements_level: _requirements_level,
             base_quantity: _base_quantity,
             base_experience: _base_experience,

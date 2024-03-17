@@ -5,6 +5,7 @@ module infinite_sea_common::item_creation_update_logic {
     friend infinite_sea_common::item_creation_aggregate;
 
     public(friend) fun verify(
+        resource_cost: u32,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,
@@ -17,6 +18,7 @@ module infinite_sea_common::item_creation_update_logic {
         let _ = ctx;
         item_creation::new_item_creation_updated(
             item_creation,
+            resource_cost,
             requirements_level,
             base_quantity,
             base_experience,
@@ -31,6 +33,7 @@ module infinite_sea_common::item_creation_update_logic {
         item_creation: &mut item_creation::ItemCreation,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {
+        let resource_cost = item_creation::item_creation_updated_resource_cost(item_creation_updated);
         let requirements_level = item_creation::item_creation_updated_requirements_level(item_creation_updated);
         let base_quantity = item_creation::item_creation_updated_base_quantity(item_creation_updated);
         let base_experience = item_creation::item_creation_updated_base_experience(item_creation_updated);
@@ -40,6 +43,7 @@ module infinite_sea_common::item_creation_update_logic {
         let item_creation_id = item_creation::item_creation_id(item_creation);
         let _ = ctx;
         let _ = item_creation_id;
+        item_creation::set_resource_cost(item_creation, resource_cost);
         item_creation::set_requirements_level(item_creation, requirements_level);
         item_creation::set_base_quantity(item_creation, base_quantity);
         item_creation::set_base_experience(item_creation, base_experience);

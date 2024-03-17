@@ -38,8 +38,12 @@ module infinite_sea_common::skill_type {
         7
     }
 
+    public fun sailing(): u8 {
+        8
+    }
+
     public fun is_valid(v: u8): bool {
-        v == farming() || v == woodcutting() || v == fishing() || v == mining() || v == smithing() || v == cooking() || v == crafting() || v == township()
+        v == farming() || v == woodcutting() || v == fishing() || v == mining() || v == smithing() || v == cooking() || v == crafting() || v == township() || v == sailing()
     }
 
     public fun are_all_valid(vs: &vector<u8>): bool {

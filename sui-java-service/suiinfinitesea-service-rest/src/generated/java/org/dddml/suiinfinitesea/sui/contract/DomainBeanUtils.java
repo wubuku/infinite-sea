@@ -215,6 +215,7 @@ public class DomainBeanUtils {
         AbstractItemCreationEvent.ItemCreationCreated itemCreationCreated = new AbstractItemCreationEvent.ItemCreationCreated();
         itemCreationCreated.setId_(contractEvent.getId());
         itemCreationCreated.setItemCreationId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemCreationId()));
+        itemCreationCreated.setResourceCost(contractEvent.getResourceCost());
         itemCreationCreated.setRequirementsLevel(contractEvent.getRequirementsLevel());
         itemCreationCreated.setBaseQuantity(contractEvent.getBaseQuantity());
         itemCreationCreated.setBaseExperience(contractEvent.getBaseExperience());
@@ -240,6 +241,7 @@ public class DomainBeanUtils {
         AbstractItemCreationEvent.ItemCreationUpdated itemCreationUpdated = new AbstractItemCreationEvent.ItemCreationUpdated();
         itemCreationUpdated.setId_(contractEvent.getId());
         itemCreationUpdated.setItemCreationId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemCreationId()));
+        itemCreationUpdated.setResourceCost(contractEvent.getResourceCost());
         itemCreationUpdated.setRequirementsLevel(contractEvent.getRequirementsLevel());
         itemCreationUpdated.setBaseQuantity(contractEvent.getBaseQuantity());
         itemCreationUpdated.setBaseExperience(contractEvent.getBaseExperience());

@@ -42,16 +42,16 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.itemcreation.CreateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, ItemCreationState.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
-                    new String[]{"_", "_", "requirementsLevel", "baseQuantity", "baseExperience", "baseCreationTime", "energyCost", "successRate"}
+                    new Class[]{java.util.function.Supplier.class, ItemCreationState.class, Long.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
+                    new String[]{"_", "_", "resourceCost", "requirementsLevel", "baseQuantity", "baseExperience", "baseCreationTime", "energyCost", "successRate"}
             );
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.itemcreation.UpdateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, ItemCreationState.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
-                    new String[]{"_", "_", "requirementsLevel", "baseQuantity", "baseExperience", "baseCreationTime", "energyCost", "successRate"}
+                    new Class[]{java.util.function.Supplier.class, ItemCreationState.class, Long.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
+                    new String[]{"_", "_", "resourceCost", "requirementsLevel", "baseQuantity", "baseExperience", "baseCreationTime", "energyCost", "successRate"}
             );
 
 
@@ -178,16 +178,16 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.itemcreation.CreateLogic",
                     "mutate",
-                    new Class[]{ItemCreationState.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "requirementsLevel", "baseQuantity", "baseExperience", "baseCreationTime", "energyCost", "successRate", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+                    new Class[]{ItemCreationState.class, Long.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "resourceCost", "requirementsLevel", "baseQuantity", "baseExperience", "baseCreationTime", "energyCost", "successRate", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
             );
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.itemcreation.UpdateLogic",
                     "mutate",
-                    new Class[]{ItemCreationState.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "requirementsLevel", "baseQuantity", "baseExperience", "baseCreationTime", "energyCost", "successRate", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+                    new Class[]{ItemCreationState.class, Long.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "resourceCost", "requirementsLevel", "baseQuantity", "baseExperience", "baseCreationTime", "energyCost", "successRate", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
             );
 
 
