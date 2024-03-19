@@ -64,6 +64,14 @@ sui client call --package "$coin_package_id" --module energy --function mint \
 energy_coin_object_id_1=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("coin::Coin<")).objectId' testnet_mint_energy_coin.json)
 echo "energy_coin_object_id_1: $energy_coin_object_id_1" | tee -a "$log_file"
 
+sui client call --package "$coin_package_id" --module energy --function mint \
+--args "$energy_coin_treasury_cap_object_id" '1000000000' \
+--gas-budget 10000000 --json  > testnet_mint_energy_coin.json
+
+energy_coin_object_id_2=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("coin::Coin<")).objectId' testnet_mint_energy_coin.json)
+echo "energy_coin_object_id_2: $energy_coin_object_id_2" | tee -a "$log_file"
+
+
 # -------- update coin Move.toml --------
 # read every line of Move.toml
 while read -r line
@@ -208,6 +216,7 @@ echo "" | tee -a "$log_file"
 
 default_publisher_object_id=""
 skill_process_table_object_id=""
+skill_process_mutex_table_object_id=""
 
 while read -r line
 do
@@ -222,10 +231,15 @@ do
   elif [[ $objectType == *::skill_process::SkillProcessTable ]]
   then
     skill_process_table_object_id=$objectId
+  elif [[ $objectType == *::skill_process_mutex::SkillProcessMutexTable ]]
+  then
+    skill_process_mutex_table_object_id=$objectId
   fi
 done < <(jq -c '.objectChanges[] | select(.type == "created")' "$publish_json_file")
 echo "default_publisher_object_id: $default_publisher_object_id" | tee -a "$log_file"
 echo "skill_process_table_object_id: $skill_process_table_object_id" | tee -a "$log_file"
+echo "skill_process_mutex_table_object_id: $skill_process_mutex_table_object_id" | tee -a "$log_file"
+
 
 # -------- update default Move.toml --------
 while read -r line
@@ -310,16 +324,60 @@ sui client call --package "$common_package_id" --module item_aggregate --functio
 item_object_id_2=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("item::Item")).objectId' testnet_create_item_2.json)
 echo "item_object_id_2: $item_object_id_2" | tee -a "$log_file"
 
+
+sui client call --package "$common_package_id" --module item_aggregate --function create \
+--args \
+'30' \
+"$common_publisher_object_id" \
+'"CoalOre"'  \
+'false' \
+'80' \
+"$item_table_object_id" \
+--gas-budget 11000000 --json > testnet_create_item_30.json
+
+item_object_id_30=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("item::Item")).objectId' testnet_create_item_30.json)
+echo "item_object_id_30: $item_object_id_30" | tee -a "$log_file"
+
+
+# -------- Add resource type --------
+
+# RESOURCE_TYPE_MINING 2_000_000_003
+sui client call --package "$common_package_id" --module item_aggregate --function create \
+--args \
+'"2000000003"' \
+"$common_publisher_object_id" \
+'"RESOURCE_TYPE_MINING"'  \
+'false' \
+'80' \
+"$item_table_object_id" \
+--gas-budget 11000000 --json > testnet_create_RESOURCE_TYPE_MINING.json
+
+RESOURCE_TYPE_MINING_object_id=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("item::Item")).objectId' testnet_create_RESOURCE_TYPE_MINING.json)
+echo "RESOURCE_TYPE_MINING_object_id: $RESOURCE_TYPE_MINING_object_id" | tee -a "$log_file"
+
+
 # ------------- Add item production ----------------
 sui client call --package "$common_package_id" --module item_production_aggregate --function create \
 --args '0' '2' "$common_publisher_object_id" \
 '[1]' '[3]' \
-'1' '10' '85' '100' '5' '100' \
+'1' '10' '85' '5' '5' '100' \
 "$item_production_table_object_id" \
 --gas-budget 11000000 --json > testnet_create_item_production.json
 
 item_production_id_1=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("item_production::ItemProduction")).objectId' testnet_create_item_production.json)
 echo "item_production_id_1: $item_production_id_1" | tee -a "$log_file"
+
+
+# ------------- Add item creation ----------------
+sui client call --package "$common_package_id" --module item_creation_aggregate --function create \
+--args '3' '30' "$common_publisher_object_id" \
+'1' \
+'1' '5' '85' '5' '5' '100' \
+"$item_creation_table_object_id" \
+--gas-budget 11000000 --json > testnet_create_item_creation.json
+
+item_creation_id_1=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("item_creation::ItemCreation")).objectId' testnet_create_item_creation.json)
+echo "item_creation_id_1: $item_creation_id_1" | tee -a "$log_file"
 
 
 # ------------------- Create player -------------------
@@ -336,15 +394,33 @@ sui client call --package "$default_package_id" --module player_aggregate --func
 '1' '100' \
 --gas-budget 11000000
 
+# RESOURCE_TYPE_MINING 2_000_000_003
+sui client call --package "$default_package_id" --module player_aggregate --function airdrop \
+--args "$player_id" \
+"$default_publisher_object_id" \
+'"2000000003"' '10' \
+--gas-budget 11000000
+
 # --------------- Create skill process ---------------
 sui client call --package "$default_package_id" --module skill_process_aggregate --function create \
 --args '0' "$player_id" \
 "$player_id" \
 "$skill_process_table_object_id" \
---gas-budget 11000000 --json > testnet_create_skill_process.json
+--gas-budget 11000000 --json > testnet_create_skill_process_1.json
 
-skill_process_object_id_1=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("skill_process::SkillProcess")).objectId' testnet_create_skill_process.json)
+skill_process_object_id_1=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("skill_process::SkillProcess")).objectId' testnet_create_skill_process_1.json)
 echo "skill_process_object_id_1: $skill_process_object_id_1" | tee -a "$log_file"
+
+
+sui client call --package "$default_package_id" --module skill_process_aggregate --function create \
+--args '3' "$player_id" \
+"$player_id" \
+"$skill_process_table_object_id" \
+--gas-budget 11000000 --json > testnet_create_skill_process_2.json
+
+skill_process_object_id_2=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("skill_process::SkillProcess")).objectId' testnet_create_skill_process_2.json)
+echo "skill_process_object_id_2: $skill_process_object_id_2" | tee -a "$log_file"
+
 
 # -------------- Start production process ----------------
 sui client call --package "$default_package_id" --module skill_process_service --function start_production \
@@ -353,11 +429,11 @@ sui client call --package "$default_package_id" --module skill_process_service -
 "$item_production_id_1" \
 "0x6" \
 "$energy_coin_object_id_1" \
---gas-budget 11000000 --json > testnet_start_skill_process.json
+--gas-budget 11000000 #--json > testnet_start_skill_process_1.json
 
 
 # -------------- Complete production process ----------------
-sleep 6
+sleep 8 # wait for 8 seconds
 
 sui client call --package "$default_package_id" --module skill_process_aggregate --function complete_production \
 --args "$skill_process_object_id_1" \
@@ -365,8 +441,41 @@ sui client call --package "$default_package_id" --module skill_process_aggregate
 "$item_production_id_1" \
 "$experience_table_object_id" \
 "0x6" \
---gas-budget 11000000 --json > testnet_complete_skill_process.json
+--gas-budget 11000000 #--json > testnet_complete_skill_process_1.json
 
 
+# -------------- Create skill process mutex ----------------
+# player_id: ID,
+# skill_process_mutex_table: &mut skill_process_mutex::SkillProcessMutexTable,
+sui client call --package "$default_package_id" --module skill_process_mutex_aggregate --function create \
+--args "$player_id" \
+"$skill_process_mutex_table_object_id" \
+--gas-budget 11000000 --json > testnet_create_skill_process_mutex_1.json
+
+skill_process_mutex_object_id_1=$(jq -r '.objectChanges[] | select(.type == "created") | select(.objectType | test("skill_process_mutex::SkillProcessMutex")).objectId' testnet_create_skill_process_mutex_1.json)
+echo "skill_process_mutex_object_id_1: $skill_process_mutex_object_id_1" | tee -a "$log_file"
+
+
+# -------------- Start mutex creation process ----------------
+sui client call --package "$default_package_id" --module skill_process_service --function start_mutex_creation \
+--args "$skill_process_object_id_2" \
+"$skill_process_mutex_object_id_1" \
+"$player_id" \
+"$item_creation_id_1" \
+"0x6" \
+"$energy_coin_object_id_2" \
+--gas-budget 11000000 #--json > testnet_start_skill_process_2.json
+
+# -------------- Complete mutex creation process ----------------
+sleep 8 # wait for 8 seconds
+
+sui client call --package "$default_package_id" --module skill_process_aggregate --function complete_mutex_creation \
+--args "$skill_process_object_id_2" \
+"$skill_process_mutex_object_id_1" \
+"$player_id" \
+"$item_creation_id_1" \
+"$experience_table_object_id" \
+"0x6" \
+--gas-budget 11000000 #--json > testnet_complete_skill_process_2.json
 
 

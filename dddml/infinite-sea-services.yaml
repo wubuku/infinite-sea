@@ -18,3 +18,21 @@ services:
           Energy:
             type: "Coin<ENERGY>"
 
+
+      StartMutexCreation:
+        parameters:
+          SkillProcess:
+            referenceType: SkillProcess
+            isMutableReference: true
+          SkillProcessMutex:
+            referenceType: SkillProcessMutex
+            isMutableReference: true
+          Player:
+            referenceType: Player
+            isMutableReference: true
+          ItemCreation:
+            referenceType: ItemCreation
+          Clock:
+            referenceType: Clock
+          Energy:
+            type: "Coin<ENERGY>"

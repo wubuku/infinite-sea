@@ -213,7 +213,7 @@ sui client call --package {COMMON_PACKAGE_ID} --module item_aggregate --function
 sui client call --package {COMMON_PACKAGE_ID} --module item_production_aggregate --function create \
 --args '0' '2' {COMMON_PACKAGE_PUBLISHER_ID} \
 '[1]' '[3]' \
-'1' '10' '85' '100' '5' '100' \
+'1' '10' '85' '5' '5' '100' \
 {ITEM_PRODUCTION_TABLE_OBJECT_ID} \
 --gas-budget 11000000
 ```

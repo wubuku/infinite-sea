@@ -1,5 +1,5 @@
 [package]
-published-at = "0x80cc2c35898c1d60bf32e96ca487716f4f5c2fdacf0e96beb1e5ec22dfac4d02"
+published-at = "0x4fd4cddc2e62598b3833b56a2da3eed099330cab8e1ba5c1f54bf630d632b0f5"
 name = "infinite_sea"
 version = "0.0.1"
 
@@ -10,6 +10,6 @@ infinite_sea_common = { local = "../infinite-sea-common" }
 infinite_sea_coin = { local = "../infinite-sea-coin" }
 
 [addresses]
-infinite_sea = "0x80cc2c35898c1d60bf32e96ca487716f4f5c2fdacf0e96beb1e5ec22dfac4d02"
+infinite_sea = "0x4fd4cddc2e62598b3833b56a2da3eed099330cab8e1ba5c1f54bf630d632b0f5"
 #infinite_sea = "0x0"
 #sui = "0000000000000000000000000000000000000000000000000000000000000002"
