@@ -138,6 +138,28 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
         }
            
 
+        protected SkillProcessEvent.MutexCreationProcessStarted verifyStartMutexCreation(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessStarted> eventFactory, String player, SkillTypeItemIdPair itemCreation, SkillProcessCommands.StartMutexCreation c) {
+            String Player = player;
+            SkillTypeItemIdPair ItemCreation = itemCreation;
+
+            SkillProcessEvent.MutexCreationProcessStarted e = (SkillProcessEvent.MutexCreationProcessStarted) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.StartMutexCreationLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), player, itemCreation, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocess;
+//
+//public class StartMutexCreationLogic {
+//    public static SkillProcessEvent.MutexCreationProcessStarted verify(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessStarted> eventFactory, SkillProcessState skillProcessState, String player, SkillTypeItemIdPair itemCreation, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
         protected AbstractSkillProcessEvent.SkillProcessCreated newSkillProcessCreated(String player, Long offChainVersion, String commandId, String requesterId) {
             SkillProcessEventId eventId = new SkillProcessEventId(getState().getSkillProcessId(), null);
             AbstractSkillProcessEvent.SkillProcessCreated e = new AbstractSkillProcessEvent.SkillProcessCreated();

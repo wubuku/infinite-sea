@@ -18,7 +18,7 @@ module infinite_sea::skill_process_mutex_unlock_logic {
         skill_process_mutex: &skill_process_mutex::SkillProcessMutex,
         ctx: &TxContext,
     ): skill_process_mutex::SkillProcessMutexUnlocked {
-        assert!(!skill_process_util::is_non_mutex_skill(skill_type), EIsNonMutexSkillType);
+        assert!(skill_process_util::is_mutex_skill(skill_type), EIsNonMutexSkillType);
         let active_skill_type = skill_process_mutex::active_skill_type(skill_process_mutex);
         assert!(option::is_some(&active_skill_type), ENotLocked);
         assert!(skill_type == option::extract(&mut active_skill_type), EIncorrectSkillType);

@@ -20,6 +20,7 @@ module infinite_sea::skill_process {
     friend infinite_sea::skill_process_create_logic;
     friend infinite_sea::skill_process_start_production_logic;
     friend infinite_sea::skill_process_complete_production_logic;
+    friend infinite_sea::skill_process_start_mutex_creation_logic;
     friend infinite_sea::skill_process_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -304,6 +305,65 @@ module infinite_sea::skill_process {
         }
     }
 
+    struct MutexCreationProcessStarted has copy, drop {
+        id: object::ID,
+        skill_process_id: SkillTypePlayerIdPair,
+        version: u64,
+        item_id: u32,
+        energy_cost: u64,
+        resource_cost: u32,
+        started_at: u64,
+        creation_time: u64,
+    }
+
+    public fun mutex_creation_process_started_id(mutex_creation_process_started: &MutexCreationProcessStarted): object::ID {
+        mutex_creation_process_started.id
+    }
+
+    public fun mutex_creation_process_started_skill_process_id(mutex_creation_process_started: &MutexCreationProcessStarted): SkillTypePlayerIdPair {
+        mutex_creation_process_started.skill_process_id
+    }
+
+    public fun mutex_creation_process_started_item_id(mutex_creation_process_started: &MutexCreationProcessStarted): u32 {
+        mutex_creation_process_started.item_id
+    }
+
+    public fun mutex_creation_process_started_energy_cost(mutex_creation_process_started: &MutexCreationProcessStarted): u64 {
+        mutex_creation_process_started.energy_cost
+    }
+
+    public fun mutex_creation_process_started_resource_cost(mutex_creation_process_started: &MutexCreationProcessStarted): u32 {
+        mutex_creation_process_started.resource_cost
+    }
+
+    public fun mutex_creation_process_started_started_at(mutex_creation_process_started: &MutexCreationProcessStarted): u64 {
+        mutex_creation_process_started.started_at
+    }
+
+    public fun mutex_creation_process_started_creation_time(mutex_creation_process_started: &MutexCreationProcessStarted): u64 {
+        mutex_creation_process_started.creation_time
+    }
+
+    public(friend) fun new_mutex_creation_process_started(
+        skill_process: &SkillProcess,
+        item_id: u32,
+        energy_cost: u64,
+        resource_cost: u32,
+        started_at: u64,
+        creation_time: u64,
+    ): MutexCreationProcessStarted {
+        MutexCreationProcessStarted {
+            id: id(skill_process),
+            skill_process_id: skill_process_id(skill_process),
+            version: version(skill_process),
+            item_id,
+            energy_cost,
+            resource_cost,
+            started_at,
+            creation_time,
+        }
+    }
+
 
     public(friend) fun create_skill_process(
         skill_process_id: SkillTypePlayerIdPair,
@@ -394,6 +454,10 @@ module infinite_sea::skill_process {
 
     public(friend) fun emit_production_process_completed(production_process_completed: ProductionProcessCompleted) {
         event::emit(production_process_completed);
+    }
+
+    public(friend) fun emit_mutex_creation_process_started(mutex_creation_process_started: MutexCreationProcessStarted) {
+        event::emit(mutex_creation_process_started);
     }
 
 }

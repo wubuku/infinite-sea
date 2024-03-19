@@ -429,6 +429,63 @@ public abstract class AbstractSkillProcessState implements SkillProcessState.Sql
 
     }
 
+    public void when(AbstractSkillProcessEvent.MutexCreationProcessStarted e) {
+        throwOnWrongEvent(e);
+
+        Long itemId = e.getItemId();
+        Long ItemId = itemId;
+        BigInteger energyCost = e.getEnergyCost();
+        BigInteger EnergyCost = energyCost;
+        Long resourceCost = e.getResourceCost();
+        Long ResourceCost = resourceCost;
+        BigInteger startedAt = e.getStartedAt();
+        BigInteger StartedAt = startedAt;
+        BigInteger creationTime = e.getCreationTime();
+        BigInteger CreationTime = creationTime;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String status = e.getStatus();
+        String Status = status;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        SkillProcessState updatedSkillProcessState = (SkillProcessState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.StartMutexCreationLogic",
+                    "mutate",
+                    new Class[]{SkillProcessState.class, Long.class, BigInteger.class, Long.class, BigInteger.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, itemId, energyCost, resourceCost, startedAt, creationTime, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocess;
+//
+//public class StartMutexCreationLogic {
+//    public static SkillProcessState mutate(SkillProcessState skillProcessState, Long itemId, BigInteger energyCost, Long resourceCost, BigInteger startedAt, BigInteger creationTime, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SkillProcessState, SkillProcessState.MutableSkillProcessState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedSkillProcessState) { merge(updatedSkillProcessState); } //else do nothing
+
+    }
+
     public void save() {
     }
 

@@ -30,6 +30,7 @@ import org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessEvent;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.SkillProcessCreated;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessStarted;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessCompleted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.MutexCreationProcessStarted;
 import org.dddml.suiinfinitesea.domain.skillprocessmutex.AbstractSkillProcessMutexEvent;
 import org.dddml.suiinfinitesea.sui.contract.skillprocessmutex.SkillProcessMutexCreated;
 import org.dddml.suiinfinitesea.sui.contract.skillprocessmutex.SkillProcessMutexLocked;
@@ -462,6 +463,30 @@ public class DomainBeanUtils {
         productionProcessCompleted.setSuiSender(eventEnvelope.getSender());
 
         return productionProcessCompleted;
+    }
+
+    public static AbstractSkillProcessEvent.MutexCreationProcessStarted toMutexCreationProcessStarted(SuiMoveEventEnvelope<MutexCreationProcessStarted> eventEnvelope) {
+        MutexCreationProcessStarted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractSkillProcessEvent.MutexCreationProcessStarted mutexCreationProcessStarted = new AbstractSkillProcessEvent.MutexCreationProcessStarted();
+        mutexCreationProcessStarted.setId_(contractEvent.getId());
+        mutexCreationProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillTypePlayerIdPair(contractEvent.getSkillProcessId()));
+        mutexCreationProcessStarted.setItemId(contractEvent.getItemId());
+        mutexCreationProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
+        mutexCreationProcessStarted.setResourceCost(contractEvent.getResourceCost());
+        mutexCreationProcessStarted.setStartedAt(contractEvent.getStartedAt());
+        mutexCreationProcessStarted.setCreationTime(contractEvent.getCreationTime());
+        mutexCreationProcessStarted.setVersion(contractEvent.getVersion());
+
+        mutexCreationProcessStarted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        mutexCreationProcessStarted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        mutexCreationProcessStarted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        mutexCreationProcessStarted.setSuiPackageId(eventEnvelope.getPackageId());
+        mutexCreationProcessStarted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        mutexCreationProcessStarted.setSuiSender(eventEnvelope.getSender());
+
+        return mutexCreationProcessStarted;
     }
 
     public static AbstractSkillProcessMutexEvent.SkillProcessMutexCreated toSkillProcessMutexCreated(SuiMoveEventEnvelope<SkillProcessMutexCreated> eventEnvelope) {

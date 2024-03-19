@@ -17,7 +17,7 @@ module infinite_sea::skill_process_mutex_lock_logic {
         skill_process_mutex: &skill_process_mutex::SkillProcessMutex,
         ctx: &TxContext,
     ): skill_process_mutex::SkillProcessMutexLocked {
-        assert!(!skill_process_util::is_non_mutex_skill(skill_type), EIsNonMutexSkillType);
+        assert!(skill_process_util::is_mutex_skill(skill_type), EIsNonMutexSkillType);
         let active_skill_type = skill_process_mutex::active_skill_type(skill_process_mutex);
         assert!(option::is_none(&active_skill_type), EAlreadyLocked);
         skill_process_mutex::new_skill_process_mutex_locked(skill_process_mutex, skill_type)

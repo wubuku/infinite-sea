@@ -1,5 +1,5 @@
 [package]
-published-at = "0xa805bd546a8393c083b1d910dc923aaccd6c6c3e6167bf7fad8330532ee78bce"
+#published-at = "0xa805bd546a8393c083b1d910dc923aaccd6c6c3e6167bf7fad8330532ee78bce"
 name = "infinite_sea_common"
 version = "0.0.1"
 
@@ -8,6 +8,6 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 #Sui = { local = "../../../MystenLabs/sui/crates/sui-framework/packages/sui-framework" }
 
 [addresses]
-infinite_sea_common = "0xa805bd546a8393c083b1d910dc923aaccd6c6c3e6167bf7fad8330532ee78bce"
-#infinite_sea_common = "0x0"
+#infinite_sea_common = "0xa805bd546a8393c083b1d910dc923aaccd6c6c3e6167bf7fad8330532ee78bce"
+infinite_sea_common = "0x0"
 #sui = "0000000000000000000000000000000000000000000000000000000000000002"

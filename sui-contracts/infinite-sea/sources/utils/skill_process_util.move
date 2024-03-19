@@ -6,4 +6,8 @@ module infinite_sea::skill_process_util {
             || skill_type == skill_type::sailing()
             || skill_type == skill_type::township()
     }
+
+    public fun is_mutex_skill(skill_type: u8): bool {
+        !is_non_mutex_skill(skill_type)
+    }
 }

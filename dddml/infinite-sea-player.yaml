@@ -12,6 +12,7 @@ aggregates:
     friends:
       - SkillProcess.StartProduction
       - SkillProcess.CompleteProduction
+      - SkillProcess.StartMutexCreation
     id:
       name: Id
       type: UID

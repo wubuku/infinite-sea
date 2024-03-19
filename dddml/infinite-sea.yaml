@@ -127,6 +127,34 @@ aggregates:
             NewLevel:
               type: u16
 
+      StartMutexCreation:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          ItemCreation:
+            referenceType: ItemCreation
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+          Energy:
+            type: "Balance<ENERGY>"
+            eventPropertyName: EnergyCost
+        event:
+          name: MutexCreationProcessStarted
+          properties:
+            ItemId: # ItemId to be created
+              type: u32
+            EnergyCost:
+              type: u64
+            ResourceCost:
+              type: u32
+            StartedAt:
+              type: u64
+            CreationTime:
+              type: u64
 
   SkillProcessMutex:
     metadata:
@@ -135,10 +163,10 @@ aggregates:
       CRUD_IT_NO_DELETE: true
       MOVE_AGGREGATE_MODULE_ATTRIBUTES: "#[allow(unused_mut_parameter)]"
     friends:
-#      - SkillProcess.StartMutexProduction
-#      - SkillProcess.CompleteMutexProduction
-#      - SkillProcess.StartMutexCreation
-#      - SkillProcess.CompleteMutexCreation
+      #- SkillProcess.StartMutexProduction
+      #- SkillProcess.CompleteMutexProduction
+      - SkillProcess.StartMutexCreation
+      #- SkillProcess.CompleteMutexCreation
     id:
       name: PlayerId
       type: ID

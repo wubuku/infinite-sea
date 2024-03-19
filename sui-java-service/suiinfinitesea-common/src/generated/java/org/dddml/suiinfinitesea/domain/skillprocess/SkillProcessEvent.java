@@ -82,6 +82,29 @@ public interface SkillProcessEvent extends Event, SuiEventEnvelope, SuiMoveEvent
 
     }
 
+    interface MutexCreationProcessStarted extends SkillProcessEvent {
+        Long getItemId();
+
+        void setItemId(Long value);
+
+        BigInteger getEnergyCost();
+
+        void setEnergyCost(BigInteger value);
+
+        Long getResourceCost();
+
+        void setResourceCost(Long value);
+
+        BigInteger getStartedAt();
+
+        void setStartedAt(BigInteger value);
+
+        BigInteger getCreationTime();
+
+        void setCreationTime(BigInteger value);
+
+    }
+
     SkillTypePlayerIdPair getSkillProcessId();
 
     //void setSkillProcessId(SkillTypePlayerIdPair skillProcessId);

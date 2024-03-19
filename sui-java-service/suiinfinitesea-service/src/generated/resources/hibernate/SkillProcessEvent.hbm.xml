@@ -52,6 +52,7 @@
       <subclass name="AbstractSkillProcessEvent$SkillProcessCreated" discriminator-value="SkillProcessCreated" />
       <subclass name="AbstractSkillProcessEvent$ProductionProcessStarted" discriminator-value="ProductionProcessStarted" />
       <subclass name="AbstractSkillProcessEvent$ProductionProcessCompleted" discriminator-value="ProductionProcessCompleted" />
+      <subclass name="AbstractSkillProcessEvent$MutexCreationProcessStarted" discriminator-value="MutexCreationProcessStarted" />
     </subclass>
   </class>
 </hibernate-mapping>

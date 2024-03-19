@@ -128,6 +128,14 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.StartMutexCreationLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "itemCreation"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.skillprocessmutex.CreateLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, SkillProcessMutexState.class, VerificationContext.class},

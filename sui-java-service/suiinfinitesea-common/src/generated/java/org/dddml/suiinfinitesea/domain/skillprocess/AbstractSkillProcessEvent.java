@@ -405,6 +405,75 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
     }
 
+    public static class MutexCreationProcessStarted extends SkillProcessClobEvent implements SkillProcessEvent.MutexCreationProcessStarted {
+
+        @Override
+        public String getEventType() {
+            return "MutexCreationProcessStarted";
+        }
+
+        public Long getItemId() {
+            Object val = getDynamicProperties().get("itemId");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setItemId(Long value) {
+            getDynamicProperties().put("itemId", value);
+        }
+
+        public BigInteger getEnergyCost() {
+            Object val = getDynamicProperties().get("energyCost");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setEnergyCost(BigInteger value) {
+            getDynamicProperties().put("energyCost", value);
+        }
+
+        public Long getResourceCost() {
+            Object val = getDynamicProperties().get("resourceCost");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setResourceCost(Long value) {
+            getDynamicProperties().put("resourceCost", value);
+        }
+
+        public BigInteger getStartedAt() {
+            Object val = getDynamicProperties().get("startedAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setStartedAt(BigInteger value) {
+            getDynamicProperties().put("startedAt", value);
+        }
+
+        public BigInteger getCreationTime() {
+            Object val = getDynamicProperties().get("creationTime");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setCreationTime(BigInteger value) {
+            getDynamicProperties().put("creationTime", value);
+        }
+
+    }
+
 
 }
 
