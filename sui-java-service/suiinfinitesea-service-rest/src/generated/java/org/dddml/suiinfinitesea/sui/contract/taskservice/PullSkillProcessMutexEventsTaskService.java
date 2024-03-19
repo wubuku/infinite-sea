@@ -21,4 +21,14 @@ public class PullSkillProcessMutexEventsTaskService {
         skillProcessMutexEventService.pullSkillProcessMutexCreatedEvents();
     }
 
+    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-mutex-events.skill-process-mutex-locked.fixed-delay:5000}")
+    public void pullSkillProcessMutexLockedEvents() {
+        skillProcessMutexEventService.pullSkillProcessMutexLockedEvents();
+    }
+
+    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-mutex-events.skill-process-mutex-unlocked.fixed-delay:5000}")
+    public void pullSkillProcessMutexUnlockedEvents() {
+        skillProcessMutexEventService.pullSkillProcessMutexUnlockedEvents();
+    }
+
 }

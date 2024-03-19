@@ -47,11 +47,11 @@ public abstract class AbstractItemCreationAggregate extends AbstractAggregate im
         }
 
         @Override
-        public void create(Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemCreationCommands.Create c) {
-            java.util.function.Supplier<ItemCreationEvent.ItemCreationCreated> eventFactory = () -> newItemCreationCreated(requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, offChainVersion, commandId, requesterId);
+        public void create(Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemCreationCommands.Create c) {
+            java.util.function.Supplier<ItemCreationEvent.ItemCreationCreated> eventFactory = () -> newItemCreationCreated(resourceCost, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, offChainVersion, commandId, requesterId);
             ItemCreationEvent.ItemCreationCreated e;
             try {
-                e = verifyCreate(eventFactory, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, c);
+                e = verifyCreate(eventFactory, resourceCost, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -60,11 +60,11 @@ public abstract class AbstractItemCreationAggregate extends AbstractAggregate im
         }
 
         @Override
-        public void update(Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemCreationCommands.Update c) {
-            java.util.function.Supplier<ItemCreationEvent.ItemCreationUpdated> eventFactory = () -> newItemCreationUpdated(requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, offChainVersion, commandId, requesterId);
+        public void update(Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemCreationCommands.Update c) {
+            java.util.function.Supplier<ItemCreationEvent.ItemCreationUpdated> eventFactory = () -> newItemCreationUpdated(resourceCost, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, offChainVersion, commandId, requesterId);
             ItemCreationEvent.ItemCreationUpdated e;
             try {
-                e = verifyUpdate(eventFactory, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, c);
+                e = verifyUpdate(eventFactory, resourceCost, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -72,7 +72,8 @@ public abstract class AbstractItemCreationAggregate extends AbstractAggregate im
             apply(e);
         }
 
-        protected ItemCreationEvent.ItemCreationCreated verifyCreate(java.util.function.Supplier<ItemCreationEvent.ItemCreationCreated> eventFactory, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, ItemCreationCommands.Create c) {
+        protected ItemCreationEvent.ItemCreationCreated verifyCreate(java.util.function.Supplier<ItemCreationEvent.ItemCreationCreated> eventFactory, Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, ItemCreationCommands.Create c) {
+            Long ResourceCost = resourceCost;
             Integer RequirementsLevel = requirementsLevel;
             Long BaseQuantity = baseQuantity;
             Long BaseExperience = baseExperience;
@@ -83,14 +84,14 @@ public abstract class AbstractItemCreationAggregate extends AbstractAggregate im
             ItemCreationEvent.ItemCreationCreated e = (ItemCreationEvent.ItemCreationCreated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.itemcreation.CreateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, ItemCreationState.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, ItemCreationState.class, Long.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), resourceCost, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.itemcreation;
 //
 //public class CreateLogic {
-//    public static ItemCreationEvent.ItemCreationCreated verify(java.util.function.Supplier<ItemCreationEvent.ItemCreationCreated> eventFactory, ItemCreationState itemCreationState, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, VerificationContext verificationContext) {
+//    public static ItemCreationEvent.ItemCreationCreated verify(java.util.function.Supplier<ItemCreationEvent.ItemCreationCreated> eventFactory, ItemCreationState itemCreationState, Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -98,7 +99,8 @@ public abstract class AbstractItemCreationAggregate extends AbstractAggregate im
         }
            
 
-        protected ItemCreationEvent.ItemCreationUpdated verifyUpdate(java.util.function.Supplier<ItemCreationEvent.ItemCreationUpdated> eventFactory, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, ItemCreationCommands.Update c) {
+        protected ItemCreationEvent.ItemCreationUpdated verifyUpdate(java.util.function.Supplier<ItemCreationEvent.ItemCreationUpdated> eventFactory, Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, ItemCreationCommands.Update c) {
+            Long ResourceCost = resourceCost;
             Integer RequirementsLevel = requirementsLevel;
             Long BaseQuantity = baseQuantity;
             Long BaseExperience = baseExperience;
@@ -109,14 +111,14 @@ public abstract class AbstractItemCreationAggregate extends AbstractAggregate im
             ItemCreationEvent.ItemCreationUpdated e = (ItemCreationEvent.ItemCreationUpdated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.itemcreation.UpdateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, ItemCreationState.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, ItemCreationState.class, Long.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), resourceCost, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.itemcreation;
 //
 //public class UpdateLogic {
-//    public static ItemCreationEvent.ItemCreationUpdated verify(java.util.function.Supplier<ItemCreationEvent.ItemCreationUpdated> eventFactory, ItemCreationState itemCreationState, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, VerificationContext verificationContext) {
+//    public static ItemCreationEvent.ItemCreationUpdated verify(java.util.function.Supplier<ItemCreationEvent.ItemCreationUpdated> eventFactory, ItemCreationState itemCreationState, Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -124,10 +126,11 @@ public abstract class AbstractItemCreationAggregate extends AbstractAggregate im
         }
            
 
-        protected AbstractItemCreationEvent.ItemCreationCreated newItemCreationCreated(Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractItemCreationEvent.ItemCreationCreated newItemCreationCreated(Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId) {
             ItemCreationEventId eventId = new ItemCreationEventId(getState().getItemCreationId(), null);
             AbstractItemCreationEvent.ItemCreationCreated e = new AbstractItemCreationEvent.ItemCreationCreated();
 
+            e.setResourceCost(resourceCost);
             e.setRequirementsLevel(requirementsLevel);
             e.setBaseQuantity(baseQuantity);
             e.setBaseExperience(baseExperience);
@@ -151,10 +154,11 @@ public abstract class AbstractItemCreationAggregate extends AbstractAggregate im
             return e;
         }
 
-        protected AbstractItemCreationEvent.ItemCreationUpdated newItemCreationUpdated(Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractItemCreationEvent.ItemCreationUpdated newItemCreationUpdated(Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId) {
             ItemCreationEventId eventId = new ItemCreationEventId(getState().getItemCreationId(), null);
             AbstractItemCreationEvent.ItemCreationUpdated e = new AbstractItemCreationEvent.ItemCreationUpdated();
 
+            e.setResourceCost(resourceCost);
             e.setRequirementsLevel(requirementsLevel);
             e.setBaseQuantity(baseQuantity);
             e.setBaseExperience(baseExperience);

@@ -15,4 +15,8 @@ public interface SkillProcessMutexEventRepository extends JpaRepository<Abstract
 
     AbstractSkillProcessMutexEvent.SkillProcessMutexCreated findFirstSkillProcessMutexCreatedByOrderBySuiTimestampDesc();
 
+    AbstractSkillProcessMutexEvent.SkillProcessMutexLocked findFirstSkillProcessMutexLockedByOrderBySuiTimestampDesc();
+
+    AbstractSkillProcessMutexEvent.SkillProcessMutexUnlocked findFirstSkillProcessMutexUnlockedByOrderBySuiTimestampDesc();
+
 }

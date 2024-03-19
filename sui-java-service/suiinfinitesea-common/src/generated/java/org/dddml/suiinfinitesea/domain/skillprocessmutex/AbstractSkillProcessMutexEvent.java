@@ -231,6 +231,48 @@ public abstract class AbstractSkillProcessMutexEvent extends AbstractEvent imple
 
     }
 
+    public static class SkillProcessMutexLocked extends SkillProcessMutexClobEvent implements SkillProcessMutexEvent.SkillProcessMutexLocked {
+
+        @Override
+        public String getEventType() {
+            return "SkillProcessMutexLocked";
+        }
+
+        public Integer getSkillType() {
+            Object val = getDynamicProperties().get("skillType");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setSkillType(Integer value) {
+            getDynamicProperties().put("skillType", value);
+        }
+
+    }
+
+    public static class SkillProcessMutexUnlocked extends SkillProcessMutexClobEvent implements SkillProcessMutexEvent.SkillProcessMutexUnlocked {
+
+        @Override
+        public String getEventType() {
+            return "SkillProcessMutexUnlocked";
+        }
+
+        public Integer getSkillType() {
+            Object val = getDynamicProperties().get("skillType");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setSkillType(Integer value) {
+            getDynamicProperties().put("skillType", value);
+        }
+
+    }
+
 
 }
 

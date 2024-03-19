@@ -24,6 +24,20 @@ public interface SkillProcessMutexEvent extends Event, SuiEventEnvelope, SuiMove
     interface SkillProcessMutexCreated extends SkillProcessMutexEvent {
     }
 
+    interface SkillProcessMutexLocked extends SkillProcessMutexEvent {
+        Integer getSkillType();
+
+        void setSkillType(Integer value);
+
+    }
+
+    interface SkillProcessMutexUnlocked extends SkillProcessMutexEvent {
+        Integer getSkillType();
+
+        void setSkillType(Integer value);
+
+    }
+
     String getPlayerId();
 
     //void setPlayerId(String playerId);

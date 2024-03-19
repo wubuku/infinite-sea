@@ -47,6 +47,8 @@
         <column name="dynamic_properties_lob" sql-type="VARCHAR(2000)" />
       </property>
       <subclass name="AbstractSkillProcessMutexEvent$SkillProcessMutexCreated" discriminator-value="SkillProcessMutexCreated" />
+      <subclass name="AbstractSkillProcessMutexEvent$SkillProcessMutexLocked" discriminator-value="SkillProcessMutexLocked" />
+      <subclass name="AbstractSkillProcessMutexEvent$SkillProcessMutexUnlocked" discriminator-value="SkillProcessMutexUnlocked" />
     </subclass>
   </class>
 </hibernate-mapping>

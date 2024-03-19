@@ -44,6 +44,7 @@ public class SuiItemCreationStateRetriever {
         ItemCreationState.MutableItemCreationState itemCreationState = itemCreationStateFactory.apply(DomainBeanUtils.toSkillTypeItemIdPair(itemCreation.getItemCreationId()));
         itemCreationState.setId_(itemCreation.getId().getId());
         itemCreationState.setVersion(itemCreation.getVersion());
+        itemCreationState.setResourceCost(itemCreation.getResourceCost());
         itemCreationState.setRequirementsLevel(itemCreation.getRequirementsLevel());
         itemCreationState.setBaseQuantity(itemCreation.getBaseQuantity());
         itemCreationState.setBaseExperience(itemCreation.getBaseExperience());

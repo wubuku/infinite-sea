@@ -21,6 +21,8 @@ public class ItemCreationUpdated {
 
     private BigInteger version;
 
+    private Long resourceCost;
+
     private Integer requirementsLevel;
 
     private Long baseQuantity;
@@ -55,6 +57,14 @@ public class ItemCreationUpdated {
 
     public void setVersion(BigInteger version) {
         this.version = version;
+    }
+
+    public Long getResourceCost() {
+        return resourceCost;
+    }
+
+    public void setResourceCost(Long resourceCost) {
+        this.resourceCost = resourceCost;
     }
 
     public Integer getRequirementsLevel() {
@@ -111,6 +121,7 @@ public class ItemCreationUpdated {
                 "id=" + '\'' + id + '\'' +
                 ", itemCreationId=" + itemCreationId +
                 ", version=" + version +
+                ", resourceCost=" + resourceCost +
                 ", requirementsLevel=" + requirementsLevel +
                 ", baseQuantity=" + baseQuantity +
                 ", baseExperience=" + baseExperience +

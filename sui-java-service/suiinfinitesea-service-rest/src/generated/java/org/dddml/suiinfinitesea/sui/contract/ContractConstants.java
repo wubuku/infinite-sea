@@ -9,15 +9,31 @@ public class ContractConstants {
     public static final String COMMON_SUI_PACKAGE_NAME = "COMMON_SUI_PACKAGE";
     public static final String DEFAULT_SUI_PACKAGE_NAME = "DEFAULT_SUI_PACKAGE";
 
+    public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE = "skill_process::SkillProcessTable";
+
+    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_TABLE = "skill_process_mutex::SkillProcessMutexTable";
+
     public static final String ITEM_MODULE_ITEM_TABLE = "item::ItemTable";
 
     public static final String ITEM_CREATION_MODULE_ITEM_CREATION_TABLE = "item_creation::ItemCreationTable";
 
     public static final String ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_TABLE = "item_production::ItemProductionTable";
 
-    public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE = "skill_process::SkillProcessTable";
+    public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_CREATED = "skill_process::SkillProcessCreated";
 
-    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_TABLE = "skill_process_mutex::SkillProcessMutexTable";
+    public static final String SKILL_PROCESS_MODULE_PRODUCTION_PROCESS_STARTED = "skill_process::ProductionProcessStarted";
+
+    public static final String SKILL_PROCESS_MODULE_PRODUCTION_PROCESS_COMPLETED = "skill_process::ProductionProcessCompleted";
+
+    public static final String SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_STARTED = "skill_process::MutexCreationProcessStarted";
+
+    public static final String SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_COMPLETED = "skill_process::MutexCreationProcessCompleted";
+
+    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_CREATED = "skill_process_mutex::SkillProcessMutexCreated";
+
+    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_LOCKED = "skill_process_mutex::SkillProcessMutexLocked";
+
+    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_UNLOCKED = "skill_process_mutex::SkillProcessMutexUnlocked";
 
     public static final String ITEM_MODULE_ITEM_CREATED = "item::ItemCreated";
 
@@ -38,22 +54,6 @@ public class ContractConstants {
     public static final String PLAYER_MODULE_PLAYER_ITEMS_DEDUCTED = "player::PlayerItemsDeducted";
 
     public static final String PLAYER_MODULE_PLAYER_EXPERIENCE_AND_ITEMS_INCREASED = "player::PlayerExperienceAndItemsIncreased";
-
-    public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_CREATED = "skill_process::SkillProcessCreated";
-
-    public static final String SKILL_PROCESS_MODULE_PRODUCTION_PROCESS_STARTED = "skill_process::ProductionProcessStarted";
-
-    public static final String SKILL_PROCESS_MODULE_PRODUCTION_PROCESS_COMPLETED = "skill_process::ProductionProcessCompleted";
-
-    public static final String SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_STARTED = "skill_process::MutexCreationProcessStarted";
-
-    public static final String SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_COMPLETED = "skill_process::MutexCreationProcessCompleted";
-
-    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_CREATED = "skill_process_mutex::SkillProcessMutexCreated";
-
-    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_LOCKED = "skill_process_mutex::SkillProcessMutexLocked";
-
-    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_UNLOCKED = "skill_process_mutex::SkillProcessMutexUnlocked";
 
     public static final String EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT = "experience_table::InitExperienceTableEvent";
 

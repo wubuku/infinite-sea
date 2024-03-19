@@ -54,6 +54,14 @@ public abstract class AbstractSkillProcessMutexApplicationService implements Ski
         update(c, ar -> ar.create(c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
+    public void when(SkillProcessMutexCommands.Lock c) {
+        update(c, ar -> ar.lock(c.getSkillType(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(SkillProcessMutexCommands.Unlock c) {
+        update(c, ar -> ar.unlock(c.getSkillType(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
     public SkillProcessMutexState get(String id) {
         SkillProcessMutexState state = getStateRepository().get(id, true);
         return state;

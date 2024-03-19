@@ -38,6 +38,19 @@ public class ItemCreationCommands {
         }
 
         /**
+         * Resource Cost
+         */
+        private Long resourceCost;
+
+        public Long getResourceCost() {
+            return this.resourceCost;
+        }
+
+        public void setResourceCost(Long resourceCost) {
+            this.resourceCost = resourceCost;
+        }
+
+        /**
          * Requirements Level
          */
         private Integer requirementsLevel;
@@ -151,6 +164,19 @@ public class ItemCreationCommands {
 
         public void setItemCreationId(SkillTypeItemIdPair itemCreationId) {
             this.itemCreationId = itemCreationId;
+        }
+
+        /**
+         * Resource Cost
+         */
+        private Long resourceCost;
+
+        public Long getResourceCost() {
+            return this.resourceCost;
+        }
+
+        public void setResourceCost(Long resourceCost) {
+            this.resourceCost = resourceCost;
         }
 
         /**

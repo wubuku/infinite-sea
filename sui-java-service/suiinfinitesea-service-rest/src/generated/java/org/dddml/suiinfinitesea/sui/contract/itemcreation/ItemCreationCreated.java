@@ -19,6 +19,8 @@ public class ItemCreationCreated {
 
     private SkillTypeItemIdPairForEvent itemCreationId;
 
+    private Long resourceCost;
+
     private Integer requirementsLevel;
 
     private Long baseQuantity;
@@ -45,6 +47,14 @@ public class ItemCreationCreated {
 
     public void setItemCreationId(SkillTypeItemIdPairForEvent itemCreationId) {
         this.itemCreationId = itemCreationId;
+    }
+
+    public Long getResourceCost() {
+        return resourceCost;
+    }
+
+    public void setResourceCost(Long resourceCost) {
+        this.resourceCost = resourceCost;
     }
 
     public Integer getRequirementsLevel() {
@@ -100,6 +110,7 @@ public class ItemCreationCreated {
         return "ItemCreationCreated{" +
                 "id=" + '\'' + id + '\'' +
                 ", itemCreationId=" + itemCreationId +
+                ", resourceCost=" + resourceCost +
                 ", requirementsLevel=" + requirementsLevel +
                 ", baseQuantity=" + baseQuantity +
                 ", baseExperience=" + baseExperience +

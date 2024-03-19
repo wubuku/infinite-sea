@@ -51,11 +51,11 @@ public abstract class AbstractItemCreationApplicationService implements ItemCrea
     }
 
     public void when(ItemCreationCommands.Create c) {
-        update(c, ar -> ar.create(c.getRequirementsLevel(), c.getBaseQuantity(), c.getBaseExperience(), c.getBaseCreationTime(), c.getEnergyCost(), c.getSuccessRate(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+        update(c, ar -> ar.create(c.getResourceCost(), c.getRequirementsLevel(), c.getBaseQuantity(), c.getBaseExperience(), c.getBaseCreationTime(), c.getEnergyCost(), c.getSuccessRate(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public void when(ItemCreationCommands.Update c) {
-        update(c, ar -> ar.update(c.getRequirementsLevel(), c.getBaseQuantity(), c.getBaseExperience(), c.getBaseCreationTime(), c.getEnergyCost(), c.getSuccessRate(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+        update(c, ar -> ar.update(c.getResourceCost(), c.getRequirementsLevel(), c.getBaseQuantity(), c.getBaseExperience(), c.getBaseCreationTime(), c.getEnergyCost(), c.getSuccessRate(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public ItemCreationState get(SkillTypeItemIdPair id) {

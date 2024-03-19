@@ -19,6 +19,10 @@ public interface SkillProcessMutexAggregate {
 
     void create(Long offChainVersion, String commandId, String requesterId, SkillProcessMutexCommands.Create c);
 
+    void lock(Integer skillType, Long offChainVersion, String commandId, String requesterId, SkillProcessMutexCommands.Lock c);
+
+    void unlock(Integer skillType, Long offChainVersion, String commandId, String requesterId, SkillProcessMutexCommands.Unlock c);
+
     void throwOnInvalidStateTransition(Command c);
 }
 

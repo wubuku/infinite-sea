@@ -15,6 +15,8 @@ import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
 import org.dddml.suiinfinitesea.sui.contract.DomainBeanUtils;
 import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.skillprocessmutex.SkillProcessMutexCreated;
+import org.dddml.suiinfinitesea.sui.contract.skillprocessmutex.SkillProcessMutexLocked;
+import org.dddml.suiinfinitesea.sui.contract.skillprocessmutex.SkillProcessMutexUnlocked;
 import org.dddml.suiinfinitesea.sui.contract.repository.SkillProcessMutexEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +79,86 @@ public class SkillProcessMutexEventService {
             return;
         }
         skillProcessMutexEventRepository.save(skillProcessMutexCreated);
+    }
+
+    @Transactional
+    public void pullSkillProcessMutexLockedEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getSkillProcessMutexLockedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<SkillProcessMutexLocked> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_LOCKED,
+                    cursor, limit, false, SkillProcessMutexLocked.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<SkillProcessMutexLocked> eventEnvelope : eventPage.getData()) {
+                    saveSkillProcessMutexLocked(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getSkillProcessMutexLockedEventNextCursor() {
+        AbstractSkillProcessMutexEvent lastEvent = skillProcessMutexEventRepository.findFirstSkillProcessMutexLockedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveSkillProcessMutexLocked(SuiMoveEventEnvelope<SkillProcessMutexLocked> eventEnvelope) {
+        AbstractSkillProcessMutexEvent.SkillProcessMutexLocked skillProcessMutexLocked = DomainBeanUtils.toSkillProcessMutexLocked(eventEnvelope);
+        if (skillProcessMutexEventRepository.findById(skillProcessMutexLocked.getSkillProcessMutexEventId()).isPresent()) {
+            return;
+        }
+        skillProcessMutexEventRepository.save(skillProcessMutexLocked);
+    }
+
+    @Transactional
+    public void pullSkillProcessMutexUnlockedEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getSkillProcessMutexUnlockedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<SkillProcessMutexUnlocked> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_UNLOCKED,
+                    cursor, limit, false, SkillProcessMutexUnlocked.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<SkillProcessMutexUnlocked> eventEnvelope : eventPage.getData()) {
+                    saveSkillProcessMutexUnlocked(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getSkillProcessMutexUnlockedEventNextCursor() {
+        AbstractSkillProcessMutexEvent lastEvent = skillProcessMutexEventRepository.findFirstSkillProcessMutexUnlockedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveSkillProcessMutexUnlocked(SuiMoveEventEnvelope<SkillProcessMutexUnlocked> eventEnvelope) {
+        AbstractSkillProcessMutexEvent.SkillProcessMutexUnlocked skillProcessMutexUnlocked = DomainBeanUtils.toSkillProcessMutexUnlocked(eventEnvelope);
+        if (skillProcessMutexEventRepository.findById(skillProcessMutexUnlocked.getSkillProcessMutexEventId()).isPresent()) {
+            return;
+        }
+        skillProcessMutexEventRepository.save(skillProcessMutexUnlocked);
     }
 
 

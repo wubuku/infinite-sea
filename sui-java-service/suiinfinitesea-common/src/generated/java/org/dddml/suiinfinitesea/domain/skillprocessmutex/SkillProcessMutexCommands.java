@@ -52,5 +52,107 @@ public class SkillProcessMutexCommands {
 
     }
 
+    public static class Lock extends AbstractSkillProcessMutexCommand implements SkillProcessMutexCommand {
+
+        public String getCommandType() {
+            return "Lock";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Player Id
+         */
+        private String playerId;
+
+        public String getPlayerId() {
+            return this.playerId;
+        }
+
+        public void setPlayerId(String playerId) {
+            this.playerId = playerId;
+        }
+
+        /**
+         * Skill Type
+         */
+        private Integer skillType;
+
+        public Integer getSkillType() {
+            return this.skillType;
+        }
+
+        public void setSkillType(Integer skillType) {
+            this.skillType = skillType;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class Unlock extends AbstractSkillProcessMutexCommand implements SkillProcessMutexCommand {
+
+        public String getCommandType() {
+            return "Unlock";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Player Id
+         */
+        private String playerId;
+
+        public String getPlayerId() {
+            return this.playerId;
+        }
+
+        public void setPlayerId(String playerId) {
+            this.playerId = playerId;
+        }
+
+        /**
+         * Skill Type
+         */
+        private Integer skillType;
+
+        public Integer getSkillType() {
+            return this.skillType;
+        }
+
+        public void setSkillType(Integer skillType) {
+            this.skillType = skillType;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
 }
 

@@ -22,6 +22,10 @@ public interface ItemCreationEvent extends Event, SuiEventEnvelope, SuiMoveEvent
     }
 
     interface ItemCreationCreated extends ItemCreationEvent {
+        Long getResourceCost();
+
+        void setResourceCost(Long value);
+
         Integer getRequirementsLevel();
 
         void setRequirementsLevel(Integer value);
@@ -49,6 +53,10 @@ public interface ItemCreationEvent extends Event, SuiEventEnvelope, SuiMoveEvent
     }
 
     interface ItemCreationUpdated extends ItemCreationEvent {
+        Long getResourceCost();
+
+        void setResourceCost(Long value);
+
         Integer getRequirementsLevel();
 
         void setRequirementsLevel(Integer value);

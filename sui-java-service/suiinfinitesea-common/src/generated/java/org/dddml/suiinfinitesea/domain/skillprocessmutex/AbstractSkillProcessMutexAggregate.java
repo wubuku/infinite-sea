@@ -59,6 +59,32 @@ public abstract class AbstractSkillProcessMutexAggregate extends AbstractAggrega
             apply(e);
         }
 
+        @Override
+        public void lock(Integer skillType, Long offChainVersion, String commandId, String requesterId, SkillProcessMutexCommands.Lock c) {
+            java.util.function.Supplier<SkillProcessMutexEvent.SkillProcessMutexLocked> eventFactory = () -> newSkillProcessMutexLocked(skillType, offChainVersion, commandId, requesterId);
+            SkillProcessMutexEvent.SkillProcessMutexLocked e;
+            try {
+                e = verifyLock(eventFactory, skillType, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
+        @Override
+        public void unlock(Integer skillType, Long offChainVersion, String commandId, String requesterId, SkillProcessMutexCommands.Unlock c) {
+            java.util.function.Supplier<SkillProcessMutexEvent.SkillProcessMutexUnlocked> eventFactory = () -> newSkillProcessMutexUnlocked(skillType, offChainVersion, commandId, requesterId);
+            SkillProcessMutexEvent.SkillProcessMutexUnlocked e;
+            try {
+                e = verifyUnlock(eventFactory, skillType, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
         protected SkillProcessMutexEvent.SkillProcessMutexCreated verifyCreate(java.util.function.Supplier<SkillProcessMutexEvent.SkillProcessMutexCreated> eventFactory, SkillProcessMutexCommands.Create c) {
 
             SkillProcessMutexEvent.SkillProcessMutexCreated e = (SkillProcessMutexEvent.SkillProcessMutexCreated) ReflectUtils.invokeStaticMethod(
@@ -79,10 +105,96 @@ public abstract class AbstractSkillProcessMutexAggregate extends AbstractAggrega
         }
            
 
+        protected SkillProcessMutexEvent.SkillProcessMutexLocked verifyLock(java.util.function.Supplier<SkillProcessMutexEvent.SkillProcessMutexLocked> eventFactory, Integer skillType, SkillProcessMutexCommands.Lock c) {
+            Integer SkillType = skillType;
+
+            SkillProcessMutexEvent.SkillProcessMutexLocked e = (SkillProcessMutexEvent.SkillProcessMutexLocked) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocessmutex.LockLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessMutexState.class, Integer.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), skillType, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocessmutex;
+//
+//public class LockLogic {
+//    public static SkillProcessMutexEvent.SkillProcessMutexLocked verify(java.util.function.Supplier<SkillProcessMutexEvent.SkillProcessMutexLocked> eventFactory, SkillProcessMutexState skillProcessMutexState, Integer skillType, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
+        protected SkillProcessMutexEvent.SkillProcessMutexUnlocked verifyUnlock(java.util.function.Supplier<SkillProcessMutexEvent.SkillProcessMutexUnlocked> eventFactory, Integer skillType, SkillProcessMutexCommands.Unlock c) {
+            Integer SkillType = skillType;
+
+            SkillProcessMutexEvent.SkillProcessMutexUnlocked e = (SkillProcessMutexEvent.SkillProcessMutexUnlocked) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocessmutex.UnlockLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessMutexState.class, Integer.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), skillType, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocessmutex;
+//
+//public class UnlockLogic {
+//    public static SkillProcessMutexEvent.SkillProcessMutexUnlocked verify(java.util.function.Supplier<SkillProcessMutexEvent.SkillProcessMutexUnlocked> eventFactory, SkillProcessMutexState skillProcessMutexState, Integer skillType, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
         protected AbstractSkillProcessMutexEvent.SkillProcessMutexCreated newSkillProcessMutexCreated(Long offChainVersion, String commandId, String requesterId) {
             SkillProcessMutexEventId eventId = new SkillProcessMutexEventId(getState().getPlayerId(), null);
             AbstractSkillProcessMutexEvent.SkillProcessMutexCreated e = new AbstractSkillProcessMutexEvent.SkillProcessMutexCreated();
 
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setSkillProcessMutexEventId(eventId);
+            return e;
+        }
+
+        protected AbstractSkillProcessMutexEvent.SkillProcessMutexLocked newSkillProcessMutexLocked(Integer skillType, Long offChainVersion, String commandId, String requesterId) {
+            SkillProcessMutexEventId eventId = new SkillProcessMutexEventId(getState().getPlayerId(), null);
+            AbstractSkillProcessMutexEvent.SkillProcessMutexLocked e = new AbstractSkillProcessMutexEvent.SkillProcessMutexLocked();
+
+            e.setSkillType(skillType);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setSkillProcessMutexEventId(eventId);
+            return e;
+        }
+
+        protected AbstractSkillProcessMutexEvent.SkillProcessMutexUnlocked newSkillProcessMutexUnlocked(Integer skillType, Long offChainVersion, String commandId, String requesterId) {
+            SkillProcessMutexEventId eventId = new SkillProcessMutexEventId(getState().getPlayerId(), null);
+            AbstractSkillProcessMutexEvent.SkillProcessMutexUnlocked e = new AbstractSkillProcessMutexEvent.SkillProcessMutexUnlocked();
+
+            e.setSkillType(skillType);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

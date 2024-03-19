@@ -21,6 +21,8 @@ public class ItemCreation {
 
     private Long offChainVersion;
 
+    private Long resourceCost;
+
     private Integer requirementsLevel;
 
     private Long baseQuantity;
@@ -57,6 +59,14 @@ public class ItemCreation {
 
     public void setOffChainVersion(Long offChainVersion) {
         this.offChainVersion = offChainVersion;
+    }
+
+    public Long getResourceCost() {
+        return resourceCost;
+    }
+
+    public void setResourceCost(Long resourceCost) {
+        this.resourceCost = resourceCost;
     }
 
     public Integer getRequirementsLevel() {
@@ -121,6 +131,7 @@ public class ItemCreation {
                 "id=" + id +
                 ", itemCreationId=" + itemCreationId +
                 ", offChainVersion=" + offChainVersion +
+                ", resourceCost=" + resourceCost +
                 ", requirementsLevel=" + requirementsLevel +
                 ", baseQuantity=" + baseQuantity +
                 ", baseExperience=" + baseExperience +

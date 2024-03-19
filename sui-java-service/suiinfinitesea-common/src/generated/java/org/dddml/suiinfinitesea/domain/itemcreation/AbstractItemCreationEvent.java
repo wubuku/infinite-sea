@@ -229,6 +229,18 @@ public abstract class AbstractItemCreationEvent extends AbstractEvent implements
             return "ItemCreationCreated";
         }
 
+        public Long getResourceCost() {
+            Object val = getDynamicProperties().get("resourceCost");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setResourceCost(Long value) {
+            getDynamicProperties().put("resourceCost", value);
+        }
+
         public Integer getRequirementsLevel() {
             Object val = getDynamicProperties().get("requirementsLevel");
             if (val instanceof Integer) {
@@ -308,6 +320,18 @@ public abstract class AbstractItemCreationEvent extends AbstractEvent implements
         @Override
         public String getEventType() {
             return "ItemCreationUpdated";
+        }
+
+        public Long getResourceCost() {
+            Object val = getDynamicProperties().get("resourceCost");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setResourceCost(Long value) {
+            getDynamicProperties().put("resourceCost", value);
         }
 
         public Integer getRequirementsLevel() {

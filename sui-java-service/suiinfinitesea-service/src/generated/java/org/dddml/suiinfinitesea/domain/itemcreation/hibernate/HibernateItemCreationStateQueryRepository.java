@@ -31,7 +31,7 @@ public class HibernateItemCreationStateQueryRepository implements ItemCreationSt
         return this.sessionFactory.getCurrentSession();
     }
     
-    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("ItemCreationId", "RequirementsLevel", "BaseQuantity", "BaseExperience", "BaseCreationTime", "EnergyCost", "SuccessRate", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
+    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("ItemCreationId", "ResourceCost", "RequirementsLevel", "BaseQuantity", "BaseExperience", "BaseCreationTime", "EnergyCost", "SuccessRate", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
     
     private ReadOnlyProxyGenerator readOnlyProxyGenerator;
     

@@ -17,6 +17,10 @@ import org.dddml.suiinfinitesea.domain.Command;
 public interface SkillProcessMutexApplicationService {
     void when(SkillProcessMutexCommands.Create c);
 
+    void when(SkillProcessMutexCommands.Lock c);
+
+    void when(SkillProcessMutexCommands.Unlock c);
+
     SkillProcessMutexState get(String id);
 
     Iterable<SkillProcessMutexState> getAll(Integer firstResult, Integer maxResults);

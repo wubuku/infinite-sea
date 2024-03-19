@@ -14,6 +14,9 @@
     <property name="id_">
       <column name="id" unique-key="unique_itemcreation_sid" sql-type="VARCHAR(66)" />
     </property>
+    <property name="resourceCost">
+      <column name="resource_cost" />
+    </property>
     <property name="requirementsLevel">
       <column name="requirements_level" />
     </property>

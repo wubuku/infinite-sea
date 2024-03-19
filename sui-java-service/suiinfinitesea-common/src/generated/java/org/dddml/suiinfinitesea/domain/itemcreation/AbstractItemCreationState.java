@@ -35,6 +35,16 @@ public abstract class AbstractItemCreationState implements ItemCreationState.Sql
         this.id_ = id;
     }
 
+    private Long resourceCost;
+
+    public Long getResourceCost() {
+        return this.resourceCost;
+    }
+
+    public void setResourceCost(Long resourceCost) {
+        this.resourceCost = resourceCost;
+    }
+
     private Integer requirementsLevel;
 
     public Integer getRequirementsLevel() {
@@ -252,6 +262,7 @@ public abstract class AbstractItemCreationState implements ItemCreationState.Sql
         if (s == this) {
             return;
         }
+        this.setResourceCost(s.getResourceCost());
         this.setRequirementsLevel(s.getRequirementsLevel());
         this.setBaseQuantity(s.getBaseQuantity());
         this.setBaseExperience(s.getBaseExperience());
@@ -265,6 +276,8 @@ public abstract class AbstractItemCreationState implements ItemCreationState.Sql
     public void when(AbstractItemCreationEvent.ItemCreationCreated e) {
         throwOnWrongEvent(e);
 
+        Long resourceCost = e.getResourceCost();
+        Long ResourceCost = resourceCost;
         Integer requirementsLevel = e.getRequirementsLevel();
         Integer RequirementsLevel = requirementsLevel;
         Long baseQuantity = e.getBaseQuantity();
@@ -306,14 +319,14 @@ public abstract class AbstractItemCreationState implements ItemCreationState.Sql
         ItemCreationState updatedItemCreationState = (ItemCreationState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.itemcreation.CreateLogic",
                     "mutate",
-                    new Class[]{ItemCreationState.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{ItemCreationState.class, Long.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, resourceCost, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.itemcreation;
 //
 //public class CreateLogic {
-//    public static ItemCreationState mutate(ItemCreationState itemCreationState, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemCreationState, ItemCreationState.MutableItemCreationState> mutationContext) {
+//    public static ItemCreationState mutate(ItemCreationState itemCreationState, Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemCreationState, ItemCreationState.MutableItemCreationState> mutationContext) {
 //    }
 //}
 
@@ -324,6 +337,8 @@ public abstract class AbstractItemCreationState implements ItemCreationState.Sql
     public void when(AbstractItemCreationEvent.ItemCreationUpdated e) {
         throwOnWrongEvent(e);
 
+        Long resourceCost = e.getResourceCost();
+        Long ResourceCost = resourceCost;
         Integer requirementsLevel = e.getRequirementsLevel();
         Integer RequirementsLevel = requirementsLevel;
         Long baseQuantity = e.getBaseQuantity();
@@ -365,14 +380,14 @@ public abstract class AbstractItemCreationState implements ItemCreationState.Sql
         ItemCreationState updatedItemCreationState = (ItemCreationState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.itemcreation.UpdateLogic",
                     "mutate",
-                    new Class[]{ItemCreationState.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{ItemCreationState.class, Long.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, resourceCost, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.itemcreation;
 //
 //public class UpdateLogic {
-//    public static ItemCreationState mutate(ItemCreationState itemCreationState, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemCreationState, ItemCreationState.MutableItemCreationState> mutationContext) {
+//    public static ItemCreationState mutate(ItemCreationState itemCreationState, Long resourceCost, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemCreationState, ItemCreationState.MutableItemCreationState> mutationContext) {
 //    }
 //}
 

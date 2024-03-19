@@ -39,6 +39,18 @@ public class ItemCreationStateDto {
         this.id_ = id;
     }
 
+    private Long resourceCost;
+
+    public Long getResourceCost()
+    {
+        return this.resourceCost;
+    }
+
+    public void setResourceCost(Long resourceCost)
+    {
+        this.resourceCost = resourceCost;
+    }
+
     private Integer requirementsLevel;
 
     public Integer getRequirementsLevel()
@@ -229,6 +241,9 @@ public class ItemCreationStateDto {
             }
             if (returnedFieldsContains("Id_")) {
                 dto.setId_(state.getId_());
+            }
+            if (returnedFieldsContains("ResourceCost")) {
+                dto.setResourceCost(state.getResourceCost());
             }
             if (returnedFieldsContains("RequirementsLevel")) {
                 dto.setRequirementsLevel(state.getRequirementsLevel());

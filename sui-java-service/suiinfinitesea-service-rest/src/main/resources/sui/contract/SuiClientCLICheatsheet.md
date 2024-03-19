@@ -26,7 +26,7 @@ sui client call --package _PACKAGE_ID_ --module item_aggregate --function update
 
 ```shell
 sui client call --package _PACKAGE_ID_ --module item_creation_aggregate --function create \
---args u8_item_creation_id_skill_type u32_item_creation_id_item_id \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" u16_requirements_level u32_base_quantity u32_base_experience \"u64_base_creation_time\" \"u64_energy_cost\" u16_success_rate \"_ITEM_CREATION_ITEM_CREATION_TABLE_OBJECT_ID_\" \
+--args u8_item_creation_id_skill_type u32_item_creation_id_item_id \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" u32_resource_cost u16_requirements_level u32_base_quantity u32_base_experience \"u64_base_creation_time\" \"u64_energy_cost\" u16_success_rate \"_ITEM_CREATION_ITEM_CREATION_TABLE_OBJECT_ID_\" \
 --gas-budget 100000
 ```
 
@@ -34,7 +34,7 @@ sui client call --package _PACKAGE_ID_ --module item_creation_aggregate --functi
 
 ```shell
 sui client call --package _PACKAGE_ID_ --module item_creation_aggregate --function update \
---args item_creation_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" u16_requirements_level u32_base_quantity u32_base_experience \"u64_base_creation_time\" \"u64_energy_cost\" u16_success_rate \
+--args item_creation_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" u32_resource_cost u16_requirements_level u32_base_quantity u32_base_experience \"u64_base_creation_time\" \"u64_energy_cost\" u16_success_rate \
 --gas-budget 100000
 ```
 

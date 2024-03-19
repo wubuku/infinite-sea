@@ -191,6 +191,10 @@ public abstract class AbstractSkillProcessMutexState implements SkillProcessMute
             ;
         } else if (e instanceof AbstractSkillProcessMutexEvent.SkillProcessMutexCreated) {
             when((AbstractSkillProcessMutexEvent.SkillProcessMutexCreated)e);
+        } else if (e instanceof AbstractSkillProcessMutexEvent.SkillProcessMutexLocked) {
+            when((AbstractSkillProcessMutexEvent.SkillProcessMutexLocked)e);
+        } else if (e instanceof AbstractSkillProcessMutexEvent.SkillProcessMutexUnlocked) {
+            when((AbstractSkillProcessMutexEvent.SkillProcessMutexUnlocked)e);
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported event type: %1$s", e.getClass().getName()));
         }
@@ -245,6 +249,104 @@ public abstract class AbstractSkillProcessMutexState implements SkillProcessMute
 //
 //public class CreateLogic {
 //    public static SkillProcessMutexState mutate(SkillProcessMutexState skillProcessMutexState, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SkillProcessMutexState, SkillProcessMutexState.MutableSkillProcessMutexState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedSkillProcessMutexState) { merge(updatedSkillProcessMutexState); } //else do nothing
+
+    }
+
+    public void when(AbstractSkillProcessMutexEvent.SkillProcessMutexLocked e) {
+        throwOnWrongEvent(e);
+
+        Integer skillType = e.getSkillType();
+        Integer SkillType = skillType;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String status = e.getStatus();
+        String Status = status;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        SkillProcessMutexState updatedSkillProcessMutexState = (SkillProcessMutexState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocessmutex.LockLogic",
+                    "mutate",
+                    new Class[]{SkillProcessMutexState.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, skillType, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocessmutex;
+//
+//public class LockLogic {
+//    public static SkillProcessMutexState mutate(SkillProcessMutexState skillProcessMutexState, Integer skillType, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SkillProcessMutexState, SkillProcessMutexState.MutableSkillProcessMutexState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedSkillProcessMutexState) { merge(updatedSkillProcessMutexState); } //else do nothing
+
+    }
+
+    public void when(AbstractSkillProcessMutexEvent.SkillProcessMutexUnlocked e) {
+        throwOnWrongEvent(e);
+
+        Integer skillType = e.getSkillType();
+        Integer SkillType = skillType;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String status = e.getStatus();
+        String Status = status;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        SkillProcessMutexState updatedSkillProcessMutexState = (SkillProcessMutexState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocessmutex.UnlockLogic",
+                    "mutate",
+                    new Class[]{SkillProcessMutexState.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, skillType, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocessmutex;
+//
+//public class UnlockLogic {
+//    public static SkillProcessMutexState mutate(SkillProcessMutexState skillProcessMutexState, Integer skillType, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SkillProcessMutexState, SkillProcessMutexState.MutableSkillProcessMutexState> mutationContext) {
 //    }
 //}
 

@@ -22,6 +22,8 @@ public interface ItemCreationState extends ItemCreationOrProduction, VersionedSu
 
     String getId_();
 
+    Long getResourceCost();
+
     Long getOffChainVersion();
 
     String getCreatedBy();
@@ -40,6 +42,8 @@ public interface ItemCreationState extends ItemCreationOrProduction, VersionedSu
         void setItemCreationId(SkillTypeItemIdPair itemCreationId);
 
         void setId_(String id);
+
+        void setResourceCost(Long resourceCost);
 
         void setOffChainVersion(Long offChainVersion);
 
