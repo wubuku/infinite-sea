@@ -129,6 +129,10 @@ aggregates:
 
       StartMutexCreation:
         parameters:
+          SkillProcessMutex:
+            referenceType: SkillProcessMutex
+            isMutableReference: true
+            isIgnoredInEvent: true
           Player:
             referenceType: Player
             isMutableReference: true

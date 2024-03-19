@@ -256,6 +256,19 @@ public class SkillProcessCommands {
         }
 
         /**
+         * Skill Process Mutex
+         */
+        private String skillProcessMutex;
+
+        public String getSkillProcessMutex() {
+            return this.skillProcessMutex;
+        }
+
+        public void setSkillProcessMutex(String skillProcessMutex) {
+            this.skillProcessMutex = skillProcessMutex;
+        }
+
+        /**
          * Player
          */
         private String player;

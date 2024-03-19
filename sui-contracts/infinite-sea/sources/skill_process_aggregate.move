@@ -8,6 +8,7 @@ module infinite_sea::skill_process_aggregate {
     use infinite_sea::skill_process;
     use infinite_sea::skill_process_complete_production_logic;
     use infinite_sea::skill_process_create_logic;
+    use infinite_sea::skill_process_mutex::SkillProcessMutex;
     use infinite_sea::skill_process_start_mutex_creation_logic;
     use infinite_sea::skill_process_start_production_logic;
     use infinite_sea_coin::energy::ENERGY;
@@ -105,6 +106,7 @@ module infinite_sea::skill_process_aggregate {
 
     public fun start_mutex_creation(
         skill_process: &mut skill_process::SkillProcess,
+        skill_process_mutex: &mut SkillProcessMutex,
         player: &mut Player,
         item_creation: &ItemCreation,
         clock: &Clock,
@@ -112,6 +114,7 @@ module infinite_sea::skill_process_aggregate {
         ctx: &mut tx_context::TxContext,
     ) {
         let mutex_creation_process_started = skill_process_start_mutex_creation_logic::verify(
+            skill_process_mutex,
             player,
             item_creation,
             clock,
@@ -122,6 +125,7 @@ module infinite_sea::skill_process_aggregate {
         skill_process_start_mutex_creation_logic::mutate(
             &mutex_creation_process_started,
             energy,
+            skill_process_mutex,
             player,
             skill_process,
             ctx,

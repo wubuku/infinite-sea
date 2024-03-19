@@ -131,7 +131,7 @@ public class StaticMethodConstraints {
                     "org.dddml.suiinfinitesea.domain.skillprocess.StartMutexCreationLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new String[]{"_", "_", "player", "itemCreation"}
+                    new String[]{"_", "_", "skillProcessMutex", "player", "itemCreation"}
             );
 
 

@@ -138,7 +138,8 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
         }
            
 
-        protected SkillProcessEvent.MutexCreationProcessStarted verifyStartMutexCreation(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessStarted> eventFactory, String player, SkillTypeItemIdPair itemCreation, SkillProcessCommands.StartMutexCreation c) {
+        protected SkillProcessEvent.MutexCreationProcessStarted verifyStartMutexCreation(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessStarted> eventFactory, String skillProcessMutex, String player, SkillTypeItemIdPair itemCreation, SkillProcessCommands.StartMutexCreation c) {
+            String SkillProcessMutex = skillProcessMutex;
             String Player = player;
             SkillTypeItemIdPair ItemCreation = itemCreation;
 
@@ -146,13 +147,13 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
                     "org.dddml.suiinfinitesea.domain.skillprocess.StartMutexCreationLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), player, itemCreation, VerificationContext.forCommand(c)}
+                    new Object[]{eventFactory, getState(), skillProcessMutex, player, itemCreation, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.skillprocess;
 //
 //public class StartMutexCreationLogic {
-//    public static SkillProcessEvent.MutexCreationProcessStarted verify(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessStarted> eventFactory, SkillProcessState skillProcessState, String player, SkillTypeItemIdPair itemCreation, VerificationContext verificationContext) {
+//    public static SkillProcessEvent.MutexCreationProcessStarted verify(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessStarted> eventFactory, SkillProcessState skillProcessState, String skillProcessMutex, String player, SkillTypeItemIdPair itemCreation, VerificationContext verificationContext) {
 //    }
 //}
 

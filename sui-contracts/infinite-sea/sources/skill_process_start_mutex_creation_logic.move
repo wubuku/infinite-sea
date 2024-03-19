@@ -3,6 +3,8 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
     use sui::balance::{Self, Balance};
     use sui::clock::{Self, Clock};
     use sui::tx_context::TxContext;
+    use infinite_sea::skill_process_mutex;
+    use infinite_sea::skill_process_mutex::SkillProcessMutex;
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::item_creation::{Self, ItemCreation};
     use infinite_sea_common::item_id;
@@ -12,6 +14,7 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
 
     use infinite_sea::player::{Self, Player};
     use infinite_sea::player_aggregate;
+    use infinite_sea::skill_process_mutex_aggregate;
     use infinite_sea::skill_process;
     use infinite_sea::skill_process_util;
 
@@ -24,8 +27,10 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
     const ELowerThanRequiredLevel: u64 = 14;
     const EIsNonMutexSkillType: u64 = 15;
     const ESenderHasNoPermission: u64 = 22;
+    const EInvalidMutexPlayerId: u64 = 23;
 
     public(friend) fun verify(
+        skill_process_mutex: &SkillProcessMutex,
         player: &mut Player,
         item_creation: &ItemCreation,
         clock: &Clock,
@@ -41,6 +46,7 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
         let skill_process_id = skill_process::skill_process_id(skill_process);
         let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
         assert!(player::id(player) == player_id, EInvalidPlayerId);
+        assert!(skill_process_mutex::player_id(skill_process_mutex) == player_id, EInvalidMutexPlayerId);
 
         let item_creation_id = item_creation::item_creation_id(item_creation);
         let skill_type = skill_type_item_id_pair::skill_type(&item_creation_id);
@@ -69,6 +75,7 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
     public(friend) fun mutate(
         mutex_creation_process_started: &skill_process::MutexCreationProcessStarted,
         energy: Balance<ENERGY>,
+        skill_process_mutex: &mut SkillProcessMutex,
         player: &mut Player,
         skill_process: &mut skill_process::SkillProcess,
         ctx: &mut TxContext, // modify the reference to mutable if needed
@@ -82,6 +89,8 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
         let skill_type = skill_type_player_id_pair::skill_type(&skill_process_id);
         let resource_type = item_id::resource_type_required_for_skill(skill_type);
 
+        skill_process_mutex_aggregate::lock(skill_process_mutex, skill_type, ctx);
+
         skill_process::set_item_id(skill_process, item_id);
         skill_process::set_started_at(skill_process, started_at);
         skill_process::set_creation_time(skill_process, creation_time);
@@ -94,5 +103,6 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
         let required_resource_items = vector[production_material::new(resource_type, resource_cost)];
 
         player_aggregate::deduct_items(player, required_resource_items, ctx);
+
     }
 }
