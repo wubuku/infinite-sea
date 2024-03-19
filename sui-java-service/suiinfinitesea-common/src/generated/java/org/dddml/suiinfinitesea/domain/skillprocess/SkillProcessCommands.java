@@ -322,5 +322,108 @@ public class SkillProcessCommands {
 
     }
 
+    public static class CompleteMutexCreation extends AbstractSkillProcessCommand implements SkillProcessCommand {
+
+        public String getCommandType() {
+            return "CompleteMutexCreation";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Skill Process Id
+         */
+        private SkillTypePlayerIdPair skillProcessId;
+
+        public SkillTypePlayerIdPair getSkillProcessId() {
+            return this.skillProcessId;
+        }
+
+        public void setSkillProcessId(SkillTypePlayerIdPair skillProcessId) {
+            this.skillProcessId = skillProcessId;
+        }
+
+        /**
+         * Skill Process Mutex
+         */
+        private String skillProcessMutex;
+
+        public String getSkillProcessMutex() {
+            return this.skillProcessMutex;
+        }
+
+        public void setSkillProcessMutex(String skillProcessMutex) {
+            this.skillProcessMutex = skillProcessMutex;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * Item Creation
+         */
+        private SkillTypeItemIdPair itemCreation;
+
+        public SkillTypeItemIdPair getItemCreation() {
+            return this.itemCreation;
+        }
+
+        public void setItemCreation(SkillTypeItemIdPair itemCreation) {
+            this.itemCreation = itemCreation;
+        }
+
+        /**
+         * Experience Table
+         */
+        private String experienceTable;
+
+        public String getExperienceTable() {
+            return this.experienceTable;
+        }
+
+        public void setExperienceTable(String experienceTable) {
+            this.experienceTable = experienceTable;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
 }
 

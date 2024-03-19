@@ -136,6 +136,14 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteMutexCreationLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
+                    new String[]{"_", "_", "skillProcessMutex", "player", "itemCreation", "experienceTable"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.skillprocessmutex.CreateLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, SkillProcessMutexState.class, VerificationContext.class},
@@ -273,6 +281,14 @@ public class StaticMethodConstraints {
 
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.skillprocess.CompleteProductionLogic",
+                    "mutate",
+                    new Class[]{SkillProcessState.class, Long.class, BigInteger.class, BigInteger.class, BigInteger.class, Boolean.class, Long.class, Long.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "itemId", "startedAt", "creationTime", "endedAt", "successful", "quantity", "experience", "newLevel", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteMutexCreationLogic",
                     "mutate",
                     new Class[]{SkillProcessState.class, Long.class, BigInteger.class, BigInteger.class, BigInteger.class, Boolean.class, Long.class, Long.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "itemId", "startedAt", "creationTime", "endedAt", "successful", "quantity", "experience", "newLevel", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}

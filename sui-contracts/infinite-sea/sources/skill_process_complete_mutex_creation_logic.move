@@ -1,10 +1,10 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
-module infinite_sea::skill_process_complete_production_logic {
+module infinite_sea::skill_process_complete_mutex_creation_logic {
     use sui::clock::{Self, Clock};
     use sui::tx_context::TxContext;
     use infinite_sea_common::experience_table::ExperienceTable;
+    use infinite_sea_common::item_creation::{Self, ItemCreation};
     use infinite_sea_common::item_id;
-    use infinite_sea_common::item_production::{Self, ItemProduction};
     use infinite_sea_common::production_material;
     use infinite_sea_common::skill_type_item_id_pair;
     use infinite_sea_common::skill_type_player_id_pair;
@@ -13,6 +13,8 @@ module infinite_sea::skill_process_complete_production_logic {
     use infinite_sea::player::{Self, Player};
     use infinite_sea::player_aggregate;
     use infinite_sea::skill_process;
+    use infinite_sea::skill_process_mutex::{Self, SkillProcessMutex};
+    use infinite_sea::skill_process_mutex_aggregate;
 
     friend infinite_sea::skill_process_aggregate;
 
@@ -22,27 +24,30 @@ module infinite_sea::skill_process_complete_production_logic {
     //const ENotEnoughEnergy: u64 = 13;
     const EStillInProgress: u64 = 14;
     const EIncorrectItemId: u64 = 22;
+    const EInvalidMutexPlayerId: u64 = 23;
     //const ELowerThanRequiredLevel: u64 = 24;
     //const ESenderHasNoPermission: u64 = 32;
 
     public(friend) fun verify(
+        skill_process_mutex: &mut SkillProcessMutex,
         player: &mut Player,
-        item_production: &ItemProduction,
+        item_creation: &ItemCreation,
         experience_table: &ExperienceTable,
         clock: &Clock,
         skill_process: &skill_process::SkillProcess,
         ctx: &TxContext,
-    ): skill_process::ProductionProcessCompleted {
+    ): skill_process::MutexCreationProcessCompleted {
         let item_id = skill_process::item_id(skill_process);
         assert!(item_id != item_id::unused_item() && !skill_process::completed(skill_process), EProcessNotStarted);
 
-        let item_production_id = item_production::item_production_id(item_production);
-        assert!(item_id == skill_type_item_id_pair::item_id(&item_production_id), EIncorrectItemId);
-        let skill_type = skill_type_item_id_pair::skill_type(&item_production_id);
+        let item_creation_id = item_creation::item_creation_id(item_creation);
+        assert!(item_id == skill_type_item_id_pair::item_id(&item_creation_id), EIncorrectItemId);
+        let skill_type = skill_type_item_id_pair::skill_type(&item_creation_id);
         let skill_process_id = skill_process::skill_process_id(skill_process);
         assert!(skill_type == skill_type_player_id_pair::skill_type(&skill_process_id), EIncorrectSkillType);
         let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
         assert!(player::id(player) == player_id, EInvalidPlayerId);
+        assert!(skill_process_mutex::player_id(skill_process_mutex) == player_id, EInvalidMutexPlayerId);
 
         let started_at = skill_process::started_at(skill_process);
         let creation_time = skill_process::creation_time(skill_process);
@@ -50,10 +55,10 @@ module infinite_sea::skill_process_complete_production_logic {
         assert!(ended_at >= started_at + creation_time, EStillInProgress);
 
         let successful = true; //todo
-        let quantity = item_production::base_quantity(item_production);
-        let added_experience = item_production::base_experience(item_production);
+        let quantity = item_creation::base_quantity(item_creation);
+        let added_experience = item_creation::base_experience(item_creation);
         let new_level = experience_table_util::calculate_new_level(player, experience_table, added_experience);
-        skill_process::new_production_process_completed(
+        skill_process::new_mutex_creation_process_completed(
             skill_process,
             item_id,
             started_at,
@@ -67,23 +72,25 @@ module infinite_sea::skill_process_complete_production_logic {
     }
 
     public(friend) fun mutate(
-        production_process_completed: &skill_process::ProductionProcessCompleted,
+        mutex_creation_process_completed: &skill_process::MutexCreationProcessCompleted,
+        skill_process_mutex: &mut SkillProcessMutex,
         player: &mut Player,
         skill_process: &mut skill_process::SkillProcess,
         ctx: &mut TxContext, // modify the reference to mutable if needed
     ) {
-        let item_id = skill_process::production_process_completed_item_id(production_process_completed);
-        //let started_at = skill_process::production_process_completed_started_at(production_process_completed);
-        //let creation_time = skill_process::production_process_completed_creation_time(production_process_completed);
-        let ended_at = skill_process::production_process_completed_ended_at(production_process_completed);
-        let successful = skill_process::production_process_completed_successful(production_process_completed);
-        //let skill_process_id = skill_process::skill_process_id(skill_process);
-        let quantity = skill_process::production_process_completed_quantity(production_process_completed);
-        let experience = skill_process::production_process_completed_experience(production_process_completed);
-        let new_level = skill_process::production_process_completed_new_level(production_process_completed);
+        let item_id = skill_process::mutex_creation_process_completed_item_id(mutex_creation_process_completed);
+        //let started_at = skill_process::mutex_creation_process_completed_started_at(mutex_creation_process_completed);
+        //let creation_time = skill_process::mutex_creation_process_completed_creation_time(mutex_creation_process_completed);
+        let ended_at = skill_process::mutex_creation_process_completed_ended_at(mutex_creation_process_completed);
+        let successful = skill_process::mutex_creation_process_completed_successful(mutex_creation_process_completed);
+        let quantity = skill_process::mutex_creation_process_completed_quantity(mutex_creation_process_completed);
+        let experience = skill_process::mutex_creation_process_completed_experience(mutex_creation_process_completed);
+        let new_level = skill_process::mutex_creation_process_completed_new_level(mutex_creation_process_completed);
+        let skill_process_id = skill_process::skill_process_id(skill_process);
+        let skill_type = skill_type_player_id_pair::skill_type(&skill_process_id);
 
-        //skill_process::set_item_id(skill_process, item_id);
-        //skill_process::set_started_at(skill_process, started_at);
+        skill_process_mutex_aggregate::unlock(skill_process_mutex, skill_type, ctx);
+
         skill_process::set_completed(skill_process, true);
         skill_process::set_ended_at(skill_process, ended_at);
 

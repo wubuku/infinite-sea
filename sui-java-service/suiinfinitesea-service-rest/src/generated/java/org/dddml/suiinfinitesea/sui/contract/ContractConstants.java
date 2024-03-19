@@ -47,6 +47,8 @@ public class ContractConstants {
 
     public static final String SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_STARTED = "skill_process::MutexCreationProcessStarted";
 
+    public static final String SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_COMPLETED = "skill_process::MutexCreationProcessCompleted";
+
     public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_CREATED = "skill_process_mutex::SkillProcessMutexCreated";
 
     public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_LOCKED = "skill_process_mutex::SkillProcessMutexLocked";

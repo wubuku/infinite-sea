@@ -31,6 +31,7 @@ import org.dddml.suiinfinitesea.sui.contract.skillprocess.SkillProcessCreated;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessStarted;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessCompleted;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.MutexCreationProcessStarted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.MutexCreationProcessCompleted;
 import org.dddml.suiinfinitesea.domain.skillprocessmutex.AbstractSkillProcessMutexEvent;
 import org.dddml.suiinfinitesea.sui.contract.skillprocessmutex.SkillProcessMutexCreated;
 import org.dddml.suiinfinitesea.sui.contract.skillprocessmutex.SkillProcessMutexLocked;
@@ -487,6 +488,33 @@ public class DomainBeanUtils {
         mutexCreationProcessStarted.setSuiSender(eventEnvelope.getSender());
 
         return mutexCreationProcessStarted;
+    }
+
+    public static AbstractSkillProcessEvent.MutexCreationProcessCompleted toMutexCreationProcessCompleted(SuiMoveEventEnvelope<MutexCreationProcessCompleted> eventEnvelope) {
+        MutexCreationProcessCompleted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractSkillProcessEvent.MutexCreationProcessCompleted mutexCreationProcessCompleted = new AbstractSkillProcessEvent.MutexCreationProcessCompleted();
+        mutexCreationProcessCompleted.setId_(contractEvent.getId());
+        mutexCreationProcessCompleted.setSkillProcessId(DomainBeanUtils.toSkillTypePlayerIdPair(contractEvent.getSkillProcessId()));
+        mutexCreationProcessCompleted.setItemId(contractEvent.getItemId());
+        mutexCreationProcessCompleted.setStartedAt(contractEvent.getStartedAt());
+        mutexCreationProcessCompleted.setCreationTime(contractEvent.getCreationTime());
+        mutexCreationProcessCompleted.setEndedAt(contractEvent.getEndedAt());
+        mutexCreationProcessCompleted.setSuccessful(contractEvent.getSuccessful());
+        mutexCreationProcessCompleted.setQuantity(contractEvent.getQuantity());
+        mutexCreationProcessCompleted.setExperience(contractEvent.getExperience());
+        mutexCreationProcessCompleted.setNewLevel(contractEvent.getNewLevel());
+        mutexCreationProcessCompleted.setVersion(contractEvent.getVersion());
+
+        mutexCreationProcessCompleted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        mutexCreationProcessCompleted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        mutexCreationProcessCompleted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        mutexCreationProcessCompleted.setSuiPackageId(eventEnvelope.getPackageId());
+        mutexCreationProcessCompleted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        mutexCreationProcessCompleted.setSuiSender(eventEnvelope.getSender());
+
+        return mutexCreationProcessCompleted;
     }
 
     public static AbstractSkillProcessMutexEvent.SkillProcessMutexCreated toSkillProcessMutexCreated(SuiMoveEventEnvelope<SkillProcessMutexCreated> eventEnvelope) {

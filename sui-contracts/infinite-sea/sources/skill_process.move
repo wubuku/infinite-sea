@@ -21,6 +21,7 @@ module infinite_sea::skill_process {
     friend infinite_sea::skill_process_start_production_logic;
     friend infinite_sea::skill_process_complete_production_logic;
     friend infinite_sea::skill_process_start_mutex_creation_logic;
+    friend infinite_sea::skill_process_complete_mutex_creation_logic;
     friend infinite_sea::skill_process_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -364,6 +365,86 @@ module infinite_sea::skill_process {
         }
     }
 
+    struct MutexCreationProcessCompleted has copy, drop {
+        id: object::ID,
+        skill_process_id: SkillTypePlayerIdPair,
+        version: u64,
+        item_id: u32,
+        started_at: u64,
+        creation_time: u64,
+        ended_at: u64,
+        successful: bool,
+        quantity: u32,
+        experience: u32,
+        new_level: u16,
+    }
+
+    public fun mutex_creation_process_completed_id(mutex_creation_process_completed: &MutexCreationProcessCompleted): object::ID {
+        mutex_creation_process_completed.id
+    }
+
+    public fun mutex_creation_process_completed_skill_process_id(mutex_creation_process_completed: &MutexCreationProcessCompleted): SkillTypePlayerIdPair {
+        mutex_creation_process_completed.skill_process_id
+    }
+
+    public fun mutex_creation_process_completed_item_id(mutex_creation_process_completed: &MutexCreationProcessCompleted): u32 {
+        mutex_creation_process_completed.item_id
+    }
+
+    public fun mutex_creation_process_completed_started_at(mutex_creation_process_completed: &MutexCreationProcessCompleted): u64 {
+        mutex_creation_process_completed.started_at
+    }
+
+    public fun mutex_creation_process_completed_creation_time(mutex_creation_process_completed: &MutexCreationProcessCompleted): u64 {
+        mutex_creation_process_completed.creation_time
+    }
+
+    public fun mutex_creation_process_completed_ended_at(mutex_creation_process_completed: &MutexCreationProcessCompleted): u64 {
+        mutex_creation_process_completed.ended_at
+    }
+
+    public fun mutex_creation_process_completed_successful(mutex_creation_process_completed: &MutexCreationProcessCompleted): bool {
+        mutex_creation_process_completed.successful
+    }
+
+    public fun mutex_creation_process_completed_quantity(mutex_creation_process_completed: &MutexCreationProcessCompleted): u32 {
+        mutex_creation_process_completed.quantity
+    }
+
+    public fun mutex_creation_process_completed_experience(mutex_creation_process_completed: &MutexCreationProcessCompleted): u32 {
+        mutex_creation_process_completed.experience
+    }
+
+    public fun mutex_creation_process_completed_new_level(mutex_creation_process_completed: &MutexCreationProcessCompleted): u16 {
+        mutex_creation_process_completed.new_level
+    }
+
+    public(friend) fun new_mutex_creation_process_completed(
+        skill_process: &SkillProcess,
+        item_id: u32,
+        started_at: u64,
+        creation_time: u64,
+        ended_at: u64,
+        successful: bool,
+        quantity: u32,
+        experience: u32,
+        new_level: u16,
+    ): MutexCreationProcessCompleted {
+        MutexCreationProcessCompleted {
+            id: id(skill_process),
+            skill_process_id: skill_process_id(skill_process),
+            version: version(skill_process),
+            item_id,
+            started_at,
+            creation_time,
+            ended_at,
+            successful,
+            quantity,
+            experience,
+            new_level,
+        }
+    }
+
 
     public(friend) fun create_skill_process(
         skill_process_id: SkillTypePlayerIdPair,
@@ -458,6 +539,10 @@ module infinite_sea::skill_process {
 
     public(friend) fun emit_mutex_creation_process_started(mutex_creation_process_started: MutexCreationProcessStarted) {
         event::emit(mutex_creation_process_started);
+    }
+
+    public(friend) fun emit_mutex_creation_process_completed(mutex_creation_process_completed: MutexCreationProcessCompleted) {
+        event::emit(mutex_creation_process_completed);
     }
 
 }

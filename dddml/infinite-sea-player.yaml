@@ -13,6 +13,7 @@ aggregates:
       - SkillProcess.StartProduction
       - SkillProcess.CompleteProduction
       - SkillProcess.StartMutexCreation
+      - SkillProcess.CompleteMutexCreation
     id:
       name: Id
       type: UID

@@ -13,6 +13,7 @@ module infinite_sea::skill_process_mutex_aggregate {
     use sui::tx_context;
 
     friend infinite_sea::skill_process_start_mutex_creation_logic;
+    friend infinite_sea::skill_process_complete_mutex_creation_logic;
     friend infinite_sea::skill_process_service;
 
     public entry fun create(
