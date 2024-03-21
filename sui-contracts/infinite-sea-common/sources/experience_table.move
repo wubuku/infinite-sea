@@ -165,30 +165,10 @@ module infinite_sea_common::experience_table {
     }
 
 
-    public(friend) fun transfer_object(experience_table: ExperienceTable, recipient: address) {
-        assert!(experience_table.version == 0, EInappropriateVersion);
-        transfer::transfer(experience_table, recipient);
-    }
-
-    public(friend) fun update_version_and_transfer_object(experience_table: ExperienceTable, recipient: address) {
-        update_object_version(&mut experience_table);
-        transfer::transfer(experience_table, recipient);
-    }
-
     #[lint_allow(share_owned)]
     public(friend) fun share_object(experience_table: ExperienceTable) {
         assert!(experience_table.version == 0, EInappropriateVersion);
         transfer::share_object(experience_table);
-    }
-
-    public(friend) fun freeze_object(experience_table: ExperienceTable) {
-        assert!(experience_table.version == 0, EInappropriateVersion);
-        transfer::freeze_object(experience_table);
-    }
-
-    public(friend) fun update_version_and_freeze_object(experience_table: ExperienceTable) {
-        update_object_version(&mut experience_table);
-        transfer::freeze_object(experience_table);
     }
 
     public(friend) fun update_object_version(experience_table: &mut ExperienceTable) {

@@ -341,30 +341,10 @@ module infinite_sea_common::item_production {
         table::add(&mut item_production_table.table, item_production_id, id);
     }
 
-    public(friend) fun transfer_object(item_production: ItemProduction, recipient: address) {
-        assert!(item_production.version == 0, EInappropriateVersion);
-        transfer::transfer(item_production, recipient);
-    }
-
-    public(friend) fun update_version_and_transfer_object(item_production: ItemProduction, recipient: address) {
-        update_object_version(&mut item_production);
-        transfer::transfer(item_production, recipient);
-    }
-
     #[lint_allow(share_owned)]
     public(friend) fun share_object(item_production: ItemProduction) {
         assert!(item_production.version == 0, EInappropriateVersion);
         transfer::share_object(item_production);
-    }
-
-    public(friend) fun freeze_object(item_production: ItemProduction) {
-        assert!(item_production.version == 0, EInappropriateVersion);
-        transfer::freeze_object(item_production);
-    }
-
-    public(friend) fun update_version_and_freeze_object(item_production: ItemProduction) {
-        update_object_version(&mut item_production);
-        transfer::freeze_object(item_production);
     }
 
     public(friend) fun update_object_version(item_production: &mut ItemProduction) {

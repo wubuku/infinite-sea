@@ -475,32 +475,10 @@ module infinite_sea::skill_process {
         table::add(&mut skill_process_table.table, skill_process_id, id);
     }
 
-    public(friend) fun transfer_object(skill_process: SkillProcess, recipient: address) {
-        assert!(skill_process.version == 0, EInappropriateVersion);
-        transfer::transfer(skill_process, recipient);
-    }
-
-    public(friend) fun update_version_and_transfer_object(skill_process: SkillProcess, recipient: address) {
-        update_object_version(&mut skill_process);
-        transfer::transfer(skill_process, recipient);
-    }
-
     #[lint_allow(share_owned)]
     public(friend) fun share_object(skill_process: SkillProcess) {
         assert!(skill_process.version == 0, EInappropriateVersion);
         transfer::share_object(skill_process);
-    }
-
-    #[lint_allow(freeze_wrapped)]
-    public(friend) fun freeze_object(skill_process: SkillProcess) {
-        assert!(skill_process.version == 0, EInappropriateVersion);
-        transfer::freeze_object(skill_process);
-    }
-
-    #[lint_allow(freeze_wrapped)]
-    public(friend) fun update_version_and_freeze_object(skill_process: SkillProcess) {
-        update_object_version(&mut skill_process);
-        transfer::freeze_object(skill_process);
     }
 
     public(friend) fun update_object_version(skill_process: &mut SkillProcess) {

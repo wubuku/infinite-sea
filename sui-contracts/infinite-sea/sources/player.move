@@ -238,32 +238,10 @@ module infinite_sea::player {
     }
 
 
-    public(friend) fun transfer_object(player: Player, recipient: address) {
-        assert!(player.version == 0, EInappropriateVersion);
-        transfer::transfer(player, recipient);
-    }
-
-    public(friend) fun update_version_and_transfer_object(player: Player, recipient: address) {
-        update_object_version(&mut player);
-        transfer::transfer(player, recipient);
-    }
-
     #[lint_allow(share_owned)]
     public(friend) fun share_object(player: Player) {
         assert!(player.version == 0, EInappropriateVersion);
         transfer::share_object(player);
-    }
-
-    #[lint_allow(freeze_wrapped)]
-    public(friend) fun freeze_object(player: Player) {
-        assert!(player.version == 0, EInappropriateVersion);
-        transfer::freeze_object(player);
-    }
-
-    #[lint_allow(freeze_wrapped)]
-    public(friend) fun update_version_and_freeze_object(player: Player) {
-        update_object_version(&mut player);
-        transfer::freeze_object(player);
     }
 
     public(friend) fun update_object_version(player: &mut Player) {

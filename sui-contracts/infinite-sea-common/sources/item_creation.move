@@ -340,30 +340,10 @@ module infinite_sea_common::item_creation {
         table::add(&mut item_creation_table.table, item_creation_id, id);
     }
 
-    public(friend) fun transfer_object(item_creation: ItemCreation, recipient: address) {
-        assert!(item_creation.version == 0, EInappropriateVersion);
-        transfer::transfer(item_creation, recipient);
-    }
-
-    public(friend) fun update_version_and_transfer_object(item_creation: ItemCreation, recipient: address) {
-        update_object_version(&mut item_creation);
-        transfer::transfer(item_creation, recipient);
-    }
-
     #[lint_allow(share_owned)]
     public(friend) fun share_object(item_creation: ItemCreation) {
         assert!(item_creation.version == 0, EInappropriateVersion);
         transfer::share_object(item_creation);
-    }
-
-    public(friend) fun freeze_object(item_creation: ItemCreation) {
-        assert!(item_creation.version == 0, EInappropriateVersion);
-        transfer::freeze_object(item_creation);
-    }
-
-    public(friend) fun update_version_and_freeze_object(item_creation: ItemCreation) {
-        update_object_version(&mut item_creation);
-        transfer::freeze_object(item_creation);
     }
 
     public(friend) fun update_object_version(item_creation: &mut ItemCreation) {
