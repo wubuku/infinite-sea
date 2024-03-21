@@ -3,26 +3,23 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
     use sui::balance::{Self, Balance};
     use sui::clock::{Self, Clock};
     use sui::tx_context::TxContext;
-    use infinite_sea::skill_process_mutex;
-    use infinite_sea::skill_process_mutex::SkillProcessMutex;
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::item_creation::{Self, ItemCreation};
     use infinite_sea_common::item_id;
     use infinite_sea_common::production_material;
-    use infinite_sea_common::skill_type_item_id_pair;
     use infinite_sea_common::skill_type_player_id_pair;
 
     use infinite_sea::player::{Self, Player};
     use infinite_sea::player_aggregate;
-    use infinite_sea::skill_process_mutex_aggregate;
     use infinite_sea::skill_process;
+    use infinite_sea::skill_process_mutex;
+    use infinite_sea::skill_process_mutex::SkillProcessMutex;
+    use infinite_sea::skill_process_mutex_aggregate;
     use infinite_sea::skill_process_util;
 
     friend infinite_sea::skill_process_aggregate;
 
     const EProcessAlreadyStarted: u64 = 10;
-    const EInvalidPlayerId: u64 = 11;
-    const EIncorrectSkillType: u64 = 12;
     const ENotEnoughEnergy: u64 = 13;
     const ELowerThanRequiredLevel: u64 = 14;
     const EIsNonMutexSkillType: u64 = 15;
@@ -43,15 +40,10 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
             skill_process::item_id(skill_process) == item_id::unused_item() || skill_process::completed(skill_process),
             EProcessAlreadyStarted
         );
-        let skill_process_id = skill_process::skill_process_id(skill_process);
-        let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
-        assert!(player::id(player) == player_id, EInvalidPlayerId);
+        let (player_id, skill_type, item_id) = skill_process_util::assert_ids_are_consistent_for_starting_creation(
+            player, item_creation, skill_process
+        );
         assert!(skill_process_mutex::player_id(skill_process_mutex) == player_id, EInvalidMutexPlayerId);
-
-        let item_creation_id = item_creation::item_creation_id(item_creation);
-        let skill_type = skill_type_item_id_pair::skill_type(&item_creation_id);
-        assert!(skill_type == skill_type_player_id_pair::skill_type(&skill_process_id), EIncorrectSkillType);
-        let item_id = skill_type_item_id_pair::item_id(&item_creation_id);
         assert!(skill_process_util::is_mutex_skill(skill_type), EIsNonMutexSkillType);
 
         let requirements_level = item_creation::requirements_level(item_creation);
@@ -103,6 +95,5 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
         let required_resource_items = vector[production_material::new(resource_type, resource_cost)];
 
         player_aggregate::deduct_items(player, required_resource_items, ctx);
-
     }
 }

@@ -6,22 +6,21 @@ module infinite_sea::skill_process_complete_production_logic {
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_production::{Self, ItemProduction};
     use infinite_sea_common::production_material;
-    use infinite_sea_common::skill_type_item_id_pair;
-    use infinite_sea_common::skill_type_player_id_pair;
 
     use infinite_sea::experience_table_util;
-    use infinite_sea::player::{Self, Player};
+    use infinite_sea::player::Player;
     use infinite_sea::player_aggregate;
     use infinite_sea::skill_process;
+    use infinite_sea::skill_process_util;
 
     friend infinite_sea::skill_process_aggregate;
 
     const EProcessNotStarted: u64 = 10;
-    const EInvalidPlayerId: u64 = 11;
-    const EIncorrectSkillType: u64 = 12;
+    //const EInvalidPlayerId: u64 = 11;
+    //const EIncorrectSkillType: u64 = 12;
     //const ENotEnoughEnergy: u64 = 13;
     const EStillInProgress: u64 = 14;
-    const EIncorrectItemId: u64 = 22;
+    //const EIncorrectItemId: u64 = 22;
     //const ELowerThanRequiredLevel: u64 = 24;
     //const ESenderHasNoPermission: u64 = 32;
 
@@ -33,16 +32,10 @@ module infinite_sea::skill_process_complete_production_logic {
         skill_process: &skill_process::SkillProcess,
         ctx: &TxContext,
     ): skill_process::ProductionProcessCompleted {
-        let item_id = skill_process::item_id(skill_process);
+        let (player_id, skill_type, item_id) = skill_process_util::assert_ids_are_consistent_for_completing_production(
+            player, item_production, skill_process
+        );
         assert!(item_id != item_id::unused_item() && !skill_process::completed(skill_process), EProcessNotStarted);
-
-        let item_production_id = item_production::item_production_id(item_production);
-        assert!(item_id == skill_type_item_id_pair::item_id(&item_production_id), EIncorrectItemId);
-        let skill_type = skill_type_item_id_pair::skill_type(&item_production_id);
-        let skill_process_id = skill_process::skill_process_id(skill_process);
-        assert!(skill_type == skill_type_player_id_pair::skill_type(&skill_process_id), EIncorrectSkillType);
-        let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
-        assert!(player::id(player) == player_id, EInvalidPlayerId);
 
         let started_at = skill_process::started_at(skill_process);
         let creation_time = skill_process::creation_time(skill_process);
