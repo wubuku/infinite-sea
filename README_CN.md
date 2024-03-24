@@ -1,10 +1,39 @@
 # README
 
+## 需求分析与领域建模
+
+### Items
+
+### Skills
+
+Item（物品）有两种“生产/创造”方式：
+
+* Item Production。需要“原材料”，生产时需要消耗一定数量的原材料（其他 Items）。我们可以限制一下，生产配方最多使用 5 种原材料（应该已经足够）。
+* Item Creation。不需要原材料。
+
+同一种东西（Item），是可能可以通过不同的技能（Skill）获得的。比如你可以通过 “Farming” 技能种植、收获一种农产品，也可以“偷窃”技能获得它。
+
+Skill（技能）要么是生产（Production）型的技能，要么是创造（Creation）型的技能，不会两者都是。比如：
+
+* Farming（农业）是生产型的技能。需要消耗“种子”（原材料 items）。种子可以从市场购买、可以“偷窃”（偷窃是创造型的技能）或者使用其他技能获得。
+* Mining（挖矿）是创造型的技能。我们需要给这些创造型的技能的使用做一些“资源限制”。这个限制是针对技能类型使用的次数（或者点数）的配额限制。
+    而不是像生产型技能那样，通过“生产配方”需要具体的原材料的 item 和消耗数量来达成限制。
+
+### Skill Processes
+
+首先，“每种技能”最多只能有一个进程（Process）在执行。
+并且，有些类型的技能的进程（Process）是互斥的。也就是说，同一个时间点，这些类型的技能只能存在一个正在执行的进程。
+不过，这些互斥的技能中的一个进程，可以和其他类型（非互斥）的技能进程并行执行。
+
+
+[TBD]
+
 
 ## 编码
 
 ### 编写 DDDML 模型文件
 
+模型文件位于目录 `./dddml` 下。
 
 ### 生成代码
 
@@ -25,6 +54,9 @@ wubuku/dddappp:0.0.1 \
 
 ### 实现业务逻辑
 
+在以 `_logic.move` 结尾的文件中填充模型中定义的实体的方法的实现，也就是所谓的业务逻辑。
+
+在以 `_service.move` 结尾的文件中填充“领域服务”的实现，它们是很薄的一层“包装”代码。
 
 ## 测试应用
 
@@ -395,7 +427,7 @@ sui client object 0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321
 
 #### Configuring off-chain service
 
-Open the `application-test.yml` file located in the directory `sui-java-service/suiinfinitesea-service-rest/src/main/resources` and set the published transaction digest.
+Open the `application-test.yml` file located in the directory `sui-java-service/suiinfinitesea-service-rest/src/main/resources` and set the publishing transaction digests.
 
 After setting, it should look like this:
 
