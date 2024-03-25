@@ -28,12 +28,13 @@ module infinite_sea::player_increase_experience_and_items_logic {
         player: &mut player::Player,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {
-        let experience = player::player_experience_and_items_increased_experience(
+        let increased_experience = player::player_experience_and_items_increased_experience(
             player_experience_and_items_increased
         );
         let new_level = player::player_experience_and_items_increased_new_level(player_experience_and_items_increased);
         //let player_id = player::player_id(player);
-        player::set_experience(player, experience);
+        let old_experience = player::experience(player);
+        player::set_experience(player, old_experience + increased_experience);
         player::set_level(player, new_level);
 
         let items = player::player_experience_and_items_increased_items(player_experience_and_items_increased);

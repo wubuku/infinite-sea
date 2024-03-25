@@ -54,7 +54,7 @@ do
     energy_coin_treasury_cap_object_id=$objectId
   fi
 done < <(jq -c '.objectChanges[] | select(.type == "created")' "$publish_json_file")
-echo "energy_coin_treasury_cap_object_id: $energy_coin_treasury_cap_object_id"
+echo "energy_coin_treasury_cap_object_id: $energy_coin_treasury_cap_object_id" | tee -a "$log_file"
 
 # -------- Mint ENERGY coins --------
 sui client call --package "$coin_package_id" --module energy --function mint \
