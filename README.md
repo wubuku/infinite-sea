@@ -19,7 +19,7 @@ why infnite game?
 
 What types of players fit into our game? 
 -
-![image](https://hackmd.io/_uploads/BJzn_tkkA.png)
+![image](https://hackmd.io/_uploads/H1qdwXEkC.png)
 * achievers, motivated mainly by increasing their skill levels, achieving goals, and collecting craftables. 
 * explorers, motivated by exploring the game world and learning how it works. They may interested in thieving which involves to explore hidden information. 
 * socializers, motivated by trading, working with other players, joining alliance, creating treaty
