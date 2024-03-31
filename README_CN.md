@@ -42,6 +42,11 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
 
 模型文件位于目录 `./dddml` 下。
 
+
+> **Tip**
+>
+> About DDDML, here is an introductory article: ["Introducing DDDML: The Key to Low-Code Development for Decentralized Applications"](https://github.com/wubuku/Dapp-LCDP-Demo/blob/main/IntroducingDDDML.md).
+
 ### 生成代码
 
 ```shell

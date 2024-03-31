@@ -1,12 +1,12 @@
 # Infinite Seas
 
-We are creating a maritime trading, managing, and battling diplomatic fully onchain game. 
+We are creating a maritime trading, managing, and battling diplomatic fully on-chain game. 
 we believe the best fully onchain games should be fun and infinite (define by games that are non-session and infinitely large map) with an open economy design. 
 ![image](https://hackmd.io/_uploads/H1yiNQVkA.jpg)
 
 why open economy?
 -
-* blockchain offers a great environment for microtransactions between players. We aim to create a game that players are encouraged to trade game assets with each other just like real world maritime trading between ports and ports. Ports trading are building with our AMM infrasture. 
+* blockchain offers a great environment for microtransactions between players. We aim to create a game that players are encouraged to trade game assets with each other just like real world maritime trading between ports and ports. Ports trading are building with our AMM infrastructure. 
 * players are required to stake chain native coins to get ownership of islands. Players can make diplomatic treaty with others to join the alliance. Winners take the orignal stakes of the loser stakes. and game continues.
 * The game is designed with mmorpg elements in mind. Our goal is to create a world that players want to live in. We have planting, mining, fishing, cooking, crafting, smithing, building for the pve parts, as well as trading, battling, thieving, and sailing for the pvp parts. 
 ![WechatIMG189-2](https://hackmd.io/_uploads/Hk2vS7V1R.jpg)
@@ -14,7 +14,7 @@ why open economy?
 why infnite game?
 -
 * non-session: blockchain as a autonomous backend should be used to create games that are running continously and in a trustless way. 
-* infinitely big map: infinite big map works like cross-sever games in traditional gaming. Infinitely big map is the cornerstone of creating a new-comer friendly open world pvp game. New-comers are able to join games anywhere on the map. they can choose a island coordinates that they feel secure to start the jounry. 
+* infinitely big map: infinite big map works like cross-sever games in traditional gaming. Infinitely big map is the cornerstone of creating a new-comer friendly open world pvp game. New-comers are able to join games anywhere on the map. they can choose a island coordinates that they feel secure to start the journey. 
 ![WechatIMG181-2](https://hackmd.io/_uploads/S1P5HmVkC.jpg)
 
 What types of players fit into our game? 
@@ -39,7 +39,7 @@ what's fun about our game?
 
 * randomness. The game introduce randomness to enhance the player UX. **The production of finished product has a failure rate. The failure rate can be reduced with more practices of the skills and better equipments.** In the PVP part, **the randomness inherent in the system makes it uncertain**: players might still win against odds, or lose despite them. Consequently, warfare, except when there is a major technological disparity between the opponents, is always tense. **It is implemented with block hash**
 
-* **The depth and variety of the game sysetm make achieving the objectives uncertain**. While information about the economy is exposed, it is often difficult to judge what to build in an island next, what skill sets will develop next. As players gain experience, they learn the ins and outs of the system, but it is still sufficiently complex to be hard to master. 
+* **The depth and variety of the game system make achieving the objectives uncertain**. While information about the economy is exposed, it is often difficult to judge what to build in an island next, what skill sets will develop next. As players gain experience, they learn the ins and outs of the system, but it is still sufficiently complex to be hard to master. 
 
 
 # Dddappp engine We built
@@ -62,6 +62,11 @@ and we're done with the development of a fully on-chain game.
 ### Writing DDDML model files
 
 The model files are located in the directory `. /dddml`.
+
+> **Tip**
+>
+> About DDDML, here is an introductory article: ["Introducing DDDML: The Key to Low-Code Development for Decentralized Applications"](https://github.com/wubuku/Dapp-LCDP-Demo/blob/main/IntroducingDDDML.md).
+
 
 ### Generating code
 
@@ -156,5 +161,76 @@ In the `sui-java-service` directory, execute the following command to start the 
 mvn -pl suiinfinitesea-service-rest -am spring-boot:run
 ```
 
+
+### About off-chain services APIs
+
+Our off-chain service pulls the state of objects on chain into an off-chain SQL database to provide query functionality.
+Such an off-chain service is sometimes called an indexer.
+
+We can certainly start by using Sui's official API service, see: https://docs.sui.io/references/sui-api
+
+However, there are some application-specific query requirements that Sui's official API service may not be able to fulfill,
+so it should be necessary to build your own or use enhanced query or indexer services provided by third parties.
+
+By default, the off-chain services we generate provide some out-of-the-box APIs.
+You can read the DDDML model files and then refer to the examples below to infer what APIs are available.
+
+For example, in our project, you can HTTP GET the list of items from the URL like this (assuming that `{BASE_URL}` is `http://localhost:1023/api`):
+
+```text
+http://localhost:1023/api/Items
+```
+
+You can use query criteria:
+
+```text
+http://localhost:1023/api/Items?name=XXX
+```
+
+Get the information of an item:
+
+```text
+http://localhost:1023/api/Items/{ITEM_ID}
+```
+
+#### Query parameters for getting entity lists
+
+Query parameters that can be supported in the request URL for getting a list, including:
+
+* `sort`: The name of the property to be used for sorting. Multiple names can be separated by commas.
+  A "-" in front of the name indicates reverse order.
+  The query parameter `sort` can appear multiple times, like this: `sort=fisrtName&sort=lastName,desc`.
+* `fields`: The names of the fields (properties) to be returned.
+  Multiple names can be separated by commas.
+* `filter`: The filter to return the result, explained further later (TBD).
+* `firstResult`: The ordinal number of the first record returned in the result, starting from `0`.
+* `maxResults`: The maximum number of records returned in the result.
+
+#### Getting the entity list's page envelope
+
+We personally don't like page "envelope" 😄, but because some developers requested it,
+we support sending a GET request to a URL to get a page envelope for the list:
+
+```url
+{BASE_URL}/{Entities}/_page?page={page}
+```
+
+Supported paging-related query parameters:
+
+* `page`: Page number, starting from 0.
+* `size`: Page size.
+
+For example:
+
+```text
+http://localhost:1023/api/Items/_page?page=0&size=10
+```
+
+#### Need more query functionality?
+
+Since the off-chain service already pulls the state of the objects on chain to the off-chain SQL database,
+we can query the off-chain service's database using any SQL query statement.
+It is very easy to encapsulate these SQL query statements into APIs.
+If you have such a need, modify the source code and add the APIs you need.
 
 
