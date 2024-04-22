@@ -17,8 +17,6 @@ import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.SkillProcessCreated;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessStarted;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessCompleted;
-import org.dddml.suiinfinitesea.sui.contract.skillprocess.MutexCreationProcessStarted;
-import org.dddml.suiinfinitesea.sui.contract.skillprocess.MutexCreationProcessCompleted;
 import org.dddml.suiinfinitesea.sui.contract.repository.SkillProcessEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,86 +159,6 @@ public class SkillProcessEventService {
             return;
         }
         skillProcessEventRepository.save(productionProcessCompleted);
-    }
-
-    @Transactional
-    public void pullMutexCreationProcessStartedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getMutexCreationProcessStartedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<MutexCreationProcessStarted> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_STARTED,
-                    cursor, limit, false, MutexCreationProcessStarted.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<MutexCreationProcessStarted> eventEnvelope : eventPage.getData()) {
-                    saveMutexCreationProcessStarted(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getMutexCreationProcessStartedEventNextCursor() {
-        AbstractSkillProcessEvent lastEvent = skillProcessEventRepository.findFirstMutexCreationProcessStartedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveMutexCreationProcessStarted(SuiMoveEventEnvelope<MutexCreationProcessStarted> eventEnvelope) {
-        AbstractSkillProcessEvent.MutexCreationProcessStarted mutexCreationProcessStarted = DomainBeanUtils.toMutexCreationProcessStarted(eventEnvelope);
-        if (skillProcessEventRepository.findById(mutexCreationProcessStarted.getSkillProcessEventId()).isPresent()) {
-            return;
-        }
-        skillProcessEventRepository.save(mutexCreationProcessStarted);
-    }
-
-    @Transactional
-    public void pullMutexCreationProcessCompletedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getMutexCreationProcessCompletedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<MutexCreationProcessCompleted> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_COMPLETED,
-                    cursor, limit, false, MutexCreationProcessCompleted.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<MutexCreationProcessCompleted> eventEnvelope : eventPage.getData()) {
-                    saveMutexCreationProcessCompleted(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getMutexCreationProcessCompletedEventNextCursor() {
-        AbstractSkillProcessEvent lastEvent = skillProcessEventRepository.findFirstMutexCreationProcessCompletedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveMutexCreationProcessCompleted(SuiMoveEventEnvelope<MutexCreationProcessCompleted> eventEnvelope) {
-        AbstractSkillProcessEvent.MutexCreationProcessCompleted mutexCreationProcessCompleted = DomainBeanUtils.toMutexCreationProcessCompleted(eventEnvelope);
-        if (skillProcessEventRepository.findById(mutexCreationProcessCompleted.getSkillProcessEventId()).isPresent()) {
-            return;
-        }
-        skillProcessEventRepository.save(mutexCreationProcessCompleted);
     }
 
 

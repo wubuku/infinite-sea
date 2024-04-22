@@ -21,8 +21,6 @@ public interface SkillProcessAggregate {
 
     void completeProduction(String player, SkillTypeItemIdPair itemProduction, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId, SkillProcessCommands.CompleteProduction c);
 
-    void completeMutexCreation(String skillProcessMutex, String player, SkillTypeItemIdPair itemCreation, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId, SkillProcessCommands.CompleteMutexCreation c);
-
     void throwOnInvalidStateTransition(Command c);
 }
 

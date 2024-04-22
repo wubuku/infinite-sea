@@ -17,8 +17,6 @@ public class ContractConstants {
 
     public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE = "skill_process::SkillProcessTable";
 
-    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_TABLE = "skill_process_mutex::SkillProcessMutexTable";
-
     public static final String ITEM_MODULE_ITEM_CREATED = "item::ItemCreated";
 
     public static final String ITEM_MODULE_ITEM_UPDATED = "item::ItemUpdated";
@@ -45,16 +43,6 @@ public class ContractConstants {
 
     public static final String SKILL_PROCESS_MODULE_PRODUCTION_PROCESS_COMPLETED = "skill_process::ProductionProcessCompleted";
 
-    public static final String SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_STARTED = "skill_process::MutexCreationProcessStarted";
-
-    public static final String SKILL_PROCESS_MODULE_MUTEX_CREATION_PROCESS_COMPLETED = "skill_process::MutexCreationProcessCompleted";
-
-    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_CREATED = "skill_process_mutex::SkillProcessMutexCreated";
-
-    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_LOCKED = "skill_process_mutex::SkillProcessMutexLocked";
-
-    public static final String SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_UNLOCKED = "skill_process_mutex::SkillProcessMutexUnlocked";
-
     public static final String EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT = "experience_table::InitExperienceTableEvent";
 
     public static final String EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_ADDED = "experience_table::ExperienceLevelAdded";
@@ -73,7 +61,6 @@ public class ContractConstants {
     public static String[] getDefaultPackageIdGeneratorObjectTypes(String packageId) {
         return new String[]{
                 packageId + "::" + SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE,
-                packageId + "::" + SKILL_PROCESS_MUTEX_MODULE_SKILL_PROCESS_MUTEX_TABLE,
         };
     }
 }

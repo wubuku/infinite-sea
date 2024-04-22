@@ -31,14 +31,4 @@ public class PullSkillProcessEventsTaskService {
         skillProcessEventService.pullProductionProcessCompletedEvents();
     }
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.mutex-creation-process-started.fixed-delay:5000}")
-    public void pullMutexCreationProcessStartedEvents() {
-        skillProcessEventService.pullMutexCreationProcessStartedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.mutex-creation-process-completed.fixed-delay:5000}")
-    public void pullMutexCreationProcessCompletedEvents() {
-        skillProcessEventService.pullMutexCreationProcessCompletedEvents();
-    }
-
 }

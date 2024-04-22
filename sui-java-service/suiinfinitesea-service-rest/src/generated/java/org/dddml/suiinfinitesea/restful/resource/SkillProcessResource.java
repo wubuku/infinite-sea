@@ -206,24 +206,6 @@ public class SkillProcessResource {
         } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
     }
 
-
-    @PutMapping("{skillProcessId}/_commands/CompleteMutexCreation")
-    public void completeMutexCreation(@PathVariable("skillProcessId") String skillProcessId, @RequestBody SkillProcessCommands.CompleteMutexCreation content) {
-        try {
-
-            SkillProcessCommands.CompleteMutexCreation cmd = content;//.toCompleteMutexCreation();
-            SkillTypePlayerIdPair idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
-            if (cmd.getSkillProcessId() == null) {
-                cmd.setSkillProcessId(idObj);
-            } else if (!cmd.getSkillProcessId().equals(idObj)) {
-                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", skillProcessId, cmd.getSkillProcessId());
-            }
-            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
-            skillProcessApplicationService.when(cmd);
-
-        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
-    }
-
     @GetMapping("_metadata/filteringFields")
     public List<PropertyMetadataDto> getMetadataFilteringFields() {
         try {

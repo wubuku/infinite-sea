@@ -72,19 +72,6 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
             apply(e);
         }
 
-        @Override
-        public void completeMutexCreation(String skillProcessMutex, String player, SkillTypeItemIdPair itemCreation, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId, SkillProcessCommands.CompleteMutexCreation c) {
-            java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessCompleted> eventFactory = () -> newMutexCreationProcessCompleted(skillProcessMutex, player, itemCreation, experienceTable, clock, offChainVersion, commandId, requesterId);
-            SkillProcessEvent.MutexCreationProcessCompleted e;
-            try {
-                e = verifyCompleteMutexCreation(eventFactory, skillProcessMutex, player, itemCreation, experienceTable, c);
-            } catch (Exception ex) {
-                throw new DomainError("VerificationFailed", ex);
-            }
-
-            apply(e);
-        }
-
         protected SkillProcessEvent.SkillProcessCreated verifyCreate(java.util.function.Supplier<SkillProcessEvent.SkillProcessCreated> eventFactory, String player, SkillProcessCommands.Create c) {
             String Player = player;
 
@@ -151,53 +138,6 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
         }
            
 
-        protected SkillProcessEvent.MutexCreationProcessStarted verifyStartMutexCreation(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessStarted> eventFactory, String skillProcessMutex, String player, SkillTypeItemIdPair itemCreation, SkillProcessCommands.StartMutexCreation c) {
-            String SkillProcessMutex = skillProcessMutex;
-            String Player = player;
-            SkillTypeItemIdPair ItemCreation = itemCreation;
-
-            SkillProcessEvent.MutexCreationProcessStarted e = (SkillProcessEvent.MutexCreationProcessStarted) ReflectUtils.invokeStaticMethod(
-                    "org.dddml.suiinfinitesea.domain.skillprocess.StartMutexCreationLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), skillProcessMutex, player, itemCreation, VerificationContext.forCommand(c)}
-            );
-
-//package org.dddml.suiinfinitesea.domain.skillprocess;
-//
-//public class StartMutexCreationLogic {
-//    public static SkillProcessEvent.MutexCreationProcessStarted verify(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessStarted> eventFactory, SkillProcessState skillProcessState, String skillProcessMutex, String player, SkillTypeItemIdPair itemCreation, VerificationContext verificationContext) {
-//    }
-//}
-
-            return e;
-        }
-           
-
-        protected SkillProcessEvent.MutexCreationProcessCompleted verifyCompleteMutexCreation(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessCompleted> eventFactory, String skillProcessMutex, String player, SkillTypeItemIdPair itemCreation, String experienceTable, SkillProcessCommands.CompleteMutexCreation c) {
-            String SkillProcessMutex = skillProcessMutex;
-            String Player = player;
-            SkillTypeItemIdPair ItemCreation = itemCreation;
-            String ExperienceTable = experienceTable;
-
-            SkillProcessEvent.MutexCreationProcessCompleted e = (SkillProcessEvent.MutexCreationProcessCompleted) ReflectUtils.invokeStaticMethod(
-                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteMutexCreationLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), skillProcessMutex, player, itemCreation, experienceTable, VerificationContext.forCommand(c)}
-            );
-
-//package org.dddml.suiinfinitesea.domain.skillprocess;
-//
-//public class CompleteMutexCreationLogic {
-//    public static SkillProcessEvent.MutexCreationProcessCompleted verify(java.util.function.Supplier<SkillProcessEvent.MutexCreationProcessCompleted> eventFactory, SkillProcessState skillProcessState, String skillProcessMutex, String player, SkillTypeItemIdPair itemCreation, String experienceTable, VerificationContext verificationContext) {
-//    }
-//}
-
-            return e;
-        }
-           
-
         protected AbstractSkillProcessEvent.SkillProcessCreated newSkillProcessCreated(String player, Long offChainVersion, String commandId, String requesterId) {
             SkillProcessEventId eventId = new SkillProcessEventId(getState().getSkillProcessId(), null);
             AbstractSkillProcessEvent.SkillProcessCreated e = new AbstractSkillProcessEvent.SkillProcessCreated();
@@ -222,35 +162,6 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
         protected AbstractSkillProcessEvent.ProductionProcessCompleted newProductionProcessCompleted(String player, SkillTypeItemIdPair itemProduction, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId) {
             SkillProcessEventId eventId = new SkillProcessEventId(getState().getSkillProcessId(), null);
             AbstractSkillProcessEvent.ProductionProcessCompleted e = new AbstractSkillProcessEvent.ProductionProcessCompleted();
-
-            e.setItemId(null);
-            e.setStartedAt(null);
-            e.setCreationTime(null);
-            e.setEndedAt(null);
-            e.setSuccessful(null);
-            e.setQuantity(null);
-            e.setExperience(null);
-            e.setNewLevel(null);
-            e.setSuiTimestamp(null);
-            e.setSuiTxDigest(null);
-            e.setSuiEventSeq(null);
-            e.setSuiPackageId(null);
-            e.setSuiTransactionModule(null);
-            e.setSuiSender(null);
-            e.setSuiType(null);
-            e.setStatus(null);
-
-            e.setCommandId(commandId);
-            e.setCreatedBy(requesterId);
-            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
-
-            e.setSkillProcessEventId(eventId);
-            return e;
-        }
-
-        protected AbstractSkillProcessEvent.MutexCreationProcessCompleted newMutexCreationProcessCompleted(String skillProcessMutex, String player, SkillTypeItemIdPair itemCreation, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId) {
-            SkillProcessEventId eventId = new SkillProcessEventId(getState().getSkillProcessId(), null);
-            AbstractSkillProcessEvent.MutexCreationProcessCompleted e = new AbstractSkillProcessEvent.MutexCreationProcessCompleted();
 
             e.setItemId(null);
             e.setStartedAt(null);

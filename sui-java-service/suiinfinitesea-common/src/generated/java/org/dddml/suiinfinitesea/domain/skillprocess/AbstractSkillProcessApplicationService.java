@@ -58,10 +58,6 @@ public abstract class AbstractSkillProcessApplicationService implements SkillPro
         update(c, ar -> ar.completeProduction(c.getPlayer(), c.getItemProduction(), c.getExperienceTable(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
-    public void when(SkillProcessCommands.CompleteMutexCreation c) {
-        update(c, ar -> ar.completeMutexCreation(c.getSkillProcessMutex(), c.getPlayer(), c.getItemCreation(), c.getExperienceTable(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
-    }
-
     public SkillProcessState get(SkillTypePlayerIdPair id) {
         SkillProcessState state = getStateRepository().get(id, true);
         return state;

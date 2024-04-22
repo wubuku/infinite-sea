@@ -8,9 +8,6 @@ package org.dddml.suiinfinitesea.config;
 import org.dddml.suiinfinitesea.domain.skillprocess.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.skillprocess.hibernate.*;
-import org.dddml.suiinfinitesea.domain.skillprocessmutex.*;
-import org.dddml.suiinfinitesea.domain.*;
-import org.dddml.suiinfinitesea.domain.skillprocessmutex.hibernate.*;
 import org.dddml.suiinfinitesea.domain.item.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.item.hibernate.*;
@@ -78,51 +75,6 @@ public class AggregatesHibernateConfig {
                 skillProcessEventStore,
                 skillProcessStateRepository,
                 skillProcessStateQueryRepository
-        );
-        return applicationService;
-    }
-
-
-
-    @Bean
-    public SkillProcessMutexStateRepository skillProcessMutexStateRepository(
-            SessionFactory hibernateSessionFactory,
-            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
-    ) {
-        HibernateSkillProcessMutexStateRepository repository = new HibernateSkillProcessMutexStateRepository();
-        repository.setSessionFactory(hibernateSessionFactory);
-        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
-        return repository;
-    }
-
-    @Bean
-    public SkillProcessMutexStateQueryRepository skillProcessMutexStateQueryRepository(
-            SessionFactory hibernateSessionFactory,
-            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
-    ) {
-        HibernateSkillProcessMutexStateQueryRepository repository = new HibernateSkillProcessMutexStateQueryRepository();
-        repository.setSessionFactory(hibernateSessionFactory);
-        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
-        return repository;
-    }
-
-    @Bean
-    public HibernateSkillProcessMutexEventStore skillProcessMutexEventStore(SessionFactory hibernateSessionFactory) {
-        HibernateSkillProcessMutexEventStore eventStore = new HibernateSkillProcessMutexEventStore();
-        eventStore.setSessionFactory(hibernateSessionFactory);
-        return eventStore;
-    }
-
-    @Bean
-    public AbstractSkillProcessMutexApplicationService.SimpleSkillProcessMutexApplicationService skillProcessMutexApplicationService(
-            @Qualifier("skillProcessMutexEventStore") EventStore skillProcessMutexEventStore,
-            SkillProcessMutexStateRepository skillProcessMutexStateRepository,
-            SkillProcessMutexStateQueryRepository skillProcessMutexStateQueryRepository
-    ) {
-        AbstractSkillProcessMutexApplicationService.SimpleSkillProcessMutexApplicationService applicationService = new AbstractSkillProcessMutexApplicationService.SimpleSkillProcessMutexApplicationService(
-                skillProcessMutexEventStore,
-                skillProcessMutexStateRepository,
-                skillProcessMutexStateQueryRepository
         );
         return applicationService;
     }

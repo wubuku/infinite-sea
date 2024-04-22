@@ -19,8 +19,6 @@ public interface SkillProcessApplicationService {
 
     void when(SkillProcessCommands.CompleteProduction c);
 
-    void when(SkillProcessCommands.CompleteMutexCreation c);
-
     SkillProcessState get(SkillTypePlayerIdPair id);
 
     Iterable<SkillProcessState> getAll(Integer firstResult, Integer maxResults);

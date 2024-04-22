@@ -127,120 +127,120 @@ aggregates:
             NewLevel:
               type: u16
 
-      StartMutexCreation:
-        parameters:
-          SkillProcessMutex:
-            referenceType: SkillProcessMutex
-            isMutableReference: true
-            isIgnoredInEvent: true
-          Player:
-            referenceType: Player
-            isMutableReference: true
-            isIgnoredInEvent: true
-          ItemCreation:
-            referenceType: ItemCreation
-            isIgnoredInEvent: true
-          Clock:
-            referenceType: Clock
-            isIgnoredInEvent: true
-          Energy:
-            type: "Balance<ENERGY>"
-            eventPropertyName: EnergyCost
-        event:
-          name: MutexCreationProcessStarted
-          properties:
-            ItemId: # ItemId to be created
-              type: u32
-            EnergyCost:
-              type: u64
-            ResourceCost:
-              type: u32
-            StartedAt:
-              type: u64
-            CreationTime:
-              type: u64
+#      StartMutexCreation:
+#        parameters:
+#          SkillProcessMutex:
+#            referenceType: SkillProcessMutex
+#            isMutableReference: true
+#            isIgnoredInEvent: true
+#          Player:
+#            referenceType: Player
+#            isMutableReference: true
+#            isIgnoredInEvent: true
+#          ItemCreation:
+#            referenceType: ItemCreation
+#            isIgnoredInEvent: true
+#          Clock:
+#            referenceType: Clock
+#            isIgnoredInEvent: true
+#          Energy:
+#            type: "Balance<ENERGY>"
+#            eventPropertyName: EnergyCost
+#        event:
+#          name: MutexCreationProcessStarted
+#          properties:
+#            ItemId: # ItemId to be created
+#              type: u32
+#            EnergyCost:
+#              type: u64
+#            ResourceCost:
+#              type: u32
+#            StartedAt:
+#              type: u64
+#            CreationTime:
+#              type: u64
+#
+#      CompleteMutexCreation:
+#        parameters:
+#          SkillProcessMutex:
+#            referenceType: SkillProcessMutex
+#            isMutableReference: true
+#            isIgnoredInEvent: true
+#          Player:
+#            referenceType: Player
+#            isMutableReference: true
+#            isIgnoredInEvent: true
+#          ItemCreation:
+#            referenceType: ItemCreation
+#            isIgnoredInEvent: true
+#          ExperienceTable:
+#            referenceType: ExperienceTable
+#            isIgnoredInEvent: true
+#          Clock:
+#            referenceType: Clock
+#            isIgnoredInEvent: true
+#        event:
+#          name: MutexCreationProcessCompleted
+#          properties:
+#            ItemId:
+#              type: u32
+#            StartedAt:
+#              type: u64
+#            CreationTime:
+#              type: u64
+#            EndedAt:
+#              type: u64
+#            Successful:
+#              type: bool
+#            Quantity:
+#              type: u32
+#            Experience:
+#              type: u32
+#              description: "Increased experience value"
+#            NewLevel:
+#              type: u16
 
-      CompleteMutexCreation:
-        parameters:
-          SkillProcessMutex:
-            referenceType: SkillProcessMutex
-            isMutableReference: true
-            isIgnoredInEvent: true
-          Player:
-            referenceType: Player
-            isMutableReference: true
-            isIgnoredInEvent: true
-          ItemCreation:
-            referenceType: ItemCreation
-            isIgnoredInEvent: true
-          ExperienceTable:
-            referenceType: ExperienceTable
-            isIgnoredInEvent: true
-          Clock:
-            referenceType: Clock
-            isIgnoredInEvent: true
-        event:
-          name: MutexCreationProcessCompleted
-          properties:
-            ItemId:
-              type: u32
-            StartedAt:
-              type: u64
-            CreationTime:
-              type: u64
-            EndedAt:
-              type: u64
-            Successful:
-              type: bool
-            Quantity:
-              type: u32
-            Experience:
-              type: u32
-              description: "Increased experience value"
-            NewLevel:
-              type: u16
 
-
-  SkillProcessMutex:
-    metadata:
-      Preprocessors: ["MOVE_CRUD_IT"]
-      CRUD_IT_NO_UPDATE: true
-      CRUD_IT_NO_DELETE: true
-      MOVE_AGGREGATE_MODULE_ATTRIBUTES: "#[allow(unused_mut_parameter)]"
-    friends:
-      #- SkillProcess.StartMutexProduction
-      #- SkillProcess.CompleteMutexProduction
-      - SkillProcess.StartMutexCreation
-      - SkillProcess.CompleteMutexCreation
-    id:
-      name: PlayerId
-      type: ID
-      generator:
-        class: assigned
-        tableName: SkillProcessMutexTable
-    properties:
-      ActiveSkillType:
-        type: SkillType
-        optional: true
-        defaultLogic:
-          Move: "std::option::none()"
-    methods:
-      Create:
-        event:
-          isObjectShared: true # Share the object after created.
-
-      Lock:
-        isInternal: true
-        parameters:
-          SkillType:
-            type: SkillType
-        event:
-          name: SkillProcessMutexLocked
-
-      Unlock:
-        isInternal: true
-        parameters:
-          SkillType:
-            type: SkillType
-        event:
-          name: SkillProcessMutexUnlocked
+#  SkillProcessMutex:
+#    metadata:
+#      Preprocessors: ["MOVE_CRUD_IT"]
+#      CRUD_IT_NO_UPDATE: true
+#      CRUD_IT_NO_DELETE: true
+#      MOVE_AGGREGATE_MODULE_ATTRIBUTES: "#[allow(unused_mut_parameter)]"
+#    friends:
+#      #- SkillProcess.StartMutexProduction
+#      #- SkillProcess.CompleteMutexProduction
+#      - SkillProcess.StartMutexCreation
+#      - SkillProcess.CompleteMutexCreation
+#    id:
+#      name: PlayerId
+#      type: ID
+#      generator:
+#        class: assigned
+#        tableName: SkillProcessMutexTable
+#    properties:
+#      ActiveSkillType:
+#        type: SkillType
+#        optional: true
+#        defaultLogic:
+#          Move: "std::option::none()"
+#    methods:
+#      Create:
+#        event:
+#          isObjectShared: true # Share the object after created.
+#
+#      Lock:
+#        isInternal: true
+#        parameters:
+#          SkillType:
+#            type: SkillType
+#        event:
+#          name: SkillProcessMutexLocked
+#
+#      Unlock:
+#        isInternal: true
+#        parameters:
+#          SkillType:
+#            type: SkillType
+#        event:
+#          name: SkillProcessMutexUnlocked
