@@ -2,9 +2,9 @@ module infinite_sea::skill_process_util {
     use sui::object::ID;
     use infinite_sea_common::item_creation::{Self, ItemCreation};
     use infinite_sea_common::item_production::{Self, ItemProduction};
+    use infinite_sea_common::skill_process_id;
     use infinite_sea_common::skill_type;
     use infinite_sea_common::skill_type_item_id_pair;
-    use infinite_sea_common::skill_process_id;
 
     use infinite_sea::player::{Self, Player};
     use infinite_sea::skill_process::{Self, SkillProcess};
@@ -13,14 +13,22 @@ module infinite_sea::skill_process_util {
     const EIncorrectSkillType: u64 = 12;
     const EIncorrectItemId: u64 = 22;
 
-    public fun is_non_mutex_skill(skill_type: u8): bool {
-        skill_type == skill_type::farming()
-            || skill_type == skill_type::sailing()
-            || skill_type == skill_type::township()
-    }
+    // public fun is_non_mutex_skill(skill_type: u8): bool {
+    //     skill_type == skill_type::farming()
+    //         || skill_type == skill_type::sailing()
+    //         || skill_type == skill_type::township()
+    // }
 
-    public fun is_mutex_skill(skill_type: u8): bool {
-        !is_non_mutex_skill(skill_type)
+    // public fun is_mutex_skill(skill_type: u8): bool {
+    //     !is_non_mutex_skill(skill_type)
+    // }
+
+    public fun skill_type_max_sequence_number(skill_type: u8): u8 {
+        if (skill_type == skill_type::farming()) {
+            1
+        } else {
+            0
+        }
     }
 
     public fun assert_ids_are_consistent_for_starting_creation(

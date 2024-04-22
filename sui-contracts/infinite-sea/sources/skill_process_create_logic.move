@@ -9,6 +9,7 @@ module infinite_sea::skill_process_create_logic {
 
     const EInvalidPlayerId: u64 = 10;
     const ESenderHasNoPermission: u64 = 22;
+    const EInvalidSequenceNumber: u64 = 23;
 
     public(friend) fun verify(
         skill_process_id: SkillProcessId,
@@ -20,6 +21,14 @@ module infinite_sea::skill_process_create_logic {
         assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
         let player_id = infinite_sea_common::skill_process_id::player_id(&skill_process_id);
         assert!(player::id(player) == player_id, EInvalidPlayerId);
+        assert!(
+            infinite_sea_common::skill_process_id::sequence_number(
+                &skill_process_id
+            ) <= infinite_sea::skill_process_util::skill_type_max_sequence_number(
+                infinite_sea_common::skill_process_id::skill_type(&skill_process_id)
+            ),
+            EInvalidSequenceNumber
+        );
 
         skill_process::asset_skill_process_id_not_exists(skill_process_id, skill_process_table);
         skill_process::new_skill_process_created(

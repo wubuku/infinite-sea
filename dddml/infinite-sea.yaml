@@ -53,11 +53,23 @@ aggregates:
             constantExpression:
               Move: 22
             type: u64
+          EInvalidSequenceNumber:
+            constantExpression:
+              Move: 23
+            type: u64
         verificationLogic:
           Move: >
             assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
                     let player_id = infinite_sea_common::skill_process_id::player_id(&skill_process_id);
                     assert!(player::id(player) == player_id, EInvalidPlayerId);
+                    assert!(
+                        infinite_sea_common::skill_process_id::sequence_number(
+                            &skill_process_id
+                        ) <= infinite_sea::skill_process_util::skill_type_max_sequence_number(
+                            infinite_sea_common::skill_process_id::skill_type(&skill_process_id)
+                        ),
+                        EInvalidSequenceNumber
+                    );
 
       #StartCreation: # todo start item creation
 

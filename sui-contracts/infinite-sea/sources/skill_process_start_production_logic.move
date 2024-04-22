@@ -6,6 +6,7 @@ module infinite_sea::skill_process_start_production_logic {
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_production::{Self, ItemProduction};
     use infinite_sea_common::production_materials;
+    use infinite_sea_common::skill_process_id;
 
     use infinite_sea::player::{Self, Player};
     use infinite_sea::player_aggregate;
@@ -20,7 +21,7 @@ module infinite_sea::skill_process_start_production_logic {
     //const EIncorrectSkillType: u64 = 12;
     const ENotEnoughEnergy: u64 = 13;
     const ELowerThanRequiredLevel: u64 = 14;
-    const EIsMutexSkillType: u64 = 15;
+    //const EIsMutexSkillType: u64 = 15;
     const ESenderHasNoPermission: u64 = 22;
 
     public(friend) fun verify(
@@ -39,7 +40,7 @@ module infinite_sea::skill_process_start_production_logic {
         let (_player_id, skill_type, item_id) = skill_process_util::assert_ids_are_consistent_for_starting_production(
             player, item_production, skill_process
         );
-        assert!(skill_process_util::is_non_mutex_skill(skill_type), EIsMutexSkillType);
+        //assert!(skill_process_util::is_non_mutex_skill(skill_type), EIsMutexSkillType);
 
         let requirements_level = item_production::requirements_level(item_production);
         assert!(player::level(player) >= requirements_level, ELowerThanRequiredLevel);
