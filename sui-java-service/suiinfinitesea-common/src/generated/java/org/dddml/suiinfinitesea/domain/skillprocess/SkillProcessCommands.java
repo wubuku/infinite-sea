@@ -27,13 +27,13 @@ public class SkillProcessCommands {
         /**
          * Skill Process Id
          */
-        private SkillTypePlayerIdPair skillProcessId;
+        private SkillProcessId skillProcessId;
 
-        public SkillTypePlayerIdPair getSkillProcessId() {
+        public SkillProcessId getSkillProcessId() {
             return this.skillProcessId;
         }
 
-        public void setSkillProcessId(SkillTypePlayerIdPair skillProcessId) {
+        public void setSkillProcessId(SkillProcessId skillProcessId) {
             this.skillProcessId = skillProcessId;
         }
 
@@ -78,13 +78,13 @@ public class SkillProcessCommands {
         /**
          * Skill Process Id
          */
-        private SkillTypePlayerIdPair skillProcessId;
+        private SkillProcessId skillProcessId;
 
-        public SkillTypePlayerIdPair getSkillProcessId() {
+        public SkillProcessId getSkillProcessId() {
             return this.skillProcessId;
         }
 
-        public void setSkillProcessId(SkillTypePlayerIdPair skillProcessId) {
+        public void setSkillProcessId(SkillProcessId skillProcessId) {
             this.skillProcessId = skillProcessId;
         }
 
@@ -155,13 +155,13 @@ public class SkillProcessCommands {
         /**
          * Skill Process Id
          */
-        private SkillTypePlayerIdPair skillProcessId;
+        private SkillProcessId skillProcessId;
 
-        public SkillTypePlayerIdPair getSkillProcessId() {
+        public SkillProcessId getSkillProcessId() {
             return this.skillProcessId;
         }
 
-        public void setSkillProcessId(SkillTypePlayerIdPair skillProcessId) {
+        public void setSkillProcessId(SkillProcessId skillProcessId) {
             this.skillProcessId = skillProcessId;
         }
 

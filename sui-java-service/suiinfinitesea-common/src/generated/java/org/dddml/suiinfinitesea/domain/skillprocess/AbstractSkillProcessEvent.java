@@ -23,11 +23,11 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
         this.skillProcessEventId = eventId;
     }
     
-    public SkillTypePlayerIdPair getSkillProcessId() {
+    public SkillProcessId getSkillProcessId() {
         return getSkillProcessEventId().getSkillProcessId();
     }
 
-    public void setSkillProcessId(SkillTypePlayerIdPair skillProcessId) {
+    public void setSkillProcessId(SkillProcessId skillProcessId) {
         getSkillProcessEventId().setSkillProcessId(skillProcessId);
     }
 

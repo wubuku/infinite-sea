@@ -2,7 +2,7 @@
 module infinite_sea::skill_process_create_logic {
     use infinite_sea::player::{Self, Player};
     use infinite_sea::skill_process;
-    use infinite_sea_common::skill_type_player_id_pair::SkillTypePlayerIdPair;
+    use infinite_sea_common::skill_process_id::SkillProcessId;
     use sui::tx_context::TxContext;
 
     friend infinite_sea::skill_process_aggregate;
@@ -11,14 +11,14 @@ module infinite_sea::skill_process_create_logic {
     const ESenderHasNoPermission: u64 = 22;
 
     public(friend) fun verify(
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
         player: &Player,
         skill_process_table: &skill_process::SkillProcessTable,
         ctx: &mut TxContext,
     ): skill_process::SkillProcessCreated {
         let _ = ctx;
         assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
-        let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
+        let player_id = infinite_sea_common::skill_process_id::player_id(&skill_process_id);
         assert!(player::id(player) == player_id, EInvalidPlayerId);
 
         skill_process::asset_skill_process_id_not_exists(skill_process_id, skill_process_table);

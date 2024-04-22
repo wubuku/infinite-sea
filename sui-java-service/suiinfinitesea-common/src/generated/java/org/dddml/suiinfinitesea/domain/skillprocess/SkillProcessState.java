@@ -18,7 +18,7 @@ public interface SkillProcessState extends VersionedSuiMoveObject
 
     Long VERSION_NULL = VERSION_ZERO - 1;
 
-    SkillTypePlayerIdPair getSkillProcessId();
+    SkillProcessId getSkillProcessId();
 
     String getId_();
 
@@ -49,7 +49,7 @@ public interface SkillProcessState extends VersionedSuiMoveObject
     Boolean getDeleted();
 
     interface MutableSkillProcessState extends SkillProcessState, VersionedSuiMoveObject.MutableVersionedSuiMoveObject {
-        void setSkillProcessId(SkillTypePlayerIdPair skillProcessId);
+        void setSkillProcessId(SkillProcessId skillProcessId);
 
         void setId_(String id);
 

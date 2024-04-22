@@ -44,7 +44,7 @@ public class HibernateSkillProcessStateQueryRepository implements SkillProcessSt
     }
 
     @Transactional(readOnly = true)
-    public SkillProcessState get(SkillTypePlayerIdPair id) {
+    public SkillProcessState get(SkillProcessId id) {
 
         SkillProcessState state = (SkillProcessState)getCurrentSession().get(AbstractSkillProcessState.SimpleSkillProcessState.class, id);
         if (getReadOnlyProxyGenerator() != null && state != null) {

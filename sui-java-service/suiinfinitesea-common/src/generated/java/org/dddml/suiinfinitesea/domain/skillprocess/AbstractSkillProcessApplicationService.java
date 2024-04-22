@@ -58,7 +58,7 @@ public abstract class AbstractSkillProcessApplicationService implements SkillPro
         update(c, ar -> ar.completeProduction(c.getPlayer(), c.getItemProduction(), c.getExperienceTable(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
-    public SkillProcessState get(SkillTypePlayerIdPair id) {
+    public SkillProcessState get(SkillProcessId id) {
         SkillProcessState state = getStateRepository().get(id, true);
         return state;
     }
@@ -87,7 +87,7 @@ public abstract class AbstractSkillProcessApplicationService implements SkillPro
         return getStateQueryRepository().getCount(filter);
     }
 
-    public SkillProcessEvent getEvent(SkillTypePlayerIdPair skillProcessId, long version) {
+    public SkillProcessEvent getEvent(SkillProcessId skillProcessId, long version) {
         SkillProcessEvent e = (SkillProcessEvent)getEventStore().getEvent(toEventStoreAggregateId(skillProcessId), version);
         if (e != null) {
             ((SkillProcessEvent.SqlSkillProcessEvent)e).setEventReadOnly(true); 
@@ -97,7 +97,7 @@ public abstract class AbstractSkillProcessApplicationService implements SkillPro
         return e;
     }
 
-    public SkillProcessState getHistoryState(SkillTypePlayerIdPair skillProcessId, long version) {
+    public SkillProcessState getHistoryState(SkillProcessId skillProcessId, long version) {
         EventStream eventStream = getEventStore().loadEventStream(AbstractSkillProcessEvent.class, toEventStoreAggregateId(skillProcessId), version - 1);
         return new AbstractSkillProcessState.SimpleSkillProcessState(eventStream.getEvents());
     }
@@ -107,12 +107,12 @@ public abstract class AbstractSkillProcessApplicationService implements SkillPro
         return new AbstractSkillProcessAggregate.SimpleSkillProcessAggregate(state);
     }
 
-    public EventStoreAggregateId toEventStoreAggregateId(SkillTypePlayerIdPair aggregateId) {
+    public EventStoreAggregateId toEventStoreAggregateId(SkillProcessId aggregateId) {
         return new EventStoreAggregateId.SimpleEventStoreAggregateId(aggregateId);
     }
 
     protected void update(SkillProcessCommand c, Consumer<SkillProcessAggregate> action) {
-        SkillTypePlayerIdPair aggregateId = c.getSkillProcessId();
+        SkillProcessId aggregateId = c.getSkillProcessId();
         EventStoreAggregateId eventStoreAggregateId = toEventStoreAggregateId(aggregateId);
         SkillProcessState state = getStateRepository().get(aggregateId, false);
         boolean duplicate = isDuplicateCommand(c, eventStoreAggregateId, state);

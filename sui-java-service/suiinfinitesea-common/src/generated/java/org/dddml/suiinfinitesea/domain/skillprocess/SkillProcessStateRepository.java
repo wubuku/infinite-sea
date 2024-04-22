@@ -12,7 +12,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public interface SkillProcessStateRepository {
-    SkillProcessState get(SkillTypePlayerIdPair id, boolean nullAllowed);
+    SkillProcessState get(SkillProcessId id, boolean nullAllowed);
 
     void save(SkillProcessState state);
 

@@ -8,7 +8,7 @@ aggregates:
       ShouldIssuePublisherObject: true
     id:
       name: SkillProcessId
-      type: SkillTypePlayerIdPair
+      type: SkillProcessId
       generator:
         class: assigned
         tableName: SkillProcessTable
@@ -56,7 +56,7 @@ aggregates:
         verificationLogic:
           Move: >
             assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
-                    let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
+                    let player_id = infinite_sea_common::skill_process_id::player_id(&skill_process_id);
                     assert!(player::id(player) == player_id, EInvalidPlayerId);
 
       #StartCreation: # todo start item creation

@@ -2,12 +2,15 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
 <hibernate-mapping package="org.dddml.suiinfinitesea.domain.skillprocess">
   <class name="org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessState$SimpleSkillProcessState" table="skill_process">
-    <composite-id name="skillProcessId" class="org.dddml.suiinfinitesea.domain.SkillTypePlayerIdPair">
+    <composite-id name="skillProcessId" class="org.dddml.suiinfinitesea.domain.SkillProcessId">
       <key-property name="skillType">
         <column name="skill_process_id_skill_type" />
       </key-property>
       <key-property name="playerId">
         <column name="skill_process_id_player_id" sql-type="VARCHAR(66)" />
+      </key-property>
+      <key-property name="sequenceNumber">
+        <column name="skill_process_id_sequence_number" />
       </key-property>
     </composite-id>
     <version name="offChainVersion" column="off_chain_version" type="long" />

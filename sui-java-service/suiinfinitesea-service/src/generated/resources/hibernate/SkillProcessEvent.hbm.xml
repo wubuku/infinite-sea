@@ -9,6 +9,9 @@
       <key-property name="skillProcessIdPlayerId">
         <column name="skill_process_id_player_id" sql-type="VARCHAR(66)" />
       </key-property>
+      <key-property name="skillProcessIdSequenceNumber">
+        <column name="skill_process_id_sequence_number" />
+      </key-property>
       <key-property name="version">
         <column name="version" sql-type="DECIMAL(20,0)" />
       </key-property>

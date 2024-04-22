@@ -6,7 +6,7 @@
 module infinite_sea::skill_process {
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::production_materials::ProductionMaterials;
-    use infinite_sea_common::skill_type_player_id_pair::SkillTypePlayerIdPair;
+    use infinite_sea_common::skill_process_id::SkillProcessId;
     use std::option;
     use sui::balance::Balance;
     use sui::event;
@@ -31,7 +31,7 @@ module infinite_sea::skill_process {
 
     struct SkillProcessTable has key {
         id: UID,
-        table: table::Table<SkillTypePlayerIdPair, object::ID>,
+        table: table::Table<SkillProcessId, object::ID>,
     }
 
     struct SkillProcessTableCreated has copy, drop {
@@ -53,7 +53,7 @@ module infinite_sea::skill_process {
 
     struct SkillProcess has key {
         id: UID,
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
         version: u64,
         item_id: u32,
         started_at: u64,
@@ -67,7 +67,7 @@ module infinite_sea::skill_process {
         object::uid_to_inner(&skill_process.id)
     }
 
-    public fun skill_process_id(skill_process: &SkillProcess): SkillTypePlayerIdPair {
+    public fun skill_process_id(skill_process: &SkillProcess): SkillProcessId {
         skill_process.skill_process_id
     }
 
@@ -124,7 +124,7 @@ module infinite_sea::skill_process {
     }
 
     fun new_skill_process(
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
         ctx: &mut TxContext,
     ): SkillProcess {
         SkillProcess {
@@ -142,7 +142,7 @@ module infinite_sea::skill_process {
 
     struct SkillProcessCreated has copy, drop {
         id: option::Option<object::ID>,
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
     }
 
     public fun skill_process_created_id(skill_process_created: &SkillProcessCreated): option::Option<object::ID> {
@@ -153,12 +153,12 @@ module infinite_sea::skill_process {
         skill_process_created.id = option::some(id);
     }
 
-    public fun skill_process_created_skill_process_id(skill_process_created: &SkillProcessCreated): SkillTypePlayerIdPair {
+    public fun skill_process_created_skill_process_id(skill_process_created: &SkillProcessCreated): SkillProcessId {
         skill_process_created.skill_process_id
     }
 
     public(friend) fun new_skill_process_created(
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
     ): SkillProcessCreated {
         SkillProcessCreated {
             id: option::none(),
@@ -168,7 +168,7 @@ module infinite_sea::skill_process {
 
     struct ProductionProcessStarted has copy, drop {
         id: object::ID,
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
         version: u64,
         item_id: u32,
         energy_cost: u64,
@@ -181,7 +181,7 @@ module infinite_sea::skill_process {
         production_process_started.id
     }
 
-    public fun production_process_started_skill_process_id(production_process_started: &ProductionProcessStarted): SkillTypePlayerIdPair {
+    public fun production_process_started_skill_process_id(production_process_started: &ProductionProcessStarted): SkillProcessId {
         production_process_started.skill_process_id
     }
 
@@ -227,7 +227,7 @@ module infinite_sea::skill_process {
 
     struct ProductionProcessCompleted has copy, drop {
         id: object::ID,
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
         version: u64,
         item_id: u32,
         started_at: u64,
@@ -243,7 +243,7 @@ module infinite_sea::skill_process {
         production_process_completed.id
     }
 
-    public fun production_process_completed_skill_process_id(production_process_completed: &ProductionProcessCompleted): SkillTypePlayerIdPair {
+    public fun production_process_completed_skill_process_id(production_process_completed: &ProductionProcessCompleted): SkillProcessId {
         production_process_completed.skill_process_id
     }
 
@@ -307,7 +307,7 @@ module infinite_sea::skill_process {
 
 
     public(friend) fun create_skill_process(
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
         skill_process_table: &mut SkillProcessTable,
         ctx: &mut TxContext,
     ): SkillProcess {
@@ -320,14 +320,14 @@ module infinite_sea::skill_process {
     }
 
     public(friend) fun asset_skill_process_id_not_exists(
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
         skill_process_table: &SkillProcessTable,
     ) {
         assert!(!table::contains(&skill_process_table.table, skill_process_id), EIdAlreadyExists);
     }
 
     fun asset_skill_process_id_not_exists_then_add(
-        skill_process_id: SkillTypePlayerIdPair,
+        skill_process_id: SkillProcessId,
         skill_process_table: &mut SkillProcessTable,
         id: object::ID,
     ) {

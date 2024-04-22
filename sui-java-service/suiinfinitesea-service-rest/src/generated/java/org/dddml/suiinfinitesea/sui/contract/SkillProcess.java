@@ -17,7 +17,7 @@ public class SkillProcess {
 
     private UID id;
 
-    private SkillTypePlayerIdPair skillProcessId;
+    private SkillProcessId skillProcessId;
 
     private Long offChainVersion;
 
@@ -43,11 +43,11 @@ public class SkillProcess {
         this.id = id;
     }
 
-    public SkillTypePlayerIdPair getSkillProcessId() {
+    public SkillProcessId getSkillProcessId() {
         return skillProcessId;
     }
 
-    public void setSkillProcessId(SkillTypePlayerIdPair skillProcessId) {
+    public void setSkillProcessId(SkillProcessId skillProcessId) {
         this.skillProcessId = skillProcessId;
     }
 

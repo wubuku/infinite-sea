@@ -21,7 +21,7 @@ public class HibernateSkillProcessEventStore extends AbstractHibernateEventStore
     @Override
     protected Serializable getEventId(EventStoreAggregateId eventStoreAggregateId, long version)
     {
-        return new SkillProcessEventId((SkillTypePlayerIdPair) eventStoreAggregateId.getId(), BigInteger.valueOf(version));
+        return new SkillProcessEventId((SkillProcessId) eventStoreAggregateId.getId(), BigInteger.valueOf(version));
     }
 
     @Override
@@ -37,10 +37,11 @@ public class HibernateSkillProcessEventStore extends AbstractHibernateEventStore
         if (!eventType.isAssignableFrom(supportedEventType)) {
             throw new UnsupportedOperationException();
         }
-        SkillTypePlayerIdPair idObj = (SkillTypePlayerIdPair) eventStoreAggregateId.getId();
+        SkillProcessId idObj = (SkillProcessId) eventStoreAggregateId.getId();
         Criteria criteria = getCurrentSession().createCriteria(AbstractSkillProcessEvent.class);
         criteria.add(Restrictions.eq("skillProcessEventId.skillProcessIdSkillType", idObj.getSkillType()));
         criteria.add(Restrictions.eq("skillProcessEventId.skillProcessIdPlayerId", idObj.getPlayerId()));
+        criteria.add(Restrictions.eq("skillProcessEventId.skillProcessIdSequenceNumber", idObj.getSequenceNumber()));
         criteria.add(Restrictions.le("skillProcessEventId.offChainVersion", version));
         criteria.addOrder(Order.asc("skillProcessEventId.offChainVersion"));
         List es = criteria.list();

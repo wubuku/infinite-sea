@@ -17,7 +17,7 @@ import java.util.*;
 public class ProductionProcessStarted {
     private String id;
 
-    private SkillTypePlayerIdPairForEvent skillProcessId;
+    private SkillProcessIdForEvent skillProcessId;
 
     private BigInteger version;
 
@@ -39,11 +39,11 @@ public class ProductionProcessStarted {
         this.id = id;
     }
 
-    public SkillTypePlayerIdPairForEvent getSkillProcessId() {
+    public SkillProcessIdForEvent getSkillProcessId() {
         return skillProcessId;
     }
 
-    public void setSkillProcessId(SkillTypePlayerIdPairForEvent skillProcessId) {
+    public void setSkillProcessId(SkillProcessIdForEvent skillProcessId) {
         this.skillProcessId = skillProcessId;
     }
 

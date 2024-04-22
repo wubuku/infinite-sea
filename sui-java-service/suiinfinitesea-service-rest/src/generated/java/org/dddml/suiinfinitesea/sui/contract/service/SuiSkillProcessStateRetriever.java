@@ -20,10 +20,10 @@ public class SuiSkillProcessStateRetriever {
 
     private SuiJsonRpcClient suiJsonRpcClient;
 
-    private Function<SkillTypePlayerIdPair, SkillProcessState.MutableSkillProcessState> skillProcessStateFactory;
+    private Function<SkillProcessId, SkillProcessState.MutableSkillProcessState> skillProcessStateFactory;
 
     public SuiSkillProcessStateRetriever(SuiJsonRpcClient suiJsonRpcClient,
-                                  Function<SkillTypePlayerIdPair, SkillProcessState.MutableSkillProcessState> skillProcessStateFactory
+                                  Function<SkillProcessId, SkillProcessState.MutableSkillProcessState> skillProcessStateFactory
     ) {
         this.suiJsonRpcClient = suiJsonRpcClient;
         this.skillProcessStateFactory = skillProcessStateFactory;
@@ -41,7 +41,7 @@ public class SuiSkillProcessStateRetriever {
     }
 
     private SkillProcessState toSkillProcessState(SkillProcess skillProcess) {
-        SkillProcessState.MutableSkillProcessState skillProcessState = skillProcessStateFactory.apply(DomainBeanUtils.toSkillTypePlayerIdPair(skillProcess.getSkillProcessId()));
+        SkillProcessState.MutableSkillProcessState skillProcessState = skillProcessStateFactory.apply(DomainBeanUtils.toSkillProcessId(skillProcess.getSkillProcessId()));
         skillProcessState.setId_(skillProcess.getId().getId());
         skillProcessState.setVersion(skillProcess.getVersion());
         skillProcessState.setItemId(skillProcess.getItemId());

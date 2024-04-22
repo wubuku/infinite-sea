@@ -133,7 +133,7 @@ public class SkillProcessResource {
     @Transactional(readOnly = true)
     public SkillProcessStateDto get(@PathVariable("skillProcessId") String skillProcessId, @RequestParam(value = "fields", required = false) String fields) {
         try {
-            SkillTypePlayerIdPair idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
+            SkillProcessId idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
             SkillProcessState state = skillProcessApplicationService.get(idObj);
             if (state == null) { return null; }
 
@@ -176,7 +176,7 @@ public class SkillProcessResource {
         try {
 
             SkillProcessCommands.Create cmd = content;//.toCreate();
-            SkillTypePlayerIdPair idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
+            SkillProcessId idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
             if (cmd.getSkillProcessId() == null) {
                 cmd.setSkillProcessId(idObj);
             } else if (!cmd.getSkillProcessId().equals(idObj)) {
@@ -194,7 +194,7 @@ public class SkillProcessResource {
         try {
 
             SkillProcessCommands.CompleteProduction cmd = content;//.toCompleteProduction();
-            SkillTypePlayerIdPair idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
+            SkillProcessId idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
             if (cmd.getSkillProcessId() == null) {
                 cmd.setSkillProcessId(idObj);
             } else if (!cmd.getSkillProcessId().equals(idObj)) {
@@ -224,7 +224,7 @@ public class SkillProcessResource {
     public SkillProcessEvent getEvent(@PathVariable("skillProcessId") String skillProcessId, @PathVariable("version") long version) {
         try {
 
-            SkillTypePlayerIdPair idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
+            SkillProcessId idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
             //SkillProcessStateEventDtoConverter dtoConverter = getSkillProcessStateEventDtoConverter();
             return skillProcessApplicationService.getEvent(idObj, version);
 
@@ -236,7 +236,7 @@ public class SkillProcessResource {
     public SkillProcessStateDto getHistoryState(@PathVariable("skillProcessId") String skillProcessId, @PathVariable("version") long version, @RequestParam(value = "fields", required = false) String fields) {
         try {
 
-            SkillTypePlayerIdPair idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
+            SkillProcessId idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
             SkillProcessStateDto.DtoConverter dtoConverter = new SkillProcessStateDto.DtoConverter();
             if (StringHelper.isNullOrEmpty(fields)) {
                 dtoConverter.setAllFieldsReturned(true);
@@ -271,13 +271,13 @@ public class SkillProcessResource {
  
     public static class SkillProcessResourceUtils {
 
-        public static SkillTypePlayerIdPair parseIdString(String idString) {
-            TextFormatter<SkillTypePlayerIdPair> formatter = SkillProcessMetadata.URL_ID_TEXT_FORMATTER;
+        public static SkillProcessId parseIdString(String idString) {
+            TextFormatter<SkillProcessId> formatter = SkillProcessMetadata.URL_ID_TEXT_FORMATTER;
             return formatter.parse(idString);
         }
 
         public static void setNullIdOrThrowOnInconsistentIds(String skillProcessId, SkillProcessCommand value) {
-            SkillTypePlayerIdPair idObj = parseIdString(skillProcessId);
+            SkillProcessId idObj = parseIdString(skillProcessId);
             if (value.getSkillProcessId() == null) {
                 value.setSkillProcessId(idObj);
             } else if (!value.getSkillProcessId().equals(idObj)) {
@@ -333,7 +333,7 @@ public class SkillProcessResource {
             return filter.entrySet();
         }
 
-        public static SkillProcessStateDto[] toSkillProcessStateDtoArray(Iterable<SkillTypePlayerIdPair> ids) {
+        public static SkillProcessStateDto[] toSkillProcessStateDtoArray(Iterable<SkillProcessId> ids) {
             List<SkillProcessStateDto> states = new ArrayList<>();
             ids.forEach(i -> {
                 SkillProcessStateDto dto = new SkillProcessStateDto();

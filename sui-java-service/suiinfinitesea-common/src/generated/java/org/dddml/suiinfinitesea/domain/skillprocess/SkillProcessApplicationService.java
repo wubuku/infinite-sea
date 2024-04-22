@@ -19,7 +19,7 @@ public interface SkillProcessApplicationService {
 
     void when(SkillProcessCommands.CompleteProduction c);
 
-    SkillProcessState get(SkillTypePlayerIdPair id);
+    SkillProcessState get(SkillProcessId id);
 
     Iterable<SkillProcessState> getAll(Integer firstResult, Integer maxResults);
 
@@ -33,9 +33,9 @@ public interface SkillProcessApplicationService {
 
     long getCount(Criterion filter);
 
-    SkillProcessEvent getEvent(SkillTypePlayerIdPair skillProcessId, long version);
+    SkillProcessEvent getEvent(SkillProcessId skillProcessId, long version);
 
-    SkillProcessState getHistoryState(SkillTypePlayerIdPair skillProcessId, long version);
+    SkillProcessState getHistoryState(SkillProcessId skillProcessId, long version);
 
 }
 

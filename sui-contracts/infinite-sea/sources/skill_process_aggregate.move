@@ -12,7 +12,7 @@ module infinite_sea::skill_process_aggregate {
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_production::ItemProduction;
-    use infinite_sea_common::skill_type_player_id_pair::{Self, SkillTypePlayerIdPair};
+    use infinite_sea_common::skill_process_id::{Self, SkillProcessId};
     use sui::balance::Balance;
     use sui::clock::Clock;
     use sui::object::ID;
@@ -23,13 +23,15 @@ module infinite_sea::skill_process_aggregate {
     public entry fun create(
         skill_process_id_skill_type: u8,
         skill_process_id_player_id: ID,
+        skill_process_id_sequence_number: u8,
         player: &Player,
         skill_process_table: &mut skill_process::SkillProcessTable,
         ctx: &mut tx_context::TxContext,
     ) {
-        let skill_process_id: SkillTypePlayerIdPair = skill_type_player_id_pair::new(
+        let skill_process_id: SkillProcessId = skill_process_id::new(
             skill_process_id_skill_type,
             skill_process_id_player_id,
+            skill_process_id_sequence_number,
         );
 
         let skill_process_created = skill_process_create_logic::verify(

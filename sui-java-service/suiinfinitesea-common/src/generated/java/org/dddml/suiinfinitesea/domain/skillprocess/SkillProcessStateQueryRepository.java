@@ -13,7 +13,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public interface SkillProcessStateQueryRepository {
-    SkillProcessState get(SkillTypePlayerIdPair id);
+    SkillProcessState get(SkillProcessId id);
 
     Iterable<SkillProcessState> getAll(Integer firstResult, Integer maxResults);
     

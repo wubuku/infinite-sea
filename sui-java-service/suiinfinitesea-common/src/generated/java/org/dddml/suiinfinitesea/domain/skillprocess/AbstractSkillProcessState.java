@@ -15,13 +15,13 @@ import org.dddml.suiinfinitesea.domain.skillprocess.SkillProcessEvent.*;
 
 public abstract class AbstractSkillProcessState implements SkillProcessState.SqlSkillProcessState {
 
-    private SkillTypePlayerIdPair skillProcessId;
+    private SkillProcessId skillProcessId;
 
-    public SkillTypePlayerIdPair getSkillProcessId() {
+    public SkillProcessId getSkillProcessId() {
         return this.skillProcessId;
     }
 
-    public void setSkillProcessId(SkillTypePlayerIdPair skillProcessId) {
+    public void setSkillProcessId(SkillProcessId skillProcessId) {
         this.skillProcessId = skillProcessId;
     }
 
@@ -433,8 +433,8 @@ public abstract class AbstractSkillProcessState implements SkillProcessState.Sql
     }
 
     protected void throwOnWrongEvent(SkillProcessEvent event) {
-        SkillTypePlayerIdPair stateEntityId = this.getSkillProcessId(); // Aggregate Id
-        SkillTypePlayerIdPair eventEntityId = ((SkillProcessEvent.SqlSkillProcessEvent)event).getSkillProcessEventId().getSkillProcessId(); // EntityBase.Aggregate.GetEventIdPropertyIdName();
+        SkillProcessId stateEntityId = this.getSkillProcessId(); // Aggregate Id
+        SkillProcessId eventEntityId = ((SkillProcessEvent.SqlSkillProcessEvent)event).getSkillProcessEventId().getSkillProcessId(); // EntityBase.Aggregate.GetEventIdPropertyIdName();
         if (!stateEntityId.equals(eventEntityId)) {
             throw DomainError.named("mutateWrongEntity", "Entity Id %1$s in state but entity id %2$s in event", stateEntityId, eventEntityId);
         }

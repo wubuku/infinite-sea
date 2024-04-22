@@ -14,9 +14,9 @@ import org.dddml.suiinfinitesea.specialization.DomainError;
 
 public interface SkillProcessCommand extends Command {
 
-    SkillTypePlayerIdPair getSkillProcessId();
+    SkillProcessId getSkillProcessId();
 
-    void setSkillProcessId(SkillTypePlayerIdPair skillProcessId);
+    void setSkillProcessId(SkillProcessId skillProcessId);
 
     String getId_();
 

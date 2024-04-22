@@ -4,7 +4,7 @@ module infinite_sea::skill_process_util {
     use infinite_sea_common::item_production::{Self, ItemProduction};
     use infinite_sea_common::skill_type;
     use infinite_sea_common::skill_type_item_id_pair;
-    use infinite_sea_common::skill_type_player_id_pair;
+    use infinite_sea_common::skill_process_id;
 
     use infinite_sea::player::{Self, Player};
     use infinite_sea::skill_process::{Self, SkillProcess};
@@ -29,12 +29,12 @@ module infinite_sea::skill_process_util {
         skill_process: &SkillProcess,
     ): (ID, u8, u32) {
         let skill_process_id = skill_process::skill_process_id(skill_process);
-        let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
+        let player_id = infinite_sea_common::skill_process_id::player_id(&skill_process_id);
         assert!(player::id(player) == player_id, EInvalidPlayerId);
 
         let item_creation_id = item_creation::item_creation_id(item_creation);
         let skill_type = skill_type_item_id_pair::skill_type(&item_creation_id);
-        assert!(skill_type == skill_type_player_id_pair::skill_type(&skill_process_id), EIncorrectSkillType);
+        assert!(skill_type == skill_process_id::skill_type(&skill_process_id), EIncorrectSkillType);
         let item_id = skill_type_item_id_pair::item_id(&item_creation_id);
 
         (player_id, skill_type, item_id)
@@ -59,12 +59,12 @@ module infinite_sea::skill_process_util {
         skill_process: &skill_process::SkillProcess,
     ): (ID, u8, u32) {
         let skill_process_id = skill_process::skill_process_id(skill_process);
-        let player_id = infinite_sea_common::skill_type_player_id_pair::player_id(&skill_process_id);
+        let player_id = infinite_sea_common::skill_process_id::player_id(&skill_process_id);
         assert!(player::id(player) == player_id, EInvalidPlayerId);
 
         let item_production_id = item_production::item_production_id(item_production);
         let skill_type = skill_type_item_id_pair::skill_type(&item_production_id);
-        assert!(skill_type == skill_type_player_id_pair::skill_type(&skill_process_id), EIncorrectSkillType);
+        assert!(skill_type == skill_process_id::skill_type(&skill_process_id), EIncorrectSkillType);
         let item_id = skill_type_item_id_pair::item_id(&item_production_id);
 
         (player_id, skill_type, item_id)

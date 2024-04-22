@@ -82,9 +82,9 @@ public interface SkillProcessEvent extends Event, SuiEventEnvelope, SuiMoveEvent
 
     }
 
-    SkillTypePlayerIdPair getSkillProcessId();
+    SkillProcessId getSkillProcessId();
 
-    //void setSkillProcessId(SkillTypePlayerIdPair skillProcessId);
+    //void setSkillProcessId(SkillProcessId skillProcessId);
 
     BigInteger getVersion();
     

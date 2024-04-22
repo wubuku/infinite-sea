@@ -154,6 +154,16 @@ valueObjects:
       PlayerId:
         type: ID
 
+  SkillProcessId:
+    module: "Common"
+    properties:
+      SkillType:
+        type: SkillType
+      PlayerId:
+        type: ID
+      SequenceNumber:
+        type: u8
+
   ExperienceLevel:
     module: "Common"
     properties:

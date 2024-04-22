@@ -662,15 +662,15 @@ public class M {
 
     public static final String URL_ID_FIELD_SEPARATOR = ",";
 
-    public static final TextFormatter<org.dddml.suiinfinitesea.domain.SkillTypePlayerIdPair> URL_ID_TEXT_FORMATTER =
-                    new AbstractValueObjectTextFormatter<org.dddml.suiinfinitesea.domain.SkillTypePlayerIdPair>(org.dddml.suiinfinitesea.domain.SkillTypePlayerIdPair.class, URL_ID_FIELD_SEPARATOR) {
+    public static final TextFormatter<org.dddml.suiinfinitesea.domain.SkillProcessId> URL_ID_TEXT_FORMATTER =
+                    new AbstractValueObjectTextFormatter<org.dddml.suiinfinitesea.domain.SkillProcessId>(org.dddml.suiinfinitesea.domain.SkillProcessId.class, URL_ID_FIELD_SEPARATOR) {
                         @Override
                         protected Class<?> getClassByTypeName(String type) {
                             return BoundedContextMetadata.CLASS_MAP.get(type);
                         }
                     };
 
-    public static final Class ID_CLASS = org.dddml.suiinfinitesea.domain.SkillTypePlayerIdPair.class;
+    public static final Class ID_CLASS = org.dddml.suiinfinitesea.domain.SkillProcessId.class;
 
     public static final String[] propertyNames = new String[] {
             "itemId",
@@ -689,6 +689,7 @@ public class M {
             "deleted",
             "skillProcessId.skillType",
             "skillProcessId.playerId",
+            "skillProcessId.sequenceNumber",
     };
 
     public static final String[] propertyTypes = new String[] {
@@ -708,6 +709,7 @@ public class M {
             "Boolean",
             "Integer",
             "String",
+            "Integer",
     };
 
     public static final Map<String, String> propertyTypeMap;
@@ -754,6 +756,8 @@ public class M {
         aliasMap.put("SkillProcessId.SkillType", "skillProcessId.skillType");
         aliasMap.put("skillProcessId.playerId", "skillProcessId.playerId");
         aliasMap.put("SkillProcessId.PlayerId", "skillProcessId.playerId");
+        aliasMap.put("skillProcessId.sequenceNumber", "skillProcessId.sequenceNumber");
+        aliasMap.put("SkillProcessId.SequenceNumber", "skillProcessId.sequenceNumber");
     }
 
     private static void initPropertyTypeMap() {

@@ -112,6 +112,28 @@ public class DomainBeanUtils {
         return productionMaterials;
     }
 
+    public static org.dddml.suiinfinitesea.domain.SkillProcessId toSkillProcessId(SkillProcessId contractSkillProcessId) {
+        if (contractSkillProcessId == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.SkillProcessId skillProcessId = new org.dddml.suiinfinitesea.domain.SkillProcessId();
+        skillProcessId.setSkillType(contractSkillProcessId.getFields().getSkillType());
+        skillProcessId.setPlayerId(contractSkillProcessId.getFields().getPlayerId());
+        skillProcessId.setSequenceNumber(contractSkillProcessId.getFields().getSequenceNumber());
+        return skillProcessId;
+    }
+
+    public static org.dddml.suiinfinitesea.domain.SkillProcessId toSkillProcessId(SkillProcessIdForEvent contractSkillProcessId) {
+        if (contractSkillProcessId == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.SkillProcessId skillProcessId = new org.dddml.suiinfinitesea.domain.SkillProcessId();
+        skillProcessId.setSkillType(contractSkillProcessId.getSkillType());
+        skillProcessId.setPlayerId(contractSkillProcessId.getPlayerId());
+        skillProcessId.setSequenceNumber(contractSkillProcessId.getSequenceNumber());
+        return skillProcessId;
+    }
+
     public static org.dddml.suiinfinitesea.domain.SkillTypeItemIdPair toSkillTypeItemIdPair(SkillTypeItemIdPair contractSkillTypeItemIdPair) {
         if (contractSkillTypeItemIdPair == null) {
             return null;
@@ -395,7 +417,7 @@ public class DomainBeanUtils {
 
         AbstractSkillProcessEvent.SkillProcessCreated skillProcessCreated = new AbstractSkillProcessEvent.SkillProcessCreated();
         skillProcessCreated.setId_(contractEvent.getId());
-        skillProcessCreated.setSkillProcessId(DomainBeanUtils.toSkillTypePlayerIdPair(contractEvent.getSkillProcessId()));
+        skillProcessCreated.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
         skillProcessCreated.setVersion(BigInteger.valueOf(-1));
 
         skillProcessCreated.setSuiTimestamp(eventEnvelope.getTimestampMs());
@@ -414,7 +436,7 @@ public class DomainBeanUtils {
 
         AbstractSkillProcessEvent.ProductionProcessStarted productionProcessStarted = new AbstractSkillProcessEvent.ProductionProcessStarted();
         productionProcessStarted.setId_(contractEvent.getId());
-        productionProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillTypePlayerIdPair(contractEvent.getSkillProcessId()));
+        productionProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
         productionProcessStarted.setItemId(contractEvent.getItemId());
         productionProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
         productionProcessStarted.setStartedAt(contractEvent.getStartedAt());
@@ -438,7 +460,7 @@ public class DomainBeanUtils {
 
         AbstractSkillProcessEvent.ProductionProcessCompleted productionProcessCompleted = new AbstractSkillProcessEvent.ProductionProcessCompleted();
         productionProcessCompleted.setId_(contractEvent.getId());
-        productionProcessCompleted.setSkillProcessId(DomainBeanUtils.toSkillTypePlayerIdPair(contractEvent.getSkillProcessId()));
+        productionProcessCompleted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
         productionProcessCompleted.setItemId(contractEvent.getItemId());
         productionProcessCompleted.setStartedAt(contractEvent.getStartedAt());
         productionProcessCompleted.setCreationTime(contractEvent.getCreationTime());
