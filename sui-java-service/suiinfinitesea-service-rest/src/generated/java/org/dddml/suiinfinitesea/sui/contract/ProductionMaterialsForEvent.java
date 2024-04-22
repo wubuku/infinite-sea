@@ -14,13 +14,13 @@ import com.github.wubuku.sui.bean.*;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ProductionMaterialsForEvent {
-    private ProductionMaterialForEvent[] items;
+    private ItemIdQuantityPairForEvent[] items;
 
-    public ProductionMaterialForEvent[] getItems() {
+    public ItemIdQuantityPairForEvent[] getItems() {
         return items;
     }
 
-    public void setItems(ProductionMaterialForEvent[] items) {
+    public void setItems(ItemIdQuantityPairForEvent[] items) {
         this.items = items;
     }
 

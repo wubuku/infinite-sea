@@ -79,7 +79,7 @@ aggregates:
         isInternal: true
         parameters:
           Items:
-            itemType: ProductionMaterial
+            itemType: ItemIdQuantityPair
         event:
           name: PlayerItemsDeducted
 
@@ -90,7 +90,7 @@ aggregates:
             type: u32
             description: "Increased experience value"
           Items:
-            itemType: ProductionMaterial
+            itemType: ItemIdQuantityPair
           NewLevel:
             type: u16
         event:

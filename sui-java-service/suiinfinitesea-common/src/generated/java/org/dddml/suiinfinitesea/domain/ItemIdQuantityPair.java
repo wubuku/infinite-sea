@@ -8,7 +8,7 @@ package org.dddml.suiinfinitesea.domain;
 import java.io.Serializable;
 import org.dddml.suiinfinitesea.domain.*;
 
-public class ProductionMaterial implements Serializable {
+public class ItemIdQuantityPair implements Serializable {
     private Long itemId;
 
     public Long getItemId()
@@ -33,11 +33,11 @@ public class ProductionMaterial implements Serializable {
         this.quantity = quantity;
     }
 
-    public ProductionMaterial()
+    public ItemIdQuantityPair()
     {
     }
 
-    public ProductionMaterial(Long itemId, Long quantity)
+    public ItemIdQuantityPair(Long itemId, Long quantity)
     {
         this.itemId = itemId;
         this.quantity = quantity;
@@ -53,7 +53,7 @@ public class ProductionMaterial implements Serializable {
             return false;
         }
 
-        ProductionMaterial other = (ProductionMaterial)obj;
+        ItemIdQuantityPair other = (ItemIdQuantityPair)obj;
         return true 
             && (itemId == other.itemId || (itemId != null && itemId.equals(other.itemId)))
             && (quantity == other.quantity || (quantity != null && quantity.equals(other.quantity)))
@@ -75,7 +75,7 @@ public class ProductionMaterial implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductionMaterial{" +
+        return "ItemIdQuantityPair{" +
                 "itemId=" + itemId +
                 ", quantity=" + quantity +
                 '}';

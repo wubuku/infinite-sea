@@ -5,7 +5,7 @@ module infinite_sea::skill_process_complete_production_logic {
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_production::{Self, ItemProduction};
-    use infinite_sea_common::production_material;
+    use infinite_sea_common::item_id_quantity_pair;
 
     use infinite_sea::experience_table_util;
     use infinite_sea::player::Player;
@@ -81,7 +81,7 @@ module infinite_sea::skill_process_complete_production_logic {
         skill_process::set_ended_at(skill_process, ended_at);
 
         if (successful) {
-            let items = vector[production_material::new(item_id, quantity)];
+            let items = vector[item_id_quantity_pair::new(item_id, quantity)];
             player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
         };
     }

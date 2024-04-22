@@ -16,14 +16,14 @@ public class ProductionMaterials extends MoveStruct<ProductionMaterials.Producti
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ProductionMaterialsFields {
-        private ProductionMaterial[] items;
+        private ItemIdQuantityPair[] items;
 
 
-        public ProductionMaterial[] getItems() {
+        public ItemIdQuantityPair[] getItems() {
             return items;
         }
 
-        public void setItems(ProductionMaterial[] items) {
+        public void setItems(ItemIdQuantityPair[] items) {
             this.items = items;
         }
 

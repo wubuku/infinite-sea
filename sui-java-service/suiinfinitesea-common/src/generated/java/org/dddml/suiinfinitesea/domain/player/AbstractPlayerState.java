@@ -383,8 +383,8 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
     public void when(AbstractPlayerEvent.PlayerItemsDeducted e) {
         throwOnWrongEvent(e);
 
-        ProductionMaterial[] items = e.getItems();
-        ProductionMaterial[] Items = items;
+        ItemIdQuantityPair[] items = e.getItems();
+        ItemIdQuantityPair[] Items = items;
         Long suiTimestamp = e.getSuiTimestamp();
         Long SuiTimestamp = suiTimestamp;
         String suiTxDigest = e.getSuiTxDigest();
@@ -414,14 +414,14 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
         PlayerState updatedPlayerState = (PlayerState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.player.DeductItemsLogic",
                     "mutate",
-                    new Class[]{PlayerState.class, ProductionMaterial[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{PlayerState.class, ItemIdQuantityPair[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new Object[]{this, items, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.player;
 //
 //public class DeductItemsLogic {
-//    public static PlayerState mutate(PlayerState playerState, ProductionMaterial[] items, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
+//    public static PlayerState mutate(PlayerState playerState, ItemIdQuantityPair[] items, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
 //    }
 //}
 
@@ -434,8 +434,8 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
 
         Long experience = e.getExperience();
         Long Experience = experience;
-        ProductionMaterial[] items = e.getItems();
-        ProductionMaterial[] Items = items;
+        ItemIdQuantityPair[] items = e.getItems();
+        ItemIdQuantityPair[] Items = items;
         Integer newLevel = e.getNewLevel();
         Integer NewLevel = newLevel;
         Long suiTimestamp = e.getSuiTimestamp();
@@ -467,14 +467,14 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
         PlayerState updatedPlayerState = (PlayerState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.player.IncreaseExperienceAndItemsLogic",
                     "mutate",
-                    new Class[]{PlayerState.class, Long.class, ProductionMaterial[].class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{PlayerState.class, Long.class, ItemIdQuantityPair[].class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new Object[]{this, experience, items, newLevel, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.player;
 //
 //public class IncreaseExperienceAndItemsLogic {
-//    public static PlayerState mutate(PlayerState playerState, Long experience, ProductionMaterial[] items, Integer newLevel, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
+//    public static PlayerState mutate(PlayerState playerState, Long experience, ItemIdQuantityPair[] items, Integer newLevel, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
 //    }
 //}
 

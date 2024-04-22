@@ -12,10 +12,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.wubuku.sui.bean.*;
 
-public class ProductionMaterial extends MoveStruct<ProductionMaterial.ProductionMaterialFields> {
+public class ItemIdQuantityPair extends MoveStruct<ItemIdQuantityPair.ItemIdQuantityPairFields> {
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class ProductionMaterialFields {
+    public static class ItemIdQuantityPairFields {
         private Long itemId;
 
         private Long quantity;
@@ -39,7 +39,7 @@ public class ProductionMaterial extends MoveStruct<ProductionMaterial.Production
 
         @Override
         public String toString() {
-            return "ProductionMaterialFields{" +
+            return "ItemIdQuantityPairFields{" +
                     "itemId=" + itemId +
                     ", quantity=" + quantity +
                     '}';

@@ -5,7 +5,7 @@
 
 module infinite_sea::player {
     use infinite_sea::player_item::{Self, PlayerItem};
-    use infinite_sea_common::production_material::ProductionMaterial;
+    use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
     use std::option;
     use sui::event;
     use sui::object::{Self, UID};
@@ -24,6 +24,7 @@ module infinite_sea::player {
     const EIdAlreadyExists: u64 = 101;
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
+    #[allow(unused_const)]
     const EInappropriateVersion: u64 = 103;
     const EEmptyObjectID: u64 = 107;
     const EIdNotFound: u64 = 111;
@@ -176,20 +177,20 @@ module infinite_sea::player {
     struct PlayerItemsDeducted has copy, drop {
         id: object::ID,
         version: u64,
-        items: vector<ProductionMaterial>,
+        items: vector<ItemIdQuantityPair>,
     }
 
     public fun player_items_deducted_id(player_items_deducted: &PlayerItemsDeducted): object::ID {
         player_items_deducted.id
     }
 
-    public fun player_items_deducted_items(player_items_deducted: &PlayerItemsDeducted): vector<ProductionMaterial> {
+    public fun player_items_deducted_items(player_items_deducted: &PlayerItemsDeducted): vector<ItemIdQuantityPair> {
         player_items_deducted.items
     }
 
     public(friend) fun new_player_items_deducted(
         player: &Player,
-        items: vector<ProductionMaterial>,
+        items: vector<ItemIdQuantityPair>,
     ): PlayerItemsDeducted {
         PlayerItemsDeducted {
             id: id(player),
@@ -202,7 +203,7 @@ module infinite_sea::player {
         id: object::ID,
         version: u64,
         experience: u32,
-        items: vector<ProductionMaterial>,
+        items: vector<ItemIdQuantityPair>,
         new_level: u16,
     }
 
@@ -214,7 +215,7 @@ module infinite_sea::player {
         player_experience_and_items_increased.experience
     }
 
-    public fun player_experience_and_items_increased_items(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): vector<ProductionMaterial> {
+    public fun player_experience_and_items_increased_items(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): vector<ItemIdQuantityPair> {
         player_experience_and_items_increased.items
     }
 
@@ -225,7 +226,7 @@ module infinite_sea::player {
     public(friend) fun new_player_experience_and_items_increased(
         player: &Player,
         experience: u32,
-        items: vector<ProductionMaterial>,
+        items: vector<ItemIdQuantityPair>,
         new_level: u16,
     ): PlayerExperienceAndItemsIncreased {
         PlayerExperienceAndItemsIncreased {

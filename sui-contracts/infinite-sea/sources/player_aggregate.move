@@ -10,7 +10,7 @@ module infinite_sea::player_aggregate {
     use infinite_sea::player_create_logic;
     use infinite_sea::player_deduct_items_logic;
     use infinite_sea::player_increase_experience_and_items_logic;
-    use infinite_sea_common::production_material::{Self, ProductionMaterial};
+    use infinite_sea_common::item_id_quantity_pair::{Self, ItemIdQuantityPair};
     use sui::tx_context;
 
     friend infinite_sea::skill_process_start_production_logic;
@@ -61,7 +61,7 @@ module infinite_sea::player_aggregate {
 
     public(friend) fun deduct_items(
         player: &mut player::Player,
-        items: vector<ProductionMaterial>,
+        items: vector<ItemIdQuantityPair>,
         ctx: &mut tx_context::TxContext,
     ) {
         let player_items_deducted = player_deduct_items_logic::verify(
@@ -81,7 +81,7 @@ module infinite_sea::player_aggregate {
     public(friend) fun increase_experience_and_items(
         player: &mut player::Player,
         experience: u32,
-        items: vector<ProductionMaterial>,
+        items: vector<ItemIdQuantityPair>,
         new_level: u16,
         ctx: &mut tx_context::TxContext,
     ) {

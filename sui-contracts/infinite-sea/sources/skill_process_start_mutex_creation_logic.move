@@ -6,7 +6,7 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::item_creation::{Self, ItemCreation};
     use infinite_sea_common::item_id;
-    use infinite_sea_common::production_material;
+    use infinite_sea_common::item_id_quantity_pair;
     use infinite_sea_common::skill_type_player_id_pair;
 
     use infinite_sea::player::{Self, Player};
@@ -92,7 +92,7 @@ module infinite_sea::skill_process_start_mutex_creation_logic {
         let energy_vault = skill_process::borrow_mut_energy_vault(skill_process);
         balance::join(energy_vault, energy);
 
-        let required_resource_items = vector[production_material::new(resource_type, resource_cost)];
+        let required_resource_items = vector[item_id_quantity_pair::new(resource_type, resource_cost)];
 
         player_aggregate::deduct_items(player, required_resource_items, ctx);
     }

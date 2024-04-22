@@ -9,13 +9,13 @@ import java.io.Serializable;
 import org.dddml.suiinfinitesea.domain.*;
 
 public class ProductionMaterials implements Serializable {
-    private java.util.List<ProductionMaterial> items;
+    private java.util.List<ItemIdQuantityPair> items;
 
-    public java.util.List<ProductionMaterial> getItems() {
+    public java.util.List<ItemIdQuantityPair> getItems() {
         return this.items;
     }
 
-    public void setItems(java.util.List<ProductionMaterial> items) {
+    public void setItems(java.util.List<ItemIdQuantityPair> items) {
         this.items = items;
     }
 
@@ -23,7 +23,7 @@ public class ProductionMaterials implements Serializable {
     {
     }
 
-    public ProductionMaterials(java.util.List<ProductionMaterial> items)
+    public ProductionMaterials(java.util.List<ItemIdQuantityPair> items)
     {
         this.items = items;
     }

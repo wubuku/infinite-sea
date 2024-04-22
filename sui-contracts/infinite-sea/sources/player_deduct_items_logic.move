@@ -3,8 +3,8 @@ module infinite_sea::player_deduct_items_logic {
     use std::vector;
 
     use sui::tx_context::TxContext;
-    use infinite_sea_common::production_material;
-    use infinite_sea_common::production_material::ProductionMaterial;
+    use infinite_sea_common::item_id_quantity_pair;
+    use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
 
     use infinite_sea::player;
     use infinite_sea::player_item::Self;
@@ -15,7 +15,7 @@ module infinite_sea::player_deduct_items_logic {
     const EInsufficientItemQuantity: u64 = 11;
 
     public(friend) fun verify(
-        items: vector<ProductionMaterial>,
+        items: vector<ItemIdQuantityPair>,
         player: &player::Player,
         ctx: &TxContext,
     ): player::PlayerItemsDeducted {
@@ -36,8 +36,8 @@ module infinite_sea::player_deduct_items_logic {
         let l = vector::length(&items);
         while (i < l) {
             let item = vector::borrow(&items, i);
-            let item_id = production_material::item_id(item);
-            let quantity = production_material::quantity(item);
+            let item_id = item_id_quantity_pair::item_id(item);
+            let quantity = item_id_quantity_pair::quantity(item);
             assert!(player::items_contains(player, item_id), EPalyerHasNoSuchItem);
             let player_item = player::borrow_mut_item(player, item_id);
             let old_quantity = player_item::quantity(player_item);

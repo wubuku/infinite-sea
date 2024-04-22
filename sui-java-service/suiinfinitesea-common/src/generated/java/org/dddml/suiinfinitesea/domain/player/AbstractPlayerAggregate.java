@@ -73,7 +73,7 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void deductItems(ProductionMaterial[] items, Long offChainVersion, String commandId, String requesterId, PlayerCommands.DeductItems c) {
+        public void deductItems(ItemIdQuantityPair[] items, Long offChainVersion, String commandId, String requesterId, PlayerCommands.DeductItems c) {
             java.util.function.Supplier<PlayerEvent.PlayerItemsDeducted> eventFactory = () -> newPlayerItemsDeducted(items, offChainVersion, commandId, requesterId);
             PlayerEvent.PlayerItemsDeducted e;
             try {
@@ -86,7 +86,7 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void increaseExperienceAndItems(Long experience, ProductionMaterial[] items, Integer newLevel, Long offChainVersion, String commandId, String requesterId, PlayerCommands.IncreaseExperienceAndItems c) {
+        public void increaseExperienceAndItems(Long experience, ItemIdQuantityPair[] items, Integer newLevel, Long offChainVersion, String commandId, String requesterId, PlayerCommands.IncreaseExperienceAndItems c) {
             java.util.function.Supplier<PlayerEvent.PlayerExperienceAndItemsIncreased> eventFactory = () -> newPlayerExperienceAndItemsIncreased(experience, items, newLevel, offChainVersion, commandId, requesterId);
             PlayerEvent.PlayerExperienceAndItemsIncreased e;
             try {
@@ -140,20 +140,20 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
            
 
-        protected PlayerEvent.PlayerItemsDeducted verifyDeductItems(java.util.function.Supplier<PlayerEvent.PlayerItemsDeducted> eventFactory, ProductionMaterial[] items, PlayerCommands.DeductItems c) {
-            ProductionMaterial[] Items = items;
+        protected PlayerEvent.PlayerItemsDeducted verifyDeductItems(java.util.function.Supplier<PlayerEvent.PlayerItemsDeducted> eventFactory, ItemIdQuantityPair[] items, PlayerCommands.DeductItems c) {
+            ItemIdQuantityPair[] Items = items;
 
             PlayerEvent.PlayerItemsDeducted e = (PlayerEvent.PlayerItemsDeducted) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.player.DeductItemsLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, ProductionMaterial[].class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, ItemIdQuantityPair[].class, VerificationContext.class},
                     new Object[]{eventFactory, getState(), items, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.player;
 //
 //public class DeductItemsLogic {
-//    public static PlayerEvent.PlayerItemsDeducted verify(java.util.function.Supplier<PlayerEvent.PlayerItemsDeducted> eventFactory, PlayerState playerState, ProductionMaterial[] items, VerificationContext verificationContext) {
+//    public static PlayerEvent.PlayerItemsDeducted verify(java.util.function.Supplier<PlayerEvent.PlayerItemsDeducted> eventFactory, PlayerState playerState, ItemIdQuantityPair[] items, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -161,22 +161,22 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
            
 
-        protected PlayerEvent.PlayerExperienceAndItemsIncreased verifyIncreaseExperienceAndItems(java.util.function.Supplier<PlayerEvent.PlayerExperienceAndItemsIncreased> eventFactory, Long experience, ProductionMaterial[] items, Integer newLevel, PlayerCommands.IncreaseExperienceAndItems c) {
+        protected PlayerEvent.PlayerExperienceAndItemsIncreased verifyIncreaseExperienceAndItems(java.util.function.Supplier<PlayerEvent.PlayerExperienceAndItemsIncreased> eventFactory, Long experience, ItemIdQuantityPair[] items, Integer newLevel, PlayerCommands.IncreaseExperienceAndItems c) {
             Long Experience = experience;
-            ProductionMaterial[] Items = items;
+            ItemIdQuantityPair[] Items = items;
             Integer NewLevel = newLevel;
 
             PlayerEvent.PlayerExperienceAndItemsIncreased e = (PlayerEvent.PlayerExperienceAndItemsIncreased) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.player.IncreaseExperienceAndItemsLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, Long.class, ProductionMaterial[].class, Integer.class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, Long.class, ItemIdQuantityPair[].class, Integer.class, VerificationContext.class},
                     new Object[]{eventFactory, getState(), experience, items, newLevel, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.player;
 //
 //public class IncreaseExperienceAndItemsLogic {
-//    public static PlayerEvent.PlayerExperienceAndItemsIncreased verify(java.util.function.Supplier<PlayerEvent.PlayerExperienceAndItemsIncreased> eventFactory, PlayerState playerState, Long experience, ProductionMaterial[] items, Integer newLevel, VerificationContext verificationContext) {
+//    public static PlayerEvent.PlayerExperienceAndItemsIncreased verify(java.util.function.Supplier<PlayerEvent.PlayerExperienceAndItemsIncreased> eventFactory, PlayerState playerState, Long experience, ItemIdQuantityPair[] items, Integer newLevel, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -229,7 +229,7 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             return e;
         }
 
-        protected AbstractPlayerEvent.PlayerItemsDeducted newPlayerItemsDeducted(ProductionMaterial[] items, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractPlayerEvent.PlayerItemsDeducted newPlayerItemsDeducted(ItemIdQuantityPair[] items, Long offChainVersion, String commandId, String requesterId) {
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.PlayerItemsDeducted e = new AbstractPlayerEvent.PlayerItemsDeducted();
 
@@ -251,7 +251,7 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             return e;
         }
 
-        protected AbstractPlayerEvent.PlayerExperienceAndItemsIncreased newPlayerExperienceAndItemsIncreased(Long experience, ProductionMaterial[] items, Integer newLevel, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractPlayerEvent.PlayerExperienceAndItemsIncreased newPlayerExperienceAndItemsIncreased(Long experience, ItemIdQuantityPair[] items, Integer newLevel, Long offChainVersion, String commandId, String requesterId) {
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.PlayerExperienceAndItemsIncreased e = new AbstractPlayerEvent.PlayerExperienceAndItemsIncreased();
 

@@ -70,6 +70,26 @@ public class DomainBeanUtils {
         return experienceLevel;
     }
 
+    public static org.dddml.suiinfinitesea.domain.ItemIdQuantityPair toItemIdQuantityPair(ItemIdQuantityPair contractItemIdQuantityPair) {
+        if (contractItemIdQuantityPair == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.ItemIdQuantityPair itemIdQuantityPair = new org.dddml.suiinfinitesea.domain.ItemIdQuantityPair();
+        itemIdQuantityPair.setItemId(contractItemIdQuantityPair.getFields().getItemId());
+        itemIdQuantityPair.setQuantity(contractItemIdQuantityPair.getFields().getQuantity());
+        return itemIdQuantityPair;
+    }
+
+    public static org.dddml.suiinfinitesea.domain.ItemIdQuantityPair toItemIdQuantityPair(ItemIdQuantityPairForEvent contractItemIdQuantityPair) {
+        if (contractItemIdQuantityPair == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.ItemIdQuantityPair itemIdQuantityPair = new org.dddml.suiinfinitesea.domain.ItemIdQuantityPair();
+        itemIdQuantityPair.setItemId(contractItemIdQuantityPair.getItemId());
+        itemIdQuantityPair.setQuantity(contractItemIdQuantityPair.getQuantity());
+        return itemIdQuantityPair;
+    }
+
     public static org.dddml.suiinfinitesea.domain.ObjectTable toObjectTable(ObjectTable contractObjectTable) {
         if (contractObjectTable == null) {
             return null;
@@ -80,32 +100,12 @@ public class DomainBeanUtils {
         return objectTable;
     }
 
-    public static org.dddml.suiinfinitesea.domain.ProductionMaterial toProductionMaterial(ProductionMaterial contractProductionMaterial) {
-        if (contractProductionMaterial == null) {
-            return null;
-        }
-        org.dddml.suiinfinitesea.domain.ProductionMaterial productionMaterial = new org.dddml.suiinfinitesea.domain.ProductionMaterial();
-        productionMaterial.setItemId(contractProductionMaterial.getFields().getItemId());
-        productionMaterial.setQuantity(contractProductionMaterial.getFields().getQuantity());
-        return productionMaterial;
-    }
-
-    public static org.dddml.suiinfinitesea.domain.ProductionMaterial toProductionMaterial(ProductionMaterialForEvent contractProductionMaterial) {
-        if (contractProductionMaterial == null) {
-            return null;
-        }
-        org.dddml.suiinfinitesea.domain.ProductionMaterial productionMaterial = new org.dddml.suiinfinitesea.domain.ProductionMaterial();
-        productionMaterial.setItemId(contractProductionMaterial.getItemId());
-        productionMaterial.setQuantity(contractProductionMaterial.getQuantity());
-        return productionMaterial;
-    }
-
     public static org.dddml.suiinfinitesea.domain.ProductionMaterials toProductionMaterials(ProductionMaterials contractProductionMaterials) {
         if (contractProductionMaterials == null) {
             return null;
         }
         org.dddml.suiinfinitesea.domain.ProductionMaterials productionMaterials = new org.dddml.suiinfinitesea.domain.ProductionMaterials();
-        productionMaterials.setItems(java.util.Arrays.stream(contractProductionMaterials.getFields().getItems()).map(x -> DomainBeanUtils.toProductionMaterial(x)).collect(java.util.stream.Collectors.toList()));
+        productionMaterials.setItems(java.util.Arrays.stream(contractProductionMaterials.getFields().getItems()).map(x -> DomainBeanUtils.toItemIdQuantityPair(x)).collect(java.util.stream.Collectors.toList()));
         return productionMaterials;
     }
 
@@ -114,7 +114,7 @@ public class DomainBeanUtils {
             return null;
         }
         org.dddml.suiinfinitesea.domain.ProductionMaterials productionMaterials = new org.dddml.suiinfinitesea.domain.ProductionMaterials();
-        productionMaterials.setItems(java.util.Arrays.stream(contractProductionMaterials.getItems()).map(x -> DomainBeanUtils.toProductionMaterial(x)).collect(java.util.stream.Collectors.toList()));
+        productionMaterials.setItems(java.util.Arrays.stream(contractProductionMaterials.getItems()).map(x -> DomainBeanUtils.toItemIdQuantityPair(x)).collect(java.util.stream.Collectors.toList()));
         return productionMaterials;
     }
 
@@ -361,7 +361,7 @@ public class DomainBeanUtils {
 
         AbstractPlayerEvent.PlayerItemsDeducted playerItemsDeducted = new AbstractPlayerEvent.PlayerItemsDeducted();
         playerItemsDeducted.setId(contractEvent.getId());
-        playerItemsDeducted.setItems(java.util.Arrays.stream(contractEvent.getItems()).map(DomainBeanUtils::toProductionMaterial).toArray(org.dddml.suiinfinitesea.domain.ProductionMaterial[]::new));
+        playerItemsDeducted.setItems(java.util.Arrays.stream(contractEvent.getItems()).map(DomainBeanUtils::toItemIdQuantityPair).toArray(org.dddml.suiinfinitesea.domain.ItemIdQuantityPair[]::new));
         playerItemsDeducted.setVersion(contractEvent.getVersion());
 
         playerItemsDeducted.setSuiTimestamp(eventEnvelope.getTimestampMs());
@@ -381,7 +381,7 @@ public class DomainBeanUtils {
         AbstractPlayerEvent.PlayerExperienceAndItemsIncreased playerExperienceAndItemsIncreased = new AbstractPlayerEvent.PlayerExperienceAndItemsIncreased();
         playerExperienceAndItemsIncreased.setId(contractEvent.getId());
         playerExperienceAndItemsIncreased.setExperience(contractEvent.getExperience());
-        playerExperienceAndItemsIncreased.setItems(java.util.Arrays.stream(contractEvent.getItems()).map(DomainBeanUtils::toProductionMaterial).toArray(org.dddml.suiinfinitesea.domain.ProductionMaterial[]::new));
+        playerExperienceAndItemsIncreased.setItems(java.util.Arrays.stream(contractEvent.getItems()).map(DomainBeanUtils::toItemIdQuantityPair).toArray(org.dddml.suiinfinitesea.domain.ItemIdQuantityPair[]::new));
         playerExperienceAndItemsIncreased.setNewLevel(contractEvent.getNewLevel());
         playerExperienceAndItemsIncreased.setVersion(contractEvent.getVersion());
 

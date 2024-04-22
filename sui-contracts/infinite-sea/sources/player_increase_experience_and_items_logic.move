@@ -3,8 +3,8 @@ module infinite_sea::player_increase_experience_and_items_logic {
     use std::vector;
 
     use sui::tx_context::TxContext;
-    use infinite_sea_common::production_material;
-    use infinite_sea_common::production_material::ProductionMaterial;
+    use infinite_sea_common::item_id_quantity_pair;
+    use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
 
     use infinite_sea::player;
     use infinite_sea::player_item::Self;
@@ -13,7 +13,7 @@ module infinite_sea::player_increase_experience_and_items_logic {
 
     public(friend) fun verify(
         experience: u32,
-        items: vector<ProductionMaterial>,
+        items: vector<ItemIdQuantityPair>,
         new_level: u16,
         player: &player::Player,
         ctx: &TxContext,
@@ -42,8 +42,8 @@ module infinite_sea::player_increase_experience_and_items_logic {
         let l = vector::length(&items);
         while (i < l) {
             let item = vector::borrow(&items, i);
-            let item_id = production_material::item_id(item);
-            let quantity = production_material::quantity(item);
+            let item_id = item_id_quantity_pair::item_id(item);
+            let quantity = item_id_quantity_pair::quantity(item);
             increase_player_item_quantity(player, item_id, quantity);
             i = i + 1;
         };

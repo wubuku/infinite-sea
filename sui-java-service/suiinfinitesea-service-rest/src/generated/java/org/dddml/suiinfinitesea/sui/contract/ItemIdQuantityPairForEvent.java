@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.github.wubuku.sui.bean.*;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ProductionMaterialForEvent {
+public class ItemIdQuantityPairForEvent {
     private Long itemId;
 
     private Long quantity;
@@ -36,7 +36,7 @@ public class ProductionMaterialForEvent {
 
     @Override
     public String toString() {
-        return "ProductionMaterialFields{" +
+        return "ItemIdQuantityPairFields{" +
                 "itemId=" + itemId +
                 ", quantity=" + quantity +
             '}';

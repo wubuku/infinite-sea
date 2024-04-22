@@ -90,7 +90,7 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.player.DeductItemsLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, ProductionMaterial[].class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, ItemIdQuantityPair[].class, VerificationContext.class},
                     new String[]{"_", "_", "items"}
             );
 
@@ -98,7 +98,7 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.player.IncreaseExperienceAndItemsLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, Long.class, ProductionMaterial[].class, Integer.class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, Long.class, ItemIdQuantityPair[].class, Integer.class, VerificationContext.class},
                     new String[]{"_", "_", "experience", "items", "newLevel"}
             );
 
@@ -258,7 +258,7 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.player.DeductItemsLogic",
                     "mutate",
-                    new Class[]{PlayerState.class, ProductionMaterial[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{PlayerState.class, ItemIdQuantityPair[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "items", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
             );
 
@@ -266,7 +266,7 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.player.IncreaseExperienceAndItemsLogic",
                     "mutate",
-                    new Class[]{PlayerState.class, Long.class, ProductionMaterial[].class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{PlayerState.class, Long.class, ItemIdQuantityPair[].class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "experience", "items", "newLevel", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
             );
 

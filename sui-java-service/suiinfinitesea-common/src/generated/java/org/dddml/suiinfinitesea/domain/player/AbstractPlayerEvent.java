@@ -299,15 +299,15 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
             return "PlayerItemsDeducted";
         }
 
-        public ProductionMaterial[] getItems() {
+        public ItemIdQuantityPair[] getItems() {
             Object val = getDynamicProperties().get("items");
-            if (val instanceof ProductionMaterial[]) {
-                return (ProductionMaterial[]) val;
+            if (val instanceof ItemIdQuantityPair[]) {
+                return (ItemIdQuantityPair[]) val;
             }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, ProductionMaterial[].class);
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPair[].class);
         }
 
-        public void setItems(ProductionMaterial[] value) {
+        public void setItems(ItemIdQuantityPair[] value) {
             getDynamicProperties().put("items", value);
         }
 
@@ -332,15 +332,15 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
             getDynamicProperties().put("experience", value);
         }
 
-        public ProductionMaterial[] getItems() {
+        public ItemIdQuantityPair[] getItems() {
             Object val = getDynamicProperties().get("items");
-            if (val instanceof ProductionMaterial[]) {
-                return (ProductionMaterial[]) val;
+            if (val instanceof ItemIdQuantityPair[]) {
+                return (ItemIdQuantityPair[]) val;
             }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, ProductionMaterial[].class);
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPair[].class);
         }
 
-        public void setItems(ProductionMaterial[] value) {
+        public void setItems(ItemIdQuantityPair[] value) {
             getDynamicProperties().put("items", value);
         }
 

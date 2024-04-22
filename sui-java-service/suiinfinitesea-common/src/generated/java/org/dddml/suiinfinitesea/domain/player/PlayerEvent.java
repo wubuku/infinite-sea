@@ -40,9 +40,9 @@ public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasS
     }
 
     interface PlayerItemsDeducted extends PlayerEvent {
-        ProductionMaterial[] getItems();
+        ItemIdQuantityPair[] getItems();
 
-        void setItems(ProductionMaterial[] value);
+        void setItems(ItemIdQuantityPair[] value);
 
     }
 
@@ -51,9 +51,9 @@ public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasS
 
         void setExperience(Long value);
 
-        ProductionMaterial[] getItems();
+        ItemIdQuantityPair[] getItems();
 
-        void setItems(ProductionMaterial[] value);
+        void setItems(ItemIdQuantityPair[] value);
 
         Integer getNewLevel();
 

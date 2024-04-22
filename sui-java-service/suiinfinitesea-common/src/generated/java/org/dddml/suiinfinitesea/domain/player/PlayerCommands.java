@@ -142,13 +142,13 @@ public class PlayerCommands {
         /**
          * Items
          */
-        private ProductionMaterial[] items;
+        private ItemIdQuantityPair[] items;
 
-        public ProductionMaterial[] getItems() {
+        public ItemIdQuantityPair[] getItems() {
             return this.items;
         }
 
-        public void setItems(ProductionMaterial[] items) {
+        public void setItems(ItemIdQuantityPair[] items) {
             this.items = items;
         }
 
@@ -206,13 +206,13 @@ public class PlayerCommands {
         /**
          * Items
          */
-        private ProductionMaterial[] items;
+        private ItemIdQuantityPair[] items;
 
-        public ProductionMaterial[] getItems() {
+        public ItemIdQuantityPair[] getItems() {
             return this.items;
         }
 
-        public void setItems(ProductionMaterial[] items) {
+        public void setItems(ItemIdQuantityPair[] items) {
             this.items = items;
         }
 

@@ -169,7 +169,7 @@ valueObjects:
     hibernateMappingType: JsonObject
     properties:
       Items:
-        itemType: ProductionMaterial
+        itemType: ItemIdQuantityPair
         isList: true
     methods:
       New:
@@ -200,13 +200,13 @@ valueObjects:
                         let item_quantity = *std::vector::borrow(&item_quantity_list, i);
                         std::vector::push_back(
                             &mut items,
-                            infinite_sea_common::production_material::new(item_id, item_quantity)
+                            infinite_sea_common::item_id_quantity_pair::new(item_id, item_quantity)
                         );
                         i = i + 1;
                     };
                     {_INSTANTIATE_STRUCT_}
 
-  ProductionMaterial:
+  ItemIdQuantityPair:
     module: "Common"
     properties:
       ItemId:

@@ -18,6 +18,7 @@ module infinite_sea_common::experience_table {
 
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
+    #[allow(unused_const)]
     const EInappropriateVersion: u64 = 103;
 
     fun init(otw: EXPERIENCE_TABLE, ctx: &mut TxContext) {

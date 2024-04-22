@@ -21,9 +21,9 @@ public interface PlayerAggregate {
 
     void airdrop(Long itemId, Long quantity, Long offChainVersion, String commandId, String requesterId, PlayerCommands.Airdrop c);
 
-    void deductItems(ProductionMaterial[] items, Long offChainVersion, String commandId, String requesterId, PlayerCommands.DeductItems c);
+    void deductItems(ItemIdQuantityPair[] items, Long offChainVersion, String commandId, String requesterId, PlayerCommands.DeductItems c);
 
-    void increaseExperienceAndItems(Long experience, ProductionMaterial[] items, Integer newLevel, Long offChainVersion, String commandId, String requesterId, PlayerCommands.IncreaseExperienceAndItems c);
+    void increaseExperienceAndItems(Long experience, ItemIdQuantityPair[] items, Integer newLevel, Long offChainVersion, String commandId, String requesterId, PlayerCommands.IncreaseExperienceAndItems c);
 
     void throwOnInvalidStateTransition(Command c);
 }
