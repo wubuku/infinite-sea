@@ -17,6 +17,8 @@ import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.SkillProcessCreated;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessStarted;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessCompleted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.CreationProcessStarted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.CreationProcessCompleted;
 import org.dddml.suiinfinitesea.sui.contract.repository.SkillProcessEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +161,86 @@ public class SkillProcessEventService {
             return;
         }
         skillProcessEventRepository.save(productionProcessCompleted);
+    }
+
+    @Transactional
+    public void pullCreationProcessStartedEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getCreationProcessStartedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<CreationProcessStarted> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SKILL_PROCESS_MODULE_CREATION_PROCESS_STARTED,
+                    cursor, limit, false, CreationProcessStarted.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<CreationProcessStarted> eventEnvelope : eventPage.getData()) {
+                    saveCreationProcessStarted(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getCreationProcessStartedEventNextCursor() {
+        AbstractSkillProcessEvent lastEvent = skillProcessEventRepository.findFirstCreationProcessStartedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveCreationProcessStarted(SuiMoveEventEnvelope<CreationProcessStarted> eventEnvelope) {
+        AbstractSkillProcessEvent.CreationProcessStarted creationProcessStarted = DomainBeanUtils.toCreationProcessStarted(eventEnvelope);
+        if (skillProcessEventRepository.findById(creationProcessStarted.getSkillProcessEventId()).isPresent()) {
+            return;
+        }
+        skillProcessEventRepository.save(creationProcessStarted);
+    }
+
+    @Transactional
+    public void pullCreationProcessCompletedEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getCreationProcessCompletedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<CreationProcessCompleted> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SKILL_PROCESS_MODULE_CREATION_PROCESS_COMPLETED,
+                    cursor, limit, false, CreationProcessCompleted.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<CreationProcessCompleted> eventEnvelope : eventPage.getData()) {
+                    saveCreationProcessCompleted(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getCreationProcessCompletedEventNextCursor() {
+        AbstractSkillProcessEvent lastEvent = skillProcessEventRepository.findFirstCreationProcessCompletedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveCreationProcessCompleted(SuiMoveEventEnvelope<CreationProcessCompleted> eventEnvelope) {
+        AbstractSkillProcessEvent.CreationProcessCompleted creationProcessCompleted = DomainBeanUtils.toCreationProcessCompleted(eventEnvelope);
+        if (skillProcessEventRepository.findById(creationProcessCompleted.getSkillProcessEventId()).isPresent()) {
+            return;
+        }
+        skillProcessEventRepository.save(creationProcessCompleted);
     }
 
 

@@ -6,11 +6,14 @@
 module infinite_sea::skill_process_aggregate {
     use infinite_sea::player::Player;
     use infinite_sea::skill_process;
+    use infinite_sea::skill_process_complete_creation_logic;
     use infinite_sea::skill_process_complete_production_logic;
     use infinite_sea::skill_process_create_logic;
+    use infinite_sea::skill_process_start_creation_logic;
     use infinite_sea::skill_process_start_production_logic;
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::experience_table::ExperienceTable;
+    use infinite_sea_common::item_creation::ItemCreation;
     use infinite_sea_common::item_production::ItemProduction;
     use infinite_sea_common::skill_process_id::{Self, SkillProcessId};
     use sui::balance::Balance;
@@ -101,6 +104,59 @@ module infinite_sea::skill_process_aggregate {
         );
         skill_process::update_object_version(skill_process);
         skill_process::emit_production_process_completed(production_process_completed);
+    }
+
+    public fun start_creation(
+        skill_process: &mut skill_process::SkillProcess,
+        player: &mut Player,
+        item_creation: &ItemCreation,
+        clock: &Clock,
+        energy: Balance<ENERGY>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let creation_process_started = skill_process_start_creation_logic::verify(
+            player,
+            item_creation,
+            clock,
+            &energy,
+            skill_process,
+            ctx,
+        );
+        skill_process_start_creation_logic::mutate(
+            &creation_process_started,
+            energy,
+            player,
+            skill_process,
+            ctx,
+        );
+        skill_process::update_object_version(skill_process);
+        skill_process::emit_creation_process_started(creation_process_started);
+    }
+
+    public entry fun complete_creation(
+        skill_process: &mut skill_process::SkillProcess,
+        player: &mut Player,
+        item_creation: &ItemCreation,
+        experience_table: &ExperienceTable,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let creation_process_completed = skill_process_complete_creation_logic::verify(
+            player,
+            item_creation,
+            experience_table,
+            clock,
+            skill_process,
+            ctx,
+        );
+        skill_process_complete_creation_logic::mutate(
+            &creation_process_completed,
+            player,
+            skill_process,
+            ctx,
+        );
+        skill_process::update_object_version(skill_process);
+        skill_process::emit_creation_process_completed(creation_process_completed);
     }
 
 }

@@ -16,10 +16,10 @@ public class SuiCliCheatsheetConstants {
 
     static {
         Map<String, String> map = new HashMap<>();
+        map.put(ContractConstants.SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE, "_SKILL_PROCESS_SKILL_PROCESS_TABLE_OBJECT_ID_");
         map.put(ContractConstants.ITEM_MODULE_ITEM_TABLE, "_ITEM_ITEM_TABLE_OBJECT_ID_");
         map.put(ContractConstants.ITEM_CREATION_MODULE_ITEM_CREATION_TABLE, "_ITEM_CREATION_ITEM_CREATION_TABLE_OBJECT_ID_");
         map.put(ContractConstants.ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_TABLE, "_ITEM_PRODUCTION_ITEM_PRODUCTION_TABLE_OBJECT_ID_");
-        map.put(ContractConstants.SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE, "_SKILL_PROCESS_SKILL_PROCESS_TABLE_OBJECT_ID_");
         ID_GENERATOR_OBJECT_NAME_TO_ARGUMENT_HINT_MAP = map;
     }
 

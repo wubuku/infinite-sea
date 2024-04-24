@@ -232,5 +232,172 @@ public class SkillProcessCommands {
 
     }
 
+    public static class StartCreation extends AbstractSkillProcessCommand implements SkillProcessCommand {
+
+        public String getCommandType() {
+            return "StartCreation";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Skill Process Id
+         */
+        private SkillProcessId skillProcessId;
+
+        public SkillProcessId getSkillProcessId() {
+            return this.skillProcessId;
+        }
+
+        public void setSkillProcessId(SkillProcessId skillProcessId) {
+            this.skillProcessId = skillProcessId;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * Item Creation
+         */
+        private SkillTypeItemIdPair itemCreation;
+
+        public SkillTypeItemIdPair getItemCreation() {
+            return this.itemCreation;
+        }
+
+        public void setItemCreation(SkillTypeItemIdPair itemCreation) {
+            this.itemCreation = itemCreation;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class CompleteCreation extends AbstractSkillProcessCommand implements SkillProcessCommand {
+
+        public String getCommandType() {
+            return "CompleteCreation";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Skill Process Id
+         */
+        private SkillProcessId skillProcessId;
+
+        public SkillProcessId getSkillProcessId() {
+            return this.skillProcessId;
+        }
+
+        public void setSkillProcessId(SkillProcessId skillProcessId) {
+            this.skillProcessId = skillProcessId;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * Item Creation
+         */
+        private SkillTypeItemIdPair itemCreation;
+
+        public SkillTypeItemIdPair getItemCreation() {
+            return this.itemCreation;
+        }
+
+        public void setItemCreation(SkillTypeItemIdPair itemCreation) {
+            this.itemCreation = itemCreation;
+        }
+
+        /**
+         * Experience Table
+         */
+        private String experienceTable;
+
+        public String getExperienceTable() {
+            return this.experienceTable;
+        }
+
+        public void setExperienceTable(String experienceTable) {
+            this.experienceTable = experienceTable;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
 }
 

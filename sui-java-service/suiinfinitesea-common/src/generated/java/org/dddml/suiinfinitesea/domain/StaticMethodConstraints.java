@@ -8,19 +8,59 @@ package org.dddml.suiinfinitesea.domain;
 import org.dddml.suiinfinitesea.specialization.ReflectUtils;
 import org.dddml.suiinfinitesea.specialization.MutationContext;
 import org.dddml.suiinfinitesea.specialization.VerificationContext;
-import org.dddml.suiinfinitesea.domain.item.*;
+import org.dddml.suiinfinitesea.domain.skillprocess.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.item.*;
 import org.dddml.suiinfinitesea.domain.itemcreation.*;
 import org.dddml.suiinfinitesea.domain.itemproduction.*;
 import org.dddml.suiinfinitesea.domain.player.*;
-import org.dddml.suiinfinitesea.domain.skillprocess.*;
 import org.dddml.suiinfinitesea.domain.experiencetable.*;
 
 public class StaticMethodConstraints {
 
     public static void assertStaticVerificationAndMutationMethods() {
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CreateLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
+                    new String[]{"_", "_", "player"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.StartProductionLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "itemProduction"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteProductionLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "itemProduction", "experienceTable"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.StartCreationLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "itemCreation"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteCreationLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "itemCreation", "experienceTable"}
+            );
+
 
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.item.CreateLogic",
@@ -103,30 +143,6 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.skillprocess.CreateLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new String[]{"_", "_", "player"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.skillprocess.StartProductionLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new String[]{"_", "_", "player", "itemProduction"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteProductionLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new String[]{"_", "_", "player", "itemProduction", "experienceTable"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.experiencetable.__Init__Logic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, ExperienceTableState.class, VerificationContext.class},
@@ -147,6 +163,30 @@ public class StaticMethodConstraints {
                     "verify",
                     new Class[]{java.util.function.Supplier.class, ExperienceTableState.class, Integer.class, Long.class, Long.class, VerificationContext.class},
                     new String[]{"_", "_", "level", "experience", "difference"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CreateLogic",
+                    "mutate",
+                    new Class[]{SkillProcessState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteProductionLogic",
+                    "mutate",
+                    new Class[]{SkillProcessState.class, Long.class, BigInteger.class, BigInteger.class, BigInteger.class, Boolean.class, Long.class, Long.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "itemId", "startedAt", "creationTime", "endedAt", "successful", "quantity", "experience", "newLevel", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteCreationLogic",
+                    "mutate",
+                    new Class[]{SkillProcessState.class, Long.class, BigInteger.class, BigInteger.class, BigInteger.class, Boolean.class, Long.class, Long.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "itemId", "startedAt", "creationTime", "endedAt", "successful", "quantity", "experience", "newLevel", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
             );
 
 
@@ -227,22 +267,6 @@ public class StaticMethodConstraints {
                     "mutate",
                     new Class[]{PlayerState.class, Long.class, ItemIdQuantityPair[].class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "experience", "items", "newLevel", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.skillprocess.CreateLogic",
-                    "mutate",
-                    new Class[]{SkillProcessState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteProductionLogic",
-                    "mutate",
-                    new Class[]{SkillProcessState.class, Long.class, BigInteger.class, BigInteger.class, BigInteger.class, Boolean.class, Long.class, Long.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "itemId", "startedAt", "creationTime", "endedAt", "successful", "quantity", "experience", "newLevel", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "status"}
             );
 
 

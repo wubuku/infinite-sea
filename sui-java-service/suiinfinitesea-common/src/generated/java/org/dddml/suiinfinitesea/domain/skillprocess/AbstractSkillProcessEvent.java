@@ -405,6 +405,180 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
     }
 
+    public static class CreationProcessStarted extends SkillProcessClobEvent implements SkillProcessEvent.CreationProcessStarted {
+
+        @Override
+        public String getEventType() {
+            return "CreationProcessStarted";
+        }
+
+        public Long getItemId() {
+            Object val = getDynamicProperties().get("itemId");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setItemId(Long value) {
+            getDynamicProperties().put("itemId", value);
+        }
+
+        public BigInteger getEnergyCost() {
+            Object val = getDynamicProperties().get("energyCost");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setEnergyCost(BigInteger value) {
+            getDynamicProperties().put("energyCost", value);
+        }
+
+        public Long getResourceCost() {
+            Object val = getDynamicProperties().get("resourceCost");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setResourceCost(Long value) {
+            getDynamicProperties().put("resourceCost", value);
+        }
+
+        public BigInteger getStartedAt() {
+            Object val = getDynamicProperties().get("startedAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setStartedAt(BigInteger value) {
+            getDynamicProperties().put("startedAt", value);
+        }
+
+        public BigInteger getCreationTime() {
+            Object val = getDynamicProperties().get("creationTime");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setCreationTime(BigInteger value) {
+            getDynamicProperties().put("creationTime", value);
+        }
+
+    }
+
+    public static class CreationProcessCompleted extends SkillProcessClobEvent implements SkillProcessEvent.CreationProcessCompleted {
+
+        @Override
+        public String getEventType() {
+            return "CreationProcessCompleted";
+        }
+
+        public Long getItemId() {
+            Object val = getDynamicProperties().get("itemId");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setItemId(Long value) {
+            getDynamicProperties().put("itemId", value);
+        }
+
+        public BigInteger getStartedAt() {
+            Object val = getDynamicProperties().get("startedAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setStartedAt(BigInteger value) {
+            getDynamicProperties().put("startedAt", value);
+        }
+
+        public BigInteger getCreationTime() {
+            Object val = getDynamicProperties().get("creationTime");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setCreationTime(BigInteger value) {
+            getDynamicProperties().put("creationTime", value);
+        }
+
+        public BigInteger getEndedAt() {
+            Object val = getDynamicProperties().get("endedAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setEndedAt(BigInteger value) {
+            getDynamicProperties().put("endedAt", value);
+        }
+
+        public Boolean getSuccessful() {
+            Object val = getDynamicProperties().get("successful");
+            if (val instanceof Boolean) {
+                return (Boolean) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Boolean.class);
+        }
+
+        public void setSuccessful(Boolean value) {
+            getDynamicProperties().put("successful", value);
+        }
+
+        public Long getQuantity() {
+            Object val = getDynamicProperties().get("quantity");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setQuantity(Long value) {
+            getDynamicProperties().put("quantity", value);
+        }
+
+        public Long getExperience() {
+            Object val = getDynamicProperties().get("experience");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setExperience(Long value) {
+            getDynamicProperties().put("experience", value);
+        }
+
+        public Integer getNewLevel() {
+            Object val = getDynamicProperties().get("newLevel");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setNewLevel(Integer value) {
+            getDynamicProperties().put("newLevel", value);
+        }
+
+    }
+
 
 }
 

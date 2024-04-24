@@ -243,6 +243,8 @@ public abstract class AbstractSkillProcessState implements SkillProcessState.Sql
             when((AbstractSkillProcessEvent.SkillProcessCreated)e);
         } else if (e instanceof AbstractSkillProcessEvent.ProductionProcessCompleted) {
             when((AbstractSkillProcessEvent.ProductionProcessCompleted)e);
+        } else if (e instanceof AbstractSkillProcessEvent.CreationProcessCompleted) {
+            when((AbstractSkillProcessEvent.CreationProcessCompleted)e);
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported event type: %1$s", e.getClass().getName()));
         }
@@ -421,6 +423,126 @@ public abstract class AbstractSkillProcessState implements SkillProcessState.Sql
 //package org.dddml.suiinfinitesea.domain.skillprocess;
 //
 //public class CompleteProductionLogic {
+//    public static SkillProcessState mutate(SkillProcessState skillProcessState, Long itemId, BigInteger startedAt, BigInteger creationTime, BigInteger endedAt, Boolean successful, Long quantity, Long experience, Integer newLevel, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SkillProcessState, SkillProcessState.MutableSkillProcessState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedSkillProcessState) { merge(updatedSkillProcessState); } //else do nothing
+
+    }
+
+    public void when(AbstractSkillProcessEvent.CreationProcessStarted e) {
+        throwOnWrongEvent(e);
+
+        Long itemId = e.getItemId();
+        Long ItemId = itemId;
+        BigInteger energyCost = e.getEnergyCost();
+        BigInteger EnergyCost = energyCost;
+        Long resourceCost = e.getResourceCost();
+        Long ResourceCost = resourceCost;
+        BigInteger startedAt = e.getStartedAt();
+        BigInteger StartedAt = startedAt;
+        BigInteger creationTime = e.getCreationTime();
+        BigInteger CreationTime = creationTime;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String status = e.getStatus();
+        String Status = status;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        SkillProcessState updatedSkillProcessState = (SkillProcessState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.StartCreationLogic",
+                    "mutate",
+                    new Class[]{SkillProcessState.class, Long.class, BigInteger.class, Long.class, BigInteger.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, itemId, energyCost, resourceCost, startedAt, creationTime, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocess;
+//
+//public class StartCreationLogic {
+//    public static SkillProcessState mutate(SkillProcessState skillProcessState, Long itemId, BigInteger energyCost, Long resourceCost, BigInteger startedAt, BigInteger creationTime, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SkillProcessState, SkillProcessState.MutableSkillProcessState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedSkillProcessState) { merge(updatedSkillProcessState); } //else do nothing
+
+    }
+
+    public void when(AbstractSkillProcessEvent.CreationProcessCompleted e) {
+        throwOnWrongEvent(e);
+
+        Long itemId = e.getItemId();
+        Long ItemId = itemId;
+        BigInteger startedAt = e.getStartedAt();
+        BigInteger StartedAt = startedAt;
+        BigInteger creationTime = e.getCreationTime();
+        BigInteger CreationTime = creationTime;
+        BigInteger endedAt = e.getEndedAt();
+        BigInteger EndedAt = endedAt;
+        Boolean successful = e.getSuccessful();
+        Boolean Successful = successful;
+        Long quantity = e.getQuantity();
+        Long Quantity = quantity;
+        Long experience = e.getExperience();
+        Long Experience = experience;
+        Integer newLevel = e.getNewLevel();
+        Integer NewLevel = newLevel;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String status = e.getStatus();
+        String Status = status;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        SkillProcessState updatedSkillProcessState = (SkillProcessState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteCreationLogic",
+                    "mutate",
+                    new Class[]{SkillProcessState.class, Long.class, BigInteger.class, BigInteger.class, BigInteger.class, Boolean.class, Long.class, Long.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, itemId, startedAt, creationTime, endedAt, successful, quantity, experience, newLevel, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocess;
+//
+//public class CompleteCreationLogic {
 //    public static SkillProcessState mutate(SkillProcessState skillProcessState, Long itemId, BigInteger startedAt, BigInteger creationTime, BigInteger endedAt, Boolean successful, Long quantity, Long experience, Integer newLevel, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SkillProcessState, SkillProcessState.MutableSkillProcessState> mutationContext) {
 //    }
 //}

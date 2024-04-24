@@ -19,4 +19,8 @@ public interface SkillProcessEventRepository extends JpaRepository<AbstractSkill
 
     AbstractSkillProcessEvent.ProductionProcessCompleted findFirstProductionProcessCompletedByOrderBySuiTimestampDesc();
 
+    AbstractSkillProcessEvent.CreationProcessStarted findFirstCreationProcessStartedByOrderBySuiTimestampDesc();
+
+    AbstractSkillProcessEvent.CreationProcessCompleted findFirstCreationProcessCompletedByOrderBySuiTimestampDesc();
+
 }

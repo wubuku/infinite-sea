@@ -20,6 +20,8 @@ module infinite_sea::skill_process {
     friend infinite_sea::skill_process_create_logic;
     friend infinite_sea::skill_process_start_production_logic;
     friend infinite_sea::skill_process_complete_production_logic;
+    friend infinite_sea::skill_process_start_creation_logic;
+    friend infinite_sea::skill_process_complete_creation_logic;
     friend infinite_sea::skill_process_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -305,6 +307,145 @@ module infinite_sea::skill_process {
         }
     }
 
+    struct CreationProcessStarted has copy, drop {
+        id: object::ID,
+        skill_process_id: SkillProcessId,
+        version: u64,
+        item_id: u32,
+        energy_cost: u64,
+        resource_cost: u32,
+        started_at: u64,
+        creation_time: u64,
+    }
+
+    public fun creation_process_started_id(creation_process_started: &CreationProcessStarted): object::ID {
+        creation_process_started.id
+    }
+
+    public fun creation_process_started_skill_process_id(creation_process_started: &CreationProcessStarted): SkillProcessId {
+        creation_process_started.skill_process_id
+    }
+
+    public fun creation_process_started_item_id(creation_process_started: &CreationProcessStarted): u32 {
+        creation_process_started.item_id
+    }
+
+    public fun creation_process_started_energy_cost(creation_process_started: &CreationProcessStarted): u64 {
+        creation_process_started.energy_cost
+    }
+
+    public fun creation_process_started_resource_cost(creation_process_started: &CreationProcessStarted): u32 {
+        creation_process_started.resource_cost
+    }
+
+    public fun creation_process_started_started_at(creation_process_started: &CreationProcessStarted): u64 {
+        creation_process_started.started_at
+    }
+
+    public fun creation_process_started_creation_time(creation_process_started: &CreationProcessStarted): u64 {
+        creation_process_started.creation_time
+    }
+
+    public(friend) fun new_creation_process_started(
+        skill_process: &SkillProcess,
+        item_id: u32,
+        energy_cost: u64,
+        resource_cost: u32,
+        started_at: u64,
+        creation_time: u64,
+    ): CreationProcessStarted {
+        CreationProcessStarted {
+            id: id(skill_process),
+            skill_process_id: skill_process_id(skill_process),
+            version: version(skill_process),
+            item_id,
+            energy_cost,
+            resource_cost,
+            started_at,
+            creation_time,
+        }
+    }
+
+    struct CreationProcessCompleted has copy, drop {
+        id: object::ID,
+        skill_process_id: SkillProcessId,
+        version: u64,
+        item_id: u32,
+        started_at: u64,
+        creation_time: u64,
+        ended_at: u64,
+        successful: bool,
+        quantity: u32,
+        experience: u32,
+        new_level: u16,
+    }
+
+    public fun creation_process_completed_id(creation_process_completed: &CreationProcessCompleted): object::ID {
+        creation_process_completed.id
+    }
+
+    public fun creation_process_completed_skill_process_id(creation_process_completed: &CreationProcessCompleted): SkillProcessId {
+        creation_process_completed.skill_process_id
+    }
+
+    public fun creation_process_completed_item_id(creation_process_completed: &CreationProcessCompleted): u32 {
+        creation_process_completed.item_id
+    }
+
+    public fun creation_process_completed_started_at(creation_process_completed: &CreationProcessCompleted): u64 {
+        creation_process_completed.started_at
+    }
+
+    public fun creation_process_completed_creation_time(creation_process_completed: &CreationProcessCompleted): u64 {
+        creation_process_completed.creation_time
+    }
+
+    public fun creation_process_completed_ended_at(creation_process_completed: &CreationProcessCompleted): u64 {
+        creation_process_completed.ended_at
+    }
+
+    public fun creation_process_completed_successful(creation_process_completed: &CreationProcessCompleted): bool {
+        creation_process_completed.successful
+    }
+
+    public fun creation_process_completed_quantity(creation_process_completed: &CreationProcessCompleted): u32 {
+        creation_process_completed.quantity
+    }
+
+    public fun creation_process_completed_experience(creation_process_completed: &CreationProcessCompleted): u32 {
+        creation_process_completed.experience
+    }
+
+    public fun creation_process_completed_new_level(creation_process_completed: &CreationProcessCompleted): u16 {
+        creation_process_completed.new_level
+    }
+
+    public(friend) fun new_creation_process_completed(
+        skill_process: &SkillProcess,
+        item_id: u32,
+        started_at: u64,
+        creation_time: u64,
+        ended_at: u64,
+        successful: bool,
+        quantity: u32,
+        experience: u32,
+        new_level: u16,
+    ): CreationProcessCompleted {
+        CreationProcessCompleted {
+            id: id(skill_process),
+            skill_process_id: skill_process_id(skill_process),
+            version: version(skill_process),
+            item_id,
+            started_at,
+            creation_time,
+            ended_at,
+            successful,
+            quantity,
+            experience,
+            new_level,
+        }
+    }
+
 
     public(friend) fun create_skill_process(
         skill_process_id: SkillProcessId,
@@ -373,6 +514,14 @@ module infinite_sea::skill_process {
 
     public(friend) fun emit_production_process_completed(production_process_completed: ProductionProcessCompleted) {
         event::emit(production_process_completed);
+    }
+
+    public(friend) fun emit_creation_process_started(creation_process_started: CreationProcessStarted) {
+        event::emit(creation_process_started);
+    }
+
+    public(friend) fun emit_creation_process_completed(creation_process_completed: CreationProcessCompleted) {
+        event::emit(creation_process_completed);
     }
 
 }

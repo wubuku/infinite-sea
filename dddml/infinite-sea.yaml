@@ -71,146 +71,47 @@ aggregates:
                         EInvalidSequenceNumber
                     );
 
-      #StartCreation: # todo start item creation
-
       StartProduction:
-        parameters:
-          Player:
-            referenceType: Player
-            isMutableReference: true
-            isIgnoredInEvent: true
-          ItemProduction:
-            referenceType: ItemProduction
-            #eventPropertyName: ItemProductionId
-            isIgnoredInEvent: true
-          Clock:
-            referenceType: Clock
-            isIgnoredInEvent: true
-          Energy:
-            type: "Balance<ENERGY>"
-            eventPropertyName: EnergyCost
+        inheritsFrom: SkillProcessTemplate.StartProduction
         event:
           name: ProductionProcessStarted
-          properties:
-            ItemId:
-              type: u32
-            EnergyCost:
-              type: u64
-            StartedAt:
-              type: u64
-            CreationTime:
-              type: u64
-            ProductionMaterials:
-              type: ProductionMaterials
 
       CompleteProduction:
-        parameters:
-          Player:
-            referenceType: Player
-            isMutableReference: true
-            isIgnoredInEvent: true
-          ItemProduction:
-            referenceType: ItemProduction
-            isIgnoredInEvent: true
-          ExperienceTable:
-            referenceType: ExperienceTable
-            isIgnoredInEvent: true
-          Clock:
-            referenceType: Clock
-            isIgnoredInEvent: true
+        inheritsFrom: SkillProcessTemplate.CompleteProduction
         event:
           name: ProductionProcessCompleted
-          properties:
-            ItemId:
-              type: u32
-            StartedAt:
-              type: u64
-            CreationTime:
-              type: u64
-            EndedAt:
-              type: u64
-            Successful:
-              type: bool
-            Quantity:
-              type: u32
-            Experience:
-              type: u32
-              description: "Increased experience value"
-            NewLevel:
-              type: u16
+
+
+      StartCreation:
+        inheritsFrom: SkillProcessTemplate.StartCreation
+        event:
+          name: CreationProcessStarted
+
+      CompleteCreation:
+        inheritsFrom: SkillProcessTemplate.CompleteCreation
+        event:
+          name: CreationProcessCompleted
+
 
 #      StartMutexCreation:
+#        inheritsFrom: SkillProcessTemplate.StartCreation
 #        parameters:
 #          SkillProcessMutex:
 #            referenceType: SkillProcessMutex
 #            isMutableReference: true
 #            isIgnoredInEvent: true
-#          Player:
-#            referenceType: Player
-#            isMutableReference: true
-#            isIgnoredInEvent: true
-#          ItemCreation:
-#            referenceType: ItemCreation
-#            isIgnoredInEvent: true
-#          Clock:
-#            referenceType: Clock
-#            isIgnoredInEvent: true
-#          Energy:
-#            type: "Balance<ENERGY>"
-#            eventPropertyName: EnergyCost
 #        event:
 #          name: MutexCreationProcessStarted
-#          properties:
-#            ItemId: # ItemId to be created
-#              type: u32
-#            EnergyCost:
-#              type: u64
-#            ResourceCost:
-#              type: u32
-#            StartedAt:
-#              type: u64
-#            CreationTime:
-#              type: u64
 #
 #      CompleteMutexCreation:
+#        inheritsFrom: SkillProcessTemplate.CompleteCreation
 #        parameters:
 #          SkillProcessMutex:
 #            referenceType: SkillProcessMutex
 #            isMutableReference: true
-#            isIgnoredInEvent: true
-#          Player:
-#            referenceType: Player
-#            isMutableReference: true
-#            isIgnoredInEvent: true
-#          ItemCreation:
-#            referenceType: ItemCreation
-#            isIgnoredInEvent: true
-#          ExperienceTable:
-#            referenceType: ExperienceTable
-#            isIgnoredInEvent: true
-#          Clock:
-#            referenceType: Clock
 #            isIgnoredInEvent: true
 #        event:
 #          name: MutexCreationProcessCompleted
-#          properties:
-#            ItemId:
-#              type: u32
-#            StartedAt:
-#              type: u64
-#            CreationTime:
-#              type: u64
-#            EndedAt:
-#              type: u64
-#            Successful:
-#              type: bool
-#            Quantity:
-#              type: u32
-#            Experience:
-#              type: u32
-#              description: "Increased experience value"
-#            NewLevel:
-#              type: u16
 
 
 #  SkillProcessMutex:
@@ -256,3 +157,135 @@ aggregates:
 #            type: SkillType
 #        event:
 #          name: SkillProcessMutexUnlocked
+
+superObjects:
+  SkillProcessTemplate:
+    isTemplate: true
+    methods:
+      StartProduction:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          ItemProduction:
+            referenceType: ItemProduction
+            #eventPropertyName: ItemProductionId
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+          Energy:
+            type: "Balance<ENERGY>"
+            eventPropertyName: EnergyCost
+        event:
+          properties:
+            ItemId:
+              type: u32
+            EnergyCost:
+              type: u64
+            StartedAt:
+              type: u64
+            CreationTime:
+              type: u64
+            ProductionMaterials:
+              type: ProductionMaterials
+
+      CompleteProduction:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          ItemProduction:
+            referenceType: ItemProduction
+            isIgnoredInEvent: true
+          ExperienceTable:
+            referenceType: ExperienceTable
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          properties:
+            ItemId:
+              type: u32
+            StartedAt:
+              type: u64
+            CreationTime:
+              type: u64
+            EndedAt:
+              type: u64
+            Successful:
+              type: bool
+            Quantity:
+              type: u32
+            Experience:
+              type: u32
+              description: "Increased experience value"
+            NewLevel:
+              type: u16
+
+
+      StartCreation:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          ItemCreation:
+            referenceType: ItemCreation
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+          Energy:
+            type: "Balance<ENERGY>"
+            eventPropertyName: EnergyCost
+        event:
+          properties:
+            ItemId: # ItemId to be created
+              type: u32
+            EnergyCost:
+              type: u64
+            ResourceCost:
+              type: u32
+            StartedAt:
+              type: u64
+            CreationTime:
+              type: u64
+
+      CompleteCreation:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          ItemCreation:
+            referenceType: ItemCreation
+            isIgnoredInEvent: true
+          ExperienceTable:
+            referenceType: ExperienceTable
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          properties:
+            ItemId:
+              type: u32
+            StartedAt:
+              type: u64
+            CreationTime:
+              type: u64
+            EndedAt:
+              type: u64
+            Successful:
+              type: bool
+            Quantity:
+              type: u32
+            Experience:
+              type: u32
+              description: "Increased experience value"
+            NewLevel:
+              type: u16
