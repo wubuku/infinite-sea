@@ -226,6 +226,13 @@ valueObjects:
         #1  Copper Ore
         #1  Tin Ore
 
+  Coordinates:
+    module: "Common"
+    properties:
+      X:
+        type: u32
+      Y:
+        type: u32
 
 enumObjects:
   SkillType:
@@ -252,6 +259,14 @@ enumObjects:
         value: 8
       #Thieving:
       #  value: xxx
+
+
+  MapLocationType:
+    module: "Common"
+    baseType: u32
+    values:
+      Island:
+        value: 0
 
 #  IslandResourceType:
 #    module: "Common"

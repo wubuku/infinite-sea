@@ -5,8 +5,9 @@
 
 module infinite_sea::player {
     use infinite_sea::player_item::{Self, PlayerItem};
+    use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
-    use std::option;
+    use std::option::{Self, Option};
     use sui::event;
     use sui::object::{Self, UID};
     use sui::table;
@@ -39,6 +40,7 @@ module infinite_sea::player {
         owner: address,
         level: u16,
         experience: u32,
+        claimed_island: Option<Coordinates>,
         items: table::Table<u32, PlayerItem>,
     }
 
@@ -72,6 +74,14 @@ module infinite_sea::player {
 
     public(friend) fun set_experience(player: &mut Player, experience: u32) {
         player.experience = experience;
+    }
+
+    public fun claimed_island(player: &Player): Option<Coordinates> {
+        player.claimed_island
+    }
+
+    public(friend) fun set_claimed_island(player: &mut Player, claimed_island: Option<Coordinates>) {
+        player.claimed_island = claimed_island;
     }
 
     public(friend) fun add_item(player: &mut Player, item: PlayerItem) {
@@ -112,6 +122,7 @@ module infinite_sea::player {
             owner,
             level: 1,
             experience: 0,
+            claimed_island: std::option::none(),
             items: table::new<u32, PlayerItem>(ctx),
         }
     }
@@ -257,6 +268,7 @@ module infinite_sea::player {
             owner: _owner,
             level: _level,
             experience: _experience,
+            claimed_island: _claimed_island,
             items,
         } = player;
         object::delete(id);

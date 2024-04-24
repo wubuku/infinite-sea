@@ -289,3 +289,28 @@ superObjects:
               description: "Increased experience value"
             NewLevel:
               type: u16
+
+singletonObjects:
+  Map:
+    properties:
+      Locations:
+        itemType: MapLocation
+    methods:
+      "__Init__":
+        event:
+          isObjectShared: true # Share the object after initialization.
+    entities:
+      MapLocation:
+        id:
+          name: Coordinates
+          type: Coordinates
+        properties:
+          Type:
+            type: u32
+          OccupiedBy:
+            type: ID # PlayerId
+            optional: true
+          Resources:
+            itemType: ItemIdQuantityPair
+          GatheredAt:
+            type: u64
