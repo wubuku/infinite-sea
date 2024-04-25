@@ -8,9 +8,9 @@ package org.dddml.suiinfinitesea.domain.player;
 import java.util.*;
 import java.util.function.Consumer;
 import org.dddml.support.criterion.Criterion;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.*;
 
 public abstract class AbstractPlayerApplicationService implements PlayerApplicationService {
@@ -52,6 +52,10 @@ public abstract class AbstractPlayerApplicationService implements PlayerApplicat
 
     public void when(PlayerCommands.Create c) {
         update(c, ar -> ar.create(c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(PlayerCommands.ClaimIsland c) {
+        update(c, ar -> ar.claimIsland(c.getMap(), c.getCoordinates(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public void when(PlayerCommands.Airdrop c) {
@@ -108,14 +112,6 @@ public abstract class AbstractPlayerApplicationService implements PlayerApplicat
     public PlayerState getHistoryState(String id, long version) {
         EventStream eventStream = getEventStore().loadEventStream(AbstractPlayerEvent.class, toEventStoreAggregateId(id), version - 1);
         return new AbstractPlayerState.SimplePlayerState(eventStream.getEvents());
-    }
-
-    public PlayerItemState getPlayerItem(String playerId, Long itemId) {
-        return getStateQueryRepository().getPlayerItem(playerId, itemId);
-    }
-
-    public Iterable<PlayerItemState> getPlayerItems(String playerId, Criterion filter, List<String> orders) {
-        return getStateQueryRepository().getPlayerItems(playerId, filter, orders);
     }
 
 

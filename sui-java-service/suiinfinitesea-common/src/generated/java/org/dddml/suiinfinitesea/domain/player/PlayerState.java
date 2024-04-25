@@ -7,9 +7,9 @@ package org.dddml.suiinfinitesea.domain.player;
 
 import java.util.*;
 import java.math.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.Event;
 
 public interface PlayerState extends VersionedSuiMoveObject
@@ -26,6 +26,8 @@ public interface PlayerState extends VersionedSuiMoveObject
 
     Long getExperience();
 
+    Coordinates getClaimedIsland();
+
     Long getOffChainVersion();
 
     String getCreatedBy();
@@ -40,7 +42,7 @@ public interface PlayerState extends VersionedSuiMoveObject
 
     Boolean getDeleted();
 
-    EntityStateCollection<Long, PlayerItemState> getItems();
+    Set<ItemIdQuantityPair> getInventory();
 
     interface MutablePlayerState extends PlayerState, VersionedSuiMoveObject.MutableVersionedSuiMoveObject {
         void setId(String id);
@@ -50,6 +52,8 @@ public interface PlayerState extends VersionedSuiMoveObject
         void setLevel(Integer level);
 
         void setExperience(Long experience);
+
+        void setClaimedIsland(Coordinates claimedIsland);
 
         void setOffChainVersion(Long offChainVersion);
 
@@ -64,6 +68,8 @@ public interface PlayerState extends VersionedSuiMoveObject
         void setActive(Boolean active);
 
         void setDeleted(Boolean deleted);
+
+        void setInventory(Set<ItemIdQuantityPair> inventory);
 
 
         void mutate(Event e);

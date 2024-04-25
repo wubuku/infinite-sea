@@ -44,6 +44,7 @@
         <column name="dynamic_properties_lob" sql-type="VARCHAR(2000)" />
       </property>
       <subclass name="AbstractPlayerEvent$PlayerCreated" discriminator-value="PlayerCreated" />
+      <subclass name="AbstractPlayerEvent$IslandClaimed" discriminator-value="IslandClaimed" />
       <subclass name="AbstractPlayerEvent$PlayerAirdropped" discriminator-value="PlayerAirdropped" />
       <subclass name="AbstractPlayerEvent$PlayerItemsDeducted" discriminator-value="PlayerItemsDeducted" />
       <subclass name="AbstractPlayerEvent$PlayerExperienceAndItemsIncreased" discriminator-value="PlayerExperienceAndItemsIncreased" />

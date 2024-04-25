@@ -22,7 +22,7 @@ public interface ItemProductionState extends ItemCreationOrProduction, Versioned
 
     String getId_();
 
-    ProductionMaterials getProductionMaterials();
+    ItemIdQuantityPairs getProductionMaterials();
 
     Long getOffChainVersion();
 
@@ -43,7 +43,7 @@ public interface ItemProductionState extends ItemCreationOrProduction, Versioned
 
         void setId_(String id);
 
-        void setProductionMaterials(ProductionMaterials productionMaterials);
+        void setProductionMaterials(ItemIdQuantityPairs productionMaterials);
 
         void setOffChainVersion(Long offChainVersion);
 

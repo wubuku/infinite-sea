@@ -286,15 +286,15 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
             getDynamicProperties().put("creationTime", value);
         }
 
-        public ProductionMaterials getProductionMaterials() {
+        public ItemIdQuantityPairs getProductionMaterials() {
             Object val = getDynamicProperties().get("productionMaterials");
-            if (val instanceof ProductionMaterials) {
-                return (ProductionMaterials) val;
+            if (val instanceof ItemIdQuantityPairs) {
+                return (ItemIdQuantityPairs) val;
             }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, ProductionMaterials.class);
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPairs.class);
         }
 
-        public void setProductionMaterials(ProductionMaterials value) {
+        public void setProductionMaterials(ItemIdQuantityPairs value) {
             getDynamicProperties().put("productionMaterials", value);
         }
 

@@ -7,9 +7,9 @@ package org.dddml.suiinfinitesea.domain.player.hibernate;
 
 import java.io.Serializable;
 import java.util.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.specialization.hibernate.AbstractHibernateEventStore;
 import org.hibernate.*;

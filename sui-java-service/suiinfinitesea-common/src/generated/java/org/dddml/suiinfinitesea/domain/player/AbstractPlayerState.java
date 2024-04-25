@@ -7,13 +7,13 @@ package org.dddml.suiinfinitesea.domain.player;
 
 import java.util.*;
 import java.math.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.domain.player.PlayerEvent.*;
 
-public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState, Saveable {
+public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState {
 
     private String id;
 
@@ -53,6 +53,16 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
 
     public void setExperience(Long experience) {
         this.experience = experience;
+    }
+
+    private Coordinates claimedIsland;
+
+    public Coordinates getClaimedIsland() {
+        return this.claimedIsland;
+    }
+
+    public void setClaimedIsland(Coordinates claimedIsland) {
+        this.claimedIsland = claimedIsland;
     }
 
     private BigInteger version;
@@ -135,28 +145,18 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
         this.deleted = deleted;
     }
 
+    private Set<ItemIdQuantityPair> inventory;
+
+    public Set<ItemIdQuantityPair> getInventory() {
+        return this.inventory;
+    }
+
+    public void setInventory(Set<ItemIdQuantityPair> inventory) {
+        this.inventory = inventory;
+    }
+
     public boolean isStateUnsaved() {
         return this.getOffChainVersion() == null;
-    }
-
-    private Set<PlayerItemState> protectedItems = new HashSet<>();
-
-    protected Set<PlayerItemState> getProtectedItems() {
-        return this.protectedItems;
-    }
-
-    protected void setProtectedItems(Set<PlayerItemState> protectedItems) {
-        this.protectedItems = protectedItems;
-    }
-
-    private EntityStateCollection<Long, PlayerItemState> items;
-
-    public EntityStateCollection<Long, PlayerItemState> getItems() {
-        return this.items;
-    }
-
-    public void setItems(EntityStateCollection<Long, PlayerItemState> items) {
-        this.items = items;
     }
 
     private Boolean stateReadOnly;
@@ -198,7 +198,6 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
     }
     
     protected void initializeProperties() {
-        items = new SimplePlayerItemStateCollection();
     }
 
     @Override
@@ -222,6 +221,8 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
             ;
         } else if (e instanceof AbstractPlayerEvent.PlayerCreated) {
             when((AbstractPlayerEvent.PlayerCreated)e);
+        } else if (e instanceof AbstractPlayerEvent.IslandClaimed) {
+            when((AbstractPlayerEvent.IslandClaimed)e);
         } else if (e instanceof AbstractPlayerEvent.PlayerAirdropped) {
             when((AbstractPlayerEvent.PlayerAirdropped)e);
         } else if (e instanceof AbstractPlayerEvent.PlayerItemsDeducted) {
@@ -240,44 +241,10 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
         this.setOwner(s.getOwner());
         this.setLevel(s.getLevel());
         this.setExperience(s.getExperience());
+        this.setClaimedIsland(s.getClaimedIsland());
+        this.setInventory(s.getInventory());
         this.setVersion(s.getVersion());
         this.setActive(s.getActive());
-
-        if (s.getItems() != null) {
-            Iterable<PlayerItemState> iterable;
-            if (s.getItems().isLazy()) {
-                iterable = s.getItems().getLoadedStates();
-            } else {
-                iterable = s.getItems();
-            }
-            if (iterable != null) {
-                for (PlayerItemState ss : iterable) {
-                    PlayerItemState thisInnerState = ((EntityStateCollection.ModifiableEntityStateCollection<Long, PlayerItemState>)this.getItems()).getOrAddDefault(ss.getItemId());
-                    ((AbstractPlayerItemState) thisInnerState).merge(ss);
-                }
-            }
-        }
-        if (s.getItems() != null) {
-            if (s.getItems() instanceof EntityStateCollection.RemovalLoggedEntityStateCollection) {
-                if (((EntityStateCollection.RemovalLoggedEntityStateCollection)s.getItems()).getRemovedStates() != null) {
-                    for (PlayerItemState ss : ((EntityStateCollection.RemovalLoggedEntityStateCollection<Long, PlayerItemState>)s.getItems()).getRemovedStates()) {
-                        PlayerItemState thisInnerState = ((EntityStateCollection.ModifiableEntityStateCollection<Long, PlayerItemState>)this.getItems()).getOrAddDefault(ss.getItemId());
-                        ((EntityStateCollection.ModifiableEntityStateCollection)this.getItems()).removeState(thisInnerState);
-                    }
-                }
-            } else {
-                if (s.getItems().isAllLoaded()) {
-                    Set<Long> removedStateIds = new HashSet<>(this.getItems().stream().map(i -> i.getItemId()).collect(java.util.stream.Collectors.toList()));
-                    s.getItems().forEach(i -> removedStateIds.remove(i.getItemId()));
-                    for (Long i : removedStateIds) {
-                        PlayerItemState thisInnerState = ((EntityStateCollection.ModifiableEntityStateCollection<Long, PlayerItemState>)this.getItems()).getOrAddDefault(i);
-                        ((EntityStateCollection.ModifiableEntityStateCollection)this.getItems()).removeState(thisInnerState);
-                    }
-                } else {
-                    throw new UnsupportedOperationException();
-                }
-            }
-        }
     }
 
     public void when(AbstractPlayerEvent.PlayerCreated e) {
@@ -322,6 +289,57 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
 //
 //public class CreateLogic {
 //    public static PlayerState mutate(PlayerState playerState, String owner, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedPlayerState) { merge(updatedPlayerState); } //else do nothing
+
+    }
+
+    public void when(AbstractPlayerEvent.IslandClaimed e) {
+        throwOnWrongEvent(e);
+
+        Coordinates coordinates = e.getCoordinates();
+        Coordinates Coordinates = coordinates;
+        BigInteger claimedAt = e.getClaimedAt();
+        BigInteger ClaimedAt = claimedAt;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String status = e.getStatus();
+        String Status = status;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        PlayerState updatedPlayerState = (PlayerState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.player.ClaimIslandLogic",
+                    "mutate",
+                    new Class[]{PlayerState.class, Coordinates.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, coordinates, claimedAt, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.player;
+//
+//public class ClaimIslandLogic {
+//    public static PlayerState mutate(PlayerState playerState, Coordinates coordinates, BigInteger claimedAt, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
 //    }
 //}
 
@@ -483,9 +501,6 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
     }
 
     public void save() {
-        if (items instanceof Saveable) {
-            ((Saveable)items).save();
-        }
     }
 
     protected void throwOnWrongEvent(PlayerEvent event) {
@@ -518,127 +533,6 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState,
 
     }
 
-
-    class SimplePlayerItemStateCollection implements EntityStateCollection.ModifiableEntityStateCollection<Long, PlayerItemState>, Collection<PlayerItemState> {
-
-        @Override
-        public PlayerItemState get(Long itemId) {
-            return protectedItems.stream().filter(
-                            e -> e.getItemId().equals(itemId))
-                    .findFirst().orElse(null);
-        }
-
-        @Override
-        public boolean isLazy() {
-            return false;
-        }
-
-        @Override
-        public boolean isAllLoaded() {
-            return true;
-        }
-
-        @Override
-        public Collection<PlayerItemState> getLoadedStates() {
-            return protectedItems;
-        }
-
-        @Override
-        public PlayerItemState getOrAddDefault(Long itemId) {
-            PlayerItemState s = get(itemId);
-            if (s == null) {
-                PlayerItemId globalId = new PlayerItemId(getId(), itemId);
-                AbstractPlayerItemState state = new AbstractPlayerItemState.SimplePlayerItemState();
-                state.setPlayerItemId(globalId);
-                add(state);
-                s = state;
-            }
-            return s;
-        }
-
-        @Override
-        public int size() {
-            return protectedItems.size();
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return protectedItems.isEmpty();
-        }
-
-        @Override
-        public boolean contains(Object o) {
-            return protectedItems.contains(o);
-        }
-
-        @Override
-        public Iterator<PlayerItemState> iterator() {
-            return protectedItems.iterator();
-        }
-
-        @Override
-        public java.util.stream.Stream<PlayerItemState> stream() {
-            return protectedItems.stream();
-        }
-
-        @Override
-        public Object[] toArray() {
-            return protectedItems.toArray();
-        }
-
-        @Override
-        public <T> T[] toArray(T[] a) {
-            return protectedItems.toArray(a);
-        }
-
-        @Override
-        public boolean add(PlayerItemState s) {
-            if (s instanceof AbstractPlayerItemState) {
-                AbstractPlayerItemState state = (AbstractPlayerItemState) s;
-                state.setProtectedPlayerState(AbstractPlayerState.this);
-            }
-            return protectedItems.add(s);
-        }
-
-        @Override
-        public boolean remove(Object o) {
-            if (o instanceof AbstractPlayerItemState) {
-                AbstractPlayerItemState s = (AbstractPlayerItemState) o;
-                s.setProtectedPlayerState(null);
-            }
-            return protectedItems.remove(o);
-        }
-
-        @Override
-        public boolean removeState(PlayerItemState s) {
-            return remove(s);
-        }
-
-        @Override
-        public boolean containsAll(Collection<?> c) {
-            return protectedItems.contains(c);
-        }
-
-        @Override
-        public boolean addAll(Collection<? extends PlayerItemState> c) {
-            return protectedItems.addAll(c);
-        }
-
-        @Override
-        public boolean removeAll(Collection<?> c) {
-            return protectedItems.removeAll(c);
-        }
-
-        @Override
-        public boolean retainAll(Collection<?> c) {
-            return protectedItems.retainAll(c);
-        }
-
-        @Override
-        public void clear() {
-            protectedItems.clear();
-        }
-    }
 
 
 }

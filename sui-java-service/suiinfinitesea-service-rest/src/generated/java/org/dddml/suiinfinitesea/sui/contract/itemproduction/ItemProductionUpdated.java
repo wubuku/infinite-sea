@@ -21,7 +21,7 @@ public class ItemProductionUpdated {
 
     private BigInteger version;
 
-    private ProductionMaterialsForEvent productionMaterials;
+    private ItemIdQuantityPairsForEvent productionMaterials;
 
     private Integer requirementsLevel;
 
@@ -59,11 +59,11 @@ public class ItemProductionUpdated {
         this.version = version;
     }
 
-    public ProductionMaterialsForEvent getProductionMaterials() {
+    public ItemIdQuantityPairsForEvent getProductionMaterials() {
         return productionMaterials;
     }
 
-    public void setProductionMaterials(ProductionMaterialsForEvent productionMaterials) {
+    public void setProductionMaterials(ItemIdQuantityPairsForEvent productionMaterials) {
         this.productionMaterials = productionMaterials;
     }
 

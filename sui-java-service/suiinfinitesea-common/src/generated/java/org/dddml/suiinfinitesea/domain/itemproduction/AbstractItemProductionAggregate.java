@@ -47,7 +47,7 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
         }
 
         @Override
-        public void create(ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemProductionCommands.Create c) {
+        public void create(ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemProductionCommands.Create c) {
             java.util.function.Supplier<ItemProductionEvent.ItemProductionCreated> eventFactory = () -> newItemProductionCreated(productionMaterials, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, offChainVersion, commandId, requesterId);
             ItemProductionEvent.ItemProductionCreated e;
             try {
@@ -60,7 +60,7 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
         }
 
         @Override
-        public void update(ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemProductionCommands.Update c) {
+        public void update(ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemProductionCommands.Update c) {
             java.util.function.Supplier<ItemProductionEvent.ItemProductionUpdated> eventFactory = () -> newItemProductionUpdated(productionMaterials, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, offChainVersion, commandId, requesterId);
             ItemProductionEvent.ItemProductionUpdated e;
             try {
@@ -72,8 +72,8 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
             apply(e);
         }
 
-        protected ItemProductionEvent.ItemProductionCreated verifyCreate(java.util.function.Supplier<ItemProductionEvent.ItemProductionCreated> eventFactory, ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, ItemProductionCommands.Create c) {
-            ProductionMaterials ProductionMaterials = productionMaterials;
+        protected ItemProductionEvent.ItemProductionCreated verifyCreate(java.util.function.Supplier<ItemProductionEvent.ItemProductionCreated> eventFactory, ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, ItemProductionCommands.Create c) {
+            ItemIdQuantityPairs ProductionMaterials = productionMaterials;
             Integer RequirementsLevel = requirementsLevel;
             Long BaseQuantity = baseQuantity;
             Long BaseExperience = baseExperience;
@@ -84,14 +84,14 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
             ItemProductionEvent.ItemProductionCreated e = (ItemProductionEvent.ItemProductionCreated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.itemproduction.CreateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, ItemProductionState.class, ProductionMaterials.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, ItemProductionState.class, ItemIdQuantityPairs.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
                     new Object[]{eventFactory, getState(), productionMaterials, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.itemproduction;
 //
 //public class CreateLogic {
-//    public static ItemProductionEvent.ItemProductionCreated verify(java.util.function.Supplier<ItemProductionEvent.ItemProductionCreated> eventFactory, ItemProductionState itemProductionState, ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, VerificationContext verificationContext) {
+//    public static ItemProductionEvent.ItemProductionCreated verify(java.util.function.Supplier<ItemProductionEvent.ItemProductionCreated> eventFactory, ItemProductionState itemProductionState, ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -99,8 +99,8 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
         }
            
 
-        protected ItemProductionEvent.ItemProductionUpdated verifyUpdate(java.util.function.Supplier<ItemProductionEvent.ItemProductionUpdated> eventFactory, ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, ItemProductionCommands.Update c) {
-            ProductionMaterials ProductionMaterials = productionMaterials;
+        protected ItemProductionEvent.ItemProductionUpdated verifyUpdate(java.util.function.Supplier<ItemProductionEvent.ItemProductionUpdated> eventFactory, ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, ItemProductionCommands.Update c) {
+            ItemIdQuantityPairs ProductionMaterials = productionMaterials;
             Integer RequirementsLevel = requirementsLevel;
             Long BaseQuantity = baseQuantity;
             Long BaseExperience = baseExperience;
@@ -111,14 +111,14 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
             ItemProductionEvent.ItemProductionUpdated e = (ItemProductionEvent.ItemProductionUpdated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.itemproduction.UpdateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, ItemProductionState.class, ProductionMaterials.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, ItemProductionState.class, ItemIdQuantityPairs.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, VerificationContext.class},
                     new Object[]{eventFactory, getState(), productionMaterials, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.itemproduction;
 //
 //public class UpdateLogic {
-//    public static ItemProductionEvent.ItemProductionUpdated verify(java.util.function.Supplier<ItemProductionEvent.ItemProductionUpdated> eventFactory, ItemProductionState itemProductionState, ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, VerificationContext verificationContext) {
+//    public static ItemProductionEvent.ItemProductionUpdated verify(java.util.function.Supplier<ItemProductionEvent.ItemProductionUpdated> eventFactory, ItemProductionState itemProductionState, ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -126,7 +126,7 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
         }
            
 
-        protected AbstractItemProductionEvent.ItemProductionCreated newItemProductionCreated(ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractItemProductionEvent.ItemProductionCreated newItemProductionCreated(ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId) {
             ItemProductionEventId eventId = new ItemProductionEventId(getState().getItemProductionId(), null);
             AbstractItemProductionEvent.ItemProductionCreated e = new AbstractItemProductionEvent.ItemProductionCreated();
 
@@ -154,7 +154,7 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
             return e;
         }
 
-        protected AbstractItemProductionEvent.ItemProductionUpdated newItemProductionUpdated(ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractItemProductionEvent.ItemProductionUpdated newItemProductionUpdated(ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId) {
             ItemProductionEventId eventId = new ItemProductionEventId(getState().getItemProductionId(), null);
             AbstractItemProductionEvent.ItemProductionUpdated e = new AbstractItemProductionEvent.ItemProductionUpdated();
 

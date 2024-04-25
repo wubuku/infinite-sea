@@ -41,9 +41,9 @@ public interface SkillProcessEvent extends Event, SuiEventEnvelope, SuiMoveEvent
 
         void setCreationTime(BigInteger value);
 
-        ProductionMaterials getProductionMaterials();
+        ItemIdQuantityPairs getProductionMaterials();
 
-        void setProductionMaterials(ProductionMaterials value);
+        void setProductionMaterials(ItemIdQuantityPairs value);
 
     }
 

@@ -14,9 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.dddml.support.criterion.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.domain.player.*;
 import static org.dddml.suiinfinitesea.domain.meta.M.*;
@@ -189,6 +189,24 @@ public class PlayerResource {
     }
 
 
+    @PutMapping("{id}/_commands/ClaimIsland")
+    public void claimIsland(@PathVariable("id") String id, @RequestBody PlayerCommands.ClaimIsland content) {
+        try {
+
+            PlayerCommands.ClaimIsland cmd = content;//.toClaimIsland();
+            String idObj = id;
+            if (cmd.getId() == null) {
+                cmd.setId(idObj);
+            } else if (!cmd.getId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", id, cmd.getId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            playerApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
     @PutMapping("{id}/_commands/Airdrop")
     public void airdrop(@PathVariable("id") String id, @RequestBody PlayerCommands.Airdrop content) {
         try {
@@ -248,59 +266,6 @@ public class PlayerResource {
         } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
     }
 
-    /**
-     * Retrieve.
-     * Retrieves PlayerItem with the specified ItemId.
-     */
-    @GetMapping("{id}/PlayerItems/{itemId}")
-    @Transactional(readOnly = true)
-    public PlayerItemStateDto getPlayerItem(@PathVariable("id") String id, @PathVariable("itemId") Long itemId) {
-        try {
-
-            PlayerItemState state = playerApplicationService.getPlayerItem(id, itemId);
-            if (state == null) { return null; }
-            PlayerItemStateDto.DtoConverter dtoConverter = new PlayerItemStateDto.DtoConverter();
-            PlayerItemStateDto stateDto = dtoConverter.toPlayerItemStateDto(state);
-            dtoConverter.setAllFieldsReturned(true);
-            return stateDto;
-
-        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
-    }
-
-    /**
-     * PlayerItem List
-     */
-    @GetMapping("{id}/PlayerItems")
-    @Transactional(readOnly = true)
-    public PlayerItemStateDto[] getPlayerItems(@PathVariable("id") String id,
-                    @RequestParam(value = "sort", required = false) String sort,
-                    @RequestParam(value = "fields", required = false) String fields,
-                    @RequestParam(value = "filter", required = false) String filter,
-                     HttpServletRequest request) {
-        try {
-            CriterionDto criterion = null;
-            if (!StringHelper.isNullOrEmpty(filter)) {
-                criterion = new ObjectMapper().readValue(filter, CriterionDto.class);
-            } else {
-                criterion = QueryParamUtils.getQueryCriterionDto(request.getParameterMap().entrySet().stream()
-                    .filter(kv -> PlayerResourceUtils.getPlayerItemFilterPropertyName(kv.getKey()) != null)
-                    .collect(Collectors.toMap(kv -> kv.getKey(), kv -> kv.getValue())));
-            }
-            Criterion c = CriterionDto.toSubclass(criterion, getCriterionTypeConverter(), getPropertyTypeResolver(), 
-                n -> (PlayerItemMetadata.aliasMap.containsKey(n) ? PlayerItemMetadata.aliasMap.get(n) : n));
-            Iterable<PlayerItemState> states = playerApplicationService.getPlayerItems(id, c,
-                    PlayerResourceUtils.getPlayerItemQuerySorts(request.getParameterMap()));
-            if (states == null) { return null; }
-            PlayerItemStateDto.DtoConverter dtoConverter = new PlayerItemStateDto.DtoConverter();
-            if (StringHelper.isNullOrEmpty(fields)) {
-                dtoConverter.setAllFieldsReturned(true);
-            } else {
-                dtoConverter.setReturnedFieldsString(fields);
-            }
-            return dtoConverter.toPlayerItemStateDtoArray(states);
-        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
-    }
-
 
 
     //protected  PlayerStateEventDtoConverter getPlayerStateEventDtoConverter() {
@@ -316,15 +281,6 @@ public class PlayerResource {
             @Override
             public Class resolveTypeByPropertyName(String propertyName) {
                 return PlayerResourceUtils.getFilterPropertyType(propertyName);
-            }
-        };
-    }
-
-    protected PropertyTypeResolver getPlayerItemPropertyTypeResolver() {
-        return new PropertyTypeResolver() {
-            @Override
-            public Class resolveTypeByPropertyName(String propertyName) {
-                return PlayerResourceUtils.getPlayerItemFilterPropertyType(propertyName);
             }
         };
     }
@@ -383,54 +339,6 @@ public class PlayerResource {
                     String pName = getFilterPropertyName(key);
                     if (!StringHelper.isNullOrEmpty(pName)) {
                         Class pClass = getFilterPropertyType(pName);
-                        filter.put(pName, ApplicationContext.current.getTypeConverter().convertFromString(pClass, values[0]));
-                    }
-                }
-            });
-            return filter.entrySet();
-        }
-
-        public static List<String> getPlayerItemQueryOrders(String str, String separator) {
-            return QueryParamUtils.getQueryOrders(str, separator, PlayerItemMetadata.aliasMap);
-        }
-
-        public static List<String> getPlayerItemQuerySorts(Map<String, String[]> queryNameValuePairs) {
-            String[] values = queryNameValuePairs.get("sort");
-            return QueryParamUtils.getQuerySorts(values, PlayerItemMetadata.aliasMap);
-        }
-
-        public static String getPlayerItemFilterPropertyName(String fieldName) {
-            if ("sort".equalsIgnoreCase(fieldName)
-                    || "firstResult".equalsIgnoreCase(fieldName)
-                    || "maxResults".equalsIgnoreCase(fieldName)
-                    || "fields".equalsIgnoreCase(fieldName)) {
-                return null;
-            }
-            if (PlayerItemMetadata.aliasMap.containsKey(fieldName)) {
-                return PlayerItemMetadata.aliasMap.get(fieldName);
-            }
-            return null;
-        }
-
-        public static Class getPlayerItemFilterPropertyType(String propertyName) {
-            if (PlayerItemMetadata.propertyTypeMap.containsKey(propertyName)) {
-                String propertyType = PlayerItemMetadata.propertyTypeMap.get(propertyName);
-                if (!StringHelper.isNullOrEmpty(propertyType)) {
-                    if (BoundedContextMetadata.CLASS_MAP.containsKey(propertyType)) {
-                        return BoundedContextMetadata.CLASS_MAP.get(propertyType);
-                    }
-                }
-            }
-            return String.class;
-        }
-
-        public static Iterable<Map.Entry<String, Object>> getPlayerItemQueryFilterMap(Map<String, String[]> queryNameValuePairs) {
-            Map<String, Object> filter = new HashMap<>();
-            queryNameValuePairs.forEach((key, values) -> {
-                if (values.length > 0) {
-                    String pName = getPlayerItemFilterPropertyName(key);
-                    if (!StringHelper.isNullOrEmpty(pName)) {
-                        Class pClass = getPlayerItemFilterPropertyType(pName);
                         filter.put(pName, ApplicationContext.current.getTypeConverter().convertFromString(pClass, values[0]));
                     }
                 }

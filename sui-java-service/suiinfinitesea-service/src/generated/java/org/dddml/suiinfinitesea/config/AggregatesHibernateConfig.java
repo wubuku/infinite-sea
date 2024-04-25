@@ -20,6 +20,9 @@ import org.dddml.suiinfinitesea.domain.itemproduction.hibernate.*;
 import org.dddml.suiinfinitesea.domain.player.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.player.hibernate.*;
+import org.dddml.suiinfinitesea.domain.map.*;
+import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.map.hibernate.*;
 import org.dddml.suiinfinitesea.domain.experiencetable.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.experiencetable.hibernate.*;
@@ -217,13 +220,6 @@ public class AggregatesHibernateConfig {
 
 
     @Bean
-    public PlayerItemEventDao playerItemEventDao(SessionFactory hibernateSessionFactory) {
-        HibernatePlayerItemEventDao dao = new HibernatePlayerItemEventDao();
-        dao.setSessionFactory(hibernateSessionFactory);
-        return dao;
-    }
-
-    @Bean
     public PlayerStateRepository playerStateRepository(
             SessionFactory hibernateSessionFactory,
             ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
@@ -262,6 +258,58 @@ public class AggregatesHibernateConfig {
                 playerEventStore,
                 playerStateRepository,
                 playerStateQueryRepository
+        );
+        return applicationService;
+    }
+
+
+
+    @Bean
+    public MapLocationEventDao mapLocationEventDao(SessionFactory hibernateSessionFactory) {
+        HibernateMapLocationEventDao dao = new HibernateMapLocationEventDao();
+        dao.setSessionFactory(hibernateSessionFactory);
+        return dao;
+    }
+
+    @Bean
+    public MapStateRepository mapStateRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateMapStateRepository repository = new HibernateMapStateRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public MapStateQueryRepository mapStateQueryRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateMapStateQueryRepository repository = new HibernateMapStateQueryRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public HibernateMapEventStore mapEventStore(SessionFactory hibernateSessionFactory) {
+        HibernateMapEventStore eventStore = new HibernateMapEventStore();
+        eventStore.setSessionFactory(hibernateSessionFactory);
+        return eventStore;
+    }
+
+    @Bean
+    public AbstractMapApplicationService.SimpleMapApplicationService mapApplicationService(
+            @Qualifier("mapEventStore") EventStore mapEventStore,
+            MapStateRepository mapStateRepository,
+            MapStateQueryRepository mapStateQueryRepository
+    ) {
+        AbstractMapApplicationService.SimpleMapApplicationService applicationService = new AbstractMapApplicationService.SimpleMapApplicationService(
+                mapEventStore,
+                mapStateRepository,
+                mapStateQueryRepository
         );
         return applicationService;
     }

@@ -6,9 +6,9 @@
 package org.dddml.suiinfinitesea.domain.player;
 
 import java.util.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.domain.AbstractEvent;
 
@@ -173,32 +173,6 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
         this.playerEventId = eventId;
     }
 
-    protected PlayerItemEventDao getPlayerItemEventDao() {
-        return (PlayerItemEventDao)ApplicationContext.current.get("playerItemEventDao");
-    }
-
-    protected PlayerItemEventId newPlayerItemEventId(Long itemId)
-    {
-        PlayerItemEventId eventId = new PlayerItemEventId(this.getPlayerEventId().getId(), 
-            itemId, 
-            this.getPlayerEventId().getVersion());
-        return eventId;
-    }
-
-    protected void throwOnInconsistentEventIds(PlayerItemEvent.SqlPlayerItemEvent e)
-    {
-        throwOnInconsistentEventIds(this, e);
-    }
-
-    public static void throwOnInconsistentEventIds(PlayerEvent.SqlPlayerEvent oe, PlayerItemEvent.SqlPlayerItemEvent e)
-    {
-        if (!oe.getPlayerEventId().getId().equals(e.getPlayerItemEventId().getPlayerId()))
-        { 
-            throw DomainError.named("inconsistentEventIds", "Outer Id Id %1$s but inner id PlayerId %2$s", 
-                oe.getPlayerEventId().getId(), e.getPlayerItemEventId().getPlayerId());
-        }
-    }
-
 
     public abstract String getEventType();
 
@@ -255,6 +229,39 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
 
         public void setOwner(String value) {
             getDynamicProperties().put("owner", value);
+        }
+
+    }
+
+    public static class IslandClaimed extends PlayerClobEvent implements PlayerEvent.IslandClaimed {
+
+        @Override
+        public String getEventType() {
+            return "IslandClaimed";
+        }
+
+        public Coordinates getCoordinates() {
+            Object val = getDynamicProperties().get("coordinates");
+            if (val instanceof Coordinates) {
+                return (Coordinates) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
+        }
+
+        public void setCoordinates(Coordinates value) {
+            getDynamicProperties().put("coordinates", value);
+        }
+
+        public BigInteger getClaimedAt() {
+            Object val = getDynamicProperties().get("claimedAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setClaimedAt(BigInteger value) {
+            getDynamicProperties().put("claimedAt", value);
         }
 
     }

@@ -35,13 +35,13 @@ public abstract class AbstractItemProductionState implements ItemProductionState
         this.id_ = id;
     }
 
-    private ProductionMaterials productionMaterials;
+    private ItemIdQuantityPairs productionMaterials;
 
-    public ProductionMaterials getProductionMaterials() {
+    public ItemIdQuantityPairs getProductionMaterials() {
         return this.productionMaterials;
     }
 
-    public void setProductionMaterials(ProductionMaterials productionMaterials) {
+    public void setProductionMaterials(ItemIdQuantityPairs productionMaterials) {
         this.productionMaterials = productionMaterials;
     }
 
@@ -276,8 +276,8 @@ public abstract class AbstractItemProductionState implements ItemProductionState
     public void when(AbstractItemProductionEvent.ItemProductionCreated e) {
         throwOnWrongEvent(e);
 
-        ProductionMaterials productionMaterials = e.getProductionMaterials();
-        ProductionMaterials ProductionMaterials = productionMaterials;
+        ItemIdQuantityPairs productionMaterials = e.getProductionMaterials();
+        ItemIdQuantityPairs ProductionMaterials = productionMaterials;
         Integer requirementsLevel = e.getRequirementsLevel();
         Integer RequirementsLevel = requirementsLevel;
         Long baseQuantity = e.getBaseQuantity();
@@ -319,14 +319,14 @@ public abstract class AbstractItemProductionState implements ItemProductionState
         ItemProductionState updatedItemProductionState = (ItemProductionState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.itemproduction.CreateLogic",
                     "mutate",
-                    new Class[]{ItemProductionState.class, ProductionMaterials.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{ItemProductionState.class, ItemIdQuantityPairs.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new Object[]{this, productionMaterials, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.itemproduction;
 //
 //public class CreateLogic {
-//    public static ItemProductionState mutate(ItemProductionState itemProductionState, ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemProductionState, ItemProductionState.MutableItemProductionState> mutationContext) {
+//    public static ItemProductionState mutate(ItemProductionState itemProductionState, ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemProductionState, ItemProductionState.MutableItemProductionState> mutationContext) {
 //    }
 //}
 
@@ -337,8 +337,8 @@ public abstract class AbstractItemProductionState implements ItemProductionState
     public void when(AbstractItemProductionEvent.ItemProductionUpdated e) {
         throwOnWrongEvent(e);
 
-        ProductionMaterials productionMaterials = e.getProductionMaterials();
-        ProductionMaterials ProductionMaterials = productionMaterials;
+        ItemIdQuantityPairs productionMaterials = e.getProductionMaterials();
+        ItemIdQuantityPairs ProductionMaterials = productionMaterials;
         Integer requirementsLevel = e.getRequirementsLevel();
         Integer RequirementsLevel = requirementsLevel;
         Long baseQuantity = e.getBaseQuantity();
@@ -380,14 +380,14 @@ public abstract class AbstractItemProductionState implements ItemProductionState
         ItemProductionState updatedItemProductionState = (ItemProductionState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.itemproduction.UpdateLogic",
                     "mutate",
-                    new Class[]{ItemProductionState.class, ProductionMaterials.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{ItemProductionState.class, ItemIdQuantityPairs.class, Integer.class, Long.class, Long.class, BigInteger.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new Object[]{this, productionMaterials, requirementsLevel, baseQuantity, baseExperience, baseCreationTime, energyCost, successRate, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.itemproduction;
 //
 //public class UpdateLogic {
-//    public static ItemProductionState mutate(ItemProductionState itemProductionState, ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemProductionState, ItemProductionState.MutableItemProductionState> mutationContext) {
+//    public static ItemProductionState mutate(ItemProductionState itemProductionState, ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemProductionState, ItemProductionState.MutableItemProductionState> mutationContext) {
 //    }
 //}
 

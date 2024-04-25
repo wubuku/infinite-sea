@@ -15,6 +15,8 @@ public interface PlayerEventRepository extends JpaRepository<AbstractPlayerEvent
 
     AbstractPlayerEvent.PlayerCreated findFirstPlayerCreatedByOrderBySuiTimestampDesc();
 
+    AbstractPlayerEvent.IslandClaimed findFirstIslandClaimedByOrderBySuiTimestampDesc();
+
     AbstractPlayerEvent.PlayerAirdropped findFirstPlayerAirdroppedByOrderBySuiTimestampDesc();
 
     AbstractPlayerEvent.PlayerItemsDeducted findFirstPlayerItemsDeductedByOrderBySuiTimestampDesc();

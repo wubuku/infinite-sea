@@ -31,9 +31,7 @@ public class SuiPlayerService {
                     PlayerState.MutablePlayerState s = new AbstractPlayerState.SimplePlayerState();
                     s.setId(id);
                     return s;
-                },
-                (playerState, itemId) -> (PlayerItemState.MutablePlayerItemState)
-                        ((EntityStateCollection.ModifiableEntityStateCollection<Long, PlayerItemState>) playerState.getItems()).getOrAddDefault(itemId)
+                }
         );
     }
 

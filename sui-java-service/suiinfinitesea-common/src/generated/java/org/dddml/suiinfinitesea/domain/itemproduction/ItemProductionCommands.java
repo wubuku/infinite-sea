@@ -40,13 +40,13 @@ public class ItemProductionCommands {
         /**
          * Production Materials
          */
-        private ProductionMaterials productionMaterials;
+        private ItemIdQuantityPairs productionMaterials;
 
-        public ProductionMaterials getProductionMaterials() {
+        public ItemIdQuantityPairs getProductionMaterials() {
             return this.productionMaterials;
         }
 
-        public void setProductionMaterials(ProductionMaterials productionMaterials) {
+        public void setProductionMaterials(ItemIdQuantityPairs productionMaterials) {
             this.productionMaterials = productionMaterials;
         }
 
@@ -169,13 +169,13 @@ public class ItemProductionCommands {
         /**
          * Production Materials
          */
-        private ProductionMaterials productionMaterials;
+        private ItemIdQuantityPairs productionMaterials;
 
-        public ProductionMaterials getProductionMaterials() {
+        public ItemIdQuantityPairs getProductionMaterials() {
             return this.productionMaterials;
         }
 
-        public void setProductionMaterials(ProductionMaterials productionMaterials) {
+        public void setProductionMaterials(ItemIdQuantityPairs productionMaterials) {
             this.productionMaterials = productionMaterials;
         }
 

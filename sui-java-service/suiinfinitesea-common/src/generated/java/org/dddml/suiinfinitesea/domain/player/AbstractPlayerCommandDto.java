@@ -5,9 +5,9 @@
 
 package org.dddml.suiinfinitesea.domain.player;
 
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.AbstractCommand;
 
 public abstract class AbstractPlayerCommandDto extends AbstractCommand {

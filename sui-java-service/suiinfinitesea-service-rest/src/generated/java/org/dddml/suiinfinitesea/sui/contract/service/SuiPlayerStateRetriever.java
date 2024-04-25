@@ -11,8 +11,6 @@ import org.dddml.suiinfinitesea.domain.player.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.sui.contract.DomainBeanUtils;
 import org.dddml.suiinfinitesea.sui.contract.Player;
-import org.dddml.suiinfinitesea.sui.contract.PlayerItem;
-import org.dddml.suiinfinitesea.sui.contract.PlayerItemDynamicField;
 
 import java.util.*;
 import java.math.*;
@@ -23,15 +21,12 @@ public class SuiPlayerStateRetriever {
     private SuiJsonRpcClient suiJsonRpcClient;
 
     private Function<String, PlayerState.MutablePlayerState> playerStateFactory;
-    private BiFunction<PlayerState, Long, PlayerItemState.MutablePlayerItemState> playerItemStateFactory;
 
     public SuiPlayerStateRetriever(SuiJsonRpcClient suiJsonRpcClient,
-                                  Function<String, PlayerState.MutablePlayerState> playerStateFactory,
-                                  BiFunction<PlayerState, Long, PlayerItemState.MutablePlayerItemState> playerItemStateFactory
+                                  Function<String, PlayerState.MutablePlayerState> playerStateFactory
     ) {
         this.suiJsonRpcClient = suiJsonRpcClient;
         this.playerStateFactory = playerStateFactory;
-        this.playerItemStateFactory = playerItemStateFactory;
     }
 
     public PlayerState retrievePlayerState(String objectId) {
@@ -51,42 +46,9 @@ public class SuiPlayerStateRetriever {
         playerState.setOwner(player.getOwner());
         playerState.setLevel(player.getLevel());
         playerState.setExperience(player.getExperience());
-        if (player.getItems() != null) {
-            String playerItemTableId = player.getItems().getFields().getId().getId();
-            List<PlayerItem> items = getPlayerItems(playerItemTableId);
-            for (PlayerItem i : items) {
-                ((EntityStateCollection.ModifiableEntityStateCollection)playerState.getItems()).add(toPlayerItemState(playerState, i));
-            }
-        }
-
+        playerState.setClaimedIsland(DomainBeanUtils.toCoordinates(player.getClaimedIsland()));
+        playerState.setInventory(java.util.Arrays.stream(player.getInventory()).map(x -> DomainBeanUtils.toItemIdQuantityPair(x)).collect(java.util.stream.Collectors.toSet()));
         return playerState;
-    }
-
-    private PlayerItemState toPlayerItemState(PlayerState playerState, PlayerItem playerItem) {
-        PlayerItemState.MutablePlayerItemState playerItemState = playerItemStateFactory.apply(playerState, playerItem.getItemId());
-        playerItemState.setQuantity(playerItem.getQuantity());
-        return playerItemState;
-    }
-
-    private List<PlayerItem> getPlayerItems(String playerItemTableId) {
-        List<PlayerItem> playerItems = new ArrayList<>();
-        String cursor = null;
-        while (true) {
-            DynamicFieldPage<?> playerItemFieldPage = suiJsonRpcClient.getDynamicFields(playerItemTableId, cursor, null);
-            for (DynamicFieldInfo playerItemFieldInfo : playerItemFieldPage.getData()) {
-                String fieldObjectId = playerItemFieldInfo.getObjectId();
-                SuiMoveObjectResponse<PlayerItemDynamicField> getPlayerItemFieldResponse
-                        = suiJsonRpcClient.getMoveObject(fieldObjectId, new SuiObjectDataOptions(true, true, true, true, true, true, true), PlayerItemDynamicField.class);
-                PlayerItem playerItem = getPlayerItemFieldResponse
-                        .getData().getContent().getFields().getValue().getFields();
-                playerItems.add(playerItem);
-            }
-            cursor = playerItemFieldPage.getNextCursor();
-            if (!Page.hasNextPage(playerItemFieldPage)) {
-                break;
-            }
-        }
-        return playerItems;
     }
 
     

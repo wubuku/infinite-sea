@@ -6,9 +6,9 @@
 package org.dddml.suiinfinitesea.domain.player;
 
 import java.util.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.*;
 
 public abstract class AbstractPlayerAggregate extends AbstractAggregate implements PlayerAggregate {
@@ -52,6 +52,19 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             PlayerEvent.PlayerCreated e;
             try {
                 e = verifyCreate(eventFactory, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
+        @Override
+        public void claimIsland(String map, Coordinates coordinates, String clock, Long offChainVersion, String commandId, String requesterId, PlayerCommands.ClaimIsland c) {
+            java.util.function.Supplier<PlayerEvent.IslandClaimed> eventFactory = () -> newIslandClaimed(map, coordinates, clock, offChainVersion, commandId, requesterId);
+            PlayerEvent.IslandClaimed e;
+            try {
+                e = verifyClaimIsland(eventFactory, map, coordinates, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -111,6 +124,28 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
 //
 //public class CreateLogic {
 //    public static PlayerEvent.PlayerCreated verify(java.util.function.Supplier<PlayerEvent.PlayerCreated> eventFactory, PlayerState playerState, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
+        protected PlayerEvent.IslandClaimed verifyClaimIsland(java.util.function.Supplier<PlayerEvent.IslandClaimed> eventFactory, String map, Coordinates coordinates, PlayerCommands.ClaimIsland c) {
+            String Map = map;
+            Coordinates Coordinates = coordinates;
+
+            PlayerEvent.IslandClaimed e = (PlayerEvent.IslandClaimed) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.player.ClaimIslandLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, Coordinates.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), map, coordinates, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.player;
+//
+//public class ClaimIslandLogic {
+//    public static PlayerEvent.IslandClaimed verify(java.util.function.Supplier<PlayerEvent.IslandClaimed> eventFactory, PlayerState playerState, String map, Coordinates coordinates, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -189,6 +224,29 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             AbstractPlayerEvent.PlayerCreated e = new AbstractPlayerEvent.PlayerCreated();
 
             e.setOwner(null);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setPlayerEventId(eventId);
+            return e;
+        }
+
+        protected AbstractPlayerEvent.IslandClaimed newIslandClaimed(String map, Coordinates coordinates, String clock, Long offChainVersion, String commandId, String requesterId) {
+            PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
+            AbstractPlayerEvent.IslandClaimed e = new AbstractPlayerEvent.IslandClaimed();
+
+            e.setCoordinates(coordinates);
+            e.setClaimedAt(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

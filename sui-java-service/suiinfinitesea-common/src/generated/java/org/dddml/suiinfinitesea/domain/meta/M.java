@@ -38,8 +38,9 @@ public class M {
         typeToAggMap.put("ItemCreation", "ItemCreation");
         typeToAggMap.put("ItemProduction", "ItemProduction");
         typeToAggMap.put("Player", "Player");
-        typeToAggMap.put("PlayerItem", "Player");
         typeToAggMap.put("ExperienceTable", "ExperienceTable");
+        typeToAggMap.put("MapLocation", "Map");
+        typeToAggMap.put("Map", "Map");
         TYPE_NAME_TO_AGGREGATE_NAME_MAP = typeToAggMap;
 
         Map<String, Class<?>> clsMap = new HashMap<>();
@@ -614,6 +615,8 @@ public class M {
             "updatedAt",
             "active",
             "deleted",
+            "claimedIsland.x",
+            "claimedIsland.y",
     };
 
     public static final String[] propertyTypes = new String[] {
@@ -629,6 +632,8 @@ public class M {
             "Date",
             "Boolean",
             "Boolean",
+            "Long",
+            "Long",
     };
 
     public static final Map<String, String> propertyTypeMap;
@@ -667,6 +672,10 @@ public class M {
         aliasMap.put("Active", "active");
         aliasMap.put("deleted", "deleted");
         aliasMap.put("Deleted", "deleted");
+        aliasMap.put("claimedIsland.x", "claimedIsland.x");
+        aliasMap.put("ClaimedIsland.X", "claimedIsland.x");
+        aliasMap.put("claimedIsland.y", "claimedIsland.y");
+        aliasMap.put("ClaimedIsland.Y", "claimedIsland.y");
     }
 
     private static void initPropertyTypeMap() {
@@ -679,9 +688,90 @@ public class M {
 
 
   // /////////////////////////////////////////////////////////  
-  public static class PlayerItemMetadata {
+  public static class MapMetadata {
 
-    private PlayerItemMetadata() {
+    private MapMetadata() {
+    }
+
+    public static final String PROPERTY_NAME_VERSION      = "offChainVersion";
+    public static final String PROPERTY_NAME_ACTIVE       = "active";
+    public static final String PROPERTY_NAME_DELETED      = "deleted";
+    public static final String PROPERTY_NAME_CREATED_BY   = "createdBy";
+    public static final String PROPERTY_NAME_CREATED_AT   = "createdAt";
+    public static final String PROPERTY_NAME_UPDATED_BY   = "updatedBy";
+    public static final String PROPERTY_NAME_UPDATED_AT   = "updatedAt";
+
+    public static final Class ID_CLASS = String.class;
+
+    public static final String[] propertyNames = new String[] {
+            "id",
+            "offChainVersion",
+            "createdBy",
+            "createdAt",
+            "updatedBy",
+            "updatedAt",
+            "active",
+            "deleted",
+            "version",
+    };
+
+    public static final String[] propertyTypes = new String[] {
+            "String",
+            "Long",
+            "String",
+            "Date",
+            "String",
+            "Date",
+            "Boolean",
+            "Boolean",
+            "BigInteger",
+    };
+
+    public static final Map<String, String> propertyTypeMap;
+
+    public static final Map<String, String> aliasMap;
+
+    static {
+        propertyTypeMap = new HashMap<String, String>();
+        initPropertyTypeMap();
+        aliasMap = new HashMap<String, String>();
+        initAliasMap();
+    }
+
+    private static  void initAliasMap() {
+        aliasMap.put("id", "id");
+        aliasMap.put("Id", "id");
+        aliasMap.put("offChainVersion", "offChainVersion");
+        aliasMap.put("OffChainVersion", "offChainVersion");
+        aliasMap.put("createdBy", "createdBy");
+        aliasMap.put("CreatedBy", "createdBy");
+        aliasMap.put("createdAt", "createdAt");
+        aliasMap.put("CreatedAt", "createdAt");
+        aliasMap.put("updatedBy", "updatedBy");
+        aliasMap.put("UpdatedBy", "updatedBy");
+        aliasMap.put("updatedAt", "updatedAt");
+        aliasMap.put("UpdatedAt", "updatedAt");
+        aliasMap.put("active", "active");
+        aliasMap.put("Active", "active");
+        aliasMap.put("deleted", "deleted");
+        aliasMap.put("Deleted", "deleted");
+        aliasMap.put("version", "version");
+        aliasMap.put("Version", "version");
+    }
+
+    private static void initPropertyTypeMap() {
+        for (int i = 0; i < propertyNames.length; i++ ) {
+            propertyTypeMap.put(propertyNames[i], propertyTypes[i]);
+        }
+    }
+
+  }
+
+
+  // /////////////////////////////////////////////////////////  
+  public static class MapLocationMetadata {
+
+    private MapLocationMetadata() {
     }
 
     public static final String PROPERTY_NAME_VERSION      = "offChainVersion";
@@ -693,8 +783,9 @@ public class M {
     public static final String PROPERTY_NAME_UPDATED_AT   = "updatedAt";
 
     public static final String[] propertyNames = new String[] {
-            "itemId",
-            "quantity",
+            "type",
+            "occupiedBy",
+            "gatheredAt",
             "offChainVersion",
             "createdBy",
             "createdAt",
@@ -702,14 +793,18 @@ public class M {
             "updatedAt",
             "active",
             "deleted",
-            "playerId",
-            "playerItemId.playerId",
-            "playerItemId.itemId",
+            "mapId",
+            "coordinates.x",
+            "coordinates.y",
+            "mapLocationId.mapId",
+            "mapLocationId.coordinatesX",
+            "mapLocationId.coordinatesY",
     };
 
     public static final String[] propertyTypes = new String[] {
             "Long",
-            "Long",
+            "String",
+            "BigInteger",
             "Long",
             "String",
             "Date",
@@ -718,7 +813,10 @@ public class M {
             "Boolean",
             "Boolean",
             "String",
+            "Long",
+            "Long",
             "String",
+            "Long",
             "Long",
     };
 
@@ -734,10 +832,12 @@ public class M {
     }
 
     private static  void initAliasMap() {
-        aliasMap.put("itemId", "playerItemId.itemId");
-        aliasMap.put("ItemId", "playerItemId.itemId");
-        aliasMap.put("quantity", "quantity");
-        aliasMap.put("Quantity", "quantity");
+        aliasMap.put("type", "type");
+        aliasMap.put("Type", "type");
+        aliasMap.put("occupiedBy", "occupiedBy");
+        aliasMap.put("OccupiedBy", "occupiedBy");
+        aliasMap.put("gatheredAt", "gatheredAt");
+        aliasMap.put("GatheredAt", "gatheredAt");
         aliasMap.put("offChainVersion", "offChainVersion");
         aliasMap.put("OffChainVersion", "offChainVersion");
         aliasMap.put("createdBy", "createdBy");
@@ -752,12 +852,26 @@ public class M {
         aliasMap.put("Active", "active");
         aliasMap.put("deleted", "deleted");
         aliasMap.put("Deleted", "deleted");
-        aliasMap.put("playerId", "playerItemId.playerId");
-        aliasMap.put("PlayerId", "playerItemId.playerId");
-        aliasMap.put("playerItemId.playerId", "playerItemId.playerId");
-        aliasMap.put("PlayerItemId.PlayerId", "playerItemId.playerId");
-        aliasMap.put("playerItemId.itemId", "playerItemId.itemId");
-        aliasMap.put("PlayerItemId.ItemId", "playerItemId.itemId");
+        aliasMap.put("mapId", "mapLocationId.mapId");
+        aliasMap.put("MapId", "mapLocationId.mapId");
+        aliasMap.put("coordinates.x", "mapLocationId.coordinatesX");
+        aliasMap.put("Coordinates.X", "mapLocationId.coordinatesX");
+        aliasMap.put("coordinates.x", "mapLocationId.coordinatesX");
+        aliasMap.put("Coordinates.X", "mapLocationId.coordinatesX");
+        aliasMap.put("coordinates.y", "mapLocationId.coordinatesY");
+        aliasMap.put("Coordinates.Y", "mapLocationId.coordinatesY");
+        aliasMap.put("coordinates.y", "mapLocationId.coordinatesY");
+        aliasMap.put("Coordinates.Y", "mapLocationId.coordinatesY");
+        aliasMap.put("mapLocationId.mapId", "mapLocationId.mapId");
+        aliasMap.put("MapLocationId.MapId", "mapLocationId.mapId");
+        aliasMap.put("mapLocationId.coordinatesX", "mapLocationId.coordinatesX");
+        aliasMap.put("MapLocationId.CoordinatesX", "mapLocationId.coordinatesX");
+        aliasMap.put("mapLocationId.coordinates.x", "mapLocationId.coordinatesX");
+        aliasMap.put("MapLocationId.Coordinates.X", "mapLocationId.coordinatesX");
+        aliasMap.put("mapLocationId.coordinatesY", "mapLocationId.coordinatesY");
+        aliasMap.put("MapLocationId.CoordinatesY", "mapLocationId.coordinatesY");
+        aliasMap.put("mapLocationId.coordinates.y", "mapLocationId.coordinatesY");
+        aliasMap.put("MapLocationId.Coordinates.Y", "mapLocationId.coordinatesY");
     }
 
     private static void initPropertyTypeMap() {

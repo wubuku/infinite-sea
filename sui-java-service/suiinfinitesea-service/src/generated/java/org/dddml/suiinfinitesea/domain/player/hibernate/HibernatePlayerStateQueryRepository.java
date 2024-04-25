@@ -6,9 +6,9 @@
 package org.dddml.suiinfinitesea.domain.player.hibernate;
 
 import java.util.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.hibernate.Session;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -31,7 +31,7 @@ public class HibernatePlayerStateQueryRepository implements PlayerStateQueryRepo
         return this.sessionFactory.getCurrentSession();
     }
     
-    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Owner", "Level", "Experience", "Items", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
+    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Owner", "Level", "Experience", "ClaimedIsland", "Inventory", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
     
     private ReadOnlyProxyGenerator readOnlyProxyGenerator;
     
@@ -48,7 +48,7 @@ public class HibernatePlayerStateQueryRepository implements PlayerStateQueryRepo
 
         PlayerState state = (PlayerState)getCurrentSession().get(AbstractPlayerState.SimplePlayerState.class, id);
         if (getReadOnlyProxyGenerator() != null && state != null) {
-            return (PlayerState) getReadOnlyProxyGenerator().createProxy(state, new Class[]{PlayerState.SqlPlayerState.class, Saveable.class}, "getStateReadOnly", readOnlyPropertyPascalCaseNames);
+            return (PlayerState) getReadOnlyProxyGenerator().createProxy(state, new Class[]{PlayerState.SqlPlayerState.class}, "getStateReadOnly", readOnlyPropertyPascalCaseNames);
         }
         return state;
     }
@@ -128,22 +128,6 @@ public class HibernatePlayerStateQueryRepository implements PlayerStateQueryRepo
         }
         addNotDeletedRestriction(criteria);
         return (long)criteria.uniqueResult();
-    }
-
-    @Transactional(readOnly = true)
-    public PlayerItemState getPlayerItem(String playerId, Long itemId) {
-        PlayerItemId entityId = new PlayerItemId(playerId, itemId);
-        return (PlayerItemState) getCurrentSession().get(AbstractPlayerItemState.SimplePlayerItemState.class, entityId);
-    }
-
-    @Transactional(readOnly = true)
-    public Iterable<PlayerItemState> getPlayerItems(String playerId, org.dddml.support.criterion.Criterion filter, List<String> orders) {
-        Criteria criteria = getCurrentSession().createCriteria(AbstractPlayerItemState.SimplePlayerItemState.class);
-        org.hibernate.criterion.Junction partIdCondition = org.hibernate.criterion.Restrictions.conjunction()
-            .add(org.hibernate.criterion.Restrictions.eq("playerItemId.playerId", playerId))
-            ;
-        HibernateUtils.criteriaAddFilterAndOrdersAndSetFirstResultAndMaxResults(criteria, filter, orders, 0, Integer.MAX_VALUE);
-        return criteria.add(partIdCondition).list();
     }
 
 

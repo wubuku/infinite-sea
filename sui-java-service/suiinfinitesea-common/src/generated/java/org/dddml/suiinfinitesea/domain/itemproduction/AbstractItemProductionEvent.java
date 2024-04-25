@@ -229,15 +229,15 @@ public abstract class AbstractItemProductionEvent extends AbstractEvent implemen
             return "ItemProductionCreated";
         }
 
-        public ProductionMaterials getProductionMaterials() {
+        public ItemIdQuantityPairs getProductionMaterials() {
             Object val = getDynamicProperties().get("productionMaterials");
-            if (val instanceof ProductionMaterials) {
-                return (ProductionMaterials) val;
+            if (val instanceof ItemIdQuantityPairs) {
+                return (ItemIdQuantityPairs) val;
             }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, ProductionMaterials.class);
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPairs.class);
         }
 
-        public void setProductionMaterials(ProductionMaterials value) {
+        public void setProductionMaterials(ItemIdQuantityPairs value) {
             getDynamicProperties().put("productionMaterials", value);
         }
 
@@ -322,15 +322,15 @@ public abstract class AbstractItemProductionEvent extends AbstractEvent implemen
             return "ItemProductionUpdated";
         }
 
-        public ProductionMaterials getProductionMaterials() {
+        public ItemIdQuantityPairs getProductionMaterials() {
             Object val = getDynamicProperties().get("productionMaterials");
-            if (val instanceof ProductionMaterials) {
-                return (ProductionMaterials) val;
+            if (val instanceof ItemIdQuantityPairs) {
+                return (ItemIdQuantityPairs) val;
             }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, ProductionMaterials.class);
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPairs.class);
         }
 
-        public void setProductionMaterials(ProductionMaterials value) {
+        public void setProductionMaterials(ItemIdQuantityPairs value) {
             getDynamicProperties().put("productionMaterials", value);
         }
 

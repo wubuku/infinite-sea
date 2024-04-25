@@ -322,8 +322,8 @@ public abstract class AbstractSkillProcessState implements SkillProcessState.Sql
         BigInteger StartedAt = startedAt;
         BigInteger creationTime = e.getCreationTime();
         BigInteger CreationTime = creationTime;
-        ProductionMaterials productionMaterials = e.getProductionMaterials();
-        ProductionMaterials ProductionMaterials = productionMaterials;
+        ItemIdQuantityPairs productionMaterials = e.getProductionMaterials();
+        ItemIdQuantityPairs ProductionMaterials = productionMaterials;
         Long suiTimestamp = e.getSuiTimestamp();
         Long SuiTimestamp = suiTimestamp;
         String suiTxDigest = e.getSuiTxDigest();
@@ -353,14 +353,14 @@ public abstract class AbstractSkillProcessState implements SkillProcessState.Sql
         SkillProcessState updatedSkillProcessState = (SkillProcessState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.skillprocess.StartProductionLogic",
                     "mutate",
-                    new Class[]{SkillProcessState.class, Long.class, BigInteger.class, BigInteger.class, BigInteger.class, ProductionMaterials.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{SkillProcessState.class, Long.class, BigInteger.class, BigInteger.class, BigInteger.class, ItemIdQuantityPairs.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new Object[]{this, itemId, energyCost, startedAt, creationTime, productionMaterials, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.skillprocess;
 //
 //public class StartProductionLogic {
-//    public static SkillProcessState mutate(SkillProcessState skillProcessState, Long itemId, BigInteger energyCost, BigInteger startedAt, BigInteger creationTime, ProductionMaterials productionMaterials, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SkillProcessState, SkillProcessState.MutableSkillProcessState> mutationContext) {
+//    public static SkillProcessState mutate(SkillProcessState skillProcessState, Long itemId, BigInteger energyCost, BigInteger startedAt, BigInteger creationTime, ItemIdQuantityPairs productionMaterials, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<SkillProcessState, SkillProcessState.MutableSkillProcessState> mutationContext) {
 //    }
 //}
 

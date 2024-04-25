@@ -7,12 +7,6 @@
       <generator class="assigned" />
     </id>
     <version name="offChainVersion" column="off_chain_version" type="long" />
-    <set name="protectedItems" inverse="true" cascade="all-delete-orphan" fetch="join">
-      <key>
-        <column name="player_item_id_player_id" />
-      </key>
-      <one-to-many class="org.dddml.suiinfinitesea.domain.player.AbstractPlayerItemState$SimplePlayerItemState" />
-    </set>
     <property name="owner">
       <column name="owner" sql-type="VARCHAR(66)" />
     </property>
@@ -22,6 +16,14 @@
     <property name="experience">
       <column name="experience" />
     </property>
+    <component name="claimedIsland" class="org.dddml.suiinfinitesea.domain.Coordinates">
+      <property name="x">
+        <column name="claimed_island_x" />
+      </property>
+      <property name="y">
+        <column name="claimed_island_y" />
+      </property>
+    </component>
     <property name="version">
       <column name="version" sql-type="DECIMAL(20,0)" />
     </property>
@@ -39,5 +41,16 @@
     </property>
     <property name="createdAt" column="created_at" />
     <property name="updatedAt" column="updated_at" />
+    <set name="inventory" table="player_inventory" lazy="false">
+      <key column="Id" />
+      <composite-element class="org.dddml.suiinfinitesea.domain.ItemIdQuantityPair">
+        <property name="itemId">
+          <column name="item_id" not-null="true" />
+        </property>
+        <property name="quantity">
+          <column name="quantity" not-null="true" />
+        </property>
+      </composite-element>
+    </set>
   </class>
 </hibernate-mapping>

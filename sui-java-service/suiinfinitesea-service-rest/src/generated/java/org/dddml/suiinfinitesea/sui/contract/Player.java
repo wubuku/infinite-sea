@@ -25,9 +25,11 @@ public class Player {
 
     private Long experience;
 
-    private BigInteger version;
+    private Coordinates claimedIsland;
 
-    private Table items;
+    private ItemIdQuantityPair[] inventory;
+
+    private BigInteger version;
 
     public UID getId() {
         return id;
@@ -69,20 +71,28 @@ public class Player {
         this.experience = experience;
     }
 
+    public Coordinates getClaimedIsland() {
+        return claimedIsland;
+    }
+
+    public void setClaimedIsland(Coordinates claimedIsland) {
+        this.claimedIsland = claimedIsland;
+    }
+
+    public ItemIdQuantityPair[] getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(ItemIdQuantityPair[] inventory) {
+        this.inventory = inventory;
+    }
+
     public BigInteger getVersion() {
         return version;
     }
 
     public void setVersion(BigInteger version) {
         this.version = version;
-    }
-
-    public Table getItems() {
-        return items;
-    }
-
-    public void setItems(Table items) {
-        this.items = items;
     }
 
     @Override
@@ -93,8 +103,9 @@ public class Player {
                 ", owner=" + '\'' + owner + '\'' +
                 ", level=" + level +
                 ", experience=" + experience +
+                ", claimedIsland=" + claimedIsland +
+                ", inventory=" + Arrays.toString(inventory) +
                 ", version=" + version +
-                ", items=" + items +
                 '}';
     }
 }

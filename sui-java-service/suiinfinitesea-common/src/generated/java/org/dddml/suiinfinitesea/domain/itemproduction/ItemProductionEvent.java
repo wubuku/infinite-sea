@@ -22,9 +22,9 @@ public interface ItemProductionEvent extends Event, SuiEventEnvelope, SuiMoveEve
     }
 
     interface ItemProductionCreated extends ItemProductionEvent {
-        ProductionMaterials getProductionMaterials();
+        ItemIdQuantityPairs getProductionMaterials();
 
-        void setProductionMaterials(ProductionMaterials value);
+        void setProductionMaterials(ItemIdQuantityPairs value);
 
         Integer getRequirementsLevel();
 
@@ -53,9 +53,9 @@ public interface ItemProductionEvent extends Event, SuiEventEnvelope, SuiMoveEve
     }
 
     interface ItemProductionUpdated extends ItemProductionEvent {
-        ProductionMaterials getProductionMaterials();
+        ItemIdQuantityPairs getProductionMaterials();
 
-        void setProductionMaterials(ProductionMaterials value);
+        void setProductionMaterials(ItemIdQuantityPairs value);
 
         Integer getRequirementsLevel();
 

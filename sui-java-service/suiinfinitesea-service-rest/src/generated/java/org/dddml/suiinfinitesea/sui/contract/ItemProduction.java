@@ -21,7 +21,7 @@ public class ItemProduction {
 
     private Long offChainVersion;
 
-    private ProductionMaterials productionMaterials;
+    private ItemIdQuantityPairs productionMaterials;
 
     private Integer requirementsLevel;
 
@@ -61,11 +61,11 @@ public class ItemProduction {
         this.offChainVersion = offChainVersion;
     }
 
-    public ProductionMaterials getProductionMaterials() {
+    public ItemIdQuantityPairs getProductionMaterials() {
         return productionMaterials;
     }
 
-    public void setProductionMaterials(ProductionMaterials productionMaterials) {
+    public void setProductionMaterials(ItemIdQuantityPairs productionMaterials) {
         this.productionMaterials = productionMaterials;
     }
 

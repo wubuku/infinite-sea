@@ -6,9 +6,9 @@
 package org.dddml.suiinfinitesea.domain.player.hibernate;
 
 import java.util.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.hibernate.Session;
 import org.hibernate.Criteria;
 //import org.hibernate.criterion.Order;
@@ -31,7 +31,7 @@ public class HibernatePlayerStateRepository implements PlayerStateRepository {
         return this.sessionFactory.getCurrentSession();
     }
     
-    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Owner", "Level", "Experience", "Items", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
+    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Owner", "Level", "Experience", "ClaimedIsland", "Inventory", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
     
     private ReadOnlyProxyGenerator readOnlyProxyGenerator;
     
@@ -51,7 +51,7 @@ public class HibernatePlayerStateRepository implements PlayerStateRepository {
             state.setId(id);
         }
         if (getReadOnlyProxyGenerator() != null && state != null) {
-            return (PlayerState) getReadOnlyProxyGenerator().createProxy(state, new Class[]{PlayerState.SqlPlayerState.class, Saveable.class}, "getStateReadOnly", readOnlyPropertyPascalCaseNames);
+            return (PlayerState) getReadOnlyProxyGenerator().createProxy(state, new Class[]{PlayerState.SqlPlayerState.class}, "getStateReadOnly", readOnlyPropertyPascalCaseNames);
         }
         return state;
     }

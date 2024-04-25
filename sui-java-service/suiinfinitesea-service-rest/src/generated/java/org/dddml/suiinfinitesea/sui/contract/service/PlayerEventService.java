@@ -15,6 +15,7 @@ import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
 import org.dddml.suiinfinitesea.sui.contract.DomainBeanUtils;
 import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
+import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerItemsDeducted;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerExperienceAndItemsIncreased;
@@ -80,6 +81,46 @@ public class PlayerEventService {
             return;
         }
         playerEventRepository.save(playerCreated);
+    }
+
+    @Transactional
+    public void pullIslandClaimedEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getIslandClaimedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<IslandClaimed> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.PLAYER_MODULE_ISLAND_CLAIMED,
+                    cursor, limit, false, IslandClaimed.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<IslandClaimed> eventEnvelope : eventPage.getData()) {
+                    saveIslandClaimed(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getIslandClaimedEventNextCursor() {
+        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstIslandClaimedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveIslandClaimed(SuiMoveEventEnvelope<IslandClaimed> eventEnvelope) {
+        AbstractPlayerEvent.IslandClaimed islandClaimed = DomainBeanUtils.toIslandClaimed(eventEnvelope);
+        if (playerEventRepository.findById(islandClaimed.getPlayerEventId()).isPresent()) {
+            return;
+        }
+        playerEventRepository.save(islandClaimed);
     }
 
     @Transactional

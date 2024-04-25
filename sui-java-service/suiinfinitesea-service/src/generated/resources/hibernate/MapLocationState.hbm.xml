@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.map">
+  <class name="org.dddml.suiinfinitesea.domain.map.AbstractMapLocationState$SimpleMapLocationState" table="map_location">
+    <composite-id name="mapLocationId" class="org.dddml.suiinfinitesea.domain.map.MapLocationId">
+      <key-property name="mapId">
+        <column name="map_location_id_map_id" sql-type="VARCHAR(66)" />
+      </key-property>
+      <key-property name="coordinatesX">
+        <column name="map_location_id_coordinates_x" />
+      </key-property>
+      <key-property name="coordinatesY">
+        <column name="map_location_id_coordinates_y" />
+      </key-property>
+    </composite-id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <many-to-one name="protectedMapState" class="org.dddml.suiinfinitesea.domain.map.AbstractMapState$SimpleMapState" insert="false" update="false">
+      <column name="map_location_id_map_id" />
+    </many-to-one>
+    <property name="type">
+      <column name="type" />
+    </property>
+    <property name="occupiedBy">
+      <column name="occupied_by" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="gatheredAt">
+      <column name="gathered_at" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+    <set name="resources" table="map_location_resources" lazy="false">
+      <key>
+        <column name="map_location_id_map_id" />
+        <column name="map_location_id_coordinates_x" />
+        <column name="map_location_id_coordinates_y" />
+      </key>
+      <composite-element class="org.dddml.suiinfinitesea.domain.ItemIdQuantityPair">
+        <property name="itemId">
+          <column name="item_id" not-null="true" />
+        </property>
+        <property name="quantity">
+          <column name="quantity" not-null="true" />
+        </property>
+      </composite-element>
+    </set>
+  </class>
+</hibernate-mapping>

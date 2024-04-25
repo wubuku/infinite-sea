@@ -6,9 +6,9 @@
 package org.dddml.suiinfinitesea.domain.player;
 
 import java.util.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.Event;
 
 public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasStatus {
@@ -25,6 +25,17 @@ public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasS
         String getOwner();
 
         void setOwner(String value);
+
+    }
+
+    interface IslandClaimed extends PlayerEvent {
+        Coordinates getCoordinates();
+
+        void setCoordinates(Coordinates value);
+
+        BigInteger getClaimedAt();
+
+        void setClaimedAt(BigInteger value);
 
     }
 

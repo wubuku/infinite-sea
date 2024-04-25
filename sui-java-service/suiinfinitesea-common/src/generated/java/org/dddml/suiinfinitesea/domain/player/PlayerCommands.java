@@ -6,9 +6,9 @@
 package org.dddml.suiinfinitesea.domain.player;
 
 import java.util.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 
 public class PlayerCommands {
     private PlayerCommands() {
@@ -35,6 +35,83 @@ public class PlayerCommands {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class ClaimIsland extends AbstractPlayerCommand implements PlayerCommand {
+
+        public String getCommandType() {
+            return "ClaimIsland";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Id
+         */
+        private String id;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        /**
+         * Map
+         */
+        private String map;
+
+        public String getMap() {
+            return this.map;
+        }
+
+        public void setMap(String map) {
+            this.map = map;
+        }
+
+        /**
+         * Coordinates
+         */
+        private Coordinates coordinates;
+
+        public Coordinates getCoordinates() {
+            return this.coordinates;
+        }
+
+        public void setCoordinates(Coordinates coordinates) {
+            this.coordinates = coordinates;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
         }
 
         /**

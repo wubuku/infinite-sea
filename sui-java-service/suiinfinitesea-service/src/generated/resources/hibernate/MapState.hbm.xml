@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.map">
+  <class name="org.dddml.suiinfinitesea.domain.map.AbstractMapState$SimpleMapState" table="map">
+    <id name="id" length="66">
+      <column name="id" sql-type="VARCHAR(66)" />
+      <generator class="assigned" />
+    </id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <set name="protectedLocations" inverse="true" cascade="all-delete-orphan" fetch="join">
+      <key>
+        <column name="map_location_id_map_id" />
+      </key>
+      <one-to-many class="org.dddml.suiinfinitesea.domain.map.AbstractMapLocationState$SimpleMapLocationState" />
+    </set>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="version">
+      <column name="version" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+  </class>
+</hibernate-mapping>

@@ -7,9 +7,9 @@ package org.dddml.suiinfinitesea.domain.player;
 
 import java.util.*;
 import org.dddml.support.criterion.Criterion;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 
 public interface PlayerStateRepository {
     PlayerState get(String id, boolean nullAllowed);

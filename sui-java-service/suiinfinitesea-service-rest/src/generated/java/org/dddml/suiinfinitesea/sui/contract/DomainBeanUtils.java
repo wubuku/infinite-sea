@@ -29,9 +29,14 @@ import org.dddml.suiinfinitesea.sui.contract.itemproduction.ItemProductionCreate
 import org.dddml.suiinfinitesea.sui.contract.itemproduction.ItemProductionUpdated;
 import org.dddml.suiinfinitesea.domain.player.AbstractPlayerEvent;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
+import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerItemsDeducted;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerExperienceAndItemsIncreased;
+import org.dddml.suiinfinitesea.domain.map.AbstractMapEvent;
+import org.dddml.suiinfinitesea.sui.contract.map.InitMapEvent;
+import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
+import org.dddml.suiinfinitesea.sui.contract.map.MapIslandClaimed;
 import org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.InitExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelAdded;
@@ -42,6 +47,26 @@ import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelUpda
  */
 public class DomainBeanUtils {
     private DomainBeanUtils() {
+    }
+
+    public static org.dddml.suiinfinitesea.domain.Coordinates toCoordinates(Coordinates contractCoordinates) {
+        if (contractCoordinates == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.Coordinates coordinates = new org.dddml.suiinfinitesea.domain.Coordinates();
+        coordinates.setX(contractCoordinates.getFields().getX());
+        coordinates.setY(contractCoordinates.getFields().getY());
+        return coordinates;
+    }
+
+    public static org.dddml.suiinfinitesea.domain.Coordinates toCoordinates(CoordinatesForEvent contractCoordinates) {
+        if (contractCoordinates == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.Coordinates coordinates = new org.dddml.suiinfinitesea.domain.Coordinates();
+        coordinates.setX(contractCoordinates.getX());
+        coordinates.setY(contractCoordinates.getY());
+        return coordinates;
     }
 
     public static org.dddml.suiinfinitesea.domain.ExperienceLevel toExperienceLevel(ExperienceLevel contractExperienceLevel) {
@@ -86,6 +111,24 @@ public class DomainBeanUtils {
         return itemIdQuantityPair;
     }
 
+    public static org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs toItemIdQuantityPairs(ItemIdQuantityPairs contractItemIdQuantityPairs) {
+        if (contractItemIdQuantityPairs == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs itemIdQuantityPairs = new org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs();
+        itemIdQuantityPairs.setItems(java.util.Arrays.stream(contractItemIdQuantityPairs.getFields().getItems()).map(x -> DomainBeanUtils.toItemIdQuantityPair(x)).collect(java.util.stream.Collectors.toList()));
+        return itemIdQuantityPairs;
+    }
+
+    public static org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs toItemIdQuantityPairs(ItemIdQuantityPairsForEvent contractItemIdQuantityPairs) {
+        if (contractItemIdQuantityPairs == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs itemIdQuantityPairs = new org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs();
+        itemIdQuantityPairs.setItems(java.util.Arrays.stream(contractItemIdQuantityPairs.getItems()).map(x -> DomainBeanUtils.toItemIdQuantityPair(x)).collect(java.util.stream.Collectors.toList()));
+        return itemIdQuantityPairs;
+    }
+
     public static org.dddml.suiinfinitesea.domain.ObjectTable toObjectTable(ObjectTable contractObjectTable) {
         if (contractObjectTable == null) {
             return null;
@@ -94,24 +137,6 @@ public class DomainBeanUtils {
         objectTable.setId(contractObjectTable.getFields().getId().getId());
         objectTable.setSize(contractObjectTable.getFields().getSize());
         return objectTable;
-    }
-
-    public static org.dddml.suiinfinitesea.domain.ProductionMaterials toProductionMaterials(ProductionMaterials contractProductionMaterials) {
-        if (contractProductionMaterials == null) {
-            return null;
-        }
-        org.dddml.suiinfinitesea.domain.ProductionMaterials productionMaterials = new org.dddml.suiinfinitesea.domain.ProductionMaterials();
-        productionMaterials.setItems(java.util.Arrays.stream(contractProductionMaterials.getFields().getItems()).map(x -> DomainBeanUtils.toItemIdQuantityPair(x)).collect(java.util.stream.Collectors.toList()));
-        return productionMaterials;
-    }
-
-    public static org.dddml.suiinfinitesea.domain.ProductionMaterials toProductionMaterials(ProductionMaterialsForEvent contractProductionMaterials) {
-        if (contractProductionMaterials == null) {
-            return null;
-        }
-        org.dddml.suiinfinitesea.domain.ProductionMaterials productionMaterials = new org.dddml.suiinfinitesea.domain.ProductionMaterials();
-        productionMaterials.setItems(java.util.Arrays.stream(contractProductionMaterials.getItems()).map(x -> DomainBeanUtils.toItemIdQuantityPair(x)).collect(java.util.stream.Collectors.toList()));
-        return productionMaterials;
     }
 
     public static org.dddml.suiinfinitesea.domain.SkillProcessId toSkillProcessId(SkillProcessId contractSkillProcessId) {
@@ -216,7 +241,7 @@ public class DomainBeanUtils {
         productionProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
         productionProcessStarted.setStartedAt(contractEvent.getStartedAt());
         productionProcessStarted.setCreationTime(contractEvent.getCreationTime());
-        productionProcessStarted.setProductionMaterials(DomainBeanUtils.toProductionMaterials(contractEvent.getProductionMaterials()));
+        productionProcessStarted.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
         productionProcessStarted.setVersion(contractEvent.getVersion());
 
         productionProcessStarted.setSuiTimestamp(eventEnvelope.getTimestampMs());
@@ -410,7 +435,7 @@ public class DomainBeanUtils {
         AbstractItemProductionEvent.ItemProductionCreated itemProductionCreated = new AbstractItemProductionEvent.ItemProductionCreated();
         itemProductionCreated.setId_(contractEvent.getId());
         itemProductionCreated.setItemProductionId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemProductionId()));
-        itemProductionCreated.setProductionMaterials(DomainBeanUtils.toProductionMaterials(contractEvent.getProductionMaterials()));
+        itemProductionCreated.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
         itemProductionCreated.setRequirementsLevel(contractEvent.getRequirementsLevel());
         itemProductionCreated.setBaseQuantity(contractEvent.getBaseQuantity());
         itemProductionCreated.setBaseExperience(contractEvent.getBaseExperience());
@@ -436,7 +461,7 @@ public class DomainBeanUtils {
         AbstractItemProductionEvent.ItemProductionUpdated itemProductionUpdated = new AbstractItemProductionEvent.ItemProductionUpdated();
         itemProductionUpdated.setId_(contractEvent.getId());
         itemProductionUpdated.setItemProductionId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemProductionId()));
-        itemProductionUpdated.setProductionMaterials(DomainBeanUtils.toProductionMaterials(contractEvent.getProductionMaterials()));
+        itemProductionUpdated.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
         itemProductionUpdated.setRequirementsLevel(contractEvent.getRequirementsLevel());
         itemProductionUpdated.setBaseQuantity(contractEvent.getBaseQuantity());
         itemProductionUpdated.setBaseExperience(contractEvent.getBaseExperience());
@@ -473,6 +498,26 @@ public class DomainBeanUtils {
         playerCreated.setSuiSender(eventEnvelope.getSender());
 
         return playerCreated;
+    }
+
+    public static AbstractPlayerEvent.IslandClaimed toIslandClaimed(SuiMoveEventEnvelope<IslandClaimed> eventEnvelope) {
+        IslandClaimed contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractPlayerEvent.IslandClaimed islandClaimed = new AbstractPlayerEvent.IslandClaimed();
+        islandClaimed.setId(contractEvent.getId());
+        islandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        islandClaimed.setClaimedAt(contractEvent.getClaimedAt());
+        islandClaimed.setVersion(contractEvent.getVersion());
+
+        islandClaimed.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        islandClaimed.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        islandClaimed.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        islandClaimed.setSuiPackageId(eventEnvelope.getPackageId());
+        islandClaimed.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        islandClaimed.setSuiSender(eventEnvelope.getSender());
+
+        return islandClaimed;
     }
 
     public static AbstractPlayerEvent.PlayerAirdropped toPlayerAirdropped(SuiMoveEventEnvelope<PlayerAirdropped> eventEnvelope) {
@@ -533,6 +578,65 @@ public class DomainBeanUtils {
         playerExperienceAndItemsIncreased.setSuiSender(eventEnvelope.getSender());
 
         return playerExperienceAndItemsIncreased;
+    }
+
+    public static AbstractMapEvent.InitMapEvent toInitMapEvent(SuiMoveEventEnvelope<InitMapEvent> eventEnvelope) {
+        InitMapEvent contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.InitMapEvent initMapEvent = new AbstractMapEvent.InitMapEvent();
+        initMapEvent.setId(contractEvent.getId());
+        initMapEvent.setVersion(BigInteger.valueOf(-1));
+
+        initMapEvent.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        initMapEvent.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        initMapEvent.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        initMapEvent.setSuiPackageId(eventEnvelope.getPackageId());
+        initMapEvent.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        initMapEvent.setSuiSender(eventEnvelope.getSender());
+
+        return initMapEvent;
+    }
+
+    public static AbstractMapEvent.IslandAdded toIslandAdded(SuiMoveEventEnvelope<IslandAdded> eventEnvelope) {
+        IslandAdded contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.IslandAdded islandAdded = new AbstractMapEvent.IslandAdded();
+        islandAdded.setId(contractEvent.getId());
+        islandAdded.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        islandAdded.setResources(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getResources()));
+        islandAdded.setVersion(contractEvent.getVersion());
+
+        islandAdded.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        islandAdded.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        islandAdded.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        islandAdded.setSuiPackageId(eventEnvelope.getPackageId());
+        islandAdded.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        islandAdded.setSuiSender(eventEnvelope.getSender());
+
+        return islandAdded;
+    }
+
+    public static AbstractMapEvent.MapIslandClaimed toMapIslandClaimed(SuiMoveEventEnvelope<MapIslandClaimed> eventEnvelope) {
+        MapIslandClaimed contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.MapIslandClaimed mapIslandClaimed = new AbstractMapEvent.MapIslandClaimed();
+        mapIslandClaimed.setId(contractEvent.getId());
+        mapIslandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        mapIslandClaimed.setClaimedBy(contractEvent.getClaimedBy());
+        mapIslandClaimed.setClaimedAt(contractEvent.getClaimedAt());
+        mapIslandClaimed.setVersion(contractEvent.getVersion());
+
+        mapIslandClaimed.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        mapIslandClaimed.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        mapIslandClaimed.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        mapIslandClaimed.setSuiPackageId(eventEnvelope.getPackageId());
+        mapIslandClaimed.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        mapIslandClaimed.setSuiSender(eventEnvelope.getSender());
+
+        return mapIslandClaimed;
     }
 
     public static AbstractExperienceTableEvent.InitExperienceTableEvent toInitExperienceTableEvent(SuiMoveEventEnvelope<InitExperienceTableEvent> eventEnvelope) {

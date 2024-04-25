@@ -39,14 +39,14 @@ public class ItemProductionStateDto {
         this.id_ = id;
     }
 
-    private ProductionMaterials productionMaterials;
+    private ItemIdQuantityPairs productionMaterials;
 
-    public ProductionMaterials getProductionMaterials()
+    public ItemIdQuantityPairs getProductionMaterials()
     {
         return this.productionMaterials;
     }
 
-    public void setProductionMaterials(ProductionMaterials productionMaterials)
+    public void setProductionMaterials(ItemIdQuantityPairs productionMaterials)
     {
         this.productionMaterials = productionMaterials;
     }

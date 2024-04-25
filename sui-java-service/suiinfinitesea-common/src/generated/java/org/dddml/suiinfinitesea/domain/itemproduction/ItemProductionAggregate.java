@@ -17,9 +17,9 @@ public interface ItemProductionAggregate {
 
     List<Event> getChanges();
 
-    void create(ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemProductionCommands.Create c);
+    void create(ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemProductionCommands.Create c);
 
-    void update(ProductionMaterials productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemProductionCommands.Update c);
+    void update(ItemIdQuantityPairs productionMaterials, Integer requirementsLevel, Long baseQuantity, Long baseExperience, BigInteger baseCreationTime, BigInteger energyCost, Integer successRate, Long offChainVersion, String commandId, String requesterId, ItemProductionCommands.Update c);
 
     void throwOnInvalidStateTransition(Command c);
 }

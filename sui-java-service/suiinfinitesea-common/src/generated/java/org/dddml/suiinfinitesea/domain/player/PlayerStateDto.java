@@ -7,9 +7,9 @@ package org.dddml.suiinfinitesea.domain.player;
 
 import java.util.*;
 import java.math.*;
+import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.*;
 
 
@@ -61,6 +61,18 @@ public class PlayerStateDto {
     public void setExperience(Long experience)
     {
         this.experience = experience;
+    }
+
+    private Coordinates claimedIsland;
+
+    public Coordinates getClaimedIsland()
+    {
+        return this.claimedIsland;
+    }
+
+    public void setClaimedIsland(Coordinates claimedIsland)
+    {
+        this.claimedIsland = claimedIsland;
     }
 
     private BigInteger version;
@@ -147,22 +159,20 @@ public class PlayerStateDto {
         this.updatedAt = updatedAt;
     }
 
-    private PlayerItemStateDto[] items;
+    private ItemIdQuantityPair[] inventory;
 
-    public PlayerItemStateDto[] getItems()
-    {
-        return this.items;
-    }    
+    public ItemIdQuantityPair[] getInventory() {
+        return this.inventory;
+    }
 
-    public void setItems(PlayerItemStateDto[] items)
-    {
-        this.items = items;
+    public void setInventory(ItemIdQuantityPair[] inventory) {
+        this.inventory = inventory;
     }
 
 
     public static class DtoConverter extends AbstractStateDtoConverter
     {
-        public static Collection<String> collectionFieldNames = Arrays.asList(new String[]{"Items"});
+        public static Collection<String> collectionFieldNames = Arrays.asList(new String[]{});
 
         @Override
         protected boolean isCollectionField(String fieldName) {
@@ -200,6 +210,9 @@ public class PlayerStateDto {
             if (returnedFieldsContains("Experience")) {
                 dto.setExperience(state.getExperience());
             }
+            if (returnedFieldsContains("ClaimedIsland")) {
+                dto.setClaimedIsland(state.getClaimedIsland());
+            }
             if (returnedFieldsContains("Version")) {
                 dto.setVersion(state.getVersion());
             }
@@ -221,17 +234,14 @@ public class PlayerStateDto {
             if (returnedFieldsContains("UpdatedAt")) {
                 dto.setUpdatedAt(state.getUpdatedAt());
             }
-            if (returnedFieldsContains("Items")) {
-                ArrayList<PlayerItemStateDto> arrayList = new ArrayList();
-                if (state.getItems() != null) {
-                    PlayerItemStateDto.DtoConverter conv = new PlayerItemStateDto.DtoConverter();
-                    String returnFS = CollectionUtils.mapGetValueIgnoringCase(getReturnedFields(), "Items");
-                    if(returnFS != null) { conv.setReturnedFieldsString(returnFS); } else { conv.setAllFieldsReturned(this.getAllFieldsReturned()); }
-                    for (PlayerItemState s : state.getItems()) {
-                        arrayList.add(conv.toPlayerItemStateDto(s));
+            if (returnedFieldsContains("Inventory")) {
+                ArrayList<ItemIdQuantityPair> arrayList = new ArrayList();
+                if (state.getInventory() != null) {
+                    for (ItemIdQuantityPair s : state.getInventory()) {
+                        arrayList.add(s);
                     }
                 }
-                dto.setItems(arrayList.toArray(new PlayerItemStateDto[0]));
+                dto.setInventory(arrayList.toArray(new ItemIdQuantityPair[0]));
             }
             return dto;
         }

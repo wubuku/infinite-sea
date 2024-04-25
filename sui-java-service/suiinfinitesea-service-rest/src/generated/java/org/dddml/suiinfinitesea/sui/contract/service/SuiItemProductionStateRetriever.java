@@ -44,7 +44,7 @@ public class SuiItemProductionStateRetriever {
         ItemProductionState.MutableItemProductionState itemProductionState = itemProductionStateFactory.apply(DomainBeanUtils.toSkillTypeItemIdPair(itemProduction.getItemProductionId()));
         itemProductionState.setId_(itemProduction.getId().getId());
         itemProductionState.setVersion(itemProduction.getVersion());
-        itemProductionState.setProductionMaterials(DomainBeanUtils.toProductionMaterials(itemProduction.getProductionMaterials()));
+        itemProductionState.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(itemProduction.getProductionMaterials()));
         itemProductionState.setRequirementsLevel(itemProduction.getRequirementsLevel());
         itemProductionState.setBaseQuantity(itemProduction.getBaseQuantity());
         itemProductionState.setBaseExperience(itemProduction.getBaseExperience());
