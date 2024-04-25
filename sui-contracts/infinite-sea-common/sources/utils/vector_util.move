@@ -9,6 +9,18 @@ module infinite_sea_common::vector_util {
     const EInsufficientQuantity: u64 = 2;
     const EItemNotFound: u64 = 3;
 
+    /// "merged" is a vector already sorted in ascending order by "item_id",
+    /// merge the "other" vector into "merged" while maintaining its order.
+    public fun merge_item_id_quantity_pairs(merged: &mut vector<ItemIdQuantityPair>, other: &vector<ItemIdQuantityPair>) {
+        let oi = 0;
+        let ol = vector::length(other);
+        while (oi < ol) {
+            let other_pair = vector::borrow(other, oi);
+            insert_or_add_item_id_quantity_pair(merged, *other_pair);
+            oi = oi + 1;
+        };
+    }
+
     /// "v" is a vector already sorted in ascending order by "item_id",
     /// insert or update the quantity of the given "pair" in the vector while maintaining the order.
     public fun insert_or_add_item_id_quantity_pair(v: &mut vector<ItemIdQuantityPair>, pair: ItemIdQuantityPair) {
@@ -25,6 +37,12 @@ module infinite_sea_common::vector_util {
         } else {
             // Insert the new ItemIdQuantityPair at the found position.
             vector::insert(v, pair, low);
+        };
+    }
+
+    public fun remove_all_item_id_quantity_pairs(v: &mut vector<ItemIdQuantityPair>) {
+        while (!vector::is_empty(v)) {
+            vector::pop_back(v);
         };
     }
 
