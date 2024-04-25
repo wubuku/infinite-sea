@@ -1,19 +1,17 @@
 #[allow(unused_mut_parameter)]
 module infinite_sea::player_create_logic {
     use std::vector;
+
     use sui::tx_context::TxContext;
 
     use infinite_sea::player;
 
     friend infinite_sea::player_aggregate;
 
-    //const ESenderHasNoPermission: u64 = 22;
-
     public(friend) fun verify(
         ctx: &mut TxContext,
     ): player::PlayerCreated {
         let _ = ctx;
-        //assert!(sui::tx_context::sender(ctx) == owner, ESenderHasNoPermission);
         let owner = sui::tx_context::sender(ctx);
         player::new_player_created(
             owner,

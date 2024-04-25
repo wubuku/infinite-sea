@@ -6,10 +6,13 @@
 module infinite_sea::map_aggregate {
     use infinite_sea::map;
     use infinite_sea::map_add_island_logic;
+    use infinite_sea::map_claim_island_logic;
     use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_common::item_id_quantity_pairs::{Self, ItemIdQuantityPairs};
+    use sui::object::ID;
     use sui::tx_context;
 
+    friend infinite_sea::player_claim_island_logic;
     friend infinite_sea::skill_process_service;
 
     const EInvalidAdminCap: u64 = 50;
@@ -46,6 +49,35 @@ module infinite_sea::map_aggregate {
         );
         map::update_object_version(map);
         map::emit_island_added(island_added);
+    }
+
+    public(friend) fun claim_island(
+        map: &mut map::Map,
+        coordinates_x: u32,
+        coordinates_y: u32,
+        claimed_by: ID,
+        claimed_at: u64,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        map::assert_schema_version(map);
+        let coordinates: Coordinates = coordinates::new(
+            coordinates_x,
+            coordinates_y,
+        );
+        let map_island_claimed = map_claim_island_logic::verify(
+            coordinates,
+            claimed_by,
+            claimed_at,
+            map,
+            ctx,
+        );
+        map_claim_island_logic::mutate(
+            &map_island_claimed,
+            map,
+            ctx,
+        );
+        map::update_object_version(map);
+        map::emit_map_island_claimed(map_island_claimed);
     }
 
 }

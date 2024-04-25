@@ -16,6 +16,7 @@ module infinite_sea::map {
     struct MAP has drop {}
 
     friend infinite_sea::map_add_island_logic;
+    friend infinite_sea::map_claim_island_logic;
     friend infinite_sea::map_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -172,6 +173,45 @@ module infinite_sea::map {
         }
     }
 
+    struct MapIslandClaimed has copy, drop {
+        id: object::ID,
+        version: u64,
+        coordinates: Coordinates,
+        claimed_by: ID,
+        claimed_at: u64,
+    }
+
+    public fun map_island_claimed_id(map_island_claimed: &MapIslandClaimed): object::ID {
+        map_island_claimed.id
+    }
+
+    public fun map_island_claimed_coordinates(map_island_claimed: &MapIslandClaimed): Coordinates {
+        map_island_claimed.coordinates
+    }
+
+    public fun map_island_claimed_claimed_by(map_island_claimed: &MapIslandClaimed): ID {
+        map_island_claimed.claimed_by
+    }
+
+    public fun map_island_claimed_claimed_at(map_island_claimed: &MapIslandClaimed): u64 {
+        map_island_claimed.claimed_at
+    }
+
+    public(friend) fun new_map_island_claimed(
+        map: &Map,
+        coordinates: Coordinates,
+        claimed_by: ID,
+        claimed_at: u64,
+    ): MapIslandClaimed {
+        MapIslandClaimed {
+            id: id(map),
+            version: version(map),
+            coordinates,
+            claimed_by,
+            claimed_at,
+        }
+    }
+
 
     #[lint_allow(share_owned)]
     public(friend) fun share_object(map: Map) {
@@ -198,6 +238,10 @@ module infinite_sea::map {
 
     public(friend) fun emit_island_added(island_added: IslandAdded) {
         event::emit(island_added);
+    }
+
+    public(friend) fun emit_map_island_claimed(map_island_claimed: MapIslandClaimed) {
+        event::emit(map_island_claimed);
     }
 
 }

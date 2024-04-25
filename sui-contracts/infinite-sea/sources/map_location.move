@@ -9,6 +9,7 @@ module infinite_sea::map_location {
     use std::option::Option;
     use sui::object::ID;
     friend infinite_sea::map_add_island_logic;
+    friend infinite_sea::map_claim_island_logic;
     friend infinite_sea::map;
 
     #[allow(unused_const)]

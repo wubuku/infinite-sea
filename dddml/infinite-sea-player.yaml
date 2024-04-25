@@ -64,14 +64,31 @@ aggregates:
           properties:
             Owner:
               type: address
-        #constants:
-        #  ESenderHasNoPermission:
-        #    constantExpression:
-        #      Move: 22
-        #    type: u64
-        #verificationLogic:
-        #  Move: >
-        #    assert!(sui::tx_context::sender(ctx) == owner, ESenderHasNoPermission);
+
+      ClaimIsland:
+        parameters:
+          Map:
+            referenceType: Map
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Coordinates:
+            type: Coordinates
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          name: IslandClaimed
+          properties:
+            ClaimedAt:
+              type: u64
+        constants:
+          ESenderHasNoPermission:
+            constantExpression:
+              Move: 22
+            type: u64
+        verificationLogic:
+          Move: >
+            assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
 
       Airdrop:
         requiredPermission: "__Publisher__"

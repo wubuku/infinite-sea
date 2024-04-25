@@ -15,6 +15,7 @@ module infinite_sea::player {
     struct PLAYER has drop {}
 
     friend infinite_sea::player_create_logic;
+    friend infinite_sea::player_claim_island_logic;
     friend infinite_sea::player_airdrop_logic;
     friend infinite_sea::player_deduct_items_logic;
     friend infinite_sea::player_increase_experience_and_items_logic;
@@ -135,6 +136,38 @@ module infinite_sea::player {
         PlayerCreated {
             id: option::none(),
             owner,
+        }
+    }
+
+    struct IslandClaimed has copy, drop {
+        id: object::ID,
+        version: u64,
+        coordinates: Coordinates,
+        claimed_at: u64,
+    }
+
+    public fun island_claimed_id(island_claimed: &IslandClaimed): object::ID {
+        island_claimed.id
+    }
+
+    public fun island_claimed_coordinates(island_claimed: &IslandClaimed): Coordinates {
+        island_claimed.coordinates
+    }
+
+    public fun island_claimed_claimed_at(island_claimed: &IslandClaimed): u64 {
+        island_claimed.claimed_at
+    }
+
+    public(friend) fun new_island_claimed(
+        player: &Player,
+        coordinates: Coordinates,
+        claimed_at: u64,
+    ): IslandClaimed {
+        IslandClaimed {
+            id: id(player),
+            version: version(player),
+            coordinates,
+            claimed_at,
         }
     }
 
@@ -262,6 +295,10 @@ module infinite_sea::player {
     public(friend) fun emit_player_created(player_created: PlayerCreated) {
         assert!(std::option::is_some(&player_created.id), EEmptyObjectID);
         event::emit(player_created);
+    }
+
+    public(friend) fun emit_island_claimed(island_claimed: IslandClaimed) {
+        event::emit(island_claimed);
     }
 
     public(friend) fun emit_player_airdropped(player_airdropped: PlayerAirdropped) {

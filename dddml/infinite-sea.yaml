@@ -294,6 +294,8 @@ singletonObjects:
   Map:
     metadata:
       IS_MOVE_SCHEMA_VERSIONED: true
+    friends:
+      - Player.ClaimIsland
     properties:
       Locations:
         itemType: MapLocation
@@ -311,6 +313,18 @@ singletonObjects:
             type: ItemIdQuantityPairs
         event:
           name: IslandAdded
+
+      ClaimIsland:
+        isInternal: true
+        parameters:
+          Coordinates:
+            type: Coordinates
+          ClaimedBy:
+            type: ID # PlayerId
+          ClaimedAt:
+            type: u64
+        event:
+          name: MapIslandClaimed
 
     entities:
       MapLocation:

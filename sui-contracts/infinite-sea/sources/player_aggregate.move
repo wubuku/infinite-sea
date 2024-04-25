@@ -5,12 +5,16 @@
 
 #[allow(unused_mut_parameter, unused_use)]
 module infinite_sea::player_aggregate {
+    use infinite_sea::map::Map;
     use infinite_sea::player;
     use infinite_sea::player_airdrop_logic;
+    use infinite_sea::player_claim_island_logic;
     use infinite_sea::player_create_logic;
     use infinite_sea::player_deduct_items_logic;
     use infinite_sea::player_increase_experience_and_items_logic;
+    use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_common::item_id_quantity_pair::{Self, ItemIdQuantityPair};
+    use sui::clock::Clock;
     use sui::tx_context;
 
     friend infinite_sea::skill_process_start_production_logic;
@@ -34,6 +38,35 @@ module infinite_sea::player_aggregate {
         player::set_player_created_id(&mut player_created, player::id(&player));
         player::share_object(player);
         player::emit_player_created(player_created);
+    }
+
+    public entry fun claim_island(
+        player: &mut player::Player,
+        map: &mut Map,
+        coordinates_x: u32,
+        coordinates_y: u32,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let coordinates: Coordinates = coordinates::new(
+            coordinates_x,
+            coordinates_y,
+        );
+        let island_claimed = player_claim_island_logic::verify(
+            map,
+            coordinates,
+            clock,
+            player,
+            ctx,
+        );
+        player_claim_island_logic::mutate(
+            &island_claimed,
+            map,
+            player,
+            ctx,
+        );
+        player::update_object_version(player);
+        player::emit_island_claimed(island_claimed);
     }
 
     public entry fun airdrop(
