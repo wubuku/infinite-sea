@@ -292,6 +292,8 @@ superObjects:
 
 singletonObjects:
   Map:
+    metadata:
+      IS_MOVE_SCHEMA_VERSIONED: true
     properties:
       Locations:
         itemType: MapLocation
@@ -299,6 +301,17 @@ singletonObjects:
       "__Init__":
         event:
           isObjectShared: true # Share the object after initialization.
+
+      AddIsland:
+        requiredPermission: "AdminCap"
+        parameters:
+          Coordinates:
+            type: Coordinates
+          Resources:
+            type: ItemIdQuantityPairs
+        event:
+          name: IslandAdded
+
     entities:
       MapLocation:
         id:

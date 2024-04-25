@@ -8,6 +8,7 @@ module infinite_sea::map_location {
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
     use std::option::Option;
     use sui::object::ID;
+    friend infinite_sea::map_add_island_logic;
     friend infinite_sea::map;
 
     #[allow(unused_const)]

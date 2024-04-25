@@ -6,14 +6,16 @@
 module infinite_sea::map {
     use infinite_sea::map_location::{Self, MapLocation};
     use infinite_sea_common::coordinates::Coordinates;
+    use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use sui::event;
-    use sui::object::{Self, UID};
+    use sui::object::{Self, ID, UID};
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
 
     struct MAP has drop {}
 
+    friend infinite_sea::map_add_island_logic;
     friend infinite_sea::map_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -22,6 +24,20 @@ module infinite_sea::map {
     #[allow(unused_const)]
     const EInappropriateVersion: u64 = 103;
     const EIdNotFound: u64 = 111;
+
+    /// Not the right admin for the object
+    const ENotAdmin: u64 = 0;
+    /// Migration is not an upgrade
+    const ENotUpgrade: u64 = 1;
+    /// Calling functions from the wrong package version
+    const EWrongSchemaVersion: u64 = 2;
+
+    const SCHEMA_VERSION: u64 = 0;
+
+    struct AdminCap has key {
+        id: UID,
+    }
+
 
     fun init(otw: MAP, ctx: &mut TxContext) {
         let map = new_map(
@@ -32,9 +48,15 @@ module infinite_sea::map {
         share_object(map);
     }
 
+    public fun assert_schema_version(map: &Map) {
+        assert!(map.schema_version == SCHEMA_VERSION, EWrongSchemaVersion);
+    }
+
     struct Map has key {
         id: UID,
         version: u64,
+        schema_version: u64,
+        admin_cap: ID,
         locations: table::Table<Coordinates, MapLocation>,
     }
 
@@ -74,15 +96,32 @@ module infinite_sea::map {
         table::length(&map.locations)
     }
 
+    public fun admin_cap(map: &Map): ID {
+        map.admin_cap
+    }
+
     public(friend) fun new_map(
         _witness: MAP,
         ctx: &mut TxContext,
     ): Map {
+        let admin_cap = AdminCap {
+            id: object::new(ctx),
+        };
+        let admin_cap_id = object::id(&admin_cap);
+        transfer::transfer(admin_cap, sui::tx_context::sender(ctx));
         Map {
             id: object::new(ctx),
             version: 0,
+            schema_version: SCHEMA_VERSION,
+            admin_cap: admin_cap_id,
             locations: table::new<Coordinates, MapLocation>(ctx),
         }
+    }
+
+    entry fun migrate(map: &mut Map, a: &AdminCap) {
+        assert!(map.admin_cap == object::id(a), ENotAdmin);
+        assert!(map.schema_version < SCHEMA_VERSION, ENotUpgrade);
+        map.schema_version = SCHEMA_VERSION;
     }
 
     struct InitMapEvent has copy, drop {
@@ -98,6 +137,38 @@ module infinite_sea::map {
     ): InitMapEvent {
         InitMapEvent {
             id: id(map),
+        }
+    }
+
+    struct IslandAdded has copy, drop {
+        id: object::ID,
+        version: u64,
+        coordinates: Coordinates,
+        resources: ItemIdQuantityPairs,
+    }
+
+    public fun island_added_id(island_added: &IslandAdded): object::ID {
+        island_added.id
+    }
+
+    public fun island_added_coordinates(island_added: &IslandAdded): Coordinates {
+        island_added.coordinates
+    }
+
+    public fun island_added_resources(island_added: &IslandAdded): ItemIdQuantityPairs {
+        island_added.resources
+    }
+
+    public(friend) fun new_island_added(
+        map: &Map,
+        coordinates: Coordinates,
+        resources: ItemIdQuantityPairs,
+    ): IslandAdded {
+        IslandAdded {
+            id: id(map),
+            version: version(map),
+            coordinates,
+            resources,
         }
     }
 
@@ -117,10 +188,16 @@ module infinite_sea::map {
         let Map {
             id,
             version: _version,
+            schema_version: _,
+            admin_cap: _,
             locations,
         } = map;
         object::delete(id);
         table::destroy_empty(locations);
+    }
+
+    public(friend) fun emit_island_added(island_added: IslandAdded) {
+        event::emit(island_added);
     }
 
 }
