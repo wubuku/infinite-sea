@@ -3,16 +3,15 @@ module infinite_sea::player_deduct_items_logic {
     use std::vector;
 
     use sui::tx_context::TxContext;
-    use infinite_sea_common::item_id_quantity_pair;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
+    use infinite_sea_common::vector_util;
 
     use infinite_sea::player;
-    use infinite_sea::player_item::Self;
 
     friend infinite_sea::player_aggregate;
 
-    const EPalyerHasNoSuchItem: u64 = 10;
-    const EInsufficientItemQuantity: u64 = 11;
+    // const EPalyerHasNoSuchItem: u64 = 10;
+    // const EInsufficientItemQuantity: u64 = 11;
 
     public(friend) fun verify(
         items: vector<ItemIdQuantityPair>,
@@ -30,20 +29,16 @@ module infinite_sea::player_deduct_items_logic {
         player: &mut player::Player,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {
+        let inv = player::borrow_mut_inventory(player);
         let items = player::player_items_deducted_items(player_items_deducted);
         //let player_id = player::player_id(player);
         let i = 0;
         let l = vector::length(&items);
         while (i < l) {
             let item = vector::borrow(&items, i);
-            let item_id = item_id_quantity_pair::item_id(item);
-            let quantity = item_id_quantity_pair::quantity(item);
-            assert!(player::items_contains(player, item_id), EPalyerHasNoSuchItem);
-            let player_item = player::borrow_mut_item(player, item_id);
-            let old_quantity = player_item::quantity(player_item);
-            assert!(old_quantity >= quantity, EInsufficientItemQuantity);
-            player_item::set_quantity(player_item, old_quantity - quantity);
-
+            // let item_id = item_id_quantity_pair::item_id(item);
+            // let quantity = item_id_quantity_pair::quantity(item);
+            vector_util::subtract_item_id_quantity_pair(inv, *item);
             i = i + 1;
         };
     }

@@ -35,8 +35,10 @@ aggregates:
         optional: true
         defaultLogic:
           Move: "std::option::none()"
-      Items:
-        itemType: PlayerItem
+      Inventory:
+        itemType: ItemIdQuantityPair
+      #Items:
+      #  itemType: PlayerItem
       #Nickname:
       #  type: AsciiString
       #  length: 50
@@ -44,14 +46,14 @@ aggregates:
       #  type: String
       #  length: 350
 
-    entities:
-      PlayerItem:
-        id:
-          name: ItemId
-          type: u32
-        properties:
-          Quantity:
-            type: u32
+#    entities:
+#      PlayerItem:
+#        id:
+#          name: ItemId
+#          type: u32
+#        properties:
+#          Quantity:
+#            type: u32
 
     methods:
       Create:

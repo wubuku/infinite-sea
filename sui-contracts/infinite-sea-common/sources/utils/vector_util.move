@@ -6,10 +6,12 @@ module infinite_sea_common::vector_util {
     use infinite_sea_common::item_id_quantity_pair::{Self, ItemIdQuantityPair};
 
     const EItemAlreadyExists: u64 = 1;
+    const EInsufficientQuantity: u64 = 2;
+    const EItemNotFound: u64 = 3;
 
     /// "v" is a vector already sorted in ascending order by "item_id",
     /// insert or update the quantity of the given "pair" in the vector while maintaining the order.
-    public fun upsert_item_id_quantity_pair(v: &mut vector<ItemIdQuantityPair>, pair: ItemIdQuantityPair) {
+    public fun insert_or_add_item_id_quantity_pair(v: &mut vector<ItemIdQuantityPair>, pair: ItemIdQuantityPair) {
         let item_id = item_id_quantity_pair::item_id(&pair);
         let (idx, low) = binary_search_item_id_quantity_pair(v, item_id);
         if (option::is_some(&idx)) {
@@ -23,6 +25,24 @@ module infinite_sea_common::vector_util {
         } else {
             // Insert the new ItemIdQuantityPair at the found position.
             vector::insert(v, pair, low);
+        };
+    }
+
+    /// "v" is a vector already sorted in ascending order by "item_id".
+    public fun subtract_item_id_quantity_pair(v: &mut vector<ItemIdQuantityPair>, pair: ItemIdQuantityPair) {
+        let item_id = item_id_quantity_pair::item_id(&pair);
+        let (idx, low) = binary_search_item_id_quantity_pair(v, item_id);
+        assert!(option::is_some(&idx), EItemNotFound);
+        let i = option::extract(&mut idx);
+        let existing_pair = vector::borrow(v, i);
+        let existing_quantity = item_id_quantity_pair::quantity(existing_pair);
+        let subtract_quantity = item_id_quantity_pair::quantity(&pair);
+        assert!(existing_quantity >= subtract_quantity, EInsufficientQuantity);
+        let new_quantity = existing_quantity - subtract_quantity;
+        vector::remove(v, i);
+        if (new_quantity > 0) {
+            let new_pair = item_id_quantity_pair::new(item_id, new_quantity);
+            vector::insert(v, new_pair, i);
         };
     }
 

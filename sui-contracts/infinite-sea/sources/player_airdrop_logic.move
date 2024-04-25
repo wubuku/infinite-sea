@@ -1,9 +1,10 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::player_airdrop_logic {
     use sui::tx_context::TxContext;
+    use infinite_sea_common::item_id_quantity_pair;
+    use infinite_sea_common::vector_util;
 
     use infinite_sea::player;
-    use infinite_sea::player_item;
 
     friend infinite_sea::player_aggregate;
 
@@ -27,14 +28,7 @@ module infinite_sea::player_airdrop_logic {
     ) {
         let item_id = player::player_airdropped_item_id(player_airdropped);
         let quantity = player::player_airdropped_quantity(player_airdropped);
-        //let player_id = player::player_id(player);
-        if (!player::items_contains(player, item_id)) {
-            let player_item = player_item::new_player_item(item_id, quantity);
-            player::add_item(player, player_item);
-        } else {
-            let player_item = player::borrow_mut_item(player, item_id);
-            let q = player_item::quantity(player_item) + quantity;
-            player_item::set_quantity(player_item, q);
-        };
+        let inv = player::borrow_mut_inventory(player);
+        vector_util::insert_or_add_item_id_quantity_pair(inv, item_id_quantity_pair::new(item_id, quantity));
     }
 }

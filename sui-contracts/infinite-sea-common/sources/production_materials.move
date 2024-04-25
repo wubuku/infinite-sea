@@ -27,7 +27,7 @@ module infinite_sea_common::production_materials {
         while (i < l) {
             let item_id = *std::vector::borrow(&item_id_list, i);
             let item_quantity = *std::vector::borrow(&item_quantity_list, i);
-            infinite_sea_common::vector_util::upsert_item_id_quantity_pair(
+            infinite_sea_common::vector_util::insert_or_add_item_id_quantity_pair(
                 &mut items,
                 infinite_sea_common::item_id_quantity_pair::new(item_id, item_quantity)
             );

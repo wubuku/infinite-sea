@@ -25,7 +25,7 @@ module infinite_sea_common::vector_util_tests {
         vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_5);
         vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_4);
 
-        vector_util::upsert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_2);
+        vector_util::insert_or_add_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_2);
 
         let l = vector::length(&item_id_quantity_pair_vector);
         let i = 0;

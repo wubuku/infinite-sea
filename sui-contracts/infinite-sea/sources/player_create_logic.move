@@ -1,5 +1,6 @@
 #[allow(unused_mut_parameter)]
 module infinite_sea::player_create_logic {
+    use std::vector;
     use sui::tx_context::TxContext;
 
     use infinite_sea::player;
@@ -26,6 +27,7 @@ module infinite_sea::player_create_logic {
         let owner = player::player_created_owner(player_created);
         player::new_player(
             owner,
+            vector::empty(),
             ctx,
         )
     }
