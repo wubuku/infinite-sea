@@ -189,7 +189,7 @@ superObjects:
             CreationTime:
               type: u64
             ProductionMaterials:
-              type: ProductionMaterials
+              type: ItemIdQuantityPairs
 
       CompleteProduction:
         parameters:

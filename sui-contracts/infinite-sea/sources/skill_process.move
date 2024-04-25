@@ -5,7 +5,7 @@
 
 module infinite_sea::skill_process {
     use infinite_sea_coin::energy::ENERGY;
-    use infinite_sea_common::production_materials::ProductionMaterials;
+    use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use infinite_sea_common::skill_process_id::SkillProcessId;
     use std::option;
     use sui::balance::Balance;
@@ -176,7 +176,7 @@ module infinite_sea::skill_process {
         energy_cost: u64,
         started_at: u64,
         creation_time: u64,
-        production_materials: ProductionMaterials,
+        production_materials: ItemIdQuantityPairs,
     }
 
     public fun production_process_started_id(production_process_started: &ProductionProcessStarted): object::ID {
@@ -203,7 +203,7 @@ module infinite_sea::skill_process {
         production_process_started.creation_time
     }
 
-    public fun production_process_started_production_materials(production_process_started: &ProductionProcessStarted): ProductionMaterials {
+    public fun production_process_started_production_materials(production_process_started: &ProductionProcessStarted): ItemIdQuantityPairs {
         production_process_started.production_materials
     }
 
@@ -213,7 +213,7 @@ module infinite_sea::skill_process {
         energy_cost: u64,
         started_at: u64,
         creation_time: u64,
-        production_materials: ProductionMaterials,
+        production_materials: ItemIdQuantityPairs,
     ): ProductionProcessStarted {
         ProductionProcessStarted {
             id: id(skill_process),

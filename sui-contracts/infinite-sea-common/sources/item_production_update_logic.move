@@ -1,12 +1,12 @@
 module infinite_sea_common::item_production_update_logic {
+    use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use infinite_sea_common::item_production;
-    use infinite_sea_common::production_materials::ProductionMaterials;
     use sui::tx_context::TxContext;
 
     friend infinite_sea_common::item_production_aggregate;
 
     public(friend) fun verify(
-        production_materials: ProductionMaterials,
+        production_materials: ItemIdQuantityPairs,
         requirements_level: u16,
         base_quantity: u32,
         base_experience: u32,

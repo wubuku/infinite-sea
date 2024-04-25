@@ -12,7 +12,7 @@ configuration:
 
   sqlTypes:
     #ProductionMaterials: "json"
-    ProductionMaterials: "json"
+    ItemIdQuantityPairs: "json"
 
   hibernate:
     hibernateTypes:
