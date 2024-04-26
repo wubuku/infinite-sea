@@ -8,7 +8,7 @@ module infinite_sea::player {
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
     use std::option::{Self, Option};
     use sui::event;
-    use sui::object::{Self, UID};
+    use sui::object::{Self, ID, UID};
     use sui::transfer;
     use sui::tx_context::TxContext;
 
@@ -39,6 +39,7 @@ module infinite_sea::player {
         experience: u32,
         claimed_island: Option<Coordinates>,
         inventory: vector<ItemIdQuantityPair>,
+        unassigned_ships: vector<ID>,
     }
 
     public fun id(player: &Player): object::ID {
@@ -97,6 +98,22 @@ module infinite_sea::player {
         player.inventory = inventory;
     }
 
+    public fun borrow_unassigned_ships(player: &Player): &vector<ID> {
+        &player.unassigned_ships
+    }
+
+    public(friend) fun borrow_mut_unassigned_ships(player: &mut Player): &mut vector<ID> {
+        &mut player.unassigned_ships
+    }
+
+    public fun unassigned_ships(player: &Player): vector<ID> {
+        player.unassigned_ships
+    }
+
+    public(friend) fun set_unassigned_ships(player: &mut Player, unassigned_ships: vector<ID>) {
+        player.unassigned_ships = unassigned_ships;
+    }
+
     public(friend) fun new_player(
         owner: address,
         inventory: vector<ItemIdQuantityPair>,
@@ -110,6 +127,7 @@ module infinite_sea::player {
             experience: 0,
             claimed_island: std::option::none(),
             inventory,
+            unassigned_ships: std::vector::empty(),
         }
     }
 
@@ -288,6 +306,7 @@ module infinite_sea::player {
             experience: _experience,
             claimed_island: _claimed_island,
             inventory: _inventory,
+            unassigned_ships: _unassigned_ships,
         } = player;
         object::delete(id);
     }

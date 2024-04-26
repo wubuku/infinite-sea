@@ -182,6 +182,7 @@ module infinite_sea::ship {
         transfer::share_object(ship);
     }
 
+    #[allow(unused_function)]
     fun update_object_version(ship: &mut Ship) {
         ship.version = ship.version + 1;
         //assert!(ship.version != 0, EInappropriateVersion);
