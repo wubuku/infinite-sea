@@ -1,7 +1,7 @@
 aggregates:
   SkillProcess:
     metadata:
-      Preprocessors: ["MOVE_CRUD_IT"]
+      Preprocessors: [ "MOVE_CRUD_IT" ]
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
       NO_MOVE_EVENT_MODULE: true
@@ -92,7 +92,6 @@ aggregates:
         event:
           name: CreationProcessCompleted
 
-
 #      StartMutexCreation:
 #        inheritsFrom: SkillProcessTemplate.StartCreation
 #        parameters:
@@ -112,6 +111,39 @@ aggregates:
 #            isIgnoredInEvent: true
 #        event:
 #          name: MutexCreationProcessCompleted
+
+
+  Ship:
+    metadata:
+      Preprocessors: ["MOVE_CRUD_IT"]
+      CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+      ShouldIssuePublisherObject: true
+      #todo
+      #friends:
+      #- SkillProcess.StartShipProduction
+      #- SkillProcess.CompleteShipProduction
+    id:
+      name: Id
+      type: UID
+    properties:
+      Owner:
+        type: ID # PlayerId
+      HealthPoints:
+        type: u32
+      Attack:
+        type: u32
+      Protection:
+        type: u32
+      Speed:
+        type: u32
+      BuildingExpenses:
+        type: ItemIdQuantityPairs
+    methods:
+      Create:
+        isInternal: true
+        event:
+          isObjectShared: true # Share the object after created.
 
 
 #  SkillProcessMutex:

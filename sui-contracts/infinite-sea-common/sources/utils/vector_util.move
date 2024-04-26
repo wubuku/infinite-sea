@@ -49,7 +49,7 @@ module infinite_sea_common::vector_util {
     /// "v" is a vector already sorted in ascending order by "item_id".
     public fun subtract_item_id_quantity_pair(v: &mut vector<ItemIdQuantityPair>, pair: ItemIdQuantityPair) {
         let item_id = item_id_quantity_pair::item_id(&pair);
-        let (idx, low) = binary_search_item_id_quantity_pair(v, item_id);
+        let (idx, _low) = binary_search_item_id_quantity_pair(v, item_id);
         assert!(option::is_some(&idx), EItemNotFound);
         let i = option::extract(&mut idx);
         let existing_pair = vector::borrow(v, i);
