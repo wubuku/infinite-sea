@@ -5,13 +5,13 @@ module infinite_sea::skill_process_complete_ship_production_logic {
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
-    use infinite_sea::player_aggregate;
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_production::{Self, ItemProduction};
 
     use infinite_sea::experience_table_util;
     use infinite_sea::player::{Self, Player};
+    use infinite_sea::player_aggregate;
     use infinite_sea::ship::Ship;
     use infinite_sea::ship_aggregate;
     use infinite_sea::skill_process;
@@ -77,7 +77,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
         //let creation_time = skill_process::ship_production_process_completed_creation_time(ship_production_process_completed);
         let ended_at = skill_process::ship_production_process_completed_ended_at(ship_production_process_completed);
         let successful = skill_process::ship_production_process_completed_successful(ship_production_process_completed);
-        let quantity = skill_process::ship_production_process_completed_quantity(ship_production_process_completed);
+        //let quantity = skill_process::ship_production_process_completed_quantity(ship_production_process_completed);
         let experience = skill_process::ship_production_process_completed_experience(ship_production_process_completed);
         let new_level = skill_process::ship_production_process_completed_new_level(ship_production_process_completed);
         //let skill_process_id = skill_process::skill_process_id(skill_process);
@@ -86,6 +86,8 @@ module infinite_sea::skill_process_complete_ship_production_logic {
         skill_process::set_ended_at(skill_process, ended_at);
         assert!(successful, EProcessFailed);
         let items = vector[];//vector[item_id_quantity_pair::new(item_id, quantity)];
+        //let ship_id = ship::id(&ship);
+        //todo player::borrow_mut_unassigned_ships(player)?
         player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
         let building_expences = skill_process::production_materials(skill_process);
         assert!(option::is_some(&building_expences), EProcessNotStarted);

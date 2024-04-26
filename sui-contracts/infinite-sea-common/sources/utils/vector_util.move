@@ -3,7 +3,16 @@ module infinite_sea_common::vector_util {
     use std::option::{Self, Option};
     use std::vector;
 
+    use sui::object;
+    use sui::object::ID;
+
+    use infinite_sea_common::compare;
     use infinite_sea_common::item_id_quantity_pair::{Self, ItemIdQuantityPair};
+
+    const EQUAL: u8 = 0;
+    const LESS_THAN: u8 = 1;
+    #[allow(unused_const)]
+    const GREATER_THAN: u8 = 2;
 
     const EItemAlreadyExists: u64 = 1;
     const EInsufficientQuantity: u64 = 2;
@@ -11,7 +20,10 @@ module infinite_sea_common::vector_util {
 
     /// "merged" is a vector already sorted in ascending order by "item_id",
     /// merge the "other" vector into "merged" while maintaining its order.
-    public fun merge_item_id_quantity_pairs(merged: &mut vector<ItemIdQuantityPair>, other: &vector<ItemIdQuantityPair>) {
+    public fun merge_item_id_quantity_pairs(
+        merged: &mut vector<ItemIdQuantityPair>,
+        other: &vector<ItemIdQuantityPair>
+    ) {
         let oi = 0;
         let ol = vector::length(other);
         while (oi < ol) {
@@ -97,6 +109,44 @@ module infinite_sea_common::vector_util {
             if (mid_value == item_id) {
                 return (option::some(mid), low)
             } else if (mid_value < item_id) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            };
+        };
+        (option::none<u64>(), low)
+    }
+
+    public fun add_id(v: &mut vector<ID>, id: ID) {
+        let (idx, low) = binary_search_id(v, id);
+        if (option::is_some(&idx)) {
+            abort EItemAlreadyExists
+        };
+        vector::insert(v, id, low);
+    }
+
+    public fun remove_id(v: &mut vector<ID>, id: ID) {
+        let (idx, _low) = binary_search_id(v, id);
+        assert!(option::is_some(&idx), EItemNotFound);
+        let i = option::extract(&mut idx);
+        vector::remove(v, i);
+    }
+
+    public fun find_id(v: &vector<ID>, id: ID): Option<u64> {
+        let (idx, _low) = binary_search_id(v, id);
+        idx
+    }
+
+    fun binary_search_id(v: &vector<ID>, id: ID): (Option<u64>, u64) {
+        let low = 0;
+        let high = vector::length(v);
+        while (low < high) {
+            let mid = low + (high - low) / 2;
+            let mid_value = vector::borrow(v, mid);
+            let c = compare::cmp_bcs_bytes(&object::id_to_bytes(mid_value), &object::id_to_bytes(&id));
+            if (c == EQUAL) {
+                return (option::some(mid), low)
+            } else if (c == LESS_THAN) {
                 low = mid + 1;
             } else {
                 high = mid;
