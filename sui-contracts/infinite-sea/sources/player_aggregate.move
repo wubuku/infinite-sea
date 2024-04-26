@@ -15,6 +15,7 @@ module infinite_sea::player_aggregate {
     use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_common::item_id_quantity_pair::{Self, ItemIdQuantityPair};
     use sui::clock::Clock;
+    use sui::object::ID;
     use sui::tx_context;
 
     friend infinite_sea::skill_process_start_production_logic;
@@ -118,12 +119,14 @@ module infinite_sea::player_aggregate {
         experience: u32,
         items: vector<ItemIdQuantityPair>,
         new_level: u16,
+        unassigned_ships: vector<ID>,
         ctx: &mut tx_context::TxContext,
     ) {
         let player_experience_and_items_increased = player_increase_experience_and_items_logic::verify(
             experience,
             items,
             new_level,
+            unassigned_ships,
             player,
             ctx,
         );

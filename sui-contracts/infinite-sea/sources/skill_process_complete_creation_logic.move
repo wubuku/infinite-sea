@@ -1,5 +1,7 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::skill_process_complete_creation_logic {
+    use std::vector;
+
     use sui::clock::{Self, Clock};
     use sui::tx_context::TxContext;
     use infinite_sea_common::experience_table::ExperienceTable;
@@ -89,7 +91,7 @@ module infinite_sea::skill_process_complete_creation_logic {
 
         if (successful) {
             let items = vector[item_id_quantity_pair::new(item_id, quantity)];
-            player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
+            player_aggregate::increase_experience_and_items(player, experience, items, new_level, vector::empty(), ctx);
         };
     }
 }

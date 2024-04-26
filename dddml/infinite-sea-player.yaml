@@ -125,5 +125,7 @@ aggregates:
             itemType: ItemIdQuantityPair
           NewLevel:
             type: u16
+          UnassignedShips:
+            itemType: ID # Ship ID
         event:
           name: PlayerExperienceAndItemsIncreased

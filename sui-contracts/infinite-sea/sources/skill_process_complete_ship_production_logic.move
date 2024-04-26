@@ -12,6 +12,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
     use infinite_sea::experience_table_util;
     use infinite_sea::player::{Self, Player};
     use infinite_sea::player_aggregate;
+    use infinite_sea::ship;
     use infinite_sea::ship::Ship;
     use infinite_sea::ship_aggregate;
     use infinite_sea::skill_process;
@@ -28,6 +29,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
     //const ELowerThanRequiredLevel: u64 = 24;
     //const ESenderHasNoPermission: u64 = 32;
     const EItemIdIsNotShip: u64 = 24;
+    const EBuidingExpencesNotSet: u64 = 25;
     const EProcessFailed: u64 = 30;
 
     public(friend) fun verify(
@@ -86,11 +88,9 @@ module infinite_sea::skill_process_complete_ship_production_logic {
         skill_process::set_ended_at(skill_process, ended_at);
         assert!(successful, EProcessFailed);
         let items = vector[];//vector[item_id_quantity_pair::new(item_id, quantity)];
-        //let ship_id = ship::id(&ship);
-        //todo player::borrow_mut_unassigned_ships(player)?
-        player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
+
         let building_expences = skill_process::production_materials(skill_process);
-        assert!(option::is_some(&building_expences), EProcessNotStarted);
+        assert!(option::is_some(&building_expences), EBuidingExpencesNotSet);
         let ship = ship_aggregate::create(player::id(player),
             100, //todo
             100, //todo
@@ -99,6 +99,11 @@ module infinite_sea::skill_process_complete_ship_production_logic {
             option::extract(&mut building_expences),
             ctx,
         );
+
+        let ship_id = ship::id(&ship);
+        let unassigned_ships = vector[ship_id];
+        player_aggregate::increase_experience_and_items(player, experience, items, new_level, unassigned_ships, ctx);
+
         ship
     }
 }

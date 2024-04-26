@@ -252,6 +252,7 @@ module infinite_sea::player {
         experience: u32,
         items: vector<ItemIdQuantityPair>,
         new_level: u16,
+        unassigned_ships: vector<ID>,
     }
 
     public fun player_experience_and_items_increased_id(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): object::ID {
@@ -270,11 +271,16 @@ module infinite_sea::player {
         player_experience_and_items_increased.new_level
     }
 
+    public fun player_experience_and_items_increased_unassigned_ships(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): vector<ID> {
+        player_experience_and_items_increased.unassigned_ships
+    }
+
     public(friend) fun new_player_experience_and_items_increased(
         player: &Player,
         experience: u32,
         items: vector<ItemIdQuantityPair>,
         new_level: u16,
+        unassigned_ships: vector<ID>,
     ): PlayerExperienceAndItemsIncreased {
         PlayerExperienceAndItemsIncreased {
             id: id(player),
@@ -282,6 +288,7 @@ module infinite_sea::player {
             experience,
             items,
             new_level,
+            unassigned_ships,
         }
     }
 
