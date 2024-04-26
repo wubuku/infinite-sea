@@ -53,17 +53,12 @@ module infinite_sea::map_aggregate {
 
     public(friend) fun claim_island(
         map: &mut map::Map,
-        coordinates_x: u32,
-        coordinates_y: u32,
+        coordinates: Coordinates,
         claimed_by: ID,
         claimed_at: u64,
         ctx: &mut tx_context::TxContext,
     ) {
         map::assert_schema_version(map);
-        let coordinates: Coordinates = coordinates::new(
-            coordinates_x,
-            coordinates_y,
-        );
         let map_island_claimed = map_claim_island_logic::verify(
             coordinates,
             claimed_by,

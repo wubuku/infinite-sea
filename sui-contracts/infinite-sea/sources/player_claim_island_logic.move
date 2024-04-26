@@ -5,7 +5,6 @@ module infinite_sea::player_claim_island_logic {
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
-    use infinite_sea_common::coordinates;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::vector_util;
 
@@ -46,9 +45,6 @@ module infinite_sea::player_claim_island_logic {
         let inv = player::borrow_mut_inventory(player);
         vector_util::merge_item_id_quantity_pairs(inv, map_location::borrow_resources(island));
         // call map_aggregate::claim_island
-        map_aggregate::claim_island(map,
-            coordinates::x(&coordinates), coordinates::y(&coordinates),
-            player_id, claimed_at, ctx
-        );
+        map_aggregate::claim_island(map, coordinates, player_id, claimed_at, ctx);
     }
 }

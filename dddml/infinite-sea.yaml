@@ -35,6 +35,12 @@ aggregates:
           Move: "0"
       EnergyVault:
         type: "Balance<ENERGY>"
+      ProductionMaterials:
+        type: ItemIdQuantityPairs
+        optional: true
+        description: "Actual input materials for production"
+        defaultLogic:
+          Move: "std::option::none()"
 
     methods:
       Create:
@@ -81,6 +87,20 @@ aggregates:
         event:
           name: ProductionProcessCompleted
 
+      StartShipProduction:
+        inheritsFrom: SkillProcessTemplate.StartProduction
+        parameters:
+          ProductionMaterials:
+            type: ItemIdQuantityPairs
+        event:
+          name: ShipProductionProcessStarted
+
+      CompleteShipProduction:
+        inheritsFrom: SkillProcessTemplate.CompleteProduction
+        event:
+          name: ShipProductionProcessCompleted
+        result:
+          type: Ship
 
       StartCreation:
         inheritsFrom: SkillProcessTemplate.StartCreation
@@ -119,10 +139,9 @@ aggregates:
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
       ShouldIssuePublisherObject: true
-      #todo
-      #friends:
+    friends:
+      - SkillProcess.CompleteShipProduction
       #- SkillProcess.StartShipProduction
-      #- SkillProcess.CompleteShipProduction
     id:
       name: Id
       type: UID
@@ -142,6 +161,8 @@ aggregates:
     methods:
       Create:
         isInternal: true
+        result:
+          isObjectReturned: true
         event:
           isObjectShared: true # Share the object after created.
 

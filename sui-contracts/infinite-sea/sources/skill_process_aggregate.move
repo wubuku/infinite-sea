@@ -5,15 +5,19 @@
 
 module infinite_sea::skill_process_aggregate {
     use infinite_sea::player::Player;
+    use infinite_sea::ship::Ship;
     use infinite_sea::skill_process;
     use infinite_sea::skill_process_complete_creation_logic;
     use infinite_sea::skill_process_complete_production_logic;
+    use infinite_sea::skill_process_complete_ship_production_logic;
     use infinite_sea::skill_process_create_logic;
     use infinite_sea::skill_process_start_creation_logic;
     use infinite_sea::skill_process_start_production_logic;
+    use infinite_sea::skill_process_start_ship_production_logic;
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_creation::ItemCreation;
+    use infinite_sea_common::item_id_quantity_pairs::{Self, ItemIdQuantityPairs};
     use infinite_sea_common::item_production::ItemProduction;
     use infinite_sea_common::skill_process_id::{Self, SkillProcessId};
     use sui::balance::Balance;
@@ -104,6 +108,67 @@ module infinite_sea::skill_process_aggregate {
         );
         skill_process::update_object_version(skill_process);
         skill_process::emit_production_process_completed(production_process_completed);
+    }
+
+    public fun start_ship_production(
+        skill_process: &mut skill_process::SkillProcess,
+        production_materials_item_id_list: vector<u32>,
+        production_materials_item_quantity_list: vector<u32>,
+        player: &mut Player,
+        item_production: &ItemProduction,
+        clock: &Clock,
+        energy: Balance<ENERGY>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let production_materials: ItemIdQuantityPairs = item_id_quantity_pairs::new(
+            production_materials_item_id_list,
+            production_materials_item_quantity_list,
+        );
+        let ship_production_process_started = skill_process_start_ship_production_logic::verify(
+            production_materials,
+            player,
+            item_production,
+            clock,
+            &energy,
+            skill_process,
+            ctx,
+        );
+        skill_process_start_ship_production_logic::mutate(
+            &ship_production_process_started,
+            energy,
+            player,
+            skill_process,
+            ctx,
+        );
+        skill_process::update_object_version(skill_process);
+        skill_process::emit_ship_production_process_started(ship_production_process_started);
+    }
+
+    public fun complete_ship_production(
+        skill_process: &mut skill_process::SkillProcess,
+        player: &mut Player,
+        item_production: &ItemProduction,
+        experience_table: &ExperienceTable,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ): Ship {
+        let ship_production_process_completed = skill_process_complete_ship_production_logic::verify(
+            player,
+            item_production,
+            experience_table,
+            clock,
+            skill_process,
+            ctx,
+        );
+        let complete_ship_production_return = skill_process_complete_ship_production_logic::mutate(
+            &ship_production_process_completed,
+            player,
+            skill_process,
+            ctx,
+        );
+        skill_process::update_object_version(skill_process);
+        skill_process::emit_ship_production_process_completed(ship_production_process_completed);
+        complete_ship_production_return
     }
 
     public fun start_creation(

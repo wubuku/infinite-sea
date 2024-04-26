@@ -14,8 +14,18 @@ module infinite_sea_common::item_id {
     //const RESOURCE_TYPE_CRAFTING: u32 = 2_000_000_006;
     //const RESOURCE_TYPE_TOWNSHIP: u32 = 2_000_000_007;
 
+    const SHIP: u32 = 1_000_000_001;
+
     public fun unused_item(): u32 {
         UNUSED_ITEM
+    }
+
+    public fun ship(): u32 {
+        SHIP
+    }
+
+    public fun should_produce_individuals(item_id: u32): bool {
+        item_id == SHIP
     }
 
     public fun resource_type_woodcutting(): u32 {

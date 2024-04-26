@@ -1,15 +1,19 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
-module infinite_sea::skill_process_complete_production_logic {
-    use sui::clock::{Self, Clock};
+module infinite_sea::skill_process_complete_ship_production_logic {
+    use std::option;
+
+    use sui::clock;
+    use sui::clock::Clock;
     use sui::tx_context::TxContext;
+    use infinite_sea::player_aggregate;
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_production::{Self, ItemProduction};
-    use infinite_sea_common::item_id_quantity_pair;
 
     use infinite_sea::experience_table_util;
-    use infinite_sea::player::Player;
-    use infinite_sea::player_aggregate;
+    use infinite_sea::player::{Self, Player};
+    use infinite_sea::ship::Ship;
+    use infinite_sea::ship_aggregate;
     use infinite_sea::skill_process;
     use infinite_sea::skill_process_util;
 
@@ -23,7 +27,8 @@ module infinite_sea::skill_process_complete_production_logic {
     //const EIncorrectItemId: u64 = 22;
     //const ELowerThanRequiredLevel: u64 = 24;
     //const ESenderHasNoPermission: u64 = 32;
-    const EItemProduceIndividuals: u64 = 24;
+    const EItemIdIsNotShip: u64 = 24;
+    const EProcessFailed: u64 = 30;
 
     public(friend) fun verify(
         player: &mut Player,
@@ -32,12 +37,12 @@ module infinite_sea::skill_process_complete_production_logic {
         clock: &Clock,
         skill_process: &skill_process::SkillProcess,
         ctx: &TxContext,
-    ): skill_process::ProductionProcessCompleted {
+    ): skill_process::ShipProductionProcessCompleted {
         let (player_id, skill_type, item_id) = skill_process_util::assert_ids_are_consistent_for_completing_production(
             player, item_production, skill_process
         );
         assert!(item_id != item_id::unused_item() && !skill_process::completed(skill_process), EProcessNotStarted);
-        assert!(!item_id::should_produce_individuals(item_id), EItemProduceIndividuals);
+        assert!(item_id::ship() == item_id, EItemIdIsNotShip);
 
         let started_at = skill_process::started_at(skill_process);
         let creation_time = skill_process::creation_time(skill_process);
@@ -48,7 +53,7 @@ module infinite_sea::skill_process_complete_production_logic {
         let quantity = item_production::base_quantity(item_production);
         let added_experience = item_production::base_experience(item_production);
         let new_level = experience_table_util::calculate_new_level(player, experience_table, added_experience);
-        skill_process::new_production_process_completed(
+        skill_process::new_ship_production_process_completed(
             skill_process,
             item_id,
             started_at,
@@ -62,29 +67,36 @@ module infinite_sea::skill_process_complete_production_logic {
     }
 
     public(friend) fun mutate(
-        production_process_completed: &skill_process::ProductionProcessCompleted,
+        ship_production_process_completed: &skill_process::ShipProductionProcessCompleted,
         player: &mut Player,
         skill_process: &mut skill_process::SkillProcess,
         ctx: &mut TxContext, // modify the reference to mutable if needed
-    ) {
-        let item_id = skill_process::production_process_completed_item_id(production_process_completed);
-        //let started_at = skill_process::production_process_completed_started_at(production_process_completed);
-        //let creation_time = skill_process::production_process_completed_creation_time(production_process_completed);
-        let ended_at = skill_process::production_process_completed_ended_at(production_process_completed);
-        let successful = skill_process::production_process_completed_successful(production_process_completed);
+    ): Ship {
+        let item_id = skill_process::ship_production_process_completed_item_id(ship_production_process_completed);
+        //let started_at = skill_process::ship_production_process_completed_started_at(ship_production_process_completed);
+        //let creation_time = skill_process::ship_production_process_completed_creation_time(ship_production_process_completed);
+        let ended_at = skill_process::ship_production_process_completed_ended_at(ship_production_process_completed);
+        let successful = skill_process::ship_production_process_completed_successful(ship_production_process_completed);
+        let quantity = skill_process::ship_production_process_completed_quantity(ship_production_process_completed);
+        let experience = skill_process::ship_production_process_completed_experience(ship_production_process_completed);
+        let new_level = skill_process::ship_production_process_completed_new_level(ship_production_process_completed);
         //let skill_process_id = skill_process::skill_process_id(skill_process);
-        let quantity = skill_process::production_process_completed_quantity(production_process_completed);
-        let experience = skill_process::production_process_completed_experience(production_process_completed);
-        let new_level = skill_process::production_process_completed_new_level(production_process_completed);
 
-        //skill_process::set_item_id(skill_process, item_id);
-        //skill_process::set_started_at(skill_process, started_at);
         skill_process::set_completed(skill_process, true);
         skill_process::set_ended_at(skill_process, ended_at);
-
-        if (successful) {
-            let items = vector[item_id_quantity_pair::new(item_id, quantity)];
-            player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
-        };
+        assert!(successful, EProcessFailed);
+        let items = vector[];//vector[item_id_quantity_pair::new(item_id, quantity)];
+        player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
+        let building_expences = skill_process::production_materials(skill_process);
+        assert!(option::is_some(&building_expences), EProcessNotStarted);
+        let ship = ship_aggregate::create(player::id(player),
+            100, //todo
+            100, //todo
+            100, //todo
+            100, //todo
+            option::extract(&mut building_expences),
+            ctx,
+        );
+        ship
     }
 }

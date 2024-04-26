@@ -12,6 +12,8 @@ aggregates:
     friends:
       - SkillProcess.StartProduction
       - SkillProcess.CompleteProduction
+      - SkillProcess.StartShipProduction
+      - SkillProcess.CompleteShipProduction
       - SkillProcess.StartCreation
       - SkillProcess.CompleteCreation
 #      - SkillProcess.StartMutexCreation

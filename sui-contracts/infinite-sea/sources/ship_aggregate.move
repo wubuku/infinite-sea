@@ -6,10 +6,11 @@
 module infinite_sea::ship_aggregate {
     use infinite_sea::ship;
     use infinite_sea::ship_create_logic;
-    use infinite_sea_common::item_id_quantity_pairs::{Self, ItemIdQuantityPairs};
+    use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use sui::object::ID;
     use sui::tx_context;
 
+    friend infinite_sea::skill_process_complete_ship_production_logic;
     friend infinite_sea::skill_process_service;
 
     public(friend) fun create(
@@ -18,14 +19,9 @@ module infinite_sea::ship_aggregate {
         attack: u32,
         protection: u32,
         speed: u32,
-        building_expenses_item_id_list: vector<u32>,
-        building_expenses_item_quantity_list: vector<u32>,
+        building_expenses: ItemIdQuantityPairs,
         ctx: &mut tx_context::TxContext,
-    ) {
-        let building_expenses: ItemIdQuantityPairs = item_id_quantity_pairs::new(
-            building_expenses_item_id_list,
-            building_expenses_item_quantity_list,
-        );
+    ): ship::Ship {
         let ship_created = ship_create_logic::verify(
             owner,
             health_points,
@@ -40,8 +36,8 @@ module infinite_sea::ship_aggregate {
             ctx,
         );
         ship::set_ship_created_id(&mut ship_created, ship::id(&ship));
-        ship::share_object(ship);
         ship::emit_ship_created(ship_created);
+        ship
     }
 
 }

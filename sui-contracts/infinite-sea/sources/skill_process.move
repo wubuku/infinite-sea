@@ -7,7 +7,7 @@ module infinite_sea::skill_process {
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use infinite_sea_common::skill_process_id::SkillProcessId;
-    use std::option;
+    use std::option::{Self, Option};
     use sui::balance::Balance;
     use sui::event;
     use sui::object::{Self, UID};
@@ -20,6 +20,8 @@ module infinite_sea::skill_process {
     friend infinite_sea::skill_process_create_logic;
     friend infinite_sea::skill_process_start_production_logic;
     friend infinite_sea::skill_process_complete_production_logic;
+    friend infinite_sea::skill_process_start_ship_production_logic;
+    friend infinite_sea::skill_process_complete_ship_production_logic;
     friend infinite_sea::skill_process_start_creation_logic;
     friend infinite_sea::skill_process_complete_creation_logic;
     friend infinite_sea::skill_process_aggregate;
@@ -63,6 +65,7 @@ module infinite_sea::skill_process {
         completed: bool,
         ended_at: u64,
         energy_vault: Balance<ENERGY>,
+        production_materials: Option<ItemIdQuantityPairs>,
     }
 
     public fun id(skill_process: &SkillProcess): object::ID {
@@ -125,6 +128,14 @@ module infinite_sea::skill_process {
         &mut skill_process.energy_vault
     }
 
+    public fun production_materials(skill_process: &SkillProcess): Option<ItemIdQuantityPairs> {
+        skill_process.production_materials
+    }
+
+    public(friend) fun set_production_materials(skill_process: &mut SkillProcess, production_materials: Option<ItemIdQuantityPairs>) {
+        skill_process.production_materials = production_materials;
+    }
+
     fun new_skill_process(
         skill_process_id: SkillProcessId,
         ctx: &mut TxContext,
@@ -139,6 +150,7 @@ module infinite_sea::skill_process {
             completed: true,
             ended_at: 0,
             energy_vault: sui::balance::zero(),
+            production_materials: std::option::none(),
         }
     }
 
@@ -293,6 +305,145 @@ module infinite_sea::skill_process {
         new_level: u16,
     ): ProductionProcessCompleted {
         ProductionProcessCompleted {
+            id: id(skill_process),
+            skill_process_id: skill_process_id(skill_process),
+            version: version(skill_process),
+            item_id,
+            started_at,
+            creation_time,
+            ended_at,
+            successful,
+            quantity,
+            experience,
+            new_level,
+        }
+    }
+
+    struct ShipProductionProcessStarted has copy, drop {
+        id: object::ID,
+        skill_process_id: SkillProcessId,
+        version: u64,
+        item_id: u32,
+        energy_cost: u64,
+        started_at: u64,
+        creation_time: u64,
+        production_materials: ItemIdQuantityPairs,
+    }
+
+    public fun ship_production_process_started_id(ship_production_process_started: &ShipProductionProcessStarted): object::ID {
+        ship_production_process_started.id
+    }
+
+    public fun ship_production_process_started_skill_process_id(ship_production_process_started: &ShipProductionProcessStarted): SkillProcessId {
+        ship_production_process_started.skill_process_id
+    }
+
+    public fun ship_production_process_started_item_id(ship_production_process_started: &ShipProductionProcessStarted): u32 {
+        ship_production_process_started.item_id
+    }
+
+    public fun ship_production_process_started_energy_cost(ship_production_process_started: &ShipProductionProcessStarted): u64 {
+        ship_production_process_started.energy_cost
+    }
+
+    public fun ship_production_process_started_started_at(ship_production_process_started: &ShipProductionProcessStarted): u64 {
+        ship_production_process_started.started_at
+    }
+
+    public fun ship_production_process_started_creation_time(ship_production_process_started: &ShipProductionProcessStarted): u64 {
+        ship_production_process_started.creation_time
+    }
+
+    public fun ship_production_process_started_production_materials(ship_production_process_started: &ShipProductionProcessStarted): ItemIdQuantityPairs {
+        ship_production_process_started.production_materials
+    }
+
+    public(friend) fun new_ship_production_process_started(
+        skill_process: &SkillProcess,
+        item_id: u32,
+        energy_cost: u64,
+        started_at: u64,
+        creation_time: u64,
+        production_materials: ItemIdQuantityPairs,
+    ): ShipProductionProcessStarted {
+        ShipProductionProcessStarted {
+            id: id(skill_process),
+            skill_process_id: skill_process_id(skill_process),
+            version: version(skill_process),
+            item_id,
+            energy_cost,
+            started_at,
+            creation_time,
+            production_materials,
+        }
+    }
+
+    struct ShipProductionProcessCompleted has copy, drop {
+        id: object::ID,
+        skill_process_id: SkillProcessId,
+        version: u64,
+        item_id: u32,
+        started_at: u64,
+        creation_time: u64,
+        ended_at: u64,
+        successful: bool,
+        quantity: u32,
+        experience: u32,
+        new_level: u16,
+    }
+
+    public fun ship_production_process_completed_id(ship_production_process_completed: &ShipProductionProcessCompleted): object::ID {
+        ship_production_process_completed.id
+    }
+
+    public fun ship_production_process_completed_skill_process_id(ship_production_process_completed: &ShipProductionProcessCompleted): SkillProcessId {
+        ship_production_process_completed.skill_process_id
+    }
+
+    public fun ship_production_process_completed_item_id(ship_production_process_completed: &ShipProductionProcessCompleted): u32 {
+        ship_production_process_completed.item_id
+    }
+
+    public fun ship_production_process_completed_started_at(ship_production_process_completed: &ShipProductionProcessCompleted): u64 {
+        ship_production_process_completed.started_at
+    }
+
+    public fun ship_production_process_completed_creation_time(ship_production_process_completed: &ShipProductionProcessCompleted): u64 {
+        ship_production_process_completed.creation_time
+    }
+
+    public fun ship_production_process_completed_ended_at(ship_production_process_completed: &ShipProductionProcessCompleted): u64 {
+        ship_production_process_completed.ended_at
+    }
+
+    public fun ship_production_process_completed_successful(ship_production_process_completed: &ShipProductionProcessCompleted): bool {
+        ship_production_process_completed.successful
+    }
+
+    public fun ship_production_process_completed_quantity(ship_production_process_completed: &ShipProductionProcessCompleted): u32 {
+        ship_production_process_completed.quantity
+    }
+
+    public fun ship_production_process_completed_experience(ship_production_process_completed: &ShipProductionProcessCompleted): u32 {
+        ship_production_process_completed.experience
+    }
+
+    public fun ship_production_process_completed_new_level(ship_production_process_completed: &ShipProductionProcessCompleted): u16 {
+        ship_production_process_completed.new_level
+    }
+
+    public(friend) fun new_ship_production_process_completed(
+        skill_process: &SkillProcess,
+        item_id: u32,
+        started_at: u64,
+        creation_time: u64,
+        ended_at: u64,
+        successful: bool,
+        quantity: u32,
+        experience: u32,
+        new_level: u16,
+    ): ShipProductionProcessCompleted {
+        ShipProductionProcessCompleted {
             id: id(skill_process),
             skill_process_id: skill_process_id(skill_process),
             version: version(skill_process),
@@ -498,6 +649,7 @@ module infinite_sea::skill_process {
             completed: _completed,
             ended_at: _ended_at,
             energy_vault,
+            production_materials: _production_materials,
         } = skill_process;
         object::delete(id);
         sui::balance::destroy_zero(energy_vault);
@@ -514,6 +666,14 @@ module infinite_sea::skill_process {
 
     public(friend) fun emit_production_process_completed(production_process_completed: ProductionProcessCompleted) {
         event::emit(production_process_completed);
+    }
+
+    public(friend) fun emit_ship_production_process_started(ship_production_process_started: ShipProductionProcessStarted) {
+        event::emit(ship_production_process_started);
+    }
+
+    public(friend) fun emit_ship_production_process_completed(ship_production_process_completed: ShipProductionProcessCompleted) {
+        event::emit(ship_production_process_completed);
     }
 
     public(friend) fun emit_creation_process_started(creation_process_started: CreationProcessStarted) {
