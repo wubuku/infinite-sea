@@ -23,10 +23,11 @@ module infinite_sea::player_create_logic {
         ctx: &mut TxContext,
     ): player::Player {
         let owner = player::player_created_owner(player_created);
-        player::new_player(
+        let player = player::new_player(
             owner,
             vector::empty(),
             ctx,
-        )
+        );
+        player
     }
 }

@@ -46,5 +46,11 @@ module infinite_sea::player_claim_island_logic {
         vector_util::merge_item_id_quantity_pairs(inv, map_location::borrow_resources(island));
         // call map_aggregate::claim_island
         map_aggregate::claim_island(map, coordinates, player_id, claimed_at, ctx);
+
+        let i: u8 = 0;
+        while (i < 5) {
+            //create rosters
+            //todo roster_aggregate::create(player_id, i, roster_status::at_anchor(), 0, vector::empty(), ...)
+        };
     }
 }

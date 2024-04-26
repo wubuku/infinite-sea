@@ -16,12 +16,12 @@ module infinite_sea::player_increase_experience_and_items_logic {
         experience: u32,
         items: vector<ItemIdQuantityPair>,
         new_level: u16,
-        unassigned_ships: vector<ID>,
+        //unassigned_ships: vector<ID>,
         player: &player::Player,
         ctx: &TxContext,
     ): player::PlayerExperienceAndItemsIncreased {
         player::new_player_experience_and_items_increased(
-            player, experience, items, new_level, unassigned_ships
+            player, experience, items, new_level//, unassigned_ships
         )
     }
 
@@ -34,9 +34,9 @@ module infinite_sea::player_increase_experience_and_items_logic {
             player_experience_and_items_increased
         );
         let new_level = player::player_experience_and_items_increased_new_level(player_experience_and_items_increased);
-        let unassigned_ships = player::player_experience_and_items_increased_unassigned_ships(
-            player_experience_and_items_increased
-        );
+        // let unassigned_ships = player::player_experience_and_items_increased_unassigned_ships(
+        //     player_experience_and_items_increased
+        // );
         //let player_id = player::player_id(player);
         let old_experience = player::experience(player);
         player::set_experience(player, old_experience + increased_experience);
@@ -53,14 +53,14 @@ module infinite_sea::player_increase_experience_and_items_logic {
             i = i + 1;
         };
 
-        let player_unassigned_ships = player::borrow_mut_unassigned_ships(player);
-        let i = 0;
-        let l = vector::length(&unassigned_ships);
-        while (i < l) {
-            let ship_id = vector::borrow(&unassigned_ships, i);
-            vector_util::add_id(player_unassigned_ships, *ship_id);
-            i = i + 1;
-        };
+        // let player_unassigned_ships = player::borrow_mut_unassigned_ships(player);
+        // let i = 0;
+        // let l = vector::length(&unassigned_ships);
+        // while (i < l) {
+        //     let ship_id = vector::borrow(&unassigned_ships, i);
+        //     vector_util::add_id(player_unassigned_ships, *ship_id);
+        //     i = i + 1;
+        // };
     }
 
     fun increase_player_item_quantity(player: &mut player::Player, item_id: u32, quantity: u32) {

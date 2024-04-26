@@ -86,7 +86,7 @@ module infinite_sea::skill_process_complete_production_logic {
 
         if (successful) {
             let items = vector[item_id_quantity_pair::new(item_id, quantity)];
-            player_aggregate::increase_experience_and_items(player, experience, items, new_level, vector::empty(), ctx);
+            player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
         };
     }
 }

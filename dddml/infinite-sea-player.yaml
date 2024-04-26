@@ -39,10 +39,10 @@ aggregates:
           Move: "std::option::none()"
       Inventory:
         itemType: ItemIdQuantityPair
-      UnassignedShips:
-        itemType: ID # Ship ID
-        defaultLogic:
-          Move: "std::vector::empty()"
+      #UnassignedShips:
+      #  itemType: ID # Ship ID
+      #  defaultLogic:
+      #    Move: "std::vector::empty()"
       #Items:
       #  itemType: PlayerItem
       #Nickname:
@@ -125,7 +125,7 @@ aggregates:
             itemType: ItemIdQuantityPair
           NewLevel:
             type: u16
-          UnassignedShips:
-            itemType: ID # Ship ID
+          #UnassignedShips:
+          #  itemType: ID # Ship ID
         event:
           name: PlayerExperienceAndItemsIncreased

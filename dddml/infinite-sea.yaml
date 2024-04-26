@@ -97,10 +97,15 @@ aggregates:
 
       CompleteShipProduction:
         inheritsFrom: SkillProcessTemplate.CompleteProduction
+        parameters:
+          UnassignedShips:
+            referenceType: Roster
+            isMutableReference: true
+            isIgnoredInEvent: true
         event:
           name: ShipProductionProcessCompleted
-        result:
-          type: Ship
+        #result:
+        #  type: Ship
 
       StartCreation:
         inheritsFrom: SkillProcessTemplate.StartCreation
@@ -135,6 +140,7 @@ aggregates:
 
   Ship:
     metadata:
+      HasStoreAbility: true
       Preprocessors: ["MOVE_CRUD_IT"]
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
@@ -163,8 +169,61 @@ aggregates:
         isInternal: true
         result:
           isObjectReturned: true
+        #event:
+        #  isObjectShared: true # Share the object after created.
+
+
+  Roster:
+    id:
+      name: RosterId
+      type: RosterId
+      generator:
+        class: assigned
+        tableName: RosterTable
+    metadata:
+      #HasStoreAbility: true
+      Preprocessors: ["MOVE_CRUD_IT"]
+      CRUD_IT_NO_UPDATE: true
+      CRUD_IT_NO_DELETE: true
+      #ShouldIssuePublisherObject: true
+    friends:
+      - Player.Create
+      - Player.ClaimIsland
+      - SkillProcess.CompleteShipProduction
+    properties:
+      Status:
+        type: u8
+      Speed:
+        type: u32
+      ShipIds:
+        itemType: ID # ShipId
+      Ships:
+        type: ObjectTable<ID, Ship>
+      UpdatedCoordinates:
+        type: Coordinates
+        description: "The last updated coordinates"
+      CoordinatesUpdatedAt:
+        type: u64
+      TargetCoordinates:
+        type: Coordinates
+        optional: true
+      ShipBattleId:
+        type: ID
+        optional: true
+    methods:
+      Create:
+        isInternal: true
+        result:
+          isObjectReturned: true
         event:
           isObjectShared: true # Share the object after created.
+      AddShip:
+        isInternal: true
+        parameters:
+          Ship:
+            type: Ship
+        event:
+          name: RosterShipAdded
 
 
 #  SkillProcessMutex:

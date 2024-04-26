@@ -8,12 +8,15 @@ module infinite_sea::skill_process_complete_ship_production_logic {
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_production::{Self, ItemProduction};
+    use infinite_sea_common::roster_id;
+    use infinite_sea_common::roster_sequence_number;
 
     use infinite_sea::experience_table_util;
     use infinite_sea::player::{Self, Player};
     use infinite_sea::player_aggregate;
-    use infinite_sea::ship;
-    use infinite_sea::ship::Ship;
+    use infinite_sea::roster;
+    use infinite_sea::roster::Roster;
+    use infinite_sea::roster_aggregate;
     use infinite_sea::ship_aggregate;
     use infinite_sea::skill_process;
     use infinite_sea::skill_process_util;
@@ -30,9 +33,12 @@ module infinite_sea::skill_process_complete_ship_production_logic {
     //const ESenderHasNoPermission: u64 = 32;
     const EItemIdIsNotShip: u64 = 24;
     const EBuidingExpencesNotSet: u64 = 25;
+    const ERosterIsNotUnassignedShips: u64 = 26;
+    const EInvalidRoasterPlayerId: u64 = 27;
     const EProcessFailed: u64 = 30;
 
     public(friend) fun verify(
+        unassigned_ships: &mut Roster,
         player: &mut Player,
         item_production: &ItemProduction,
         experience_table: &ExperienceTable,
@@ -45,6 +51,12 @@ module infinite_sea::skill_process_complete_ship_production_logic {
         );
         assert!(item_id != item_id::unused_item() && !skill_process::completed(skill_process), EProcessNotStarted);
         assert!(item_id::ship() == item_id, EItemIdIsNotShip);
+        let roster_id = roster::roster_id(unassigned_ships);
+        assert!(
+            roster_sequence_number::unassigned_ships() == roster_id::sequence_number(&roster_id),
+            ERosterIsNotUnassignedShips
+        );
+        assert!(player_id == roster_id::player_id(&roster_id), EInvalidRoasterPlayerId);
 
         let started_at = skill_process::started_at(skill_process);
         let creation_time = skill_process::creation_time(skill_process);
@@ -70,10 +82,11 @@ module infinite_sea::skill_process_complete_ship_production_logic {
 
     public(friend) fun mutate(
         ship_production_process_completed: &skill_process::ShipProductionProcessCompleted,
+        unassigned_ships: &mut Roster,
         player: &mut Player,
         skill_process: &mut skill_process::SkillProcess,
         ctx: &mut TxContext, // modify the reference to mutable if needed
-    ): Ship {
+    ) {
         let item_id = skill_process::ship_production_process_completed_item_id(ship_production_process_completed);
         //let started_at = skill_process::ship_production_process_completed_started_at(ship_production_process_completed);
         //let creation_time = skill_process::ship_production_process_completed_creation_time(ship_production_process_completed);
@@ -91,6 +104,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
 
         let building_expences = skill_process::production_materials(skill_process);
         assert!(option::is_some(&building_expences), EBuidingExpencesNotSet);
+        player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
         let ship = ship_aggregate::create(player::id(player),
             100, //todo
             100, //todo
@@ -99,11 +113,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
             option::extract(&mut building_expences),
             ctx,
         );
-
-        let ship_id = ship::id(&ship);
-        let unassigned_ships = vector[ship_id];
-        player_aggregate::increase_experience_and_items(player, experience, items, new_level, unassigned_ships, ctx);
-
-        ship
+        // add ship into "unassigned_ships"
+        roster_aggregate::add_ship(unassigned_ships, ship, ctx);
     }
 }

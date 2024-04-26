@@ -26,7 +26,7 @@ module infinite_sea::ship {
         sui::package::claim_and_keep(otw, ctx);
     }
 
-    struct Ship has key {
+    struct Ship has key, store {
         id: UID,
         version: u64,
         owner: ID,
@@ -176,9 +176,10 @@ module infinite_sea::ship {
     }
 
 
-    #[lint_allow(share_owned)]
-    public fun share_object(ship: Ship) {
-        transfer::share_object(ship);
+    #[lint_allow(custom_state_change)]
+    public(friend) fun transfer_object(ship: Ship, recipient: address) {
+        assert!(ship.version == 0, EInappropriateVersion);
+        transfer::transfer(ship, recipient);
     }
 
     #[allow(unused_function)]

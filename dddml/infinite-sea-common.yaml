@@ -164,6 +164,14 @@ valueObjects:
       SequenceNumber:
         type: u8
 
+  RosterId:
+    module: "Common"
+    properties:
+      PlayerId:
+        type: ID
+      SequenceNumber:
+        type: u8
+
   ExperienceLevel:
     module: "Common"
     properties:
@@ -267,6 +275,32 @@ enumObjects:
     values:
       Island:
         value: 0
+
+  RosterSequenceNumber:
+    module: "Common"
+    baseType: u8
+    values:
+      UnassignedShips:
+        value: 0
+      First:
+        value: 1
+      Second:
+        value: 2
+      Third:
+        value: 3
+      Fourth:
+        value: 4
+
+  RosterStatus:
+    module: "Common"
+    baseType: u8
+    values:
+      AtAnchor:
+        value: 0
+      Underway:
+        value: 1
+      InBattle:
+        value: 2
 
 #  IslandResourceType:
 #    module: "Common"

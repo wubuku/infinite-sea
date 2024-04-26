@@ -5,7 +5,7 @@
 
 module infinite_sea::skill_process_aggregate {
     use infinite_sea::player::Player;
-    use infinite_sea::ship::Ship;
+    use infinite_sea::roster::Roster;
     use infinite_sea::skill_process;
     use infinite_sea::skill_process_complete_creation_logic;
     use infinite_sea::skill_process_complete_production_logic;
@@ -144,15 +144,17 @@ module infinite_sea::skill_process_aggregate {
         skill_process::emit_ship_production_process_started(ship_production_process_started);
     }
 
-    public fun complete_ship_production(
+    public entry fun complete_ship_production(
         skill_process: &mut skill_process::SkillProcess,
+        unassigned_ships: &mut Roster,
         player: &mut Player,
         item_production: &ItemProduction,
         experience_table: &ExperienceTable,
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
-    ): Ship {
+    ) {
         let ship_production_process_completed = skill_process_complete_ship_production_logic::verify(
+            unassigned_ships,
             player,
             item_production,
             experience_table,
@@ -160,15 +162,15 @@ module infinite_sea::skill_process_aggregate {
             skill_process,
             ctx,
         );
-        let complete_ship_production_return = skill_process_complete_ship_production_logic::mutate(
+        skill_process_complete_ship_production_logic::mutate(
             &ship_production_process_completed,
+            unassigned_ships,
             player,
             skill_process,
             ctx,
         );
         skill_process::update_object_version(skill_process);
         skill_process::emit_ship_production_process_completed(ship_production_process_completed);
-        complete_ship_production_return
     }
 
     public fun start_creation(
