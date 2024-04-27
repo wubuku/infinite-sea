@@ -148,7 +148,6 @@ module infinite_sea::roster {
         roster_id: RosterId,
         status: u8,
         speed: u32,
-        ship_ids: vector<ID>,
         ships: ObjectTable<ID, Ship>,
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
@@ -162,7 +161,7 @@ module infinite_sea::roster {
             version: 0,
             status,
             speed,
-            ship_ids,
+            ship_ids: std::vector::empty(),
             ships,
             updated_coordinates,
             coordinates_updated_at,
@@ -176,7 +175,6 @@ module infinite_sea::roster {
         roster_id: RosterId,
         status: u8,
         speed: u32,
-        ship_ids: vector<ID>,
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
@@ -201,10 +199,6 @@ module infinite_sea::roster {
 
     public fun roster_created_speed(roster_created: &RosterCreated): u32 {
         roster_created.speed
-    }
-
-    public fun roster_created_ship_ids(roster_created: &RosterCreated): vector<ID> {
-        roster_created.ship_ids
     }
 
     public fun roster_created_updated_coordinates(roster_created: &RosterCreated): Coordinates {
@@ -235,7 +229,6 @@ module infinite_sea::roster {
         roster_id: RosterId,
         status: u8,
         speed: u32,
-        ship_ids: vector<ID>,
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
@@ -246,7 +239,6 @@ module infinite_sea::roster {
             roster_id,
             status,
             speed,
-            ship_ids,
             updated_coordinates,
             coordinates_updated_at,
             target_coordinates,
@@ -283,7 +275,6 @@ module infinite_sea::roster {
         roster_id: RosterId,
         status: u8,
         speed: u32,
-        ship_ids: vector<ID>,
         ships: ObjectTable<ID, Ship>,
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
@@ -296,7 +287,6 @@ module infinite_sea::roster {
             roster_id,
             status,
             speed,
-            ship_ids,
             ships,
             updated_coordinates,
             coordinates_updated_at,

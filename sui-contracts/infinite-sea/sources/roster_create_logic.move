@@ -15,7 +15,6 @@ module infinite_sea::roster_create_logic {
         roster_id: RosterId,
         status: u8,
         speed: u32,
-        ship_ids: vector<ID>,
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
@@ -29,7 +28,6 @@ module infinite_sea::roster_create_logic {
             roster_id,
             status,
             speed,
-            ship_ids,
             updated_coordinates,
             coordinates_updated_at,
             target_coordinates,
@@ -45,7 +43,6 @@ module infinite_sea::roster_create_logic {
         let roster_id = roster::roster_created_roster_id(roster_created);
         let status = roster::roster_created_status(roster_created);
         let speed = roster::roster_created_speed(roster_created);
-        let ship_ids = roster::roster_created_ship_ids(roster_created);
         let updated_coordinates = roster::roster_created_updated_coordinates(roster_created);
         let coordinates_updated_at = roster::roster_created_coordinates_updated_at(roster_created);
         let target_coordinates = roster::roster_created_target_coordinates(roster_created);
@@ -54,7 +51,6 @@ module infinite_sea::roster_create_logic {
             roster_id,
             status,
             speed,
-            ship_ids,
             sui::object_table::new(ctx),
             updated_coordinates,
             coordinates_updated_at,

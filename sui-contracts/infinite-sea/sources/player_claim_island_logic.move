@@ -6,12 +6,16 @@ module infinite_sea::player_claim_island_logic {
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
     use infinite_sea_common::coordinates::Coordinates;
+    use infinite_sea_common::roster_status;
     use infinite_sea_common::vector_util;
 
     use infinite_sea::map::{Self, Map};
     use infinite_sea::map_aggregate;
     use infinite_sea::map_location;
     use infinite_sea::player;
+    use infinite_sea::roster;
+    use infinite_sea::roster::RosterTable;
+    use infinite_sea::roster_aggregate;
 
     friend infinite_sea::player_aggregate;
 
@@ -21,6 +25,7 @@ module infinite_sea::player_claim_island_logic {
         map: &mut Map,
         coordinates: Coordinates,
         clock: &Clock,
+        roster_table: &mut RosterTable,
         player: &player::Player,
         ctx: &TxContext,
     ): player::IslandClaimed {
@@ -32,6 +37,7 @@ module infinite_sea::player_claim_island_logic {
     public(friend) fun mutate(
         island_claimed: &player::IslandClaimed,
         map: &mut Map,
+        roster_table: &mut RosterTable,
         player: &mut player::Player,
         ctx: &mut TxContext, // modify the reference to mutable if needed
     ) {
@@ -47,10 +53,13 @@ module infinite_sea::player_claim_island_logic {
         // call map_aggregate::claim_island
         map_aggregate::claim_island(map, coordinates, player_id, claimed_at, ctx);
 
+        // create rosters after claiming the island
         let i: u8 = 0;
         while (i < 5) {
-            //create rosters
-            //todo roster_aggregate::create(player_id, i, roster_status::at_anchor(), 0, vector::empty(), ...)
+            let r = roster_aggregate::create(player_id, i, roster_status::at_anchor(), 0,
+                coordinates, 0, option::none(), option::none(), roster_table, ctx
+            );
+            roster::share_object(r);
         };
     }
 }

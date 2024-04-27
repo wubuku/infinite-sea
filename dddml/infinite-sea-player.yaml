@@ -82,6 +82,10 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          RosterTable:
+            referenceType: RosterTable
+            isMutableReference: true
+            isIgnoredInEvent: true
         event:
           name: IslandClaimed
           properties:

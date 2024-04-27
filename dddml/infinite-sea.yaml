@@ -196,7 +196,9 @@ aggregates:
       Speed:
         type: u32
       ShipIds:
-        itemType: ID # ShipId
+        itemType: ID # Ship ID
+        defaultLogic:
+          Move: "std::vector::empty()"
       Ships:
         type: ObjectTable<ID, Ship>
       UpdatedCoordinates:
