@@ -7,10 +7,12 @@ module infinite_sea::roster_aggregate {
     use infinite_sea::roster;
     use infinite_sea::roster_add_ship_logic;
     use infinite_sea::roster_create_logic;
+    use infinite_sea::roster_set_sail_logic;
     use infinite_sea::ship::Ship;
-    use infinite_sea_common::coordinates::Coordinates;
+    use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_common::roster_id::{Self, RosterId};
     use std::option::Option;
+    use sui::clock::Clock;
     use sui::object::ID;
     use sui::tx_context;
 
@@ -77,6 +79,32 @@ module infinite_sea::roster_aggregate {
         );
         roster::update_object_version(roster);
         roster::emit_roster_ship_added(roster_ship_added);
+    }
+
+    public entry fun set_sail(
+        roster: &mut roster::Roster,
+        target_coordinates_x: u32,
+        target_coordinates_y: u32,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let target_coordinates: Coordinates = coordinates::new(
+            target_coordinates_x,
+            target_coordinates_y,
+        );
+        let roster_set_sail = roster_set_sail_logic::verify(
+            target_coordinates,
+            clock,
+            roster,
+            ctx,
+        );
+        roster_set_sail_logic::mutate(
+            &roster_set_sail,
+            roster,
+            ctx,
+        );
+        roster::update_object_version(roster);
+        roster::emit_roster_set_sail(roster_set_sail);
     }
 
 }

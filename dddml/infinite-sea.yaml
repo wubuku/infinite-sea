@@ -233,6 +233,20 @@ aggregates:
             optional: true
         event:
           name: RosterShipAdded
+      SetSail:
+        #requiredPermission: Owner
+        parameters:
+          TargetCoordinates:
+            type: Coordinates
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          name: RosterSetSail
+          properties:
+            SetSailAt:
+              type: u64
+
 
   ShipBattle:
     id:

@@ -1,10 +1,10 @@
 #[test_only]
-module infinite_sea_common::linear_path_util_tests {
+module infinite_sea_common::direct_route_util_tests {
 
     use std::debug;
 
     use infinite_sea_common::coordinates;
-    use infinite_sea_common::linear_path_util;
+    use infinite_sea_common::direct_route_util;
 
     #[test]
     public fun test_1() {
@@ -15,7 +15,7 @@ module infinite_sea_common::linear_path_util_tests {
         let speed_numerator = 5000;
         let speed_denominator = 1000;
         let elapsed_time = 50;
-        let result = linear_path_util::calculate_current_location(
+        let result = direct_route_util::calculate_current_location(
             origin,
             destination,
             speed_numerator,

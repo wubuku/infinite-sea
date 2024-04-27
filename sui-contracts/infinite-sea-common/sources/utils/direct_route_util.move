@@ -1,4 +1,4 @@
-module infinite_sea_common::linear_path_util {
+module infinite_sea_common::direct_route_util {
 
     use sui::math;
 

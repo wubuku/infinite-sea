@@ -16,6 +16,7 @@ module infinite_sea::roster {
     use sui::tx_context::TxContext;
     friend infinite_sea::roster_create_logic;
     friend infinite_sea::roster_add_ship_logic;
+    friend infinite_sea::roster_set_sail_logic;
     friend infinite_sea::roster_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -281,6 +282,44 @@ module infinite_sea::roster {
         }
     }
 
+    struct RosterSetSail has copy, drop {
+        id: object::ID,
+        roster_id: RosterId,
+        version: u64,
+        target_coordinates: Coordinates,
+        set_sail_at: u64,
+    }
+
+    public fun roster_set_sail_id(roster_set_sail: &RosterSetSail): object::ID {
+        roster_set_sail.id
+    }
+
+    public fun roster_set_sail_roster_id(roster_set_sail: &RosterSetSail): RosterId {
+        roster_set_sail.roster_id
+    }
+
+    public fun roster_set_sail_target_coordinates(roster_set_sail: &RosterSetSail): Coordinates {
+        roster_set_sail.target_coordinates
+    }
+
+    public fun roster_set_sail_set_sail_at(roster_set_sail: &RosterSetSail): u64 {
+        roster_set_sail.set_sail_at
+    }
+
+    public(friend) fun new_roster_set_sail(
+        roster: &Roster,
+        target_coordinates: Coordinates,
+        set_sail_at: u64,
+    ): RosterSetSail {
+        RosterSetSail {
+            id: id(roster),
+            roster_id: roster_id(roster),
+            version: version(roster),
+            target_coordinates,
+            set_sail_at,
+        }
+    }
+
 
     public(friend) fun create_roster(
         roster_id: RosterId,
@@ -360,6 +399,10 @@ module infinite_sea::roster {
 
     public(friend) fun emit_roster_ship_added(roster_ship_added: RosterShipAdded) {
         event::emit(roster_ship_added);
+    }
+
+    public(friend) fun emit_roster_set_sail(roster_set_sail: RosterSetSail) {
+        event::emit(roster_set_sail);
     }
 
     #[test_only]
