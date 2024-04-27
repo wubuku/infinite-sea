@@ -234,6 +234,52 @@ aggregates:
         event:
           name: RosterShipAdded
 
+  ShipBattle:
+    id:
+      name: Id
+      type: UID
+    properties:
+      Initiator:
+        type: ID # Roster ID
+      Responder:
+        type: ID # Roster ID
+      Status:
+        type: u8
+      RoundNumber:
+        type: u32
+        defaultLogic:
+          Move: "1"
+      RoundMover:
+        type: u8
+        description: "1: Initiator, 0: Responder"
+      RoundStartedAt:
+        type: u64
+    methods:
+      InitiateBattle:
+        isCreationCommand: true
+        parameters:
+          Initiator:
+            referenceType: Roster
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Responder:
+            referenceType: Roster
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          name: ShipBattleInitiated
+          isObjectShared: true
+          properties:
+            InitiatorId:
+              type: ID
+            ResponderId:
+              type: ID
+            StartedAt:
+              type: u64
+
 
 #  SkillProcessMutex:
 #    metadata:
