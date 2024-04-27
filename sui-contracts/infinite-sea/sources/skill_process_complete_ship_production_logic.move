@@ -114,6 +114,6 @@ module infinite_sea::skill_process_complete_ship_production_logic {
             ctx,
         );
         // add ship into "unassigned_ships"
-        roster_aggregate::add_ship(unassigned_ships, ship, ctx);
+        roster_aggregate::add_ship(unassigned_ships, ship, option::none(), ctx);
     }
 }

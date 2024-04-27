@@ -250,6 +250,7 @@ module infinite_sea::roster {
         id: object::ID,
         roster_id: RosterId,
         version: u64,
+        position: Option<u64>,
     }
 
     public fun roster_ship_added_id(roster_ship_added: &RosterShipAdded): object::ID {
@@ -260,13 +261,23 @@ module infinite_sea::roster {
         roster_ship_added.roster_id
     }
 
+    public fun roster_ship_added_position(roster_ship_added: &RosterShipAdded): Option<u64> {
+        roster_ship_added.position
+    }
+
+    public(friend) fun set_roster_ship_added_position(roster_ship_added: &mut RosterShipAdded, position: Option<u64>) {
+        roster_ship_added.position = position;
+    }
+
     public(friend) fun new_roster_ship_added(
         roster: &Roster,
+        position: Option<u64>,
     ): RosterShipAdded {
         RosterShipAdded {
             id: id(roster),
             roster_id: roster_id(roster),
             version: version(roster),
+            position,
         }
     }
 

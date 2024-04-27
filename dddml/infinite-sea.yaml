@@ -164,6 +164,10 @@ aggregates:
         type: u32
       BuildingExpenses:
         type: ItemIdQuantityPairs
+      Inventory:
+        itemType: ItemIdQuantityPair
+        defaultLogic:
+          Move: "std::vector::empty()"
     methods:
       Create:
         isInternal: true
@@ -224,6 +228,9 @@ aggregates:
         parameters:
           Ship:
             type: Ship
+          Position:
+            type: u64
+            optional: true
         event:
           name: RosterShipAdded
 

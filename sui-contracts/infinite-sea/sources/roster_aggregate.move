@@ -60,15 +60,17 @@ module infinite_sea::roster_aggregate {
     public(friend) fun add_ship(
         roster: &mut roster::Roster,
         ship: Ship,
+        position: Option<u64>,
         ctx: &mut tx_context::TxContext,
     ) {
         let roster_ship_added = roster_add_ship_logic::verify(
             &ship,
+            position,
             roster,
             ctx,
         );
         roster_add_ship_logic::mutate(
-            &roster_ship_added,
+            &mut roster_ship_added,
             ship,
             roster,
             ctx,
