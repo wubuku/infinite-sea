@@ -223,6 +223,7 @@ aggregates:
           isObjectReturned: true
         event:
           isObjectShared: true # Share the object after created.
+
       AddShip:
         isInternal: true
         parameters:
@@ -233,6 +234,7 @@ aggregates:
             optional: true
         event:
           name: RosterShipAdded
+
       SetSail:
         #requiredPermission: Owner
         parameters:
@@ -246,6 +248,25 @@ aggregates:
           properties:
             SetSailAt:
               type: u64
+            UpdatedCoordinates:
+              type: Coordinates
+
+      UpdateLocation:
+        parameters:
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          name: RosterLocationUpdated
+          properties:
+            UpdatedCoordinates:
+              type: Coordinates
+            CoordinatesUpdatedAt:
+              type: u64
+            NewStatus:
+              type: u8
+            #OldStatus:
+            #  type: u8
 
 
   ShipBattle:

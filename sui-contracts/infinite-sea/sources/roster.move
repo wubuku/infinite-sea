@@ -17,6 +17,7 @@ module infinite_sea::roster {
     friend infinite_sea::roster_create_logic;
     friend infinite_sea::roster_add_ship_logic;
     friend infinite_sea::roster_set_sail_logic;
+    friend infinite_sea::roster_update_location_logic;
     friend infinite_sea::roster_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -288,6 +289,7 @@ module infinite_sea::roster {
         version: u64,
         target_coordinates: Coordinates,
         set_sail_at: u64,
+        updated_coordinates: Coordinates,
     }
 
     public fun roster_set_sail_id(roster_set_sail: &RosterSetSail): object::ID {
@@ -306,10 +308,15 @@ module infinite_sea::roster {
         roster_set_sail.set_sail_at
     }
 
+    public fun roster_set_sail_updated_coordinates(roster_set_sail: &RosterSetSail): Coordinates {
+        roster_set_sail.updated_coordinates
+    }
+
     public(friend) fun new_roster_set_sail(
         roster: &Roster,
         target_coordinates: Coordinates,
         set_sail_at: u64,
+        updated_coordinates: Coordinates,
     ): RosterSetSail {
         RosterSetSail {
             id: id(roster),
@@ -317,6 +324,52 @@ module infinite_sea::roster {
             version: version(roster),
             target_coordinates,
             set_sail_at,
+            updated_coordinates,
+        }
+    }
+
+    struct RosterLocationUpdated has copy, drop {
+        id: object::ID,
+        roster_id: RosterId,
+        version: u64,
+        updated_coordinates: Coordinates,
+        coordinates_updated_at: u64,
+        new_status: u8,
+    }
+
+    public fun roster_location_updated_id(roster_location_updated: &RosterLocationUpdated): object::ID {
+        roster_location_updated.id
+    }
+
+    public fun roster_location_updated_roster_id(roster_location_updated: &RosterLocationUpdated): RosterId {
+        roster_location_updated.roster_id
+    }
+
+    public fun roster_location_updated_updated_coordinates(roster_location_updated: &RosterLocationUpdated): Coordinates {
+        roster_location_updated.updated_coordinates
+    }
+
+    public fun roster_location_updated_coordinates_updated_at(roster_location_updated: &RosterLocationUpdated): u64 {
+        roster_location_updated.coordinates_updated_at
+    }
+
+    public fun roster_location_updated_new_status(roster_location_updated: &RosterLocationUpdated): u8 {
+        roster_location_updated.new_status
+    }
+
+    public(friend) fun new_roster_location_updated(
+        roster: &Roster,
+        updated_coordinates: Coordinates,
+        coordinates_updated_at: u64,
+        new_status: u8,
+    ): RosterLocationUpdated {
+        RosterLocationUpdated {
+            id: id(roster),
+            roster_id: roster_id(roster),
+            version: version(roster),
+            updated_coordinates,
+            coordinates_updated_at,
+            new_status,
         }
     }
 
@@ -403,6 +456,10 @@ module infinite_sea::roster {
 
     public(friend) fun emit_roster_set_sail(roster_set_sail: RosterSetSail) {
         event::emit(roster_set_sail);
+    }
+
+    public(friend) fun emit_roster_location_updated(roster_location_updated: RosterLocationUpdated) {
+        event::emit(roster_location_updated);
     }
 
     #[test_only]

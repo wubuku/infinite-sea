@@ -8,6 +8,7 @@ module infinite_sea::roster_aggregate {
     use infinite_sea::roster_add_ship_logic;
     use infinite_sea::roster_create_logic;
     use infinite_sea::roster_set_sail_logic;
+    use infinite_sea::roster_update_location_logic;
     use infinite_sea::ship::Ship;
     use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_common::roster_id::{Self, RosterId};
@@ -105,6 +106,25 @@ module infinite_sea::roster_aggregate {
         );
         roster::update_object_version(roster);
         roster::emit_roster_set_sail(roster_set_sail);
+    }
+
+    public entry fun update_location(
+        roster: &mut roster::Roster,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let roster_location_updated = roster_update_location_logic::verify(
+            clock,
+            roster,
+            ctx,
+        );
+        roster_update_location_logic::mutate(
+            &roster_location_updated,
+            roster,
+            ctx,
+        );
+        roster::update_object_version(roster);
+        roster::emit_roster_location_updated(roster_location_updated);
     }
 
 }

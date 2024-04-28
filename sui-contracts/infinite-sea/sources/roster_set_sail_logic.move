@@ -22,7 +22,8 @@ module infinite_sea::roster_set_sail_logic {
         //todo check ownership
         //todo check if the roster is at anchor
         //todo check if the roster is already underway
-        roster::new_roster_set_sail(roster, target_coordinates, clock::timestamp_ms(clock) / 1000)
+        let updated_coordinates = roster::updated_coordinates(roster);
+        roster::new_roster_set_sail(roster, target_coordinates, clock::timestamp_ms(clock) / 1000, updated_coordinates)
     }
 
     public(friend) fun mutate(
@@ -32,9 +33,11 @@ module infinite_sea::roster_set_sail_logic {
     ) {
         let target_coordinates = roster::roster_set_sail_target_coordinates(roster_set_sail);
         let set_sail_at = roster::roster_set_sail_set_sail_at(roster_set_sail);
+        let updated_coordinates = roster::roster_set_sail_updated_coordinates(roster_set_sail);
         //let roster_id = roster::roster_id(roster);
 
         roster::set_status(roster, roster_status::underway());
+        roster::set_updated_coordinates(roster, updated_coordinates);
         roster::set_target_coordinates(roster, option::some(target_coordinates));
         roster::set_coordinates_updated_at(roster, set_sail_at);
     }
