@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import org.dddml.suiinfinitesea.specialization.Event;
 
-public interface ShipEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasStatus {
+public interface ShipEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEventStatus {
 
     interface SqlShipEvent extends ShipEvent {
         ShipEventId getShipEventId();

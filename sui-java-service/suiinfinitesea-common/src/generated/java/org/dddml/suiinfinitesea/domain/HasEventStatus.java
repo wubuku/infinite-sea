@@ -8,11 +8,11 @@ package org.dddml.suiinfinitesea.domain;
 import java.math.*;
 import java.util.*;
 
-public interface HasStatus {
+public interface HasEventStatus {
 
     String getEventStatus();
 
-    interface MutableHasStatus {
+    interface MutableHasEventStatus {
 
         void setEventStatus(String p);
 

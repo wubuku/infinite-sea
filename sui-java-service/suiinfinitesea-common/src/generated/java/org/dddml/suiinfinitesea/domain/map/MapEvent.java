@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.Event;
 
-public interface MapEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasStatus {
+public interface MapEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEventStatus {
 
     interface SqlMapEvent extends MapEvent {
         MapEventId getMapEventId();

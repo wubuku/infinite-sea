@@ -27,7 +27,7 @@ public class UpdateShipBattleStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-ship-battle-states.fixed-delay:5000}")
     @Transactional
     public void updateShipBattleStates() {
-        shipBattleEventRepository.findByStatusIsNull().forEach(e -> {
+        shipBattleEventRepository.findByEventStatusIsNull().forEach(e -> {
             String objectId = e.getId();
             suiShipBattleService.updateShipBattleState(objectId);
             shipBattleEventService.updateStatusToProcessed(e);

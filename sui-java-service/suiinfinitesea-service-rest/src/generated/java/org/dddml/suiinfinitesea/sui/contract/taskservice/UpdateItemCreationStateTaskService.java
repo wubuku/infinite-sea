@@ -27,7 +27,7 @@ public class UpdateItemCreationStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-item-creation-states.fixed-delay:5000}")
     @Transactional
     public void updateItemCreationStates() {
-        itemCreationEventRepository.findByStatusIsNull().forEach(e -> {
+        itemCreationEventRepository.findByEventStatusIsNull().forEach(e -> {
             String objectId = e.getId_();
             suiItemCreationService.updateItemCreationState(objectId);
             itemCreationEventService.updateStatusToProcessed(e);

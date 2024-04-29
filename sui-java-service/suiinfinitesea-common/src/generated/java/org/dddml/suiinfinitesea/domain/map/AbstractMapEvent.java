@@ -12,7 +12,7 @@ import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.domain.AbstractEvent;
 
-public abstract class AbstractMapEvent extends AbstractEvent implements MapEvent.SqlMapEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasStatus.MutableHasStatus {
+public abstract class AbstractMapEvent extends AbstractEvent implements MapEvent.SqlMapEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasEventStatus.MutableHasEventStatus {
     private MapEventId mapEventId = new MapEventId();
 
     public MapEventId getMapEventId() {

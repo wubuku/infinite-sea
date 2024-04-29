@@ -11,7 +11,7 @@ import java.util.Date;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.Event;
 
-public interface ItemEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasStatus {
+public interface ItemEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEventStatus {
 
     interface SqlItemEvent extends ItemEvent {
         ItemEventId getItemEventId();

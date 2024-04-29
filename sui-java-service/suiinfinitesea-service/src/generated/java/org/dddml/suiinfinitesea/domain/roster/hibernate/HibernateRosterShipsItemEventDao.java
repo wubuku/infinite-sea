@@ -5,7 +5,6 @@
 
 package org.dddml.suiinfinitesea.domain.roster.hibernate;
 
-import org.dddml.suiinfinitesea.domain.ship.*;
 import java.util.Date;
 import org.dddml.suiinfinitesea.domain.*;
 import org.hibernate.*;

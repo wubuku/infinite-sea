@@ -12,7 +12,7 @@ import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.domain.AbstractEvent;
 
-public abstract class AbstractShipBattleEvent extends AbstractEvent implements ShipBattleEvent.SqlShipBattleEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasStatus.MutableHasStatus {
+public abstract class AbstractShipBattleEvent extends AbstractEvent implements ShipBattleEvent.SqlShipBattleEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasEventStatus.MutableHasEventStatus {
     private ShipBattleEventId shipBattleEventId = new ShipBattleEventId();
 
     public ShipBattleEventId getShipBattleEventId() {

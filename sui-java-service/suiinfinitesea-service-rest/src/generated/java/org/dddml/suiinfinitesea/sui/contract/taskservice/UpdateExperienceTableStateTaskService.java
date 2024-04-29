@@ -27,7 +27,7 @@ public class UpdateExperienceTableStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-experience-table-states.fixed-delay:5000}")
     @Transactional
     public void updateExperienceTableStates() {
-        experienceTableEventRepository.findByStatusIsNull().forEach(e -> {
+        experienceTableEventRepository.findByEventStatusIsNull().forEach(e -> {
             String objectId = e.getId();
             suiExperienceTableService.updateExperienceTableState(objectId);
             experienceTableEventService.updateStatusToProcessed(e);

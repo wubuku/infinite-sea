@@ -11,7 +11,7 @@ import java.util.Date;
 import java.math.BigInteger;
 import org.dddml.suiinfinitesea.specialization.Event;
 
-public interface ExperienceTableEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasStatus {
+public interface ExperienceTableEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEventStatus {
 
     interface SqlExperienceTableEvent extends ExperienceTableEvent {
         ExperienceTableEventId getExperienceTableEventId();

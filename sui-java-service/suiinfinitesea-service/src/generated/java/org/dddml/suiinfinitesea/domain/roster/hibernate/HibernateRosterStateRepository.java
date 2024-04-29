@@ -9,7 +9,6 @@ import java.util.*;
 import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.ship.*;
 import org.hibernate.Session;
 import org.hibernate.Criteria;
 //import org.hibernate.criterion.Order;

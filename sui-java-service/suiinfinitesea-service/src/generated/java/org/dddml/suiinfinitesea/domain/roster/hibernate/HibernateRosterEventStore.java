@@ -10,7 +10,6 @@ import java.util.*;
 import org.dddml.suiinfinitesea.domain.*;
 import java.math.BigInteger;
 import java.util.Date;
-import org.dddml.suiinfinitesea.domain.ship.*;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.specialization.hibernate.AbstractHibernateEventStore;
 import org.hibernate.*;

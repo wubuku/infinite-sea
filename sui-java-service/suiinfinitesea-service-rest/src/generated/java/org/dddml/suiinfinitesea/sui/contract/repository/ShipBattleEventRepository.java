@@ -11,7 +11,7 @@ import java.util.*;
 
 public interface ShipBattleEventRepository extends JpaRepository<AbstractShipBattleEvent, ShipBattleEventId> {
 
-    List<AbstractShipBattleEvent> findByStatusIsNull();
+    List<AbstractShipBattleEvent> findByEventStatusIsNull();
 
     AbstractShipBattleEvent.ShipBattleInitiated findFirstShipBattleInitiatedByOrderBySuiTimestampDesc();
 

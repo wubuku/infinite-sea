@@ -27,7 +27,7 @@ public class UpdateSkillProcessStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-skill-process-states.fixed-delay:5000}")
     @Transactional
     public void updateSkillProcessStates() {
-        skillProcessEventRepository.findByStatusIsNull().forEach(e -> {
+        skillProcessEventRepository.findByEventStatusIsNull().forEach(e -> {
             String objectId = e.getId_();
             suiSkillProcessService.updateSkillProcessState(objectId);
             skillProcessEventService.updateStatusToProcessed(e);

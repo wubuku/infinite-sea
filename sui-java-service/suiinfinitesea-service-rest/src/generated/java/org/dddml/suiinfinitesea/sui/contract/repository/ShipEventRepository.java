@@ -11,7 +11,7 @@ import java.util.*;
 
 public interface ShipEventRepository extends JpaRepository<AbstractShipEvent, ShipEventId> {
 
-    List<AbstractShipEvent> findByStatusIsNull();
+    List<AbstractShipEvent> findByEventStatusIsNull();
 
     AbstractShipEvent.ShipCreated findFirstShipCreatedByOrderBySuiTimestampDesc();
 

@@ -12,7 +12,7 @@ import java.util.Date;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.domain.AbstractEvent;
 
-public abstract class AbstractRosterEvent extends AbstractEvent implements RosterEvent.SqlRosterEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasStatus.MutableHasStatus {
+public abstract class AbstractRosterEvent extends AbstractEvent implements RosterEvent.SqlRosterEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasEventStatus.MutableHasEventStatus {
     private RosterEventId rosterEventId = new RosterEventId();
 
     public RosterEventId getRosterEventId() {

@@ -12,7 +12,7 @@ import java.math.BigInteger;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.domain.AbstractEvent;
 
-public abstract class AbstractExperienceTableEvent extends AbstractEvent implements ExperienceTableEvent.SqlExperienceTableEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasStatus.MutableHasStatus {
+public abstract class AbstractExperienceTableEvent extends AbstractEvent implements ExperienceTableEvent.SqlExperienceTableEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasEventStatus.MutableHasEventStatus {
     private ExperienceTableEventId experienceTableEventId = new ExperienceTableEventId();
 
     public ExperienceTableEventId getExperienceTableEventId() {

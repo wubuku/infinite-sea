@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import org.dddml.suiinfinitesea.specialization.Event;
 
-public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasStatus {
+public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEventStatus {
 
     interface SqlRosterEvent extends RosterEvent {
         RosterEventId getRosterEventId();

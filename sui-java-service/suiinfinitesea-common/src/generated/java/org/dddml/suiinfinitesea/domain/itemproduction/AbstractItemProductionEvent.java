@@ -12,7 +12,7 @@ import java.util.Date;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.domain.AbstractEvent;
 
-public abstract class AbstractItemProductionEvent extends AbstractEvent implements ItemProductionEvent.SqlItemProductionEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasStatus.MutableHasStatus {
+public abstract class AbstractItemProductionEvent extends AbstractEvent implements ItemProductionEvent.SqlItemProductionEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasEventStatus.MutableHasEventStatus {
     private ItemProductionEventId itemProductionEventId = new ItemProductionEventId();
 
     public ItemProductionEventId getItemProductionEventId() {

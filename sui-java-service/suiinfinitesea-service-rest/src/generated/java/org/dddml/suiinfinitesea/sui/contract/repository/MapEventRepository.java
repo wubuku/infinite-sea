@@ -11,7 +11,7 @@ import java.util.*;
 
 public interface MapEventRepository extends JpaRepository<AbstractMapEvent, MapEventId> {
 
-    List<AbstractMapEvent> findByStatusIsNull();
+    List<AbstractMapEvent> findByEventStatusIsNull();
 
     AbstractMapEvent.InitMapEvent findFirstInitMapEventByOrderBySuiTimestampDesc();
 

@@ -11,7 +11,7 @@ import java.util.*;
 
 public interface ItemProductionEventRepository extends JpaRepository<AbstractItemProductionEvent, ItemProductionEventId> {
 
-    List<AbstractItemProductionEvent> findByStatusIsNull();
+    List<AbstractItemProductionEvent> findByEventStatusIsNull();
 
     AbstractItemProductionEvent.ItemProductionCreated findFirstItemProductionCreatedByOrderBySuiTimestampDesc();
 

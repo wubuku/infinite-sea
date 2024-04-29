@@ -11,7 +11,7 @@ import java.util.*;
 
 public interface SkillProcessEventRepository extends JpaRepository<AbstractSkillProcessEvent, SkillProcessEventId> {
 
-    List<AbstractSkillProcessEvent> findByStatusIsNull();
+    List<AbstractSkillProcessEvent> findByEventStatusIsNull();
 
     AbstractSkillProcessEvent.SkillProcessCreated findFirstSkillProcessCreatedByOrderBySuiTimestampDesc();
 

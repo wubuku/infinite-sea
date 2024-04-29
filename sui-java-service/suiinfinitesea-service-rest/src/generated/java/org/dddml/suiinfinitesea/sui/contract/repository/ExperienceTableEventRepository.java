@@ -11,7 +11,7 @@ import java.util.*;
 
 public interface ExperienceTableEventRepository extends JpaRepository<AbstractExperienceTableEvent, ExperienceTableEventId> {
 
-    List<AbstractExperienceTableEvent> findByStatusIsNull();
+    List<AbstractExperienceTableEvent> findByEventStatusIsNull();
 
     AbstractExperienceTableEvent.InitExperienceTableEvent findFirstInitExperienceTableEventByOrderBySuiTimestampDesc();
 

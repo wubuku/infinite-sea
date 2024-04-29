@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import org.dddml.suiinfinitesea.specialization.Event;
 
-public interface ItemCreationEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasStatus {
+public interface ItemCreationEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEventStatus {
 
     interface SqlItemCreationEvent extends ItemCreationEvent {
         ItemCreationEventId getItemCreationEventId();

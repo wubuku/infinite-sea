@@ -27,7 +27,7 @@ public class UpdateMapStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-map-states.fixed-delay:5000}")
     @Transactional
     public void updateMapStates() {
-        mapEventRepository.findByStatusIsNull().forEach(e -> {
+        mapEventRepository.findByEventStatusIsNull().forEach(e -> {
             String objectId = e.getId();
             suiMapService.updateMapState(objectId);
             mapEventService.updateStatusToProcessed(e);

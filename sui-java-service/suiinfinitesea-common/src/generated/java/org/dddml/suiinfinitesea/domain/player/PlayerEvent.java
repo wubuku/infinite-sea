@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import org.dddml.suiinfinitesea.specialization.Event;
 
-public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasStatus {
+public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEventStatus {
 
     interface SqlPlayerEvent extends PlayerEvent {
         PlayerEventId getPlayerEventId();

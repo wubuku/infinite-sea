@@ -12,7 +12,7 @@ import java.util.Date;
 import org.dddml.suiinfinitesea.specialization.*;
 import org.dddml.suiinfinitesea.domain.AbstractEvent;
 
-public abstract class AbstractSkillProcessEvent extends AbstractEvent implements SkillProcessEvent.SqlSkillProcessEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasStatus.MutableHasStatus {
+public abstract class AbstractSkillProcessEvent extends AbstractEvent implements SkillProcessEvent.SqlSkillProcessEvent, SuiEventEnvelope.MutableSuiEventEnvelope, SuiMoveEvent.MutableSuiMoveEvent, HasEventStatus.MutableHasEventStatus {
     private SkillProcessEventId skillProcessEventId = new SkillProcessEventId();
 
     public SkillProcessEventId getSkillProcessEventId() {

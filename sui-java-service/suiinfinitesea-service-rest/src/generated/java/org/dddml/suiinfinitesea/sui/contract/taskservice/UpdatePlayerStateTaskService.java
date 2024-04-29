@@ -27,7 +27,7 @@ public class UpdatePlayerStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-player-states.fixed-delay:5000}")
     @Transactional
     public void updatePlayerStates() {
-        playerEventRepository.findByStatusIsNull().forEach(e -> {
+        playerEventRepository.findByEventStatusIsNull().forEach(e -> {
             String objectId = e.getId();
             suiPlayerService.updatePlayerState(objectId);
             playerEventService.updateStatusToProcessed(e);

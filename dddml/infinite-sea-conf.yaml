@@ -9,6 +9,10 @@ configuration:
   submodules:
     Common:
       requiredModules: [ ]
+  java:
+    eventProcessingInterfaceName: HasEventStatus
+    eventProcessingStatusPropertyName: EventStatus
+    eventProcessingStatusPropertyType: indicator
 
   sqlTypes:
     #ProductionMaterials: "json"
