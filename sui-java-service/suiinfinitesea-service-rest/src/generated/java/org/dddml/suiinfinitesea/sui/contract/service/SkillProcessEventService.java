@@ -17,6 +17,8 @@ import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.SkillProcessCreated;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessStarted;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessCompleted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.ShipProductionProcessStarted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.ShipProductionProcessCompleted;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.CreationProcessStarted;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.CreationProcessCompleted;
 import org.dddml.suiinfinitesea.sui.contract.repository.SkillProcessEventRepository;
@@ -39,7 +41,7 @@ public class SkillProcessEventService {
 
     @Transactional
     public void updateStatusToProcessed(AbstractSkillProcessEvent event) {
-        event.setStatus("D");
+        event.setEventStatus("D");
         skillProcessEventRepository.save(event);
     }
 
@@ -161,6 +163,86 @@ public class SkillProcessEventService {
             return;
         }
         skillProcessEventRepository.save(productionProcessCompleted);
+    }
+
+    @Transactional
+    public void pullShipProductionProcessStartedEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getShipProductionProcessStartedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<ShipProductionProcessStarted> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SKILL_PROCESS_MODULE_SHIP_PRODUCTION_PROCESS_STARTED,
+                    cursor, limit, false, ShipProductionProcessStarted.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<ShipProductionProcessStarted> eventEnvelope : eventPage.getData()) {
+                    saveShipProductionProcessStarted(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getShipProductionProcessStartedEventNextCursor() {
+        AbstractSkillProcessEvent lastEvent = skillProcessEventRepository.findFirstShipProductionProcessStartedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveShipProductionProcessStarted(SuiMoveEventEnvelope<ShipProductionProcessStarted> eventEnvelope) {
+        AbstractSkillProcessEvent.ShipProductionProcessStarted shipProductionProcessStarted = DomainBeanUtils.toShipProductionProcessStarted(eventEnvelope);
+        if (skillProcessEventRepository.findById(shipProductionProcessStarted.getSkillProcessEventId()).isPresent()) {
+            return;
+        }
+        skillProcessEventRepository.save(shipProductionProcessStarted);
+    }
+
+    @Transactional
+    public void pullShipProductionProcessCompletedEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getShipProductionProcessCompletedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<ShipProductionProcessCompleted> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SKILL_PROCESS_MODULE_SHIP_PRODUCTION_PROCESS_COMPLETED,
+                    cursor, limit, false, ShipProductionProcessCompleted.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<ShipProductionProcessCompleted> eventEnvelope : eventPage.getData()) {
+                    saveShipProductionProcessCompleted(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getShipProductionProcessCompletedEventNextCursor() {
+        AbstractSkillProcessEvent lastEvent = skillProcessEventRepository.findFirstShipProductionProcessCompletedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveShipProductionProcessCompleted(SuiMoveEventEnvelope<ShipProductionProcessCompleted> eventEnvelope) {
+        AbstractSkillProcessEvent.ShipProductionProcessCompleted shipProductionProcessCompleted = DomainBeanUtils.toShipProductionProcessCompleted(eventEnvelope);
+        if (skillProcessEventRepository.findById(shipProductionProcessCompleted.getSkillProcessEventId()).isPresent()) {
+            return;
+        }
+        skillProcessEventRepository.save(shipProductionProcessCompleted);
     }
 
     @Transactional

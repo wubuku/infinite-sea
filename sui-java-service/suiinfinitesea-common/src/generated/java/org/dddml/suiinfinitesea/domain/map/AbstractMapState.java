@@ -262,8 +262,8 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         String SuiSender = suiSender;
         String suiType = e.getSuiType();
         String SuiType = suiType;
-        String status = e.getStatus();
-        String Status = status;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
 
         if (this.getCreatedBy() == null){
             this.setCreatedBy(e.getCreatedBy());
@@ -278,13 +278,13 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
                     "org.dddml.suiinfinitesea.domain.map.__Init__Logic",
                     "mutate",
                     new Class[]{MapState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Object[]{this, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.map;
 //
 //public class __Init__Logic {
-//    public static MapState mutate(MapState mapState, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
+//    public static MapState mutate(MapState mapState, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
 //    }
 //}
 
@@ -313,8 +313,8 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         String SuiSender = suiSender;
         String suiType = e.getSuiType();
         String SuiType = suiType;
-        String status = e.getStatus();
-        String Status = status;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
 
         if (this.getCreatedBy() == null){
             this.setCreatedBy(e.getCreatedBy());
@@ -329,13 +329,13 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
                     "org.dddml.suiinfinitesea.domain.map.AddIslandLogic",
                     "mutate",
                     new Class[]{MapState.class, Coordinates.class, ItemIdQuantityPairs.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, coordinates, resources, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Object[]{this, coordinates, resources, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.map;
 //
 //public class AddIslandLogic {
-//    public static MapState mutate(MapState mapState, Coordinates coordinates, ItemIdQuantityPairs resources, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
+//    public static MapState mutate(MapState mapState, Coordinates coordinates, ItemIdQuantityPairs resources, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
 //    }
 //}
 
@@ -366,8 +366,8 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         String SuiSender = suiSender;
         String suiType = e.getSuiType();
         String SuiType = suiType;
-        String status = e.getStatus();
-        String Status = status;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
 
         if (this.getCreatedBy() == null){
             this.setCreatedBy(e.getCreatedBy());
@@ -382,13 +382,13 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
                     "org.dddml.suiinfinitesea.domain.map.ClaimIslandLogic",
                     "mutate",
                     new Class[]{MapState.class, Coordinates.class, String.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, coordinates, claimedBy, claimedAt, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Object[]{this, coordinates, claimedBy, claimedAt, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.map;
 //
 //public class ClaimIslandLogic {
-//    public static MapState mutate(MapState mapState, Coordinates coordinates, String claimedBy, BigInteger claimedAt, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
+//    public static MapState mutate(MapState mapState, Coordinates coordinates, String claimedBy, BigInteger claimedAt, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
 //    }
 //}
 

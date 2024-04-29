@@ -207,6 +207,24 @@ public class SkillProcessResource {
     }
 
 
+    @PutMapping("{skillProcessId}/_commands/CompleteShipProduction")
+    public void completeShipProduction(@PathVariable("skillProcessId") String skillProcessId, @RequestBody SkillProcessCommands.CompleteShipProduction content) {
+        try {
+
+            SkillProcessCommands.CompleteShipProduction cmd = content;//.toCompleteShipProduction();
+            SkillProcessId idObj = SkillProcessResourceUtils.parseIdString(skillProcessId);
+            if (cmd.getSkillProcessId() == null) {
+                cmd.setSkillProcessId(idObj);
+            } else if (!cmd.getSkillProcessId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", skillProcessId, cmd.getSkillProcessId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            skillProcessApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
     @PutMapping("{skillProcessId}/_commands/CompleteCreation")
     public void completeCreation(@PathVariable("skillProcessId") String skillProcessId, @RequestBody SkillProcessCommands.CompleteCreation content) {
         try {

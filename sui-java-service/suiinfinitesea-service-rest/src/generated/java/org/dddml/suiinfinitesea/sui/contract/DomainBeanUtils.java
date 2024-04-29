@@ -12,12 +12,6 @@ import com.github.wubuku.sui.bean.MoveEvent;
 import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
 import com.github.wubuku.sui.bean.Table;
 import com.github.wubuku.sui.bean.ObjectTable;
-import org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessEvent;
-import org.dddml.suiinfinitesea.sui.contract.skillprocess.SkillProcessCreated;
-import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessStarted;
-import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessCompleted;
-import org.dddml.suiinfinitesea.sui.contract.skillprocess.CreationProcessStarted;
-import org.dddml.suiinfinitesea.sui.contract.skillprocess.CreationProcessCompleted;
 import org.dddml.suiinfinitesea.domain.item.AbstractItemEvent;
 import org.dddml.suiinfinitesea.sui.contract.item.ItemCreated;
 import org.dddml.suiinfinitesea.sui.contract.item.ItemUpdated;
@@ -33,14 +27,31 @@ import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerItemsDeducted;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerExperienceAndItemsIncreased;
-import org.dddml.suiinfinitesea.domain.map.AbstractMapEvent;
-import org.dddml.suiinfinitesea.sui.contract.map.InitMapEvent;
-import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
-import org.dddml.suiinfinitesea.sui.contract.map.MapIslandClaimed;
+import org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessEvent;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.SkillProcessCreated;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessStarted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessCompleted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.ShipProductionProcessStarted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.ShipProductionProcessCompleted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.CreationProcessStarted;
+import org.dddml.suiinfinitesea.sui.contract.skillprocess.CreationProcessCompleted;
+import org.dddml.suiinfinitesea.domain.ship.AbstractShipEvent;
+import org.dddml.suiinfinitesea.sui.contract.ship.ShipCreated;
+import org.dddml.suiinfinitesea.domain.roster.AbstractRosterEvent;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterCreated;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipAdded;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterSetSail;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterLocationUpdated;
+import org.dddml.suiinfinitesea.domain.shipbattle.AbstractShipBattleEvent;
+import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleInitiated;
 import org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.InitExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelAdded;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelUpdated;
+import org.dddml.suiinfinitesea.domain.map.AbstractMapEvent;
+import org.dddml.suiinfinitesea.sui.contract.map.InitMapEvent;
+import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
+import org.dddml.suiinfinitesea.sui.contract.map.MapIslandClaimed;
 
 /**
  * Utils that convert beans in the contract package to domain beans.
@@ -139,6 +150,26 @@ public class DomainBeanUtils {
         return objectTable;
     }
 
+    public static org.dddml.suiinfinitesea.domain.RosterId toRosterId(RosterId contractRosterId) {
+        if (contractRosterId == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.RosterId rosterId = new org.dddml.suiinfinitesea.domain.RosterId();
+        rosterId.setPlayerId(contractRosterId.getFields().getPlayerId());
+        rosterId.setSequenceNumber(contractRosterId.getFields().getSequenceNumber());
+        return rosterId;
+    }
+
+    public static org.dddml.suiinfinitesea.domain.RosterId toRosterId(RosterIdForEvent contractRosterId) {
+        if (contractRosterId == null) {
+            return null;
+        }
+        org.dddml.suiinfinitesea.domain.RosterId rosterId = new org.dddml.suiinfinitesea.domain.RosterId();
+        rosterId.setPlayerId(contractRosterId.getPlayerId());
+        rosterId.setSequenceNumber(contractRosterId.getSequenceNumber());
+        return rosterId;
+    }
+
     public static org.dddml.suiinfinitesea.domain.SkillProcessId toSkillProcessId(SkillProcessId contractSkillProcessId) {
         if (contractSkillProcessId == null) {
             return null;
@@ -211,127 +242,6 @@ public class DomainBeanUtils {
         return table;
     }
 
-
-    public static AbstractSkillProcessEvent.SkillProcessCreated toSkillProcessCreated(SuiMoveEventEnvelope<SkillProcessCreated> eventEnvelope) {
-        SkillProcessCreated contractEvent = eventEnvelope.getParsedJson();
-
-        AbstractSkillProcessEvent.SkillProcessCreated skillProcessCreated = new AbstractSkillProcessEvent.SkillProcessCreated();
-        skillProcessCreated.setId_(contractEvent.getId());
-        skillProcessCreated.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
-        skillProcessCreated.setVersion(BigInteger.valueOf(-1));
-
-        skillProcessCreated.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        skillProcessCreated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        skillProcessCreated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
-
-        skillProcessCreated.setSuiPackageId(eventEnvelope.getPackageId());
-        skillProcessCreated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        skillProcessCreated.setSuiSender(eventEnvelope.getSender());
-
-        return skillProcessCreated;
-    }
-
-    public static AbstractSkillProcessEvent.ProductionProcessStarted toProductionProcessStarted(SuiMoveEventEnvelope<ProductionProcessStarted> eventEnvelope) {
-        ProductionProcessStarted contractEvent = eventEnvelope.getParsedJson();
-
-        AbstractSkillProcessEvent.ProductionProcessStarted productionProcessStarted = new AbstractSkillProcessEvent.ProductionProcessStarted();
-        productionProcessStarted.setId_(contractEvent.getId());
-        productionProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
-        productionProcessStarted.setItemId(contractEvent.getItemId());
-        productionProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
-        productionProcessStarted.setStartedAt(contractEvent.getStartedAt());
-        productionProcessStarted.setCreationTime(contractEvent.getCreationTime());
-        productionProcessStarted.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
-        productionProcessStarted.setVersion(contractEvent.getVersion());
-
-        productionProcessStarted.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        productionProcessStarted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        productionProcessStarted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
-
-        productionProcessStarted.setSuiPackageId(eventEnvelope.getPackageId());
-        productionProcessStarted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        productionProcessStarted.setSuiSender(eventEnvelope.getSender());
-
-        return productionProcessStarted;
-    }
-
-    public static AbstractSkillProcessEvent.ProductionProcessCompleted toProductionProcessCompleted(SuiMoveEventEnvelope<ProductionProcessCompleted> eventEnvelope) {
-        ProductionProcessCompleted contractEvent = eventEnvelope.getParsedJson();
-
-        AbstractSkillProcessEvent.ProductionProcessCompleted productionProcessCompleted = new AbstractSkillProcessEvent.ProductionProcessCompleted();
-        productionProcessCompleted.setId_(contractEvent.getId());
-        productionProcessCompleted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
-        productionProcessCompleted.setItemId(contractEvent.getItemId());
-        productionProcessCompleted.setStartedAt(contractEvent.getStartedAt());
-        productionProcessCompleted.setCreationTime(contractEvent.getCreationTime());
-        productionProcessCompleted.setEndedAt(contractEvent.getEndedAt());
-        productionProcessCompleted.setSuccessful(contractEvent.getSuccessful());
-        productionProcessCompleted.setQuantity(contractEvent.getQuantity());
-        productionProcessCompleted.setExperience(contractEvent.getExperience());
-        productionProcessCompleted.setNewLevel(contractEvent.getNewLevel());
-        productionProcessCompleted.setVersion(contractEvent.getVersion());
-
-        productionProcessCompleted.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        productionProcessCompleted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        productionProcessCompleted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
-
-        productionProcessCompleted.setSuiPackageId(eventEnvelope.getPackageId());
-        productionProcessCompleted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        productionProcessCompleted.setSuiSender(eventEnvelope.getSender());
-
-        return productionProcessCompleted;
-    }
-
-    public static AbstractSkillProcessEvent.CreationProcessStarted toCreationProcessStarted(SuiMoveEventEnvelope<CreationProcessStarted> eventEnvelope) {
-        CreationProcessStarted contractEvent = eventEnvelope.getParsedJson();
-
-        AbstractSkillProcessEvent.CreationProcessStarted creationProcessStarted = new AbstractSkillProcessEvent.CreationProcessStarted();
-        creationProcessStarted.setId_(contractEvent.getId());
-        creationProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
-        creationProcessStarted.setItemId(contractEvent.getItemId());
-        creationProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
-        creationProcessStarted.setResourceCost(contractEvent.getResourceCost());
-        creationProcessStarted.setStartedAt(contractEvent.getStartedAt());
-        creationProcessStarted.setCreationTime(contractEvent.getCreationTime());
-        creationProcessStarted.setVersion(contractEvent.getVersion());
-
-        creationProcessStarted.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        creationProcessStarted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        creationProcessStarted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
-
-        creationProcessStarted.setSuiPackageId(eventEnvelope.getPackageId());
-        creationProcessStarted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        creationProcessStarted.setSuiSender(eventEnvelope.getSender());
-
-        return creationProcessStarted;
-    }
-
-    public static AbstractSkillProcessEvent.CreationProcessCompleted toCreationProcessCompleted(SuiMoveEventEnvelope<CreationProcessCompleted> eventEnvelope) {
-        CreationProcessCompleted contractEvent = eventEnvelope.getParsedJson();
-
-        AbstractSkillProcessEvent.CreationProcessCompleted creationProcessCompleted = new AbstractSkillProcessEvent.CreationProcessCompleted();
-        creationProcessCompleted.setId_(contractEvent.getId());
-        creationProcessCompleted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
-        creationProcessCompleted.setItemId(contractEvent.getItemId());
-        creationProcessCompleted.setStartedAt(contractEvent.getStartedAt());
-        creationProcessCompleted.setCreationTime(contractEvent.getCreationTime());
-        creationProcessCompleted.setEndedAt(contractEvent.getEndedAt());
-        creationProcessCompleted.setSuccessful(contractEvent.getSuccessful());
-        creationProcessCompleted.setQuantity(contractEvent.getQuantity());
-        creationProcessCompleted.setExperience(contractEvent.getExperience());
-        creationProcessCompleted.setNewLevel(contractEvent.getNewLevel());
-        creationProcessCompleted.setVersion(contractEvent.getVersion());
-
-        creationProcessCompleted.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        creationProcessCompleted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        creationProcessCompleted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
-
-        creationProcessCompleted.setSuiPackageId(eventEnvelope.getPackageId());
-        creationProcessCompleted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        creationProcessCompleted.setSuiSender(eventEnvelope.getSender());
-
-        return creationProcessCompleted;
-    }
 
     public static AbstractItemEvent.ItemCreated toItemCreated(SuiMoveEventEnvelope<ItemCreated> eventEnvelope) {
         ItemCreated contractEvent = eventEnvelope.getParsedJson();
@@ -580,63 +490,311 @@ public class DomainBeanUtils {
         return playerExperienceAndItemsIncreased;
     }
 
-    public static AbstractMapEvent.InitMapEvent toInitMapEvent(SuiMoveEventEnvelope<InitMapEvent> eventEnvelope) {
-        InitMapEvent contractEvent = eventEnvelope.getParsedJson();
+    public static AbstractSkillProcessEvent.SkillProcessCreated toSkillProcessCreated(SuiMoveEventEnvelope<SkillProcessCreated> eventEnvelope) {
+        SkillProcessCreated contractEvent = eventEnvelope.getParsedJson();
 
-        AbstractMapEvent.InitMapEvent initMapEvent = new AbstractMapEvent.InitMapEvent();
-        initMapEvent.setId(contractEvent.getId());
-        initMapEvent.setVersion(BigInteger.valueOf(-1));
+        AbstractSkillProcessEvent.SkillProcessCreated skillProcessCreated = new AbstractSkillProcessEvent.SkillProcessCreated();
+        skillProcessCreated.setId_(contractEvent.getId());
+        skillProcessCreated.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
+        skillProcessCreated.setVersion(BigInteger.valueOf(-1));
 
-        initMapEvent.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        initMapEvent.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        initMapEvent.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+        skillProcessCreated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        skillProcessCreated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        skillProcessCreated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
 
-        initMapEvent.setSuiPackageId(eventEnvelope.getPackageId());
-        initMapEvent.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        initMapEvent.setSuiSender(eventEnvelope.getSender());
+        skillProcessCreated.setSuiPackageId(eventEnvelope.getPackageId());
+        skillProcessCreated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        skillProcessCreated.setSuiSender(eventEnvelope.getSender());
 
-        return initMapEvent;
+        return skillProcessCreated;
     }
 
-    public static AbstractMapEvent.IslandAdded toIslandAdded(SuiMoveEventEnvelope<IslandAdded> eventEnvelope) {
-        IslandAdded contractEvent = eventEnvelope.getParsedJson();
+    public static AbstractSkillProcessEvent.ProductionProcessStarted toProductionProcessStarted(SuiMoveEventEnvelope<ProductionProcessStarted> eventEnvelope) {
+        ProductionProcessStarted contractEvent = eventEnvelope.getParsedJson();
 
-        AbstractMapEvent.IslandAdded islandAdded = new AbstractMapEvent.IslandAdded();
-        islandAdded.setId(contractEvent.getId());
-        islandAdded.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
-        islandAdded.setResources(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getResources()));
-        islandAdded.setVersion(contractEvent.getVersion());
+        AbstractSkillProcessEvent.ProductionProcessStarted productionProcessStarted = new AbstractSkillProcessEvent.ProductionProcessStarted();
+        productionProcessStarted.setId_(contractEvent.getId());
+        productionProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
+        productionProcessStarted.setItemId(contractEvent.getItemId());
+        productionProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
+        productionProcessStarted.setStartedAt(contractEvent.getStartedAt());
+        productionProcessStarted.setCreationTime(contractEvent.getCreationTime());
+        productionProcessStarted.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
+        productionProcessStarted.setVersion(contractEvent.getVersion());
 
-        islandAdded.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        islandAdded.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        islandAdded.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+        productionProcessStarted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        productionProcessStarted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        productionProcessStarted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
 
-        islandAdded.setSuiPackageId(eventEnvelope.getPackageId());
-        islandAdded.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        islandAdded.setSuiSender(eventEnvelope.getSender());
+        productionProcessStarted.setSuiPackageId(eventEnvelope.getPackageId());
+        productionProcessStarted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        productionProcessStarted.setSuiSender(eventEnvelope.getSender());
 
-        return islandAdded;
+        return productionProcessStarted;
     }
 
-    public static AbstractMapEvent.MapIslandClaimed toMapIslandClaimed(SuiMoveEventEnvelope<MapIslandClaimed> eventEnvelope) {
-        MapIslandClaimed contractEvent = eventEnvelope.getParsedJson();
+    public static AbstractSkillProcessEvent.ProductionProcessCompleted toProductionProcessCompleted(SuiMoveEventEnvelope<ProductionProcessCompleted> eventEnvelope) {
+        ProductionProcessCompleted contractEvent = eventEnvelope.getParsedJson();
 
-        AbstractMapEvent.MapIslandClaimed mapIslandClaimed = new AbstractMapEvent.MapIslandClaimed();
-        mapIslandClaimed.setId(contractEvent.getId());
-        mapIslandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
-        mapIslandClaimed.setClaimedBy(contractEvent.getClaimedBy());
-        mapIslandClaimed.setClaimedAt(contractEvent.getClaimedAt());
-        mapIslandClaimed.setVersion(contractEvent.getVersion());
+        AbstractSkillProcessEvent.ProductionProcessCompleted productionProcessCompleted = new AbstractSkillProcessEvent.ProductionProcessCompleted();
+        productionProcessCompleted.setId_(contractEvent.getId());
+        productionProcessCompleted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
+        productionProcessCompleted.setItemId(contractEvent.getItemId());
+        productionProcessCompleted.setStartedAt(contractEvent.getStartedAt());
+        productionProcessCompleted.setCreationTime(contractEvent.getCreationTime());
+        productionProcessCompleted.setEndedAt(contractEvent.getEndedAt());
+        productionProcessCompleted.setSuccessful(contractEvent.getSuccessful());
+        productionProcessCompleted.setQuantity(contractEvent.getQuantity());
+        productionProcessCompleted.setExperience(contractEvent.getExperience());
+        productionProcessCompleted.setNewLevel(contractEvent.getNewLevel());
+        productionProcessCompleted.setVersion(contractEvent.getVersion());
 
-        mapIslandClaimed.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        mapIslandClaimed.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        mapIslandClaimed.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+        productionProcessCompleted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        productionProcessCompleted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        productionProcessCompleted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
 
-        mapIslandClaimed.setSuiPackageId(eventEnvelope.getPackageId());
-        mapIslandClaimed.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        mapIslandClaimed.setSuiSender(eventEnvelope.getSender());
+        productionProcessCompleted.setSuiPackageId(eventEnvelope.getPackageId());
+        productionProcessCompleted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        productionProcessCompleted.setSuiSender(eventEnvelope.getSender());
 
-        return mapIslandClaimed;
+        return productionProcessCompleted;
+    }
+
+    public static AbstractSkillProcessEvent.ShipProductionProcessStarted toShipProductionProcessStarted(SuiMoveEventEnvelope<ShipProductionProcessStarted> eventEnvelope) {
+        ShipProductionProcessStarted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractSkillProcessEvent.ShipProductionProcessStarted shipProductionProcessStarted = new AbstractSkillProcessEvent.ShipProductionProcessStarted();
+        shipProductionProcessStarted.setId_(contractEvent.getId());
+        shipProductionProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
+        shipProductionProcessStarted.setItemId(contractEvent.getItemId());
+        shipProductionProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
+        shipProductionProcessStarted.setStartedAt(contractEvent.getStartedAt());
+        shipProductionProcessStarted.setCreationTime(contractEvent.getCreationTime());
+        shipProductionProcessStarted.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
+        shipProductionProcessStarted.setVersion(contractEvent.getVersion());
+
+        shipProductionProcessStarted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        shipProductionProcessStarted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        shipProductionProcessStarted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        shipProductionProcessStarted.setSuiPackageId(eventEnvelope.getPackageId());
+        shipProductionProcessStarted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        shipProductionProcessStarted.setSuiSender(eventEnvelope.getSender());
+
+        return shipProductionProcessStarted;
+    }
+
+    public static AbstractSkillProcessEvent.ShipProductionProcessCompleted toShipProductionProcessCompleted(SuiMoveEventEnvelope<ShipProductionProcessCompleted> eventEnvelope) {
+        ShipProductionProcessCompleted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractSkillProcessEvent.ShipProductionProcessCompleted shipProductionProcessCompleted = new AbstractSkillProcessEvent.ShipProductionProcessCompleted();
+        shipProductionProcessCompleted.setId_(contractEvent.getId());
+        shipProductionProcessCompleted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
+        shipProductionProcessCompleted.setItemId(contractEvent.getItemId());
+        shipProductionProcessCompleted.setStartedAt(contractEvent.getStartedAt());
+        shipProductionProcessCompleted.setCreationTime(contractEvent.getCreationTime());
+        shipProductionProcessCompleted.setEndedAt(contractEvent.getEndedAt());
+        shipProductionProcessCompleted.setSuccessful(contractEvent.getSuccessful());
+        shipProductionProcessCompleted.setQuantity(contractEvent.getQuantity());
+        shipProductionProcessCompleted.setExperience(contractEvent.getExperience());
+        shipProductionProcessCompleted.setNewLevel(contractEvent.getNewLevel());
+        shipProductionProcessCompleted.setVersion(contractEvent.getVersion());
+
+        shipProductionProcessCompleted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        shipProductionProcessCompleted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        shipProductionProcessCompleted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        shipProductionProcessCompleted.setSuiPackageId(eventEnvelope.getPackageId());
+        shipProductionProcessCompleted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        shipProductionProcessCompleted.setSuiSender(eventEnvelope.getSender());
+
+        return shipProductionProcessCompleted;
+    }
+
+    public static AbstractSkillProcessEvent.CreationProcessStarted toCreationProcessStarted(SuiMoveEventEnvelope<CreationProcessStarted> eventEnvelope) {
+        CreationProcessStarted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractSkillProcessEvent.CreationProcessStarted creationProcessStarted = new AbstractSkillProcessEvent.CreationProcessStarted();
+        creationProcessStarted.setId_(contractEvent.getId());
+        creationProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
+        creationProcessStarted.setItemId(contractEvent.getItemId());
+        creationProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
+        creationProcessStarted.setResourceCost(contractEvent.getResourceCost());
+        creationProcessStarted.setStartedAt(contractEvent.getStartedAt());
+        creationProcessStarted.setCreationTime(contractEvent.getCreationTime());
+        creationProcessStarted.setVersion(contractEvent.getVersion());
+
+        creationProcessStarted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        creationProcessStarted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        creationProcessStarted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        creationProcessStarted.setSuiPackageId(eventEnvelope.getPackageId());
+        creationProcessStarted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        creationProcessStarted.setSuiSender(eventEnvelope.getSender());
+
+        return creationProcessStarted;
+    }
+
+    public static AbstractSkillProcessEvent.CreationProcessCompleted toCreationProcessCompleted(SuiMoveEventEnvelope<CreationProcessCompleted> eventEnvelope) {
+        CreationProcessCompleted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractSkillProcessEvent.CreationProcessCompleted creationProcessCompleted = new AbstractSkillProcessEvent.CreationProcessCompleted();
+        creationProcessCompleted.setId_(contractEvent.getId());
+        creationProcessCompleted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
+        creationProcessCompleted.setItemId(contractEvent.getItemId());
+        creationProcessCompleted.setStartedAt(contractEvent.getStartedAt());
+        creationProcessCompleted.setCreationTime(contractEvent.getCreationTime());
+        creationProcessCompleted.setEndedAt(contractEvent.getEndedAt());
+        creationProcessCompleted.setSuccessful(contractEvent.getSuccessful());
+        creationProcessCompleted.setQuantity(contractEvent.getQuantity());
+        creationProcessCompleted.setExperience(contractEvent.getExperience());
+        creationProcessCompleted.setNewLevel(contractEvent.getNewLevel());
+        creationProcessCompleted.setVersion(contractEvent.getVersion());
+
+        creationProcessCompleted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        creationProcessCompleted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        creationProcessCompleted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        creationProcessCompleted.setSuiPackageId(eventEnvelope.getPackageId());
+        creationProcessCompleted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        creationProcessCompleted.setSuiSender(eventEnvelope.getSender());
+
+        return creationProcessCompleted;
+    }
+
+    public static AbstractShipEvent.ShipCreated toShipCreated(SuiMoveEventEnvelope<ShipCreated> eventEnvelope) {
+        ShipCreated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractShipEvent.ShipCreated shipCreated = new AbstractShipEvent.ShipCreated();
+        shipCreated.setId(contractEvent.getId());
+        shipCreated.setOwner(contractEvent.getOwner());
+        shipCreated.setHealthPoints(contractEvent.getHealthPoints());
+        shipCreated.setAttack(contractEvent.getAttack());
+        shipCreated.setProtection(contractEvent.getProtection());
+        shipCreated.setSpeed(contractEvent.getSpeed());
+        shipCreated.setBuildingExpenses(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getBuildingExpenses()));
+        shipCreated.setVersion(BigInteger.valueOf(-1));
+
+        shipCreated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        shipCreated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        shipCreated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        shipCreated.setSuiPackageId(eventEnvelope.getPackageId());
+        shipCreated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        shipCreated.setSuiSender(eventEnvelope.getSender());
+
+        return shipCreated;
+    }
+
+    public static AbstractRosterEvent.RosterCreated toRosterCreated(SuiMoveEventEnvelope<RosterCreated> eventEnvelope) {
+        RosterCreated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.RosterCreated rosterCreated = new AbstractRosterEvent.RosterCreated();
+        rosterCreated.setId_(contractEvent.getId());
+        rosterCreated.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterCreated.setStatus(contractEvent.getStatus());
+        rosterCreated.setSpeed(contractEvent.getSpeed());
+        rosterCreated.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
+        rosterCreated.setCoordinatesUpdatedAt(contractEvent.getCoordinatesUpdatedAt());
+        rosterCreated.setTargetCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getTargetCoordinates()));
+        rosterCreated.setShipBattleId(contractEvent.getShipBattleId());
+        rosterCreated.setVersion(BigInteger.valueOf(-1));
+
+        rosterCreated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        rosterCreated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        rosterCreated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        rosterCreated.setSuiPackageId(eventEnvelope.getPackageId());
+        rosterCreated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        rosterCreated.setSuiSender(eventEnvelope.getSender());
+
+        return rosterCreated;
+    }
+
+    public static AbstractRosterEvent.RosterShipAdded toRosterShipAdded(SuiMoveEventEnvelope<RosterShipAdded> eventEnvelope) {
+        RosterShipAdded contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.RosterShipAdded rosterShipAdded = new AbstractRosterEvent.RosterShipAdded();
+        rosterShipAdded.setId_(contractEvent.getId());
+        rosterShipAdded.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterShipAdded.setShip(contractEvent.getShip());
+        rosterShipAdded.setPosition(contractEvent.getPosition());
+        rosterShipAdded.setVersion(contractEvent.getVersion());
+
+        rosterShipAdded.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        rosterShipAdded.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        rosterShipAdded.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        rosterShipAdded.setSuiPackageId(eventEnvelope.getPackageId());
+        rosterShipAdded.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        rosterShipAdded.setSuiSender(eventEnvelope.getSender());
+
+        return rosterShipAdded;
+    }
+
+    public static AbstractRosterEvent.RosterSetSail toRosterSetSail(SuiMoveEventEnvelope<RosterSetSail> eventEnvelope) {
+        RosterSetSail contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.RosterSetSail rosterSetSail = new AbstractRosterEvent.RosterSetSail();
+        rosterSetSail.setId_(contractEvent.getId());
+        rosterSetSail.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterSetSail.setTargetCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getTargetCoordinates()));
+        rosterSetSail.setSetSailAt(contractEvent.getSetSailAt());
+        rosterSetSail.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
+        rosterSetSail.setVersion(contractEvent.getVersion());
+
+        rosterSetSail.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        rosterSetSail.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        rosterSetSail.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        rosterSetSail.setSuiPackageId(eventEnvelope.getPackageId());
+        rosterSetSail.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        rosterSetSail.setSuiSender(eventEnvelope.getSender());
+
+        return rosterSetSail;
+    }
+
+    public static AbstractRosterEvent.RosterLocationUpdated toRosterLocationUpdated(SuiMoveEventEnvelope<RosterLocationUpdated> eventEnvelope) {
+        RosterLocationUpdated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.RosterLocationUpdated rosterLocationUpdated = new AbstractRosterEvent.RosterLocationUpdated();
+        rosterLocationUpdated.setId_(contractEvent.getId());
+        rosterLocationUpdated.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterLocationUpdated.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
+        rosterLocationUpdated.setCoordinatesUpdatedAt(contractEvent.getCoordinatesUpdatedAt());
+        rosterLocationUpdated.setNewStatus(contractEvent.getNewStatus());
+        rosterLocationUpdated.setVersion(contractEvent.getVersion());
+
+        rosterLocationUpdated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        rosterLocationUpdated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        rosterLocationUpdated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        rosterLocationUpdated.setSuiPackageId(eventEnvelope.getPackageId());
+        rosterLocationUpdated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        rosterLocationUpdated.setSuiSender(eventEnvelope.getSender());
+
+        return rosterLocationUpdated;
+    }
+
+    public static AbstractShipBattleEvent.ShipBattleInitiated toShipBattleInitiated(SuiMoveEventEnvelope<ShipBattleInitiated> eventEnvelope) {
+        ShipBattleInitiated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractShipBattleEvent.ShipBattleInitiated shipBattleInitiated = new AbstractShipBattleEvent.ShipBattleInitiated();
+        shipBattleInitiated.setId(contractEvent.getId());
+        shipBattleInitiated.setInitiatorId(contractEvent.getInitiatorId());
+        shipBattleInitiated.setResponderId(contractEvent.getResponderId());
+        shipBattleInitiated.setStartedAt(contractEvent.getStartedAt());
+        shipBattleInitiated.setVersion(BigInteger.valueOf(-1));
+
+        shipBattleInitiated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        shipBattleInitiated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        shipBattleInitiated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        shipBattleInitiated.setSuiPackageId(eventEnvelope.getPackageId());
+        shipBattleInitiated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        shipBattleInitiated.setSuiSender(eventEnvelope.getSender());
+
+        return shipBattleInitiated;
     }
 
     public static AbstractExperienceTableEvent.InitExperienceTableEvent toInitExperienceTableEvent(SuiMoveEventEnvelope<InitExperienceTableEvent> eventEnvelope) {
@@ -697,6 +855,65 @@ public class DomainBeanUtils {
         experienceLevelUpdated.setSuiSender(eventEnvelope.getSender());
 
         return experienceLevelUpdated;
+    }
+
+    public static AbstractMapEvent.InitMapEvent toInitMapEvent(SuiMoveEventEnvelope<InitMapEvent> eventEnvelope) {
+        InitMapEvent contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.InitMapEvent initMapEvent = new AbstractMapEvent.InitMapEvent();
+        initMapEvent.setId(contractEvent.getId());
+        initMapEvent.setVersion(BigInteger.valueOf(-1));
+
+        initMapEvent.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        initMapEvent.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        initMapEvent.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        initMapEvent.setSuiPackageId(eventEnvelope.getPackageId());
+        initMapEvent.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        initMapEvent.setSuiSender(eventEnvelope.getSender());
+
+        return initMapEvent;
+    }
+
+    public static AbstractMapEvent.IslandAdded toIslandAdded(SuiMoveEventEnvelope<IslandAdded> eventEnvelope) {
+        IslandAdded contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.IslandAdded islandAdded = new AbstractMapEvent.IslandAdded();
+        islandAdded.setId(contractEvent.getId());
+        islandAdded.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        islandAdded.setResources(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getResources()));
+        islandAdded.setVersion(contractEvent.getVersion());
+
+        islandAdded.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        islandAdded.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        islandAdded.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        islandAdded.setSuiPackageId(eventEnvelope.getPackageId());
+        islandAdded.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        islandAdded.setSuiSender(eventEnvelope.getSender());
+
+        return islandAdded;
+    }
+
+    public static AbstractMapEvent.MapIslandClaimed toMapIslandClaimed(SuiMoveEventEnvelope<MapIslandClaimed> eventEnvelope) {
+        MapIslandClaimed contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.MapIslandClaimed mapIslandClaimed = new AbstractMapEvent.MapIslandClaimed();
+        mapIslandClaimed.setId(contractEvent.getId());
+        mapIslandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        mapIslandClaimed.setClaimedBy(contractEvent.getClaimedBy());
+        mapIslandClaimed.setClaimedAt(contractEvent.getClaimedAt());
+        mapIslandClaimed.setVersion(contractEvent.getVersion());
+
+        mapIslandClaimed.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        mapIslandClaimed.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        mapIslandClaimed.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        mapIslandClaimed.setSuiPackageId(eventEnvelope.getPackageId());
+        mapIslandClaimed.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        mapIslandClaimed.setSuiSender(eventEnvelope.getSender());
+
+        return mapIslandClaimed;
     }
 
 

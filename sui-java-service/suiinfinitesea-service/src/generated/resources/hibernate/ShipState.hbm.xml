@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.ship">
+  <class name="org.dddml.suiinfinitesea.domain.ship.AbstractShipState$SimpleShipState" table="ship">
+    <id name="id" length="66">
+      <column name="id" sql-type="VARCHAR(66)" />
+      <generator class="assigned" />
+    </id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <property name="owner">
+      <column name="owner" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="healthPoints">
+      <column name="health_points" />
+    </property>
+    <property name="attack">
+      <column name="attack" />
+    </property>
+    <property name="protection">
+      <column name="protection" />
+    </property>
+    <property name="speed">
+      <column name="speed" />
+    </property>
+    <property name="buildingExpenses">
+      <column name="building_expenses" sql-type="json" />
+      <type name="io.hypersistence.utils.hibernate.type.json.JsonType">
+        <param name="org.hibernate.type.ParameterType">java.util.HashMap</param>
+      </type>
+    </property>
+    <property name="version">
+      <column name="version" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+    <set name="inventory" table="ship_inventory" lazy="false">
+      <key column="Id" />
+      <composite-element class="org.dddml.suiinfinitesea.domain.ItemIdQuantityPair">
+        <property name="itemId">
+          <column name="item_id" not-null="true" />
+        </property>
+        <property name="quantity">
+          <column name="quantity" not-null="true" />
+        </property>
+      </composite-element>
+    </set>
+  </class>
+</hibernate-mapping>

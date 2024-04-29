@@ -44,8 +44,8 @@
     <property name="suiType">
       <column name="sui_type" length="200" />
     </property>
-    <property name="status">
-      <column name="status" sql-type="CHAR(1)" />
+    <property name="eventStatus">
+      <column name="event_status" sql-type="CHAR(1)" />
     </property>
     <property name="commandType" column="command_type" length="50" />
     <subclass name="AbstractSkillProcessEvent$SkillProcessClobEvent" discriminator-value="SkillProcessClobEvent">
@@ -55,6 +55,8 @@
       <subclass name="AbstractSkillProcessEvent$SkillProcessCreated" discriminator-value="SkillProcessCreated" />
       <subclass name="AbstractSkillProcessEvent$ProductionProcessStarted" discriminator-value="ProductionProcessStarted" />
       <subclass name="AbstractSkillProcessEvent$ProductionProcessCompleted" discriminator-value="ProductionProcessCompleted" />
+      <subclass name="AbstractSkillProcessEvent$ShipProductionProcessStarted" discriminator-value="ShipProductionProcessStarted" />
+      <subclass name="AbstractSkillProcessEvent$ShipProductionProcessCompleted" discriminator-value="ShipProductionProcessCompleted" />
       <subclass name="AbstractSkillProcessEvent$CreationProcessStarted" discriminator-value="CreationProcessStarted" />
       <subclass name="AbstractSkillProcessEvent$CreationProcessCompleted" discriminator-value="CreationProcessCompleted" />
     </subclass>

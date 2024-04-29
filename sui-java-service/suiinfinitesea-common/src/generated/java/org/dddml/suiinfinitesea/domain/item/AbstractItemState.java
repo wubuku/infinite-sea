@@ -252,8 +252,8 @@ public abstract class AbstractItemState implements ItemState.SqlItemState {
         String SuiSender = suiSender;
         String suiType = e.getSuiType();
         String SuiType = suiType;
-        String status = e.getStatus();
-        String Status = status;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
 
         if (this.getCreatedBy() == null){
             this.setCreatedBy(e.getCreatedBy());
@@ -268,13 +268,13 @@ public abstract class AbstractItemState implements ItemState.SqlItemState {
                     "org.dddml.suiinfinitesea.domain.item.CreateLogic",
                     "mutate",
                     new Class[]{ItemState.class, String.class, Boolean.class, Long.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, name, requiredForCompletion, sellsFor, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Object[]{this, name, requiredForCompletion, sellsFor, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.item;
 //
 //public class CreateLogic {
-//    public static ItemState mutate(ItemState itemState, String name, Boolean requiredForCompletion, Long sellsFor, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemState, ItemState.MutableItemState> mutationContext) {
+//    public static ItemState mutate(ItemState itemState, String name, Boolean requiredForCompletion, Long sellsFor, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ItemState, ItemState.MutableItemState> mutationContext) {
 //    }
 //}
 
@@ -305,8 +305,8 @@ public abstract class AbstractItemState implements ItemState.SqlItemState {
         String SuiSender = suiSender;
         String suiType = e.getSuiType();
         String SuiType = suiType;
-        String status = e.getStatus();
-        String Status = status;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
 
         if (this.getCreatedBy() == null){
             this.setCreatedBy(e.getCreatedBy());
@@ -321,13 +321,13 @@ public abstract class AbstractItemState implements ItemState.SqlItemState {
                     "org.dddml.suiinfinitesea.domain.item.UpdateLogic",
                     "mutate",
                     new Class[]{ItemState.class, String.class, Boolean.class, Long.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, name, requiredForCompletion, sellsFor, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Object[]{this, name, requiredForCompletion, sellsFor, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.item;
 //
 //public class UpdateLogic {
-//    public static ItemState mutate(ItemState itemState, String name, Boolean requiredForCompletion, Long sellsFor, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ItemState, ItemState.MutableItemState> mutationContext) {
+//    public static ItemState mutate(ItemState itemState, String name, Boolean requiredForCompletion, Long sellsFor, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ItemState, ItemState.MutableItemState> mutationContext) {
 //    }
 //}
 

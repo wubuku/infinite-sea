@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.roster">
+  <class name="org.dddml.suiinfinitesea.domain.roster.AbstractRosterState$SimpleRosterState" table="roster">
+    <composite-id name="rosterId" class="org.dddml.suiinfinitesea.domain.RosterId">
+      <key-property name="playerId">
+        <column name="roster_id_player_id" sql-type="VARCHAR(66)" />
+      </key-property>
+      <key-property name="sequenceNumber">
+        <column name="roster_id_sequence_number" />
+      </key-property>
+    </composite-id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <set name="protectedRosterShipsItems" inverse="true" cascade="all-delete-orphan" fetch="join">
+      <key>
+        <column name="player_id" />
+        <column name="sequence_number" />
+      </key>
+      <one-to-many class="org.dddml.suiinfinitesea.domain.roster.AbstractRosterShipsItemState$SimpleRosterShipsItemState" />
+    </set>
+    <property name="id_">
+      <column name="id" unique-key="unique_roster_sid" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="status">
+      <column name="status" />
+    </property>
+    <property name="speed">
+      <column name="speed" />
+    </property>
+    <component name="ships" class="org.dddml.suiinfinitesea.domain.ObjectTable">
+      <property name="id">
+        <column name="ships_id" sql-type="VARCHAR(66)" />
+      </property>
+      <property name="size">
+        <column name="ships_size" />
+      </property>
+    </component>
+    <component name="updatedCoordinates" class="org.dddml.suiinfinitesea.domain.Coordinates">
+      <property name="x">
+        <column name="updated_coordinates_x" />
+      </property>
+      <property name="y">
+        <column name="updated_coordinates_y" />
+      </property>
+    </component>
+    <property name="coordinatesUpdatedAt">
+      <column name="coordinates_updated_at" sql-type="DECIMAL(20,0)" />
+    </property>
+    <component name="targetCoordinates" class="org.dddml.suiinfinitesea.domain.Coordinates">
+      <property name="x">
+        <column name="target_coordinates_x" />
+      </property>
+      <property name="y">
+        <column name="target_coordinates_y" />
+      </property>
+    </component>
+    <property name="shipBattleId">
+      <column name="ship_battle_id" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="version">
+      <column name="version" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+    <set name="shipIds" table="roster_ship_ids" lazy="false">
+      <key>
+        <column name="roster_id_player_id" />
+        <column name="roster_id_sequence_number" />
+      </key>
+      <element column="ship_ids_item" type="string" not-null="true" />
+    </set>
+  </class>
+</hibernate-mapping>

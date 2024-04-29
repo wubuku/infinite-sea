@@ -33,6 +33,8 @@ public class SkillProcess {
 
     private java.math.BigInteger energyVault;
 
+    private ItemIdQuantityPairs productionMaterials;
+
     private BigInteger version;
 
     public UID getId() {
@@ -107,6 +109,14 @@ public class SkillProcess {
         this.energyVault = energyVault;
     }
 
+    public ItemIdQuantityPairs getProductionMaterials() {
+        return productionMaterials;
+    }
+
+    public void setProductionMaterials(ItemIdQuantityPairs productionMaterials) {
+        this.productionMaterials = productionMaterials;
+    }
+
     public BigInteger getVersion() {
         return version;
     }
@@ -127,6 +137,7 @@ public class SkillProcess {
                 ", completed=" + completed +
                 ", endedAt=" + endedAt +
                 ", energyVault=" + energyVault +
+                ", productionMaterials=" + productionMaterials +
                 ", version=" + version +
                 '}';
     }

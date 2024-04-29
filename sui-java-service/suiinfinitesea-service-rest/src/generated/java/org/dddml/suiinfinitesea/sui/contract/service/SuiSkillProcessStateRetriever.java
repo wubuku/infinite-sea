@@ -50,6 +50,7 @@ public class SuiSkillProcessStateRetriever {
         skillProcessState.setCompleted(skillProcess.getCompleted());
         skillProcessState.setEndedAt(skillProcess.getEndedAt());
         skillProcessState.setEnergyVault(skillProcess.getEnergyVault());
+        skillProcessState.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(skillProcess.getProductionMaterials()));
         return skillProcessState;
     }
 

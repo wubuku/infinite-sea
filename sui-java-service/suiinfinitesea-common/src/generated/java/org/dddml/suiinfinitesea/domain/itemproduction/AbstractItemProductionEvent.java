@@ -125,14 +125,14 @@ public abstract class AbstractItemProductionEvent extends AbstractEvent implemen
         this.suiType = suiType;
     }
 
-    private String status;
+    private String eventStatus;
 
-    public String getStatus() {
-        return this.status;
+    public String getEventStatus() {
+        return this.eventStatus;
     }
     
-    public void setStatus(String status) {
-        this.status = status;
+    public void setEventStatus(String eventStatus) {
+        this.eventStatus = eventStatus;
     }
 
     private String createdBy;

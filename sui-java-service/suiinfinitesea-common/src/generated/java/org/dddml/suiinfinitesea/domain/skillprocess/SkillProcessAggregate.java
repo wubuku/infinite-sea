@@ -21,6 +21,8 @@ public interface SkillProcessAggregate {
 
     void completeProduction(String player, SkillTypeItemIdPair itemProduction, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId, SkillProcessCommands.CompleteProduction c);
 
+    void completeShipProduction(RosterId unassignedShips, String player, SkillTypeItemIdPair itemProduction, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId, SkillProcessCommands.CompleteShipProduction c);
+
     void completeCreation(String player, SkillTypeItemIdPair itemCreation, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId, SkillProcessCommands.CompleteCreation c);
 
     void throwOnInvalidStateTransition(Command c);

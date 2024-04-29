@@ -205,6 +205,9 @@ aggregates:
           Move: "std::vector::empty()"
       Ships:
         type: ObjectTable<ID, Ship>
+        typeArguments:
+          - # not set for ID
+          - persistenceType: JsonObject
       UpdatedCoordinates:
         type: Coordinates
         description: "The last updated coordinates"

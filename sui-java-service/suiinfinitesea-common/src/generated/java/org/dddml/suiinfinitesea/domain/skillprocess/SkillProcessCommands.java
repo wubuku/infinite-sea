@@ -232,6 +232,199 @@ public class SkillProcessCommands {
 
     }
 
+    public static class StartShipProduction extends AbstractSkillProcessCommand implements SkillProcessCommand {
+
+        public String getCommandType() {
+            return "StartShipProduction";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Skill Process Id
+         */
+        private SkillProcessId skillProcessId;
+
+        public SkillProcessId getSkillProcessId() {
+            return this.skillProcessId;
+        }
+
+        public void setSkillProcessId(SkillProcessId skillProcessId) {
+            this.skillProcessId = skillProcessId;
+        }
+
+        /**
+         * Production Materials
+         */
+        private ItemIdQuantityPairs productionMaterials;
+
+        public ItemIdQuantityPairs getProductionMaterials() {
+            return this.productionMaterials;
+        }
+
+        public void setProductionMaterials(ItemIdQuantityPairs productionMaterials) {
+            this.productionMaterials = productionMaterials;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * Item Production
+         */
+        private SkillTypeItemIdPair itemProduction;
+
+        public SkillTypeItemIdPair getItemProduction() {
+            return this.itemProduction;
+        }
+
+        public void setItemProduction(SkillTypeItemIdPair itemProduction) {
+            this.itemProduction = itemProduction;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class CompleteShipProduction extends AbstractSkillProcessCommand implements SkillProcessCommand {
+
+        public String getCommandType() {
+            return "CompleteShipProduction";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Skill Process Id
+         */
+        private SkillProcessId skillProcessId;
+
+        public SkillProcessId getSkillProcessId() {
+            return this.skillProcessId;
+        }
+
+        public void setSkillProcessId(SkillProcessId skillProcessId) {
+            this.skillProcessId = skillProcessId;
+        }
+
+        /**
+         * Unassigned Ships
+         */
+        private RosterId unassignedShips;
+
+        public RosterId getUnassignedShips() {
+            return this.unassignedShips;
+        }
+
+        public void setUnassignedShips(RosterId unassignedShips) {
+            this.unassignedShips = unassignedShips;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * Item Production
+         */
+        private SkillTypeItemIdPair itemProduction;
+
+        public SkillTypeItemIdPair getItemProduction() {
+            return this.itemProduction;
+        }
+
+        public void setItemProduction(SkillTypeItemIdPair itemProduction) {
+            this.itemProduction = itemProduction;
+        }
+
+        /**
+         * Experience Table
+         */
+        private String experienceTable;
+
+        public String getExperienceTable() {
+            return this.experienceTable;
+        }
+
+        public void setExperienceTable(String experienceTable) {
+            this.experienceTable = experienceTable;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
     public static class StartCreation extends AbstractSkillProcessCommand implements SkillProcessCommand {
 
         public String getCommandType() {

@@ -36,7 +36,7 @@ public class ItemCreationEventService {
 
     @Transactional
     public void updateStatusToProcessed(AbstractItemCreationEvent event) {
-        event.setStatus("D");
+        event.setEventStatus("D");
         itemCreationEventRepository.save(event);
     }
 

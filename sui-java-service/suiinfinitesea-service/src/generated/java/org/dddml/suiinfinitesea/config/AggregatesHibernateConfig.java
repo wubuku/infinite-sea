@@ -8,6 +8,15 @@ package org.dddml.suiinfinitesea.config;
 import org.dddml.suiinfinitesea.domain.skillprocess.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.skillprocess.hibernate.*;
+import org.dddml.suiinfinitesea.domain.ship.*;
+import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.ship.hibernate.*;
+import org.dddml.suiinfinitesea.domain.roster.*;
+import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.roster.hibernate.*;
+import org.dddml.suiinfinitesea.domain.shipbattle.*;
+import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.shipbattle.hibernate.*;
 import org.dddml.suiinfinitesea.domain.item.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.item.hibernate.*;
@@ -78,6 +87,148 @@ public class AggregatesHibernateConfig {
                 skillProcessEventStore,
                 skillProcessStateRepository,
                 skillProcessStateQueryRepository
+        );
+        return applicationService;
+    }
+
+
+
+    @Bean
+    public ShipStateRepository shipStateRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateShipStateRepository repository = new HibernateShipStateRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public ShipStateQueryRepository shipStateQueryRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateShipStateQueryRepository repository = new HibernateShipStateQueryRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public HibernateShipEventStore shipEventStore(SessionFactory hibernateSessionFactory) {
+        HibernateShipEventStore eventStore = new HibernateShipEventStore();
+        eventStore.setSessionFactory(hibernateSessionFactory);
+        return eventStore;
+    }
+
+    @Bean
+    public AbstractShipApplicationService.SimpleShipApplicationService shipApplicationService(
+            @Qualifier("shipEventStore") EventStore shipEventStore,
+            ShipStateRepository shipStateRepository,
+            ShipStateQueryRepository shipStateQueryRepository
+    ) {
+        AbstractShipApplicationService.SimpleShipApplicationService applicationService = new AbstractShipApplicationService.SimpleShipApplicationService(
+                shipEventStore,
+                shipStateRepository,
+                shipStateQueryRepository
+        );
+        return applicationService;
+    }
+
+
+
+    @Bean
+    public RosterShipsItemEventDao rosterShipsItemEventDao(SessionFactory hibernateSessionFactory) {
+        HibernateRosterShipsItemEventDao dao = new HibernateRosterShipsItemEventDao();
+        dao.setSessionFactory(hibernateSessionFactory);
+        return dao;
+    }
+
+    @Bean
+    public RosterStateRepository rosterStateRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateRosterStateRepository repository = new HibernateRosterStateRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public RosterStateQueryRepository rosterStateQueryRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateRosterStateQueryRepository repository = new HibernateRosterStateQueryRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public HibernateRosterEventStore rosterEventStore(SessionFactory hibernateSessionFactory) {
+        HibernateRosterEventStore eventStore = new HibernateRosterEventStore();
+        eventStore.setSessionFactory(hibernateSessionFactory);
+        return eventStore;
+    }
+
+    @Bean
+    public AbstractRosterApplicationService.SimpleRosterApplicationService rosterApplicationService(
+            @Qualifier("rosterEventStore") EventStore rosterEventStore,
+            RosterStateRepository rosterStateRepository,
+            RosterStateQueryRepository rosterStateQueryRepository
+    ) {
+        AbstractRosterApplicationService.SimpleRosterApplicationService applicationService = new AbstractRosterApplicationService.SimpleRosterApplicationService(
+                rosterEventStore,
+                rosterStateRepository,
+                rosterStateQueryRepository
+        );
+        return applicationService;
+    }
+
+
+
+    @Bean
+    public ShipBattleStateRepository shipBattleStateRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateShipBattleStateRepository repository = new HibernateShipBattleStateRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public ShipBattleStateQueryRepository shipBattleStateQueryRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateShipBattleStateQueryRepository repository = new HibernateShipBattleStateQueryRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public HibernateShipBattleEventStore shipBattleEventStore(SessionFactory hibernateSessionFactory) {
+        HibernateShipBattleEventStore eventStore = new HibernateShipBattleEventStore();
+        eventStore.setSessionFactory(hibernateSessionFactory);
+        return eventStore;
+    }
+
+    @Bean
+    public AbstractShipBattleApplicationService.SimpleShipBattleApplicationService shipBattleApplicationService(
+            @Qualifier("shipBattleEventStore") EventStore shipBattleEventStore,
+            ShipBattleStateRepository shipBattleStateRepository,
+            ShipBattleStateQueryRepository shipBattleStateQueryRepository
+    ) {
+        AbstractShipBattleApplicationService.SimpleShipBattleApplicationService applicationService = new AbstractShipBattleApplicationService.SimpleShipBattleApplicationService(
+                shipBattleEventStore,
+                shipBattleStateRepository,
+                shipBattleStateQueryRepository
         );
         return applicationService;
     }

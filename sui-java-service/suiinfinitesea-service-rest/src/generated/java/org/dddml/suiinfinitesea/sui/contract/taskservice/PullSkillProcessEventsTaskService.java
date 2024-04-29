@@ -31,6 +31,16 @@ public class PullSkillProcessEventsTaskService {
         skillProcessEventService.pullProductionProcessCompletedEvents();
     }
 
+    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.ship-production-process-started.fixed-delay:5000}")
+    public void pullShipProductionProcessStartedEvents() {
+        skillProcessEventService.pullShipProductionProcessStartedEvents();
+    }
+
+    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.ship-production-process-completed.fixed-delay:5000}")
+    public void pullShipProductionProcessCompletedEvents() {
+        skillProcessEventService.pullShipProductionProcessCompletedEvents();
+    }
+
     @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.creation-process-started.fixed-delay:5000}")
     public void pullCreationProcessStartedEvents() {
         skillProcessEventService.pullCreationProcessStartedEvents();

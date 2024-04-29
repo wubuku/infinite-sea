@@ -39,7 +39,7 @@ public class PlayerEventService {
 
     @Transactional
     public void updateStatusToProcessed(AbstractPlayerEvent event) {
-        event.setStatus("D");
+        event.setEventStatus("D");
         playerEventRepository.save(event);
     }
 

@@ -37,7 +37,7 @@ public class MapEventService {
 
     @Transactional
     public void updateStatusToProcessed(AbstractMapEvent event) {
-        event.setStatus("D");
+        event.setEventStatus("D");
         mapEventRepository.save(event);
     }
 

@@ -115,6 +115,19 @@ public class PlayerCommands {
         }
 
         /**
+         * Roster Table
+         */
+        private String rosterTable;
+
+        public String getRosterTable() {
+            return this.rosterTable;
+        }
+
+        public void setRosterTable(String rosterTable) {
+            this.rosterTable = rosterTable;
+        }
+
+        /**
          * Off Chain Version
          */
         private Long offChainVersion;

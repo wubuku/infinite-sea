@@ -35,6 +35,12 @@
     <property name="energyVault">
       <column name="energy_vault" />
     </property>
+    <property name="productionMaterials">
+      <column name="production_materials" sql-type="json" />
+      <type name="io.hypersistence.utils.hibernate.type.json.JsonType">
+        <param name="org.hibernate.type.ParameterType">java.util.HashMap</param>
+      </type>
+    </property>
     <property name="version">
       <column name="version" sql-type="DECIMAL(20,0)" />
     </property>

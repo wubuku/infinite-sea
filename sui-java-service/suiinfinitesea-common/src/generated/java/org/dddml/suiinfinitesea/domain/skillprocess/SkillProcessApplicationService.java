@@ -19,6 +19,8 @@ public interface SkillProcessApplicationService {
 
     void when(SkillProcessCommands.CompleteProduction c);
 
+    void when(SkillProcessCommands.CompleteShipProduction c);
+
     void when(SkillProcessCommands.CompleteCreation c);
 
     SkillProcessState get(SkillProcessId id);

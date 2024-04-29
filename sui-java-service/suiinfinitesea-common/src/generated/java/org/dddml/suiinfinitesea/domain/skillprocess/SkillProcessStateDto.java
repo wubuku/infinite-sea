@@ -111,6 +111,18 @@ public class SkillProcessStateDto {
         this.energyVault = energyVault;
     }
 
+    private ItemIdQuantityPairs productionMaterials;
+
+    public ItemIdQuantityPairs getProductionMaterials()
+    {
+        return this.productionMaterials;
+    }
+
+    public void setProductionMaterials(ItemIdQuantityPairs productionMaterials)
+    {
+        this.productionMaterials = productionMaterials;
+    }
+
     private BigInteger version;
 
     public BigInteger getVersion()
@@ -247,6 +259,9 @@ public class SkillProcessStateDto {
             }
             if (returnedFieldsContains("EnergyVault")) {
                 dto.setEnergyVault(state.getEnergyVault());
+            }
+            if (returnedFieldsContains("ProductionMaterials")) {
+                dto.setProductionMaterials(state.getProductionMaterials());
             }
             if (returnedFieldsContains("Version")) {
                 dto.setVersion(state.getVersion());

@@ -73,6 +73,19 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
         }
 
         @Override
+        public void completeShipProduction(RosterId unassignedShips, String player, SkillTypeItemIdPair itemProduction, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId, SkillProcessCommands.CompleteShipProduction c) {
+            java.util.function.Supplier<SkillProcessEvent.ShipProductionProcessCompleted> eventFactory = () -> newShipProductionProcessCompleted(unassignedShips, player, itemProduction, experienceTable, clock, offChainVersion, commandId, requesterId);
+            SkillProcessEvent.ShipProductionProcessCompleted e;
+            try {
+                e = verifyCompleteShipProduction(eventFactory, unassignedShips, player, itemProduction, experienceTable, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
+        @Override
         public void completeCreation(String player, SkillTypeItemIdPair itemCreation, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId, SkillProcessCommands.CompleteCreation c) {
             java.util.function.Supplier<SkillProcessEvent.CreationProcessCompleted> eventFactory = () -> newCreationProcessCompleted(player, itemCreation, experienceTable, clock, offChainVersion, commandId, requesterId);
             SkillProcessEvent.CreationProcessCompleted e;
@@ -151,6 +164,53 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
         }
            
 
+        protected SkillProcessEvent.ShipProductionProcessStarted verifyStartShipProduction(java.util.function.Supplier<SkillProcessEvent.ShipProductionProcessStarted> eventFactory, ItemIdQuantityPairs productionMaterials, String player, SkillTypeItemIdPair itemProduction, SkillProcessCommands.StartShipProduction c) {
+            ItemIdQuantityPairs ProductionMaterials = productionMaterials;
+            String Player = player;
+            SkillTypeItemIdPair ItemProduction = itemProduction;
+
+            SkillProcessEvent.ShipProductionProcessStarted e = (SkillProcessEvent.ShipProductionProcessStarted) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.StartShipProductionLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, ItemIdQuantityPairs.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), productionMaterials, player, itemProduction, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocess;
+//
+//public class StartShipProductionLogic {
+//    public static SkillProcessEvent.ShipProductionProcessStarted verify(java.util.function.Supplier<SkillProcessEvent.ShipProductionProcessStarted> eventFactory, SkillProcessState skillProcessState, ItemIdQuantityPairs productionMaterials, String player, SkillTypeItemIdPair itemProduction, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
+        protected SkillProcessEvent.ShipProductionProcessCompleted verifyCompleteShipProduction(java.util.function.Supplier<SkillProcessEvent.ShipProductionProcessCompleted> eventFactory, RosterId unassignedShips, String player, SkillTypeItemIdPair itemProduction, String experienceTable, SkillProcessCommands.CompleteShipProduction c) {
+            RosterId UnassignedShips = unassignedShips;
+            String Player = player;
+            SkillTypeItemIdPair ItemProduction = itemProduction;
+            String ExperienceTable = experienceTable;
+
+            SkillProcessEvent.ShipProductionProcessCompleted e = (SkillProcessEvent.ShipProductionProcessCompleted) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.skillprocess.CompleteShipProductionLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), unassignedShips, player, itemProduction, experienceTable, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.skillprocess;
+//
+//public class CompleteShipProductionLogic {
+//    public static SkillProcessEvent.ShipProductionProcessCompleted verify(java.util.function.Supplier<SkillProcessEvent.ShipProductionProcessCompleted> eventFactory, SkillProcessState skillProcessState, RosterId unassignedShips, String player, SkillTypeItemIdPair itemProduction, String experienceTable, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
         protected SkillProcessEvent.CreationProcessStarted verifyStartCreation(java.util.function.Supplier<SkillProcessEvent.CreationProcessStarted> eventFactory, String player, SkillTypeItemIdPair itemCreation, SkillProcessCommands.StartCreation c) {
             String Player = player;
             SkillTypeItemIdPair ItemCreation = itemCreation;
@@ -207,7 +267,7 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
             e.setSuiTransactionModule(null);
             e.setSuiSender(null);
             e.setSuiType(null);
-            e.setStatus(null);
+            e.setEventStatus(null);
 
             e.setCommandId(commandId);
             e.setCreatedBy(requesterId);
@@ -236,7 +296,36 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
             e.setSuiTransactionModule(null);
             e.setSuiSender(null);
             e.setSuiType(null);
-            e.setStatus(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setSkillProcessEventId(eventId);
+            return e;
+        }
+
+        protected AbstractSkillProcessEvent.ShipProductionProcessCompleted newShipProductionProcessCompleted(RosterId unassignedShips, String player, SkillTypeItemIdPair itemProduction, String experienceTable, String clock, Long offChainVersion, String commandId, String requesterId) {
+            SkillProcessEventId eventId = new SkillProcessEventId(getState().getSkillProcessId(), null);
+            AbstractSkillProcessEvent.ShipProductionProcessCompleted e = new AbstractSkillProcessEvent.ShipProductionProcessCompleted();
+
+            e.setItemId(null);
+            e.setStartedAt(null);
+            e.setCreationTime(null);
+            e.setEndedAt(null);
+            e.setSuccessful(null);
+            e.setQuantity(null);
+            e.setExperience(null);
+            e.setNewLevel(null);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
 
             e.setCommandId(commandId);
             e.setCreatedBy(requesterId);
@@ -265,7 +354,7 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
             e.setSuiTransactionModule(null);
             e.setSuiSender(null);
             e.setSuiType(null);
-            e.setStatus(null);
+            e.setEventStatus(null);
 
             e.setCommandId(commandId);
             e.setCreatedBy(requesterId);

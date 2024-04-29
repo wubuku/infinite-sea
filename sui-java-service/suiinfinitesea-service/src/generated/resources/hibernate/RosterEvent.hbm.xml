@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.roster">
+  <class name="AbstractRosterEvent" table="roster_event" abstract="true">
+    <composite-id name="rosterEventId" class="org.dddml.suiinfinitesea.domain.roster.RosterEventId">
+      <key-property name="rosterIdPlayerId">
+        <column name="roster_id_player_id" sql-type="VARCHAR(66)" />
+      </key-property>
+      <key-property name="rosterIdSequenceNumber">
+        <column name="roster_id_sequence_number" />
+      </key-property>
+      <key-property name="version">
+        <column name="version" sql-type="DECIMAL(20,0)" />
+      </key-property>
+    </composite-id>
+    <discriminator column="event_type" type="string" />
+    <property name="id_">
+      <column name="id" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="createdBy" column="created_by" />
+    <property name="createdAt" column="created_at" />
+    <property name="commandId" column="command_id" />
+    <property name="suiTimestamp">
+      <column name="sui_timestamp" />
+    </property>
+    <property name="suiTxDigest">
+      <column name="sui_tx_digest" length="50" />
+    </property>
+    <property name="suiEventSeq">
+      <column name="sui_event_seq" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="suiPackageId">
+      <column name="sui_package_id" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="suiTransactionModule">
+      <column name="sui_transaction_module" length="100" />
+    </property>
+    <property name="suiSender">
+      <column name="sui_sender" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="suiType">
+      <column name="sui_type" length="200" />
+    </property>
+    <property name="eventStatus">
+      <column name="event_status" sql-type="CHAR(1)" />
+    </property>
+    <property name="commandType" column="command_type" length="50" />
+    <subclass name="AbstractRosterEvent$RosterClobEvent" discriminator-value="RosterClobEvent">
+      <property name="dynamicPropertiesLob">
+        <column name="dynamic_properties_lob" sql-type="VARCHAR(2000)" />
+      </property>
+      <subclass name="AbstractRosterEvent$RosterCreated" discriminator-value="RosterCreated" />
+      <subclass name="AbstractRosterEvent$RosterShipAdded" discriminator-value="RosterShipAdded" />
+      <subclass name="AbstractRosterEvent$RosterSetSail" discriminator-value="RosterSetSail" />
+      <subclass name="AbstractRosterEvent$RosterLocationUpdated" discriminator-value="RosterLocationUpdated" />
+    </subclass>
+  </class>
+</hibernate-mapping>

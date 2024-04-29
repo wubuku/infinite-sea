@@ -37,7 +37,7 @@ public class ExperienceTableEventService {
 
     @Transactional
     public void updateStatusToProcessed(AbstractExperienceTableEvent event) {
-        event.setStatus("D");
+        event.setEventStatus("D");
         experienceTableEventRepository.save(event);
     }
 

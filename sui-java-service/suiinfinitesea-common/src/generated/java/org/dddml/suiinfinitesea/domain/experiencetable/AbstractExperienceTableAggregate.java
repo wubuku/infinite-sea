@@ -149,7 +149,7 @@ public abstract class AbstractExperienceTableAggregate extends AbstractAggregate
             e.setSuiTransactionModule(null);
             e.setSuiSender(null);
             e.setSuiType(null);
-            e.setStatus(null);
+            e.setEventStatus(null);
 
             e.setCommandId(commandId);
             e.setCreatedBy(requesterId);
@@ -173,7 +173,7 @@ public abstract class AbstractExperienceTableAggregate extends AbstractAggregate
             e.setSuiTransactionModule(null);
             e.setSuiSender(null);
             e.setSuiType(null);
-            e.setStatus(null);
+            e.setEventStatus(null);
 
             e.setCommandId(commandId);
             e.setCreatedBy(requesterId);
@@ -197,7 +197,7 @@ public abstract class AbstractExperienceTableAggregate extends AbstractAggregate
             e.setSuiTransactionModule(null);
             e.setSuiSender(null);
             e.setSuiType(null);
-            e.setStatus(null);
+            e.setEventStatus(null);
 
             e.setCommandId(commandId);
             e.setCreatedBy(requesterId);

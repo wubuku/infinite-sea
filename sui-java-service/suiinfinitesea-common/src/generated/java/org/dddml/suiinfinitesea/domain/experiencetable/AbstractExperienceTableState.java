@@ -216,8 +216,8 @@ public abstract class AbstractExperienceTableState implements ExperienceTableSta
         String SuiSender = suiSender;
         String suiType = e.getSuiType();
         String SuiType = suiType;
-        String status = e.getStatus();
-        String Status = status;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
 
         if (this.getCreatedBy() == null){
             this.setCreatedBy(e.getCreatedBy());
@@ -232,13 +232,13 @@ public abstract class AbstractExperienceTableState implements ExperienceTableSta
                     "org.dddml.suiinfinitesea.domain.experiencetable.__Init__Logic",
                     "mutate",
                     new Class[]{ExperienceTableState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Object[]{this, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.experiencetable;
 //
 //public class __Init__Logic {
-//    public static ExperienceTableState mutate(ExperienceTableState experienceTableState, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ExperienceTableState, ExperienceTableState.MutableExperienceTableState> mutationContext) {
+//    public static ExperienceTableState mutate(ExperienceTableState experienceTableState, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ExperienceTableState, ExperienceTableState.MutableExperienceTableState> mutationContext) {
 //    }
 //}
 
@@ -269,8 +269,8 @@ public abstract class AbstractExperienceTableState implements ExperienceTableSta
         String SuiSender = suiSender;
         String suiType = e.getSuiType();
         String SuiType = suiType;
-        String status = e.getStatus();
-        String Status = status;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
 
         if (this.getCreatedBy() == null){
             this.setCreatedBy(e.getCreatedBy());
@@ -285,13 +285,13 @@ public abstract class AbstractExperienceTableState implements ExperienceTableSta
                     "org.dddml.suiinfinitesea.domain.experiencetable.AddLevelLogic",
                     "mutate",
                     new Class[]{ExperienceTableState.class, Integer.class, Long.class, Long.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, level, experience, difference, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Object[]{this, level, experience, difference, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.experiencetable;
 //
 //public class AddLevelLogic {
-//    public static ExperienceTableState mutate(ExperienceTableState experienceTableState, Integer level, Long experience, Long difference, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ExperienceTableState, ExperienceTableState.MutableExperienceTableState> mutationContext) {
+//    public static ExperienceTableState mutate(ExperienceTableState experienceTableState, Integer level, Long experience, Long difference, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ExperienceTableState, ExperienceTableState.MutableExperienceTableState> mutationContext) {
 //    }
 //}
 
@@ -322,8 +322,8 @@ public abstract class AbstractExperienceTableState implements ExperienceTableSta
         String SuiSender = suiSender;
         String suiType = e.getSuiType();
         String SuiType = suiType;
-        String status = e.getStatus();
-        String Status = status;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
 
         if (this.getCreatedBy() == null){
             this.setCreatedBy(e.getCreatedBy());
@@ -338,13 +338,13 @@ public abstract class AbstractExperienceTableState implements ExperienceTableSta
                     "org.dddml.suiinfinitesea.domain.experiencetable.UpdateLevelLogic",
                     "mutate",
                     new Class[]{ExperienceTableState.class, Integer.class, Long.class, Long.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, level, experience, difference, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, status, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Object[]{this, level, experience, difference, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.experiencetable;
 //
 //public class UpdateLevelLogic {
-//    public static ExperienceTableState mutate(ExperienceTableState experienceTableState, Integer level, Long experience, Long difference, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String status, MutationContext<ExperienceTableState, ExperienceTableState.MutableExperienceTableState> mutationContext) {
+//    public static ExperienceTableState mutate(ExperienceTableState experienceTableState, Integer level, Long experience, Long difference, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ExperienceTableState, ExperienceTableState.MutableExperienceTableState> mutationContext) {
 //    }
 //}
 

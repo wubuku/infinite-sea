@@ -27,4 +27,7 @@ typeDefinitions:
     moveType: "infinite_sea_coin::energy::ENERGY"
     droppable: true
 
+  JsonObject:
+    javaType: "java.util.Map<String, Object>"
+    sqlType: "json"
 

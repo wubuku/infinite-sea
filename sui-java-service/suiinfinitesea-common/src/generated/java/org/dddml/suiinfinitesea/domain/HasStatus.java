@@ -10,11 +10,11 @@ import java.util.*;
 
 public interface HasStatus {
 
-    String getStatus();
+    String getEventStatus();
 
     interface MutableHasStatus {
 
-        void setStatus(String p);
+        void setEventStatus(String p);
 
     }
 
