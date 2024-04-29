@@ -1,5 +1,6 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::ship_battle_make_move_logic {
+    use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
 
@@ -22,7 +23,10 @@ module infinite_sea::ship_battle_make_move_logic {
     ): ship_battle::ShipBattleMoveMade {
         permission_util::assert_sender_is_player_owner(player, ctx);
         ship_battle_util::assert_palyer_is_current_round_mover(player, ship_battle, initiator, responder);
-        ship_battle::new_ship_battle_move_made(ship_battle, command)
+
+        let now_time = clock::timestamp_ms(clock) / 1000;
+
+        ship_battle::new_ship_battle_move_made(ship_battle, command, now_time)
     }
 
     public(friend) fun mutate(

@@ -344,6 +344,31 @@ aggregates:
             type: ShipBattleCommand
         event:
           name: ShipBattleMoveMade
+          properties:
+            NextRoundStartedAt:
+              type: u64
+
+      MakeMoveAfterTimeout:
+        parameters:
+          #Player:
+          #  referenceType: Player
+          #  isIgnoredInEvent: true
+          Initiator:
+            referenceType: Roster
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Responder:
+            referenceType: Roster
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          name: ShipBattleMoveMadeAfterTimeout
+          properties:
+            NextRoundStartedAt:
+              type: u64
 
 
 #  SkillProcessMutex:

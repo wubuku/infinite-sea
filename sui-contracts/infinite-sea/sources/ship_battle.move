@@ -11,6 +11,7 @@ module infinite_sea::ship_battle {
     use sui::tx_context::TxContext;
     friend infinite_sea::ship_battle_initiate_battle_logic;
     friend infinite_sea::ship_battle_make_move_logic;
+    friend infinite_sea::ship_battle_make_move_after_timeout_logic;
     friend infinite_sea::ship_battle_aggregate;
 
     #[allow(unused_const)]
@@ -150,6 +151,7 @@ module infinite_sea::ship_battle {
         id: object::ID,
         version: u64,
         command: u8,
+        next_round_started_at: u64,
     }
 
     public fun ship_battle_move_made_id(ship_battle_move_made: &ShipBattleMoveMade): object::ID {
@@ -160,14 +162,45 @@ module infinite_sea::ship_battle {
         ship_battle_move_made.command
     }
 
+    public fun ship_battle_move_made_next_round_started_at(ship_battle_move_made: &ShipBattleMoveMade): u64 {
+        ship_battle_move_made.next_round_started_at
+    }
+
     public(friend) fun new_ship_battle_move_made(
         ship_battle: &ShipBattle,
         command: u8,
+        next_round_started_at: u64,
     ): ShipBattleMoveMade {
         ShipBattleMoveMade {
             id: id(ship_battle),
             version: version(ship_battle),
             command,
+            next_round_started_at,
+        }
+    }
+
+    struct ShipBattleMoveMadeAfterTimeout has copy, drop {
+        id: object::ID,
+        version: u64,
+        next_round_started_at: u64,
+    }
+
+    public fun ship_battle_move_made_after_timeout_id(ship_battle_move_made_after_timeout: &ShipBattleMoveMadeAfterTimeout): object::ID {
+        ship_battle_move_made_after_timeout.id
+    }
+
+    public fun ship_battle_move_made_after_timeout_next_round_started_at(ship_battle_move_made_after_timeout: &ShipBattleMoveMadeAfterTimeout): u64 {
+        ship_battle_move_made_after_timeout.next_round_started_at
+    }
+
+    public(friend) fun new_ship_battle_move_made_after_timeout(
+        ship_battle: &ShipBattle,
+        next_round_started_at: u64,
+    ): ShipBattleMoveMadeAfterTimeout {
+        ShipBattleMoveMadeAfterTimeout {
+            id: id(ship_battle),
+            version: version(ship_battle),
+            next_round_started_at,
         }
     }
 
@@ -204,6 +237,10 @@ module infinite_sea::ship_battle {
 
     public(friend) fun emit_ship_battle_move_made(ship_battle_move_made: ShipBattleMoveMade) {
         event::emit(ship_battle_move_made);
+    }
+
+    public(friend) fun emit_ship_battle_move_made_after_timeout(ship_battle_move_made_after_timeout: ShipBattleMoveMadeAfterTimeout) {
+        event::emit(ship_battle_move_made_after_timeout);
     }
 
 }
