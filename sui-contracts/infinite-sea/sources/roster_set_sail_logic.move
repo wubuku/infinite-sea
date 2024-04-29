@@ -8,20 +8,25 @@ module infinite_sea::roster_set_sail_logic {
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::roster_status;
 
+    use infinite_sea::permission_util;
+    use infinite_sea::player::Player;
     use infinite_sea::roster;
 
     friend infinite_sea::roster_aggregate;
 
     public(friend) fun verify(
+        player: &Player,
         target_coordinates: Coordinates,
         clock: &Clock,
         roster: &roster::Roster,
         ctx: &TxContext,
     ): roster::RosterSetSail {
-        let roster_id = roster::roster_id(roster);
-        //todo check ownership
-        //todo check if the roster is at anchor
-        //todo check if the roster is already underway
+       //let roster_id = roster::roster_id(roster);
+        permission_util::assert_sender_is_player_owner(player, ctx);
+        permission_util::assert_player_is_roster_owner(player, roster);
+
+        //todo: if the roster is at anchor...
+        //todo: check if the roster is already underway...
         let updated_coordinates = roster::updated_coordinates(roster);
         roster::new_roster_set_sail(roster, target_coordinates, clock::timestamp_ms(clock) / 1000, updated_coordinates)
     }

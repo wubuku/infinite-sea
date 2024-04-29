@@ -302,6 +302,17 @@ enumObjects:
       InBattle:
         value: 2
 
+  ShipBattleCommand:
+    module: "Common"
+    baseType: u8
+    values:
+      Attack:
+        value: 0
+      SwapPositions:
+        value: 1
+      Pass:
+        value: 2
+
 #  IslandResourceType:
 #    module: "Common"
 #    baseType: u8

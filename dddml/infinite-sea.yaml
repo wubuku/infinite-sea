@@ -241,6 +241,9 @@ aggregates:
       SetSail:
         #requiredPermission: Owner
         parameters:
+          Player:
+            referenceType: Player
+            isIgnoredInEvent: true
           TargetCoordinates:
             type: Coordinates
           Clock:
@@ -296,6 +299,9 @@ aggregates:
       InitiateBattle:
         isCreationCommand: true
         parameters:
+          Player:
+            referenceType: Player
+            isIgnoredInEvent: true
           Initiator:
             referenceType: Roster
             isMutableReference: true
@@ -317,6 +323,27 @@ aggregates:
               type: ID
             StartedAt:
               type: u64
+
+      MakeMove:
+        parameters:
+          Player:
+            referenceType: Player
+            isIgnoredInEvent: true
+          Initiator:
+            referenceType: Roster
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Responder:
+            referenceType: Roster
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+          Command:
+            type: ShipBattleCommand
+        event:
+          name: ShipBattleMoveMade
 
 
 #  SkillProcessMutex:

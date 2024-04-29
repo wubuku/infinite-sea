@@ -3,6 +3,8 @@ module infinite_sea::ship_battle_initiate_battle_logic {
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
+    use infinite_sea::permission_util;
+    use infinite_sea::player::Player;
     use infinite_sea::ship_battle_util;
 
     use infinite_sea::roster::{Self, Roster};
@@ -11,11 +13,15 @@ module infinite_sea::ship_battle_initiate_battle_logic {
     friend infinite_sea::ship_battle_aggregate;
 
     public(friend) fun verify(
+        player: &Player,
         initiator: &mut Roster,
         responder: &mut Roster,
         clock: &Clock,
         ctx: &mut TxContext,
     ): ship_battle::ShipBattleInitiated {
+        permission_util::assert_sender_is_player_owner(player, ctx);
+        permission_util::assert_player_is_roster_owner(player, initiator);
+
         // todo update and check rosters' statuses
         ship_battle::new_ship_battle_initiated(
             roster::id(initiator),
@@ -33,13 +39,18 @@ module infinite_sea::ship_battle_initiate_battle_logic {
         let initiator_id = ship_battle::ship_battle_initiated_initiator_id(ship_battle_initiated);
         let opposing_side_id = ship_battle::ship_battle_initiated_responder_id(ship_battle_initiated);
         let started_at = ship_battle::ship_battle_initiated_started_at(ship_battle_initiated);
-        ship_battle::new_ship_battle(
+        let battle = ship_battle::new_ship_battle(
             initiator_id,
             opposing_side_id,
             0, //todo battle status
             ship_battle_util::initiator(),
             started_at,
             ctx
-        )
+        );
+        let battle_id = ship_battle::id(&battle);
+        // todo update rosters with battle_id
+        //roster::set_battle_id(initiator, battle_id, ...);
+        //roster::set_battle_id(responder, battle_id, ...);
+        battle
     }
 }

@@ -10,6 +10,7 @@ module infinite_sea::ship_battle {
     use sui::transfer;
     use sui::tx_context::TxContext;
     friend infinite_sea::ship_battle_initiate_battle_logic;
+    friend infinite_sea::ship_battle_make_move_logic;
     friend infinite_sea::ship_battle_aggregate;
 
     #[allow(unused_const)]
@@ -145,6 +146,31 @@ module infinite_sea::ship_battle {
         }
     }
 
+    struct ShipBattleMoveMade has copy, drop {
+        id: object::ID,
+        version: u64,
+        command: u8,
+    }
+
+    public fun ship_battle_move_made_id(ship_battle_move_made: &ShipBattleMoveMade): object::ID {
+        ship_battle_move_made.id
+    }
+
+    public fun ship_battle_move_made_command(ship_battle_move_made: &ShipBattleMoveMade): u8 {
+        ship_battle_move_made.command
+    }
+
+    public(friend) fun new_ship_battle_move_made(
+        ship_battle: &ShipBattle,
+        command: u8,
+    ): ShipBattleMoveMade {
+        ShipBattleMoveMade {
+            id: id(ship_battle),
+            version: version(ship_battle),
+            command,
+        }
+    }
+
 
     #[lint_allow(share_owned)]
     public(friend) fun share_object(ship_battle: ShipBattle) {
@@ -152,8 +178,7 @@ module infinite_sea::ship_battle {
         transfer::share_object(ship_battle);
     }
 
-    #[allow(unused_function)]
-    fun update_object_version(ship_battle: &mut ShipBattle) {
+    public(friend) fun update_object_version(ship_battle: &mut ShipBattle) {
         ship_battle.version = ship_battle.version + 1;
         //assert!(ship_battle.version != 0, EInappropriateVersion);
     }
@@ -175,6 +200,10 @@ module infinite_sea::ship_battle {
     public(friend) fun emit_ship_battle_initiated(ship_battle_initiated: ShipBattleInitiated) {
         assert!(std::option::is_some(&ship_battle_initiated.id), EEmptyObjectID);
         event::emit(ship_battle_initiated);
+    }
+
+    public(friend) fun emit_ship_battle_move_made(ship_battle_move_made: ShipBattleMoveMade) {
+        event::emit(ship_battle_move_made);
     }
 
 }
