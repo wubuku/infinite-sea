@@ -1,7 +1,20 @@
 #!/bin/bash
 
-#player_owner="0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2"
+# Before running this script, please make sure that the "Move.toml" files of all the projects (packages) to be published
+# have been adjusted as follows:
+#
+#[package]
+##published-at = ... # <- This line does not exist or has been commented out.
+#
+#[addresses]
+#{PACKAGE_NAME} = "0x0"
 
+
+# -------- Constants --------
+move_toml_file="Move.toml"
+move_toml_temp="Move-temp.toml"
+
+#player_owner="0xfc50aa2363f3b3c5d80631cae512ec51a8ba94080500a981f4ae1a2ce4d201c2"
 # External Package IDs
 # ...
 
@@ -13,10 +26,6 @@
 # Make sure the amounts of the following SUI objects are greater than xxx
 #sui_coin_object_id_1="0xfdf3344392babaf053e0293218cb901236dd43c3abf52a1cf3b5af17ee1b9e20"
 #sui_coin_object_id_2="0xdd4aea51975a506e1e5451e38f340c3444ae03c4b2533afd04253f7a53a8b4d0"
-
-# -------- Constants --------
-move_toml_file="Move.toml"
-move_toml_temp="Move-temp.toml"
 
 # ----------------------------------------------------------------------------------------
 # Publish coin package
