@@ -190,6 +190,9 @@ aggregates:
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
       #ShouldIssuePublisherObject: true
+      DataAccessFriends:
+        - ShipBattle.InitiateBattle # Make this method can access ("write") Roster's data model.
+        # This should only be done occasionally!
     friends:
       - Player.Create
       - Player.ClaimIsland

@@ -1,8 +1,10 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::ship_battle_initiate_battle_logic {
+    use std::option;
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
+    use infinite_sea_common::roster_status;
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
     use infinite_sea::ship_battle_util;
@@ -42,15 +44,17 @@ module infinite_sea::ship_battle_initiate_battle_logic {
         let battle = ship_battle::new_ship_battle(
             initiator_id,
             opposing_side_id,
-            0, //todo battle status
+            0, //todo battle status?
             ship_battle_util::initiator(),
             started_at,
             ctx
         );
         let battle_id = ship_battle::id(&battle);
-        // todo update rosters with battle_id
-        //roster::set_battle_id(initiator, battle_id, ...);
-        //roster::set_battle_id(responder, battle_id, ...);
+        // update rosters with battle ID
+        roster::set_status(initiator, roster_status::in_battle());
+        roster::set_ship_battle_id(initiator, option::some(battle_id));
+        roster::set_status(responder, roster_status::in_battle());
+        roster::set_ship_battle_id(responder, option::some(battle_id));
         battle
     }
 }

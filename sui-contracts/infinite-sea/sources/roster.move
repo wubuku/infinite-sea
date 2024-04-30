@@ -20,6 +20,8 @@ module infinite_sea::roster {
     friend infinite_sea::roster_update_location_logic;
     friend infinite_sea::roster_aggregate;
 
+    friend infinite_sea::ship_battle_initiate_battle_logic;
+
     const EIdAlreadyExists: u64 = 101;
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
