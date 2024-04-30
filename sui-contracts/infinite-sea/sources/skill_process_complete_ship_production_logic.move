@@ -7,9 +7,11 @@ module infinite_sea::skill_process_complete_ship_production_logic {
     use sui::tx_context::TxContext;
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id;
+    use infinite_sea_common::item_id_quantity_pairs;
     use infinite_sea_common::item_production::{Self, ItemProduction};
     use infinite_sea_common::roster_id;
     use infinite_sea_common::roster_sequence_number;
+    use infinite_sea_common::ship_util;
 
     use infinite_sea::experience_table_util;
     use infinite_sea::player::{Self, Player};
@@ -56,7 +58,10 @@ module infinite_sea::skill_process_complete_ship_production_logic {
             roster_sequence_number::unassigned_ships() == roster_id::sequence_number(&roster_id),
             ERosterIsNotUnassignedShips
         );
+        //assert_player_is_roster_owner
         assert!(player_id == roster_id::player_id(&roster_id), EInvalidRoasterPlayerId);
+        let building_expences_o = skill_process::production_materials(skill_process);
+        assert!(option::is_some(&building_expences_o), EBuidingExpencesNotSet);
 
         let started_at = skill_process::started_at(skill_process);
         let creation_time = skill_process::creation_time(skill_process);
@@ -102,16 +107,12 @@ module infinite_sea::skill_process_complete_ship_production_logic {
         assert!(successful, EProcessFailed);
         let items = vector[];//vector[item_id_quantity_pair::new(item_id, quantity)];
 
-        let building_expences = skill_process::production_materials(skill_process);
-        assert!(option::is_some(&building_expences), EBuidingExpencesNotSet);
         player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
-        let ship = ship_aggregate::create(player::id(player),
-            100, //todo
-            100, //todo
-            100, //todo
-            100, //todo
-            option::extract(&mut building_expences),
-            ctx,
+        let building_expences_o = skill_process::production_materials(skill_process);
+        let building_expences = item_id_quantity_pairs::items(option::borrow(&building_expences_o));
+        let (health_points, attack, protection, speed) = ship_util::calculate_ship_attributes(&building_expences);
+        let ship = ship_aggregate::create(player::id(player), health_points, attack, protection, speed,
+            option::extract(&mut building_expences_o), ctx,
         );
         // add ship into "unassigned_ships"
         roster_aggregate::add_ship(unassigned_ships, ship, option::none(), ctx);

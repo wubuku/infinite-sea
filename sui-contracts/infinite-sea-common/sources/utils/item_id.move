@@ -24,6 +24,44 @@ module infinite_sea_common::item_id {
         SHIP
     }
 
+    /// Normal Logs are obtained by cutting a Normal Tree.
+    public fun normal_logs(): u32 {
+        200
+    }
+
+    public fun potato_seeds(): u32 {
+        1
+    }
+
+    public fun potatoes(): u32 {
+        101
+    }
+
+    public fun cotton_seeds(): u32 {
+        2
+    }
+
+    public fun cottons(): u32 {
+        102
+    }
+
+    public fun copper_ore(): u32 {
+        301
+    }
+
+    public fun tin_ore(): u32 {
+        302
+    }
+
+    //Skill
+    //  Smithing
+    //Materials
+    //  1  Copper Ore
+    //  1  Tin Ore
+    public fun bronze_bar(): u32 {
+        1001
+    }
+
     public fun should_produce_individuals(item_id: u32): bool {
         item_id == SHIP
     }

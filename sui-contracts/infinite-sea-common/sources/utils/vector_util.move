@@ -97,6 +97,17 @@ module infinite_sea_common::vector_util {
         idx
     }
 
+    public fun get_item_id_quantity_pair_or_else_abort(
+        v: &vector<ItemIdQuantityPair>,
+        item_id: u32,
+        err: u64
+    ): ItemIdQuantityPair {
+        let (idx, _low) = binary_search_item_id_quantity_pair(v, item_id);
+        assert!(option::is_some(&idx), err);
+        let i = option::extract(&mut idx);
+        *vector::borrow(v, i)
+    }
+
     /// "v" is a vector already sorted in ascending order by "item_id",
     /// find the position of the element with the given "item_id" using binary search.
     /// If the element is found, return the index and the lower bound of the last search.
