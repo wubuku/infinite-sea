@@ -6,6 +6,7 @@
 module infinite_sea::roster {
     use infinite_sea::ship::Ship;
     use infinite_sea_common::coordinates::Coordinates;
+    use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use infinite_sea_common::roster_id::RosterId;
     use std::option::{Self, Option};
     use sui::event;
@@ -18,6 +19,11 @@ module infinite_sea::roster {
     friend infinite_sea::roster_add_ship_logic;
     friend infinite_sea::roster_set_sail_logic;
     friend infinite_sea::roster_update_location_logic;
+    friend infinite_sea::roster_adjust_ships_position_logic;
+    friend infinite_sea::roster_transfer_ship_logic;
+    friend infinite_sea::roster_transfer_ship_inventory_logic;
+    friend infinite_sea::roster_take_out_ship_inventory_logic;
+    friend infinite_sea::roster_put_in_ship_inventory_logic;
     friend infinite_sea::roster_aggregate;
 
     friend infinite_sea::ship_battle_initiate_battle_logic;
@@ -375,6 +381,214 @@ module infinite_sea::roster {
         }
     }
 
+    struct RosterShipsPositionAdjusted has copy, drop {
+        id: object::ID,
+        roster_id: RosterId,
+        version: u64,
+        positions: vector<u64>,
+        ship_ids: vector<ID>,
+    }
+
+    public fun roster_ships_position_adjusted_id(roster_ships_position_adjusted: &RosterShipsPositionAdjusted): object::ID {
+        roster_ships_position_adjusted.id
+    }
+
+    public fun roster_ships_position_adjusted_roster_id(roster_ships_position_adjusted: &RosterShipsPositionAdjusted): RosterId {
+        roster_ships_position_adjusted.roster_id
+    }
+
+    public fun roster_ships_position_adjusted_positions(roster_ships_position_adjusted: &RosterShipsPositionAdjusted): vector<u64> {
+        roster_ships_position_adjusted.positions
+    }
+
+    public fun roster_ships_position_adjusted_ship_ids(roster_ships_position_adjusted: &RosterShipsPositionAdjusted): vector<ID> {
+        roster_ships_position_adjusted.ship_ids
+    }
+
+    public(friend) fun new_roster_ships_position_adjusted(
+        roster: &Roster,
+        positions: vector<u64>,
+        ship_ids: vector<ID>,
+    ): RosterShipsPositionAdjusted {
+        RosterShipsPositionAdjusted {
+            id: id(roster),
+            roster_id: roster_id(roster),
+            version: version(roster),
+            positions,
+            ship_ids,
+        }
+    }
+
+    struct RosterShipTransferred has copy, drop {
+        id: object::ID,
+        roster_id: RosterId,
+        version: u64,
+        ship_id: ID,
+        to_roster_id: RosterId,
+        to_position: Option<u64>,
+    }
+
+    public fun roster_ship_transferred_id(roster_ship_transferred: &RosterShipTransferred): object::ID {
+        roster_ship_transferred.id
+    }
+
+    public fun roster_ship_transferred_roster_id(roster_ship_transferred: &RosterShipTransferred): RosterId {
+        roster_ship_transferred.roster_id
+    }
+
+    public fun roster_ship_transferred_ship_id(roster_ship_transferred: &RosterShipTransferred): ID {
+        roster_ship_transferred.ship_id
+    }
+
+    public fun roster_ship_transferred_to_roster_id(roster_ship_transferred: &RosterShipTransferred): RosterId {
+        roster_ship_transferred.to_roster_id
+    }
+
+    public fun roster_ship_transferred_to_position(roster_ship_transferred: &RosterShipTransferred): Option<u64> {
+        roster_ship_transferred.to_position
+    }
+
+    public(friend) fun set_roster_ship_transferred_to_position(roster_ship_transferred: &mut RosterShipTransferred, to_position: Option<u64>) {
+        roster_ship_transferred.to_position = to_position;
+    }
+
+    public(friend) fun new_roster_ship_transferred(
+        roster: &Roster,
+        ship_id: ID,
+        to_roster_id: RosterId,
+        to_position: Option<u64>,
+    ): RosterShipTransferred {
+        RosterShipTransferred {
+            id: id(roster),
+            roster_id: roster_id(roster),
+            version: version(roster),
+            ship_id,
+            to_roster_id,
+            to_position,
+        }
+    }
+
+    struct RosterShipInventoryTransferred has copy, drop {
+        id: object::ID,
+        roster_id: RosterId,
+        version: u64,
+        from_ship_id: ID,
+        to_ship_id: ID,
+        item_id_quantity_pairs: ItemIdQuantityPairs,
+    }
+
+    public fun roster_ship_inventory_transferred_id(roster_ship_inventory_transferred: &RosterShipInventoryTransferred): object::ID {
+        roster_ship_inventory_transferred.id
+    }
+
+    public fun roster_ship_inventory_transferred_roster_id(roster_ship_inventory_transferred: &RosterShipInventoryTransferred): RosterId {
+        roster_ship_inventory_transferred.roster_id
+    }
+
+    public fun roster_ship_inventory_transferred_from_ship_id(roster_ship_inventory_transferred: &RosterShipInventoryTransferred): ID {
+        roster_ship_inventory_transferred.from_ship_id
+    }
+
+    public fun roster_ship_inventory_transferred_to_ship_id(roster_ship_inventory_transferred: &RosterShipInventoryTransferred): ID {
+        roster_ship_inventory_transferred.to_ship_id
+    }
+
+    public fun roster_ship_inventory_transferred_item_id_quantity_pairs(roster_ship_inventory_transferred: &RosterShipInventoryTransferred): ItemIdQuantityPairs {
+        roster_ship_inventory_transferred.item_id_quantity_pairs
+    }
+
+    public(friend) fun new_roster_ship_inventory_transferred(
+        roster: &Roster,
+        from_ship_id: ID,
+        to_ship_id: ID,
+        item_id_quantity_pairs: ItemIdQuantityPairs,
+    ): RosterShipInventoryTransferred {
+        RosterShipInventoryTransferred {
+            id: id(roster),
+            roster_id: roster_id(roster),
+            version: version(roster),
+            from_ship_id,
+            to_ship_id,
+            item_id_quantity_pairs,
+        }
+    }
+
+    struct RosterShipInventoryTakenOut has copy, drop {
+        id: object::ID,
+        roster_id: RosterId,
+        version: u64,
+        ship_id: ID,
+        item_id_quantity_pairs: ItemIdQuantityPairs,
+    }
+
+    public fun roster_ship_inventory_taken_out_id(roster_ship_inventory_taken_out: &RosterShipInventoryTakenOut): object::ID {
+        roster_ship_inventory_taken_out.id
+    }
+
+    public fun roster_ship_inventory_taken_out_roster_id(roster_ship_inventory_taken_out: &RosterShipInventoryTakenOut): RosterId {
+        roster_ship_inventory_taken_out.roster_id
+    }
+
+    public fun roster_ship_inventory_taken_out_ship_id(roster_ship_inventory_taken_out: &RosterShipInventoryTakenOut): ID {
+        roster_ship_inventory_taken_out.ship_id
+    }
+
+    public fun roster_ship_inventory_taken_out_item_id_quantity_pairs(roster_ship_inventory_taken_out: &RosterShipInventoryTakenOut): ItemIdQuantityPairs {
+        roster_ship_inventory_taken_out.item_id_quantity_pairs
+    }
+
+    public(friend) fun new_roster_ship_inventory_taken_out(
+        roster: &Roster,
+        ship_id: ID,
+        item_id_quantity_pairs: ItemIdQuantityPairs,
+    ): RosterShipInventoryTakenOut {
+        RosterShipInventoryTakenOut {
+            id: id(roster),
+            roster_id: roster_id(roster),
+            version: version(roster),
+            ship_id,
+            item_id_quantity_pairs,
+        }
+    }
+
+    struct RosterShipInventoryPutIn has copy, drop {
+        id: object::ID,
+        roster_id: RosterId,
+        version: u64,
+        ship_id: ID,
+        item_id_quantity_pairs: ItemIdQuantityPairs,
+    }
+
+    public fun roster_ship_inventory_put_in_id(roster_ship_inventory_put_in: &RosterShipInventoryPutIn): object::ID {
+        roster_ship_inventory_put_in.id
+    }
+
+    public fun roster_ship_inventory_put_in_roster_id(roster_ship_inventory_put_in: &RosterShipInventoryPutIn): RosterId {
+        roster_ship_inventory_put_in.roster_id
+    }
+
+    public fun roster_ship_inventory_put_in_ship_id(roster_ship_inventory_put_in: &RosterShipInventoryPutIn): ID {
+        roster_ship_inventory_put_in.ship_id
+    }
+
+    public fun roster_ship_inventory_put_in_item_id_quantity_pairs(roster_ship_inventory_put_in: &RosterShipInventoryPutIn): ItemIdQuantityPairs {
+        roster_ship_inventory_put_in.item_id_quantity_pairs
+    }
+
+    public(friend) fun new_roster_ship_inventory_put_in(
+        roster: &Roster,
+        ship_id: ID,
+        item_id_quantity_pairs: ItemIdQuantityPairs,
+    ): RosterShipInventoryPutIn {
+        RosterShipInventoryPutIn {
+            id: id(roster),
+            roster_id: roster_id(roster),
+            version: version(roster),
+            ship_id,
+            item_id_quantity_pairs,
+        }
+    }
+
 
     public(friend) fun create_roster(
         roster_id: RosterId,
@@ -462,6 +676,26 @@ module infinite_sea::roster {
 
     public(friend) fun emit_roster_location_updated(roster_location_updated: RosterLocationUpdated) {
         event::emit(roster_location_updated);
+    }
+
+    public(friend) fun emit_roster_ships_position_adjusted(roster_ships_position_adjusted: RosterShipsPositionAdjusted) {
+        event::emit(roster_ships_position_adjusted);
+    }
+
+    public(friend) fun emit_roster_ship_transferred(roster_ship_transferred: RosterShipTransferred) {
+        event::emit(roster_ship_transferred);
+    }
+
+    public(friend) fun emit_roster_ship_inventory_transferred(roster_ship_inventory_transferred: RosterShipInventoryTransferred) {
+        event::emit(roster_ship_inventory_transferred);
+    }
+
+    public(friend) fun emit_roster_ship_inventory_taken_out(roster_ship_inventory_taken_out: RosterShipInventoryTakenOut) {
+        event::emit(roster_ship_inventory_taken_out);
+    }
+
+    public(friend) fun emit_roster_ship_inventory_put_in(roster_ship_inventory_put_in: RosterShipInventoryPutIn) {
+        event::emit(roster_ship_inventory_put_in);
     }
 
     #[test_only]

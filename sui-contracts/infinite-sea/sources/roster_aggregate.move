@@ -5,13 +5,19 @@
 
 module infinite_sea::roster_aggregate {
     use infinite_sea::player::Player;
-    use infinite_sea::roster;
+    use infinite_sea::roster::{Self, Roster};
     use infinite_sea::roster_add_ship_logic;
+    use infinite_sea::roster_adjust_ships_position_logic;
     use infinite_sea::roster_create_logic;
+    use infinite_sea::roster_put_in_ship_inventory_logic;
     use infinite_sea::roster_set_sail_logic;
+    use infinite_sea::roster_take_out_ship_inventory_logic;
+    use infinite_sea::roster_transfer_ship_inventory_logic;
+    use infinite_sea::roster_transfer_ship_logic;
     use infinite_sea::roster_update_location_logic;
     use infinite_sea::ship::Ship;
     use infinite_sea_common::coordinates::{Self, Coordinates};
+    use infinite_sea_common::item_id_quantity_pairs::{Self, ItemIdQuantityPairs};
     use infinite_sea_common::roster_id::{Self, RosterId};
     use std::option::Option;
     use sui::clock::Clock;
@@ -128,6 +134,143 @@ module infinite_sea::roster_aggregate {
         );
         roster::update_object_version(roster);
         roster::emit_roster_location_updated(roster_location_updated);
+    }
+
+    public entry fun adjust_ships_position(
+        roster: &mut roster::Roster,
+        player: &Player,
+        positions: vector<u64>,
+        ship_ids: vector<ID>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let roster_ships_position_adjusted = roster_adjust_ships_position_logic::verify(
+            player,
+            positions,
+            ship_ids,
+            roster,
+            ctx,
+        );
+        roster_adjust_ships_position_logic::mutate(
+            &roster_ships_position_adjusted,
+            roster,
+            ctx,
+        );
+        roster::update_object_version(roster);
+        roster::emit_roster_ships_position_adjusted(roster_ships_position_adjusted);
+    }
+
+    public entry fun transfer_ship(
+        roster: &mut roster::Roster,
+        player: &Player,
+        ship_id: ID,
+        to_roster: &mut Roster,
+        to_position: Option<u64>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let roster_ship_transferred = roster_transfer_ship_logic::verify(
+            player,
+            ship_id,
+            to_roster,
+            to_position,
+            roster,
+            ctx,
+        );
+        roster_transfer_ship_logic::mutate(
+            &mut roster_ship_transferred,
+            to_roster,
+            roster,
+            ctx,
+        );
+        roster::update_object_version(roster);
+        roster::emit_roster_ship_transferred(roster_ship_transferred);
+    }
+
+    public entry fun transfer_ship_inventory(
+        roster: &mut roster::Roster,
+        player: &Player,
+        from_ship_id: ID,
+        to_ship_id: ID,
+        item_id_quantity_pairs_item_id_list: vector<u32>,
+        item_id_quantity_pairs_item_quantity_list: vector<u32>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let item_id_quantity_pairs: ItemIdQuantityPairs = item_id_quantity_pairs::new(
+            item_id_quantity_pairs_item_id_list,
+            item_id_quantity_pairs_item_quantity_list,
+        );
+        let roster_ship_inventory_transferred = roster_transfer_ship_inventory_logic::verify(
+            player,
+            from_ship_id,
+            to_ship_id,
+            item_id_quantity_pairs,
+            roster,
+            ctx,
+        );
+        roster_transfer_ship_inventory_logic::mutate(
+            &roster_ship_inventory_transferred,
+            roster,
+            ctx,
+        );
+        roster::update_object_version(roster);
+        roster::emit_roster_ship_inventory_transferred(roster_ship_inventory_transferred);
+    }
+
+    public entry fun take_out_ship_inventory(
+        roster: &mut roster::Roster,
+        player: &mut Player,
+        ship_id: ID,
+        item_id_quantity_pairs_item_id_list: vector<u32>,
+        item_id_quantity_pairs_item_quantity_list: vector<u32>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let item_id_quantity_pairs: ItemIdQuantityPairs = item_id_quantity_pairs::new(
+            item_id_quantity_pairs_item_id_list,
+            item_id_quantity_pairs_item_quantity_list,
+        );
+        let roster_ship_inventory_taken_out = roster_take_out_ship_inventory_logic::verify(
+            player,
+            ship_id,
+            item_id_quantity_pairs,
+            roster,
+            ctx,
+        );
+        roster_take_out_ship_inventory_logic::mutate(
+            &roster_ship_inventory_taken_out,
+            player,
+            roster,
+            ctx,
+        );
+        roster::update_object_version(roster);
+        roster::emit_roster_ship_inventory_taken_out(roster_ship_inventory_taken_out);
+    }
+
+    public entry fun put_in_ship_inventory(
+        roster: &mut roster::Roster,
+        player: &mut Player,
+        ship_id: ID,
+        item_id_quantity_pairs_item_id_list: vector<u32>,
+        item_id_quantity_pairs_item_quantity_list: vector<u32>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let item_id_quantity_pairs: ItemIdQuantityPairs = item_id_quantity_pairs::new(
+            item_id_quantity_pairs_item_id_list,
+            item_id_quantity_pairs_item_quantity_list,
+        );
+        let roster_ship_inventory_put_in = roster_put_in_ship_inventory_logic::verify(
+            player,
+            ship_id,
+            item_id_quantity_pairs,
+            roster,
+            ctx,
+        );
+        roster_put_in_ship_inventory_logic::mutate(
+            &roster_ship_inventory_put_in,
+            player,
+            roster,
+            ctx,
+        );
+        roster::update_object_version(roster);
+        roster::emit_roster_ship_inventory_put_in(roster_ship_inventory_put_in);
     }
 
 }

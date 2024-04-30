@@ -277,6 +277,62 @@ aggregates:
             #OldStatus:
             #  type: u8
 
+      AdjustShipsPosition:
+        parameters:
+          Player:
+            referenceType: Player
+            isIgnoredInEvent: true
+          Positions:
+            itemType: u64
+          ShipIds:
+            itemType: ID
+        event:
+          name: RosterShipsPositionAdjusted
+
+      TransferShip:
+        parameters:
+          Player:
+            referenceType: Player
+            isIgnoredInEvent: true
+          ShipId:
+            type: ID
+          #FromRoster: # from current roster
+          ToRoster:
+            referenceType: Roster
+            isMutableReference: true
+            eventPropertyName: ToRosterId
+          ToPosition:
+            type: u64
+            optional: true
+        event:
+          name: RosterShipTransferred
+
+      TransferShipInventory:
+        parameters:
+          Player:
+            referenceType: Player
+            isIgnoredInEvent: true
+          FromShipId:
+            type: ID
+          ToShipId:
+            type: ID
+          ItemIdQuantityPairs:
+            type: ItemIdQuantityPairs
+        event:
+          name: RosterShipInventoryTransferred
+
+      TakeOutShipInventory:
+        inheritsFrom: RosterTemplate.InOutShipInventory
+        #parameters:
+        event:
+          name: RosterShipInventoryTakenOut
+
+      PutInShipInventory:
+        inheritsFrom: RosterTemplate.InOutShipInventory
+        #parameters:
+        event:
+          name: RosterShipInventoryPutIn
+
 
   ShipBattle:
     id:
@@ -549,6 +605,21 @@ superObjects:
               description: "Increased experience value"
             NewLevel:
               type: u16
+
+  RosterTemplate:
+    isTemplate: true
+    methods:
+      InOutShipInventory:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          ShipId:
+            type: ID
+          ItemIdQuantityPairs:
+            type: ItemIdQuantityPairs
+
 
 singletonObjects:
   Map:
