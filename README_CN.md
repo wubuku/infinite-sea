@@ -118,6 +118,25 @@ wubuku/dddappp:0.0.1 \
 值得一提的是，链下服务（off-chain service，有时候会被称为 indexer）是 100% 自动生成的。
 你甚至一行代码都不需要写，只需要配置一下发布合约的交易摘要，就可以直接使用了。
 
+#### Move 代码中的定义的常量
+
+```move
+        //
+        // 可以编写脚本来添加岛屿，以及为岛屿随机地生成资源。
+        //
+        // 添加岛屿时，应该初始化以下资源（在 item_id 模块中定义了返回 Item ID 常量的函数）：
+        item_id::resource_type_mining(); // Item Creation 需要的“资源”也抽象为 Item
+        item_id::resource_type_woodcutting();
+        item_id::cotton_seeds();
+        //以便用户可以通过这些技能：
+        skill_type::mining(); // 这是一个 Item Creation 类型的技能
+        skill_type::woodcutting(); // Item Creation Skill
+        skill_type::farming(); // 这是一个 Item Production 类型的技能
+        //产出造船需要的 Items：
+        item_id::copper_ore(); // 铜矿
+        item_id::normal_logs(); // 普通原木
+        item_id::cottons(); // 棉花
+```
 
 ## 测试应用
 
