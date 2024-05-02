@@ -36,4 +36,20 @@ module infinite_sea::roster_util {
         };
         speed / (l as u32)
     }
+
+    public fun is_destroyed(roster: &Roster): bool {
+        let ship_ids = roster::borrow_ship_ids(roster);
+        let ships = roster::borrow_ships(roster);
+        let i = 0;
+        let l = vector::length(ship_ids);
+        while (i < l) {
+            let ship_id = *vector::borrow(ship_ids, i);
+            let ship = object_table::borrow(ships, ship_id);
+            if (ship::health_points(ship) > 0) {
+                return false
+            };
+            i = i + 1;
+        };
+        true
+    }
 }
