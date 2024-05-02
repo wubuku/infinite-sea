@@ -17,6 +17,8 @@ module infinite_sea::ship {
     friend infinite_sea::ship_create_logic;
     friend infinite_sea::ship_aggregate;
 
+    friend infinite_sea::ship_battle_take_loot_logic;
+
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
     #[allow(unused_const)]

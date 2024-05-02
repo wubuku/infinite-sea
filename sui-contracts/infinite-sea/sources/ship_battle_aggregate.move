@@ -10,6 +10,7 @@ module infinite_sea::ship_battle_aggregate {
     use infinite_sea::ship_battle_initiate_battle_logic;
     use infinite_sea::ship_battle_make_move_after_timeout_logic;
     use infinite_sea::ship_battle_make_move_logic;
+    use infinite_sea::ship_battle_take_loot_logic;
     use sui::clock::Clock;
     use sui::tx_context;
 
@@ -92,6 +93,31 @@ module infinite_sea::ship_battle_aggregate {
         );
         ship_battle::update_object_version(ship_battle);
         ship_battle::emit_ship_battle_move_made_after_timeout(ship_battle_move_made_after_timeout);
+    }
+
+    public entry fun take_loot(
+        ship_battle: &mut ship_battle::ShipBattle,
+        initiator: &mut Roster,
+        responder: &mut Roster,
+        winner: u8,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let ship_battle_loot_taken = ship_battle_take_loot_logic::verify(
+            initiator,
+            responder,
+            winner,
+            ship_battle,
+            ctx,
+        );
+        ship_battle_take_loot_logic::mutate(
+            &ship_battle_loot_taken,
+            initiator,
+            responder,
+            ship_battle,
+            ctx,
+        );
+        ship_battle::update_object_version(ship_battle);
+        ship_battle::emit_ship_battle_loot_taken(ship_battle_loot_taken);
     }
 
 }

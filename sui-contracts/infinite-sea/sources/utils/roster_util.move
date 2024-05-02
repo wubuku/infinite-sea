@@ -9,6 +9,8 @@ module infinite_sea::roster_util {
     use infinite_sea::roster::{Self, Roster};
     use infinite_sea::ship;
 
+    const EEmptyRosterShipIds: u64 = 1;
+
     public fun add_ship_id(ship_ids: &mut vector<ID>, ship_id: ID, position: Option<u64>) {
         if (option::is_none(&position)) {
             vector::push_back(ship_ids, ship_id);
@@ -51,5 +53,12 @@ module infinite_sea::roster_util {
             i = i + 1;
         };
         true
+    }
+
+    public fun get_last_ship_id(roster: &Roster): ID {
+        let ship_ids = roster::borrow_ship_ids(roster);
+        let l = vector::length(ship_ids);
+        assert!(l > 0, EEmptyRosterShipIds);
+        *vector::borrow(ship_ids, l - 1)
     }
 }

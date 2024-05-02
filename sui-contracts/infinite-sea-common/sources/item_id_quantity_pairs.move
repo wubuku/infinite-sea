@@ -8,8 +8,6 @@ module infinite_sea_common::item_id_quantity_pairs {
 
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
-    const EEmptyList: u64 = 10;
-    const EIncorrectListLength: u64 = 11;
 
     struct ItemIdQuantityPairs has store, drop, copy {
         items: vector<ItemIdQuantityPair>,
@@ -19,20 +17,7 @@ module infinite_sea_common::item_id_quantity_pairs {
         item_id_list: vector<u32>,
         item_quantity_list: vector<u32>,
     ): ItemIdQuantityPairs {
-        assert!(std::vector::length(&item_id_list) > 0, EEmptyList);
-        assert!(std::vector::length(&item_id_list) == std::vector::length(&item_quantity_list), EIncorrectListLength);
-        let items = std::vector::empty();
-        let l = std::vector::length(&item_id_list);
-        let i = 0;
-        while (i < l) {
-            let item_id = *std::vector::borrow(&item_id_list, i);
-            let item_quantity = *std::vector::borrow(&item_quantity_list, i);
-            infinite_sea_common::vector_util::insert_or_add_item_id_quantity_pair(
-                &mut items,
-                infinite_sea_common::item_id_quantity_pair::new(item_id, item_quantity)
-            );
-            i = i + 1;
-        };
+        let items = infinite_sea_common::vector_util::new_item_id_quantity_pairs(item_id_list, item_quantity_list);
         let item_id_quantity_pairs = ItemIdQuantityPairs {
             items,
         };

@@ -145,6 +145,8 @@ aggregates:
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
       ShouldIssuePublisherObject: true
+      DataAccessFriends:
+        - ShipBattle.TakeLoot
     friends:
       - SkillProcess.CompleteShipProduction
       #- SkillProcess.StartShipProduction
@@ -191,8 +193,10 @@ aggregates:
       CRUD_IT_NO_DELETE: true
       #ShouldIssuePublisherObject: true
       DataAccessFriends:
-        - ShipBattle.InitiateBattle # Make this method can access ("write") Roster's data model.
+        # Make some methods can access ("write") Roster's data model.
         # This should only be done occasionally!
+        - ShipBattle.InitiateBattle
+        - ShipBattle.TakeLoot
     friends:
       - Player.Create
       - Player.ClaimIsland
@@ -428,6 +432,27 @@ aggregates:
           properties:
             NextRoundStartedAt:
               type: u64
+
+      TakeLoot:
+        parameters:
+          Initiator:
+            referenceType: Roster
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Responder:
+            referenceType: Roster
+            isMutableReference: true
+            isIgnoredInEvent: true
+          #Clock:
+          #  referenceType: Clock
+          #  isIgnoredInEvent: true
+          Winner:
+            type: u8 # 1: Initiator, 0: Responder
+        event:
+          name: ShipBattleLootTaken
+          properties:
+            Loot:
+              itemType: ItemIdQuantityPair
 
 
 #  SkillProcessMutex:
