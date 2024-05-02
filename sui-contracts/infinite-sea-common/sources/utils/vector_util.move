@@ -165,4 +165,18 @@ module infinite_sea_common::vector_util {
         };
         (option::none<u64>(), low)
     }
+
+    /// Concat IDs' bytes into a single byte vector.
+    public fun concat_ids_bytes(ids: &vector<ID>): vector<u8> {
+        let bytes = vector::empty<u8>();
+        let i = 0;
+        let l = vector::length(ids);
+        while (i < l) {
+            let id = vector::borrow(ids, i);
+            let id_bytes = object::id_to_bytes(id);
+            vector::append(&mut bytes, id_bytes);
+            i = i + 1;
+        };
+        bytes
+    }
 }
