@@ -18,8 +18,12 @@ module infinite_sea_common::roster_status {
         2
     }
 
+    public fun destroyed(): u8 {
+        3
+    }
+
     public fun is_valid(v: u8): bool {
-        v == at_anchor() || v == underway() || v == in_battle()
+        v == at_anchor() || v == underway() || v == in_battle() || v == destroyed()
     }
 
     public fun are_all_valid(vs: &vector<u8>): bool {

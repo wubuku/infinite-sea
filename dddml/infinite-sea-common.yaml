@@ -288,6 +288,8 @@ enumObjects:
         value: 1
       InBattle:
         value: 2
+      Destroyed:
+        value: 3
 
   ShipBattleCommand:
     module: "Common"

@@ -8,7 +8,6 @@ module infinite_sea::ship_battle_aggregate {
     use infinite_sea::roster::Roster;
     use infinite_sea::ship_battle;
     use infinite_sea::ship_battle_initiate_battle_logic;
-    use infinite_sea::ship_battle_make_move_after_timeout_logic;
     use infinite_sea::ship_battle_make_move_logic;
     use infinite_sea::ship_battle_take_loot_logic;
     use sui::clock::Clock;
@@ -31,7 +30,7 @@ module infinite_sea::ship_battle_aggregate {
             ctx,
         );
         let ship_battle = ship_battle_initiate_battle_logic::mutate(
-            &ship_battle_initiated,
+            &mut ship_battle_initiated,
             initiator,
             responder,
             ctx,
@@ -47,7 +46,8 @@ module infinite_sea::ship_battle_aggregate {
         initiator: &mut Roster,
         responder: &mut Roster,
         clock: &Clock,
-        command: u8,
+        attacker_command: u8,
+        defender_command: u8,
         ctx: &mut tx_context::TxContext,
     ) {
         let ship_battle_move_made = ship_battle_make_move_logic::verify(
@@ -55,12 +55,13 @@ module infinite_sea::ship_battle_aggregate {
             initiator,
             responder,
             clock,
-            command,
+            attacker_command,
+            defender_command,
             ship_battle,
             ctx,
         );
         ship_battle_make_move_logic::mutate(
-            &ship_battle_move_made,
+            &mut ship_battle_move_made,
             initiator,
             responder,
             ship_battle,
@@ -68,31 +69,6 @@ module infinite_sea::ship_battle_aggregate {
         );
         ship_battle::update_object_version(ship_battle);
         ship_battle::emit_ship_battle_move_made(ship_battle_move_made);
-    }
-
-    public entry fun make_move_after_timeout(
-        ship_battle: &mut ship_battle::ShipBattle,
-        initiator: &mut Roster,
-        responder: &mut Roster,
-        clock: &Clock,
-        ctx: &mut tx_context::TxContext,
-    ) {
-        let ship_battle_move_made_after_timeout = ship_battle_make_move_after_timeout_logic::verify(
-            initiator,
-            responder,
-            clock,
-            ship_battle,
-            ctx,
-        );
-        ship_battle_make_move_after_timeout_logic::mutate(
-            &ship_battle_move_made_after_timeout,
-            initiator,
-            responder,
-            ship_battle,
-            ctx,
-        );
-        ship_battle::update_object_version(ship_battle);
-        ship_battle::emit_ship_battle_move_made_after_timeout(ship_battle_move_made_after_timeout);
     }
 
     public entry fun take_loot(

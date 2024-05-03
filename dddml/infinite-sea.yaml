@@ -353,11 +353,18 @@ aggregates:
         type: u32
         defaultLogic:
           Move: "1"
-      RoundMover:
-        type: u8
-        description: "1: Initiator, 0: Responder"
       RoundStartedAt:
         type: u64
+      RoundMover:
+        type: u8
+        optional: true
+        description: "1: Initiator, 0: Responder"
+      RoundAttackerShip:
+        type: ID
+        optional: true
+      RoundDefenderShip:
+        type: ID
+        optional: true
     methods:
       InitiateBattle:
         isCreationCommand: true
@@ -386,6 +393,15 @@ aggregates:
               type: ID
             StartedAt:
               type: u64
+            FirstRoundMover:
+              type: u8
+              optional: true
+            FirstRoundAttackerShip:
+              type: ID
+              optional: true
+            FirstRoundDefenderShip:
+              type: ID
+              optional: true
 
       MakeMove:
         parameters:
@@ -403,35 +419,52 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
-          Command:
+          AttackerCommand:
+            type: ShipBattleCommand
+          DefenderCommand:
             type: ShipBattleCommand
         event:
           name: ShipBattleMoveMade
           properties:
+            RoundNumber:
+              type: u32
+            DefenderDamageTaken:
+              type: u32
+            AttackerDamageTaken:
+              type: u32
             NextRoundStartedAt:
               type: u64
+            NextRoundMover:
+              type: u8
+              optional: true
+            NextRoundAttackerShip:
+              type: ID
+              optional: true
+            NextRoundDefenderShip:
+              type: ID
+              optional: true
 
-      MakeMoveAfterTimeout:
-        parameters:
-          #Player:
-          #  referenceType: Player
-          #  isIgnoredInEvent: true
-          Initiator:
-            referenceType: Roster
-            isMutableReference: true
-            isIgnoredInEvent: true
-          Responder:
-            referenceType: Roster
-            isMutableReference: true
-            isIgnoredInEvent: true
-          Clock:
-            referenceType: Clock
-            isIgnoredInEvent: true
-        event:
-          name: ShipBattleMoveMadeAfterTimeout
-          properties:
-            NextRoundStartedAt:
-              type: u64
+#      MakeMoveAfterTimeout:
+#        parameters:
+#          #Player:
+#          #  referenceType: Player
+#          #  isIgnoredInEvent: true
+#          Initiator:
+#            referenceType: Roster
+#            isMutableReference: true
+#            isIgnoredInEvent: true
+#          Responder:
+#            referenceType: Roster
+#            isMutableReference: true
+#            isIgnoredInEvent: true
+#          Clock:
+#            referenceType: Clock
+#            isIgnoredInEvent: true
+#        event:
+#          name: ShipBattleMoveMadeAfterTimeout
+#          properties:
+#            NextRoundStartedAt:
+#              type: u64
 
       TakeLoot:
         parameters:

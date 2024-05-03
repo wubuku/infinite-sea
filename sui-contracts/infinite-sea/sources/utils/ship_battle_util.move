@@ -23,6 +23,7 @@ module infinite_sea::ship_battle_util {
     const EResponderIdMismatch: u64 = 13;
     const EShipNotFoundById: u64 = 21;
     const ENoLivingShips: u64 = 22;
+    const ENoRoundMover: u64 = 23;
 
     public fun initiator(): u8 {
         1
@@ -38,7 +39,8 @@ module infinite_sea::ship_battle_util {
         assert_ids_are_consistent(ship_battle, initiator, responder);
 
         let round_mover = ship_battle::round_mover(ship_battle);
-        if (round_mover == initiator()) {
+        assert!(option::is_some(&round_mover), ENoRoundMover);
+        if (*option::borrow(&round_mover) == initiator()) {
             permission_util::assert_player_is_roster_owner(player, initiator);
         } else {
             permission_util::assert_player_is_roster_owner(player, responder);
@@ -73,12 +75,12 @@ module infinite_sea::ship_battle_util {
 
     public fun determine_ship_to_go_first(roster_1: &Roster, roster_2: &Roster, clock: &Clock): (ID, u8) {
         let seed_1 = vector_util::concat_ids_bytes(&vector[roster::id(roster_1), roster::id(roster_2)]);
-        let (candidate_1, initiative_1) = get_candidate_initiator_ship_id(roster_1, clock, seed_1);
+        let (candidate_1, initiative_1) = get_candidate_attacker_ship_id(roster_1, clock, seed_1);
         let seed_2 = vector::empty<u8>();
         vector::append(&mut seed_2, bcs::to_bytes(&initiative_1));
         vector::append(&mut seed_2, bcs::to_bytes(&vector::length(&roster::ship_ids(roster_1))));
         vector::append(&mut seed_2, seed_1);
-        let (candidate_2, initiative_2) = get_candidate_initiator_ship_id(roster_2, clock, seed_2);
+        let (candidate_2, initiative_2) = get_candidate_attacker_ship_id(roster_2, clock, seed_2);
         assert!(!(option::is_none(&candidate_1) && option::is_none(&candidate_2)), ENoLivingShips);
         if (option::is_none(&candidate_1)) {
             (option::extract(&mut candidate_2), 2)
@@ -92,7 +94,7 @@ module infinite_sea::ship_battle_util {
         }
     }
 
-    fun get_candidate_initiator_ship_id(roster: &Roster, clock: &Clock, seed: vector<u8>): (Option<ID>, u64) {
+    fun get_candidate_attacker_ship_id(roster: &Roster, clock: &Clock, seed: vector<u8>): (Option<ID>, u64) {
         let ship_ids = roster::borrow_ship_ids(roster);
         let ships = roster::borrow_ships(roster);
         //let turn_order = vector::empty<ID>();

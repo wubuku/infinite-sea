@@ -29,11 +29,14 @@ module infinite_sea::ship_battle_initiate_battle_logic {
             roster::id(initiator),
             roster::id(responder),
             clock::timestamp_ms(clock) / 1000,
+            option::none(),//todo
+            option::none(),
+            option::none(),
         )
     }
 
     public(friend) fun mutate(
-        ship_battle_initiated: &ship_battle::ShipBattleInitiated,
+        ship_battle_initiated: &mut ship_battle::ShipBattleInitiated,
         initiator: &mut Roster,
         responder: &mut Roster,
         ctx: &mut TxContext,
@@ -45,8 +48,10 @@ module infinite_sea::ship_battle_initiate_battle_logic {
             initiator_id,
             opposing_side_id,
             0, //todo battle status?
-            ship_battle_util::initiator(),
             started_at,
+            option::none(),//ship_battle_util::initiator(),
+            option::none(),
+            option::none(),
             ctx
         );
         let battle_id = ship_battle::id(&battle);

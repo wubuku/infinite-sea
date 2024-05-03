@@ -5,14 +5,13 @@
 
 module infinite_sea::ship_battle {
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
-    use std::option;
+    use std::option::{Self, Option};
     use sui::event;
     use sui::object::{Self, ID, UID};
     use sui::transfer;
     use sui::tx_context::TxContext;
     friend infinite_sea::ship_battle_initiate_battle_logic;
     friend infinite_sea::ship_battle_make_move_logic;
-    friend infinite_sea::ship_battle_make_move_after_timeout_logic;
     friend infinite_sea::ship_battle_take_loot_logic;
     friend infinite_sea::ship_battle_aggregate;
 
@@ -29,8 +28,10 @@ module infinite_sea::ship_battle {
         responder: ID,
         status: u8,
         round_number: u32,
-        round_mover: u8,
         round_started_at: u64,
+        round_mover: Option<u8>,
+        round_attacker_ship: Option<ID>,
+        round_defender_ship: Option<ID>,
     }
 
     public fun id(ship_battle: &ShipBattle): object::ID {
@@ -73,14 +74,6 @@ module infinite_sea::ship_battle {
         ship_battle.round_number = round_number;
     }
 
-    public fun round_mover(ship_battle: &ShipBattle): u8 {
-        ship_battle.round_mover
-    }
-
-    public(friend) fun set_round_mover(ship_battle: &mut ShipBattle, round_mover: u8) {
-        ship_battle.round_mover = round_mover;
-    }
-
     public fun round_started_at(ship_battle: &ShipBattle): u64 {
         ship_battle.round_started_at
     }
@@ -89,12 +82,38 @@ module infinite_sea::ship_battle {
         ship_battle.round_started_at = round_started_at;
     }
 
+    public fun round_mover(ship_battle: &ShipBattle): Option<u8> {
+        ship_battle.round_mover
+    }
+
+    public(friend) fun set_round_mover(ship_battle: &mut ShipBattle, round_mover: Option<u8>) {
+        ship_battle.round_mover = round_mover;
+    }
+
+    public fun round_attacker_ship(ship_battle: &ShipBattle): Option<ID> {
+        ship_battle.round_attacker_ship
+    }
+
+    public(friend) fun set_round_attacker_ship(ship_battle: &mut ShipBattle, round_attacker_ship: Option<ID>) {
+        ship_battle.round_attacker_ship = round_attacker_ship;
+    }
+
+    public fun round_defender_ship(ship_battle: &ShipBattle): Option<ID> {
+        ship_battle.round_defender_ship
+    }
+
+    public(friend) fun set_round_defender_ship(ship_battle: &mut ShipBattle, round_defender_ship: Option<ID>) {
+        ship_battle.round_defender_ship = round_defender_ship;
+    }
+
     public(friend) fun new_ship_battle(
         initiator: ID,
         responder: ID,
         status: u8,
-        round_mover: u8,
         round_started_at: u64,
+        round_mover: Option<u8>,
+        round_attacker_ship: Option<ID>,
+        round_defender_ship: Option<ID>,
         ctx: &mut TxContext,
     ): ShipBattle {
         ShipBattle {
@@ -104,8 +123,10 @@ module infinite_sea::ship_battle {
             responder,
             status,
             round_number: 1,
-            round_mover,
             round_started_at,
+            round_mover,
+            round_attacker_ship,
+            round_defender_ship,
         }
     }
 
@@ -114,6 +135,9 @@ module infinite_sea::ship_battle {
         initiator_id: ID,
         responder_id: ID,
         started_at: u64,
+        first_round_mover: Option<u8>,
+        first_round_attacker_ship: Option<ID>,
+        first_round_defender_ship: Option<ID>,
     }
 
     public fun ship_battle_initiated_id(ship_battle_initiated: &ShipBattleInitiated): option::Option<object::ID> {
@@ -136,73 +160,139 @@ module infinite_sea::ship_battle {
         ship_battle_initiated.started_at
     }
 
+    public fun ship_battle_initiated_first_round_mover(ship_battle_initiated: &ShipBattleInitiated): Option<u8> {
+        ship_battle_initiated.first_round_mover
+    }
+
+    public(friend) fun set_ship_battle_initiated_first_round_mover(ship_battle_initiated: &mut ShipBattleInitiated, first_round_mover: Option<u8>) {
+        ship_battle_initiated.first_round_mover = first_round_mover;
+    }
+
+    public fun ship_battle_initiated_first_round_attacker_ship(ship_battle_initiated: &ShipBattleInitiated): Option<ID> {
+        ship_battle_initiated.first_round_attacker_ship
+    }
+
+    public(friend) fun set_ship_battle_initiated_first_round_attacker_ship(ship_battle_initiated: &mut ShipBattleInitiated, first_round_attacker_ship: Option<ID>) {
+        ship_battle_initiated.first_round_attacker_ship = first_round_attacker_ship;
+    }
+
+    public fun ship_battle_initiated_first_round_defender_ship(ship_battle_initiated: &ShipBattleInitiated): Option<ID> {
+        ship_battle_initiated.first_round_defender_ship
+    }
+
+    public(friend) fun set_ship_battle_initiated_first_round_defender_ship(ship_battle_initiated: &mut ShipBattleInitiated, first_round_defender_ship: Option<ID>) {
+        ship_battle_initiated.first_round_defender_ship = first_round_defender_ship;
+    }
+
     public(friend) fun new_ship_battle_initiated(
         initiator_id: ID,
         responder_id: ID,
         started_at: u64,
+        first_round_mover: Option<u8>,
+        first_round_attacker_ship: Option<ID>,
+        first_round_defender_ship: Option<ID>,
     ): ShipBattleInitiated {
         ShipBattleInitiated {
             id: option::none(),
             initiator_id,
             responder_id,
             started_at,
+            first_round_mover,
+            first_round_attacker_ship,
+            first_round_defender_ship,
         }
     }
 
     struct ShipBattleMoveMade has copy, drop {
         id: object::ID,
         version: u64,
-        command: u8,
+        attacker_command: u8,
+        defender_command: u8,
+        round_number: u32,
+        defender_damage_taken: u32,
+        attacker_damage_taken: u32,
         next_round_started_at: u64,
+        next_round_mover: Option<u8>,
+        next_round_attacker_ship: Option<ID>,
+        next_round_defender_ship: Option<ID>,
     }
 
     public fun ship_battle_move_made_id(ship_battle_move_made: &ShipBattleMoveMade): object::ID {
         ship_battle_move_made.id
     }
 
-    public fun ship_battle_move_made_command(ship_battle_move_made: &ShipBattleMoveMade): u8 {
-        ship_battle_move_made.command
+    public fun ship_battle_move_made_attacker_command(ship_battle_move_made: &ShipBattleMoveMade): u8 {
+        ship_battle_move_made.attacker_command
+    }
+
+    public fun ship_battle_move_made_defender_command(ship_battle_move_made: &ShipBattleMoveMade): u8 {
+        ship_battle_move_made.defender_command
+    }
+
+    public fun ship_battle_move_made_round_number(ship_battle_move_made: &ShipBattleMoveMade): u32 {
+        ship_battle_move_made.round_number
+    }
+
+    public fun ship_battle_move_made_defender_damage_taken(ship_battle_move_made: &ShipBattleMoveMade): u32 {
+        ship_battle_move_made.defender_damage_taken
+    }
+
+    public fun ship_battle_move_made_attacker_damage_taken(ship_battle_move_made: &ShipBattleMoveMade): u32 {
+        ship_battle_move_made.attacker_damage_taken
     }
 
     public fun ship_battle_move_made_next_round_started_at(ship_battle_move_made: &ShipBattleMoveMade): u64 {
         ship_battle_move_made.next_round_started_at
     }
 
+    public fun ship_battle_move_made_next_round_mover(ship_battle_move_made: &ShipBattleMoveMade): Option<u8> {
+        ship_battle_move_made.next_round_mover
+    }
+
+    public(friend) fun set_ship_battle_move_made_next_round_mover(ship_battle_move_made: &mut ShipBattleMoveMade, next_round_mover: Option<u8>) {
+        ship_battle_move_made.next_round_mover = next_round_mover;
+    }
+
+    public fun ship_battle_move_made_next_round_attacker_ship(ship_battle_move_made: &ShipBattleMoveMade): Option<ID> {
+        ship_battle_move_made.next_round_attacker_ship
+    }
+
+    public(friend) fun set_ship_battle_move_made_next_round_attacker_ship(ship_battle_move_made: &mut ShipBattleMoveMade, next_round_attacker_ship: Option<ID>) {
+        ship_battle_move_made.next_round_attacker_ship = next_round_attacker_ship;
+    }
+
+    public fun ship_battle_move_made_next_round_defender_ship(ship_battle_move_made: &ShipBattleMoveMade): Option<ID> {
+        ship_battle_move_made.next_round_defender_ship
+    }
+
+    public(friend) fun set_ship_battle_move_made_next_round_defender_ship(ship_battle_move_made: &mut ShipBattleMoveMade, next_round_defender_ship: Option<ID>) {
+        ship_battle_move_made.next_round_defender_ship = next_round_defender_ship;
+    }
+
     public(friend) fun new_ship_battle_move_made(
         ship_battle: &ShipBattle,
-        command: u8,
+        attacker_command: u8,
+        defender_command: u8,
+        round_number: u32,
+        defender_damage_taken: u32,
+        attacker_damage_taken: u32,
         next_round_started_at: u64,
+        next_round_mover: Option<u8>,
+        next_round_attacker_ship: Option<ID>,
+        next_round_defender_ship: Option<ID>,
     ): ShipBattleMoveMade {
         ShipBattleMoveMade {
             id: id(ship_battle),
             version: version(ship_battle),
-            command,
+            attacker_command,
+            defender_command,
+            round_number,
+            defender_damage_taken,
+            attacker_damage_taken,
             next_round_started_at,
-        }
-    }
-
-    struct ShipBattleMoveMadeAfterTimeout has copy, drop {
-        id: object::ID,
-        version: u64,
-        next_round_started_at: u64,
-    }
-
-    public fun ship_battle_move_made_after_timeout_id(ship_battle_move_made_after_timeout: &ShipBattleMoveMadeAfterTimeout): object::ID {
-        ship_battle_move_made_after_timeout.id
-    }
-
-    public fun ship_battle_move_made_after_timeout_next_round_started_at(ship_battle_move_made_after_timeout: &ShipBattleMoveMadeAfterTimeout): u64 {
-        ship_battle_move_made_after_timeout.next_round_started_at
-    }
-
-    public(friend) fun new_ship_battle_move_made_after_timeout(
-        ship_battle: &ShipBattle,
-        next_round_started_at: u64,
-    ): ShipBattleMoveMadeAfterTimeout {
-        ShipBattleMoveMadeAfterTimeout {
-            id: id(ship_battle),
-            version: version(ship_battle),
-            next_round_started_at,
+            next_round_mover,
+            next_round_attacker_ship,
+            next_round_defender_ship,
         }
     }
 
@@ -258,8 +348,10 @@ module infinite_sea::ship_battle {
             responder: _responder,
             status: _status,
             round_number: _round_number,
-            round_mover: _round_mover,
             round_started_at: _round_started_at,
+            round_mover: _round_mover,
+            round_attacker_ship: _round_attacker_ship,
+            round_defender_ship: _round_defender_ship,
         } = ship_battle;
         object::delete(id);
     }
@@ -271,10 +363,6 @@ module infinite_sea::ship_battle {
 
     public(friend) fun emit_ship_battle_move_made(ship_battle_move_made: ShipBattleMoveMade) {
         event::emit(ship_battle_move_made);
-    }
-
-    public(friend) fun emit_ship_battle_move_made_after_timeout(ship_battle_move_made_after_timeout: ShipBattleMoveMadeAfterTimeout) {
-        event::emit(ship_battle_move_made_after_timeout);
     }
 
     public(friend) fun emit_ship_battle_loot_taken(ship_battle_loot_taken: ShipBattleLootTaken) {
