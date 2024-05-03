@@ -1,18 +1,22 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::ship_battle_initiate_battle_logic {
     use std::option;
+
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
+    use infinite_sea_common::battle_status;
     use infinite_sea_common::roster_status;
+
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
-    use infinite_sea::ship_battle_util;
-
     use infinite_sea::roster::{Self, Roster};
     use infinite_sea::ship_battle;
+    use infinite_sea::ship_battle_util;
 
     friend infinite_sea::ship_battle_aggregate;
+
+    const FIRST_ROUND_NUMBER: u32 = 1;
 
     public(friend) fun verify(
         player: &Player,
@@ -23,15 +27,23 @@ module infinite_sea::ship_battle_initiate_battle_logic {
     ): ship_battle::ShipBattleInitiated {
         permission_util::assert_sender_is_player_owner(player, ctx);
         permission_util::assert_player_is_roster_owner(player, initiator);
+        // todo more checks???
 
-        // todo update and check rosters' statuses
+        let (attacker_ship_id, defender_ship_id, roster_indicator) = ship_battle_util::determine_attacker_and_defender(
+            initiator, responder, clock, FIRST_ROUND_NUMBER
+        );
+        let first_round_mover = if (roster_indicator == 1) {
+            ship_battle_util::initiator()
+        } else {
+            ship_battle_util::responder()
+        };
         ship_battle::new_ship_battle_initiated(
             roster::id(initiator),
             roster::id(responder),
             clock::timestamp_ms(clock) / 1000,
-            option::none(),//todo
-            option::none(),
-            option::none(),
+            option::some(first_round_mover),
+            option::some(attacker_ship_id),
+            option::some(defender_ship_id),
         )
     }
 
@@ -42,18 +54,23 @@ module infinite_sea::ship_battle_initiate_battle_logic {
         ctx: &mut TxContext,
     ): ship_battle::ShipBattle {
         let initiator_id = ship_battle::ship_battle_initiated_initiator_id(ship_battle_initiated);
-        let opposing_side_id = ship_battle::ship_battle_initiated_responder_id(ship_battle_initiated);
+        let responder_id = ship_battle::ship_battle_initiated_responder_id(ship_battle_initiated);
         let started_at = ship_battle::ship_battle_initiated_started_at(ship_battle_initiated);
+        let first_round_mover = ship_battle::ship_battle_initiated_first_round_mover(ship_battle_initiated);
+        let first_round_attacker_ship = ship_battle::ship_battle_initiated_first_round_attacker_ship(
+            ship_battle_initiated
+        );
+        let first_round_defender_ship = ship_battle::ship_battle_initiated_first_round_defender_ship(
+            ship_battle_initiated
+        );
         let battle = ship_battle::new_ship_battle(
-            initiator_id,
-            opposing_side_id,
-            0, //todo battle status?
+            initiator_id, responder_id,
+            battle_status::in_progress(),
             started_at,
-            option::none(),//ship_battle_util::initiator(),
-            option::none(),
-            option::none(),
+            first_round_mover, first_round_attacker_ship, first_round_defender_ship,
             ctx
         );
+        ship_battle::set_round_number(&mut battle, FIRST_ROUND_NUMBER);
         let battle_id = ship_battle::id(&battle);
         // update rosters with battle ID
         roster::set_status(initiator, roster_status::in_battle());

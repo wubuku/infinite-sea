@@ -349,6 +349,12 @@ aggregates:
         type: ID # Roster ID
       Status:
         type: u8
+      Winner:
+        type: u8
+        optional: true
+        description: "1: Initiator, 0: Responder"
+        defaultLogic:
+          Move: "std::option::none()"
       RoundNumber:
         type: u32
         defaultLogic:
@@ -432,6 +438,12 @@ aggregates:
               type: u32
             AttackerDamageTaken:
               type: u32
+            IsBattleEnded:
+              type: bool
+            Winner:
+              type: u8
+              optional: true
+              description: "1: Initiator, 0: Responder"
             NextRoundStartedAt:
               type: u64
             NextRoundMover:
@@ -479,8 +491,8 @@ aggregates:
           #Clock:
           #  referenceType: Clock
           #  isIgnoredInEvent: true
-          Winner:
-            type: u8 # 1: Initiator, 0: Responder
+          #Winner:
+          #  type: u8 # 1: Initiator, 0: Responder
         event:
           name: ShipBattleLootTaken
           properties:

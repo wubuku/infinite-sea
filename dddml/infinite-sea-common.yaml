@@ -302,6 +302,18 @@ enumObjects:
       Pass:
         value: 2
 
+  BattleStatus:
+    module: "Common"
+    baseType: u8
+    values:
+      InProgress:
+        value: 0
+      Ended:
+        value: 1
+      Looted:
+        value: 2
+        # The loot has been taken.
+
 #  IslandResourceType:
 #    module: "Common"
 #    baseType: u8

@@ -75,13 +75,11 @@ module infinite_sea::ship_battle_aggregate {
         ship_battle: &mut ship_battle::ShipBattle,
         initiator: &mut Roster,
         responder: &mut Roster,
-        winner: u8,
         ctx: &mut tx_context::TxContext,
     ) {
         let ship_battle_loot_taken = ship_battle_take_loot_logic::verify(
             initiator,
             responder,
-            winner,
             ship_battle,
             ctx,
         );

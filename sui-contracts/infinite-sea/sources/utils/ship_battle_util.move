@@ -17,6 +17,9 @@ module infinite_sea::ship_battle_util {
     use infinite_sea::ship::{Self, Ship};
     use infinite_sea::ship_battle::{Self, ShipBattle};
 
+    friend infinite_sea::ship_battle_initiate_battle_logic;
+    friend infinite_sea::ship_battle_make_move_logic;
+
     const EInitiatorBattleIdMismatch: u64 = 10;
     const EResponderBattleIdMismatch: u64 = 11;
     const EInitiatorIdMismatch: u64 = 12;
@@ -36,7 +39,7 @@ module infinite_sea::ship_battle_util {
     public fun assert_palyer_is_current_round_mover(player: &Player, ship_battle: &ShipBattle,
                                                     initiator: &Roster, responder: &Roster
     ) {
-        assert_ids_are_consistent(ship_battle, initiator, responder);
+        assert_ids_are_consistent(ship_battle, initiator, responder);//NOTE!
 
         let round_mover = ship_battle::round_mover(ship_battle);
         assert!(option::is_some(&round_mover), ENoRoundMover);
@@ -61,6 +64,27 @@ module infinite_sea::ship_battle_util {
         assert!(responder_id == roster::id(responder), EResponderIdMismatch);
     }
 
+    /// Returns the ID of the attacker ship that should go first in the battle round, the ID of the defender ship,
+    /// and the indicator (1 or 2) of the roster that the attacker belongs to.
+    public(friend) fun determine_attacker_and_defender(
+        roster_1: &Roster,
+        roster_2: &Roster,
+        clock: &Clock,
+        round_number: u32
+    ): (ID, ID, u8) {
+        let (attacker_ship_id, roster_indicator) = determine_ship_to_go_first(roster_1, roster_2, clock, round_number);
+        let defender_ship_id = if (roster_indicator == 1) {
+            let d_id = get_front_ship(roster_2);
+            assert!(option::is_some(&d_id), ENoLivingShips);
+            option::extract(&mut d_id)
+        } else {
+            let d_id = get_front_ship(roster_1);
+            assert!(option::is_some(&d_id), ENoLivingShips);
+            option::extract(&mut d_id)
+        };
+        (attacker_ship_id, defender_ship_id, roster_indicator)
+    }
+
     /*
     def generate_turn_order(ships):
         turn_order = []
@@ -73,8 +97,17 @@ module infinite_sea::ship_battle_util {
         return [ship[0] for ship in turn_order]
     */
 
-    public fun determine_ship_to_go_first(roster_1: &Roster, roster_2: &Roster, clock: &Clock): (ID, u8) {
+    /// Determine which ship should go first in the battle round, based on the initiative score.
+    /// Initiative score is calculated based on the ship's speed and a random number.
+    /// Returns the ID of the ship that should go first and the indicator (1 or 2) of the roster that the ship belongs to.
+    public(friend) fun determine_ship_to_go_first(
+        roster_1: &Roster,
+        roster_2: &Roster,
+        clock: &Clock,
+        round_number: u32
+    ): (ID, u8) {
         let seed_1 = vector_util::concat_ids_bytes(&vector[roster::id(roster_1), roster::id(roster_2)]);
+        vector::append(&mut seed_1, bcs::to_bytes(&round_number));
         let (candidate_1, initiative_1) = get_candidate_attacker_ship_id(roster_1, clock, seed_1);
         let seed_2 = vector::empty<u8>();
         vector::append(&mut seed_2, bcs::to_bytes(&initiative_1));

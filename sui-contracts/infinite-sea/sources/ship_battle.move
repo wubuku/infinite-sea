@@ -27,6 +27,7 @@ module infinite_sea::ship_battle {
         initiator: ID,
         responder: ID,
         status: u8,
+        winner: Option<u8>,
         round_number: u32,
         round_started_at: u64,
         round_mover: Option<u8>,
@@ -64,6 +65,14 @@ module infinite_sea::ship_battle {
 
     public(friend) fun set_status(ship_battle: &mut ShipBattle, status: u8) {
         ship_battle.status = status;
+    }
+
+    public fun winner(ship_battle: &ShipBattle): Option<u8> {
+        ship_battle.winner
+    }
+
+    public(friend) fun set_winner(ship_battle: &mut ShipBattle, winner: Option<u8>) {
+        ship_battle.winner = winner;
     }
 
     public fun round_number(ship_battle: &ShipBattle): u32 {
@@ -122,6 +131,7 @@ module infinite_sea::ship_battle {
             initiator,
             responder,
             status,
+            winner: std::option::none(),
             round_number: 1,
             round_started_at,
             round_mover,
@@ -211,6 +221,8 @@ module infinite_sea::ship_battle {
         round_number: u32,
         defender_damage_taken: u32,
         attacker_damage_taken: u32,
+        is_battle_ended: bool,
+        winner: Option<u8>,
         next_round_started_at: u64,
         next_round_mover: Option<u8>,
         next_round_attacker_ship: Option<ID>,
@@ -239,6 +251,18 @@ module infinite_sea::ship_battle {
 
     public fun ship_battle_move_made_attacker_damage_taken(ship_battle_move_made: &ShipBattleMoveMade): u32 {
         ship_battle_move_made.attacker_damage_taken
+    }
+
+    public fun ship_battle_move_made_is_battle_ended(ship_battle_move_made: &ShipBattleMoveMade): bool {
+        ship_battle_move_made.is_battle_ended
+    }
+
+    public fun ship_battle_move_made_winner(ship_battle_move_made: &ShipBattleMoveMade): Option<u8> {
+        ship_battle_move_made.winner
+    }
+
+    public(friend) fun set_ship_battle_move_made_winner(ship_battle_move_made: &mut ShipBattleMoveMade, winner: Option<u8>) {
+        ship_battle_move_made.winner = winner;
     }
 
     public fun ship_battle_move_made_next_round_started_at(ship_battle_move_made: &ShipBattleMoveMade): u64 {
@@ -276,6 +300,8 @@ module infinite_sea::ship_battle {
         round_number: u32,
         defender_damage_taken: u32,
         attacker_damage_taken: u32,
+        is_battle_ended: bool,
+        winner: Option<u8>,
         next_round_started_at: u64,
         next_round_mover: Option<u8>,
         next_round_attacker_ship: Option<ID>,
@@ -289,6 +315,8 @@ module infinite_sea::ship_battle {
             round_number,
             defender_damage_taken,
             attacker_damage_taken,
+            is_battle_ended,
+            winner,
             next_round_started_at,
             next_round_mover,
             next_round_attacker_ship,
@@ -299,16 +327,11 @@ module infinite_sea::ship_battle {
     struct ShipBattleLootTaken has copy, drop {
         id: object::ID,
         version: u64,
-        winner: u8,
         loot: vector<ItemIdQuantityPair>,
     }
 
     public fun ship_battle_loot_taken_id(ship_battle_loot_taken: &ShipBattleLootTaken): object::ID {
         ship_battle_loot_taken.id
-    }
-
-    public fun ship_battle_loot_taken_winner(ship_battle_loot_taken: &ShipBattleLootTaken): u8 {
-        ship_battle_loot_taken.winner
     }
 
     public fun ship_battle_loot_taken_loot(ship_battle_loot_taken: &ShipBattleLootTaken): vector<ItemIdQuantityPair> {
@@ -317,13 +340,11 @@ module infinite_sea::ship_battle {
 
     public(friend) fun new_ship_battle_loot_taken(
         ship_battle: &ShipBattle,
-        winner: u8,
         loot: vector<ItemIdQuantityPair>,
     ): ShipBattleLootTaken {
         ShipBattleLootTaken {
             id: id(ship_battle),
             version: version(ship_battle),
-            winner,
             loot,
         }
     }
@@ -347,6 +368,7 @@ module infinite_sea::ship_battle {
             initiator: _initiator,
             responder: _responder,
             status: _status,
+            winner: _winner,
             round_number: _round_number,
             round_started_at: _round_started_at,
             round_mover: _round_mover,
