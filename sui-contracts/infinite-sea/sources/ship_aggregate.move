@@ -11,6 +11,7 @@ module infinite_sea::ship_aggregate {
     use sui::tx_context;
 
     friend infinite_sea::skill_process_complete_ship_production_logic;
+    friend infinite_sea::roster_create_environment_roster_logic;
     friend infinite_sea::ship_battle_service;
     friend infinite_sea::skill_process_service;
 

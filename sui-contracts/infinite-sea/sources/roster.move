@@ -15,7 +15,11 @@ module infinite_sea::roster {
     use sui::table;
     use sui::transfer;
     use sui::tx_context::TxContext;
+
+    struct ROSTER has drop {}
+
     friend infinite_sea::roster_create_logic;
+    friend infinite_sea::roster_create_environment_roster_logic;
     friend infinite_sea::roster_add_ship_logic;
     friend infinite_sea::roster_set_sail_logic;
     friend infinite_sea::roster_update_location_logic;
@@ -37,6 +41,20 @@ module infinite_sea::roster {
     const EInappropriateVersion: u64 = 103;
     const EEmptyObjectID: u64 = 107;
 
+    /// Not the right admin for the object
+    const ENotAdmin: u64 = 0;
+    /// Migration is not an upgrade
+    const ENotUpgrade: u64 = 1;
+    /// Calling functions from the wrong package version
+    const EWrongSchemaVersion: u64 = 2;
+
+    const SCHEMA_VERSION: u64 = 0;
+
+    struct AdminCap has key {
+        id: UID,
+    }
+
+
     struct RosterTable has key {
         id: UID,
         table: table::Table<RosterId, object::ID>,
@@ -46,7 +64,8 @@ module infinite_sea::roster {
         id: object::ID,
     }
 
-    fun init(ctx: &mut TxContext) {
+    fun init(otw: ROSTER, ctx: &mut TxContext) {
+        sui::package::claim_and_keep(otw, ctx);
         let id_generator_table = RosterTable {
             id: object::new(ctx),
             table: table::new(ctx),
@@ -58,10 +77,16 @@ module infinite_sea::roster {
         });
     }
 
+    public fun assert_schema_version(roster: &Roster) {
+        assert!(roster.schema_version == SCHEMA_VERSION, EWrongSchemaVersion);
+    }
+
     struct Roster has key {
         id: UID,
         roster_id: RosterId,
         version: u64,
+        schema_version: u64,
+        admin_cap: ID,
         status: u8,
         speed: u32,
         ship_ids: vector<ID>,
@@ -70,6 +95,8 @@ module infinite_sea::roster {
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
         ship_battle_id: Option<ID>,
+        environment_owned: bool,
+        base_experience: Option<u32>,
     }
 
     public fun id(roster: &Roster): object::ID {
@@ -156,6 +183,26 @@ module infinite_sea::roster {
         roster.ship_battle_id = ship_battle_id;
     }
 
+    public fun environment_owned(roster: &Roster): bool {
+        roster.environment_owned
+    }
+
+    public(friend) fun set_environment_owned(roster: &mut Roster, environment_owned: bool) {
+        roster.environment_owned = environment_owned;
+    }
+
+    public fun base_experience(roster: &Roster): Option<u32> {
+        roster.base_experience
+    }
+
+    public(friend) fun set_base_experience(roster: &mut Roster, base_experience: Option<u32>) {
+        roster.base_experience = base_experience;
+    }
+
+    public fun admin_cap(roster: &Roster): ID {
+        roster.admin_cap
+    }
+
     fun new_roster(
         roster_id: RosterId,
         status: u8,
@@ -167,10 +214,17 @@ module infinite_sea::roster {
         ship_battle_id: Option<ID>,
         ctx: &mut TxContext,
     ): Roster {
+        let admin_cap = AdminCap {
+            id: object::new(ctx),
+        };
+        let admin_cap_id = object::id(&admin_cap);
+        transfer::transfer(admin_cap, sui::tx_context::sender(ctx));
         Roster {
             id: object::new(ctx),
             roster_id,
             version: 0,
+            schema_version: SCHEMA_VERSION,
+            admin_cap: admin_cap_id,
             status,
             speed,
             ship_ids: std::vector::empty(),
@@ -179,7 +233,15 @@ module infinite_sea::roster {
             coordinates_updated_at,
             target_coordinates,
             ship_battle_id,
+            environment_owned: false,
+            base_experience: std::option::none(),
         }
+    }
+
+    entry fun migrate(roster: &mut Roster, a: &AdminCap) {
+        assert!(roster.admin_cap == object::id(a), ENotAdmin);
+        assert!(roster.schema_version < SCHEMA_VERSION, ENotUpgrade);
+        roster.schema_version = SCHEMA_VERSION;
     }
 
     struct RosterCreated has copy, drop {
@@ -255,6 +317,60 @@ module infinite_sea::roster {
             coordinates_updated_at,
             target_coordinates,
             ship_battle_id,
+        }
+    }
+
+    struct EnvironmentRosterCreated has copy, drop {
+        id: option::Option<object::ID>,
+        roster_id: RosterId,
+        coordinates: Coordinates,
+        ship_resource_quantity: u32,
+        ship_base_resource_quantity: u32,
+        base_experience: u32,
+    }
+
+    public fun environment_roster_created_id(environment_roster_created: &EnvironmentRosterCreated): option::Option<object::ID> {
+        environment_roster_created.id
+    }
+
+    public(friend) fun set_environment_roster_created_id(environment_roster_created: &mut EnvironmentRosterCreated, id: object::ID) {
+        environment_roster_created.id = option::some(id);
+    }
+
+    public fun environment_roster_created_roster_id(environment_roster_created: &EnvironmentRosterCreated): RosterId {
+        environment_roster_created.roster_id
+    }
+
+    public fun environment_roster_created_coordinates(environment_roster_created: &EnvironmentRosterCreated): Coordinates {
+        environment_roster_created.coordinates
+    }
+
+    public fun environment_roster_created_ship_resource_quantity(environment_roster_created: &EnvironmentRosterCreated): u32 {
+        environment_roster_created.ship_resource_quantity
+    }
+
+    public fun environment_roster_created_ship_base_resource_quantity(environment_roster_created: &EnvironmentRosterCreated): u32 {
+        environment_roster_created.ship_base_resource_quantity
+    }
+
+    public fun environment_roster_created_base_experience(environment_roster_created: &EnvironmentRosterCreated): u32 {
+        environment_roster_created.base_experience
+    }
+
+    public(friend) fun new_environment_roster_created(
+        roster_id: RosterId,
+        coordinates: Coordinates,
+        ship_resource_quantity: u32,
+        ship_base_resource_quantity: u32,
+        base_experience: u32,
+    ): EnvironmentRosterCreated {
+        EnvironmentRosterCreated {
+            id: option::none(),
+            roster_id,
+            coordinates,
+            ship_resource_quantity,
+            ship_base_resource_quantity,
+            base_experience,
         }
     }
 
@@ -650,6 +766,8 @@ module infinite_sea::roster {
             id,
             roster_id: _roster_id,
             version: _version,
+            schema_version: _,
+            admin_cap: _,
             status: _status,
             speed: _speed,
             ship_ids: _ship_ids,
@@ -658,6 +776,8 @@ module infinite_sea::roster {
             coordinates_updated_at: _coordinates_updated_at,
             target_coordinates: _target_coordinates,
             ship_battle_id: _ship_battle_id,
+            environment_owned: _environment_owned,
+            base_experience: _base_experience,
         } = roster;
         object::delete(id);
         sui::object_table::destroy_empty(ships);
@@ -666,6 +786,11 @@ module infinite_sea::roster {
     public(friend) fun emit_roster_created(roster_created: RosterCreated) {
         assert!(std::option::is_some(&roster_created.id), EEmptyObjectID);
         event::emit(roster_created);
+    }
+
+    public(friend) fun emit_environment_roster_created(environment_roster_created: EnvironmentRosterCreated) {
+        assert!(std::option::is_some(&environment_roster_created.id), EEmptyObjectID);
+        event::emit(environment_roster_created);
     }
 
     public(friend) fun emit_roster_ship_added(roster_ship_added: RosterShipAdded) {
@@ -698,12 +823,6 @@ module infinite_sea::roster {
 
     public(friend) fun emit_roster_ship_inventory_put_in(roster_ship_inventory_put_in: RosterShipInventoryPutIn) {
         event::emit(roster_ship_inventory_put_in);
-    }
-
-    #[test_only]
-    /// Wrapper of module initializer for testing
-    public fun test_init(ctx: &mut TxContext) {
-        init(ctx)
     }
 
 }

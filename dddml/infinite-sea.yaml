@@ -151,6 +151,7 @@ aggregates:
     friends:
       - SkillProcess.CompleteShipProduction
       #- SkillProcess.StartShipProduction
+      - Roster.CreateEnvironmentRoster
     id:
       name: Id
       type: UID
@@ -192,7 +193,8 @@ aggregates:
       Preprocessors: ["MOVE_CRUD_IT"]
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
-      #ShouldIssuePublisherObject: true
+      ShouldIssuePublisherObject: true
+      IS_MOVE_SCHEMA_VERSIONED: true
       DataAccessFriends:
         # Make some methods can access ("write") Roster's data model.
         # This should only be done occasionally!
@@ -228,6 +230,18 @@ aggregates:
       ShipBattleId:
         type: ID
         optional: true
+      EnvironmentOwned:
+        type: bool
+        description: "Whether the roster is owned by the environment"
+        defaultLogic:
+          Move: "false"
+      BaseExperience:
+        type: u32
+        optional: true
+        description: "The base experience value gained by the player when the roster is destroyed"
+        defaultLogic:
+          Move: "std::option::none()"
+
     methods:
       Create:
         isInternal: true
@@ -235,6 +249,22 @@ aggregates:
           isObjectReturned: true
         event:
           isObjectShared: true # Share the object after created.
+
+      CreateEnvironmentRoster:
+        isCreationCommand: true
+        requiredPermission: "__Publisher__"
+        parameters:
+          Coordinates:
+            type: Coordinates
+          ShipResourceQuantity:
+            type: u32
+          ShipBaseResourceQuantity:
+            type: u32
+          BaseExperience:
+            type: u32
+        event:
+          name: EnvironmentRosterCreated
+          isObjectShared: true
 
       AddShip:
         isInternal: true

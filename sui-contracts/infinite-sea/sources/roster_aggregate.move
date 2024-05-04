@@ -8,6 +8,7 @@ module infinite_sea::roster_aggregate {
     use infinite_sea::roster::{Self, Roster};
     use infinite_sea::roster_add_ship_logic;
     use infinite_sea::roster_adjust_ships_position_logic;
+    use infinite_sea::roster_create_environment_roster_logic;
     use infinite_sea::roster_create_logic;
     use infinite_sea::roster_put_in_ship_inventory_logic;
     use infinite_sea::roster_set_sail_logic;
@@ -29,6 +30,8 @@ module infinite_sea::roster_aggregate {
     friend infinite_sea::skill_process_complete_ship_production_logic;
     friend infinite_sea::ship_battle_service;
     friend infinite_sea::skill_process_service;
+
+    const EInvalidPublisher: u64 = 50;
 
     public(friend) fun create(
         roster_id_player_id: ID,
@@ -68,12 +71,54 @@ module infinite_sea::roster_aggregate {
         roster
     }
 
+    public entry fun create_environment_roster(
+        roster_id_player_id: ID,
+        roster_id_sequence_number: u8,
+        publisher: &sui::package::Publisher,
+        coordinates_x: u32,
+        coordinates_y: u32,
+        ship_resource_quantity: u32,
+        ship_base_resource_quantity: u32,
+        base_experience: u32,
+        roster_table: &mut roster::RosterTable,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        assert!(sui::package::from_package<roster::Roster>(publisher), EInvalidPublisher);
+        let roster_id: RosterId = roster_id::new(
+            roster_id_player_id,
+            roster_id_sequence_number,
+        );
+
+        let coordinates: Coordinates = coordinates::new(
+            coordinates_x,
+            coordinates_y,
+        );
+        let environment_roster_created = roster_create_environment_roster_logic::verify(
+            roster_id,
+            coordinates,
+            ship_resource_quantity,
+            ship_base_resource_quantity,
+            base_experience,
+            roster_table,
+            ctx,
+        );
+        let roster = roster_create_environment_roster_logic::mutate(
+            &environment_roster_created,
+            roster_table,
+            ctx,
+        );
+        roster::set_environment_roster_created_id(&mut environment_roster_created, roster::id(&roster));
+        roster::share_object(roster);
+        roster::emit_environment_roster_created(environment_roster_created);
+    }
+
     public(friend) fun add_ship(
         roster: &mut roster::Roster,
         ship: Ship,
         position: Option<u64>,
         ctx: &mut tx_context::TxContext,
     ) {
+        roster::assert_schema_version(roster);
         let roster_ship_added = roster_add_ship_logic::verify(
             &ship,
             position,
@@ -98,6 +143,7 @@ module infinite_sea::roster_aggregate {
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
+        roster::assert_schema_version(roster);
         let target_coordinates: Coordinates = coordinates::new(
             target_coordinates_x,
             target_coordinates_y,
@@ -123,6 +169,7 @@ module infinite_sea::roster_aggregate {
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
+        roster::assert_schema_version(roster);
         let roster_location_updated = roster_update_location_logic::verify(
             clock,
             roster,
@@ -144,6 +191,7 @@ module infinite_sea::roster_aggregate {
         ship_ids: vector<ID>,
         ctx: &mut tx_context::TxContext,
     ) {
+        roster::assert_schema_version(roster);
         let roster_ships_position_adjusted = roster_adjust_ships_position_logic::verify(
             player,
             positions,
@@ -168,6 +216,7 @@ module infinite_sea::roster_aggregate {
         to_position: Option<u64>,
         ctx: &mut tx_context::TxContext,
     ) {
+        roster::assert_schema_version(roster);
         let roster_ship_transferred = roster_transfer_ship_logic::verify(
             player,
             ship_id,
@@ -195,6 +244,7 @@ module infinite_sea::roster_aggregate {
         item_id_quantity_pairs_item_quantity_list: vector<u32>,
         ctx: &mut tx_context::TxContext,
     ) {
+        roster::assert_schema_version(roster);
         let item_id_quantity_pairs: ItemIdQuantityPairs = item_id_quantity_pairs::new(
             item_id_quantity_pairs_item_id_list,
             item_id_quantity_pairs_item_quantity_list,
@@ -224,6 +274,7 @@ module infinite_sea::roster_aggregate {
         item_id_quantity_pairs_item_quantity_list: vector<u32>,
         ctx: &mut tx_context::TxContext,
     ) {
+        roster::assert_schema_version(roster);
         let item_id_quantity_pairs: ItemIdQuantityPairs = item_id_quantity_pairs::new(
             item_id_quantity_pairs_item_id_list,
             item_id_quantity_pairs_item_quantity_list,
@@ -253,6 +304,7 @@ module infinite_sea::roster_aggregate {
         item_id_quantity_pairs_item_quantity_list: vector<u32>,
         ctx: &mut tx_context::TxContext,
     ) {
+        roster::assert_schema_version(roster);
         let item_id_quantity_pairs: ItemIdQuantityPairs = item_id_quantity_pairs::new(
             item_id_quantity_pairs_item_id_list,
             item_id_quantity_pairs_item_quantity_list,
