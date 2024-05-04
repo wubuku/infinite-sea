@@ -27,6 +27,7 @@ module infinite_sea::roster {
     friend infinite_sea::roster_aggregate;
 
     friend infinite_sea::ship_battle_initiate_battle_logic;
+    friend infinite_sea::ship_battle_make_move_logic;
     friend infinite_sea::ship_battle_take_loot_logic;
 
     const EIdAlreadyExists: u64 = 101;

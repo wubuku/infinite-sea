@@ -39,6 +39,27 @@ module infinite_sea::roster_util {
         speed / (l as u32)
     }
 
+    /// Returns true if all ships in the roster are destroyed except the ship with the given ID.
+    public fun is_destroyed_except_ship(roster: &Roster, ship: ID): bool {
+        let ship_ids = roster::borrow_ship_ids(roster);
+        let ships = roster::borrow_ships(roster);
+        let i = 0;
+        let l = vector::length(ship_ids);
+        while (i < l) {
+            let ship_id = *vector::borrow(ship_ids, i);
+            if (ship_id == ship) {
+                i = i + 1;
+                continue
+            };
+            let ship = object_table::borrow(ships, ship_id);
+            if (ship::health_points(ship) > 0) {
+                return false
+            };
+            i = i + 1;
+        };
+        true
+    }
+
     public fun is_destroyed(roster: &Roster): bool {
         let ship_ids = roster::borrow_ship_ids(roster);
         let ships = roster::borrow_ships(roster);

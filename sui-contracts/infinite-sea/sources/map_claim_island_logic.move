@@ -15,6 +15,7 @@ module infinite_sea::map_claim_island_logic {
 
     const ELocationTypeMismatch: u64 = 1;
     const EIslandAlreadyClaimed: u64 = 2;
+    const ELocationNotFound: u64 = 3;
 
     public(friend) fun verify(
         coordinates: Coordinates,
@@ -23,6 +24,7 @@ module infinite_sea::map_claim_island_logic {
         map: &map::Map,
         ctx: &TxContext,
     ): map::MapIslandClaimed {
+        assert!(map::locations_contains(map, coordinates), ELocationNotFound);
         let island = map::borrow_location(map, coordinates);
         assert!(map_location::type(island) == map_location_type::island(), ELocationTypeMismatch);
         assert!(option::is_none(&map_location::occupied_by(island)), EIslandAlreadyClaimed);

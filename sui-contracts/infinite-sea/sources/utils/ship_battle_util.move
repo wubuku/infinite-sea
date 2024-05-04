@@ -36,6 +36,15 @@ module infinite_sea::ship_battle_util {
         2
     }
 
+    /// Get the "opposite" side.
+    public fun opposite_side(side: u8): u8 {
+        if (side == initiator()) {
+            responder()
+        } else {
+            initiator()
+        }
+    }
+
     public fun assert_palyer_is_current_round_mover(player: &Player, ship_battle: &ShipBattle,
                                                     initiator: &Roster, responder: &Roster
     ) {
@@ -176,7 +185,7 @@ module infinite_sea::ship_battle_util {
         option::none()
     }
 
-    public fun perform_attack(self: &Ship, opponent: &Ship, clock: &Clock): u32 {
+    public fun perform_attack(self: &Ship, opponent: &Ship, clock: &Clock, round_number: u32): u32 {
         // Dodge check
         let dodge_chance = if (ship::protection(opponent) >= ship::attack(self)) {
             math::min(60, ((ship::protection(opponent) - ship::attack(self)) as u64) * 8 + 15)
@@ -184,6 +193,7 @@ module infinite_sea::ship_battle_util {
             0
         };
         let seed_1 = vector_util::concat_ids_bytes(&vector[ship::id(self), ship::id(opponent)]);
+        vector::append(&mut seed_1, bcs::to_bytes(&round_number));
         if (1 + ts_random_util::next_int(clock, seed_1, 100) <= dodge_chance) {
             return 0
         };
@@ -201,6 +211,8 @@ module infinite_sea::ship_battle_util {
         };
 
         let seed_2 = vector_util::concat_ids_bytes(&vector[ship::id(opponent), ship::id(self)]);
+        vector::append(&mut seed_2, bcs::to_bytes(&round_number));
+
         // Critical hit and miss logic
         let critical_hit_chance = 20;  // 20% chance for a critical hit
         let critical_miss_chance = 35;  // 35% chance for a critical miss

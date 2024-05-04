@@ -146,6 +146,7 @@ aggregates:
       CRUD_IT_NO_DELETE: true
       ShouldIssuePublisherObject: true
       DataAccessFriends:
+        - ShipBattle.MakeMove
         - ShipBattle.TakeLoot
     friends:
       - SkillProcess.CompleteShipProduction
@@ -196,6 +197,7 @@ aggregates:
         # Make some methods can access ("write") Roster's data model.
         # This should only be done occasionally!
         - ShipBattle.InitiateBattle
+        - ShipBattle.MakeMove
         - ShipBattle.TakeLoot
     friends:
       - Player.Create
