@@ -11,10 +11,15 @@ module infinite_sea::ship_battle_initiate_battle_logic {
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
     use infinite_sea::roster::{Self, Roster};
+    use infinite_sea::roster_util;
     use infinite_sea::ship_battle;
     use infinite_sea::ship_battle_util;
 
     friend infinite_sea::ship_battle_aggregate;
+
+    const EInitiatorNotBattleReady: u64 = 10;
+    const EResponderNotBattleReady: u64 = 11;
+    const ENotCloseEnoughToBattle: u64 = 12;
 
     const FIRST_ROUND_NUMBER: u32 = 1;
 
@@ -25,12 +30,28 @@ module infinite_sea::ship_battle_initiate_battle_logic {
         clock: &Clock,
         ctx: &mut TxContext,
     ): ship_battle::ShipBattleInitiated {
+        assert!(roster_util::is_status_battle_ready(initiator), EInitiatorNotBattleReady);
+        assert!(roster_util::is_status_battle_ready(responder), EResponderNotBattleReady);
         permission_util::assert_sender_is_player_owner(player, ctx);
         permission_util::assert_player_is_roster_owner(player, initiator);
-        //
-        // todo Update the positions of the two rosters and then determine if they are close enough to each other
-        //
         // todo more checks???
+
+        // Update the locations of the two rosters,
+        if (roster_status::underway() == roster::status(initiator)) {
+            //roster_aggregate::update_location(initiator, clock, ctx);
+            let (c, t, _new_status) = roster_util::calculate_current_location(initiator, clock);
+            roster::set_updated_coordinates(initiator, c);
+            roster::set_coordinates_updated_at(initiator, t);
+        };
+        if (roster_status::underway() == roster::status(responder)) {
+            //roster_aggregate::update_location(responder, clock, ctx);
+            let (c, t, _new_status) = roster_util::calculate_current_location(responder, clock);
+            roster::set_updated_coordinates(responder, c);
+            roster::set_coordinates_updated_at(responder, t);
+        };
+
+        // and then assert if they are close enough to each other
+        assert!(ship_battle_util::are_rosters_close_enough(initiator, responder), ENotCloseEnoughToBattle);
 
         let (attacker_ship_id, defender_ship_id, roster_indicator) = ship_battle_util::determine_attacker_and_defender(
             initiator, responder, clock, FIRST_ROUND_NUMBER
@@ -75,7 +96,7 @@ module infinite_sea::ship_battle_initiate_battle_logic {
         );
         ship_battle::set_round_number(&mut battle, FIRST_ROUND_NUMBER);
         let battle_id = ship_battle::id(&battle);
-        // update rosters with battle ID
+        // update status and battle_id fields in the rosters
         roster::set_status(initiator, roster_status::in_battle());
         roster::set_ship_battle_id(initiator, option::some(battle_id));
         roster::set_status(responder, roster_status::in_battle());

@@ -3,13 +3,23 @@ module infinite_sea::roster_util {
     use std::option::Option;
     use std::vector;
 
+    use sui::clock;
+    use sui::clock::Clock;
     use sui::object::ID;
     use sui::object_table;
+    use infinite_sea_common::coordinates::Coordinates;
+    use infinite_sea_common::direct_route_util;
+    use infinite_sea_common::roster_status;
+    use infinite_sea_common::speed_util;
 
     use infinite_sea::roster::{Self, Roster};
     use infinite_sea::ship;
 
     const EEmptyRosterShipIds: u64 = 1;
+
+    const EInvalidRoasterStatus: u64 = 10;
+    const ETargetCoordinatesNotSet: u64 = 11;
+    const EInvalidRoasterUpdateTime: u64 = 12;
 
     public fun add_ship_id(ship_ids: &mut vector<ID>, ship_id: ID, position: Option<u64>) {
         if (option::is_none(&position)) {
@@ -81,5 +91,39 @@ module infinite_sea::roster_util {
         let l = vector::length(ship_ids);
         assert!(l > 0, EEmptyRosterShipIds);
         *vector::borrow(ship_ids, l - 1)
+    }
+
+    /// Wether the status of the roster is battle ready.
+    public fun is_status_battle_ready(roster: &Roster): bool {
+        let s = roster::status(roster);
+        s == roster_status::at_anchor() || s == roster_status::underway()
+    }
+
+    /// Return current location of the roster, the now time and the new status of the roster.
+    public fun calculate_current_location(roster: &Roster, clock: &Clock): (Coordinates, u64, u8) {
+        let old_status = roster::status(roster);
+        let target_coordinates_o = roster::target_coordinates(roster);
+        assert!(roster_status::underway() == old_status, EInvalidRoasterStatus);
+        assert!(option::is_some(&target_coordinates_o), ETargetCoordinatesNotSet);
+
+        let target_coordinates = option::extract(&mut target_coordinates_o);
+        let updated_coordinates = roster::updated_coordinates(roster);
+        let coordinates_updated_at = roster::coordinates_updated_at(roster);
+        let new_status = old_status;
+        let (speed_numerator, speed_denominator) = speed_util::speed_to_coordinate_units_per_second(
+            roster::speed(roster)
+        );
+        let now_time = clock::timestamp_ms(clock) / 1000;
+        assert!(now_time >= coordinates_updated_at, EInvalidRoasterUpdateTime);
+        let elapsed_time = now_time - coordinates_updated_at;
+        updated_coordinates = direct_route_util::calculate_current_location(
+            updated_coordinates, target_coordinates,
+            speed_numerator, speed_denominator, elapsed_time
+        );
+        if (target_coordinates == updated_coordinates) {
+            new_status = roster_status::at_anchor();
+        };
+        coordinates_updated_at = now_time;
+        (updated_coordinates, coordinates_updated_at, new_status)
     }
 }

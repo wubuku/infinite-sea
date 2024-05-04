@@ -7,6 +7,7 @@ module infinite_sea::ship_battle_take_loot_logic {
     use sui::tx_context::TxContext;
     use infinite_sea_common::battle_status;
     use infinite_sea_common::item_id_quantity_pairs;
+    use infinite_sea_common::roster_status;
     use infinite_sea_common::vector_util;
 
     use infinite_sea::loot_util;
@@ -22,6 +23,7 @@ module infinite_sea::ship_battle_take_loot_logic {
     const EResponderNotDestroyed: u64 = 11;
     const EInvalidWinner: u64 = 12;
     const EBattleNotEnded: u64 = 13;
+    const EInvalidLoserStatus: u64 = 14;
 
     public(friend) fun verify(
         initiator: &mut Roster,
@@ -43,6 +45,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         } else {
             abort EInvalidWinner
         };
+        assert!(roster::status(loser) == roster_status::destroyed(), EInvalidLoserStatus);
         let ship_ids = roster::ship_ids(loser);
         let ships = roster::borrow_mut_ships(loser);
         let loot_item_ids = vector::empty<u32>();
@@ -88,6 +91,17 @@ module infinite_sea::ship_battle_take_loot_logic {
         let ship = object_table::borrow_mut(ships, last_ship_id);
         let inv = ship::borrow_mut_inventory(ship);
         vector_util::merge_item_id_quantity_pairs(inv, &loot);
+
+        roster::set_ship_battle_id(winner_roster, option::none());
+        let current_coordinates = roster::updated_coordinates(winner_roster);
+        let target_coordinates = roster::target_coordinates(winner_roster);
+        if (option::is_some(&target_coordinates) && *option::borrow(&target_coordinates) != current_coordinates) {
+            roster::set_status(winner_roster, roster_status::underway());
+        } else {
+            roster::set_status(winner_roster, roster_status::at_anchor());
+        };
+
+        ship_battle::set_status(ship_battle, battle_status::looted());
         //todo more operations?
     }
 }

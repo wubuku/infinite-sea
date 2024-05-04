@@ -50,8 +50,8 @@ module infinite_sea::roster_create_environment_roster_logic {
         let base_experience = roster::environment_roster_created_base_experience(environment_roster_created);
 
         let status = roster_status::at_anchor();
-        let speed = 0;//todo
-        let roster = roster::create_roster(roster_id, status, speed, sui::object_table::new(ctx),
+        let roster_speed = 0;
+        let roster = roster::create_roster(roster_id, status, roster_speed, sui::object_table::new(ctx),
             coordinates,
             0, //coordinates_updated_at,
             option::none(), //target_coordinates,
@@ -65,15 +65,16 @@ module infinite_sea::roster_create_environment_roster_logic {
             let player_id = roster_id::player_id(&roster_id);
 
             let building_expences_item_ids = vector[item_id::copper_ore(), item_id::normal_logs(), item_id::cottons()];
+            //todo distribute random resources based on ship_resource_quantity
             let building_expences_item_quantities = vector[ship_base_resource_quantity, ship_base_resource_quantity, ship_base_resource_quantity];
             let building_expences = item_id_quantity_pairs::new(
                 building_expences_item_ids,
                 building_expences_item_quantities
             );
-            let (health_points, attack, protection, speed) = ship_util::calculate_ship_attributes(
+            let (health_points, attack, protection, ship_speed) = ship_util::calculate_ship_attributes(
                 &item_id_quantity_pairs::items(&building_expences)
             );
-            let ship = ship_aggregate::create(player_id, health_points, attack, protection, speed,
+            let ship = ship_aggregate::create(player_id, health_points, attack, protection, ship_speed,
                 building_expences, ctx,
             );
 
@@ -83,11 +84,15 @@ module infinite_sea::roster_create_environment_roster_logic {
             let ships = roster::borrow_mut_ships(&mut roster);
             object_table::add(ships, ship_id, ship);
 
+            roster_speed = roster_speed + ship_speed;
+
             position = position + 1;
         };
 
-        let speed = roster_util::calculate_roster_speed(&roster);//todo better speed calculation?
-        roster::set_speed(&mut roster, speed);
+        roster_speed = roster_speed / (position as u32);
+        roster::set_speed(&mut roster, roster_speed);
+        roster::set_environment_owned(&mut roster, true);
+        roster::set_base_experience(&mut roster, option::some(base_experience));
 
         roster
     }

@@ -8,6 +8,7 @@ module infinite_sea::ship_battle_util {
     use sui::math;
     use sui::object::ID;
     use sui::object_table;
+    use infinite_sea_common::direct_route_util;
     use infinite_sea_common::ts_random_util;
     use infinite_sea_common::vector_util;
 
@@ -27,6 +28,8 @@ module infinite_sea::ship_battle_util {
     const EShipNotFoundById: u64 = 21;
     const ENoLivingShips: u64 = 22;
     const ENoRoundMover: u64 = 23;
+
+    const MIN_DISTANCE_TO_BATTLE: u64 = 3; //todo is it ok?
 
     public fun initiator(): u8 {
         1
@@ -71,6 +74,14 @@ module infinite_sea::ship_battle_util {
 
         let responder_id = ship_battle::responder(ship_battle);
         assert!(responder_id == roster::id(responder), EResponderIdMismatch);
+    }
+
+    /// Check if the two rosters are close enough to initiate a battle.
+    public fun are_rosters_close_enough(roster_1: &Roster, roster_2: &Roster): bool {
+        let c_1 = roster::updated_coordinates(roster_1);
+        let c_2 = roster::updated_coordinates(roster_2);
+        let d = direct_route_util::get_distance(c_1, c_2);
+        d <= MIN_DISTANCE_TO_BATTLE
     }
 
     /// Returns the ID of the attacker ship that should go first in the battle round, the ID of the defender ship,
