@@ -351,8 +351,7 @@ module infinite_sea::ship_battle {
 
 
     #[lint_allow(share_owned)]
-    public(friend) fun share_object(ship_battle: ShipBattle) {
-        assert!(ship_battle.version == 0, EInappropriateVersion);
+    public fun share_object(ship_battle: ShipBattle) {
         transfer::share_object(ship_battle);
     }
 

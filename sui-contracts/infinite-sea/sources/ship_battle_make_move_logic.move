@@ -8,6 +8,7 @@ module infinite_sea::ship_battle_make_move_logic {
     use sui::object_table;
     use sui::tx_context::TxContext;
     use infinite_sea_common::battle_status;
+    use infinite_sea_common::ship_battle_command;
 
     use infinite_sea::player::Player;
     use infinite_sea::roster;
@@ -31,15 +32,18 @@ module infinite_sea::ship_battle_make_move_logic {
         responder: &Roster,
         clock: &Clock,
         attacker_command: u8,
-        defender_command: u8,
         ship_battle: &ship_battle::ShipBattle,
         ctx: &TxContext,
     ): ship_battle::ShipBattleMoveMade {
         ship_battle_util::assert_ids_are_consistent(ship_battle, initiator, responder);
+
+        let defender_command: u8 = ship_battle_command::attack();//Unused for now
+        let _ = player; //Unused for now
         //
         //permission_util::assert_sender_is_player_owner(player, ctx);
         //ship_battle_util::assert_palyer_is_current_round_mover(player, ship_battle, initiator, responder); //NOTE!
         //
+
         let now_time = clock::timestamp_ms(clock) / 1000;
         let current_round_number = ship_battle::round_number(ship_battle);
 
@@ -147,6 +151,8 @@ module infinite_sea::ship_battle_make_move_logic {
         //let attacker_command = ship_battle::ship_battle_move_made_attacker_command(ship_battle_move_made);
         //let id = ship_battle::id(ship_battle);
         let round_mover = ship_battle::round_mover(ship_battle);
+        let defender_damage_taken = ship_battle::ship_battle_move_made_defender_damage_taken(ship_battle_move_made);
+        let attacker_damage_taken = ship_battle::ship_battle_move_made_attacker_damage_taken(ship_battle_move_made);
         let attacker_ship_id = ship_battle::round_attacker_ship(ship_battle);
         let defender_ship_id = ship_battle::round_defender_ship(ship_battle);
         let attacker_roster: &mut Roster;
@@ -162,8 +168,6 @@ module infinite_sea::ship_battle_make_move_logic {
         let defender_ships = roster::borrow_mut_ships(defender_roster);
         let attacker_ship = object_table::borrow_mut(attacker_ships, *option::borrow(&attacker_ship_id));
         let defender_ship = object_table::borrow_mut(defender_ships, *option::borrow(&defender_ship_id));
-        let defender_damage_taken = ship_battle::ship_battle_move_made_defender_damage_taken(ship_battle_move_made);
-        let attacker_damage_taken = ship_battle::ship_battle_move_made_attacker_damage_taken(ship_battle_move_made);
         let defender_ship_hp = ship::health_points(defender_ship);
         let attacker_ship_hp = ship::health_points(attacker_ship);
         ship::set_health_points(defender_ship, defender_ship_hp - defender_damage_taken);

@@ -27,6 +27,7 @@ module infinite_sea::roster_aggregate {
     friend infinite_sea::player_create_logic;
     friend infinite_sea::player_claim_island_logic;
     friend infinite_sea::skill_process_complete_ship_production_logic;
+    friend infinite_sea::ship_battle_service;
     friend infinite_sea::skill_process_service;
 
     public(friend) fun create(

@@ -13,15 +13,16 @@ module infinite_sea::ship_battle_aggregate {
     use sui::clock::Clock;
     use sui::tx_context;
 
+    friend infinite_sea::ship_battle_service;
     friend infinite_sea::skill_process_service;
 
-    public entry fun initiate_battle(
+    public fun initiate_battle(
         player: &Player,
         initiator: &mut Roster,
         responder: &mut Roster,
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
-    ) {
+    ): ship_battle::ShipBattle {
         let ship_battle_initiated = ship_battle_initiate_battle_logic::verify(
             player,
             initiator,
@@ -36,8 +37,8 @@ module infinite_sea::ship_battle_aggregate {
             ctx,
         );
         ship_battle::set_ship_battle_initiated_id(&mut ship_battle_initiated, ship_battle::id(&ship_battle));
-        ship_battle::share_object(ship_battle);
         ship_battle::emit_ship_battle_initiated(ship_battle_initiated);
+        ship_battle
     }
 
     public entry fun make_move(
@@ -47,7 +48,6 @@ module infinite_sea::ship_battle_aggregate {
         responder: &mut Roster,
         clock: &Clock,
         attacker_command: u8,
-        defender_command: u8,
         ctx: &mut tx_context::TxContext,
     ) {
         let ship_battle_move_made = ship_battle_make_move_logic::verify(
@@ -56,7 +56,6 @@ module infinite_sea::ship_battle_aggregate {
             responder,
             clock,
             attacker_command,
-            defender_command,
             ship_battle,
             ctx,
         );

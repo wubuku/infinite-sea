@@ -391,6 +391,8 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+        result:
+          isObjectReturned: true
         event:
           name: ShipBattleInitiated
           isObjectShared: true
@@ -429,11 +431,11 @@ aggregates:
             isIgnoredInEvent: true
           AttackerCommand:
             type: ShipBattleCommand
-          DefenderCommand:
-            type: ShipBattleCommand
         event:
           name: ShipBattleMoveMade
           properties:
+            DefenderCommand:
+              type: ShipBattleCommand
             RoundNumber:
               type: u32
             DefenderDamageTaken:
@@ -744,3 +746,20 @@ singletonObjects:
             itemType: ItemIdQuantityPair
           GatheredAt:
             type: u64
+
+services:
+  ShipBattleService:
+    methods:
+      InitiateBattleAndAutoPlayTillEnd:
+        parameters:
+          Player:
+            referenceType: Player
+          Initiator:
+            referenceType: Roster
+            isMutableReference: true
+          Responder:
+            referenceType: Roster
+            isMutableReference: true
+          Clock:
+            referenceType: Clock
+

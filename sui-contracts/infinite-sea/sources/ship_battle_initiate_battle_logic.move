@@ -27,6 +27,9 @@ module infinite_sea::ship_battle_initiate_battle_logic {
     ): ship_battle::ShipBattleInitiated {
         permission_util::assert_sender_is_player_owner(player, ctx);
         permission_util::assert_player_is_roster_owner(player, initiator);
+        //
+        // todo Update the positions of the two rosters and then determine if they are close enough to each other
+        //
         // todo more checks???
 
         let (attacker_ship_id, defender_ship_id, roster_indicator) = ship_battle_util::determine_attacker_and_defender(
