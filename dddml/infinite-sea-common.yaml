@@ -2,7 +2,7 @@ aggregates:
   Item:
     module: "Common"
     metadata:
-      Preprocessors: ["MOVE_CRUD_IT"]
+      Preprocessors: [ "MOVE_CRUD_IT" ]
       #CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
       ShouldIssuePublisherObject: true
@@ -34,7 +34,7 @@ aggregates:
   ItemCreation:
     module: "Common"
     metadata:
-      Preprocessors: ["MOVE_CRUD_IT"]
+      Preprocessors: [ "MOVE_CRUD_IT" ]
       #CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
     implements:
@@ -60,7 +60,7 @@ aggregates:
   ItemProduction:
     module: "Common"
     metadata:
-      Preprocessors: ["MOVE_CRUD_IT"]
+      Preprocessors: [ "MOVE_CRUD_IT" ]
       #CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
     implements:
@@ -218,8 +218,7 @@ valueObjects:
         type: u32
       Quantity:
         type: u32
-        #1  Copper Ore
-        #1  Tin Ore
+
 
   Coordinates:
     module: "Common"

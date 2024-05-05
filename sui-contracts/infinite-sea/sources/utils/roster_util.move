@@ -9,17 +9,39 @@ module infinite_sea::roster_util {
     use sui::object_table;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::direct_route_util;
+    use infinite_sea_common::roster_id;
+    use infinite_sea_common::roster_id::RosterId;
+    use infinite_sea_common::roster_sequence_number;
     use infinite_sea_common::roster_status;
     use infinite_sea_common::speed_util;
 
+    use infinite_sea::player;
+    use infinite_sea::player::Player;
     use infinite_sea::roster::{Self, Roster};
     use infinite_sea::ship;
 
     const EEmptyRosterShipIds: u64 = 1;
 
-    const EInvalidRoasterStatus: u64 = 10;
+    const EInvalidRosterStatus: u64 = 10;
     const ETargetCoordinatesNotSet: u64 = 11;
     const EInvalidRoasterUpdateTime: u64 = 12;
+    const EPayerHasNoClaimedIsland: u64 = 21;
+    const ERosterNotAnchoredAtIsland: u64 = 22;
+
+    /// Assert that the roster is anchored at the island claimed by the player.
+    public fun assert_roster_is_anchored_at_claimed_island(roster: &Roster, player: &Player) {
+        let status = roster::status(roster);
+        assert!(status == roster_status::at_anchor(), EInvalidRosterStatus);
+        let claimed_island_coordinates = player::claimed_island(player);
+        assert!(option::is_some(&claimed_island_coordinates), EPayerHasNoClaimedIsland);
+        let ros = roster::updated_coordinates(roster);
+        assert!(ros == *option::borrow(&claimed_island_coordinates), ERosterNotAnchoredAtIsland);
+    }
+
+    /// Wether the sequence number of the "player" roster is valid.
+    public fun is_valid_roster_id_sequence_number(roster_id: &RosterId): bool {
+        roster_id::sequence_number(roster_id) <= roster_sequence_number::fourth() //todo Is this ok?
+    }
 
     public fun add_ship_id(ship_ids: &mut vector<ID>, ship_id: ID, position: Option<u64>) {
         if (option::is_none(&position)) {
@@ -103,7 +125,7 @@ module infinite_sea::roster_util {
     public fun calculate_current_location(roster: &Roster, clock: &Clock): (Coordinates, u64, u8) {
         let old_status = roster::status(roster);
         let target_coordinates_o = roster::target_coordinates(roster);
-        assert!(roster_status::underway() == old_status, EInvalidRoasterStatus);
+        assert!(roster_status::underway() == old_status, EInvalidRosterStatus);
         assert!(option::is_some(&target_coordinates_o), ETargetCoordinatesNotSet);
 
         let target_coordinates = option::extract(&mut target_coordinates_o);

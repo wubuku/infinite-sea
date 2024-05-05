@@ -141,13 +141,15 @@ aggregates:
   Ship:
     metadata:
       HasStoreAbility: true
-      Preprocessors: ["MOVE_CRUD_IT"]
+      Preprocessors: [ "MOVE_CRUD_IT" ]
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
       ShouldIssuePublisherObject: true
       DataAccessFriends:
         - ShipBattle.MakeMove
         - ShipBattle.TakeLoot
+        - Roster.PutInShipInventory
+        - Roster.TakeOutShipInventory
     friends:
       - SkillProcess.CompleteShipProduction
       #- SkillProcess.StartShipProduction
@@ -190,7 +192,7 @@ aggregates:
         tableName: RosterTable
     metadata:
       #HasStoreAbility: true
-      Preprocessors: ["MOVE_CRUD_IT"]
+      Preprocessors: [ "MOVE_CRUD_IT" ]
       CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
       ShouldIssuePublisherObject: true
@@ -244,7 +246,11 @@ aggregates:
           Move: "std::option::none()"
       EnergyVault:
         type: "Balance<ENERGY>"
-
+#      CurrentSailEnergyCost:
+#        type: u64
+#        optional: true
+#        defaultLogic:
+#          Move: "std::option::none()"
     methods:
       Create:
         isInternal: true
@@ -550,7 +556,7 @@ aggregates:
 
 #  SkillProcessMutex:
 #    metadata:
-#      Preprocessors: ["MOVE_CRUD_IT"]
+#      Preprocessors: [ "MOVE_CRUD_IT" ]
 #      CRUD_IT_NO_UPDATE: true
 #      CRUD_IT_NO_DELETE: true
 #      MOVE_AGGREGATE_MODULE_ATTRIBUTES: "#[allow(unused_mut_parameter)]"
@@ -732,6 +738,9 @@ superObjects:
           Player:
             referenceType: Player
             isMutableReference: true
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
             isIgnoredInEvent: true
           ShipId:
             type: ID

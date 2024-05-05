@@ -11,6 +11,8 @@ module infinite_sea::roster_create_logic {
 
     friend infinite_sea::roster_aggregate;
 
+    const EInvalidRosterSequenceNumber: u64 = 10;
+
     public(friend) fun verify(
         roster_id: RosterId,
         status: u8,
@@ -22,6 +24,7 @@ module infinite_sea::roster_create_logic {
         roster_id_table: &roster::RosterTable,
         ctx: &mut TxContext,
     ): roster::RosterCreated {
+        assert!(infinite_sea::roster_util::is_valid_roster_id_sequence_number(&roster_id), EInvalidRosterSequenceNumber);
         let _ = ctx;
         roster::asset_roster_id_not_exists(roster_id, roster_id_table);
         roster::new_roster_created(

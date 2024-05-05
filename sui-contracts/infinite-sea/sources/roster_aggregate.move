@@ -275,6 +275,7 @@ module infinite_sea::roster_aggregate {
     public entry fun take_out_ship_inventory(
         roster: &mut roster::Roster,
         player: &mut Player,
+        clock: &Clock,
         ship_id: ID,
         item_id_quantity_pairs_item_id_list: vector<u32>,
         item_id_quantity_pairs_item_quantity_list: vector<u32>,
@@ -287,6 +288,7 @@ module infinite_sea::roster_aggregate {
         );
         let roster_ship_inventory_taken_out = roster_take_out_ship_inventory_logic::verify(
             player,
+            clock,
             ship_id,
             item_id_quantity_pairs,
             roster,
@@ -305,6 +307,7 @@ module infinite_sea::roster_aggregate {
     public entry fun put_in_ship_inventory(
         roster: &mut roster::Roster,
         player: &mut Player,
+        clock: &Clock,
         ship_id: ID,
         item_id_quantity_pairs_item_id_list: vector<u32>,
         item_id_quantity_pairs_item_quantity_list: vector<u32>,
@@ -317,6 +320,7 @@ module infinite_sea::roster_aggregate {
         );
         let roster_ship_inventory_put_in = roster_put_in_ship_inventory_logic::verify(
             player,
+            clock,
             ship_id,
             item_id_quantity_pairs,
             roster,

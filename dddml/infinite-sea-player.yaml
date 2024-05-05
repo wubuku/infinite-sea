@@ -2,13 +2,15 @@ aggregates:
   Player:
     #module: "Player"
     metadata:
-      #Preprocessors: ["MOVE_CRUD_IT"]
+      #Preprocessors: [ "MOVE_CRUD_IT" ]
       #CRUD_IT_NO_UPDATE: true
       #CRUD_IT_NO_DELETE: true
       #NO_MOVE_EVENT_MODULE: true
       ShouldIssuePublisherObject: true
       MOVE_AGGREGATE_MODULE_ATTRIBUTES: "#[allow(unused_mut_parameter, unused_use)]"
-
+      DataAccessFriends:
+        - Roster.PutInShipInventory
+        - Roster.TakeOutShipInventory
     friends:
       - SkillProcess.StartProduction
       - SkillProcess.CompleteProduction
@@ -16,8 +18,8 @@ aggregates:
       - SkillProcess.CompleteShipProduction
       - SkillProcess.StartCreation
       - SkillProcess.CompleteCreation
-#      - SkillProcess.StartMutexCreation
-#      - SkillProcess.CompleteMutexCreation
+      #- SkillProcess.StartMutexCreation
+      #- SkillProcess.CompleteMutexCreation
     id:
       name: Id
       type: UID
