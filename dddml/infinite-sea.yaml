@@ -242,6 +242,8 @@ aggregates:
         description: "The base experience value gained by the player when the roster is destroyed"
         defaultLogic:
           Move: "std::option::none()"
+      EnergyVault:
+        type: "Balance<ENERGY>"
 
     methods:
       Create:
@@ -289,6 +291,9 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          Energy:
+            type: "Balance<ENERGY>"
+            eventPropertyName: EnergyCost
         event:
           name: RosterSetSail
           properties:
@@ -296,6 +301,8 @@ aggregates:
               type: u64
             UpdatedCoordinates:
               type: Coordinates
+            EnergyCost:
+              type: u64
 
       UpdateLocation:
         parameters:

@@ -167,7 +167,7 @@ module infinite_sea::ship_battle_util {
             if (ship::health_points(ship) > 0) {
                 let s = bcs::to_bytes(&i);
                 vector::append(&mut s, seed);
-                let initiative = 1 + ts_random_util::next_int(clock, s, 8) + (ship::speed(ship) as u64);
+                let initiative = 1 + ts_random_util::get_int(clock, s, 8) + (ship::speed(ship) as u64);
                 //vector::push_back(&mut turn_order, ship_id);
                 if (initiative > max_initiative) {
                     max_initiative = initiative;
@@ -210,7 +210,7 @@ module infinite_sea::ship_battle_util {
         };
         let seed_1 = vector_util::concat_ids_bytes(&vector[ship::id(self), ship::id(opponent)]);
         vector::append(&mut seed_1, bcs::to_bytes(&round_number));
-        if (1 + ts_random_util::next_int(clock, seed_1, 100) <= dodge_chance) {
+        if (1 + ts_random_util::get_int(clock, seed_1, 100) <= dodge_chance) {
             return 0
         };
 
@@ -232,7 +232,7 @@ module infinite_sea::ship_battle_util {
         // Critical hit and miss logic
         let critical_hit_chance = 20;  // 20% chance for a critical hit
         let critical_miss_chance = 35;  // 35% chance for a critical miss
-        if (ts_random_util::next_int(clock, seed_2, 100) < critical_miss_chance) {
+        if (ts_random_util::get_int(clock, seed_2, 100) < critical_miss_chance) {
             // Critical miss negates all damage
             return 0
         } else {
@@ -240,7 +240,7 @@ module infinite_sea::ship_battle_util {
             vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(opponent)));
             vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(self)));
             vector::append(&mut seed_3, seed_2);
-            if (ts_random_util::next_int(clock, seed_3, 100) < critical_hit_chance) {
+            if (ts_random_util::get_int(clock, seed_3, 100) < critical_hit_chance) {
                 // Critical hit doubles the damage
                 //damage *= 1.5;
                 damage = damage * 3 / 2;

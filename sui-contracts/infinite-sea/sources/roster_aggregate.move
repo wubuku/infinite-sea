@@ -17,10 +17,12 @@ module infinite_sea::roster_aggregate {
     use infinite_sea::roster_transfer_ship_logic;
     use infinite_sea::roster_update_location_logic;
     use infinite_sea::ship::Ship;
+    use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_common::item_id_quantity_pairs::{Self, ItemIdQuantityPairs};
     use infinite_sea_common::roster_id::{Self, RosterId};
     use std::option::Option;
+    use sui::balance::Balance;
     use sui::clock::Clock;
     use sui::object::ID;
     use sui::tx_context;
@@ -136,12 +138,13 @@ module infinite_sea::roster_aggregate {
         roster::emit_roster_ship_added(roster_ship_added);
     }
 
-    public entry fun set_sail(
+    public fun set_sail(
         roster: &mut roster::Roster,
         player: &Player,
         target_coordinates_x: u32,
         target_coordinates_y: u32,
         clock: &Clock,
+        energy: Balance<ENERGY>,
         ctx: &mut tx_context::TxContext,
     ) {
         roster::assert_schema_version(roster);
@@ -153,11 +156,13 @@ module infinite_sea::roster_aggregate {
             player,
             target_coordinates,
             clock,
+            &energy,
             roster,
             ctx,
         );
         roster_set_sail_logic::mutate(
             &roster_set_sail,
+            energy,
             roster,
             ctx,
         );

@@ -80,7 +80,7 @@ module infinite_sea::roster_create_environment_roster_logic {
             if (position == number_of_ships - 1) {
                 current_resource_quantity = current_resource_quantity + (ship_resource_quantity % number_of_ships);
             };
-            let random_resource_quantities = ts_random_util::split_int_with_epoch_timestamp_ms(
+            let random_resource_quantities = ts_random_util::divide_int_with_epoch_timestamp_ms(
                 ctx,
                 object::id_to_bytes(&roster::id(&roster)),
                 ((current_resource_quantity - ship_base_resource_quantity * 3) as u64),

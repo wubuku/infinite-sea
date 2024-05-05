@@ -5,10 +5,12 @@
 
 module infinite_sea::roster {
     use infinite_sea::ship::Ship;
+    use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use infinite_sea_common::roster_id::RosterId;
     use std::option::{Self, Option};
+    use sui::balance::Balance;
     use sui::event;
     use sui::object::{Self, ID, UID};
     use sui::object_table::ObjectTable;
@@ -97,6 +99,7 @@ module infinite_sea::roster {
         ship_battle_id: Option<ID>,
         environment_owned: bool,
         base_experience: Option<u32>,
+        energy_vault: Balance<ENERGY>,
     }
 
     public fun id(roster: &Roster): object::ID {
@@ -199,6 +202,14 @@ module infinite_sea::roster {
         roster.base_experience = base_experience;
     }
 
+    public fun borrow_energy_vault(roster: &Roster): &Balance<ENERGY> {
+        &roster.energy_vault
+    }
+
+    public(friend) fun borrow_mut_energy_vault(roster: &mut Roster): &mut Balance<ENERGY> {
+        &mut roster.energy_vault
+    }
+
     public fun admin_cap(roster: &Roster): ID {
         roster.admin_cap
     }
@@ -235,6 +246,7 @@ module infinite_sea::roster {
             ship_battle_id,
             environment_owned: false,
             base_experience: std::option::none(),
+            energy_vault: sui::balance::zero(),
         }
     }
 
@@ -416,6 +428,7 @@ module infinite_sea::roster {
         target_coordinates: Coordinates,
         set_sail_at: u64,
         updated_coordinates: Coordinates,
+        energy_cost: u64,
     }
 
     public fun roster_set_sail_id(roster_set_sail: &RosterSetSail): object::ID {
@@ -438,11 +451,16 @@ module infinite_sea::roster {
         roster_set_sail.updated_coordinates
     }
 
+    public fun roster_set_sail_energy_cost(roster_set_sail: &RosterSetSail): u64 {
+        roster_set_sail.energy_cost
+    }
+
     public(friend) fun new_roster_set_sail(
         roster: &Roster,
         target_coordinates: Coordinates,
         set_sail_at: u64,
         updated_coordinates: Coordinates,
+        energy_cost: u64,
     ): RosterSetSail {
         RosterSetSail {
             id: id(roster),
@@ -451,6 +469,7 @@ module infinite_sea::roster {
             target_coordinates,
             set_sail_at,
             updated_coordinates,
+            energy_cost,
         }
     }
 
@@ -778,9 +797,11 @@ module infinite_sea::roster {
             ship_battle_id: _ship_battle_id,
             environment_owned: _environment_owned,
             base_experience: _base_experience,
+            energy_vault,
         } = roster;
         object::delete(id);
         sui::object_table::destroy_empty(ships);
+        sui::balance::destroy_zero(energy_vault);
     }
 
     public(friend) fun emit_roster_created(roster_created: RosterCreated) {
