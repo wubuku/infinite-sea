@@ -58,8 +58,8 @@ module infinite_sea::roster_create_environment_roster_logic {
         let base_experience = roster::environment_roster_created_base_experience(environment_roster_created);
 
         let status = roster_status::at_anchor();
-        let roster_speed = 0;
-        let roster = roster::create_roster(roster_id, status, roster_speed, sui::object_table::new(ctx),
+        let total_roster_speed = 0;
+        let roster = roster::create_roster(roster_id, status, total_roster_speed, sui::object_table::new(ctx),
             coordinates,
             0, //coordinates_updated_at,
             option::none(), //target_coordinates,
@@ -108,12 +108,12 @@ module infinite_sea::roster_create_environment_roster_logic {
             let ships = roster::borrow_mut_ships(&mut roster);
             object_table::add(ships, ship_id, ship);
 
-            roster_speed = roster_speed + ship_speed;
+            total_roster_speed = total_roster_speed + ship_speed;
 
             position = position + 1;
         };
 
-        roster_speed = roster_speed / (position as u32);
+        let roster_speed = total_roster_speed / number_of_ships;
         roster::set_speed(&mut roster, roster_speed);
         roster::set_environment_owned(&mut roster, true);
         roster::set_base_experience(&mut roster, option::some(base_experience));
