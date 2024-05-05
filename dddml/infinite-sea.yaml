@@ -530,6 +530,7 @@ aggregates:
         parameters:
           Player:
             referenceType: Player
+            isMutableReference: true
             isIgnoredInEvent: true
           Initiator:
             referenceType: Roster
@@ -538,6 +539,9 @@ aggregates:
           Responder:
             referenceType: Roster
             isMutableReference: true
+            isIgnoredInEvent: true
+          ExperienceTable:
+            referenceType: ExperienceTable
             isIgnoredInEvent: true
           Clock:
             referenceType: Clock
@@ -552,6 +556,10 @@ aggregates:
           properties:
             Loot:
               itemType: ItemIdQuantityPair
+            IncreasedExperience:
+              type: u32
+            NewLevel:
+              type: u16
 
 
 #  SkillProcessMutex:

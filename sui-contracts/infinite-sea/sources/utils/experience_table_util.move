@@ -12,11 +12,11 @@ module infinite_sea::experience_table_util {
     public fun calculate_new_level(
         player: &Player,
         experience_table: &ExperienceTable,
-        added_experience: u32,
+        increased_experience: u32,
     ): u16 {
         let old_level = player::level(player);
         let old_experience = player::experience(player);
-        let new_experience = old_experience + added_experience;
+        let new_experience = old_experience + increased_experience;
         let new_level = old_level;
         let xp_levels = experience_table::borrow_levels(experience_table);
         let xp_levels_len = vector::length(xp_levels);

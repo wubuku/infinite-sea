@@ -11,6 +11,7 @@ aggregates:
       DataAccessFriends:
         - Roster.PutInShipInventory
         - Roster.TakeOutShipInventory
+        - ShipBattle.TakeLoot
     friends:
       - SkillProcess.StartProduction
       - SkillProcess.CompleteProduction

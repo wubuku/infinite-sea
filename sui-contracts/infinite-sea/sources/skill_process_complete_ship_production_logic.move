@@ -70,8 +70,8 @@ module infinite_sea::skill_process_complete_ship_production_logic {
 
         let successful = true; //todo
         let quantity = item_production::base_quantity(item_production);
-        let added_experience = item_production::base_experience(item_production);
-        let new_level = experience_table_util::calculate_new_level(player, experience_table, added_experience);
+        let increased_experience = item_production::base_experience(item_production);
+        let new_level = experience_table_util::calculate_new_level(player, experience_table, increased_experience);
         skill_process::new_ship_production_process_completed(
             skill_process,
             item_id,
@@ -80,7 +80,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
             ended_at,
             successful,
             quantity,
-            added_experience,
+            increased_experience,
             new_level,
         )
     }

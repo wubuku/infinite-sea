@@ -51,8 +51,8 @@ module infinite_sea::skill_process_complete_creation_logic {
 
         let successful = true; //todo
         let quantity = item_creation::base_quantity(item_creation);
-        let added_experience = item_creation::base_experience(item_creation);
-        let new_level = experience_table_util::calculate_new_level(player, experience_table, added_experience);
+        let increased_experience = item_creation::base_experience(item_creation);
+        let new_level = experience_table_util::calculate_new_level(player, experience_table, increased_experience);
         skill_process::new_creation_process_completed(
             skill_process,
             item_id,
@@ -61,7 +61,7 @@ module infinite_sea::skill_process_complete_creation_logic {
             ended_at,
             successful,
             quantity,
-            added_experience,
+            increased_experience,
             new_level,
         )
     }

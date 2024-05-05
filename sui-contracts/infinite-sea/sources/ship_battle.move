@@ -329,6 +329,8 @@ module infinite_sea::ship_battle {
         version: u64,
         choice: u8,
         loot: vector<ItemIdQuantityPair>,
+        increased_experience: u32,
+        new_level: u16,
     }
 
     public fun ship_battle_loot_taken_id(ship_battle_loot_taken: &ShipBattleLootTaken): object::ID {
@@ -343,16 +345,28 @@ module infinite_sea::ship_battle {
         ship_battle_loot_taken.loot
     }
 
+    public fun ship_battle_loot_taken_increased_experience(ship_battle_loot_taken: &ShipBattleLootTaken): u32 {
+        ship_battle_loot_taken.increased_experience
+    }
+
+    public fun ship_battle_loot_taken_new_level(ship_battle_loot_taken: &ShipBattleLootTaken): u16 {
+        ship_battle_loot_taken.new_level
+    }
+
     public(friend) fun new_ship_battle_loot_taken(
         ship_battle: &ShipBattle,
         choice: u8,
         loot: vector<ItemIdQuantityPair>,
+        increased_experience: u32,
+        new_level: u16,
     ): ShipBattleLootTaken {
         ShipBattleLootTaken {
             id: id(ship_battle),
             version: version(ship_battle),
             choice,
             loot,
+            increased_experience,
+            new_level,
         }
     }
 

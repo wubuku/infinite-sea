@@ -6,11 +6,14 @@ module infinite_sea::ship_battle_take_loot_logic {
     use sui::clock::Clock;
     use sui::object_table;
     use sui::tx_context::TxContext;
+    use infinite_sea::player;
     use infinite_sea_common::battle_status;
+    use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id_quantity_pairs;
     use infinite_sea_common::roster_status;
     use infinite_sea_common::vector_util;
 
+    use infinite_sea::experience_table_util;
     use infinite_sea::loot_util;
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
@@ -35,9 +38,10 @@ module infinite_sea::ship_battle_take_loot_logic {
     const CHOICE_LEAVE_IT: u8 = 0;
 
     public(friend) fun verify(
-        player: &Player,
+        player: &mut Player,
         initiator: &mut Roster,
         responder: &mut Roster,
+        experience_table: &ExperienceTable,
         clock: &Clock,
         choice: u8,
         ship_battle: &ship_battle::ShipBattle,
@@ -85,15 +89,26 @@ module infinite_sea::ship_battle_take_loot_logic {
             ship::drop_ship(ship); // Maybe remove and drop ship in "mutate" function would be better?
             i = i + 1;
         };
+        let increased_experience = 0;
+        let base_experience = roster::base_experience(loser_roster);
+        if (roster::environment_owned(loser_roster)) {
+            if (option::is_some(&base_experience)) {
+                increased_experience = *option::borrow(&base_experience);
+            };
+        } else {
+            increased_experience = 100; //TODO: hard-coded here?
+        };
         item_id_quantity_pairs::new(loot_item_ids, loot_item_quantities);
+        let new_level = experience_table_util::calculate_new_level(player, experience_table, increased_experience);
         ship_battle::new_ship_battle_loot_taken(
-            ship_battle, choice,
-            vector_util::new_item_id_quantity_pairs(loot_item_ids, loot_item_quantities)
+            ship_battle, choice, vector_util::new_item_id_quantity_pairs(loot_item_ids, loot_item_quantities),
+            increased_experience, new_level,
         )
     }
 
     public(friend) fun mutate(
         ship_battle_loot_taken: &ship_battle::ShipBattleLootTaken,
+        player: &mut Player,
         initiator: &mut Roster,
         responder: &mut Roster,
         ship_battle: &mut ship_battle::ShipBattle,
@@ -101,6 +116,12 @@ module infinite_sea::ship_battle_take_loot_logic {
     ) {
         let winner = option::extract(&mut ship_battle::winner(ship_battle));
         let loot = ship_battle::ship_battle_loot_taken_loot(ship_battle_loot_taken);
+        let increased_experience = ship_battle::ship_battle_loot_taken_increased_experience(ship_battle_loot_taken);
+        let new_level = ship_battle::ship_battle_loot_taken_new_level(ship_battle_loot_taken);
+        let old_experience = player::experience(player);
+        player::set_experience(player, old_experience + increased_experience);
+        player::set_level(player, new_level);
+
         //let id = ship_battle::id(ship_battle);
         let winner_roster: &mut Roster;
         if (winner == ship_battle_util::initiator()) {

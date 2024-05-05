@@ -10,6 +10,7 @@ module infinite_sea::ship_battle_aggregate {
     use infinite_sea::ship_battle_initiate_battle_logic;
     use infinite_sea::ship_battle_make_move_logic;
     use infinite_sea::ship_battle_take_loot_logic;
+    use infinite_sea_common::experience_table::ExperienceTable;
     use sui::clock::Clock;
     use sui::tx_context;
 
@@ -72,9 +73,10 @@ module infinite_sea::ship_battle_aggregate {
 
     public entry fun take_loot(
         ship_battle: &mut ship_battle::ShipBattle,
-        player: &Player,
+        player: &mut Player,
         initiator: &mut Roster,
         responder: &mut Roster,
+        experience_table: &ExperienceTable,
         clock: &Clock,
         choice: u8,
         ctx: &mut tx_context::TxContext,
@@ -83,6 +85,7 @@ module infinite_sea::ship_battle_aggregate {
             player,
             initiator,
             responder,
+            experience_table,
             clock,
             choice,
             ship_battle,
@@ -90,6 +93,7 @@ module infinite_sea::ship_battle_aggregate {
         );
         ship_battle_take_loot_logic::mutate(
             &ship_battle_loot_taken,
+            player,
             initiator,
             responder,
             ship_battle,
