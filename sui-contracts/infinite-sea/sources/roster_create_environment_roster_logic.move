@@ -1,7 +1,9 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::roster_create_environment_roster_logic {
     use std::option;
+    use std::vector;
 
+    use sui::object;
     use sui::object_table;
     use sui::tx_context::TxContext;
     use infinite_sea_common::coordinates::Coordinates;
@@ -11,6 +13,7 @@ module infinite_sea::roster_create_environment_roster_logic {
     use infinite_sea_common::roster_id::RosterId;
     use infinite_sea_common::roster_status;
     use infinite_sea_common::ship_util;
+    use infinite_sea_common::ts_random_util;
 
     use infinite_sea::roster;
     use infinite_sea::roster_util;
@@ -18,6 +21,9 @@ module infinite_sea::roster_create_environment_roster_logic {
     use infinite_sea::ship_aggregate;
 
     friend infinite_sea::roster_aggregate;
+
+    const EInvalidShipResourceQuantity: u64 = 1;
+    const EInvalidShipBaseResourceQuantity: u64 = 2;
 
     public(friend) fun verify(
         roster_id: RosterId,
@@ -28,6 +34,8 @@ module infinite_sea::roster_create_environment_roster_logic {
         roster_table: &roster::RosterTable,
         ctx: &mut TxContext,
     ): roster::EnvironmentRosterCreated {
+        assert!(ship_resource_quantity >= ship_base_resource_quantity * 3, EInvalidShipResourceQuantity);
+        assert!(ship_base_resource_quantity > 0, EInvalidShipBaseResourceQuantity);
         roster::asset_roster_id_not_exists(roster_id, roster_table);
         roster::new_environment_roster_created(
             roster_id, coordinates, ship_resource_quantity, ship_base_resource_quantity, base_experience
@@ -61,12 +69,28 @@ module infinite_sea::roster_create_environment_roster_logic {
         roster::set_base_experience(&mut roster, option::some(base_experience));
 
         let position = 0;
-        while (position < 4) {
+        let number_of_ships = 1;
+        while (position < number_of_ships) {
+            // only one ship for now!
             let player_id = roster_id::player_id(&roster_id);
 
             let building_expences_item_ids = vector[item_id::copper_ore(), item_id::normal_logs(), item_id::cottons()];
-            //todo distribute random resources based on ship_resource_quantity
-            let building_expences_item_quantities = vector[ship_base_resource_quantity, ship_base_resource_quantity, ship_base_resource_quantity];
+            // distribute random resources based on ship_resource_quantity
+            let current_resource_quantity = ship_resource_quantity / number_of_ships;
+            if (position == number_of_ships - 1) {
+                current_resource_quantity = current_resource_quantity + (ship_resource_quantity % number_of_ships);
+            };
+            let random_resource_quantities = ts_random_util::split_int_with_epoch_timestamp_ms(
+                ctx,
+                object::id_to_bytes(&roster::id(&roster)),
+                ((current_resource_quantity - ship_base_resource_quantity * 3) as u64),
+                3
+            );
+            let building_expences_item_quantities = vector[
+                ship_base_resource_quantity + (*vector::borrow(&random_resource_quantities, 0) as u32),
+                ship_base_resource_quantity + (*vector::borrow(&random_resource_quantities, 1) as u32),
+                ship_base_resource_quantity + (*vector::borrow(&random_resource_quantities, 2) as u32),
+            ];
             let building_expences = item_id_quantity_pairs::new(
                 building_expences_item_ids,
                 building_expences_item_quantities
@@ -80,7 +104,7 @@ module infinite_sea::roster_create_environment_roster_logic {
 
             let ship_id = ship::id(&ship);
             let ship_ids = roster::borrow_mut_ship_ids(&mut roster);
-            roster_util::add_ship_id(ship_ids, ship_id, option::some(position));
+            roster_util::add_ship_id(ship_ids, ship_id, option::some((position as u64)));
             let ships = roster::borrow_mut_ships(&mut roster);
             object_table::add(ships, ship_id, ship);
 
