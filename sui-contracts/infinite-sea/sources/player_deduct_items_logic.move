@@ -10,7 +10,6 @@ module infinite_sea::player_deduct_items_logic {
 
     friend infinite_sea::player_aggregate;
 
-    // const EPalyerHasNoSuchItem: u64 = 10;
     // const EInsufficientItemQuantity: u64 = 11;
 
     public(friend) fun verify(

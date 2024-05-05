@@ -72,13 +72,19 @@ module infinite_sea::ship_battle_aggregate {
 
     public entry fun take_loot(
         ship_battle: &mut ship_battle::ShipBattle,
+        player: &Player,
         initiator: &mut Roster,
         responder: &mut Roster,
+        clock: &Clock,
+        choice: u8,
         ctx: &mut tx_context::TxContext,
     ) {
         let ship_battle_loot_taken = ship_battle_take_loot_logic::verify(
+            player,
             initiator,
             responder,
+            clock,
+            choice,
             ship_battle,
             ctx,
         );

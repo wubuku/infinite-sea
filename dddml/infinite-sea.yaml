@@ -515,6 +515,9 @@ aggregates:
 
       TakeLoot:
         parameters:
+          Player:
+            referenceType: Player
+            isIgnoredInEvent: true
           Initiator:
             referenceType: Roster
             isMutableReference: true
@@ -523,11 +526,14 @@ aggregates:
             referenceType: Roster
             isMutableReference: true
             isIgnoredInEvent: true
-          #Clock:
-          #  referenceType: Clock
-          #  isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
           #Winner:
           #  type: u8 # 1: Initiator, 0: Responder
+          Choice:
+            type: u8
+            description: "1: Take all, 0: Leave it"
         event:
           name: ShipBattleLootTaken
           properties:

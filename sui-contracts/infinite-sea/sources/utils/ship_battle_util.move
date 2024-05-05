@@ -27,7 +27,7 @@ module infinite_sea::ship_battle_util {
     const EResponderIdMismatch: u64 = 13;
     const EShipNotFoundById: u64 = 21;
     const ENoLivingShips: u64 = 22;
-    const ENoRoundMover: u64 = 23;
+    const ERoundMoverNotSet: u64 = 23;
 
     const MIN_DISTANCE_TO_BATTLE: u64 = 3; //todo is it ok?
 
@@ -48,13 +48,18 @@ module infinite_sea::ship_battle_util {
         }
     }
 
-    public fun assert_palyer_is_current_round_mover(player: &Player, ship_battle: &ShipBattle,
-                                                    initiator: &Roster, responder: &Roster
+    public fun assert_ids_are_consistent_and_player_is_current_round_mover(
+        player: &Player, ship_battle: &ShipBattle, initiator: &Roster, responder: &Roster
     ) {
-        assert_ids_are_consistent(ship_battle, initiator, responder);//NOTE!
+        assert_ids_are_consistent(ship_battle, initiator, responder);
+        assert_player_is_current_round_mover(player, ship_battle, initiator, responder);
+    }
 
+    public fun assert_player_is_current_round_mover(
+        player: &Player, ship_battle: &ShipBattle, initiator: &Roster, responder: &Roster
+    ) {
         let round_mover = ship_battle::round_mover(ship_battle);
-        assert!(option::is_some(&round_mover), ENoRoundMover);
+        assert!(option::is_some(&round_mover), ERoundMoverNotSet);
         if (*option::borrow(&round_mover) == initiator()) {
             permission_util::assert_player_is_roster_owner(player, initiator);
         } else {

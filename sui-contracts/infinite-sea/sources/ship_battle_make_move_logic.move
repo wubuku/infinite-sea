@@ -41,7 +41,7 @@ module infinite_sea::ship_battle_make_move_logic {
         let _ = player; //Unused for now
         //
         //permission_util::assert_sender_is_player_owner(player, ctx);
-        //ship_battle_util::assert_palyer_is_current_round_mover(player, ship_battle, initiator, responder); //NOTE!
+        //ship_battle_util::assert_ids_are_consistent_and_player_is_current_round_mover(player, ship_battle, initiator, responder);
         //
 
         let now_time = clock::timestamp_ms(clock) / 1000;

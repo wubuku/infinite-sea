@@ -327,11 +327,16 @@ module infinite_sea::ship_battle {
     struct ShipBattleLootTaken has copy, drop {
         id: object::ID,
         version: u64,
+        choice: u8,
         loot: vector<ItemIdQuantityPair>,
     }
 
     public fun ship_battle_loot_taken_id(ship_battle_loot_taken: &ShipBattleLootTaken): object::ID {
         ship_battle_loot_taken.id
+    }
+
+    public fun ship_battle_loot_taken_choice(ship_battle_loot_taken: &ShipBattleLootTaken): u8 {
+        ship_battle_loot_taken.choice
     }
 
     public fun ship_battle_loot_taken_loot(ship_battle_loot_taken: &ShipBattleLootTaken): vector<ItemIdQuantityPair> {
@@ -340,11 +345,13 @@ module infinite_sea::ship_battle {
 
     public(friend) fun new_ship_battle_loot_taken(
         ship_battle: &ShipBattle,
+        choice: u8,
         loot: vector<ItemIdQuantityPair>,
     ): ShipBattleLootTaken {
         ShipBattleLootTaken {
             id: id(ship_battle),
             version: version(ship_battle),
+            choice,
             loot,
         }
     }
