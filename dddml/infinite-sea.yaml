@@ -571,6 +571,9 @@ aggregates:
           properties:
             Loot:
               itemType: ItemIdQuantityPair
+            LootedAt:
+              type: u64
+              description: "The time when the loot is taken"
             IncreasedExperience:
               type: u32
             NewLevel:

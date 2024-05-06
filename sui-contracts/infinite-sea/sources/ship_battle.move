@@ -365,6 +365,7 @@ module infinite_sea::ship_battle {
         version: u64,
         choice: u8,
         loot: vector<ItemIdQuantityPair>,
+        looted_at: u64,
         increased_experience: u32,
         new_level: u16,
     }
@@ -381,6 +382,10 @@ module infinite_sea::ship_battle {
         ship_battle_loot_taken.loot
     }
 
+    public fun ship_battle_loot_taken_looted_at(ship_battle_loot_taken: &ShipBattleLootTaken): u64 {
+        ship_battle_loot_taken.looted_at
+    }
+
     public fun ship_battle_loot_taken_increased_experience(ship_battle_loot_taken: &ShipBattleLootTaken): u32 {
         ship_battle_loot_taken.increased_experience
     }
@@ -393,6 +398,7 @@ module infinite_sea::ship_battle {
         ship_battle: &ShipBattle,
         choice: u8,
         loot: vector<ItemIdQuantityPair>,
+        looted_at: u64,
         increased_experience: u32,
         new_level: u16,
     ): ShipBattleLootTaken {
@@ -401,6 +407,7 @@ module infinite_sea::ship_battle {
             version: version(ship_battle),
             choice,
             loot,
+            looted_at,
             increased_experience,
             new_level,
         }

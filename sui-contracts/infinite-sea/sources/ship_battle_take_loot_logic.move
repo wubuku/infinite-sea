@@ -3,12 +3,13 @@ module infinite_sea::ship_battle_take_loot_logic {
     use std::option;
     use std::vector;
 
+    use sui::clock;
     use sui::clock::Clock;
     use sui::object_table;
     use sui::tx_context::TxContext;
-    use infinite_sea::player;
     use infinite_sea_common::battle_status;
     use infinite_sea_common::experience_table::ExperienceTable;
+    use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
     use infinite_sea_common::item_id_quantity_pairs;
     use infinite_sea_common::roster_status;
     use infinite_sea_common::vector_util;
@@ -16,6 +17,7 @@ module infinite_sea::ship_battle_take_loot_logic {
     use infinite_sea::experience_table_util;
     use infinite_sea::loot_util;
     use infinite_sea::permission_util;
+    use infinite_sea::player;
     use infinite_sea::player::Player;
     use infinite_sea::roster::{Self, Roster};
     use infinite_sea::roster_util;
@@ -103,7 +105,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         let new_level = experience_table_util::calculate_new_level(player, experience_table, increased_experience);
         ship_battle::new_ship_battle_loot_taken(
             ship_battle, choice, vector_util::new_item_id_quantity_pairs(loot_item_ids, loot_item_quantities),
-            increased_experience, new_level,
+            clock::timestamp_ms(clock) / 1000, increased_experience, new_level,
         )
     }
 
@@ -121,24 +123,50 @@ module infinite_sea::ship_battle_take_loot_logic {
         let increased_experience = ship_battle::ship_battle_loot_taken_increased_experience(ship_battle_loot_taken);
         let new_level = ship_battle::ship_battle_loot_taken_new_level(ship_battle_loot_taken);
         let old_experience = player::experience(player);
+        let looted_at = ship_battle::ship_battle_loot_taken_looted_at(ship_battle_loot_taken);
         player::set_experience(player, old_experience + increased_experience);
         player::set_level(player, new_level);
 
         //let id = ship_battle::id(ship_battle);
         let winner_roster: &mut Roster;
+        let loser_roster: &mut Roster;
         if (winner == ship_battle_util::initiator()) {
             winner_roster = initiator;
+            loser_roster = responder;
         } else if (winner == ship_battle_util::responder()) {
             winner_roster = responder;
+            loser_roster = initiator;
         } else {
             abort EInvalidWinner
         };
+
+        update_winner_inventory(winner_roster, loot);
+        update_winner_roster_status(winner_roster, looted_at);
+        update_loser_roster_status(loser_roster, loser_player, looted_at);
+
+        ship_battle::set_status(ship_battle, battle_status::looted());
+        //todo more operations?
+    }
+
+    fun update_winner_inventory(winner_roster: &mut Roster, loot: vector<ItemIdQuantityPair>) {
         let last_ship_id = roster_util::get_last_ship_id(winner_roster);
         let ships = roster::borrow_mut_ships(winner_roster);
         let ship = object_table::borrow_mut(ships, last_ship_id);
         let inv = ship::borrow_mut_inventory(ship);
         vector_util::merge_item_id_quantity_pairs(inv, &loot);
+    }
 
+    fun update_loser_roster_status(loser_roster: &mut Roster, loser_player: &mut Player, looted_at: u64) {
+        if (roster::environment_owned(loser_roster)) {
+            return
+        };
+        let island_coordinates = player::claimed_island(loser_player);
+        roster::set_updated_coordinates(loser_roster, option::extract(&mut island_coordinates));
+        roster::set_coordinates_updated_at(loser_roster, looted_at);
+        roster::set_status(loser_roster, roster_status::at_anchor());
+    }
+
+    fun update_winner_roster_status(winner_roster: &mut Roster, looted_at: u64) {
         roster::set_ship_battle_id(winner_roster, option::none());
         let current_coordinates = roster::updated_coordinates(winner_roster);
         let target_coordinates = roster::target_coordinates(winner_roster);
@@ -147,8 +175,6 @@ module infinite_sea::ship_battle_take_loot_logic {
         } else {
             roster::set_status(winner_roster, roster_status::at_anchor());
         };
-
-        ship_battle::set_status(ship_battle, battle_status::looted());
-        //todo more operations?
+        roster::set_coordinates_updated_at(winner_roster, looted_at);
     }
 }
