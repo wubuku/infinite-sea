@@ -10,7 +10,7 @@ module infinite_sea::roster_put_in_ship_inventory_logic {
     use infinite_sea_common::item_id_quantity_pairs;
     use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use infinite_sea_common::roster_status;
-    use infinite_sea_common::vector_util;
+    use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::permission_util;
     use infinite_sea::player::{Self, Player};
@@ -65,8 +65,8 @@ module infinite_sea::roster_put_in_ship_inventory_logic {
         let l = vector::length(&items);
         while (i < l) {
             let item = vector::borrow(&items, i);
-            vector_util::subtract_item_id_quantity_pair(player_inv, *item); // - item from player
-            vector_util::insert_or_add_item_id_quantity_pair(ship_inv, *item); // + item to ship
+            sorted_vector_util::subtract_item_id_quantity_pair(player_inv, *item); // - item from player
+            sorted_vector_util::insert_or_add_item_id_quantity_pair(ship_inv, *item); // + item to ship
             i = i + 1;
         };
     }

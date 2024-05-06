@@ -11,7 +11,7 @@ module infinite_sea::ship_battle_take_loot_logic {
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
     use infinite_sea_common::roster_status;
-    use infinite_sea_common::vector_util;
+    use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::experience_table_util;
     use infinite_sea::loot_util;
@@ -122,7 +122,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         );
 
         ship_battle::new_ship_battle_loot_taken(
-            ship_battle, choice, vector_util::new_item_id_quantity_pairs(loot_item_ids, loot_item_quantities),
+            ship_battle, choice, sorted_vector_util::new_item_id_quantity_pairs(loot_item_ids, loot_item_quantities),
             clock::timestamp_ms(clock) / 1000,
             winner_increased_experience, new_level, loser_increased_experience, loser_new_level,
         )
@@ -207,7 +207,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         let ships = roster::borrow_mut_ships(winner_roster);
         let ship = object_table::borrow_mut(ships, last_ship_id);
         let inv = ship::borrow_mut_inventory(ship);
-        vector_util::merge_item_id_quantity_pairs(inv, &loot);
+        sorted_vector_util::merge_item_id_quantity_pairs(inv, &loot);
     }
 
     fun update_loser_roster_status(loser_roster: &mut Roster, loser_player: &mut Player, looted_at: u64) {

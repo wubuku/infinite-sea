@@ -10,7 +10,7 @@ module infinite_sea::ship_battle_util {
     use sui::object_table;
     use infinite_sea_common::direct_route_util;
     use infinite_sea_common::ts_random_util;
-    use infinite_sea_common::vector_util;
+    use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
@@ -131,7 +131,7 @@ module infinite_sea::ship_battle_util {
         clock: &Clock,
         round_number: u32
     ): (ID, u8) {
-        let seed_1 = vector_util::concat_ids_bytes(&vector[roster::id(roster_1), roster::id(roster_2)]);
+        let seed_1 = sorted_vector_util::concat_ids_bytes(&vector[roster::id(roster_1), roster::id(roster_2)]);
         vector::append(&mut seed_1, bcs::to_bytes(&round_number));
         let (candidate_1, initiative_1) = get_candidate_attacker_ship_id(roster_1, clock, seed_1);
         let seed_2 = vector::empty<u8>();
@@ -208,7 +208,7 @@ module infinite_sea::ship_battle_util {
         } else {
             0
         };
-        let seed_1 = vector_util::concat_ids_bytes(&vector[ship::id(self), ship::id(opponent)]);
+        let seed_1 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(self), ship::id(opponent)]);
         vector::append(&mut seed_1, bcs::to_bytes(&round_number));
         if (1 + ts_random_util::get_int(clock, seed_1, 100) <= dodge_chance) {
             return 0
@@ -226,7 +226,7 @@ module infinite_sea::ship_battle_util {
             (ship::attack(self) - ship::protection(opponent) as u64) * 4 / 5
         };
 
-        let seed_2 = vector_util::concat_ids_bytes(&vector[ship::id(opponent), ship::id(self)]);
+        let seed_2 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(opponent), ship::id(self)]);
         vector::append(&mut seed_2, bcs::to_bytes(&round_number));
 
         // Critical hit and miss logic

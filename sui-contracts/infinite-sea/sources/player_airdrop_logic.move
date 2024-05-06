@@ -2,7 +2,7 @@
 module infinite_sea::player_airdrop_logic {
     use sui::tx_context::TxContext;
     use infinite_sea_common::item_id_quantity_pair;
-    use infinite_sea_common::vector_util;
+    use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::player;
 
@@ -29,6 +29,6 @@ module infinite_sea::player_airdrop_logic {
         let item_id = player::player_airdropped_item_id(player_airdropped);
         let quantity = player::player_airdropped_quantity(player_airdropped);
         let inv = player::borrow_mut_inventory(player);
-        vector_util::insert_or_add_item_id_quantity_pair(inv, item_id_quantity_pair::new(item_id, quantity));
+        sorted_vector_util::insert_or_add_item_id_quantity_pair(inv, item_id_quantity_pair::new(item_id, quantity));
     }
 }

@@ -3,7 +3,7 @@ module infinite_sea::player_properties {
 
     use infinite_sea_common::item_id_quantity_pair;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
-    use infinite_sea_common::vector_util;
+    use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::player;
     use infinite_sea::player::Player;
@@ -23,7 +23,7 @@ module infinite_sea::player_properties {
             let item = vector::borrow(&items, i);
             // let item_id = item_id_quantity_pair::item_id(item);
             // let quantity = item_id_quantity_pair::quantity(item);
-            vector_util::subtract_item_id_quantity_pair(inv, *item);
+            sorted_vector_util::subtract_item_id_quantity_pair(inv, *item);
             i = i + 1;
         };
     }
@@ -53,7 +53,7 @@ module infinite_sea::player_properties {
 
     public(friend) fun increase_player_item_quantity(player: &mut player::Player, item_id: u32, quantity: u32) {
         let inv = player::borrow_mut_inventory(player);
-        vector_util::insert_or_add_item_id_quantity_pair(inv, item_id_quantity_pair::new(item_id, quantity));
+        sorted_vector_util::insert_or_add_item_id_quantity_pair(inv, item_id_quantity_pair::new(item_id, quantity));
     }
 
     public(friend) fun increase_experience(player: &mut Player, increased_experience: u32) {

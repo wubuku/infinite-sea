@@ -7,7 +7,7 @@ module infinite_sea::player_claim_island_logic {
     use sui::tx_context::TxContext;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::roster_status;
-    use infinite_sea_common::vector_util;
+    use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::map::{Self, Map};
     use infinite_sea::map_aggregate;
@@ -49,7 +49,7 @@ module infinite_sea::player_claim_island_logic {
         // move resources from island to player inventory
         let island = map::borrow_location(map, coordinates);
         let inv = player::borrow_mut_inventory(player);
-        vector_util::merge_item_id_quantity_pairs(inv, map_location::borrow_resources(island));
+        sorted_vector_util::merge_item_id_quantity_pairs(inv, map_location::borrow_resources(island));
         // call map_aggregate::claim_island
         map_aggregate::claim_island(map, coordinates, player_id, claimed_at, ctx);
 

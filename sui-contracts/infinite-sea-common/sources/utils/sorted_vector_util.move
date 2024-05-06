@@ -1,4 +1,4 @@
-module infinite_sea_common::vector_util {
+module infinite_sea_common::sorted_vector_util {
 
     use std::option::{Self, Option};
     use std::vector;

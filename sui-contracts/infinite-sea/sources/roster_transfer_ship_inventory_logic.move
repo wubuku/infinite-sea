@@ -5,6 +5,7 @@ module infinite_sea::roster_transfer_ship_inventory_logic {
     use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use sui::object::ID;
     use sui::tx_context::{Self, TxContext};
+    use infinite_sea::permission_util;
 
     friend infinite_sea::roster_aggregate;
 
@@ -16,7 +17,9 @@ module infinite_sea::roster_transfer_ship_inventory_logic {
         roster: &roster::Roster,
         ctx: &TxContext,
     ): roster::RosterShipInventoryTransferred {
-        //todo
+        permission_util::assert_sender_is_player_owner(player, ctx);
+        permission_util::assert_player_is_roster_owner(player, roster);
+        //todo more checks
         roster::new_roster_ship_inventory_transferred(roster, from_ship_id, to_ship_id, item_id_quantity_pairs)
     }
 

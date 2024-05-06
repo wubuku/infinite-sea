@@ -17,7 +17,7 @@ module infinite_sea_common::item_id_quantity_pairs {
         item_id_list: vector<u32>,
         item_quantity_list: vector<u32>,
     ): ItemIdQuantityPairs {
-        let items = infinite_sea_common::vector_util::new_item_id_quantity_pairs(item_id_list, item_quantity_list);
+        let items = infinite_sea_common::sorted_vector_util::new_item_id_quantity_pairs(item_id_list, item_quantity_list);
         let item_id_quantity_pairs = ItemIdQuantityPairs {
             items,
         };

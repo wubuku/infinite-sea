@@ -14,7 +14,7 @@ module infinite_sea::skill_process_start_ship_production_logic {
     use infinite_sea_common::item_id_quantity_pairs;
     use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use infinite_sea_common::item_production::{Self, ItemProduction};
-    use infinite_sea_common::vector_util;
+    use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::player::{Self, Player};
     use infinite_sea::player_properties;
@@ -71,7 +71,7 @@ module infinite_sea::skill_process_start_ship_production_logic {
             let p = vector::borrow(&basic_production_materials, i);
             let item_id = item_id_quantity_pair::item_id(p);
             let basic_quantity = item_id_quantity_pair::quantity(p);
-            let actual_p_idx = vector_util::find_item_id_quantity_pair_by_item_id(
+            let actual_p_idx = sorted_vector_util::find_item_id_quantity_pair_by_item_id(
                 &actual_production_materials,
                 item_id
             );

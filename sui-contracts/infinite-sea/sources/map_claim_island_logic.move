@@ -6,7 +6,7 @@ module infinite_sea::map_claim_island_logic {
     use sui::tx_context::TxContext;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::map_location_type;
-    use infinite_sea_common::vector_util;
+    use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::map;
     use infinite_sea::map_location::Self;
@@ -46,7 +46,7 @@ module infinite_sea::map_claim_island_logic {
         let claimed_at = map::map_island_claimed_claimed_at(map_island_claimed);
         let island = map::borrow_mut_location(map, coordinates);
         map_location::set_occupied_by(island, option::some(claimed_by));
-        vector_util::remove_all_item_id_quantity_pairs(map_location::borrow_mut_resources(island));
+        sorted_vector_util::remove_all_item_id_quantity_pairs(map_location::borrow_mut_resources(island));
         map_location::set_gathered_at(island, claimed_at);
     }
 }

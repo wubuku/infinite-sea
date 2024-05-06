@@ -7,7 +7,7 @@ module infinite_sea_common::vector_util_tests {
 
     use infinite_sea_common::item_id_quantity_pair;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
-    use infinite_sea_common::vector_util;
+    use infinite_sea_common::sorted_vector_util;
 
     #[test]
     public fun vector_util_tests() {
@@ -19,13 +19,13 @@ module infinite_sea_common::vector_util_tests {
         let item_id_quantity_pair_6 = item_id_quantity_pair::new(6, 6);
 
         let item_id_quantity_pair_vector = vector::empty<ItemIdQuantityPair>();
-        vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_6);
-        vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_2);
-        vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_1);
-        vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_5);
-        vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_4);
+        sorted_vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_6);
+        sorted_vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_2);
+        sorted_vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_1);
+        sorted_vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_5);
+        sorted_vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_4);
 
-        vector_util::insert_or_add_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_2);
+        sorted_vector_util::insert_or_add_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_2);
 
         let l = vector::length(&item_id_quantity_pair_vector);
         let i = 0;
@@ -36,13 +36,13 @@ module infinite_sea_common::vector_util_tests {
             i = i + 1;
         };
 
-        let idx_2 = vector_util::find_item_id_quantity_pair_by_item_id(&item_id_quantity_pair_vector, 2);
+        let idx_2 = sorted_vector_util::find_item_id_quantity_pair_by_item_id(&item_id_quantity_pair_vector, 2);
         debug::print(&option::is_some(&idx_2));
-        let idx_3 = vector_util::find_item_id_quantity_pair_by_item_id(&item_id_quantity_pair_vector, 3);
+        let idx_3 = sorted_vector_util::find_item_id_quantity_pair_by_item_id(&item_id_quantity_pair_vector, 3);
         debug::print(&option::is_some(&idx_3));
 
         let item_id_quantity_pair_3 = item_id_quantity_pair::new(3, 3);
-        vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_3);
+        sorted_vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_3);
         //vector_util::add_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_2);
     }
 }
