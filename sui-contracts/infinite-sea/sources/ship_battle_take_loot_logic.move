@@ -54,16 +54,30 @@ module infinite_sea::ship_battle_take_loot_logic {
         assert!(ship_battle::status(ship_battle) == battle_status::ended(), EBattleNotEnded);
         assert!(option::is_some(&ship_battle::winner(ship_battle)), EWinnerNotSet);
         let winner = option::extract(&mut ship_battle::winner(ship_battle));
-        let loser_roster: &mut Roster;
         let winner_roster: &Roster;
+        let loser_roster: &mut Roster;
+        let winner_increased_experience: u32;
+        let loser_increased_experience: u32;
         if (winner == ship_battle_util::initiator()) {
             assert!(roster_util::is_destroyed(responder), EResponderNotDestroyed);
-            loser_roster = responder;
             winner_roster = initiator;
+            loser_roster = responder;
+            winner_increased_experience = get_winner_increased_experience(
+                ship_battle::initiator_experiences(ship_battle)
+            );
+            loser_increased_experience = get_loser_increased_experience(
+                ship_battle::responder_experiences(ship_battle)
+            );
         } else if (winner == ship_battle_util::responder()) {
             assert!(roster_util::is_destroyed(initiator), EInitiatorNotDestroyed);
-            loser_roster = initiator;
             winner_roster = responder;
+            loser_roster = initiator;
+            winner_increased_experience = get_winner_increased_experience(
+                ship_battle::responder_experiences(ship_battle)
+            );
+            loser_increased_experience = get_loser_increased_experience(
+                ship_battle::initiator_experiences(ship_battle)
+            );
         } else {
             abort EInvalidWinner
         };
@@ -84,7 +98,7 @@ module infinite_sea::ship_battle_take_loot_logic {
             let ship_id = *vector::borrow(&ship_ids, i);
             let ship = object_table::remove(ships, ship_id);
             if (choice != CHOICE_LEAVE_IT) {
-                // take all
+                // take all for default
                 let (ids, qs) = loot_util::calculate_loot(&ship);
                 vector::append(&mut loot_item_ids, ids);
                 vector::append(&mut loot_item_quantities, qs);
@@ -92,20 +106,27 @@ module infinite_sea::ship_battle_take_loot_logic {
             ship::drop_ship(ship); // Maybe remove and drop ship in "mutate" function would be better?
             i = i + 1;
         };
-        let increased_experience = 0;
+
         let base_experience = roster::base_experience(loser_roster);
         if (roster::environment_owned(loser_roster)) {
             if (option::is_some(&base_experience)) {
-                increased_experience = *option::borrow(&base_experience);
+                let b = *option::borrow(&base_experience);
+                if (b > winner_increased_experience) {
+                    winner_increased_experience = b;
+                };
             };
-        } else {
-            increased_experience = 100; //TODO: hard-coded here?
         };
         item_id_quantity_pairs::new(loot_item_ids, loot_item_quantities);
-        let new_level = experience_table_util::calculate_new_level(player, experience_table, increased_experience);
+        let new_level = experience_table_util::calculate_new_level(
+            player, experience_table, winner_increased_experience
+        );
+        let loser_new_level = experience_table_util::calculate_new_level(
+            loser_player, experience_table, loser_increased_experience
+        );
         ship_battle::new_ship_battle_loot_taken(
             ship_battle, choice, vector_util::new_item_id_quantity_pairs(loot_item_ids, loot_item_quantities),
-            clock::timestamp_ms(clock) / 1000, increased_experience, new_level,
+            clock::timestamp_ms(clock) / 1000,
+            winner_increased_experience, new_level, loser_increased_experience, loser_new_level,
         )
     }
 
@@ -120,14 +141,8 @@ module infinite_sea::ship_battle_take_loot_logic {
     ) {
         let winner = option::extract(&mut ship_battle::winner(ship_battle));
         let loot = ship_battle::ship_battle_loot_taken_loot(ship_battle_loot_taken);
-        let increased_experience = ship_battle::ship_battle_loot_taken_increased_experience(ship_battle_loot_taken);
-        let new_level = ship_battle::ship_battle_loot_taken_new_level(ship_battle_loot_taken);
-        let old_experience = player::experience(player);
         let looted_at = ship_battle::ship_battle_loot_taken_looted_at(ship_battle_loot_taken);
-        player::set_experience(player, old_experience + increased_experience);
-        player::set_level(player, new_level);
 
-        //let id = ship_battle::id(ship_battle);
         let winner_roster: &mut Roster;
         let loser_roster: &mut Roster;
         if (winner == ship_battle_util::initiator()) {
@@ -145,7 +160,48 @@ module infinite_sea::ship_battle_take_loot_logic {
         update_loser_roster_status(loser_roster, loser_player, looted_at);
 
         ship_battle::set_status(ship_battle, battle_status::looted());
-        //todo more operations?
+
+        let increased_experience = ship_battle::ship_battle_loot_taken_increased_experience(ship_battle_loot_taken);
+        let new_level = ship_battle::ship_battle_loot_taken_new_level(ship_battle_loot_taken);
+        let old_experience = player::experience(player);
+        player::set_experience(player, old_experience + increased_experience);
+        player::set_level(player, new_level);
+
+        let loser_increased_experience = ship_battle::ship_battle_loot_taken_loser_increased_experience(
+            ship_battle_loot_taken
+        );
+        let loser_new_level = ship_battle::ship_battle_loot_taken_loser_new_level(ship_battle_loot_taken);
+        let loser_old_experience = player::experience(loser_player);
+        player::set_experience(loser_player, loser_old_experience + loser_increased_experience);
+        player::set_level(loser_player, loser_new_level);
+
+        // more operations?
+    }
+
+    fun get_winner_increased_experience(xps: vector<u32>): u32 {
+        let sum = 0;
+        let i = 0;
+        let l = vector::length(&xps);
+        while (i < l) {
+            sum = sum + *vector::borrow(&xps, i);
+            i = i + 1;
+        };
+        sum
+    }
+
+    fun get_loser_increased_experience(xps: vector<u32>): u32 {
+        let vc = 0;
+        let sum = 0;
+        let i = 0;
+        let l = vector::length(&xps);
+        while (i < l) {
+            let x = *vector::borrow(&xps, i);
+            if (x > 0) { vc = vc + 1 };
+            sum = sum + x;
+            i = i + 1;
+        };
+        // If loser has defeated more than 2 ships, then it will get the experience.
+        if (vc >= 2) { sum } else { 0 }
     }
 
     fun update_winner_inventory(winner_roster: &mut Roster, loot: vector<ItemIdQuantityPair>) {

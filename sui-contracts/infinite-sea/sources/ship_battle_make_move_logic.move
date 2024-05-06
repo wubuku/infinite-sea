@@ -217,12 +217,12 @@ module infinite_sea::ship_battle_make_move_logic {
         let responder_experiences = ship_battle::responder_experiences(ship_battle);
         if (*option::borrow(&round_mover) == ship_battle_util::initiator()) {
             //current round attacker is initiator
-            vector::push_back(&mut initiator_experiences, attacker_xp);
-            vector::push_back(&mut responder_experiences, defender_xp);
+            if (attacker_xp > 0) { vector::push_back(&mut initiator_experiences, attacker_xp) };
+            if (defender_xp > 0) { vector::push_back(&mut responder_experiences, defender_xp) };
         } else {
             //current round attacker is responder
-            vector::push_back(&mut responder_experiences, attacker_xp);
-            vector::push_back(&mut initiator_experiences, defender_xp);
+            if (attacker_xp > 0) { vector::push_back(&mut responder_experiences, attacker_xp) };
+            if (defender_xp > 0) { vector::push_back(&mut initiator_experiences, defender_xp) };
         };
         ship_battle::set_initiator_experiences(ship_battle, initiator_experiences);
         ship_battle::set_responder_experiences(ship_battle, responder_experiences);

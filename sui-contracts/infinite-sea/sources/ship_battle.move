@@ -368,6 +368,8 @@ module infinite_sea::ship_battle {
         looted_at: u64,
         increased_experience: u32,
         new_level: u16,
+        loser_increased_experience: u32,
+        loser_new_level: u16,
     }
 
     public fun ship_battle_loot_taken_id(ship_battle_loot_taken: &ShipBattleLootTaken): object::ID {
@@ -394,6 +396,14 @@ module infinite_sea::ship_battle {
         ship_battle_loot_taken.new_level
     }
 
+    public fun ship_battle_loot_taken_loser_increased_experience(ship_battle_loot_taken: &ShipBattleLootTaken): u32 {
+        ship_battle_loot_taken.loser_increased_experience
+    }
+
+    public fun ship_battle_loot_taken_loser_new_level(ship_battle_loot_taken: &ShipBattleLootTaken): u16 {
+        ship_battle_loot_taken.loser_new_level
+    }
+
     public(friend) fun new_ship_battle_loot_taken(
         ship_battle: &ShipBattle,
         choice: u8,
@@ -401,6 +411,8 @@ module infinite_sea::ship_battle {
         looted_at: u64,
         increased_experience: u32,
         new_level: u16,
+        loser_increased_experience: u32,
+        loser_new_level: u16,
     ): ShipBattleLootTaken {
         ShipBattleLootTaken {
             id: id(ship_battle),
@@ -410,6 +422,8 @@ module infinite_sea::ship_battle {
             looted_at,
             increased_experience,
             new_level,
+            loser_increased_experience,
+            loser_new_level,
         }
     }
 

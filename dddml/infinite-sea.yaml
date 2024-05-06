@@ -396,7 +396,7 @@ aggregates:
       Status:
         type: u8
       InitiatorExperiences:
-        #This array keeps track of the experiences Initiator has gained in each round.
+        # The experiences Initiator has gained during the battle
         itemType: u32
         isList: true
         defaultLogic:
@@ -577,6 +577,10 @@ aggregates:
             IncreasedExperience:
               type: u32
             NewLevel:
+              type: u16
+            LoserIncreasedExperience:
+              type: u32
+            LoserNewLevel:
               type: u16
 
 
