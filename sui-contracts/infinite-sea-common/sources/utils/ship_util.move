@@ -2,6 +2,8 @@ module infinite_sea_common::ship_util {
 
     use std::vector;
 
+    use sui::object::ID;
+
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_id_quantity_pair;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
@@ -51,6 +53,18 @@ module infinite_sea_common::ship_util {
             2
         } else {
             1
+        }
+    }
+
+    public fun remove_ship_id(ship_ids: &mut vector<ID>, ship_id: ID) {
+        let i = 0;
+        let l = vector::length(ship_ids);
+        while (i < l) {
+            if (*vector::borrow(ship_ids, i) == ship_id) {
+                vector::remove(ship_ids, i);
+                break
+            };
+            i = i + 1;
         }
     }
 }

@@ -56,6 +56,19 @@ module infinite_sea_common::sorted_vector_util {
         };
     }
 
+    public fun subtract_item_id_quantity_pairs(
+        minuend: &mut vector<ItemIdQuantityPair>,
+        subtrahend: &vector<ItemIdQuantityPair>
+    ) {
+        let oi = 0;
+        let ol = vector::length(subtrahend);
+        while (oi < ol) {
+            let other_pair = vector::borrow(subtrahend, oi);
+            subtract_item_id_quantity_pair(minuend, *other_pair);
+            oi = oi + 1;
+        };
+    }
+
     /// "v" is a vector already sorted in ascending order by "item_id",
     /// insert or update the quantity of the given "pair" in the vector while maintaining the order.
     public fun insert_or_add_item_id_quantity_pair(v: &mut vector<ItemIdQuantityPair>, pair: ItemIdQuantityPair) {

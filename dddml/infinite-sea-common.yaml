@@ -199,7 +199,7 @@ valueObjects:
             itemType: u32
         implementationLogic:
           Move: >-
-            let items = infinite_sea_common::vector_util::new_item_id_quantity_pairs(item_id_list, item_quantity_list);
+            let items = infinite_sea_common::sorted_vector_util::new_item_id_quantity_pairs(item_id_list, item_quantity_list);
                     {_INSTANTIATE_STRUCT_}
 #        constants:
 #          EEmptyList:

@@ -7,6 +7,7 @@ module infinite_sea::roster_transfer_ship_logic {
     use sui::object::ID;
     use sui::object_table;
     use sui::tx_context::TxContext;
+    use infinite_sea_common::ship_util;
 
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
@@ -45,7 +46,7 @@ module infinite_sea::roster_transfer_ship_logic {
 
         let from_roster = roster;
         let from_ship_ids = roster::ship_ids(from_roster);
-        remove_ship_id(&mut from_ship_ids, ship_id);
+        ship_util::remove_ship_id(&mut from_ship_ids, ship_id);
         roster::set_ship_ids(from_roster, from_ship_ids);
 
         let from_ships = roster::borrow_mut_ships(from_roster);
@@ -63,15 +64,4 @@ module infinite_sea::roster_transfer_ship_logic {
         object_table::add(to_ships, ship_id, ship);
     }
 
-    fun remove_ship_id(ship_ids: &mut vector<ID>, ship_id: ID) {
-        let i = 0;
-        let l = vector::length(ship_ids);
-        while (i < l) {
-            if (*vector::borrow(ship_ids, i) == ship_id) {
-                vector::remove(ship_ids, i);
-                break
-            };
-            i = i + 1;
-        }
-    }
 }

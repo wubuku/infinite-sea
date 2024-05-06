@@ -150,6 +150,7 @@ aggregates:
         - ShipBattle.TakeLoot
         - Roster.PutInShipInventory
         - Roster.TakeOutShipInventory
+        - Roster.TransferShipInventory
     friends:
       - SkillProcess.CompleteShipProduction
       #- SkillProcess.StartShipProduction
