@@ -17,13 +17,12 @@ module infinite_sea::player {
     friend infinite_sea::player_create_logic;
     friend infinite_sea::player_claim_island_logic;
     friend infinite_sea::player_airdrop_logic;
-    friend infinite_sea::player_deduct_items_logic;
-    friend infinite_sea::player_increase_experience_and_items_logic;
     friend infinite_sea::player_aggregate;
 
     friend infinite_sea::roster_put_in_ship_inventory_logic;
     friend infinite_sea::roster_take_out_ship_inventory_logic;
     friend infinite_sea::ship_battle_take_loot_logic;
+    friend infinite_sea::player_properties;
 
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;
@@ -207,70 +206,6 @@ module infinite_sea::player {
         }
     }
 
-    struct PlayerItemsDeducted has copy, drop {
-        id: object::ID,
-        version: u64,
-        items: vector<ItemIdQuantityPair>,
-    }
-
-    public fun player_items_deducted_id(player_items_deducted: &PlayerItemsDeducted): object::ID {
-        player_items_deducted.id
-    }
-
-    public fun player_items_deducted_items(player_items_deducted: &PlayerItemsDeducted): vector<ItemIdQuantityPair> {
-        player_items_deducted.items
-    }
-
-    public(friend) fun new_player_items_deducted(
-        player: &Player,
-        items: vector<ItemIdQuantityPair>,
-    ): PlayerItemsDeducted {
-        PlayerItemsDeducted {
-            id: id(player),
-            version: version(player),
-            items,
-        }
-    }
-
-    struct PlayerExperienceAndItemsIncreased has copy, drop {
-        id: object::ID,
-        version: u64,
-        experience: u32,
-        items: vector<ItemIdQuantityPair>,
-        new_level: u16,
-    }
-
-    public fun player_experience_and_items_increased_id(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): object::ID {
-        player_experience_and_items_increased.id
-    }
-
-    public fun player_experience_and_items_increased_experience(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): u32 {
-        player_experience_and_items_increased.experience
-    }
-
-    public fun player_experience_and_items_increased_items(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): vector<ItemIdQuantityPair> {
-        player_experience_and_items_increased.items
-    }
-
-    public fun player_experience_and_items_increased_new_level(player_experience_and_items_increased: &PlayerExperienceAndItemsIncreased): u16 {
-        player_experience_and_items_increased.new_level
-    }
-
-    public(friend) fun new_player_experience_and_items_increased(
-        player: &Player,
-        experience: u32,
-        items: vector<ItemIdQuantityPair>,
-        new_level: u16,
-    ): PlayerExperienceAndItemsIncreased {
-        PlayerExperienceAndItemsIncreased {
-            id: id(player),
-            version: version(player),
-            experience,
-            items,
-            new_level,
-        }
-    }
-
 
     #[lint_allow(share_owned)]
     public(friend) fun share_object(player: Player) {
@@ -307,14 +242,6 @@ module infinite_sea::player {
 
     public(friend) fun emit_player_airdropped(player_airdropped: PlayerAirdropped) {
         event::emit(player_airdropped);
-    }
-
-    public(friend) fun emit_player_items_deducted(player_items_deducted: PlayerItemsDeducted) {
-        event::emit(player_items_deducted);
-    }
-
-    public(friend) fun emit_player_experience_and_items_increased(player_experience_and_items_increased: PlayerExperienceAndItemsIncreased) {
-        event::emit(player_experience_and_items_increased);
     }
 
 }

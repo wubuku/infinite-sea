@@ -15,7 +15,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
 
     use infinite_sea::experience_table_util;
     use infinite_sea::player::{Self, Player};
-    use infinite_sea::player_aggregate;
+    use infinite_sea::player_properties;
     use infinite_sea::roster;
     use infinite_sea::roster::Roster;
     use infinite_sea::roster_aggregate;
@@ -107,7 +107,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
         assert!(successful, EProcessFailed);
         let items = vector[];//vector[item_id_quantity_pair::new(item_id, quantity)];
 
-        player_aggregate::increase_experience_and_items(player, experience, items, new_level, ctx);
+        player_properties::increase_experience_and_inventory_and_set_level(player, experience, items, new_level);
         let building_expences_o = skill_process::production_materials(skill_process);
         let building_expences = item_id_quantity_pairs::items(option::borrow(&building_expences_o));
         let (health_points, attack, protection, speed) = ship_util::calculate_ship_attributes(&building_expences);

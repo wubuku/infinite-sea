@@ -8,7 +8,7 @@ module infinite_sea::skill_process_start_production_logic {
     use infinite_sea_common::item_production::{Self, ItemProduction};
 
     use infinite_sea::player::{Self, Player};
-    use infinite_sea::player_aggregate;
+    use infinite_sea::player_properties;
     use infinite_sea::skill_process;
     use infinite_sea::skill_process::production_process_started_started_at;
     use infinite_sea::skill_process_util;
@@ -86,6 +86,6 @@ module infinite_sea::skill_process_start_production_logic {
         let energy_vault = skill_process::borrow_mut_energy_vault(skill_process);
         balance::join(energy_vault, energy);
 
-        player_aggregate::deduct_items(player, item_id_quantity_pairs::items(&production_materials), ctx);
+        player_properties::deduct_inventory(player, item_id_quantity_pairs::items(&production_materials));
     }
 }

@@ -10,7 +10,7 @@ module infinite_sea::skill_process_start_creation_logic {
     use infinite_sea_common::skill_process_id;
 
     use infinite_sea::player::{Self, Player};
-    use infinite_sea::player_aggregate;
+    use infinite_sea::player_properties;
     use infinite_sea::skill_process;
     use infinite_sea::skill_process_util;
 
@@ -94,6 +94,6 @@ module infinite_sea::skill_process_start_creation_logic {
 
         let required_resource_items = vector[item_id_quantity_pair::new(resource_type, resource_cost)];
 
-        player_aggregate::deduct_items(player, required_resource_items, ctx);
+        player_properties::deduct_inventory(player, required_resource_items);
     }
 }

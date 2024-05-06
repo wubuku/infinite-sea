@@ -12,6 +12,7 @@ aggregates:
         - Roster.PutInShipInventory
         - Roster.TakeOutShipInventory
         - ShipBattle.TakeLoot
+        - "infinite_sea::player_properties"
     friends:
       - SkillProcess.StartProduction
       - SkillProcess.CompleteProduction
@@ -114,25 +115,25 @@ aggregates:
         event:
           name: PlayerAirdropped
 
-      DeductItems:
-        isInternal: true
-        parameters:
-          Items:
-            itemType: ItemIdQuantityPair
-        event:
-          name: PlayerItemsDeducted
+#      DeductItems:
+#        isInternal: true
+#        parameters:
+#          Items:
+#            itemType: ItemIdQuantityPair
+#        event:
+#          name: PlayerItemsDeducted
 
-      IncreaseExperienceAndItems:
-        isInternal: true
-        parameters:
-          Experience:
-            type: u32
-            description: "Increased experience value"
-          Items:
-            itemType: ItemIdQuantityPair
-          NewLevel:
-            type: u16
-          #UnassignedShips:
-          #  itemType: ID # Ship ID
-        event:
-          name: PlayerExperienceAndItemsIncreased
+#      IncreaseExperienceAndItems:
+#        isInternal: true
+#        parameters:
+#          Experience:
+#            type: u32
+#            description: "Increased experience value"
+#          Items:
+#            itemType: ItemIdQuantityPair
+#          NewLevel:
+#            type: u16
+#          #UnassignedShips:
+#          #  itemType: ID # Ship ID
+#        event:
+#          name: PlayerExperienceAndItemsIncreased

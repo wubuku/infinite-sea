@@ -10,11 +10,8 @@ module infinite_sea::player_aggregate {
     use infinite_sea::player_airdrop_logic;
     use infinite_sea::player_claim_island_logic;
     use infinite_sea::player_create_logic;
-    use infinite_sea::player_deduct_items_logic;
-    use infinite_sea::player_increase_experience_and_items_logic;
     use infinite_sea::roster::RosterTable;
     use infinite_sea_common::coordinates::{Self, Coordinates};
-    use infinite_sea_common::item_id_quantity_pair::{Self, ItemIdQuantityPair};
     use sui::clock::Clock;
     use sui::tx_context;
 
@@ -97,48 +94,6 @@ module infinite_sea::player_aggregate {
         );
         player::update_object_version(player);
         player::emit_player_airdropped(player_airdropped);
-    }
-
-    public(friend) fun deduct_items(
-        player: &mut player::Player,
-        items: vector<ItemIdQuantityPair>,
-        ctx: &mut tx_context::TxContext,
-    ) {
-        let player_items_deducted = player_deduct_items_logic::verify(
-            items,
-            player,
-            ctx,
-        );
-        player_deduct_items_logic::mutate(
-            &player_items_deducted,
-            player,
-            ctx,
-        );
-        player::update_object_version(player);
-        player::emit_player_items_deducted(player_items_deducted);
-    }
-
-    public(friend) fun increase_experience_and_items(
-        player: &mut player::Player,
-        experience: u32,
-        items: vector<ItemIdQuantityPair>,
-        new_level: u16,
-        ctx: &mut tx_context::TxContext,
-    ) {
-        let player_experience_and_items_increased = player_increase_experience_and_items_logic::verify(
-            experience,
-            items,
-            new_level,
-            player,
-            ctx,
-        );
-        player_increase_experience_and_items_logic::mutate(
-            &player_experience_and_items_increased,
-            player,
-            ctx,
-        );
-        player::update_object_version(player);
-        player::emit_player_experience_and_items_increased(player_experience_and_items_increased);
     }
 
 }
