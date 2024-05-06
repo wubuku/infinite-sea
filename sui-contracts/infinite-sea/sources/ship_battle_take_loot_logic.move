@@ -10,7 +10,6 @@ module infinite_sea::ship_battle_take_loot_logic {
     use infinite_sea_common::battle_status;
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
-    use infinite_sea_common::item_id_quantity_pairs;
     use infinite_sea_common::roster_status;
     use infinite_sea_common::vector_util;
 
@@ -88,6 +87,8 @@ module infinite_sea::ship_battle_take_loot_logic {
             permission_util::assert_player_is_roster_owner(player, winner_roster);
         };
         assert!(roster::status(loser_roster) == roster_status::destroyed(), EInvalidLoserStatus);
+
+        // Remove ships from the loser roster and calculate loot.
         let ship_ids = roster::ship_ids(loser_roster);
         let ships = roster::borrow_mut_ships(loser_roster);
         let loot_item_ids = vector::empty<u32>();
@@ -95,7 +96,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         let i = 0;
         let l = vector::length(&ship_ids);
         while (i < l) {
-            let ship_id = *vector::borrow(&ship_ids, i);
+            let ship_id = vector::pop_back(&mut ship_ids);
             let ship = object_table::remove(ships, ship_id);
             if (choice != CHOICE_LEAVE_IT) {
                 // take all for default
@@ -106,23 +107,20 @@ module infinite_sea::ship_battle_take_loot_logic {
             ship::drop_ship(ship); // Maybe remove and drop ship in "mutate" function would be better?
             i = i + 1;
         };
+        roster::set_ship_ids(loser_roster, ship_ids);
 
         let base_experience = roster::base_experience(loser_roster);
-        if (roster::environment_owned(loser_roster)) {
-            if (option::is_some(&base_experience)) {
-                let b = *option::borrow(&base_experience);
-                if (b > winner_increased_experience) {
-                    winner_increased_experience = b;
-                };
-            };
+        if (roster::environment_owned(loser_roster) && option::is_some(&base_experience)) {
+            let b = *option::borrow(&base_experience);
+            if (b > winner_increased_experience) { winner_increased_experience = b; };
         };
-        item_id_quantity_pairs::new(loot_item_ids, loot_item_quantities);
         let new_level = experience_table_util::calculate_new_level(
             player, experience_table, winner_increased_experience
         );
         let loser_new_level = experience_table_util::calculate_new_level(
             loser_player, experience_table, loser_increased_experience
         );
+
         ship_battle::new_ship_battle_loot_taken(
             ship_battle, choice, vector_util::new_item_id_quantity_pairs(loot_item_ids, loot_item_quantities),
             clock::timestamp_ms(clock) / 1000,

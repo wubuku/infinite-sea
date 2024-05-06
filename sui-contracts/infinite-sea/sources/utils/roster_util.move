@@ -28,6 +28,15 @@ module infinite_sea::roster_util {
     const EPayerHasNoClaimedIsland: u64 = 21;
     const ERosterNotAnchoredAtIsland: u64 = 22;
 
+    const MIN_DISTANCE_TO_TRANSFER: u64 = 3;
+
+    public fun are_rosters_close_enough_to_transfer(roster_1: &Roster, roster_2: &Roster): bool {
+        let c_1 = roster::updated_coordinates(roster_1);
+        let c_2 = roster::updated_coordinates(roster_2);
+        let d = direct_route_util::get_distance(c_1, c_2);
+        d <= MIN_DISTANCE_TO_TRANSFER
+    }
+
     /// Assert that the roster is anchored at the island claimed by the player.
     public fun assert_roster_is_anchored_at_claimed_island(roster: &Roster, player: &Player) {
         let status = roster::status(roster);
