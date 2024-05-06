@@ -69,37 +69,37 @@ module infinite_sea::roster_create_environment_roster_logic {
         roster::set_base_experience(&mut roster, option::some(base_experience));
 
         let position = 0;
-        let number_of_ships = 1;
+        let number_of_ships = 4; //todo magic number?
         while (position < number_of_ships) {
             // only one ship for now!
             let player_id = roster_id::player_id(&roster_id);
 
-            let building_expences_item_ids = vector[item_id::copper_ore(), item_id::normal_logs(), item_id::cottons()];
+            let building_expenses_item_ids = vector[item_id::copper_ore(), item_id::normal_logs(), item_id::cottons()];
             // distribute random resources based on ship_resource_quantity
-            let current_resource_quantity = ship_resource_quantity / number_of_ships;
-            if (position == number_of_ships - 1) {
-                current_resource_quantity = current_resource_quantity + (ship_resource_quantity % number_of_ships);
-            };
+            let current_resource_quantity = ship_resource_quantity;// / number_of_ships;
+            // if (position == number_of_ships - 1) {
+            //     current_resource_quantity = current_resource_quantity + (ship_resource_quantity % number_of_ships);
+            // };
             let random_resource_quantities = ts_random_util::divide_int_with_epoch_timestamp_ms(
                 ctx,
                 object::id_to_bytes(&roster::id(&roster)),
                 ((current_resource_quantity - ship_base_resource_quantity * 3) as u64),
                 3
             );
-            let building_expences_item_quantities = vector[
+            let building_expenses_item_quantities = vector[
                 ship_base_resource_quantity + (*vector::borrow(&random_resource_quantities, 0) as u32),
                 ship_base_resource_quantity + (*vector::borrow(&random_resource_quantities, 1) as u32),
                 ship_base_resource_quantity + (*vector::borrow(&random_resource_quantities, 2) as u32),
             ];
-            let building_expences = item_id_quantity_pairs::new(
-                building_expences_item_ids,
-                building_expences_item_quantities
+            let building_expenses = item_id_quantity_pairs::new(
+                building_expenses_item_ids,
+                building_expenses_item_quantities
             );
             let (health_points, attack, protection, ship_speed) = ship_util::calculate_ship_attributes(
-                &item_id_quantity_pairs::items(&building_expences)
+                &item_id_quantity_pairs::items(&building_expenses)
             );
             let ship = ship_aggregate::create(player_id, health_points, attack, protection, ship_speed,
-                building_expences, ctx,
+                building_expenses, ctx,
             );
 
             let ship_id = ship::id(&ship);

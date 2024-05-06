@@ -1,6 +1,7 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::ship_battle_make_move_logic {
     use std::option;
+    use std::vector;
 
     use sui::clock;
     use sui::clock::Clock;
@@ -8,13 +9,16 @@ module infinite_sea::ship_battle_make_move_logic {
     use sui::object_table;
     use sui::tx_context::TxContext;
     use infinite_sea_common::battle_status;
+    use infinite_sea_common::item_id_quantity_pairs;
     use infinite_sea_common::ship_battle_command;
+    use infinite_sea_common::ship_util;
 
     use infinite_sea::player::Player;
     use infinite_sea::roster;
     use infinite_sea::roster::Roster;
     use infinite_sea::roster_util;
     use infinite_sea::ship;
+    use infinite_sea::ship::Ship;
     use infinite_sea::ship_battle;
     use infinite_sea::ship_battle_util;
 
@@ -164,14 +168,17 @@ module infinite_sea::ship_battle_make_move_logic {
             attacker_roster = responder;
             defender_roster = initiator;
         };
+        let is_attacker_env_owned = roster::environment_owned(attacker_roster);
+        let is_defender_env_owned = roster::environment_owned(defender_roster);
+
         let attacker_ships = roster::borrow_mut_ships(attacker_roster);
         let defender_ships = roster::borrow_mut_ships(defender_roster);
         let attacker_ship = object_table::borrow_mut(attacker_ships, *option::borrow(&attacker_ship_id));
         let defender_ship = object_table::borrow_mut(defender_ships, *option::borrow(&defender_ship_id));
-        let defender_ship_hp = ship::health_points(defender_ship);
-        let attacker_ship_hp = ship::health_points(attacker_ship);
-        ship::set_health_points(defender_ship, defender_ship_hp - defender_damage_taken);
-        ship::set_health_points(attacker_ship, attacker_ship_hp - attacker_damage_taken);
+        let attacker_ship_hp = ship::health_points(attacker_ship) - attacker_damage_taken;
+        let defender_ship_hp = ship::health_points(defender_ship) - defender_damage_taken;
+        ship::set_health_points(defender_ship, defender_ship_hp);
+        ship::set_health_points(attacker_ship, attacker_ship_hp);
 
         let is_batlle_ended = ship_battle::ship_battle_move_made_is_battle_ended(ship_battle_move_made);
         let winner = ship_battle::ship_battle_move_made_winner(ship_battle_move_made);
@@ -198,5 +205,35 @@ module infinite_sea::ship_battle_make_move_logic {
         ship_battle::set_round_attacker_ship(ship_battle, next_round_attacker_ship);
         ship_battle::set_round_defender_ship(ship_battle, next_round_defender_ship);
         ship_battle::set_round_started_at(ship_battle, next_round_started_at);
+
+        // Update experience points
+        let defender_xp = if (attacker_ship_hp == 0) {
+            calculate_ship_experience(attacker_ship, is_attacker_env_owned)
+        } else { 0 };
+        let attacker_xp = if (defender_ship_hp == 0) {
+            calculate_ship_experience(defender_ship, is_defender_env_owned)
+        } else { 0 };
+        let initiator_experiences = ship_battle::initiator_experiences(ship_battle);
+        let responder_experiences = ship_battle::responder_experiences(ship_battle);
+        if (*option::borrow(&round_mover) == ship_battle_util::initiator()) {
+            //current round attacker is initiator
+            vector::push_back(&mut initiator_experiences, attacker_xp);
+            vector::push_back(&mut responder_experiences, defender_xp);
+        } else {
+            //current round attacker is responder
+            vector::push_back(&mut responder_experiences, attacker_xp);
+            vector::push_back(&mut initiator_experiences, defender_xp);
+        };
+        ship_battle::set_initiator_experiences(ship_battle, initiator_experiences);
+        ship_battle::set_responder_experiences(ship_battle, responder_experiences);
+    }
+
+    fun calculate_ship_experience(ship: &Ship, isEnvironmentOwned: bool): u32 {
+        if (isEnvironmentOwned) {
+            let building_expenses = ship::building_expenses(ship);
+            ship_util::calculate_environment_ship_experience(&item_id_quantity_pairs::items(&building_expenses))
+        } else {
+            8 //todo magic number?
+        }
     }
 }
