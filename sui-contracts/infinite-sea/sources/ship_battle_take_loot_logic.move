@@ -39,6 +39,7 @@ module infinite_sea::ship_battle_take_loot_logic {
 
     public(friend) fun verify(
         player: &mut Player,
+        loser_player: &mut Player,
         initiator: &mut Roster,
         responder: &mut Roster,
         experience_table: &ExperienceTable,
@@ -109,6 +110,7 @@ module infinite_sea::ship_battle_take_loot_logic {
     public(friend) fun mutate(
         ship_battle_loot_taken: &ship_battle::ShipBattleLootTaken,
         player: &mut Player,
+        loser_player: &mut Player,
         initiator: &mut Roster,
         responder: &mut Roster,
         ship_battle: &mut ship_battle::ShipBattle,

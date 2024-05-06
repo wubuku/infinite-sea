@@ -395,6 +395,17 @@ aggregates:
         type: ID # Roster ID
       Status:
         type: u8
+      InitiatorExperiences:
+        #This array keeps track of the experiences Initiator has gained in each round.
+        itemType: u32
+        isList: true
+        defaultLogic:
+          Move: "std::vector::empty()"
+      ResponderExperiences:
+        itemType: u32
+        isList: true
+        defaultLogic:
+          Move: "std::vector::empty()"
       Winner:
         type: u8
         optional: true
@@ -529,6 +540,10 @@ aggregates:
       TakeLoot:
         parameters:
           Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          LoserPlayer:
             referenceType: Player
             isMutableReference: true
             isIgnoredInEvent: true

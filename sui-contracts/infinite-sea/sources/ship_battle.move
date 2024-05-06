@@ -27,6 +27,8 @@ module infinite_sea::ship_battle {
         initiator: ID,
         responder: ID,
         status: u8,
+        initiator_experiences: vector<u32>,
+        responder_experiences: vector<u32>,
         winner: Option<u8>,
         round_number: u32,
         round_started_at: u64,
@@ -65,6 +67,38 @@ module infinite_sea::ship_battle {
 
     public(friend) fun set_status(ship_battle: &mut ShipBattle, status: u8) {
         ship_battle.status = status;
+    }
+
+    public fun borrow_initiator_experiences(ship_battle: &ShipBattle): &vector<u32> {
+        &ship_battle.initiator_experiences
+    }
+
+    public(friend) fun borrow_mut_initiator_experiences(ship_battle: &mut ShipBattle): &mut vector<u32> {
+        &mut ship_battle.initiator_experiences
+    }
+
+    public fun initiator_experiences(ship_battle: &ShipBattle): vector<u32> {
+        ship_battle.initiator_experiences
+    }
+
+    public(friend) fun set_initiator_experiences(ship_battle: &mut ShipBattle, initiator_experiences: vector<u32>) {
+        ship_battle.initiator_experiences = initiator_experiences;
+    }
+
+    public fun borrow_responder_experiences(ship_battle: &ShipBattle): &vector<u32> {
+        &ship_battle.responder_experiences
+    }
+
+    public(friend) fun borrow_mut_responder_experiences(ship_battle: &mut ShipBattle): &mut vector<u32> {
+        &mut ship_battle.responder_experiences
+    }
+
+    public fun responder_experiences(ship_battle: &ShipBattle): vector<u32> {
+        ship_battle.responder_experiences
+    }
+
+    public(friend) fun set_responder_experiences(ship_battle: &mut ShipBattle, responder_experiences: vector<u32>) {
+        ship_battle.responder_experiences = responder_experiences;
     }
 
     public fun winner(ship_battle: &ShipBattle): Option<u8> {
@@ -131,6 +165,8 @@ module infinite_sea::ship_battle {
             initiator,
             responder,
             status,
+            initiator_experiences: std::vector::empty(),
+            responder_experiences: std::vector::empty(),
             winner: std::option::none(),
             round_number: 1,
             round_started_at,
@@ -388,6 +424,8 @@ module infinite_sea::ship_battle {
             initiator: _initiator,
             responder: _responder,
             status: _status,
+            initiator_experiences: _initiator_experiences,
+            responder_experiences: _responder_experiences,
             winner: _winner,
             round_number: _round_number,
             round_started_at: _round_started_at,

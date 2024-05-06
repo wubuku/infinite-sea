@@ -74,6 +74,7 @@ module infinite_sea::ship_battle_aggregate {
     public entry fun take_loot(
         ship_battle: &mut ship_battle::ShipBattle,
         player: &mut Player,
+        loser_player: &mut Player,
         initiator: &mut Roster,
         responder: &mut Roster,
         experience_table: &ExperienceTable,
@@ -83,6 +84,7 @@ module infinite_sea::ship_battle_aggregate {
     ) {
         let ship_battle_loot_taken = ship_battle_take_loot_logic::verify(
             player,
+            loser_player,
             initiator,
             responder,
             experience_table,
@@ -94,6 +96,7 @@ module infinite_sea::ship_battle_aggregate {
         ship_battle_take_loot_logic::mutate(
             &ship_battle_loot_taken,
             player,
+            loser_player,
             initiator,
             responder,
             ship_battle,
