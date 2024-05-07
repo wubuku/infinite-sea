@@ -32,11 +32,15 @@ module infinite_sea::ship_battle_take_loot_logic {
     const EBattleNotEnded: u64 = 13;
     const EInvalidLoserStatus: u64 = 14;
     const EWinnerNotSet: u64 = 15;
+    const EBattleEndedAtNotSet: u64 = 16;
+    const EPayerHasNoClaimedIsland: u64 = 17;
 
     #[allow(unused_const)]
     const CHOICE_TAKE_ALL: u8 = 1;
     #[allow(unused_const)]
     const CHOICE_LEAVE_IT: u8 = 0;
+    /// Time limit to take loot actively
+    const LOOT_TAKING_TIME_LIMIT: u64 = 30; // 30 seconds?
 
     public(friend) fun verify(
         player: &mut Player,
@@ -52,6 +56,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         ship_battle_util::assert_ids_are_consistent(ship_battle, initiator, responder);
         assert!(ship_battle::status(ship_battle) == battle_status::ended(), EBattleNotEnded);
         assert!(option::is_some(&ship_battle::winner(ship_battle)), EWinnerNotSet);
+        let now_time = clock::timestamp_ms(clock) / 1000;
         let winner = option::extract(&mut ship_battle::winner(ship_battle));
         let winner_roster: &Roster;
         let loser_roster: &mut Roster;
@@ -84,7 +89,14 @@ module infinite_sea::ship_battle_take_loot_logic {
             // Anyone can take the loot for the environment.
             choice = CHOICE_TAKE_ALL;
         } else {
-            permission_util::assert_player_is_roster_owner(player, winner_roster);
+            let battle_ended_at = ship_battle::ended_at(ship_battle);
+            assert!(option::is_some(&battle_ended_at), EBattleEndedAtNotSet);
+            if (now_time >= *option::borrow(&battle_ended_at) + LOOT_TAKING_TIME_LIMIT) {
+                // Anyone can trigger the loot taking after the time limit using the default choice.
+                choice = CHOICE_TAKE_ALL;
+            } else {
+                permission_util::assert_player_is_roster_owner(player, winner_roster);
+            };
         };
         assert!(roster::status(loser_roster) == roster_status::destroyed(), EInvalidLoserStatus);
 
@@ -123,7 +135,7 @@ module infinite_sea::ship_battle_take_loot_logic {
 
         ship_battle::new_ship_battle_loot_taken(
             ship_battle, choice, sorted_vector_util::new_item_id_quantity_pairs(loot_item_ids, loot_item_quantities),
-            clock::timestamp_ms(clock) / 1000,
+            now_time,
             winner_increased_experience, new_level, loser_increased_experience, loser_new_level,
         )
     }
@@ -156,7 +168,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         update_winner_inventory(winner_roster, loot);
         update_winner_roster_status(winner_roster, looted_at);
         update_loser_roster_status(loser_roster, loser_player, looted_at);
-
+        // Update ship battle status to "looted".
         ship_battle::set_status(ship_battle, battle_status::looted());
 
         let increased_experience = ship_battle::ship_battle_loot_taken_increased_experience(ship_battle_loot_taken);
@@ -214,7 +226,9 @@ module infinite_sea::ship_battle_take_loot_logic {
         if (roster::environment_owned(loser_roster)) {
             return
         };
+        // send the loser roster back to the player claimed island
         let island_coordinates = player::claimed_island(loser_player);
+        assert!(option::is_some(&island_coordinates), EPayerHasNoClaimedIsland);
         roster::set_updated_coordinates(loser_roster, option::extract(&mut island_coordinates));
         roster::set_coordinates_updated_at(loser_roster, looted_at);
         roster::set_status(loser_roster, roster_status::at_anchor());
@@ -225,6 +239,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         let current_coordinates = roster::updated_coordinates(winner_roster);
         let target_coordinates = roster::target_coordinates(winner_roster);
         if (option::is_some(&target_coordinates) && *option::borrow(&target_coordinates) != current_coordinates) {
+            //continue the journey
             roster::set_status(winner_roster, roster_status::underway());
         } else {
             roster::set_status(winner_roster, roster_status::at_anchor());

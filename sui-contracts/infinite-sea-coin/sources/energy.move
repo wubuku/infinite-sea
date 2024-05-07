@@ -9,6 +9,8 @@ module infinite_sea_coin::energy {
     use sui::transfer;
     use sui::tx_context::{Self, TxContext};
 
+    const COIN_DECIMALS: u8 = 9; // Is this a good value?
+
     /// Name of the coin
     struct ENERGY has drop {}
 
@@ -16,9 +18,16 @@ module infinite_sea_coin::energy {
     /// this is a module initializer, it ensures the currency only gets
     /// registered once.
     fun init(otw: ENERGY, ctx: &mut TxContext) {
-        // Get a treasury cap for the coin and give it to the transaction
-        // sender
-        let (treasury_cap, metadata) = coin::create_currency<ENERGY>(otw, 2, b"ENERGY", b"", b"", option::none(), ctx);
+        // Get a treasury cap for the coin and give it to the transaction sender
+        let (treasury_cap, metadata) = coin::create_currency<ENERGY>(
+            otw,
+            COIN_DECIMALS,
+            b"ENERGY",
+            b"InifiniteSeaEnergyCoin",
+            b"Inifinite Sea Energy Coin",
+            option::none(),
+            ctx
+        );
         transfer::public_freeze_object(metadata);
         transfer::public_transfer(treasury_cap, tx_context::sender(ctx))
     }

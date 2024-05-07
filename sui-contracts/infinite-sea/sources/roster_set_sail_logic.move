@@ -21,7 +21,7 @@ module infinite_sea::roster_set_sail_logic {
     const ERosterUnfitToSail: u64 = 10;
     const ENotEnoughEnergy: u64 = 11;
 
-    const MIN_SAIL_ENERGY: u64 = 500; //todo decimal 2?
+    const MIN_SAIL_ENERGY: u64 = 500; //todo Is this a good value?
 
     public(friend) fun verify(
         player: &Player,
