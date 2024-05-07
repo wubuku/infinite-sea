@@ -29,6 +29,7 @@ module infinite_sea::ship_battle {
         status: u8,
         initiator_experiences: vector<u32>,
         responder_experiences: vector<u32>,
+        ended_at: Option<u64>,
         winner: Option<u8>,
         round_number: u32,
         round_started_at: u64,
@@ -101,6 +102,14 @@ module infinite_sea::ship_battle {
         ship_battle.responder_experiences = responder_experiences;
     }
 
+    public fun ended_at(ship_battle: &ShipBattle): Option<u64> {
+        ship_battle.ended_at
+    }
+
+    public(friend) fun set_ended_at(ship_battle: &mut ShipBattle, ended_at: Option<u64>) {
+        ship_battle.ended_at = ended_at;
+    }
+
     public fun winner(ship_battle: &ShipBattle): Option<u8> {
         ship_battle.winner
     }
@@ -167,6 +176,7 @@ module infinite_sea::ship_battle {
             status,
             initiator_experiences: std::vector::empty(),
             responder_experiences: std::vector::empty(),
+            ended_at: std::option::none(),
             winner: std::option::none(),
             round_number: 1,
             round_started_at,
@@ -447,6 +457,7 @@ module infinite_sea::ship_battle {
             status: _status,
             initiator_experiences: _initiator_experiences,
             responder_experiences: _responder_experiences,
+            ended_at: _ended_at,
             winner: _winner,
             round_number: _round_number,
             round_started_at: _round_started_at,

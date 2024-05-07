@@ -1,5 +1,7 @@
 module infinite_sea_common::ship_util {
 
+    use std::option;
+    use std::option::Option;
     use std::vector;
 
     use sui::object::ID;
@@ -66,5 +68,17 @@ module infinite_sea_common::ship_util {
             };
             i = i + 1;
         }
+    }
+
+    public fun find_ship_id(ship_ids: &vector<ID>, ship_id: ID): Option<u64> {
+        let i = 0;
+        let l = vector::length(ship_ids);
+        while (i < l) {
+            if (*vector::borrow(ship_ids, i) == ship_id) {
+                return option::some(i)
+            };
+            i = i + 1;
+        };
+        option::none()
     }
 }

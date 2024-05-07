@@ -407,6 +407,11 @@ aggregates:
         isList: true
         defaultLogic:
           Move: "std::vector::empty()"
+      EndedAt:
+        type: u64
+        optional: true
+        defaultLogic:
+          Move: "std::option::none()"
       Winner:
         type: u8
         optional: true

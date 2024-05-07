@@ -193,6 +193,9 @@ module infinite_sea::ship_battle_make_move_logic {
 
         if (is_batlle_ended) {
             ship_battle::set_status(ship_battle, battle_status::ended());
+            ship_battle::set_ended_at(
+                ship_battle, option::some(next_round_started_at) //NOTE: next_round_started_at = now_time
+            );
             assert!(option::is_some(&winner), EWinnerNotSet);
         } else {
             let current_round_number = ship_battle::round_number(ship_battle);
