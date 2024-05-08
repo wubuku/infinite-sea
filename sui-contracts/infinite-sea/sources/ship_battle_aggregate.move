@@ -14,8 +14,9 @@ module infinite_sea::ship_battle_aggregate {
     use sui::clock::Clock;
     use sui::tx_context;
 
-    friend infinite_sea::ship_battle_service;
     friend infinite_sea::skill_process_service;
+    friend infinite_sea::roster_service;
+    friend infinite_sea::ship_battle_service;
 
     public fun initiate_battle(
         player: &Player,

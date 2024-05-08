@@ -1,7 +1,21 @@
 services:
   SkillProcessService:
     methods:
-      #StartCreation: # todo start item creation
+      StartCreation:
+        parameters:
+          SkillProcess:
+            referenceType: SkillProcess
+            isMutableReference: true
+          Player:
+            referenceType: Player
+            isMutableReference: true
+          ItemCreation:
+            referenceType: ItemCreation
+          Clock:
+            referenceType: Clock
+          Energy:
+            type: "Coin<ENERGY>"
+
 
       StartProduction:
         parameters:
@@ -18,6 +32,40 @@ services:
           Energy:
             type: "Coin<ENERGY>"
 
+      StartShipProduction:
+        parameters:
+          SkillProcess:
+            referenceType: SkillProcess
+            isMutableReference: true
+          ProductionMaterials:
+            type: ItemIdQuantityPairs
+          Player:
+            referenceType: Player
+            isMutableReference: true
+          ItemProduction:
+            referenceType: ItemProduction
+          Clock:
+            referenceType: Clock
+          Energy:
+            type: "Coin<ENERGY>"
+
+  RosterService:
+    methods:
+      SetSail:
+        parameters:
+          Roster:
+            referenceType: Roster
+            isMutableReference: true
+          Player:
+            referenceType: Player
+          TargetCoordinates:
+            type: Coordinates
+          Clock:
+            referenceType: Clock
+          Energy:
+            type: "Coin<ENERGY>"
+          EnergyAmount:
+            type: u64
 
 #      StartMutexCreation:
 #        parameters:
@@ -36,3 +84,36 @@ services:
 #            referenceType: Clock
 #          Energy:
 #            type: "Coin<ENERGY>"
+
+  ShipBattleService:
+    methods:
+      InitiateBattleAndAutoPlayTillEnd:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+          Initiator:
+            referenceType: Roster
+            isMutableReference: true
+          Responder:
+            referenceType: Roster
+            isMutableReference: true
+          Clock:
+            referenceType: Clock
+
+      AutoPlayTillEnd:
+        parameters:
+          ShipBattle:
+            referenceType: ShipBattle
+            isMutableReference: true
+          Player:
+            referenceType: Player
+            isMutableReference: true
+          Initiator:
+            referenceType: Roster
+            isMutableReference: true
+          Responder:
+            referenceType: Roster
+            isMutableReference: true
+          Clock:
+            referenceType: Clock

@@ -1,11 +1,11 @@
 module infinite_sea::skill_process_service {
-    use sui::balance::Balance;
     use sui::clock::Clock;
-    use sui::coin::{Self, Coin};
-    use sui::transfer;
+    use sui::coin::Coin;
     use sui::tx_context;
-    use sui::tx_context::TxContext;
     use infinite_sea_coin::energy::ENERGY;
+    use infinite_sea_common::coin_util;
+    use infinite_sea_common::item_creation;
+    use infinite_sea_common::item_creation::ItemCreation;
     use infinite_sea_common::item_production;
     use infinite_sea_common::item_production::ItemProduction;
 
@@ -13,7 +13,25 @@ module infinite_sea::skill_process_service {
     use infinite_sea::skill_process::SkillProcess;
     use infinite_sea::skill_process_aggregate;
 
-    // use infinite_sea::skill_process_mutex::SkillProcessMutex;
+    public entry fun start_creation(
+        skill_process: &mut SkillProcess,
+        player: &mut Player,
+        item_creation: &ItemCreation,
+        clock: &Clock,
+        energy: Coin<ENERGY>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let energy_cost = item_creation::energy_cost(item_creation);
+        let energy_b = coin_util::split_up_and_into_balance(energy, energy_cost, ctx);
+        skill_process_aggregate::start_creation(
+            skill_process,
+            player,
+            item_creation,
+            clock,
+            energy_b,
+            ctx
+        )
+    }
 
     public entry fun start_production(
         skill_process: &mut SkillProcess,
@@ -24,7 +42,7 @@ module infinite_sea::skill_process_service {
         ctx: &mut tx_context::TxContext,
     ) {
         let energy_cost = item_production::energy_cost(item_production);
-        let energy_b = split_up_and_into_balance(energy, energy_cost, ctx);
+        let energy_b = coin_util::split_up_and_into_balance(energy, energy_cost, ctx);
         skill_process_aggregate::start_production(
             skill_process,
             player,
@@ -35,16 +53,30 @@ module infinite_sea::skill_process_service {
         )
     }
 
-    #[lint_allow(self_transfer)]
-    fun split_up_and_into_balance<T>(coin: Coin<T>, amount: u64, ctx: &mut TxContext): Balance<T> {
-        if (coin::value(&coin) == amount) {
-            coin::into_balance(coin)
-        } else {
-            let s = coin::into_balance(coin::split(&mut coin, amount, ctx));
-            transfer::public_transfer(coin, tx_context::sender(ctx));
-            s
-        }
+    public entry fun start_ship_production(
+        skill_process: &mut SkillProcess,
+        production_materials_item_id_list: vector<u32>,
+        production_materials_item_quantity_list: vector<u32>,
+        player: &mut Player,
+        item_production: &ItemProduction,
+        clock: &Clock,
+        energy: Coin<ENERGY>,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let energy_cost = item_production::energy_cost(item_production);
+        let energy_b = coin_util::split_up_and_into_balance(energy, energy_cost, ctx);
+        skill_process_aggregate::start_ship_production(
+            skill_process,
+            production_materials_item_id_list,
+            production_materials_item_quantity_list,
+            player,
+            item_production,
+            clock,
+            energy_b,
+            ctx
+        )
     }
+
 
     // public entry fun start_mutex_creation(
     //     skill_process: &mut SkillProcess,

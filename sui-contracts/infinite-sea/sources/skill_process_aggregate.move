@@ -25,8 +25,9 @@ module infinite_sea::skill_process_aggregate {
     use sui::object::ID;
     use sui::tx_context;
 
-    friend infinite_sea::ship_battle_service;
     friend infinite_sea::skill_process_service;
+    friend infinite_sea::roster_service;
+    friend infinite_sea::ship_battle_service;
 
     public entry fun create(
         skill_process_id_skill_type: u8,

@@ -13,8 +13,9 @@ module infinite_sea::map_aggregate {
     use sui::tx_context;
 
     friend infinite_sea::player_claim_island_logic;
-    friend infinite_sea::ship_battle_service;
     friend infinite_sea::skill_process_service;
+    friend infinite_sea::roster_service;
+    friend infinite_sea::ship_battle_service;
 
     const EInvalidAdminCap: u64 = 50;
 

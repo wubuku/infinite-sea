@@ -836,36 +836,3 @@ singletonObjects:
           GatheredAt:
             type: u64
 
-services:
-  ShipBattleService:
-    methods:
-      InitiateBattleAndAutoPlayTillEnd:
-        parameters:
-          Player:
-            referenceType: Player
-            isMutableReference: true
-          Initiator:
-            referenceType: Roster
-            isMutableReference: true
-          Responder:
-            referenceType: Roster
-            isMutableReference: true
-          Clock:
-            referenceType: Clock
-
-      AutoPlayTillEnd:
-        parameters:
-          ShipBattle:
-            referenceType: ShipBattle
-            isMutableReference: true
-          Player:
-            referenceType: Player
-            isMutableReference: true
-          Initiator:
-            referenceType: Roster
-            isMutableReference: true
-          Responder:
-            referenceType: Roster
-            isMutableReference: true
-          Clock:
-            referenceType: Clock

@@ -31,8 +31,9 @@ module infinite_sea::roster_aggregate {
     friend infinite_sea::player_claim_island_logic;
     friend infinite_sea::skill_process_complete_ship_production_logic;
     friend infinite_sea::ship_battle_initiate_battle_logic;
-    friend infinite_sea::ship_battle_service;
     friend infinite_sea::skill_process_service;
+    friend infinite_sea::roster_service;
+    friend infinite_sea::ship_battle_service;
 
     const EInvalidPublisher: u64 = 50;
 
