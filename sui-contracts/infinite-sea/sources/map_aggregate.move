@@ -7,8 +7,11 @@ module infinite_sea::map_aggregate {
     use infinite_sea::map;
     use infinite_sea::map_add_island_logic;
     use infinite_sea::map_claim_island_logic;
+    use infinite_sea::map_gather_island_resources_logic;
+    use infinite_sea::player::Player;
     use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_common::item_id_quantity_pairs::{Self, ItemIdQuantityPairs};
+    use sui::clock::Clock;
     use sui::object::ID;
     use sui::tx_context;
 
@@ -75,6 +78,29 @@ module infinite_sea::map_aggregate {
         );
         map::update_object_version(map);
         map::emit_map_island_claimed(map_island_claimed);
+    }
+
+    public entry fun gather_island_resources(
+        map: &mut map::Map,
+        player: &mut Player,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        map::assert_schema_version(map);
+        let island_resources_gathered = map_gather_island_resources_logic::verify(
+            player,
+            clock,
+            map,
+            ctx,
+        );
+        map_gather_island_resources_logic::mutate(
+            &island_resources_gathered,
+            player,
+            map,
+            ctx,
+        );
+        map::update_object_version(map);
+        map::emit_island_resources_gathered(island_resources_gathered);
     }
 
 }

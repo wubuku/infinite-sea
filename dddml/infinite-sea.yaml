@@ -793,6 +793,21 @@ singletonObjects:
     properties:
       Locations:
         itemType: MapLocation
+    entities:
+      MapLocation:
+        id:
+          name: Coordinates
+          type: Coordinates
+        properties:
+          Type:
+            type: u32
+          OccupiedBy:
+            type: ID # PlayerId
+            optional: true
+          Resources:
+            itemType: ItemIdQuantityPair
+          GatheredAt:
+            type: u64
     methods:
       "__Init__":
         event:
@@ -820,19 +835,21 @@ singletonObjects:
         event:
           name: MapIslandClaimed
 
-    entities:
-      MapLocation:
-        id:
-          name: Coordinates
-          type: Coordinates
-        properties:
-          Type:
-            type: u32
-          OccupiedBy:
-            type: ID # PlayerId
-            optional: true
-          Resources:
-            itemType: ItemIdQuantityPair
-          GatheredAt:
-            type: u64
-
+      GatherIslandResources:
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          name: IslandResourcesGathered
+          properties:
+            Coordinates:
+              type: Coordinates
+            Resources:
+              itemType: ItemIdQuantityPair
+            GatheredAt:
+              type: u64

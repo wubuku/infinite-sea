@@ -6,6 +6,7 @@
 module infinite_sea::map {
     use infinite_sea::map_location::{Self, MapLocation};
     use infinite_sea_common::coordinates::Coordinates;
+    use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
     use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use sui::event;
     use sui::object::{Self, ID, UID};
@@ -17,6 +18,7 @@ module infinite_sea::map {
 
     friend infinite_sea::map_add_island_logic;
     friend infinite_sea::map_claim_island_logic;
+    friend infinite_sea::map_gather_island_resources_logic;
     friend infinite_sea::map_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -212,6 +214,45 @@ module infinite_sea::map {
         }
     }
 
+    struct IslandResourcesGathered has copy, drop {
+        id: object::ID,
+        version: u64,
+        coordinates: Coordinates,
+        resources: vector<ItemIdQuantityPair>,
+        gathered_at: u64,
+    }
+
+    public fun island_resources_gathered_id(island_resources_gathered: &IslandResourcesGathered): object::ID {
+        island_resources_gathered.id
+    }
+
+    public fun island_resources_gathered_coordinates(island_resources_gathered: &IslandResourcesGathered): Coordinates {
+        island_resources_gathered.coordinates
+    }
+
+    public fun island_resources_gathered_resources(island_resources_gathered: &IslandResourcesGathered): vector<ItemIdQuantityPair> {
+        island_resources_gathered.resources
+    }
+
+    public fun island_resources_gathered_gathered_at(island_resources_gathered: &IslandResourcesGathered): u64 {
+        island_resources_gathered.gathered_at
+    }
+
+    public(friend) fun new_island_resources_gathered(
+        map: &Map,
+        coordinates: Coordinates,
+        resources: vector<ItemIdQuantityPair>,
+        gathered_at: u64,
+    ): IslandResourcesGathered {
+        IslandResourcesGathered {
+            id: id(map),
+            version: version(map),
+            coordinates,
+            resources,
+            gathered_at,
+        }
+    }
+
 
     #[lint_allow(share_owned)]
     public(friend) fun share_object(map: Map) {
@@ -242,6 +283,10 @@ module infinite_sea::map {
 
     public(friend) fun emit_map_island_claimed(map_island_claimed: MapIslandClaimed) {
         event::emit(map_island_claimed);
+    }
+
+    public(friend) fun emit_island_resources_gathered(island_resources_gathered: IslandResourcesGathered) {
+        event::emit(island_resources_gathered);
     }
 
 }

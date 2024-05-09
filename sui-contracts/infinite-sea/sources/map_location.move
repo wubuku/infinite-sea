@@ -10,6 +10,7 @@ module infinite_sea::map_location {
     use sui::object::ID;
     friend infinite_sea::map_add_island_logic;
     friend infinite_sea::map_claim_island_logic;
+    friend infinite_sea::map_gather_island_resources_logic;
     friend infinite_sea::map;
 
     #[allow(unused_const)]
