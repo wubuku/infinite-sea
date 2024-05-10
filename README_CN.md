@@ -15,7 +15,7 @@
 
 Item（物品）有两种“生产/创造”方式：
 
-* Item Production。需要“原材料”，生产时需要消耗一定数量的原材料（其他 Items）。我们可以限制一下，生产配方最多使用 5 种原材料（应该已经足够）。
+* Item Production。需要“原材料”，生产时需要消耗一定数量的原材料（其他 Items）。
 * Item Creation。不需要原材料。
 
 同一种东西（Item），是可能可以通过不同的技能（Skill）获得的。比如你可以通过 “Farming” 技能种植、收获一种农产品，也可以“偷窃”技能获得它。
@@ -23,10 +23,24 @@ Item（物品）有两种“生产/创造”方式：
 Skill（技能）要么是生产（Production）型的技能，要么是创造（Creation）型的技能，不会两者都是。比如：
 
 * Farming（农业）是生产型的技能。需要消耗“种子”（原材料 items）。种子可以从市场购买、可以“偷窃”（偷窃是创造型的技能）或者使用其他技能获得。
-* Mining（挖矿）是创造型的技能。我们需要给这些创造型的技能的使用做一些“资源限制”。这个限制是针对技能类型使用的次数（或者点数）的配额限制。
-    而不是像生产型技能那样，通过“生产配方”需要具体的原材料的 item 和消耗数量来达成限制。
+* Mining（挖矿）和 Woodcutting（伐木）是创造型的技能。
+    * 我们需要给玩家对这些创造型技能的使用做一些限制。
+    * 严格来说，它不太像生产型技能那样，后者主要是通过设置“生产配方”所需的（可能是多种）原材料 item 和数量来达到对技能的使用限制。
+    * 不过，仍然可以将“一种创造型技能的使用配额”抽象为一个特殊的 Item(Id) 和 quantity 的 pair。
+
 
 ### Skill Processes
+
+实体 Skill Process（技能流程）表示执行 Item Production 或 Item Creation 的过程。
+
+#### Item Production 的 Skill Process
+
+执行 Skill Process 生产 Item，对于大多数 Item，生产成果只需要使用“Item ID 和数量”表示就可以了。
+
+但是 Skill Process 还需要有一些用来制造“Item 的独特个体”的方法。
+* 在 MVP 版本中，具有“独特个体”的 Item 主要指的是 Ship。所以，我们给 SkillProcess 定义了 StartShipProduction / CompleteShipProduction 方法。
+* 方法 StartShipProduction 的参数列表应该包含表示“实际投入的材料数量”的信息，因为它们可以大于 Item Production 中规定的（最少）数量。
+
 
 [TBD]
 
@@ -120,23 +134,28 @@ wubuku/dddappp:0.0.1 \
 
 #### Move 代码中的定义的常量
 
+我们在 Move 代码中定义了一些常量。在下面的代码片段中，部分常量定义所在的模块以及用于获取常量的值的函数名：
+
 ```move
         //
         // 可以编写脚本来添加岛屿，以及为岛屿随机地生成资源。
         //
         // 添加岛屿时，应该初始化以下资源（在 item_id 模块中定义了返回 Item ID 常量的函数）：
-        item_id::resource_type_mining(); // Item Creation 需要的“资源”也抽象为 Item
-        item_id::resource_type_woodcutting();
-        item_id::cotton_seeds();
+        item_id::resource_type_mining(); // Item Creation 需要的“资源”也抽象为 Item，这是执行挖矿操作所需的资源。
+        item_id::resource_type_woodcutting(); // 这是执行伐木操作所需的资源。
+        item_id::cotton_seeds(); // 这是种植棉花所需的“原材料”
+
         //以便用户可以通过这些技能：
         skill_type::mining(); // 这是一个 Item Creation 类型的技能
         skill_type::woodcutting(); // Item Creation Skill
         skill_type::farming(); // 这是一个 Item Production 类型的技能
+
         //产出造船需要的 Items：
         item_id::copper_ore(); // 铜矿
         item_id::normal_logs(); // 普通原木
         item_id::cottons(); // 棉花
 ```
+
 
 ## 测试应用
 
@@ -353,7 +372,7 @@ sui client call --package {DEFAULT_PACKAGE_ID} --module player_aggregate --funct
 
 ### 给玩家空投一些资源（Items）
 
-参数：
+这个方法只有管理员可以使用。参数：
 
 * player: &mut player::Player,
 * publisher: &sui::package::Publisher,
