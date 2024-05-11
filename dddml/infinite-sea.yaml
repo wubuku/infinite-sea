@@ -263,6 +263,8 @@ aggregates:
       CreateEnvironmentRoster:
         isCreationCommand: true
         requiredPermission: "__Publisher__"
+        metadata:
+          ParametersIncludedInMutationFunction: [ "Clock" ]
         parameters:
           Coordinates:
             type: Coordinates
@@ -272,6 +274,9 @@ aggregates:
             type: u32
           BaseExperience:
             type: u32
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
         event:
           name: EnvironmentRosterCreated
           isObjectShared: true
@@ -836,6 +841,8 @@ singletonObjects:
           name: MapIslandClaimed
 
       GatherIslandResources:
+        metadata:
+          ParametersIncludedInMutationFunction: [ "Clock" ]
         parameters:
           Player:
             referenceType: Player

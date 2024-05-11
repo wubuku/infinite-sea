@@ -37,8 +37,8 @@ module infinite_sea::map_gather_island_resources_logic {
         let rand_seed = bcs::to_bytes(&coordinates);
         vector::append(&mut rand_seed, object::id_to_bytes(&player::id(player)));
         vector::append(&mut rand_seed, bcs::to_bytes(&now_time));
-        let random_resource_quantities = ts_random_util::divide_int_with_epoch_timestamp_ms(
-            ctx,
+        let random_resource_quantities = ts_random_util::divide_int(
+            clock,
             rand_seed,
             (resources_quantity as u64),
             3
@@ -56,6 +56,7 @@ module infinite_sea::map_gather_island_resources_logic {
     public(friend) fun mutate(
         island_resources_gathered: &map::IslandResourcesGathered,
         player: &mut Player,
+        clock: &Clock,
         map: &mut map::Map,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {

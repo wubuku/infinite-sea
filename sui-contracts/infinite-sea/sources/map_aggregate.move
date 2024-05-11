@@ -96,6 +96,7 @@ module infinite_sea::map_aggregate {
         map_gather_island_resources_logic::mutate(
             &island_resources_gathered,
             player,
+            clock,
             map,
             ctx,
         );

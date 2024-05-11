@@ -3,6 +3,7 @@ module infinite_sea::roster_create_environment_roster_logic {
     use std::bcs;
     use std::option;
     use std::vector;
+    use sui::clock::Clock;
 
     use sui::object;
     use sui::object_table;
@@ -32,6 +33,7 @@ module infinite_sea::roster_create_environment_roster_logic {
         ship_resource_quantity: u32,
         ship_base_resource_quantity: u32,
         base_experience: u32,
+        clock: &Clock,
         roster_table: &roster::RosterTable,
         ctx: &mut TxContext,
     ): roster::EnvironmentRosterCreated {
@@ -45,6 +47,7 @@ module infinite_sea::roster_create_environment_roster_logic {
 
     public(friend) fun mutate(
         environment_roster_created: &roster::EnvironmentRosterCreated,
+        clock: &Clock,
         roster_table: &mut roster::RosterTable,
         ctx: &mut TxContext,
     ): roster::Roster {
@@ -83,8 +86,8 @@ module infinite_sea::roster_create_environment_roster_logic {
             // };
             let rand_seed = object::id_to_bytes(&roster::id(&roster));
             vector::append(&mut rand_seed, bcs::to_bytes(&position));
-            let random_resource_quantities = ts_random_util::divide_int_with_epoch_timestamp_ms(
-                ctx,
+            let random_resource_quantities = ts_random_util::divide_int(
+                clock,
                 rand_seed,
                 ((current_resource_quantity - ship_base_resource_quantity * 3) as u64),
                 3

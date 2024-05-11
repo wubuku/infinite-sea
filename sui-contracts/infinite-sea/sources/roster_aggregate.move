@@ -84,6 +84,7 @@ module infinite_sea::roster_aggregate {
         ship_resource_quantity: u32,
         ship_base_resource_quantity: u32,
         base_experience: u32,
+        clock: &Clock,
         roster_table: &mut roster::RosterTable,
         ctx: &mut tx_context::TxContext,
     ) {
@@ -103,11 +104,13 @@ module infinite_sea::roster_aggregate {
             ship_resource_quantity,
             ship_base_resource_quantity,
             base_experience,
+            clock,
             roster_table,
             ctx,
         );
         let roster = roster_create_environment_roster_logic::mutate(
             &environment_roster_created,
+            clock,
             roster_table,
             ctx,
         );

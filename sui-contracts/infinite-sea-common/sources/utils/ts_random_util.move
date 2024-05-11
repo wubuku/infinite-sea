@@ -20,6 +20,25 @@ module infinite_sea_common::ts_random_util {
         bcs::peel_u256(&mut bcs)
     }
 
+    public fun divide_int(clock: &Clock, seed: vector<u8>, value: u64, n: u64): vector<u64> {
+        let result = vector::empty<u64>();
+        let remaining = value;
+        let i = 0;
+        while (i < n) {
+            if (i == n - 1) {
+                vector::push_back(&mut result, remaining);
+                break
+            };
+            vector::append(&mut seed, bcs::to_bytes(&i));
+            let bound = remaining + 1;
+            let r = get_int(clock, seed, bound);
+            vector::push_back(&mut result, r);
+            remaining = remaining - r;
+            i = i + 1;
+        };
+        result
+    }
+
     /// Randomly splits an integer `value` into `n` integers whose sum is equal to the value.
     public fun divide_int_with_epoch_timestamp_ms(cxt: &TxContext, seed: vector<u8>, value: u64, n: u64): vector<u64> {
         let result = vector::empty<u64>();
