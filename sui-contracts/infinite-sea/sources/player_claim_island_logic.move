@@ -20,6 +20,7 @@ module infinite_sea::player_claim_island_logic {
     friend infinite_sea::player_aggregate;
 
     const ESenderHasNoPermission: u64 = 22;
+    const EPlayerAlreadyClaimedIsland: u64 = 23;
 
     public(friend) fun verify(
         map: &mut Map,
@@ -30,6 +31,7 @@ module infinite_sea::player_claim_island_logic {
         ctx: &TxContext,
     ): player::IslandClaimed {
         assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
+        assert!(option::is_none(&player::claimed_island(player)), EPlayerAlreadyClaimedIsland);
         let claimed_at = clock::timestamp_ms(clock) / 1000;
         player::new_island_claimed(player, coordinates, claimed_at)
     }
