@@ -21,6 +21,8 @@ module infinite_sea::map_gather_island_resources_logic {
 
     friend infinite_sea::map_aggregate;
 
+    const EResourceNotRegeneratedYet: u64 = 10;
+
     public(friend) fun verify(
         player: &mut Player,
         clock: &Clock,
@@ -32,8 +34,9 @@ module infinite_sea::map_gather_island_resources_logic {
         let coordinates = option::extract(&mut player::claimed_island(player));
         let now_time = clock::timestamp_ms(clock) / 1000;
         let resources_quantity = map_util::get_island_resources_quantity_to_gather(map, coordinates, now_time);
+        assert!(resources_quantity > 0, EResourceNotRegeneratedYet);
 
-        let resource_item_ids = vector[item_id::copper_ore(), item_id::normal_logs(), item_id::cottons()];
+        let resource_item_ids = vector[item_id::resource_type_mining(), item_id::resource_type_woodcutting(), item_id::cotton_seeds()];
         let rand_seed = bcs::to_bytes(&coordinates);
         vector::append(&mut rand_seed, object::id_to_bytes(&player::id(player)));
         vector::append(&mut rand_seed, bcs::to_bytes(&now_time));
