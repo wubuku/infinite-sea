@@ -29,6 +29,7 @@ module infinite_sea::roster_take_out_ship_inventory_logic {
     ): roster::RosterShipInventoryTakenOut {
         permission_util::assert_sender_is_player_owner(player, ctx);
         permission_util::assert_player_is_roster_owner(player, roster);
+        roster_util::assert_roster_is_not_unassigned_ships(roster); // Is this necessary?
 
         // Check if the ship has anchored at the island
         if (roster::status(roster) == roster_status::underway()) {

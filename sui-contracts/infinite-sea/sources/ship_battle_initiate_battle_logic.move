@@ -34,6 +34,8 @@ module infinite_sea::ship_battle_initiate_battle_logic {
         assert!(roster_util::is_status_battle_ready(responder), EResponderNotBattleReady);
         permission_util::assert_sender_is_player_owner(player, ctx);
         permission_util::assert_player_is_roster_owner(player, initiator);
+        roster_util::assert_roster_is_not_unassigned_ships(initiator);
+        roster_util::assert_roster_is_not_unassigned_ships(responder);
         // todo more checks???
 
         // Update the locations of the two rosters,

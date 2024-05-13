@@ -27,6 +27,7 @@ module infinite_sea::roster_util {
     const EInvalidRoasterUpdateTime: u64 = 12;
     const EPayerHasNoClaimedIsland: u64 = 21;
     const ERosterNotAnchoredAtIsland: u64 = 22;
+    const ERosterIsUnassignedShips: u64 = 23;
 
     const MIN_DISTANCE_TO_TRANSFER: u64 = 3;
 
@@ -35,6 +36,15 @@ module infinite_sea::roster_util {
         let c_2 = roster::updated_coordinates(roster_2);
         let d = direct_route_util::get_distance(c_1, c_2);
         d <= MIN_DISTANCE_TO_TRANSFER
+    }
+
+    /// Assert that the roster is NOT the special roster "unassigned ships".
+    public fun assert_roster_is_not_unassigned_ships(roster: &Roster) {
+        let roster_id = roster::roster_id(roster);
+        assert!(
+            roster_id::sequence_number(&roster_id) != roster_sequence_number::unassigned_ships(),
+            ERosterIsUnassignedShips
+        );
     }
 
     /// Assert that the roster is anchored at the island claimed by the player.
