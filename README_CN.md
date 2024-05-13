@@ -499,8 +499,8 @@ sui client object {PLAYER_ID} --json
       },
 ```
 
-在上面的示例输出中，table Id 是 `0x600ff5d855b5d9ff63edd9d9215457e1c1f6cbb316dc95999ac0d180c886e197`。
-然后我们可以这样获取 table 的“动态字段”信息（你可以把动态字段理解为表的“行”），这是个“分页”查询接口：
+在上面的示例输出中，“表”（table）的 ID 是 `0x600ff5d855b5d9ff63edd9d9215457e1c1f6cbb316dc95999ac0d180c886e197`。
+然后我们可以这样获取 table 的“动态字段”（你可以把动态字段理解为表的“行”）——这是个“分页”查询接口：
 
 ```shell
 curl -X POST \
@@ -509,8 +509,7 @@ curl -X POST \
 https://fullnode.testnet.sui.io/
 ```
 
-如果获取的是 `Table` 类型的“表”，那么， 返回的 fields 数组中的元素，"type" 为 "DynamicField"。
-返回的分页内容类似下面这样：
+如果获取的是 `Table` 类型的“表”，那么，返回的分页内容类似下面这样：
 
 ```text
 {"jsonrpc":"2.0","result":{"data":[
@@ -521,7 +520,8 @@ https://fullnode.testnet.sui.io/
 ],"nextCursor":"0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321c739","hasNextPage":false},"id":1}
 ```
 
-然后，再通过动态字段的 ID，获取动态字段的内容：
+返回的分页列表中的元素，`"type":"DynamicField"`，你可以这些元素理解为“动态字段”的“引用”，而不是动态字段的内容的全部。
+然后，再像下面这样，通过动态字段的 ID，获取“动态字段”的内容（动态字段也是一个“对象”）：
 
 ```shell
 sui client object 0x8655ebf801c0d9f734bc09b9b6aaff781f4d18c66e8ea4e0cb6261315f7b5bee
@@ -532,7 +532,7 @@ sui client object 0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321
 ---
 
 如果获取的是 `ObjectTable` 类型的表，
-那么，`suix_getDynamicFields` 方法返回的 `fields` 数组中的元素，"type" 类型为 "DynamicObject"。
+那么，`suix_getDynamicFields` 方法返回的 `fields` 数组中的元素，其类型为 "DynamicObject"。
 
 
 
