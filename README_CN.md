@@ -532,7 +532,7 @@ sui client object 0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321
 ---
 
 如果获取的是 `ObjectTable` 类型的表，
-那么，`suix_getDynamicFields` 方法返回的 `fields` 数组中的元素，其类型为 "DynamicObject"。
+那么，`suix_getDynamicFields` 方法返回分页列表中的元素，`"type":"DynamicObject"`。
 
 
 

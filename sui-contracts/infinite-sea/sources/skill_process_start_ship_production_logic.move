@@ -113,6 +113,7 @@ module infinite_sea::skill_process_start_ship_production_logic {
         skill_process::set_creation_time(skill_process, creation_time);
         skill_process::set_completed(skill_process, false);
         skill_process::set_ended_at(skill_process, 0);
+        skill_process::set_production_materials(skill_process, option::some(production_materials));
 
         let energy_vault = skill_process::borrow_mut_energy_vault(skill_process);
         balance::join(energy_vault, energy);
