@@ -455,7 +455,7 @@ sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_service 
 
 * skill_process: &mut skill_process::SkillProcess,
 * player: &mut Player,
-* item_production: &ItemProduction, 
+* item_production: &ItemProduction,
 * experience_table: &ExperienceTable,
 * clock: &Clock,
 
@@ -471,7 +471,7 @@ sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregat
 --gas-budget 11000000 --json > testnet_complete_skill_process.json
 ```
 
-接下来，我们可以检查执行结果。
+接下来，就可以检查执行结果。
 
 先获取玩家拥有的 Items 的 table ID：
 
@@ -479,11 +479,17 @@ sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregat
 sui client object {PLAYER_ID} --json
 ```
 
-输出类似：
+[TBD]
+
+
+### 关于 Move Table 或者 ObjectTable 内容的查询
+
+使用 `sui client object {OBJECT_ID}` 命令查询一个对象，如果对象包含类型为 `Table` 或者 `ObjectTable` 类型的字段，
+那么这个字段的信息输出类似下面这样：
 
 ```text
       "items": {
-        "type": "0x2::table::Table<u32, 0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc89731fa517fb8::player_item::PlayerItem>",
+        "type": "0x2::table::Table<{KEY_TYPE}, {VALUE_TYPE}>",
         "fields": {
           "id": {
             "id": "0x600ff5d855b5d9ff63edd9d9215457e1c1f6cbb316dc95999ac0d180c886e197"
@@ -493,7 +499,8 @@ sui client object {PLAYER_ID} --json
       },
 ```
 
-获取 table 的“动态字段”信息（你可以把动态字段理解为表的“行”），假设 table Id 是 `0x600ff5d855b5d9ff63edd9d9215457e1c1f6cbb316dc95999ac0d180c886e197`：
+在上面的示例输出中，table Id 是 `0x600ff5d855b5d9ff63edd9d9215457e1c1f6cbb316dc95999ac0d180c886e197`。
+然后我们可以这样获取 table 的“动态字段”信息（你可以把动态字段理解为表的“行”），这是个“分页”查询接口：
 
 ```shell
 curl -X POST \
@@ -502,7 +509,8 @@ curl -X POST \
 https://fullnode.testnet.sui.io/
 ```
 
-输出类似：
+如果获取的是 `Table` 类型的“表”，那么， 返回的 fields 数组中的元素，"type" 为 "DynamicField"。
+返回的分页内容类似下面这样：
 
 ```text
 {"jsonrpc":"2.0","result":{"data":[
@@ -513,13 +521,19 @@ https://fullnode.testnet.sui.io/
 ],"nextCursor":"0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321c739","hasNextPage":false},"id":1}
 ```
 
-通过动态字段的 ID，获取动态字段的内容。示例：
+然后，再通过动态字段的 ID，获取动态字段的内容：
 
 ```shell
 sui client object 0x8655ebf801c0d9f734bc09b9b6aaff781f4d18c66e8ea4e0cb6261315f7b5bee
 
 sui client object 0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321c739
 ```
+
+---
+
+如果获取的是 `ObjectTable` 类型的表，
+那么，`suix_getDynamicFields` 方法返回的 `fields` 数组中的元素，"type" 类型为 "DynamicObject"。
+
 
 
 ### Test off-chain service
