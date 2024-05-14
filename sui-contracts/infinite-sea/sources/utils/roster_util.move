@@ -29,6 +29,7 @@ module infinite_sea::roster_util {
     const ERosterNotAnchoredAtIsland: u64 = 22;
     const ERosterIsUnassignedShips: u64 = 23;
     const EInconsistentRosterShipId: u64 = 24;
+    const ERosterIsFull: u64 = 25;
 
     const MIN_DISTANCE_TO_TRANSFER: u64 = 3;
 
@@ -37,6 +38,12 @@ module infinite_sea::roster_util {
         let c_2 = roster::updated_coordinates(roster_2);
         let d = direct_route_util::get_distance(c_1, c_2);
         d <= MIN_DISTANCE_TO_TRANSFER
+    }
+
+    /// Assert that the ships in the roster are not full.
+    public fun assert_roster_ships_not_full(roster: &Roster) {
+        let ship_ids = roster::borrow_ship_ids(roster);
+        assert!(vector::length(ship_ids) < 4, ERosterIsFull);
     }
 
     /// Assert that ths "ships" in the roster are not empty.
@@ -66,7 +73,8 @@ module infinite_sea::roster_util {
 
     /// Wether the sequence number of the "player" roster is valid.
     public fun is_valid_roster_id_sequence_number(roster_id: &RosterId): bool {
-        roster_id::sequence_number(roster_id) <= roster_sequence_number::fourth() // todo Hardcoded max roster sequence number?
+        roster_id::sequence_number(roster_id) <= roster_sequence_number::fourth(
+        ) // todo Hardcoded max roster sequence number?
     }
 
     public fun add_ship_id(ship_ids: &mut vector<ID>, ship_id: ID, position: Option<u64>) {

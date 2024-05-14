@@ -17,6 +17,7 @@ module infinite_sea::roster_transfer_ship_logic {
     friend infinite_sea::roster_aggregate;
 
     const EShipNotFoundInSourceRoster: u64 = 10;
+    const ERostersTooFarAway: u64 = 11;
 
     public(friend) fun verify(
         player: &Player,
@@ -30,7 +31,8 @@ module infinite_sea::roster_transfer_ship_logic {
         permission_util::assert_sender_is_player_owner(player, ctx);
         permission_util::assert_player_is_roster_owner(player, roster);
         permission_util::assert_player_is_roster_owner(player, to_roster);
-        roster_util::are_rosters_close_enough_to_transfer(roster, to_roster);
+        assert!(roster_util::are_rosters_close_enough_to_transfer(roster, to_roster), ERostersTooFarAway);
+        roster_util::assert_roster_ships_not_full(to_roster);
         //todo more checks?
         roster::new_roster_ship_transferred(roster, ship_id, to_roster_id, to_position)
     }
