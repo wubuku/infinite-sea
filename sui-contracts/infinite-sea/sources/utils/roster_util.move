@@ -87,6 +87,9 @@ module infinite_sea::roster_util {
         let speed = 0;
         let i = 0;
         let l = vector::length(ship_ids);
+        if (l == 0) {
+            return 0
+        };
         while (i < l) {
             let ship_id = *vector::borrow(ship_ids, i);
             let ship = object_table::borrow(ships, ship_id);
