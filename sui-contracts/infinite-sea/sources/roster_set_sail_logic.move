@@ -35,6 +35,7 @@ module infinite_sea::roster_set_sail_logic {
         permission_util::assert_sender_is_player_owner(player, ctx);
         permission_util::assert_player_is_roster_owner(player, roster);
         roster_util::assert_roster_is_not_unassigned_ships(roster);
+        roster_util::assert_roster_ships_not_empty(roster);
 
         let updated_coordinates: Coordinates; // current location of the roster
         let status = roster::status(roster);

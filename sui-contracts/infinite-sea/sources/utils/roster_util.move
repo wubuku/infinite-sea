@@ -38,6 +38,12 @@ module infinite_sea::roster_util {
         d <= MIN_DISTANCE_TO_TRANSFER
     }
 
+    /// Assert that ths "ships" in the roster are not empty.
+    public fun assert_roster_ships_not_empty(roster: &Roster) {
+        let ship_ids = roster::borrow_ship_ids(roster);
+        assert!(vector::length(ship_ids) > 0, EEmptyRosterShipIds);
+    }
+
     /// Assert that the roster is NOT the special roster "unassigned ships".
     public fun assert_roster_is_not_unassigned_ships(roster: &Roster) {
         let roster_id = roster::roster_id(roster);
