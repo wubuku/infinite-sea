@@ -52,6 +52,9 @@ module infinite_sea::roster_transfer_ship_logic {
         let from_ships = roster::borrow_mut_ships(from_roster);
         let ship = object_table::remove(from_ships, ship_id);
 
+        let speed = roster_util::calculate_roster_speed(roster);
+        roster::set_speed(roster, speed);
+
         let to_ship_ids = roster::ship_ids(to_roster);
         if (option::is_some(&to_position)) {
             vector::insert(&mut to_ship_ids, ship_id, option::extract(&mut to_position));
@@ -62,6 +65,9 @@ module infinite_sea::roster_transfer_ship_logic {
 
         let to_ships = roster::borrow_mut_ships(to_roster);
         object_table::add(to_ships, ship_id, ship);
+
+        let speed = roster_util::calculate_roster_speed(to_roster);
+        roster::set_speed(to_roster, speed);
     }
 
 }
