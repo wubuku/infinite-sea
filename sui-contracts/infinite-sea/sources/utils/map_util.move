@@ -10,10 +10,10 @@ module infinite_sea::map_util {
     const ELocationNotAnIsland: u64 = 11;
 
     /// Island resource regeneration time in seconds.
-    const ISLAND_RESOURCE_REGENERATION_TIME: u64 = 60 * 60 * 24; // todo 1 day?
+    const ISLAND_RESOURCE_REGENERATION_TIME: u64 = 60 * 60 * 24; // todo 1 day is a good value?
 
     /// Quantity of island resources regenerated.
-    const ISLAND_RESOURCE_REGENERATION_QUANTITY: u32 = 600; // todo Is this a good value? initial value = 600
+    const ISLAND_RESOURCE_REGENERATION_QUANTITY: u32 = 600; // todo Is this a good value?
 
     /// Get the quantity of resources of the island to be gathered.
     public fun get_island_resources_quantity_to_gather(map: &Map, coordinates: Coordinates, now_time: u64): u32 {

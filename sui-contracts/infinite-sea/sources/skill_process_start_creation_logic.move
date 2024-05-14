@@ -52,7 +52,7 @@ module infinite_sea::skill_process_start_creation_logic {
         let base_creation_time = item_creation::base_creation_time(item_creation);
         let energy_cost = balance::value(energy);
         assert!(energy_cost >= item_creation::energy_cost(item_creation), ENotEnoughEnergy);
-        let creation_time = base_creation_time;// todo ?
+        let creation_time = base_creation_time; // todo level-based or XXX-based creation time calculation?
         let resource_cost = item_creation::resource_cost(item_creation);
         skill_process::new_creation_process_started(
             skill_process,

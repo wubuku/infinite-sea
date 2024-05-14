@@ -27,6 +27,8 @@ module infinite_sea::roster_create_environment_roster_logic {
     const EInvalidShipResourceQuantity: u64 = 1;
     const EInvalidShipBaseResourceQuantity: u64 = 2;
 
+    const DEFAULT_NUMBER_OF_SHIPS: u32 = 4;
+
     public(friend) fun verify(
         roster_id: RosterId,
         coordinates: Coordinates,
@@ -73,7 +75,7 @@ module infinite_sea::roster_create_environment_roster_logic {
         roster::set_base_experience(&mut roster, option::some(base_experience));
 
         let position = 0;
-        let number_of_ships = 4; //todo magic number?
+        let number_of_ships = DEFAULT_NUMBER_OF_SHIPS;
         while (position < number_of_ships) {
             // only one ship for now!
             let player_id = roster_id::player_id(&roster_id);

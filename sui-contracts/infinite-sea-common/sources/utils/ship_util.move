@@ -33,7 +33,7 @@ module infinite_sea_common::ship_util {
         let cottons_quantity = item_id_quantity_pair::quantity(&cottons);
 
         let health_points: u32 = DEFAULT_SHIP_HEALTH_POINTS; //todo Is this value ok?
-        let attack = copper_ore_quantity; //todo Is this value ok?
+        let attack = copper_ore_quantity; //NOTE Is this value ok?
         let protection = normal_log_quantity;
         let speed = cottons_quantity;
         (
@@ -77,7 +77,7 @@ module infinite_sea_common::ship_util {
             };
             i = i + 1;
         };
-        abort EShipIdNotFound;
+        abort EShipIdNotFound
     }
 
     public fun find_ship_id(ship_ids: &vector<ID>, ship_id: ID): Option<u64> {

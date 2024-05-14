@@ -29,7 +29,7 @@ module infinite_sea::ship_battle_util {
     const ENoLivingShips: u64 = 22;
     const ERoundMoverNotSet: u64 = 23;
 
-    const MIN_DISTANCE_TO_BATTLE: u64 = 3; //todo is it ok?
+    const MIN_DISTANCE_TO_BATTLE: u64 = 3; //todo Is this a good value?
 
     public fun initiator(): u8 {
         1

@@ -32,6 +32,9 @@ module infinite_sea::ship_battle_make_move_logic {
     const EWinnerSetButBattleNotEnded: u64 = 15;
     const EInvalidWinner: u64 = 16;
 
+    /// The experience points gained by defeating a "player-owned" ship.
+    const PLAYER_SHIP_EXPERIENCE: u32 = 8;
+
     public(friend) fun verify(
         player: &Player,
         initiator: &Roster,
@@ -249,12 +252,12 @@ module infinite_sea::ship_battle_make_move_logic {
         }
     }
 
-    fun calculate_ship_experience(ship: &Ship, isEnvironmentOwned: bool): u32 {
-        if (isEnvironmentOwned) {
+    fun calculate_ship_experience(ship: &Ship, is_environment_owned: bool): u32 {
+        if (is_environment_owned) {
             let building_expenses = ship::building_expenses(ship);
             ship_util::calculate_environment_ship_experience(&item_id_quantity_pairs::items(&building_expenses))
         } else {
-            8 //todo magic number?
+            PLAYER_SHIP_EXPERIENCE
         }
     }
 }

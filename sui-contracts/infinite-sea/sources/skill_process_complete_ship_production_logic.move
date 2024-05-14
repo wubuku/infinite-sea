@@ -32,12 +32,12 @@ module infinite_sea::skill_process_complete_ship_production_logic {
     const EStillInProgress: u64 = 14;
     //const EIncorrectItemId: u64 = 22;
     //const ELowerThanRequiredLevel: u64 = 24;
-    //const ESenderHasNoPermission: u64 = 32;
     const EItemIdIsNotShip: u64 = 24;
     const EBuidingExpencesNotSet: u64 = 25;
     const ERosterIsNotUnassignedShips: u64 = 26;
     const EInvalidRoasterPlayerId: u64 = 27;
     const EProcessFailed: u64 = 30;
+    //const ESenderHasNoPermission: u64 = 32;
 
     public(friend) fun verify(
         unassigned_ships: &mut Roster,
@@ -68,7 +68,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
         let ended_at = clock::timestamp_ms(clock) / 1000;
         assert!(ended_at >= started_at + creation_time, EStillInProgress);
 
-        let successful = true; //todo
+        let successful = true; //todo always successful for now
         let quantity = item_production::base_quantity(item_production);
         let increased_experience = item_production::base_experience(item_production);
         let new_level = experience_table_util::calculate_new_level(player, experience_table, increased_experience);

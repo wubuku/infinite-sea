@@ -66,7 +66,7 @@ module infinite_sea::roster_util {
 
     /// Wether the sequence number of the "player" roster is valid.
     public fun is_valid_roster_id_sequence_number(roster_id: &RosterId): bool {
-        roster_id::sequence_number(roster_id) <= roster_sequence_number::fourth() //todo Is this ok?
+        roster_id::sequence_number(roster_id) <= roster_sequence_number::fourth() // todo Hardcoded max roster sequence number?
     }
 
     public fun add_ship_id(ship_ids: &mut vector<ID>, ship_id: ID, position: Option<u64>) {

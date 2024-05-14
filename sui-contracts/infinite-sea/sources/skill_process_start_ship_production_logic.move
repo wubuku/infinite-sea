@@ -60,7 +60,7 @@ module infinite_sea::skill_process_start_ship_production_logic {
         let base_creation_time = item_production::base_creation_time(item_production);
         let energy_cost = balance::value(energy);
         assert!(energy_cost >= item_production::energy_cost(item_production), ENotEnoughEnergy);
-        let creation_time = base_creation_time;// todo ?
+        let creation_time = base_creation_time; // todo level-based or XXX-based creation time calculation?
         let basic_production_materials = item_id_quantity_pairs::items(
             &item_production::production_materials(item_production)
         );
