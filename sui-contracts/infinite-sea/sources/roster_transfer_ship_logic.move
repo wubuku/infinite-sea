@@ -16,6 +16,8 @@ module infinite_sea::roster_transfer_ship_logic {
 
     friend infinite_sea::roster_aggregate;
 
+    const EShipNotFoundInSourceRoster: u64 = 10;
+
     public(friend) fun verify(
         player: &Player,
         ship_id: ID,
@@ -50,6 +52,7 @@ module infinite_sea::roster_transfer_ship_logic {
         roster::set_ship_ids(from_roster, from_ship_ids);
 
         let from_ships = roster::borrow_mut_ships(from_roster);
+        assert!(object_table::contains(from_ships, ship_id), EShipNotFoundInSourceRoster);
         let ship = object_table::remove(from_ships, ship_id);
 
         let speed = roster_util::calculate_roster_speed(roster);
@@ -69,5 +72,4 @@ module infinite_sea::roster_transfer_ship_logic {
         let speed = roster_util::calculate_roster_speed(to_roster);
         roster::set_speed(to_roster, speed);
     }
-
 }
