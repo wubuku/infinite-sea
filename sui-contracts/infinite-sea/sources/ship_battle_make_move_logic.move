@@ -10,6 +10,7 @@ module infinite_sea::ship_battle_make_move_logic {
     use sui::tx_context::TxContext;
     use infinite_sea_common::battle_status;
     use infinite_sea_common::item_id_quantity_pairs;
+    use infinite_sea_common::roster_status;
     use infinite_sea_common::ship_battle_command;
     use infinite_sea_common::ship_util;
 
@@ -29,6 +30,7 @@ module infinite_sea::ship_battle_make_move_logic {
     const EDefenderShipNotSet: u64 = 13;
     const EWinnerNotSet: u64 = 14;
     const EWinnerSetButBattleNotEnded: u64 = 15;
+    const EInvalidWinner: u64 = 16;
 
     public(friend) fun verify(
         player: &Player,
@@ -229,6 +231,22 @@ module infinite_sea::ship_battle_make_move_logic {
         };
         ship_battle::set_initiator_experiences(ship_battle, initiator_experiences);
         ship_battle::set_responder_experiences(ship_battle, responder_experiences);
+
+        // Update roster status
+        if (is_batlle_ended) {
+            //let winner_roster: &mut Roster; //NOTE: Unused?
+            let loser_roster: &mut Roster;
+            if (*option::borrow(&winner) == ship_battle_util::initiator()) {
+                //winner_roster = initiator;
+                loser_roster = responder;
+            } else if (*option::borrow(&winner) == ship_battle_util::responder()) {
+                //winner_roster = responder;
+                loser_roster = initiator;
+            } else {
+                abort EInvalidWinner
+            };
+            roster::set_status(loser_roster, roster_status::destroyed());
+        }
     }
 
     fun calculate_ship_experience(ship: &Ship, isEnvironmentOwned: bool): u32 {

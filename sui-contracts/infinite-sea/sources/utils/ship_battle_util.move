@@ -134,9 +134,9 @@ module infinite_sea::ship_battle_util {
         let seed_1 = sorted_vector_util::concat_ids_bytes(&vector[roster::id(roster_1), roster::id(roster_2)]);
         vector::append(&mut seed_1, bcs::to_bytes(&round_number));
         let (candidate_1, initiative_1) = get_candidate_attacker_ship_id(roster_1, clock, seed_1);
-        let seed_2 = vector::empty<u8>();
-        vector::append(&mut seed_2, bcs::to_bytes(&initiative_1));
-        vector::append(&mut seed_2, bcs::to_bytes(&vector::length(&roster::ship_ids(roster_1))));
+        let seed_2 = vector[2];//vector::empty<u8>();
+        //vector::append(&mut seed_2, bcs::to_bytes(&initiative_1));
+        //vector::append(&mut seed_2, bcs::to_bytes(&vector::length(&roster::ship_ids(roster_1))));
         vector::append(&mut seed_2, seed_1);
         let (candidate_2, initiative_2) = get_candidate_attacker_ship_id(roster_2, clock, seed_2);
         assert!(!(option::is_none(&candidate_1) && option::is_none(&candidate_2)), ENoLivingShips);
