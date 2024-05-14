@@ -30,6 +30,23 @@ module infinite_sea::ship_battle_service {
         ship_battle::share_object(ship_battle);
     }
 
+    public entry fun initiate_battle(
+        player: &mut Player,
+        initiator: &mut Roster,
+        responder: &mut Roster,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let ship_battle = ship_battle_aggregate::initiate_battle(
+            player,
+            initiator,
+            responder,
+            clock,
+            ctx,
+        );
+        ship_battle::share_object(ship_battle);
+    }
+
     public entry fun auto_play_till_end(
         ship_battle: &mut ShipBattle,
         player: &mut Player,
