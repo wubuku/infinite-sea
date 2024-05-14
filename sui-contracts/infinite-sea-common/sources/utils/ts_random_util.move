@@ -15,7 +15,7 @@ module infinite_sea_common::ts_random_util {
         let now = clock::timestamp_ms(clock);
         let bs = bcs::to_bytes(&now);
         vector::append(&mut bs, seed);
-        let hash = hash::sha3_256(bs);
+        let hash = hash::sha2_256(bs);
         let bcs = bcs::new(hash);
         bcs::peel_u256(&mut bcs)
     }
@@ -68,7 +68,7 @@ module infinite_sea_common::ts_random_util {
     public fun get_u256_with_epoch_timestamp_ms(cxt: &TxContext, seed: vector<u8>): u256 {
         let bs = bcs::to_bytes(&tx_context::epoch_timestamp_ms(cxt));
         vector::append(&mut bs, seed);
-        let hash = hash::sha3_256(bs);
+        let hash = hash::sha2_256(bs);
         let bcs = bcs::new(hash);
         bcs::peel_u256(&mut bcs)
     }

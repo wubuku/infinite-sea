@@ -14,6 +14,7 @@ module infinite_sea_common::ship_util {
     const ENormalLogsNotFound: u64 = 1;
     const ECottonsNotFound: u64 = 2;
     const ECopperOresNotFound: u64 = 3;
+    const EShipIdNotFound: u64 = 4;
 
     const DEFAULT_SHIP_HEALTH_POINTS: u32 = 20;
     const NORMAL_SHIP_MAX_ATTACK: u32 = 5;
@@ -72,10 +73,11 @@ module infinite_sea_common::ship_util {
         while (i < l) {
             if (*vector::borrow(ship_ids, i) == ship_id) {
                 vector::remove(ship_ids, i);
-                break
+                return
             };
             i = i + 1;
-        }
+        };
+        abort EShipIdNotFound;
     }
 
     public fun find_ship_id(ship_ids: &vector<ID>, ship_id: ID): Option<u64> {

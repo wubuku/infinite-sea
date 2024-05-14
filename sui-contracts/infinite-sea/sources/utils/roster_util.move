@@ -28,6 +28,7 @@ module infinite_sea::roster_util {
     const EPayerHasNoClaimedIsland: u64 = 21;
     const ERosterNotAnchoredAtIsland: u64 = 22;
     const ERosterIsUnassignedShips: u64 = 23;
+    const EInconsistentRosterShipId: u64 = 24;
 
     const MIN_DISTANCE_TO_TRANSFER: u64 = 3;
 
@@ -92,6 +93,7 @@ module infinite_sea::roster_util {
         };
         while (i < l) {
             let ship_id = *vector::borrow(ship_ids, i);
+            assert!(object_table::contains(ships, ship_id), EInconsistentRosterShipId);
             let ship = object_table::borrow(ships, ship_id);
             speed = speed + ship::speed(ship);
             i = i + 1;

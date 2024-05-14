@@ -9,8 +9,8 @@ module infinite_sea::ship_battle_util {
     use sui::object::ID;
     use sui::object_table;
     use infinite_sea_common::direct_route_util;
-    use infinite_sea_common::ts_random_util;
     use infinite_sea_common::sorted_vector_util;
+    use infinite_sea_common::ts_random_util;
 
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
@@ -220,14 +220,16 @@ module infinite_sea::ship_battle_util {
             if (ship::attack(self) > d) {
                 math::max(2, (ship::attack(self) - d as u64) * 3 / 10)
             } else {
-                0
+                2
             }
         } else {
-            (ship::attack(self) - ship::protection(opponent) as u64) * 4 / 5
+            ((ship::attack(self) - ship::protection(opponent) * 4 / 5) as u64)
         };
 
-        let seed_2 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(opponent), ship::id(self)]);
-        vector::append(&mut seed_2, bcs::to_bytes(&round_number));
+        //let seed_2 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(opponent), ship::id(self)]);
+        //vector::append(&mut seed_2, bcs::to_bytes(&round_number));
+        let seed_2 = vector[2];
+        vector::append(&mut seed_2, seed_1);
 
         // Critical hit and miss logic
         let critical_hit_chance = 20;  // 20% chance for a critical hit
@@ -236,10 +238,11 @@ module infinite_sea::ship_battle_util {
             // Critical miss negates all damage
             return 0
         } else {
-            let seed_3 = vector::empty<u8>();
-            vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(opponent)));
-            vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(self)));
-            vector::append(&mut seed_3, seed_2);
+            let seed_3 = vector[3];//vector::empty<u8>();
+            //vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(opponent)));
+            //vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(self)));
+            //vector::append(&mut seed_3, seed_2);
+            vector::append(&mut seed_3, seed_1);
             if (ts_random_util::get_int(clock, seed_3, 100) < critical_hit_chance) {
                 // Critical hit doubles the damage
                 //damage *= 1.5;
