@@ -7,8 +7,20 @@ module infinite_sea_common::ts_random_util {
     use sui::clock::{Self, Clock};
     use sui::tx_context::{Self, TxContext};
 
+    const MAX_U64: u64 = 18_446_744_073_709_551_615;
+
     public fun get_int(clock: &Clock, seed: vector<u8>, bound: u64): u64 {
         (get_u256(clock, seed) % (bound as u256) as u64)
+    }
+
+    /// Get four u64 integers.
+    public fun get_4_u64(clock: &Clock, seed: vector<u8>): (u64, u64, u64, u64) {
+        let u_o = get_u256(clock, seed);
+        let u1 = ((u_o % (MAX_U64 as u256)) as u64);
+        let u2 = (((u_o >> 64) % (MAX_U64 as u256)) as u64);
+        let u3 = (((u_o >> 128) % (MAX_U64 as u256)) as u64);
+        let u4 = (((u_o >> 192) % (MAX_U64 as u256)) as u64);
+        (u1, u2, u3, u4)
     }
 
     public fun get_u256(clock: &Clock, seed: vector<u8>): u256 {

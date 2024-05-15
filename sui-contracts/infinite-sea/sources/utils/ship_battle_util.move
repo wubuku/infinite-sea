@@ -1,5 +1,4 @@
 module infinite_sea::ship_battle_util {
-    use std::bcs;
     use std::option;
     use std::option::Option;
     use std::vector;
@@ -15,7 +14,7 @@ module infinite_sea::ship_battle_util {
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
     use infinite_sea::roster::{Self, Roster};
-    use infinite_sea::ship::{Self, Ship};
+    use infinite_sea::ship::Self;
     use infinite_sea::ship_battle::{Self, ShipBattle};
 
     friend infinite_sea::ship_battle_initiate_battle_logic;
@@ -30,6 +29,11 @@ module infinite_sea::ship_battle_util {
     const ERoundMoverNotSet: u64 = 23;
 
     const MIN_DISTANCE_TO_BATTLE: u64 = 3; //todo Is this a good value?
+
+    const MAX_DODGE_CHANCE: u64 = 60;
+    const CRITICAL_MISS_CHANCE: u64 = 35;
+    //35;  //TODO: Is this a good value?
+    const CRITICAL_HIT_CHANCE: u64 = 20;  // 20% chance for a critical hit
 
     public fun initiator(): u8 {
         1
@@ -132,7 +136,7 @@ module infinite_sea::ship_battle_util {
         round_number: u32
     ): (ID, u8) {
         let seed_1 = sorted_vector_util::concat_ids_bytes(&vector[roster::id(roster_1), roster::id(roster_2)]);
-        vector::append(&mut seed_1, bcs::to_bytes(&round_number));
+        vector::append(&mut seed_1, vector[((round_number % 256) as u8)]);//bcs::to_bytes(&round_number));
         let (candidate_1, initiative_1) = get_candidate_attacker_ship_id(roster_1, clock, seed_1);
         let seed_2 = vector[2];//vector::empty<u8>();
         //vector::append(&mut seed_2, bcs::to_bytes(&initiative_1));
@@ -160,14 +164,17 @@ module infinite_sea::ship_battle_util {
         let l = vector::length(ship_ids);
         let max_initiative = 0;
         let candidate = option::none<ID>();
+        let (random_i_1, random_i_2, random_i_3, random_i_4) = ts_random_util::get_4_u64(clock, seed);
+        let random_ints = vector[random_i_1, random_i_2, random_i_3, random_i_4];
         while (i < l) {
             let ship_id = *vector::borrow(ship_ids, i);
             assert!(object_table::contains(ships, ship_id), EShipNotFoundById);
             let ship = object_table::borrow(ships, ship_id);
             if (ship::health_points(ship) > 0) {
-                let s = bcs::to_bytes(&i);
-                vector::append(&mut s, seed);
-                let initiative = 1 + ts_random_util::get_int(clock, s, 8) + (ship::speed(ship) as u64);
+                //let s = bcs::to_bytes(&i);
+                //vector::append(&mut s, seed);
+                //let initiative = 1 + ts_random_util::get_int(clock, s, 8) + (ship::speed(ship) as u64);
+                let initiative = 1 + *vector::borrow(&random_ints, i % 4) % 8 + (ship::speed(ship) as u64);
                 //vector::push_back(&mut turn_order, ship_id);
                 if (initiative > max_initiative) {
                     max_initiative = initiative;
@@ -201,20 +208,26 @@ module infinite_sea::ship_battle_util {
         option::none()
     }
 
-    public fun perform_attack(self: &Ship, opponent: &Ship, clock: &Clock, round_number: u32): u32 {
-        let self_attack = ship::attack(self);
-        let opponent_protection = ship::protection(opponent);
+    public fun perform_attack(
+        seed: vector<u8>, clock: &Clock, //round_number: u32,
+        self_attack: u32, opponent_protection: u32
+    ): u32 {
+        //self: &Ship, opponent: &Ship
+        //let self_attack = ship::attack(self);
+        //let opponent_protection = ship::protection(opponent);
+        let (_, random_i_3, random_i_2, random_i_1) = ts_random_util::get_4_u64(clock, seed);
 
         // Dodge check
         // dodge_chance = min(60, ((opponent.protection - self.attack) * 8 + 15)) if opponent.protection >= self.attack else 0
         let dodge_chance = if (opponent_protection >= self_attack) {
-            math::min(60, ((opponent_protection - self_attack) as u64) * 8 + 15)
+            math::min(MAX_DODGE_CHANCE, ((opponent_protection - self_attack) as u64) * 8 + 15)
         } else {
             0
         };
-        let seed_1 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(self), ship::id(opponent)]);
-        vector::append(&mut seed_1, vector[(round_number % 256 as u8)]); //bcs::to_bytes(&round_number)
-        if (1 + ts_random_util::get_int(clock, seed_1, 100) <= dodge_chance) {
+        // let seed_1 = seed;//sorted_vector_util::concat_ids_bytes(&vector[ship::id(self), ship::id(opponent)]);
+        // //vector::append(&mut seed_1, vector[(round_number % 256 as u8)]); //bcs::to_bytes(&round_number)
+        if (1 + random_i_1 % 100 <= dodge_chance) {
+            //if (1 + ts_random_util::get_int(clock, seed_1, 100) <= dodge_chance) {
             return 0
         };
 
@@ -234,25 +247,25 @@ module infinite_sea::ship_battle_util {
             ((self_attack - opponent_protection * 4 / 5) as u64)
         };
 
-        //let seed_2 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(opponent), ship::id(self)]);
-        //vector::append(&mut seed_2, bcs::to_bytes(&round_number));
-        vector::append(&mut seed_1, vector[2]);
-        let seed_2 = seed_1;
+        // //let seed_2 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(opponent), ship::id(self)]);
+        // //vector::append(&mut seed_2, bcs::to_bytes(&round_number));
+        // vector::append(&mut seed_1, vector[2]);
+        // let seed_2 = seed_1;
 
         // Critical hit and miss logic
-        let critical_hit_chance = 20;  // 20% chance for a critical hit
-        let critical_miss_chance = 35;  // 35% chance for a critical miss
-        if (ts_random_util::get_int(clock, seed_2, 100) < critical_miss_chance) {
+        if (random_i_2 % 100 < CRITICAL_MISS_CHANCE) {
+            //if (ts_random_util::get_int(clock, seed_2, 100) < critical_miss_chance) {
             // Critical miss negates all damage
             return 0
         } else {
-            //let seed_3 = vector::empty<u8>();
-            //vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(opponent)));
-            //vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(self)));
-            //vector::append(&mut seed_3, seed_2);
-            vector::append(&mut seed_1, vector[3]);
-            let seed_3 = seed_1;
-            if (ts_random_util::get_int(clock, seed_3, 100) < critical_hit_chance) {
+            // //let seed_3 = vector::empty<u8>();
+            // //vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(opponent)));
+            // //vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(self)));
+            // //vector::append(&mut seed_3, seed_2);
+            // vector::append(&mut seed_1, vector[3]);
+            // let seed_3 = seed_1;
+            if (random_i_3 % 100 < CRITICAL_HIT_CHANCE) {
+                //if (ts_random_util::get_int(clock, seed_3, 100) < critical_hit_chance) {
                 // Critical hit doubles the damage
                 //damage *= 1.5;
                 damage = damage * 3 / 2;

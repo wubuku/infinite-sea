@@ -5,6 +5,7 @@ module infinite_sea::ship_battle_make_move_logic {
 
     use sui::clock;
     use sui::clock::Clock;
+    use sui::object;
     use sui::object::ID;
     use sui::object_table;
     use sui::tx_context::TxContext;
@@ -76,12 +77,12 @@ module infinite_sea::ship_battle_make_move_logic {
         let defender_ships = roster::borrow_ships(defender_roster);
         let attacker_ship = object_table::borrow(attacker_ships, *option::borrow(&attacker_ship_id));
         let defender_ship = object_table::borrow(defender_ships, *option::borrow(&defender_ship_id));
+        let seed_1 = object::id_to_bytes(&ship_battle::id(ship_battle));
+        vector::append(&mut seed_1, vector[(current_round_number % 256 as u8)]);
 
         let defender_damage_taken = ship_battle_util::perform_attack(
-            attacker_ship,
-            defender_ship,
-            clock,
-            current_round_number
+            seed_1, clock,
+            ship::attack(attacker_ship), ship::protection(defender_ship), //attacker_ship, defender_ship,
         );
         let defender_ship_hp = ship::health_points(defender_ship);
         if (defender_damage_taken >= defender_ship_hp) {
@@ -100,14 +101,13 @@ module infinite_sea::ship_battle_make_move_logic {
             is_batlle_ended = true;
             winner = option::some(*option::borrow(&round_mover));
         };
-
         let attacker_damage_taken = 0;
+        let seed_2 = seed_1;
+        vector::append(&mut seed_2, vector[2]);
         if (!is_batlle_ended) {
             attacker_damage_taken = ship_battle_util::perform_attack(
-                defender_ship,
-                attacker_ship,
-                clock,
-                current_round_number
+                seed_2, clock,
+                ship::attack(defender_ship), ship::protection(attacker_ship),
             );
             let attacker_ship_hp = ship::health_points(attacker_ship);
             if (attacker_damage_taken >= attacker_ship_hp) {
@@ -215,25 +215,37 @@ module infinite_sea::ship_battle_make_move_logic {
         ship_battle::set_round_started_at(ship_battle, next_round_started_at);
 
         // Update experience points
-        let defender_xp = if (attacker_ship_hp == 0) {
+        let defender_xp_gained = if (attacker_ship_hp == 0 && attacker_damage_taken > 0) {
             calculate_ship_experience(attacker_ship, is_attacker_env_owned)
         } else { 0 };
-        let attacker_xp = if (defender_ship_hp == 0) {
+        let attacker_xp_gained = if (defender_ship_hp == 0 && defender_damage_taken > 0) {
             calculate_ship_experience(defender_ship, is_defender_env_owned)
         } else { 0 };
-        let initiator_experiences = ship_battle::initiator_experiences(ship_battle);
-        let responder_experiences = ship_battle::responder_experiences(ship_battle);
         if (*option::borrow(&round_mover) == ship_battle_util::initiator()) {
             //current round attacker is initiator
-            if (attacker_xp > 0) { vector::push_back(&mut initiator_experiences, attacker_xp) };
-            if (defender_xp > 0) { vector::push_back(&mut responder_experiences, defender_xp) };
+            if (attacker_xp_gained > 0) {
+                let initiator_experiences = ship_battle::initiator_experiences(ship_battle);
+                vector::push_back(&mut initiator_experiences, attacker_xp_gained);
+                ship_battle::set_initiator_experiences(ship_battle, initiator_experiences);
+            };
+            if (defender_xp_gained > 0) {
+                let responder_experiences = ship_battle::responder_experiences(ship_battle);
+                vector::push_back(&mut responder_experiences, defender_xp_gained);
+                ship_battle::set_responder_experiences(ship_battle, responder_experiences);
+            };
         } else {
             //current round attacker is responder
-            if (attacker_xp > 0) { vector::push_back(&mut responder_experiences, attacker_xp) };
-            if (defender_xp > 0) { vector::push_back(&mut initiator_experiences, defender_xp) };
+            if (attacker_xp_gained > 0) {
+                let responder_experiences = ship_battle::responder_experiences(ship_battle);
+                vector::push_back(&mut responder_experiences, attacker_xp_gained);
+                ship_battle::set_responder_experiences(ship_battle, responder_experiences);
+            };
+            if (defender_xp_gained > 0) {
+                let initiator_experiences = ship_battle::initiator_experiences(ship_battle);
+                vector::push_back(&mut initiator_experiences, defender_xp_gained);
+                ship_battle::set_initiator_experiences(ship_battle, initiator_experiences);
+            };
         };
-        ship_battle::set_initiator_experiences(ship_battle, initiator_experiences);
-        ship_battle::set_responder_experiences(ship_battle, responder_experiences);
 
         // Update roster status
         if (is_batlle_ended) {
