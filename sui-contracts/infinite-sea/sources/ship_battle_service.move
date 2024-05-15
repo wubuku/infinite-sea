@@ -1,6 +1,6 @@
 module infinite_sea::ship_battle_service {
     use sui::clock::Clock;
-    use sui::tx_context::Self;
+    use sui::tx_context;
     use infinite_sea_common::battle_status;
     use infinite_sea_common::ship_battle_command;
 

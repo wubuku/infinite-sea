@@ -1,7 +1,7 @@
 module infinite_sea::roster_service {
     use sui::clock::Clock;
     use sui::coin::Coin;
-    use sui::tx_context::Self;
+    use sui::tx_context;
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::coin_util;
 

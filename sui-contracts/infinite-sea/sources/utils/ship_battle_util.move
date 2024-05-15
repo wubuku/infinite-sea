@@ -14,7 +14,7 @@ module infinite_sea::ship_battle_util {
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
     use infinite_sea::roster::{Self, Roster};
-    use infinite_sea::ship::Self;
+    use infinite_sea::ship;
     use infinite_sea::ship_battle::{Self, ShipBattle};
 
     friend infinite_sea::ship_battle_initiate_battle_logic;
@@ -32,9 +32,13 @@ module infinite_sea::ship_battle_util {
     const MIN_DISTANCE_TO_BATTLE: u64 = 3; //todo Is this a good value?
 
     const MAX_DODGE_CHANCE: u64 = 60;
+    /// TODO: Is this CRITICAL_MISS_CHANCE a good value?
     const CRITICAL_MISS_CHANCE: u64 = 35;
-    //35;  //TODO: Is this a good value?
-    const CRITICAL_HIT_CHANCE: u64 = 20;  // 20% chance for a critical hit
+    /// TODO: 20% chance for a critical hit?
+    const CRITICAL_HIT_CHANCE: u64 = 20;
+    /// TODO: ONLY FOR TESTING?
+    const IS_FURY_MODE: bool = true;
+    const FURY_MODE_DAMAGE_MULTIPLIER: u64 = 2;
 
     public fun initiator(): u8 {
         1
@@ -274,7 +278,7 @@ module infinite_sea::ship_battle_util {
                 damage = damage * 3 / 2;
             }
         };
-        (damage as u32)
+        if (IS_FURY_MODE) { (damage * FURY_MODE_DAMAGE_MULTIPLIER as u32) } else { (damage as u32) }
         //opponent.hp -= damage;  // Apply the calculated damage to the opponent's HP
     }
 }

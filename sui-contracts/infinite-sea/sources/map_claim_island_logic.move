@@ -9,7 +9,7 @@ module infinite_sea::map_claim_island_logic {
     use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::map;
-    use infinite_sea::map_location::Self;
+    use infinite_sea::map_location;
 
     friend infinite_sea::map_aggregate;
 
