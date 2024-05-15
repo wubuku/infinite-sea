@@ -29,14 +29,14 @@ module infinite_sea::ship_battle_util {
     const ERoundMoverNotSet: u64 = 23;
     const EInvalidSide: u64 = 24;
 
-    const MIN_DISTANCE_TO_BATTLE: u64 = 3; //todo Is this a good value?
+    const MIN_DISTANCE_TO_BATTLE: u64 = 3; //TODO: Is this MIN_DISTANCE_TO_BATTLE a good value?
 
     const MAX_DODGE_CHANCE: u64 = 60;
     /// TODO: Is this CRITICAL_MISS_CHANCE a good value?
     const CRITICAL_MISS_CHANCE: u64 = 35;
-    /// TODO: 20% chance for a critical hit?
+    /// TODO: Is this CRITICAL_HIT_CHANCE a good value?
     const CRITICAL_HIT_CHANCE: u64 = 20;
-    /// TODO: ONLY FOR TESTING?
+    /// TODO: Is this IS_FURY_MODE only for test?
     const IS_FURY_MODE: bool = true;
     const FURY_MODE_DAMAGE_MULTIPLIER: u64 = 2;
 
@@ -222,11 +222,11 @@ module infinite_sea::ship_battle_util {
         //self: &Ship, opponent: &Ship
         //let self_attack = ship::attack(self);
         //let opponent_protection = ship::protection(opponent);
-        let (_, random_i_3, random_i_2, random_i_1) = ts_random_util::get_4_u64(clock, seed);
+        let (random_i_4, random_i_3, random_i_2, random_i_1) = ts_random_util::get_4_u64(clock, seed);
 
         // Dodge check
         // dodge_chance = min(60, ((opponent.protection - self.attack) * 8 + 15)) if opponent.protection >= self.attack else 0
-        let dodge_chance = if (opponent_protection >= self_attack) {
+        let dodge_chance = if (opponent_protection > self_attack) {
             math::min(MAX_DODGE_CHANCE, ((opponent_protection - self_attack) as u64) * 8 + 15)
         } else {
             0
@@ -263,7 +263,9 @@ module infinite_sea::ship_battle_util {
         if (random_i_2 % 100 < CRITICAL_MISS_CHANCE) {
             //if (ts_random_util::get_int(clock, seed_2, 100) < critical_miss_chance) {
             // Critical miss negates all damage
+            //if (opponent_protection < self_attack) {
             return 0
+            //}
         } else {
             // //let seed_3 = vector::empty<u8>();
             // //vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(opponent)));
@@ -278,7 +280,11 @@ module infinite_sea::ship_battle_util {
                 damage = damage * 3 / 2;
             }
         };
-        if (IS_FURY_MODE) { (damage * FURY_MODE_DAMAGE_MULTIPLIER as u32) } else { (damage as u32) }
-        //opponent.hp -= damage;  // Apply the calculated damage to the opponent's HP
+        if (IS_FURY_MODE && damage <= 2 && random_i_4 % 2 < 1) {
+            //NOTE: This line is extra relative to the Python version!
+            (damage * FURY_MODE_DAMAGE_MULTIPLIER as u32)
+        } else {
+            (damage as u32)
+        }
     }
 }

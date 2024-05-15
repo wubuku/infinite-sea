@@ -19,7 +19,9 @@ module infinite_sea::ship_battle_util_tests {
             let l = 100;
             while (i < l) {
                 let seed = vector[i];
-                let d = ship_battle_util::perform_attack(seed, &clock, 4, 5);
+                //let d = ship_battle_util::perform_attack(seed, &clock, 4, 5);
+                //let d = ship_battle_util::perform_attack(seed, &clock, 5, 4);
+                let d = ship_battle_util::perform_attack(seed, &clock, 5, 5);
                 debug::print(&d);
                 i = i + 1;
             };
