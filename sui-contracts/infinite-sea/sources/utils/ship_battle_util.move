@@ -27,6 +27,7 @@ module infinite_sea::ship_battle_util {
     const EShipNotFoundById: u64 = 21;
     const ENoLivingShips: u64 = 22;
     const ERoundMoverNotSet: u64 = 23;
+    const EInvalidSide: u64 = 24;
 
     const MIN_DISTANCE_TO_BATTLE: u64 = 3; //todo Is this a good value?
 
@@ -40,15 +41,17 @@ module infinite_sea::ship_battle_util {
     }
 
     public fun responder(): u8 {
-        2
+        0
     }
 
     /// Get the "opposite" side.
     public fun opposite_side(side: u8): u8 {
         if (side == initiator()) {
             responder()
-        } else {
+        } else if (side == responder()) {
             initiator()
+        } else {
+            abort EInvalidSide
         }
     }
 
