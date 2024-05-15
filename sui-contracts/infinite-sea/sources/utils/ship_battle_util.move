@@ -202,34 +202,42 @@ module infinite_sea::ship_battle_util {
     }
 
     public fun perform_attack(self: &Ship, opponent: &Ship, clock: &Clock, round_number: u32): u32 {
+        let self_attack = ship::attack(self);
+        let opponent_protection = ship::protection(opponent);
+
         // Dodge check
-        let dodge_chance = if (ship::protection(opponent) >= ship::attack(self)) {
-            math::min(60, ((ship::protection(opponent) - ship::attack(self)) as u64) * 8 + 15)
+        // dodge_chance = min(60, ((opponent.protection - self.attack) * 8 + 15)) if opponent.protection >= self.attack else 0
+        let dodge_chance = if (opponent_protection >= self_attack) {
+            math::min(60, ((opponent_protection - self_attack) as u64) * 8 + 15)
         } else {
             0
         };
         let seed_1 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(self), ship::id(opponent)]);
-        vector::append(&mut seed_1, bcs::to_bytes(&round_number));
+        vector::append(&mut seed_1, vector[(round_number % 256 as u8)]); //bcs::to_bytes(&round_number)
         if (1 + ts_random_util::get_int(clock, seed_1, 100) <= dodge_chance) {
             return 0
         };
 
         // Damage calculation with base formula
-        let damage = if (ship::attack(self) < ship::protection(opponent)) {
-            let d = ship::protection(opponent) - ship::attack(self);
-            if (ship::attack(self) > d) {
-                math::max(2, (ship::attack(self) - d as u64) * 3 / 10)
+        let damage = if (self_attack < opponent_protection) {
+            // damage = max(2, self.attack - (opponent.protection - self.attack) * 0.3)
+            let d = opponent_protection - self_attack;
+            let d_2 = d * 3 / 10;
+            if (self_attack >= d_2) {
+                math::max(2, ((self_attack - d_2) as u64))
             } else {
                 2
             }
         } else {
-            ((ship::attack(self) - ship::protection(opponent) * 4 / 5) as u64)
+            /* self_attack >= opponent_protection */
+            // damage = self.attack - opponent.protection * 0.8
+            ((self_attack - opponent_protection * 4 / 5) as u64)
         };
 
         //let seed_2 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(opponent), ship::id(self)]);
         //vector::append(&mut seed_2, bcs::to_bytes(&round_number));
-        let seed_2 = vector[2];
-        vector::append(&mut seed_2, seed_1);
+        vector::append(&mut seed_1, vector[2]);
+        let seed_2 = seed_1;
 
         // Critical hit and miss logic
         let critical_hit_chance = 20;  // 20% chance for a critical hit
@@ -238,11 +246,12 @@ module infinite_sea::ship_battle_util {
             // Critical miss negates all damage
             return 0
         } else {
-            let seed_3 = vector[3];//vector::empty<u8>();
+            //let seed_3 = vector::empty<u8>();
             //vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(opponent)));
             //vector::append(&mut seed_3, bcs::to_bytes(&ship::health_points(self)));
             //vector::append(&mut seed_3, seed_2);
-            vector::append(&mut seed_3, seed_1);
+            vector::append(&mut seed_1, vector[3]);
+            let seed_3 = seed_1;
             if (ts_random_util::get_int(clock, seed_3, 100) < critical_hit_chance) {
                 // Critical hit doubles the damage
                 //damage *= 1.5;
