@@ -24,7 +24,7 @@ module infinite_sea_common::sorted_vector_util {
         item_id_list: vector<u32>,
         item_quantity_list: vector<u32>,
     ): vector<ItemIdQuantityPair> {
-        assert!(std::vector::length(&item_id_list) > 0, EEmptyList);
+        assert!(std::vector::length(&item_id_list) >= 0, EEmptyList);
         assert!(std::vector::length(&item_id_list) == std::vector::length(&item_quantity_list), EIncorrectListLength);
         let items = std::vector::empty();
         let l = std::vector::length(&item_id_list);
