@@ -106,9 +106,9 @@ module infinite_sea::ship_battle_util {
         roster_1: &Roster,
         roster_2: &Roster,
         clock: &Clock,
-        round_number: u32
+        salt: u32
     ): (ID, ID, u8) {
-        let (attacker_ship_id, roster_indicator) = determine_ship_to_go_first(roster_1, roster_2, clock, round_number);
+        let (attacker_ship_id, roster_indicator) = determine_ship_to_go_first(roster_1, roster_2, clock, salt);
         let defender_ship_id = if (roster_indicator == 1) {
             let d_id = get_front_ship(roster_2);
             assert!(option::is_some(&d_id), ENoLivingShips);
@@ -140,16 +140,18 @@ module infinite_sea::ship_battle_util {
         roster_1: &Roster,
         roster_2: &Roster,
         clock: &Clock,
-        round_number: u32
+        salt: u32
     ): (ID, u8) {
         let seed_1 = sorted_vector_util::concat_ids_bytes(&vector[roster::id(roster_1), roster::id(roster_2)]);
-        vector::append(&mut seed_1, vector[((round_number % 256) as u8)]);//bcs::to_bytes(&round_number));
-        let (candidate_1, initiative_1) = get_candidate_attacker_ship_id(roster_1, clock, seed_1);
-        let seed_2 = vector[2];//vector::empty<u8>();
+        vector::append(&mut seed_1, vector[((salt % 256) as u8)]);//bcs::to_bytes(&salt));
+        let random_ints = ts_random_util::get_8_u32_vector(clock, seed_1);
+        let (candidate_1, initiative_1) = get_candidate_attacker_ship_id(roster_1, &random_ints);// clock, seed_1);
+        //let seed_2 = vector[2];//vector::empty<u8>();
         //vector::append(&mut seed_2, bcs::to_bytes(&initiative_1));
         //vector::append(&mut seed_2, bcs::to_bytes(&vector::length(&roster::ship_ids(roster_1))));
-        vector::append(&mut seed_2, seed_1);
-        let (candidate_2, initiative_2) = get_candidate_attacker_ship_id(roster_2, clock, seed_2);
+        //vector::append(&mut seed_2, seed_1);
+        vector::reverse(&mut random_ints);
+        let (candidate_2, initiative_2) = get_candidate_attacker_ship_id(roster_2, &random_ints);// clock, seed_2);
         assert!(!(option::is_none(&candidate_1) && option::is_none(&candidate_2)), ENoLivingShips);
         if (option::is_none(&candidate_1)) {
             (option::extract(&mut candidate_2), 2)
@@ -163,7 +165,10 @@ module infinite_sea::ship_battle_util {
         }
     }
 
-    fun get_candidate_attacker_ship_id(roster: &Roster, clock: &Clock, seed: vector<u8>): (Option<ID>, u64) {
+    fun get_candidate_attacker_ship_id(
+        roster: &Roster,
+        random_ints: &vector<u32>//, clock: &Clock, seed: vector<u8>
+    ): (Option<ID>, u32) {
         let ship_ids = roster::borrow_ship_ids(roster);
         let ships = roster::borrow_ships(roster);
         //let turn_order = vector::empty<ID>();
@@ -171,8 +176,9 @@ module infinite_sea::ship_battle_util {
         let l = vector::length(ship_ids);
         let max_initiative = 0;
         let candidate = option::none<ID>();
-        let (random_i_1, random_i_2, random_i_3, random_i_4) = ts_random_util::get_4_u64(clock, seed);
-        let random_ints = vector[random_i_1, random_i_2, random_i_3, random_i_4];
+        //let (random_i_1, random_i_2, random_i_3, random_i_4) = ts_random_util::get_4_u64(clock, seed);
+        //let random_ints = vector[random_i_1, random_i_2, random_i_3, random_i_4];
+        let random_ints_len = vector::length(random_ints);
         while (i < l) {
             let ship_id = *vector::borrow(ship_ids, i);
             assert!(object_table::contains(ships, ship_id), EShipNotFoundById);
@@ -181,7 +187,7 @@ module infinite_sea::ship_battle_util {
                 //let s = bcs::to_bytes(&i);
                 //vector::append(&mut s, seed);
                 //let initiative = 1 + ts_random_util::get_int(clock, s, 8) + (ship::speed(ship) as u64);
-                let initiative = 1 + *vector::borrow(&random_ints, i % 4) % 8 + (ship::speed(ship) as u64);
+                let initiative = 1 + *vector::borrow(random_ints, i % random_ints_len) % 8 + (ship::speed(ship));
                 //vector::push_back(&mut turn_order, ship_id);
                 if (initiative > max_initiative) {
                     max_initiative = initiative;
@@ -215,10 +221,8 @@ module infinite_sea::ship_battle_util {
         option::none()
     }
 
-    public fun perform_attack(
-        seed: vector<u8>, clock: &Clock, //round_number: u32,
-        self_attack: u32, opponent_protection: u32
-    ): u32 {
+    public fun perform_attack(seed: vector<u8>, clock: &Clock, self_attack: u32, opponent_protection: u32): u32 {
+        //salt: u32,
         //self: &Ship, opponent: &Ship
         //let self_attack = ship::attack(self);
         //let opponent_protection = ship::protection(opponent);
@@ -232,7 +236,7 @@ module infinite_sea::ship_battle_util {
             0
         };
         // let seed_1 = seed;//sorted_vector_util::concat_ids_bytes(&vector[ship::id(self), ship::id(opponent)]);
-        // //vector::append(&mut seed_1, vector[(round_number % 256 as u8)]); //bcs::to_bytes(&round_number)
+        // //vector::append(&mut seed_1, vector[(salt % 256 as u8)]); //bcs::to_bytes(&salt)
         if (1 + random_i_1 % 100 <= dodge_chance) {
             //if (1 + ts_random_util::get_int(clock, seed_1, 100) <= dodge_chance) {
             return 0
@@ -255,7 +259,7 @@ module infinite_sea::ship_battle_util {
         };
 
         // //let seed_2 = sorted_vector_util::concat_ids_bytes(&vector[ship::id(opponent), ship::id(self)]);
-        // //vector::append(&mut seed_2, bcs::to_bytes(&round_number));
+        // //vector::append(&mut seed_2, bcs::to_bytes(&salt));
         // vector::append(&mut seed_1, vector[2]);
         // let seed_2 = seed_1;
 
