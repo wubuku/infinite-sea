@@ -1,5 +1,5 @@
 
-$startLoation = Get-Location; 
+$startLocation = Get-Location; 
 
 $dataFile = ".\data.json"
 if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
@@ -9,7 +9,7 @@ if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
 $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
-$claimFile = "$startLoation\claim_island.json"
+$claimFile = "$startLocation\claim_island.json"
 if (-not (Test-Path -Path $claimFile -PathType Leaf)) {
     "文件 $dataFile 不存在 " | Write-Host  -ForegroundColor Red
     return
@@ -26,7 +26,7 @@ foreach ($Roster in $ClaimInfo.objectChanges) {
             $result = sui client object $Roster.objectId --json 
             if (-not ('System.Object[]' -eq $result.GetType())) {
                 "获取Roster $Roster.objectId 信息时返回 $result" | Write-Host  -ForegroundColor Red
-                Set-Location $startLoation
+                Set-Location $startLocation
                 return
             }
             $resutJson = $result | ConvertFrom-Json
@@ -35,16 +35,16 @@ foreach ($Roster in $ClaimInfo.objectChanges) {
         }
         catch {
             "获取Roster $Roster.objectId 信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return    
         }
     }
 }
 
-$playerRostersFile = "$startLoation\rosters.json"
+$playerRostersFile = "$startLocation\rosters.json"
 $RosterData | ConvertTo-Json | Tee-Object -FilePath $playerRostersFile | Write-Host -ForegroundColor Green
 
 "相关数据请参考: $playerRostersFile" | Write-Host -ForegroundColor Blue
 
 
-Set-Location $startLoation
+Set-Location $startLocation

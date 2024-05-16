@@ -1,9 +1,9 @@
 
-$startLoation = Get-Location; 
+$startLocation = Get-Location; 
 
 $now = Get-Date
 $formattedNow = $now.ToString('yyyyMMddHHmmss')
-$logFile = "$startLoation\environment_roster.log"
+$logFile = "$startLocation\environment_roster.log"
 
 
 $dataFile = ".\data.json"
@@ -24,7 +24,7 @@ if ($null -eq $newPlayId -or $newPlayId -eq "") {
         $result = sui client call --package $dataInfo.main.PackageId --module player_aggregate --function create --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "创建Player时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json
@@ -40,13 +40,13 @@ if ($null -eq $newPlayId -or $newPlayId -eq "") {
     catch {
         "创建Player失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation
+        Set-Location $startLocation
         return    
     }
 }
 if ($newPlayId -eq "") {    
     "Player Id 还是为空，请检查一下原因。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Red
-    Set-Location $startLoation
+    Set-Location $startLocation
     return    
 }
 
@@ -73,7 +73,7 @@ try {
     $createEnvironmentRosterResult = Invoke-Expression -Command $command
     if (-not ('System.Object[]' -eq $createEnvironmentRosterResult.GetType())) {
         "创建环境船队时返回信息 $createEnvironmentRosterResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $createEnvironmentRosterResultObj = $createEnvironmentRosterResult | ConvertFrom-Json
@@ -94,7 +94,7 @@ try {
 catch {
     "创建环境船队失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
     "返回的结果为:$createEnvironmentRosterResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation
+    Set-Location $startLocation
     return    
 }
 
@@ -105,10 +105,10 @@ $EnvironmentRosterJson | Add-Member -MemberType NoteProperty -Name "PlayerId" -V
 $EnvironmentRosterJson | Add-Member -MemberType NoteProperty -Name "RosterId" -Value $rosterId 
 $EnvironmentRosterJson | Add-Member -MemberType NoteProperty -Name "ShipIds" -Value $shipIds 
 
-$environmentRosterJsonFile = "$startLoation\environment_roster.json"
+$environmentRosterJsonFile = "$startLocation\environment_roster.json"
 $EnvironmentRosterJson | ConvertTo-Json | Tee-Object -FilePath $environmentRosterJsonFile | Write-Host -ForegroundColor White
 
 "相关数据请参考: $environmentRosterJsonFile" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Blue
 
 
-Set-Location $startLoation
+Set-Location $startLocation

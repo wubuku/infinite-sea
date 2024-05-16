@@ -1,9 +1,9 @@
 
-$startLoation = Get-Location; 
+$startLocation = Get-Location; 
 
 $now = Get-Date
 $formattedNow = $now.ToString('yyyyMMddHHmmss')
-$logFile = "$startLoation\crafting_$formattedNow.log"
+$logFile = "$startLocation\crafting_$formattedNow.log"
 
 
 $dataFile = ".\data.json"
@@ -16,10 +16,10 @@ $dataInfo = $ComeFromFile | ConvertFrom-Json
 
 
 
-$itemDataFile = "$startLoation\item.json"
+$itemDataFile = "$startLocation\item.json"
 if (-not (Test-Path -Path $itemDataFile -PathType Leaf)) {
     "文件 $itemDataFile 不存在 " | Write-Host  -ForegroundColor Red
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 $itemData | ConvertTo-Json | Set-Content -Path $itemDataFile 
@@ -73,7 +73,7 @@ if ($craft -and $cratingCount -ge 1) {
             $result = sui client call --package $dataInfo.main.PackageId --module skill_process_service --function start_ship_production --args  $dataInfo.main.SkillProcessCrafting  $crafingResourceIds_ $crafingResourceQuantities_  $dataInfo.main.Player  $dataInfo.common.ItemProducitonCrafting $clock  $dataInfo.coin.EnergyId --gas-budget 42000000 --json
             if (-not ('System.Object[]' -eq $result.GetType())) {
                 "建造第 $i 艘船时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-                Set-Location $startLoation
+                Set-Location $startLocation
                 return
             }
             $resultObj = $result | ConvertFrom-Json 
@@ -83,7 +83,7 @@ if ($craft -and $cratingCount -ge 1) {
             "第 $i 艘船建造失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
             "提醒:很多时候都是因为Player造船原材料不够,建议先检查一下Player手头上的原材料数量,`n sui client object $($dataInfo.main.Player) --json " | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Blue
-            Set-Location $startLoation 
+            Set-Location $startLocation 
             return    
         }
 
@@ -98,7 +98,7 @@ if ($craft -and $cratingCount -ge 1) {
             $result = Invoke-Expression -Command $commandCompleteShipProduction
             if (-not ('System.Object[]' -eq $result.GetType())) {
                 "结束第 $i 艘船建造返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-                Set-Location $startLoation
+                Set-Location $startLocation
                 return
             }
             $resultObj = $result | ConvertFrom-Json     
@@ -114,7 +114,7 @@ if ($craft -and $cratingCount -ge 1) {
         catch {
             "第 $i 艘船建造失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-            Set-Location $startLoation 
+            Set-Location $startLocation 
             return    
         }
     }
@@ -142,7 +142,7 @@ if ($transferShip -and $shipIds.Length -gt 0) {
         $getRosterResult = sui client object $targetRoster --json 
         if (-not ('System.Object[]' -eq $getRosterResult.GetType())) {
             "获取Roster $targetRoster 信息时返回 $getRosterResult" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $getRosterResultJson = $getRosterResult | ConvertFrom-Json
@@ -153,7 +153,7 @@ if ($transferShip -and $shipIds.Length -gt 0) {
     catch {
         "获取Roster $targetRoster 信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
         "返回的结果为:$getRosterResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation
+        Set-Location $startLocation
         return    
     }       
     $tranferResult = ""
@@ -167,7 +167,7 @@ if ($transferShip -and $shipIds.Length -gt 0) {
                 sui client call --package $dataInfo.main.PackageId --module roster_aggregate --function transfer_ship --args  $sourceRoster $dataInfo.main.Player $shipId  $targetRoster  [0] --gas-budget 42000000 --json
                 if (-not ('System.Object[]' -eq $tranferResult.GetType())) {
                     "转移船只 $shipId 时返回信息： $tranferResult" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Red
-                    Set-Location $startLoation
+                    Set-Location $startLocation
                     return
                 }
                 $tranferResultJson = $tranferResult | ConvertFrom-Json
@@ -176,7 +176,7 @@ if ($transferShip -and $shipIds.Length -gt 0) {
             catch {
                 "转移船只失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
                 "返回的结果为:$tranferResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-                Set-Location $startLoation
+                Set-Location $startLocation
                 return    
             }
             $index++
@@ -188,6 +188,6 @@ if ($transferShip -and $shipIds.Length -gt 0) {
 
 "该脚本执行后相关的日志请参考: $logFile" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Blue
 
-Set-Location $startLoation 
+Set-Location $startLocation 
 
 

@@ -1,10 +1,10 @@
-$startLoation = Get-Location; 
+$startLocation = Get-Location; 
 
 $now = Get-Date
 $formattedNow = $now.ToString('yyyyMMddHHmmss')
-$logFile = "$startLoation\battle_$formattedNow.log"
+$logFile = "$startLocation\battle_$formattedNow.log"
 
-$dataFile = "$startLoation\data.json"
+$dataFile = "$startLocation\data.json"
 if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
     "文件 $dataFile 不存在 " | Write-Host  -ForegroundColor Red
     return
@@ -12,7 +12,7 @@ if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
 $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
-$playerRostersFile = "$startLoation\rosters.json"
+$playerRostersFile = "$startLocation\rosters.json"
 if (-not (Test-Path -Path $playerRostersFile -PathType Leaf)) {
     "Player的船队信息文件 $playerRostersFile 不存在 " | Write-Host  -ForegroundColor Red
     return
@@ -22,7 +22,7 @@ $playerRostersJson = Get-Content -Raw -Path $playerRostersFile
 $rosters = $playerRostersJson | ConvertFrom-Json
 
 
-$environmentRosterJsonFile = "$startLoation\environment_roster.json"
+$environmentRosterJsonFile = "$startLocation\environment_roster.json"
 if (-not (Test-Path -Path $environmentRosterJsonFile -PathType Leaf)) {
     "环境船队信息文件 $playerRostersFile 不存在 " | Write-Host  -ForegroundColor Red
     return
@@ -43,11 +43,11 @@ if (-not $onlyCheckShipBattleResult) {
     try {
         "`n开始交战..." | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
         $command = "sui client call --package $($dataInfo.main.PackageId)  --module ship_battle_service --function initiate_battle_and_auto_play_till_end --args $($dataInfo.main.Player) $roster  $($environmentRoster.RosterId) '0x6' --gas-budget 4999000000 --json"
-        $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+        #$command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
         $result = Invoke-Expression -Command $command
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "交战时返回信息： $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $setSailResultObj = $result | ConvertFrom-Json   
@@ -67,13 +67,13 @@ if (-not $onlyCheckShipBattleResult) {
     catch {
         "交战失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation
+        Set-Location $startLocation
         return    
     }
 }
 if ($null -eq $shipBattleId -or $shipBattleId -eq "") {    
     "ShipBattleId 无值，请检查问题所在。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 $shipBattleResult = ""
@@ -84,18 +84,18 @@ try {
     $shipBattleResult = sui client object $shipBattleId --json 
     if (-not ('System.Object[]' -eq $shipBattleResult.GetType())) {
         "获取战斗信息时返回: $shipBattleResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $shipBattle = $shipBattleResult | ConvertFrom-Json
     $initiator = $shipBattle.content.fields.initiator
-    "发起方:$initiator" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+    "发起方: $initiator" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
     $responder = $shipBattle.content.fields.responder
-    "应战方:$responder" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+    "应战方: $responder" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
     $round_number = $shipBattle.content.fields.round_number
-    "回合数:$round_number" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+    "回合数: $round_number" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
     $status = $shipBattle.content.fields.status
-    "状态值:$status,表示：" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+    "状态值: $status,表示：" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
     if ($null -ne $status) {
         if (0 -eq $status) {
             "   进行中..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
@@ -133,7 +133,7 @@ try {
 catch {
     "获取战斗信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
     "返回的结果为:$shipBattleResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation
+    Set-Location $startLocation
     return    
 }
 
@@ -153,11 +153,11 @@ if ($status -eq 1) {
     try {
         "`n开始收拾战利品..." | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
         $command = "sui client call --package $($dataInfo.main.PackageId)  --module ship_battle_aggregate --function take_loot --args $shipBattleId $player $loser_player $initiator $responder  $($dataInfo.common.ExperienceTable)  '0x6'  0  --gas-budget 4999000000 --json"
-        $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+        #$command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
         $takeLootResult = Invoke-Expression -Command $command
         if (-not ('System.Object[]' -eq $takeLootResult.GetType())) {
             "交战时返回信息： $takeLootResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $takeLootObj = $takeLootResult | ConvertFrom-Json   
@@ -175,11 +175,11 @@ if ($status -eq 1) {
     catch {
         "搜刮失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
         "返回的结果为:$takeLootResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation
+        Set-Location $startLocation
         return    
     }
 }
 
 "运行该脚本日志请参考:$logFile" |  Write-Host 
 
-Set-Location $startLoation
+Set-Location $startLocation
