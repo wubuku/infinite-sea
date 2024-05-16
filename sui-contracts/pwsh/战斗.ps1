@@ -89,13 +89,13 @@ try {
     }
     $shipBattle = $shipBattleResult | ConvertFrom-Json
     $initiator = $shipBattle.content.fields.initiator
-    "发起方:$initiator" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+    "发起方: $initiator" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
     $responder = $shipBattle.content.fields.responder
-    "应战方:$responder" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+    "应战方: $responder" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
     $round_number = $shipBattle.content.fields.round_number
-    "回合数:$round_number" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+    "回合数: $round_number" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
     $status = $shipBattle.content.fields.status
-    "状态值:$status,表示：" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+    "状态值: $status,表示：" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
     if ($null -ne $status) {
         if (0 -eq $status) {
             "   进行中..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
