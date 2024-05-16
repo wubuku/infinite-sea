@@ -6,7 +6,7 @@ module infinite_sea_coin::energy_faucet {
     use sui::object;
     use sui::object::UID;
     use sui::transfer;
-    use sui::transfer::transfer;
+    use sui::transfer::public_transfer;
     use sui::tx_context::{sender, TxContext};
 
     use infinite_sea_coin::energy::ENERGY;
@@ -28,7 +28,7 @@ module infinite_sea_coin::energy_faucet {
 
     public entry fun request_a_drop(faucet: &mut EnergyFaucet, ctx: &mut TxContext) {
         let b = balance::split(&mut faucet.balance, DROP_AMOUNT);
-        transfer(coin::from_balance(b, ctx), sender(ctx))
+        public_transfer(coin::from_balance(b, ctx), sender(ctx))
     }
 
     /// Replenish
