@@ -27,7 +27,7 @@ configuration:
       ItemIdQuantityPairs:
         mappingType: "io.hypersistence.utils.hibernate.type.json.JsonType"
         parameters:
-          "org.hibernate.type.ParameterType": "org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs"
+          "org.hibernate.type.ParameterType": "{type}"
 
 
 typeDefinitions:
