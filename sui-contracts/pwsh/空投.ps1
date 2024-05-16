@@ -7,18 +7,18 @@ if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
 $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
-$itemDataFile = "$startLoation\item.json"
+$itemDataFile = "$startLocation\item.json"
 if (-not (Test-Path -Path $itemDataFile -PathType Leaf)) {
     "文件 $itemDataFile 不存在 " | Write-Host  -ForegroundColor Red
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 $itemDataJson = Get-Content -Raw -Path $itemDataFile
 $itemData = $itemDataJson | ConvertFrom-Json
 
 
-$startLoation = Get-Location; 
-$logFile = "$startLoation\airdrop_$($dataInfo.main.Player).log"
+$startLocation = Get-Location; 
+$logFile = "$startLocation\airdrop_$($dataInfo.main.Player).log"
 
 
 $item = $itemData.ItemNormalLogs
@@ -32,7 +32,7 @@ try {
     $result = sui client call --package $dataInfo.main.PackageId  --module player_aggregate --function airdrop --args $dataInfo.main.Player $dataInfo.main.Publisher $($item.ItemId) $quantity --gas-budget 11000000 --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "空投时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $resultObj = $result | ConvertFrom-Json
@@ -41,7 +41,7 @@ try {
 catch {
     "空投失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation 
+    Set-Location $startLocation 
     return    
 }
-Set-Location $startLoation 
+Set-Location $startLocation 

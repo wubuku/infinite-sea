@@ -1,10 +1,10 @@
-$startLoation = Get-Location; 
+$startLocation = Get-Location; 
 
 $now = Get-Date
 $formattedNow = $now.ToString('yyyyMMddHHmmss')
-$logFile = "$startLoation\set_sail_$formattedNow.log"
+$logFile = "$startLocation\set_sail_$formattedNow.log"
 
-$dataFile = "$startLoation\data.json"
+$dataFile = "$startLocation\data.json"
 if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
     "文件 $dataFile 不存在 " | Write-Host  -ForegroundColor Red
     return
@@ -12,7 +12,7 @@ if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
 $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
-$playerRostersFile = "$startLoation\rosters.json"
+$playerRostersFile = "$startLocation\rosters.json"
 if (-not (Test-Path -Path $playerRostersFile -PathType Leaf)) {
     "Player的船队信息文件 $playerRostersFile 不存在 " | Write-Host  -ForegroundColor Red
     return
@@ -22,7 +22,7 @@ $playerRostersJson = Get-Content -Raw -Path $playerRostersFile
 $rosters = $playerRostersJson | ConvertFrom-Json
 
 
-$environmentRosterJsonFile = "$startLoation\environment_roster.json"
+$environmentRosterJsonFile = "$startLocation\environment_roster.json"
 if (-not (Test-Path -Path $environmentRosterJsonFile -PathType Leaf)) {
     "环境船队信息文件 $playerRostersFile 不存在 " | Write-Host  -ForegroundColor Red
     return
@@ -46,7 +46,7 @@ try {
     $environmentRosterResult = sui client object $environmentRoster.RosterId --json 
     if (-not ('System.Object[]' -eq $environmentRosterResult.GetType())) {
         "获取目标船队 $($environmentRoster.RosterId) 信息时返回: $environmentRosterResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $environmentRosterObj = $environmentRosterResult | ConvertFrom-Json
@@ -56,7 +56,7 @@ try {
 catch {
     "获取目标船队 $($environmentRoster.RosterId) 信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
     "返回的结果为:$environmentRosterResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation
+    Set-Location $startLocation
     return    
 }
 if ($null -eq $environmentRosterResult) {    
@@ -70,7 +70,7 @@ try {
     $setSailResult = Invoke-Expression -Command $command
     if (-not ('System.Object[]' -eq $setSailResult.GetType())) {
         "船队启航返回信息： $setSailResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $setSailResultObj = $setSailResult | ConvertFrom-Json
@@ -79,9 +79,9 @@ try {
 catch {
     "船队启航失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
     "返回的结果为:$setSailResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation
+    Set-Location $startLocation
     return    
 }
 
-Set-Location $startLoation
+Set-Location $startLocation
 

@@ -9,12 +9,12 @@ $crafting = 6
 
 $clock = "0x6"
 
-$startLoation = Get-Location; 
+$startLocation = Get-Location; 
 
 $now = Get-Date
 $formattedNow = $now.ToString('yyyyMMddHHmmss')
-$logFile = "$startLoation\publish_$formattedNow.log"
-$dataFile = "$startLoation\data.json"
+$logFile = "$startLocation\publish_$formattedNow.log"
+$dataFile = "$startLocation\data.json"
 
 
 $dataJson = New-Object -TypeName PSObject
@@ -37,7 +37,10 @@ $executeWooding = $false
 "------------------------------------- 重新发布 infinite-sea-coin -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
 # 重新发布infinite-sea-coin
-$coinPath = "$startLoation\infinite-sea-coin"
+$coinPath = Join-Path $startLocation "..\infinite-sea-coin"
+#加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-coin
+$coinPath = Get-Item -Path $coinPath
+#$coinPath 其实是个对象
 "切换目录到 $coinPath" | Tee-Object -FilePath $logFile -Append | Write-Host
 if (-not (Test-Path -Path $coinPath)) {
     "目录 $coinPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
@@ -80,7 +83,7 @@ try {
     #if ('System.String' -eq $publishCommonJson.GetType()-and $publishCommonJson | Test-Json) {}
     if (-not ('System.Object[]' -eq $publishCoinJson.GetType())) {
         "发布 infinite_sea_coin 合约失败: $publishCoinJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $publishCoinJsonObj = $publishCoinJson | ConvertFrom-Json
@@ -90,7 +93,7 @@ try {
 catch {
     "发布 infinite_sea_coin 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
     "返回的结果为:$publishCoinJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 
@@ -116,17 +119,17 @@ try {
 }
 catch {
     "解析Coin返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 if ($coinPackingId -eq "") {
     "Cant find coin package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 if ($treasuryCap -eq "") {
     "没能获取TreasuryCap ObjectID" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    Set-Location $startLoation  
+    Set-Location $startLocation  
     return;
 }
 
@@ -158,7 +161,7 @@ try {
     $mintJson = sui client call --package $coinPackingId --module energy --function mint --args $treasuryCap $minAmout --gas-budget 19000000 --json
     if (-not ('System.Object[]' -eq $mintJson.GetType())) {
         "分配 Mint 失败: $mintJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $mintResultObject = $mintJson | ConvertFrom-Json;
@@ -182,14 +185,14 @@ try {
     }
     if ($minAmout -ne $mintedAmount) {
         'Mint ENERGY Failed?' | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     "分配成功 Mint OK! `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
 }
 catch {   
     "分配 Mint 失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red 
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 
@@ -197,12 +200,13 @@ if ($energyId -eq "") {
     "未能获取Coin<ENERGY> Id，请停下来检查一下什么情况。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
 }
 
-Set-Location $startLoation
+Set-Location $startLocation
 
 
 "------------------------------------- 重新发布 infinite-sea-common -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 # 重新发布Common
-$commonPath = "$startLoation\infinite-sea-common"
+$commonPath = Join-Path $startLocation "..\infinite-sea-common"
+$commonPath = Get-Item -Path $commonPath
 "切换目录到 Change Directory to $commonPath" | Tee-Object -FilePath $logFile -Append | Write-Host
 if (-not (Test-Path -Path $commonPath)) {
     "目录 $commonPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
@@ -246,7 +250,7 @@ try {
     #if ('System.String' -eq $publishCommonJson.GetType()-and $publishCommonJson | Test-Json) {}
     if (-not ('System.Object[]' -eq $publishCommonJson.GetType())) {
         "Publish Common contract failed: $publishCommonJson" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $publishCommonObj = $publishCommonJson | ConvertFrom-Json
@@ -258,7 +262,7 @@ try {
 catch {
     "发布Common合约失败 Publish Common contract failed: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
     "返回的结果为:$publishCommonJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 
@@ -367,14 +371,14 @@ foreach ($level in $levelArray) {
         $result = sui client call --package $commonPackageId --module experience_table_aggregate --function add_level --args $experienceTableId $commonPublisherId  $level.Level $level.Experience $level.Difference --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "添加等级 $level 相关信息时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         "添加等级 $level 信息成功" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
     }
     catch {
         "添加等级 $level 相关信息失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return    
     }
 }
@@ -382,10 +386,10 @@ foreach ($level in $levelArray) {
 "创建检验等级表格完成。`n" | Tee-Object $logFile -Append | Write-Host 
 
 
-$itemDataFile = "$startLoation\item.json"
+$itemDataFile = "$startLocation\item.json"
 if (-not (Test-Path -Path $itemDataFile -PathType Leaf)) {
     "文件 $itemDataFile 不存在 " | Write-Host  -ForegroundColor Red
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 $itemDataJson = Get-Content -Raw -Path $itemDataFile
@@ -402,27 +406,28 @@ foreach ($item in $itemArray) {
         $result = sui client call --package $commonPackageId --module item_aggregate --function create --args $item.ItemId $commonPublisherId $item.Name  $item.RequiredForCompletion $item.SellsFor $itemTableId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "添加Item $item 相关信息时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         "添加Item $item 信息成功" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
     }
     catch {
         "添加Item $item 相关信息失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return    
     }
 }
 "添加了" + $itemArray.Count + "个Item。`n" | Tee-Object $logFile -Append | Write-Host 
 
 #将目录切换到当前文件相同的位置
-Set-Location $startLoation
+Set-Location $startLocation
 
 
 "------------------------------------- 重新发布 infinite-sea -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
 # 重新发布Infinite-sea
-$mainPath = "$startLoation\infinite-sea"
+$mainPath = Join-Path $startLocation "..\infinite-sea"
+$mainPath = Get-Item -Path $mainPath
 "切换目录到 Change Directory to $mainPath" | Tee-Object -FilePath $logFile -Append | Write-Host
 if (-not (Test-Path -Path $mainPath)) {
     "目录 $mainPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
@@ -464,13 +469,13 @@ try {
     #if ('System.String' -eq $publishCommonJson.GetType()-and $publishCommonJson | Test-Json) {}
     if (-not ('System.Object[]' -eq $publishMainJson.GetType())) {
         "Publish infinite-sea contract failed: $publishMainJson" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
 }
 catch {
     "发布 infinite-sea 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 $publishMainObj = $null
@@ -480,7 +485,7 @@ try {
 catch {
     "不能将发布返回的结果转化为JSON对象`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
     $publishMainJson | Tee-Object -FilePath $logFile -Append | Write-Host 
-    Set-Location $startLoation
+    Set-Location $startLocation
     return
 }
 
@@ -568,7 +573,7 @@ try {
     $result = sui client call --package $mainPackageId --module player_aggregate --function create --gas-budget 11000000 --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "创建Player时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $resultObj = $result | ConvertFrom-Json
@@ -583,7 +588,7 @@ try {
 }
 catch {
     "创建Player失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    Set-Location $startLoation
+    Set-Location $startLocation
     return    
 }
 
@@ -611,7 +616,7 @@ try {
     $result = sui client call --package $mainPackageId --module map_aggregate --function add_island --args $mapId $mapAdminCap $coordinates_x $coordinates_y $islandResources_ $islandResourceQuantities_  --gas-budget 11000000 --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "调用接口返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $resultObj = $result | ConvertFrom-Json   
@@ -620,19 +625,19 @@ try {
 catch {
     "添加小岛失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation 
+    Set-Location $startLocation 
     return    
 }
 
 
-$claimFile = "$startLoation\claim_island.json"
+$claimFile = "$startLocation\claim_island.json"
 
 "`n用户宣称Claim这个小岛($coordinates_x,$coordinates_y)..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
 try {
     $result = sui client call --package $mainPackageId --module player_aggregate --function claim_island --args $playId $mapId $coordinates_x $coordinates_y $clock $rosterTableId  --gas-budget 44000000 --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "调用接口返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $resultObj = $result | ConvertFrom-Json   
@@ -645,7 +650,7 @@ try {
 catch {
     "宣称Claim小岛失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation 
+    Set-Location $startLocation 
     return    
 }
 
@@ -658,7 +663,7 @@ if ($executeFarming) {
         $result = sui client call --package $commonPackageId --module item_production_aggregate --function create --args '0' $itemData.ItemCottons.ItemId $commonPublisherId $itemCottonSeedsId '[1]' '1' '5' '85' $costTime '5' '100' $ItemProductionTableId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "添加配方Item Production(种植棉花)时返回信息: $result `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         "添加配方Item Production(种植棉花)信息成功。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
@@ -674,12 +679,12 @@ if ($executeFarming) {
     }
     catch {
         "添加配方Item Production(种植棉花)失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return    
     }
     if ($itemProductionCottonSeedsToCottonId -eq '') {
         "没有获取新增配方Item Production(种植棉花)的Id,请检查原因" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return  
     }
 
@@ -689,7 +694,7 @@ if ($executeFarming) {
         $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $farming $playId '1' $playId $skillProcessTableId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "创建生产流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json
@@ -705,12 +710,12 @@ if ($executeFarming) {
     catch {
         "创建生产流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
     if ($skillProcessId -eq "") {
         "虽然执行了创建生产流程的接口，但是没有获取 SkillProcess Id，所以请检查原因。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 
@@ -720,7 +725,7 @@ if ($executeFarming) {
         $result = sui client call --package $mainPackageId --module skill_process_service --function start_production --args $skillProcessId $playId $itemProductionCottonSeedsToCottonId $clock $energyId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "开始生产流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json    
@@ -729,7 +734,7 @@ if ($executeFarming) {
     catch {
         "开始生产流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 
@@ -743,7 +748,7 @@ if ($executeFarming) {
         $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_production --args $skillProcessId $playId $itemProductionCottonSeedsToCottonId $experienceTableId $clock --gas-budget 42000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "结束生产流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json    
@@ -752,7 +757,7 @@ if ($executeFarming) {
     catch {
         "结束生产流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 }
@@ -766,7 +771,7 @@ if ($executeWooding) {
         $result = sui client call --package $commonPackageId --module item_creation_aggregate --function create --args $woodcutting $($itemData.ItemNormalLogs.ItemId) $commonPublisherId 1 1 1 10 $woodcuttingTime 5 100  $itemCreationTableId --gas-budget 44000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "制作伐木配方返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json   
@@ -782,12 +787,12 @@ if ($executeWooding) {
     catch {
         "制作伐木配方失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
     if ($null -eq $itemCreationWoodingId) {
         "ItemCreationWooding Id 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 
@@ -799,7 +804,7 @@ if ($executeWooding) {
         $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $woodcutting $playId '0' $playId $skillProcessTableId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "创建伐木训练过程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json   
@@ -815,12 +820,12 @@ if ($executeWooding) {
     catch {
         "伐木训练过程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
     if ($null -eq $skillProcessWoodingId) {
         "SkillProcessWoodingId Id 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 
@@ -831,7 +836,7 @@ if ($executeWooding) {
         $result = sui client object $playId --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json   
@@ -853,7 +858,7 @@ if ($executeWooding) {
     catch {
         "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 
@@ -863,7 +868,7 @@ if ($executeWooding) {
         $result = sui client call --package $mainPackageId --module skill_process_service --function start_creation --args $skillProcessWoodingId $playId $itemCreationWoodingId $clock $energyId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "开始伐木时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json    
@@ -872,7 +877,7 @@ if ($executeWooding) {
     catch {
         "伐木失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 
@@ -884,7 +889,7 @@ if ($executeWooding) {
         $result = sui client object $playId --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json   
@@ -907,7 +912,7 @@ if ($executeWooding) {
     catch {
         "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 
@@ -921,7 +926,7 @@ if ($executeWooding) {
         $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_creation --args $skillProcessWoodingId $playId $itemCreationWoodingId $experienceTableId $clock --gas-budget 42000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "结束伐木流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json    
@@ -930,7 +935,7 @@ if ($executeWooding) {
     catch {
         "结束伐木流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 
@@ -942,7 +947,7 @@ if ($executeWooding) {
         $result = sui client object $playId --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLoation
+            Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json   
@@ -965,7 +970,7 @@ if ($executeWooding) {
     catch {
         "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLoation 
+        Set-Location $startLocation 
         return    
     }
 }
@@ -990,7 +995,7 @@ try {
     $result = sui client call --package $commonPackageId --module item_production_aggregate --function create --args  $crafting  $($itemData.ItemShip.ItemId)  $commonPublisherId $crafingResourceIds_ $crafingResourceQuantities_ 1 1 25 $craftingTime 10 100 $ItemProductionTableId --gas-budget 42000000 --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "制作造船配方返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $resultObj = $result | ConvertFrom-Json   
@@ -1006,12 +1011,12 @@ try {
 catch {
     "制作造船配方失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation 
+    Set-Location $startLocation 
     return    
 }
 if ($null -eq $itemProductionCraftingId) {
     "ItemProducitonCraftingId 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    Set-Location $startLoation 
+    Set-Location $startLocation 
     return    
 }
 
@@ -1021,7 +1026,7 @@ try {
     $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $crafting $playId '0' $playId $skillProcessTableId --gas-budget 24000000 --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "创建生产流程(crafting)返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLoation
+        Set-Location $startLocation
         return
     }
     $resultObj = $result | ConvertFrom-Json
@@ -1037,15 +1042,15 @@ try {
 catch {
     "创建生产流程(crafting)失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLoation 
+    Set-Location $startLocation 
     return    
 }
 if ($skillProcessCraftingId -eq "") {
     "虽然执行了创建生产流程(crafting)的接口，但是没有获取 SkillProcess Id，所以请检查原因。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    Set-Location $startLoation 
+    Set-Location $startLocation 
     return    
 }
 
 
 $dataJson | ConvertTo-Json | Set-Content -Path $dataFile 
-Set-Location $startLoation 
+Set-Location $startLocation 
