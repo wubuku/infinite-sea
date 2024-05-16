@@ -7,6 +7,7 @@ module infinite_sea_common::ts_random_util {
     use sui::clock::{Self, Clock};
     use sui::tx_context::{Self, TxContext};
 
+    const MAX_U32: u32 = 4_294_967_295;
     const MAX_U64: u64 = 18_446_744_073_709_551_615;
 
     public fun get_int(clock: &Clock, seed: vector<u8>, bound: u64): u64 {
@@ -15,14 +16,14 @@ module infinite_sea_common::ts_random_util {
 
     public fun get_8_u32_vector(clock: &Clock, seed: vector<u8>): vector<u32> {
         let u_o = get_u256(clock, seed);
-        let u1 = ((u_o % (MAX_U64 as u256)) as u32);
-        let u2 = (((u_o >> 32) % (MAX_U64 as u256)) as u32);
-        let u3 = (((u_o >> 64) % (MAX_U64 as u256)) as u32);
-        let u4 = (((u_o >> 96) % (MAX_U64 as u256)) as u32);
-        let u5 = (((u_o >> 128) % (MAX_U64 as u256)) as u32);
-        let u6 = (((u_o >> 160) % (MAX_U64 as u256)) as u32);
-        let u7 = (((u_o >> 192) % (MAX_U64 as u256)) as u32);
-        let u8 = (((u_o >> 224) % (MAX_U64 as u256)) as u32);
+        let u1 = ((u_o % (MAX_U32 as u256)) as u32);
+        let u2 = (((u_o >> 32) % (MAX_U32 as u256)) as u32);
+        let u3 = (((u_o >> 64) % (MAX_U32 as u256)) as u32);
+        let u4 = (((u_o >> 96) % (MAX_U32 as u256)) as u32);
+        let u5 = (((u_o >> 128) % (MAX_U32 as u256)) as u32);
+        let u6 = (((u_o >> 160) % (MAX_U32 as u256)) as u32);
+        let u7 = (((u_o >> 192) % (MAX_U32 as u256)) as u32);
+        let u8 = (((u_o >> 224) % (MAX_U32 as u256)) as u32);
         vector[u1, u2, u3, u4, u5, u6, u7, u8]
     }
 
