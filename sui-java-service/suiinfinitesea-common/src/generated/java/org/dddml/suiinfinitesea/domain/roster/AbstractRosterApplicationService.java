@@ -54,16 +54,36 @@ public abstract class AbstractRosterApplicationService implements RosterApplicat
         update(c, ar -> ar.create(c.getStatus(), c.getSpeed(), c.getUpdatedCoordinates(), c.getCoordinatesUpdatedAt(), c.getTargetCoordinates(), c.getShipBattleId(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
+    public void when(RosterCommands.CreateEnvironmentRoster c) {
+        update(c, ar -> ar.createEnvironmentRoster(c.getCoordinates(), c.getShipResourceQuantity(), c.getShipBaseResourceQuantity(), c.getBaseExperience(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
     public void when(RosterCommands.AddShip c) {
         update(c, ar -> ar.addShip(c.getShip(), c.getPosition(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
-    public void when(RosterCommands.SetSail c) {
-        update(c, ar -> ar.setSail(c.getTargetCoordinates(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
-    }
-
     public void when(RosterCommands.UpdateLocation c) {
         update(c, ar -> ar.updateLocation(c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(RosterCommands.AdjustShipsPosition c) {
+        update(c, ar -> ar.adjustShipsPosition(c.getPlayer(), c.getPositions(), c.getShipIds(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(RosterCommands.TransferShip c) {
+        update(c, ar -> ar.transferShip(c.getPlayer(), c.getShipId(), c.getToRoster(), c.getToPosition(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(RosterCommands.TransferShipInventory c) {
+        update(c, ar -> ar.transferShipInventory(c.getPlayer(), c.getFromShipId(), c.getToShipId(), c.getItemIdQuantityPairs(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(RosterCommands.TakeOutShipInventory c) {
+        update(c, ar -> ar.takeOutShipInventory(c.getPlayer(), c.getClock(), c.getShipId(), c.getItemIdQuantityPairs(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(RosterCommands.PutInShipInventory c) {
+        update(c, ar -> ar.putInShipInventory(c.getPlayer(), c.getClock(), c.getShipId(), c.getItemIdQuantityPairs(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public RosterState get(RosterId id) {

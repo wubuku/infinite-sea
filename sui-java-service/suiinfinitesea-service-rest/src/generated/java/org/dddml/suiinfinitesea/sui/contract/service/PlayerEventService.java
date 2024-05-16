@@ -17,8 +17,6 @@ import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
 import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
-import org.dddml.suiinfinitesea.sui.contract.player.PlayerItemsDeducted;
-import org.dddml.suiinfinitesea.sui.contract.player.PlayerExperienceAndItemsIncreased;
 import org.dddml.suiinfinitesea.sui.contract.repository.PlayerEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,86 +159,6 @@ public class PlayerEventService {
             return;
         }
         playerEventRepository.save(playerAirdropped);
-    }
-
-    @Transactional
-    public void pullPlayerItemsDeductedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getPlayerItemsDeductedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<PlayerItemsDeducted> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.PLAYER_MODULE_PLAYER_ITEMS_DEDUCTED,
-                    cursor, limit, false, PlayerItemsDeducted.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<PlayerItemsDeducted> eventEnvelope : eventPage.getData()) {
-                    savePlayerItemsDeducted(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getPlayerItemsDeductedEventNextCursor() {
-        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstPlayerItemsDeductedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void savePlayerItemsDeducted(SuiMoveEventEnvelope<PlayerItemsDeducted> eventEnvelope) {
-        AbstractPlayerEvent.PlayerItemsDeducted playerItemsDeducted = DomainBeanUtils.toPlayerItemsDeducted(eventEnvelope);
-        if (playerEventRepository.findById(playerItemsDeducted.getPlayerEventId()).isPresent()) {
-            return;
-        }
-        playerEventRepository.save(playerItemsDeducted);
-    }
-
-    @Transactional
-    public void pullPlayerExperienceAndItemsIncreasedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getPlayerExperienceAndItemsIncreasedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<PlayerExperienceAndItemsIncreased> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.PLAYER_MODULE_PLAYER_EXPERIENCE_AND_ITEMS_INCREASED,
-                    cursor, limit, false, PlayerExperienceAndItemsIncreased.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<PlayerExperienceAndItemsIncreased> eventEnvelope : eventPage.getData()) {
-                    savePlayerExperienceAndItemsIncreased(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getPlayerExperienceAndItemsIncreasedEventNextCursor() {
-        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstPlayerExperienceAndItemsIncreasedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void savePlayerExperienceAndItemsIncreased(SuiMoveEventEnvelope<PlayerExperienceAndItemsIncreased> eventEnvelope) {
-        AbstractPlayerEvent.PlayerExperienceAndItemsIncreased playerExperienceAndItemsIncreased = DomainBeanUtils.toPlayerExperienceAndItemsIncreased(eventEnvelope);
-        if (playerEventRepository.findById(playerExperienceAndItemsIncreased.getPlayerEventId()).isPresent()) {
-            return;
-        }
-        playerEventRepository.save(playerExperienceAndItemsIncreased);
     }
 
 

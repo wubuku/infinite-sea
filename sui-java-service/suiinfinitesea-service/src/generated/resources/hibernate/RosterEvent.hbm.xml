@@ -50,9 +50,15 @@
         <column name="dynamic_properties_lob" sql-type="VARCHAR(2000)" />
       </property>
       <subclass name="AbstractRosterEvent$RosterCreated" discriminator-value="RosterCreated" />
+      <subclass name="AbstractRosterEvent$EnvironmentRosterCreated" discriminator-value="EnvironmentRosterCreated" />
       <subclass name="AbstractRosterEvent$RosterShipAdded" discriminator-value="RosterShipAdded" />
       <subclass name="AbstractRosterEvent$RosterSetSail" discriminator-value="RosterSetSail" />
       <subclass name="AbstractRosterEvent$RosterLocationUpdated" discriminator-value="RosterLocationUpdated" />
+      <subclass name="AbstractRosterEvent$RosterShipsPositionAdjusted" discriminator-value="RosterShipsPositionAdjusted" />
+      <subclass name="AbstractRosterEvent$RosterShipTransferred" discriminator-value="RosterShipTransferred" />
+      <subclass name="AbstractRosterEvent$RosterShipInventoryTransferred" discriminator-value="RosterShipInventoryTransferred" />
+      <subclass name="AbstractRosterEvent$RosterShipInventoryTakenOut" discriminator-value="RosterShipInventoryTakenOut" />
+      <subclass name="AbstractRosterEvent$RosterShipInventoryPutIn" discriminator-value="RosterShipInventoryPutIn" />
     </subclass>
   </class>
 </hibernate-mapping>

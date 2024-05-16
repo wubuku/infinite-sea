@@ -99,6 +99,14 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.CreateEnvironmentRosterLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, Long.class, Long.class, Long.class, VerificationContext.class},
+                    new String[]{"_", "_", "coordinates", "shipResourceQuantity", "shipBaseResourceQuantity", "baseExperience"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.roster.AddShipLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, RosterState.class, String.class, BigInteger.class, VerificationContext.class},
@@ -110,7 +118,7 @@ public class StaticMethodConstraints {
                     "org.dddml.suiinfinitesea.domain.roster.SetSailLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, VerificationContext.class},
-                    new String[]{"_", "_", "targetCoordinates"}
+                    new String[]{"_", "_", "player", "targetCoordinates"}
             );
 
 
@@ -123,10 +131,66 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.AdjustShipsPositionLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, BigInteger[].class, String[].class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "positions", "shipIds"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.TransferShipLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, String.class, RosterId.class, BigInteger.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "shipId", "toRoster", "toPosition"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.TransferShipInventoryLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, String.class, String.class, ItemIdQuantityPairs.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "fromShipId", "toShipId", "itemIdQuantityPairs"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.TakeOutShipInventoryLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, String.class, ItemIdQuantityPairs.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "shipId", "itemIdQuantityPairs"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.PutInShipInventoryLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, String.class, ItemIdQuantityPairs.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "shipId", "itemIdQuantityPairs"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.shipbattle.InitiateBattleLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, ShipBattleState.class, VerificationContext.class},
-                    new String[]{"_", "_", "initiator", "responder"}
+                    new String[]{"_", "_", "player", "initiator", "responder"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.shipbattle.MakeMoveLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, ShipBattleState.class, Integer.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "initiator", "responder", "attackerCommand"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.shipbattle.TakeLootLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, ShipBattleState.class, Integer.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "loserPlayer", "initiator", "responder", "experienceTable", "choice"}
             );
 
 
@@ -203,22 +267,6 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.player.DeductItemsLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, ItemIdQuantityPair[].class, VerificationContext.class},
-                    new String[]{"_", "_", "items"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.player.IncreaseExperienceAndItemsLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, Long.class, ItemIdQuantityPair[].class, Integer.class, VerificationContext.class},
-                    new String[]{"_", "_", "experience", "items", "newLevel"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.map.__Init__Logic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, MapState.class, VerificationContext.class},
@@ -239,6 +287,14 @@ public class StaticMethodConstraints {
                     "verify",
                     new Class[]{java.util.function.Supplier.class, MapState.class, Coordinates.class, String.class, BigInteger.class, VerificationContext.class},
                     new String[]{"_", "_", "coordinates", "claimedBy", "claimedAt"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.map.GatherIslandResourcesLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, MapState.class, VerificationContext.class},
+                    new String[]{"_", "_", "player"}
             );
 
 
@@ -315,18 +371,18 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.roster.AddShipLogic",
+                    "org.dddml.suiinfinitesea.domain.roster.CreateEnvironmentRosterLogic",
                     "mutate",
-                    new Class[]{RosterState.class, String.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "ship", "position", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+                    new Class[]{RosterState.class, Coordinates.class, Long.class, Long.class, Long.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "coordinates", "shipResourceQuantity", "shipBaseResourceQuantity", "baseExperience", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.roster.SetSailLogic",
+                    "org.dddml.suiinfinitesea.domain.roster.AddShipLogic",
                     "mutate",
-                    new Class[]{RosterState.class, Coordinates.class, BigInteger.class, Coordinates.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "targetCoordinates", "setSailAt", "updatedCoordinates", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+                    new Class[]{RosterState.class, String.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "ship", "position", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 
@@ -339,10 +395,66 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.AdjustShipsPositionLogic",
+                    "mutate",
+                    new Class[]{RosterState.class, BigInteger[].class, String[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "positions", "shipIds", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.TransferShipLogic",
+                    "mutate",
+                    new Class[]{RosterState.class, String.class, RosterId.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "shipId", "toRosterId", "toPosition", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.TransferShipInventoryLogic",
+                    "mutate",
+                    new Class[]{RosterState.class, String.class, String.class, ItemIdQuantityPairs.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "fromShipId", "toShipId", "itemIdQuantityPairs", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.TakeOutShipInventoryLogic",
+                    "mutate",
+                    new Class[]{RosterState.class, String.class, ItemIdQuantityPairs.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "shipId", "itemIdQuantityPairs", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.PutInShipInventoryLogic",
+                    "mutate",
+                    new Class[]{RosterState.class, String.class, ItemIdQuantityPairs.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "shipId", "itemIdQuantityPairs", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.shipbattle.InitiateBattleLogic",
                     "mutate",
-                    new Class[]{ShipBattleState.class, String.class, String.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "initiatorId", "responderId", "startedAt", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+                    new Class[]{ShipBattleState.class, String.class, String.class, BigInteger.class, Integer.class, String.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "initiatorId", "responderId", "startedAt", "firstRoundMover", "firstRoundAttackerShip", "firstRoundDefenderShip", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.shipbattle.MakeMoveLogic",
+                    "mutate",
+                    new Class[]{ShipBattleState.class, Integer.class, Integer.class, Long.class, Long.class, Long.class, Boolean.class, Integer.class, BigInteger.class, Integer.class, String.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "attackerCommand", "defenderCommand", "roundNumber", "defenderDamageTaken", "attackerDamageTaken", "isBattleEnded", "winner", "nextRoundStartedAt", "nextRoundMover", "nextRoundAttackerShip", "nextRoundDefenderShip", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.shipbattle.TakeLootLogic",
+                    "mutate",
+                    new Class[]{ShipBattleState.class, Integer.class, ItemIdQuantityPair[].class, BigInteger.class, Long.class, Integer.class, Long.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "choice", "loot", "lootedAt", "increasedExperience", "newLevel", "loserIncreasedExperience", "loserNewLevel", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 
@@ -419,22 +531,6 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.player.DeductItemsLogic",
-                    "mutate",
-                    new Class[]{PlayerState.class, ItemIdQuantityPair[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "items", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.player.IncreaseExperienceAndItemsLogic",
-                    "mutate",
-                    new Class[]{PlayerState.class, Long.class, ItemIdQuantityPair[].class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "experience", "items", "newLevel", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.map.__Init__Logic",
                     "mutate",
                     new Class[]{MapState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
@@ -455,6 +551,14 @@ public class StaticMethodConstraints {
                     "mutate",
                     new Class[]{MapState.class, Coordinates.class, String.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "coordinates", "claimedBy", "claimedAt", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.map.GatherIslandResourcesLogic",
+                    "mutate",
+                    new Class[]{MapState.class, Coordinates.class, ItemIdQuantityPair[].class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "coordinates", "resources", "gatheredAt", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 

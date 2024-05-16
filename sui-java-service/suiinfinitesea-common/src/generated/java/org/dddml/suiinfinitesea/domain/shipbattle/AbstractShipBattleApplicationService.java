@@ -51,7 +51,15 @@ public abstract class AbstractShipBattleApplicationService implements ShipBattle
     }
 
     public void when(ShipBattleCommands.InitiateBattle c) {
-        update(c, ar -> ar.initiateBattle(c.getInitiator(), c.getResponder(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+        update(c, ar -> ar.initiateBattle(c.getPlayer(), c.getInitiator(), c.getResponder(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(ShipBattleCommands.MakeMove c) {
+        update(c, ar -> ar.makeMove(c.getPlayer(), c.getInitiator(), c.getResponder(), c.getClock(), c.getAttackerCommand(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(ShipBattleCommands.TakeLoot c) {
+        update(c, ar -> ar.takeLoot(c.getPlayer(), c.getLoserPlayer(), c.getInitiator(), c.getResponder(), c.getExperienceTable(), c.getClock(), c.getChoice(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public ShipBattleState get(String id) {

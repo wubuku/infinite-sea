@@ -21,6 +21,8 @@ public interface MapAggregate {
 
     void claimIsland(Coordinates coordinates, String claimedBy, BigInteger claimedAt, Long offChainVersion, String commandId, String requesterId, MapCommands.ClaimIsland c);
 
+    void gatherIslandResources(String player, String clock, Long offChainVersion, String commandId, String requesterId, MapCommands.GatherIslandResources c);
+
     void throwOnInvalidStateTransition(Command c);
 }
 

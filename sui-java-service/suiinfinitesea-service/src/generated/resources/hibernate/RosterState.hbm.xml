@@ -57,6 +57,15 @@
     <property name="shipBattleId">
       <column name="ship_battle_id" sql-type="VARCHAR(66)" />
     </property>
+    <property name="environmentOwned">
+      <column name="environment_owned" />
+    </property>
+    <property name="baseExperience">
+      <column name="base_experience" />
+    </property>
+    <property name="energyVault">
+      <column name="energy_vault" />
+    </property>
     <property name="version">
       <column name="version" sql-type="DECIMAL(20,0)" />
     </property>

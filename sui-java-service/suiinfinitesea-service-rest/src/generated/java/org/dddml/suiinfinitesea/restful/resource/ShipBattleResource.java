@@ -188,6 +188,42 @@ public class ShipBattleResource {
         } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
     }
 
+
+    @PutMapping("{id}/_commands/MakeMove")
+    public void makeMove(@PathVariable("id") String id, @RequestBody ShipBattleCommands.MakeMove content) {
+        try {
+
+            ShipBattleCommands.MakeMove cmd = content;//.toMakeMove();
+            String idObj = id;
+            if (cmd.getId() == null) {
+                cmd.setId(idObj);
+            } else if (!cmd.getId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", id, cmd.getId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            shipBattleApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
+    @PutMapping("{id}/_commands/TakeLoot")
+    public void takeLoot(@PathVariable("id") String id, @RequestBody ShipBattleCommands.TakeLoot content) {
+        try {
+
+            ShipBattleCommands.TakeLoot cmd = content;//.toTakeLoot();
+            String idObj = id;
+            if (cmd.getId() == null) {
+                cmd.setId(idObj);
+            } else if (!cmd.getId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", id, cmd.getId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            shipBattleApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
     @GetMapping("_metadata/filteringFields")
     public List<PropertyMetadataDto> getMetadataFilteringFields() {
         try {
@@ -253,7 +289,7 @@ public class ShipBattleResource {
  
     public static class ShipBattleResourceUtils {
 
-        public static void setNullIdOrThrowOnInconsistentIds(String id, ShipBattleCommand value) {
+        public static void setNullIdOrThrowOnInconsistentIds(String id, org.dddml.suiinfinitesea.domain.shipbattle.ShipBattleCommand value) {
             String idObj = id;
             if (value.getId() == null) {
                 value.setId(idObj);

@@ -19,6 +19,8 @@ public interface MapApplicationService {
 
     void when(MapCommands.ClaimIsland c);
 
+    void when(MapCommands.GatherIslandResources c);
+
     MapState get(String id);
 
     Iterable<MapState> getAll(Integer firstResult, Integer maxResults);

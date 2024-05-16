@@ -63,6 +63,30 @@ public class ShipBattleStateDto {
         this.status = status;
     }
 
+    private BigInteger endedAt;
+
+    public BigInteger getEndedAt()
+    {
+        return this.endedAt;
+    }
+
+    public void setEndedAt(BigInteger endedAt)
+    {
+        this.endedAt = endedAt;
+    }
+
+    private Integer winner;
+
+    public Integer getWinner()
+    {
+        return this.winner;
+    }
+
+    public void setWinner(Integer winner)
+    {
+        this.winner = winner;
+    }
+
     private Long roundNumber;
 
     public Long getRoundNumber()
@@ -73,6 +97,18 @@ public class ShipBattleStateDto {
     public void setRoundNumber(Long roundNumber)
     {
         this.roundNumber = roundNumber;
+    }
+
+    private BigInteger roundStartedAt;
+
+    public BigInteger getRoundStartedAt()
+    {
+        return this.roundStartedAt;
+    }
+
+    public void setRoundStartedAt(BigInteger roundStartedAt)
+    {
+        this.roundStartedAt = roundStartedAt;
     }
 
     private Integer roundMover;
@@ -87,16 +123,28 @@ public class ShipBattleStateDto {
         this.roundMover = roundMover;
     }
 
-    private BigInteger roundStartedAt;
+    private String roundAttackerShip;
 
-    public BigInteger getRoundStartedAt()
+    public String getRoundAttackerShip()
     {
-        return this.roundStartedAt;
+        return this.roundAttackerShip;
     }
 
-    public void setRoundStartedAt(BigInteger roundStartedAt)
+    public void setRoundAttackerShip(String roundAttackerShip)
     {
-        this.roundStartedAt = roundStartedAt;
+        this.roundAttackerShip = roundAttackerShip;
+    }
+
+    private String roundDefenderShip;
+
+    public String getRoundDefenderShip()
+    {
+        return this.roundDefenderShip;
+    }
+
+    public void setRoundDefenderShip(String roundDefenderShip)
+    {
+        this.roundDefenderShip = roundDefenderShip;
     }
 
     private BigInteger version;
@@ -183,6 +231,26 @@ public class ShipBattleStateDto {
         this.updatedAt = updatedAt;
     }
 
+    private Long[] initiatorExperiences;
+
+    public Long[] getInitiatorExperiences() {
+        return this.initiatorExperiences;
+    }
+
+    public void setInitiatorExperiences(Long[] initiatorExperiences) {
+        this.initiatorExperiences = initiatorExperiences;
+    }
+
+    private Long[] responderExperiences;
+
+    public Long[] getResponderExperiences() {
+        return this.responderExperiences;
+    }
+
+    public void setResponderExperiences(Long[] responderExperiences) {
+        this.responderExperiences = responderExperiences;
+    }
+
 
     public static class DtoConverter extends AbstractStateDtoConverter
     {
@@ -224,14 +292,26 @@ public class ShipBattleStateDto {
             if (returnedFieldsContains("Status")) {
                 dto.setStatus(state.getStatus());
             }
+            if (returnedFieldsContains("EndedAt")) {
+                dto.setEndedAt(state.getEndedAt());
+            }
+            if (returnedFieldsContains("Winner")) {
+                dto.setWinner(state.getWinner());
+            }
             if (returnedFieldsContains("RoundNumber")) {
                 dto.setRoundNumber(state.getRoundNumber());
+            }
+            if (returnedFieldsContains("RoundStartedAt")) {
+                dto.setRoundStartedAt(state.getRoundStartedAt());
             }
             if (returnedFieldsContains("RoundMover")) {
                 dto.setRoundMover(state.getRoundMover());
             }
-            if (returnedFieldsContains("RoundStartedAt")) {
-                dto.setRoundStartedAt(state.getRoundStartedAt());
+            if (returnedFieldsContains("RoundAttackerShip")) {
+                dto.setRoundAttackerShip(state.getRoundAttackerShip());
+            }
+            if (returnedFieldsContains("RoundDefenderShip")) {
+                dto.setRoundDefenderShip(state.getRoundDefenderShip());
             }
             if (returnedFieldsContains("Version")) {
                 dto.setVersion(state.getVersion());
@@ -253,6 +333,24 @@ public class ShipBattleStateDto {
             }
             if (returnedFieldsContains("UpdatedAt")) {
                 dto.setUpdatedAt(state.getUpdatedAt());
+            }
+            if (returnedFieldsContains("InitiatorExperiences")) {
+                ArrayList<Long> arrayList = new ArrayList();
+                if (state.getInitiatorExperiences() != null) {
+                    for (Long s : state.getInitiatorExperiences()) {
+                        arrayList.add(s);
+                    }
+                }
+                dto.setInitiatorExperiences(arrayList.toArray(new Long[0]));
+            }
+            if (returnedFieldsContains("ResponderExperiences")) {
+                ArrayList<Long> arrayList = new ArrayList();
+                if (state.getResponderExperiences() != null) {
+                    for (Long s : state.getResponderExperiences()) {
+                        arrayList.add(s);
+                    }
+                }
+                dto.setResponderExperiences(arrayList.toArray(new Long[0]));
             }
             return dto;
         }

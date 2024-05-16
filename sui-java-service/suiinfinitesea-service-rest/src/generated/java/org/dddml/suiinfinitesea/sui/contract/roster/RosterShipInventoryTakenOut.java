@@ -14,20 +14,16 @@ import java.math.*;
 import java.util.*;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class RosterSetSail {
+public class RosterShipInventoryTakenOut {
     private String id;
 
     private RosterIdForEvent rosterId;
 
     private BigInteger version;
 
-    private CoordinatesForEvent targetCoordinates;
+    private String shipId;
 
-    private BigInteger setSailAt;
-
-    private CoordinatesForEvent updatedCoordinates;
-
-    private BigInteger energyCost;
+    private ItemIdQuantityPairsForEvent itemIdQuantityPairs;
 
     public String getId() {
         return id;
@@ -53,48 +49,30 @@ public class RosterSetSail {
         this.version = version;
     }
 
-    public CoordinatesForEvent getTargetCoordinates() {
-        return targetCoordinates;
+    public String getShipId() {
+        return shipId;
     }
 
-    public void setTargetCoordinates(CoordinatesForEvent targetCoordinates) {
-        this.targetCoordinates = targetCoordinates;
+    public void setShipId(String shipId) {
+        this.shipId = shipId;
     }
 
-    public BigInteger getSetSailAt() {
-        return setSailAt;
+    public ItemIdQuantityPairsForEvent getItemIdQuantityPairs() {
+        return itemIdQuantityPairs;
     }
 
-    public void setSetSailAt(BigInteger setSailAt) {
-        this.setSailAt = setSailAt;
-    }
-
-    public CoordinatesForEvent getUpdatedCoordinates() {
-        return updatedCoordinates;
-    }
-
-    public void setUpdatedCoordinates(CoordinatesForEvent updatedCoordinates) {
-        this.updatedCoordinates = updatedCoordinates;
-    }
-
-    public BigInteger getEnergyCost() {
-        return energyCost;
-    }
-
-    public void setEnergyCost(BigInteger energyCost) {
-        this.energyCost = energyCost;
+    public void setItemIdQuantityPairs(ItemIdQuantityPairsForEvent itemIdQuantityPairs) {
+        this.itemIdQuantityPairs = itemIdQuantityPairs;
     }
 
     @Override
     public String toString() {
-        return "RosterSetSail{" +
+        return "RosterShipInventoryTakenOut{" +
                 "id=" + '\'' + id + '\'' +
                 ", rosterId=" + rosterId +
                 ", version=" + version +
-                ", targetCoordinates=" + targetCoordinates +
-                ", setSailAt=" + setSailAt +
-                ", updatedCoordinates=" + updatedCoordinates +
-                ", energyCost=" + energyCost +
+                ", shipId=" + '\'' + shipId + '\'' +
+                ", itemIdQuantityPairs=" + itemIdQuantityPairs +
                 '}';
     }
 

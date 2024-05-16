@@ -55,6 +55,26 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
         this.status = status;
     }
 
+    private BigInteger endedAt;
+
+    public BigInteger getEndedAt() {
+        return this.endedAt;
+    }
+
+    public void setEndedAt(BigInteger endedAt) {
+        this.endedAt = endedAt;
+    }
+
+    private Integer winner;
+
+    public Integer getWinner() {
+        return this.winner;
+    }
+
+    public void setWinner(Integer winner) {
+        this.winner = winner;
+    }
+
     private Long roundNumber;
 
     public Long getRoundNumber() {
@@ -63,6 +83,16 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
 
     public void setRoundNumber(Long roundNumber) {
         this.roundNumber = roundNumber;
+    }
+
+    private BigInteger roundStartedAt;
+
+    public BigInteger getRoundStartedAt() {
+        return this.roundStartedAt;
+    }
+
+    public void setRoundStartedAt(BigInteger roundStartedAt) {
+        this.roundStartedAt = roundStartedAt;
     }
 
     private Integer roundMover;
@@ -75,14 +105,24 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
         this.roundMover = roundMover;
     }
 
-    private BigInteger roundStartedAt;
+    private String roundAttackerShip;
 
-    public BigInteger getRoundStartedAt() {
-        return this.roundStartedAt;
+    public String getRoundAttackerShip() {
+        return this.roundAttackerShip;
     }
 
-    public void setRoundStartedAt(BigInteger roundStartedAt) {
-        this.roundStartedAt = roundStartedAt;
+    public void setRoundAttackerShip(String roundAttackerShip) {
+        this.roundAttackerShip = roundAttackerShip;
+    }
+
+    private String roundDefenderShip;
+
+    public String getRoundDefenderShip() {
+        return this.roundDefenderShip;
+    }
+
+    public void setRoundDefenderShip(String roundDefenderShip) {
+        this.roundDefenderShip = roundDefenderShip;
     }
 
     private BigInteger version;
@@ -165,6 +205,26 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
         this.deleted = deleted;
     }
 
+    private List<Long> initiatorExperiences;
+
+    public List<Long> getInitiatorExperiences() {
+        return this.initiatorExperiences;
+    }
+
+    public void setInitiatorExperiences(List<Long> initiatorExperiences) {
+        this.initiatorExperiences = initiatorExperiences;
+    }
+
+    private List<Long> responderExperiences;
+
+    public List<Long> getResponderExperiences() {
+        return this.responderExperiences;
+    }
+
+    public void setResponderExperiences(List<Long> responderExperiences) {
+        this.responderExperiences = responderExperiences;
+    }
+
     public boolean isStateUnsaved() {
         return this.getOffChainVersion() == null;
     }
@@ -231,6 +291,10 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
             ;
         } else if (e instanceof AbstractShipBattleEvent.ShipBattleInitiated) {
             when((AbstractShipBattleEvent.ShipBattleInitiated)e);
+        } else if (e instanceof AbstractShipBattleEvent.ShipBattleMoveMade) {
+            when((AbstractShipBattleEvent.ShipBattleMoveMade)e);
+        } else if (e instanceof AbstractShipBattleEvent.ShipBattleLootTaken) {
+            when((AbstractShipBattleEvent.ShipBattleLootTaken)e);
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported event type: %1$s", e.getClass().getName()));
         }
@@ -243,9 +307,15 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
         this.setInitiator(s.getInitiator());
         this.setResponder(s.getResponder());
         this.setStatus(s.getStatus());
+        this.setInitiatorExperiences(s.getInitiatorExperiences());
+        this.setResponderExperiences(s.getResponderExperiences());
+        this.setEndedAt(s.getEndedAt());
+        this.setWinner(s.getWinner());
         this.setRoundNumber(s.getRoundNumber());
-        this.setRoundMover(s.getRoundMover());
         this.setRoundStartedAt(s.getRoundStartedAt());
+        this.setRoundMover(s.getRoundMover());
+        this.setRoundAttackerShip(s.getRoundAttackerShip());
+        this.setRoundDefenderShip(s.getRoundDefenderShip());
         this.setVersion(s.getVersion());
         this.setActive(s.getActive());
     }
@@ -259,6 +329,12 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
         String ResponderId = responderId;
         BigInteger startedAt = e.getStartedAt();
         BigInteger StartedAt = startedAt;
+        Integer firstRoundMover = e.getFirstRoundMover();
+        Integer FirstRoundMover = firstRoundMover;
+        String firstRoundAttackerShip = e.getFirstRoundAttackerShip();
+        String FirstRoundAttackerShip = firstRoundAttackerShip;
+        String firstRoundDefenderShip = e.getFirstRoundDefenderShip();
+        String FirstRoundDefenderShip = firstRoundDefenderShip;
         Long suiTimestamp = e.getSuiTimestamp();
         Long SuiTimestamp = suiTimestamp;
         String suiTxDigest = e.getSuiTxDigest();
@@ -288,14 +364,144 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
         ShipBattleState updatedShipBattleState = (ShipBattleState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.shipbattle.InitiateBattleLogic",
                     "mutate",
-                    new Class[]{ShipBattleState.class, String.class, String.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, initiatorId, responderId, startedAt, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{ShipBattleState.class, String.class, String.class, BigInteger.class, Integer.class, String.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, initiatorId, responderId, startedAt, firstRoundMover, firstRoundAttackerShip, firstRoundDefenderShip, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.shipbattle;
 //
 //public class InitiateBattleLogic {
-//    public static ShipBattleState mutate(ShipBattleState shipBattleState, String initiatorId, String responderId, BigInteger startedAt, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ShipBattleState, ShipBattleState.MutableShipBattleState> mutationContext) {
+//    public static ShipBattleState mutate(ShipBattleState shipBattleState, String initiatorId, String responderId, BigInteger startedAt, Integer firstRoundMover, String firstRoundAttackerShip, String firstRoundDefenderShip, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ShipBattleState, ShipBattleState.MutableShipBattleState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedShipBattleState) { merge(updatedShipBattleState); } //else do nothing
+
+    }
+
+    public void when(AbstractShipBattleEvent.ShipBattleMoveMade e) {
+        throwOnWrongEvent(e);
+
+        Integer attackerCommand = e.getAttackerCommand();
+        Integer AttackerCommand = attackerCommand;
+        Integer defenderCommand = e.getDefenderCommand();
+        Integer DefenderCommand = defenderCommand;
+        Long roundNumber = e.getRoundNumber();
+        Long RoundNumber = roundNumber;
+        Long defenderDamageTaken = e.getDefenderDamageTaken();
+        Long DefenderDamageTaken = defenderDamageTaken;
+        Long attackerDamageTaken = e.getAttackerDamageTaken();
+        Long AttackerDamageTaken = attackerDamageTaken;
+        Boolean isBattleEnded = e.getIsBattleEnded();
+        Boolean IsBattleEnded = isBattleEnded;
+        Integer winner = e.getWinner();
+        Integer Winner = winner;
+        BigInteger nextRoundStartedAt = e.getNextRoundStartedAt();
+        BigInteger NextRoundStartedAt = nextRoundStartedAt;
+        Integer nextRoundMover = e.getNextRoundMover();
+        Integer NextRoundMover = nextRoundMover;
+        String nextRoundAttackerShip = e.getNextRoundAttackerShip();
+        String NextRoundAttackerShip = nextRoundAttackerShip;
+        String nextRoundDefenderShip = e.getNextRoundDefenderShip();
+        String NextRoundDefenderShip = nextRoundDefenderShip;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        ShipBattleState updatedShipBattleState = (ShipBattleState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.shipbattle.MakeMoveLogic",
+                    "mutate",
+                    new Class[]{ShipBattleState.class, Integer.class, Integer.class, Long.class, Long.class, Long.class, Boolean.class, Integer.class, BigInteger.class, Integer.class, String.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, attackerCommand, defenderCommand, roundNumber, defenderDamageTaken, attackerDamageTaken, isBattleEnded, winner, nextRoundStartedAt, nextRoundMover, nextRoundAttackerShip, nextRoundDefenderShip, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.shipbattle;
+//
+//public class MakeMoveLogic {
+//    public static ShipBattleState mutate(ShipBattleState shipBattleState, Integer attackerCommand, Integer defenderCommand, Long roundNumber, Long defenderDamageTaken, Long attackerDamageTaken, Boolean isBattleEnded, Integer winner, BigInteger nextRoundStartedAt, Integer nextRoundMover, String nextRoundAttackerShip, String nextRoundDefenderShip, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ShipBattleState, ShipBattleState.MutableShipBattleState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedShipBattleState) { merge(updatedShipBattleState); } //else do nothing
+
+    }
+
+    public void when(AbstractShipBattleEvent.ShipBattleLootTaken e) {
+        throwOnWrongEvent(e);
+
+        Integer choice = e.getChoice();
+        Integer Choice = choice;
+        ItemIdQuantityPair[] loot = e.getLoot();
+        ItemIdQuantityPair[] Loot = loot;
+        BigInteger lootedAt = e.getLootedAt();
+        BigInteger LootedAt = lootedAt;
+        Long increasedExperience = e.getIncreasedExperience();
+        Long IncreasedExperience = increasedExperience;
+        Integer newLevel = e.getNewLevel();
+        Integer NewLevel = newLevel;
+        Long loserIncreasedExperience = e.getLoserIncreasedExperience();
+        Long LoserIncreasedExperience = loserIncreasedExperience;
+        Integer loserNewLevel = e.getLoserNewLevel();
+        Integer LoserNewLevel = loserNewLevel;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        ShipBattleState updatedShipBattleState = (ShipBattleState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.shipbattle.TakeLootLogic",
+                    "mutate",
+                    new Class[]{ShipBattleState.class, Integer.class, ItemIdQuantityPair[].class, BigInteger.class, Long.class, Integer.class, Long.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, choice, loot, lootedAt, increasedExperience, newLevel, loserIncreasedExperience, loserNewLevel, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.shipbattle;
+//
+//public class TakeLootLogic {
+//    public static ShipBattleState mutate(ShipBattleState shipBattleState, Integer choice, ItemIdQuantityPair[] loot, BigInteger lootedAt, Long increasedExperience, Integer newLevel, Long loserIncreasedExperience, Integer loserNewLevel, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ShipBattleState, ShipBattleState.MutableShipBattleState> mutationContext) {
 //    }
 //}
 

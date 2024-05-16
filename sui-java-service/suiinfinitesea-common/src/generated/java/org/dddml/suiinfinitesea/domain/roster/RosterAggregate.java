@@ -19,11 +19,21 @@ public interface RosterAggregate {
 
     void create(Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, String shipBattleId, Long offChainVersion, String commandId, String requesterId, RosterCommands.Create c);
 
+    void createEnvironmentRoster(Coordinates coordinates, Long shipResourceQuantity, Long shipBaseResourceQuantity, Long baseExperience, String clock, Long offChainVersion, String commandId, String requesterId, RosterCommands.CreateEnvironmentRoster c);
+
     void addShip(String ship, BigInteger position, Long offChainVersion, String commandId, String requesterId, RosterCommands.AddShip c);
 
-    void setSail(Coordinates targetCoordinates, String clock, Long offChainVersion, String commandId, String requesterId, RosterCommands.SetSail c);
-
     void updateLocation(String clock, Long offChainVersion, String commandId, String requesterId, RosterCommands.UpdateLocation c);
+
+    void adjustShipsPosition(String player, BigInteger[] positions, String[] shipIds, Long offChainVersion, String commandId, String requesterId, RosterCommands.AdjustShipsPosition c);
+
+    void transferShip(String player, String shipId, RosterId toRoster, BigInteger toPosition, Long offChainVersion, String commandId, String requesterId, RosterCommands.TransferShip c);
+
+    void transferShipInventory(String player, String fromShipId, String toShipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId, RosterCommands.TransferShipInventory c);
+
+    void takeOutShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId, RosterCommands.TakeOutShipInventory c);
+
+    void putInShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId, RosterCommands.PutInShipInventory c);
 
     void throwOnInvalidStateTransition(Command c);
 }

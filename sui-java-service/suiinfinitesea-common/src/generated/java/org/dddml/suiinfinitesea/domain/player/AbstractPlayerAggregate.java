@@ -85,32 +85,6 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             apply(e);
         }
 
-        @Override
-        public void deductItems(ItemIdQuantityPair[] items, Long offChainVersion, String commandId, String requesterId, PlayerCommands.DeductItems c) {
-            java.util.function.Supplier<PlayerEvent.PlayerItemsDeducted> eventFactory = () -> newPlayerItemsDeducted(items, offChainVersion, commandId, requesterId);
-            PlayerEvent.PlayerItemsDeducted e;
-            try {
-                e = verifyDeductItems(eventFactory, items, c);
-            } catch (Exception ex) {
-                throw new DomainError("VerificationFailed", ex);
-            }
-
-            apply(e);
-        }
-
-        @Override
-        public void increaseExperienceAndItems(Long experience, ItemIdQuantityPair[] items, Integer newLevel, Long offChainVersion, String commandId, String requesterId, PlayerCommands.IncreaseExperienceAndItems c) {
-            java.util.function.Supplier<PlayerEvent.PlayerExperienceAndItemsIncreased> eventFactory = () -> newPlayerExperienceAndItemsIncreased(experience, items, newLevel, offChainVersion, commandId, requesterId);
-            PlayerEvent.PlayerExperienceAndItemsIncreased e;
-            try {
-                e = verifyIncreaseExperienceAndItems(eventFactory, experience, items, newLevel, c);
-            } catch (Exception ex) {
-                throw new DomainError("VerificationFailed", ex);
-            }
-
-            apply(e);
-        }
-
         protected PlayerEvent.PlayerCreated verifyCreate(java.util.function.Supplier<PlayerEvent.PlayerCreated> eventFactory, PlayerCommands.Create c) {
 
             PlayerEvent.PlayerCreated e = (PlayerEvent.PlayerCreated) ReflectUtils.invokeStaticMethod(
@@ -175,50 +149,6 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
            
 
-        protected PlayerEvent.PlayerItemsDeducted verifyDeductItems(java.util.function.Supplier<PlayerEvent.PlayerItemsDeducted> eventFactory, ItemIdQuantityPair[] items, PlayerCommands.DeductItems c) {
-            ItemIdQuantityPair[] Items = items;
-
-            PlayerEvent.PlayerItemsDeducted e = (PlayerEvent.PlayerItemsDeducted) ReflectUtils.invokeStaticMethod(
-                    "org.dddml.suiinfinitesea.domain.player.DeductItemsLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, ItemIdQuantityPair[].class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), items, VerificationContext.forCommand(c)}
-            );
-
-//package org.dddml.suiinfinitesea.domain.player;
-//
-//public class DeductItemsLogic {
-//    public static PlayerEvent.PlayerItemsDeducted verify(java.util.function.Supplier<PlayerEvent.PlayerItemsDeducted> eventFactory, PlayerState playerState, ItemIdQuantityPair[] items, VerificationContext verificationContext) {
-//    }
-//}
-
-            return e;
-        }
-           
-
-        protected PlayerEvent.PlayerExperienceAndItemsIncreased verifyIncreaseExperienceAndItems(java.util.function.Supplier<PlayerEvent.PlayerExperienceAndItemsIncreased> eventFactory, Long experience, ItemIdQuantityPair[] items, Integer newLevel, PlayerCommands.IncreaseExperienceAndItems c) {
-            Long Experience = experience;
-            ItemIdQuantityPair[] Items = items;
-            Integer NewLevel = newLevel;
-
-            PlayerEvent.PlayerExperienceAndItemsIncreased e = (PlayerEvent.PlayerExperienceAndItemsIncreased) ReflectUtils.invokeStaticMethod(
-                    "org.dddml.suiinfinitesea.domain.player.IncreaseExperienceAndItemsLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, Long.class, ItemIdQuantityPair[].class, Integer.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), experience, items, newLevel, VerificationContext.forCommand(c)}
-            );
-
-//package org.dddml.suiinfinitesea.domain.player;
-//
-//public class IncreaseExperienceAndItemsLogic {
-//    public static PlayerEvent.PlayerExperienceAndItemsIncreased verify(java.util.function.Supplier<PlayerEvent.PlayerExperienceAndItemsIncreased> eventFactory, PlayerState playerState, Long experience, ItemIdQuantityPair[] items, Integer newLevel, VerificationContext verificationContext) {
-//    }
-//}
-
-            return e;
-        }
-           
-
         protected AbstractPlayerEvent.PlayerCreated newPlayerCreated(Long offChainVersion, String commandId, String requesterId) {
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.PlayerCreated e = new AbstractPlayerEvent.PlayerCreated();
@@ -270,52 +200,6 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
 
             e.setItemId(itemId);
             e.setQuantity(quantity);
-            e.setSuiTimestamp(null);
-            e.setSuiTxDigest(null);
-            e.setSuiEventSeq(null);
-            e.setSuiPackageId(null);
-            e.setSuiTransactionModule(null);
-            e.setSuiSender(null);
-            e.setSuiType(null);
-            e.setEventStatus(null);
-
-            e.setCommandId(commandId);
-            e.setCreatedBy(requesterId);
-            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
-
-            e.setPlayerEventId(eventId);
-            return e;
-        }
-
-        protected AbstractPlayerEvent.PlayerItemsDeducted newPlayerItemsDeducted(ItemIdQuantityPair[] items, Long offChainVersion, String commandId, String requesterId) {
-            PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
-            AbstractPlayerEvent.PlayerItemsDeducted e = new AbstractPlayerEvent.PlayerItemsDeducted();
-
-            e.setItems(items);
-            e.setSuiTimestamp(null);
-            e.setSuiTxDigest(null);
-            e.setSuiEventSeq(null);
-            e.setSuiPackageId(null);
-            e.setSuiTransactionModule(null);
-            e.setSuiSender(null);
-            e.setSuiType(null);
-            e.setEventStatus(null);
-
-            e.setCommandId(commandId);
-            e.setCreatedBy(requesterId);
-            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
-
-            e.setPlayerEventId(eventId);
-            return e;
-        }
-
-        protected AbstractPlayerEvent.PlayerExperienceAndItemsIncreased newPlayerExperienceAndItemsIncreased(Long experience, ItemIdQuantityPair[] items, Integer newLevel, Long offChainVersion, String commandId, String requesterId) {
-            PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
-            AbstractPlayerEvent.PlayerExperienceAndItemsIncreased e = new AbstractPlayerEvent.PlayerExperienceAndItemsIncreased();
-
-            e.setExperience(experience);
-            e.setItems(items);
-            e.setNewLevel(newLevel);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

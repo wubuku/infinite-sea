@@ -24,11 +24,19 @@ import org.dddml.suiinfinitesea.domain.ship.AbstractShipEvent;
 import org.dddml.suiinfinitesea.sui.contract.ship.ShipCreated;
 import org.dddml.suiinfinitesea.domain.roster.AbstractRosterEvent;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterCreated;
+import org.dddml.suiinfinitesea.sui.contract.roster.EnvironmentRosterCreated;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipAdded;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterSetSail;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterLocationUpdated;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipsPositionAdjusted;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipTransferred;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTransferred;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTakenOut;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryPutIn;
 import org.dddml.suiinfinitesea.domain.shipbattle.AbstractShipBattleEvent;
 import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleInitiated;
+import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleMoveMade;
+import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleLootTaken;
 import org.dddml.suiinfinitesea.domain.item.AbstractItemEvent;
 import org.dddml.suiinfinitesea.sui.contract.item.ItemCreated;
 import org.dddml.suiinfinitesea.sui.contract.item.ItemUpdated;
@@ -42,12 +50,11 @@ import org.dddml.suiinfinitesea.domain.player.AbstractPlayerEvent;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
 import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
-import org.dddml.suiinfinitesea.sui.contract.player.PlayerItemsDeducted;
-import org.dddml.suiinfinitesea.sui.contract.player.PlayerExperienceAndItemsIncreased;
 import org.dddml.suiinfinitesea.domain.map.AbstractMapEvent;
 import org.dddml.suiinfinitesea.sui.contract.map.InitMapEvent;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
 import org.dddml.suiinfinitesea.sui.contract.map.MapIslandClaimed;
+import org.dddml.suiinfinitesea.sui.contract.map.IslandResourcesGathered;
 import org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.InitExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelAdded;
@@ -464,6 +471,29 @@ public class DomainBeanUtils {
         return rosterCreated;
     }
 
+    public static AbstractRosterEvent.EnvironmentRosterCreated toEnvironmentRosterCreated(SuiMoveEventEnvelope<EnvironmentRosterCreated> eventEnvelope) {
+        EnvironmentRosterCreated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.EnvironmentRosterCreated environmentRosterCreated = new AbstractRosterEvent.EnvironmentRosterCreated();
+        environmentRosterCreated.setId_(contractEvent.getId());
+        environmentRosterCreated.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        environmentRosterCreated.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        environmentRosterCreated.setShipResourceQuantity(contractEvent.getShipResourceQuantity());
+        environmentRosterCreated.setShipBaseResourceQuantity(contractEvent.getShipBaseResourceQuantity());
+        environmentRosterCreated.setBaseExperience(contractEvent.getBaseExperience());
+        environmentRosterCreated.setVersion(BigInteger.valueOf(-1));
+
+        environmentRosterCreated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        environmentRosterCreated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        environmentRosterCreated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        environmentRosterCreated.setSuiPackageId(eventEnvelope.getPackageId());
+        environmentRosterCreated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        environmentRosterCreated.setSuiSender(eventEnvelope.getSender());
+
+        return environmentRosterCreated;
+    }
+
     public static AbstractRosterEvent.RosterShipAdded toRosterShipAdded(SuiMoveEventEnvelope<RosterShipAdded> eventEnvelope) {
         RosterShipAdded contractEvent = eventEnvelope.getParsedJson();
 
@@ -494,6 +524,7 @@ public class DomainBeanUtils {
         rosterSetSail.setTargetCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getTargetCoordinates()));
         rosterSetSail.setSetSailAt(contractEvent.getSetSailAt());
         rosterSetSail.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
+        rosterSetSail.setEnergyCost(contractEvent.getEnergyCost());
         rosterSetSail.setVersion(contractEvent.getVersion());
 
         rosterSetSail.setSuiTimestamp(eventEnvelope.getTimestampMs());
@@ -529,6 +560,113 @@ public class DomainBeanUtils {
         return rosterLocationUpdated;
     }
 
+    public static AbstractRosterEvent.RosterShipsPositionAdjusted toRosterShipsPositionAdjusted(SuiMoveEventEnvelope<RosterShipsPositionAdjusted> eventEnvelope) {
+        RosterShipsPositionAdjusted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.RosterShipsPositionAdjusted rosterShipsPositionAdjusted = new AbstractRosterEvent.RosterShipsPositionAdjusted();
+        rosterShipsPositionAdjusted.setId_(contractEvent.getId());
+        rosterShipsPositionAdjusted.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterShipsPositionAdjusted.setPositions(contractEvent.getPositions());
+        rosterShipsPositionAdjusted.setShipIds(contractEvent.getShipIds());
+        rosterShipsPositionAdjusted.setVersion(contractEvent.getVersion());
+
+        rosterShipsPositionAdjusted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        rosterShipsPositionAdjusted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        rosterShipsPositionAdjusted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        rosterShipsPositionAdjusted.setSuiPackageId(eventEnvelope.getPackageId());
+        rosterShipsPositionAdjusted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        rosterShipsPositionAdjusted.setSuiSender(eventEnvelope.getSender());
+
+        return rosterShipsPositionAdjusted;
+    }
+
+    public static AbstractRosterEvent.RosterShipTransferred toRosterShipTransferred(SuiMoveEventEnvelope<RosterShipTransferred> eventEnvelope) {
+        RosterShipTransferred contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.RosterShipTransferred rosterShipTransferred = new AbstractRosterEvent.RosterShipTransferred();
+        rosterShipTransferred.setId_(contractEvent.getId());
+        rosterShipTransferred.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterShipTransferred.setShipId(contractEvent.getShipId());
+        rosterShipTransferred.setToRosterId(DomainBeanUtils.toRosterId(contractEvent.getToRosterId()));
+        rosterShipTransferred.setToPosition(contractEvent.getToPosition());
+        rosterShipTransferred.setVersion(contractEvent.getVersion());
+
+        rosterShipTransferred.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        rosterShipTransferred.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        rosterShipTransferred.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        rosterShipTransferred.setSuiPackageId(eventEnvelope.getPackageId());
+        rosterShipTransferred.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        rosterShipTransferred.setSuiSender(eventEnvelope.getSender());
+
+        return rosterShipTransferred;
+    }
+
+    public static AbstractRosterEvent.RosterShipInventoryTransferred toRosterShipInventoryTransferred(SuiMoveEventEnvelope<RosterShipInventoryTransferred> eventEnvelope) {
+        RosterShipInventoryTransferred contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.RosterShipInventoryTransferred rosterShipInventoryTransferred = new AbstractRosterEvent.RosterShipInventoryTransferred();
+        rosterShipInventoryTransferred.setId_(contractEvent.getId());
+        rosterShipInventoryTransferred.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterShipInventoryTransferred.setFromShipId(contractEvent.getFromShipId());
+        rosterShipInventoryTransferred.setToShipId(contractEvent.getToShipId());
+        rosterShipInventoryTransferred.setItemIdQuantityPairs(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getItemIdQuantityPairs()));
+        rosterShipInventoryTransferred.setVersion(contractEvent.getVersion());
+
+        rosterShipInventoryTransferred.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        rosterShipInventoryTransferred.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        rosterShipInventoryTransferred.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        rosterShipInventoryTransferred.setSuiPackageId(eventEnvelope.getPackageId());
+        rosterShipInventoryTransferred.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        rosterShipInventoryTransferred.setSuiSender(eventEnvelope.getSender());
+
+        return rosterShipInventoryTransferred;
+    }
+
+    public static AbstractRosterEvent.RosterShipInventoryTakenOut toRosterShipInventoryTakenOut(SuiMoveEventEnvelope<RosterShipInventoryTakenOut> eventEnvelope) {
+        RosterShipInventoryTakenOut contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.RosterShipInventoryTakenOut rosterShipInventoryTakenOut = new AbstractRosterEvent.RosterShipInventoryTakenOut();
+        rosterShipInventoryTakenOut.setId_(contractEvent.getId());
+        rosterShipInventoryTakenOut.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterShipInventoryTakenOut.setShipId(contractEvent.getShipId());
+        rosterShipInventoryTakenOut.setItemIdQuantityPairs(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getItemIdQuantityPairs()));
+        rosterShipInventoryTakenOut.setVersion(contractEvent.getVersion());
+
+        rosterShipInventoryTakenOut.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        rosterShipInventoryTakenOut.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        rosterShipInventoryTakenOut.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        rosterShipInventoryTakenOut.setSuiPackageId(eventEnvelope.getPackageId());
+        rosterShipInventoryTakenOut.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        rosterShipInventoryTakenOut.setSuiSender(eventEnvelope.getSender());
+
+        return rosterShipInventoryTakenOut;
+    }
+
+    public static AbstractRosterEvent.RosterShipInventoryPutIn toRosterShipInventoryPutIn(SuiMoveEventEnvelope<RosterShipInventoryPutIn> eventEnvelope) {
+        RosterShipInventoryPutIn contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractRosterEvent.RosterShipInventoryPutIn rosterShipInventoryPutIn = new AbstractRosterEvent.RosterShipInventoryPutIn();
+        rosterShipInventoryPutIn.setId_(contractEvent.getId());
+        rosterShipInventoryPutIn.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterShipInventoryPutIn.setShipId(contractEvent.getShipId());
+        rosterShipInventoryPutIn.setItemIdQuantityPairs(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getItemIdQuantityPairs()));
+        rosterShipInventoryPutIn.setVersion(contractEvent.getVersion());
+
+        rosterShipInventoryPutIn.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        rosterShipInventoryPutIn.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        rosterShipInventoryPutIn.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        rosterShipInventoryPutIn.setSuiPackageId(eventEnvelope.getPackageId());
+        rosterShipInventoryPutIn.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        rosterShipInventoryPutIn.setSuiSender(eventEnvelope.getSender());
+
+        return rosterShipInventoryPutIn;
+    }
+
     public static AbstractShipBattleEvent.ShipBattleInitiated toShipBattleInitiated(SuiMoveEventEnvelope<ShipBattleInitiated> eventEnvelope) {
         ShipBattleInitiated contractEvent = eventEnvelope.getParsedJson();
 
@@ -537,6 +675,9 @@ public class DomainBeanUtils {
         shipBattleInitiated.setInitiatorId(contractEvent.getInitiatorId());
         shipBattleInitiated.setResponderId(contractEvent.getResponderId());
         shipBattleInitiated.setStartedAt(contractEvent.getStartedAt());
+        shipBattleInitiated.setFirstRoundMover(contractEvent.getFirstRoundMover());
+        shipBattleInitiated.setFirstRoundAttackerShip(contractEvent.getFirstRoundAttackerShip());
+        shipBattleInitiated.setFirstRoundDefenderShip(contractEvent.getFirstRoundDefenderShip());
         shipBattleInitiated.setVersion(BigInteger.valueOf(-1));
 
         shipBattleInitiated.setSuiTimestamp(eventEnvelope.getTimestampMs());
@@ -548,6 +689,60 @@ public class DomainBeanUtils {
         shipBattleInitiated.setSuiSender(eventEnvelope.getSender());
 
         return shipBattleInitiated;
+    }
+
+    public static AbstractShipBattleEvent.ShipBattleMoveMade toShipBattleMoveMade(SuiMoveEventEnvelope<ShipBattleMoveMade> eventEnvelope) {
+        ShipBattleMoveMade contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractShipBattleEvent.ShipBattleMoveMade shipBattleMoveMade = new AbstractShipBattleEvent.ShipBattleMoveMade();
+        shipBattleMoveMade.setId(contractEvent.getId());
+        shipBattleMoveMade.setAttackerCommand(contractEvent.getAttackerCommand());
+        shipBattleMoveMade.setDefenderCommand(contractEvent.getDefenderCommand());
+        shipBattleMoveMade.setRoundNumber(contractEvent.getRoundNumber());
+        shipBattleMoveMade.setDefenderDamageTaken(contractEvent.getDefenderDamageTaken());
+        shipBattleMoveMade.setAttackerDamageTaken(contractEvent.getAttackerDamageTaken());
+        shipBattleMoveMade.setIsBattleEnded(contractEvent.getIsBattleEnded());
+        shipBattleMoveMade.setWinner(contractEvent.getWinner());
+        shipBattleMoveMade.setNextRoundStartedAt(contractEvent.getNextRoundStartedAt());
+        shipBattleMoveMade.setNextRoundMover(contractEvent.getNextRoundMover());
+        shipBattleMoveMade.setNextRoundAttackerShip(contractEvent.getNextRoundAttackerShip());
+        shipBattleMoveMade.setNextRoundDefenderShip(contractEvent.getNextRoundDefenderShip());
+        shipBattleMoveMade.setVersion(contractEvent.getVersion());
+
+        shipBattleMoveMade.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        shipBattleMoveMade.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        shipBattleMoveMade.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        shipBattleMoveMade.setSuiPackageId(eventEnvelope.getPackageId());
+        shipBattleMoveMade.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        shipBattleMoveMade.setSuiSender(eventEnvelope.getSender());
+
+        return shipBattleMoveMade;
+    }
+
+    public static AbstractShipBattleEvent.ShipBattleLootTaken toShipBattleLootTaken(SuiMoveEventEnvelope<ShipBattleLootTaken> eventEnvelope) {
+        ShipBattleLootTaken contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractShipBattleEvent.ShipBattleLootTaken shipBattleLootTaken = new AbstractShipBattleEvent.ShipBattleLootTaken();
+        shipBattleLootTaken.setId(contractEvent.getId());
+        shipBattleLootTaken.setChoice(contractEvent.getChoice());
+        shipBattleLootTaken.setLoot(java.util.Arrays.stream(contractEvent.getLoot()).map(DomainBeanUtils::toItemIdQuantityPair).toArray(org.dddml.suiinfinitesea.domain.ItemIdQuantityPair[]::new));
+        shipBattleLootTaken.setLootedAt(contractEvent.getLootedAt());
+        shipBattleLootTaken.setIncreasedExperience(contractEvent.getIncreasedExperience());
+        shipBattleLootTaken.setNewLevel(contractEvent.getNewLevel());
+        shipBattleLootTaken.setLoserIncreasedExperience(contractEvent.getLoserIncreasedExperience());
+        shipBattleLootTaken.setLoserNewLevel(contractEvent.getLoserNewLevel());
+        shipBattleLootTaken.setVersion(contractEvent.getVersion());
+
+        shipBattleLootTaken.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        shipBattleLootTaken.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        shipBattleLootTaken.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        shipBattleLootTaken.setSuiPackageId(eventEnvelope.getPackageId());
+        shipBattleLootTaken.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        shipBattleLootTaken.setSuiSender(eventEnvelope.getSender());
+
+        return shipBattleLootTaken;
     }
 
     public static AbstractItemEvent.ItemCreated toItemCreated(SuiMoveEventEnvelope<ItemCreated> eventEnvelope) {
@@ -757,46 +952,6 @@ public class DomainBeanUtils {
         return playerAirdropped;
     }
 
-    public static AbstractPlayerEvent.PlayerItemsDeducted toPlayerItemsDeducted(SuiMoveEventEnvelope<PlayerItemsDeducted> eventEnvelope) {
-        PlayerItemsDeducted contractEvent = eventEnvelope.getParsedJson();
-
-        AbstractPlayerEvent.PlayerItemsDeducted playerItemsDeducted = new AbstractPlayerEvent.PlayerItemsDeducted();
-        playerItemsDeducted.setId(contractEvent.getId());
-        playerItemsDeducted.setItems(java.util.Arrays.stream(contractEvent.getItems()).map(DomainBeanUtils::toItemIdQuantityPair).toArray(org.dddml.suiinfinitesea.domain.ItemIdQuantityPair[]::new));
-        playerItemsDeducted.setVersion(contractEvent.getVersion());
-
-        playerItemsDeducted.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        playerItemsDeducted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        playerItemsDeducted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
-
-        playerItemsDeducted.setSuiPackageId(eventEnvelope.getPackageId());
-        playerItemsDeducted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        playerItemsDeducted.setSuiSender(eventEnvelope.getSender());
-
-        return playerItemsDeducted;
-    }
-
-    public static AbstractPlayerEvent.PlayerExperienceAndItemsIncreased toPlayerExperienceAndItemsIncreased(SuiMoveEventEnvelope<PlayerExperienceAndItemsIncreased> eventEnvelope) {
-        PlayerExperienceAndItemsIncreased contractEvent = eventEnvelope.getParsedJson();
-
-        AbstractPlayerEvent.PlayerExperienceAndItemsIncreased playerExperienceAndItemsIncreased = new AbstractPlayerEvent.PlayerExperienceAndItemsIncreased();
-        playerExperienceAndItemsIncreased.setId(contractEvent.getId());
-        playerExperienceAndItemsIncreased.setExperience(contractEvent.getExperience());
-        playerExperienceAndItemsIncreased.setItems(java.util.Arrays.stream(contractEvent.getItems()).map(DomainBeanUtils::toItemIdQuantityPair).toArray(org.dddml.suiinfinitesea.domain.ItemIdQuantityPair[]::new));
-        playerExperienceAndItemsIncreased.setNewLevel(contractEvent.getNewLevel());
-        playerExperienceAndItemsIncreased.setVersion(contractEvent.getVersion());
-
-        playerExperienceAndItemsIncreased.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        playerExperienceAndItemsIncreased.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        playerExperienceAndItemsIncreased.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
-
-        playerExperienceAndItemsIncreased.setSuiPackageId(eventEnvelope.getPackageId());
-        playerExperienceAndItemsIncreased.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        playerExperienceAndItemsIncreased.setSuiSender(eventEnvelope.getSender());
-
-        return playerExperienceAndItemsIncreased;
-    }
-
     public static AbstractMapEvent.InitMapEvent toInitMapEvent(SuiMoveEventEnvelope<InitMapEvent> eventEnvelope) {
         InitMapEvent contractEvent = eventEnvelope.getParsedJson();
 
@@ -854,6 +1009,27 @@ public class DomainBeanUtils {
         mapIslandClaimed.setSuiSender(eventEnvelope.getSender());
 
         return mapIslandClaimed;
+    }
+
+    public static AbstractMapEvent.IslandResourcesGathered toIslandResourcesGathered(SuiMoveEventEnvelope<IslandResourcesGathered> eventEnvelope) {
+        IslandResourcesGathered contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.IslandResourcesGathered islandResourcesGathered = new AbstractMapEvent.IslandResourcesGathered();
+        islandResourcesGathered.setId(contractEvent.getId());
+        islandResourcesGathered.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        islandResourcesGathered.setResources(java.util.Arrays.stream(contractEvent.getResources()).map(DomainBeanUtils::toItemIdQuantityPair).toArray(org.dddml.suiinfinitesea.domain.ItemIdQuantityPair[]::new));
+        islandResourcesGathered.setGatheredAt(contractEvent.getGatheredAt());
+        islandResourcesGathered.setVersion(contractEvent.getVersion());
+
+        islandResourcesGathered.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        islandResourcesGathered.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        islandResourcesGathered.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        islandResourcesGathered.setSuiPackageId(eventEnvelope.getPackageId());
+        islandResourcesGathered.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        islandResourcesGathered.setSuiSender(eventEnvelope.getSender());
+
+        return islandResourcesGathered;
     }
 
     public static AbstractExperienceTableEvent.InitExperienceTableEvent toInitExperienceTableEvent(SuiMoveEventEnvelope<InitExperienceTableEvent> eventEnvelope) {

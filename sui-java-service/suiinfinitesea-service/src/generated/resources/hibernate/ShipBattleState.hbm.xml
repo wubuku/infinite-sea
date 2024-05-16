@@ -16,14 +16,26 @@
     <property name="status">
       <column name="status" />
     </property>
+    <property name="endedAt">
+      <column name="ended_at" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="winner">
+      <column name="winner" />
+    </property>
     <property name="roundNumber">
       <column name="round_number" />
+    </property>
+    <property name="roundStartedAt">
+      <column name="round_started_at" sql-type="DECIMAL(20,0)" />
     </property>
     <property name="roundMover">
       <column name="round_mover" />
     </property>
-    <property name="roundStartedAt">
-      <column name="round_started_at" sql-type="DECIMAL(20,0)" />
+    <property name="roundAttackerShip">
+      <column name="round_attacker_ship" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="roundDefenderShip">
+      <column name="round_defender_ship" sql-type="VARCHAR(66)" />
     </property>
     <property name="version">
       <column name="version" sql-type="DECIMAL(20,0)" />
@@ -42,5 +54,15 @@
     </property>
     <property name="createdAt" column="created_at" />
     <property name="updatedAt" column="updated_at" />
+    <list name="initiatorExperiences" table="ship_battle_initiator_experiences" lazy="false">
+      <key column="Id" />
+      <index column="initiator_experiences_index" />
+      <element column="initiator_experiences_item" type="java.lang.Long" not-null="true" />
+    </list>
+    <list name="responderExperiences" table="ship_battle_responder_experiences" lazy="false">
+      <key column="Id" />
+      <index column="responder_experiences_index" />
+      <element column="responder_experiences_item" type="java.lang.Long" not-null="true" />
+    </list>
   </class>
 </hibernate-mapping>

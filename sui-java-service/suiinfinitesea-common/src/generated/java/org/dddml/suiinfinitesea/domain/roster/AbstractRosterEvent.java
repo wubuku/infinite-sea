@@ -329,6 +329,63 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
+    public static class EnvironmentRosterCreated extends RosterClobEvent implements RosterEvent.EnvironmentRosterCreated {
+
+        @Override
+        public String getEventType() {
+            return "EnvironmentRosterCreated";
+        }
+
+        public Coordinates getCoordinates() {
+            Object val = getDynamicProperties().get("coordinates");
+            if (val instanceof Coordinates) {
+                return (Coordinates) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
+        }
+
+        public void setCoordinates(Coordinates value) {
+            getDynamicProperties().put("coordinates", value);
+        }
+
+        public Long getShipResourceQuantity() {
+            Object val = getDynamicProperties().get("shipResourceQuantity");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setShipResourceQuantity(Long value) {
+            getDynamicProperties().put("shipResourceQuantity", value);
+        }
+
+        public Long getShipBaseResourceQuantity() {
+            Object val = getDynamicProperties().get("shipBaseResourceQuantity");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setShipBaseResourceQuantity(Long value) {
+            getDynamicProperties().put("shipBaseResourceQuantity", value);
+        }
+
+        public Long getBaseExperience() {
+            Object val = getDynamicProperties().get("baseExperience");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setBaseExperience(Long value) {
+            getDynamicProperties().put("baseExperience", value);
+        }
+
+    }
+
     public static class RosterShipAdded extends RosterClobEvent implements RosterEvent.RosterShipAdded {
 
         @Override
@@ -405,6 +462,18 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
             getDynamicProperties().put("updatedCoordinates", value);
         }
 
+        public BigInteger getEnergyCost() {
+            Object val = getDynamicProperties().get("energyCost");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setEnergyCost(BigInteger value) {
+            getDynamicProperties().put("energyCost", value);
+        }
+
     }
 
     public static class RosterLocationUpdated extends RosterClobEvent implements RosterEvent.RosterLocationUpdated {
@@ -448,6 +517,195 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
         public void setNewStatus(Integer value) {
             getDynamicProperties().put("newStatus", value);
+        }
+
+    }
+
+    public static class RosterShipsPositionAdjusted extends RosterClobEvent implements RosterEvent.RosterShipsPositionAdjusted {
+
+        @Override
+        public String getEventType() {
+            return "RosterShipsPositionAdjusted";
+        }
+
+        public BigInteger[] getPositions() {
+            Object val = getDynamicProperties().get("positions");
+            if (val instanceof BigInteger[]) {
+                return (BigInteger[]) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger[].class);
+        }
+
+        public void setPositions(BigInteger[] value) {
+            getDynamicProperties().put("positions", value);
+        }
+
+        public String[] getShipIds() {
+            Object val = getDynamicProperties().get("shipIds");
+            if (val instanceof String[]) {
+                return (String[]) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String[].class);
+        }
+
+        public void setShipIds(String[] value) {
+            getDynamicProperties().put("shipIds", value);
+        }
+
+    }
+
+    public static class RosterShipTransferred extends RosterClobEvent implements RosterEvent.RosterShipTransferred {
+
+        @Override
+        public String getEventType() {
+            return "RosterShipTransferred";
+        }
+
+        public String getShipId() {
+            Object val = getDynamicProperties().get("shipId");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setShipId(String value) {
+            getDynamicProperties().put("shipId", value);
+        }
+
+        public RosterId getToRosterId() {
+            Object val = getDynamicProperties().get("toRosterId");
+            if (val instanceof RosterId) {
+                return (RosterId) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, RosterId.class);
+        }
+
+        public void setToRosterId(RosterId value) {
+            getDynamicProperties().put("toRosterId", value);
+        }
+
+        public BigInteger getToPosition() {
+            Object val = getDynamicProperties().get("toPosition");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setToPosition(BigInteger value) {
+            getDynamicProperties().put("toPosition", value);
+        }
+
+    }
+
+    public static class RosterShipInventoryTransferred extends RosterClobEvent implements RosterEvent.RosterShipInventoryTransferred {
+
+        @Override
+        public String getEventType() {
+            return "RosterShipInventoryTransferred";
+        }
+
+        public String getFromShipId() {
+            Object val = getDynamicProperties().get("fromShipId");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setFromShipId(String value) {
+            getDynamicProperties().put("fromShipId", value);
+        }
+
+        public String getToShipId() {
+            Object val = getDynamicProperties().get("toShipId");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setToShipId(String value) {
+            getDynamicProperties().put("toShipId", value);
+        }
+
+        public ItemIdQuantityPairs getItemIdQuantityPairs() {
+            Object val = getDynamicProperties().get("itemIdQuantityPairs");
+            if (val instanceof ItemIdQuantityPairs) {
+                return (ItemIdQuantityPairs) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPairs.class);
+        }
+
+        public void setItemIdQuantityPairs(ItemIdQuantityPairs value) {
+            getDynamicProperties().put("itemIdQuantityPairs", value);
+        }
+
+    }
+
+    public static class RosterShipInventoryTakenOut extends RosterClobEvent implements RosterEvent.RosterShipInventoryTakenOut {
+
+        @Override
+        public String getEventType() {
+            return "RosterShipInventoryTakenOut";
+        }
+
+        public String getShipId() {
+            Object val = getDynamicProperties().get("shipId");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setShipId(String value) {
+            getDynamicProperties().put("shipId", value);
+        }
+
+        public ItemIdQuantityPairs getItemIdQuantityPairs() {
+            Object val = getDynamicProperties().get("itemIdQuantityPairs");
+            if (val instanceof ItemIdQuantityPairs) {
+                return (ItemIdQuantityPairs) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPairs.class);
+        }
+
+        public void setItemIdQuantityPairs(ItemIdQuantityPairs value) {
+            getDynamicProperties().put("itemIdQuantityPairs", value);
+        }
+
+    }
+
+    public static class RosterShipInventoryPutIn extends RosterClobEvent implements RosterEvent.RosterShipInventoryPutIn {
+
+        @Override
+        public String getEventType() {
+            return "RosterShipInventoryPutIn";
+        }
+
+        public String getShipId() {
+            Object val = getDynamicProperties().get("shipId");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setShipId(String value) {
+            getDynamicProperties().put("shipId", value);
+        }
+
+        public ItemIdQuantityPairs getItemIdQuantityPairs() {
+            Object val = getDynamicProperties().get("itemIdQuantityPairs");
+            if (val instanceof ItemIdQuantityPairs) {
+                return (ItemIdQuantityPairs) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPairs.class);
+        }
+
+        public void setItemIdQuantityPairs(ItemIdQuantityPairs value) {
+            getDynamicProperties().put("itemIdQuantityPairs", value);
         }
 
     }

@@ -58,6 +58,10 @@ public abstract class AbstractMapApplicationService implements MapApplicationSer
         update(c, ar -> ar.claimIsland(c.getCoordinates(), c.getClaimedBy(), c.getClaimedAt(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
+    public void when(MapCommands.GatherIslandResources c) {
+        update(c, ar -> ar.gatherIslandResources(c.getPlayer(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
     public MapState get(String id) {
         MapState state = getStateRepository().get(id, true);
         return state;

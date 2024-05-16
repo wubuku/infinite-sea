@@ -37,13 +37,29 @@ public class ContractConstants {
 
     public static final String ROSTER_MODULE_ROSTER_CREATED = "roster::RosterCreated";
 
+    public static final String ROSTER_MODULE_ENVIRONMENT_ROSTER_CREATED = "roster::EnvironmentRosterCreated";
+
     public static final String ROSTER_MODULE_ROSTER_SHIP_ADDED = "roster::RosterShipAdded";
 
     public static final String ROSTER_MODULE_ROSTER_SET_SAIL = "roster::RosterSetSail";
 
     public static final String ROSTER_MODULE_ROSTER_LOCATION_UPDATED = "roster::RosterLocationUpdated";
 
+    public static final String ROSTER_MODULE_ROSTER_SHIPS_POSITION_ADJUSTED = "roster::RosterShipsPositionAdjusted";
+
+    public static final String ROSTER_MODULE_ROSTER_SHIP_TRANSFERRED = "roster::RosterShipTransferred";
+
+    public static final String ROSTER_MODULE_ROSTER_SHIP_INVENTORY_TRANSFERRED = "roster::RosterShipInventoryTransferred";
+
+    public static final String ROSTER_MODULE_ROSTER_SHIP_INVENTORY_TAKEN_OUT = "roster::RosterShipInventoryTakenOut";
+
+    public static final String ROSTER_MODULE_ROSTER_SHIP_INVENTORY_PUT_IN = "roster::RosterShipInventoryPutIn";
+
     public static final String SHIP_BATTLE_MODULE_SHIP_BATTLE_INITIATED = "ship_battle::ShipBattleInitiated";
+
+    public static final String SHIP_BATTLE_MODULE_SHIP_BATTLE_MOVE_MADE = "ship_battle::ShipBattleMoveMade";
+
+    public static final String SHIP_BATTLE_MODULE_SHIP_BATTLE_LOOT_TAKEN = "ship_battle::ShipBattleLootTaken";
 
     public static final String ITEM_MODULE_ITEM_CREATED = "item::ItemCreated";
 
@@ -63,15 +79,13 @@ public class ContractConstants {
 
     public static final String PLAYER_MODULE_PLAYER_AIRDROPPED = "player::PlayerAirdropped";
 
-    public static final String PLAYER_MODULE_PLAYER_ITEMS_DEDUCTED = "player::PlayerItemsDeducted";
-
-    public static final String PLAYER_MODULE_PLAYER_EXPERIENCE_AND_ITEMS_INCREASED = "player::PlayerExperienceAndItemsIncreased";
-
     public static final String MAP_MODULE_INIT_MAP_EVENT = "map::InitMapEvent";
 
     public static final String MAP_MODULE_ISLAND_ADDED = "map::IslandAdded";
 
     public static final String MAP_MODULE_MAP_ISLAND_CLAIMED = "map::MapIslandClaimed";
+
+    public static final String MAP_MODULE_ISLAND_RESOURCES_GATHERED = "map::IslandResourcesGathered";
 
     public static final String EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT = "experience_table::InitExperienceTableEvent";
 

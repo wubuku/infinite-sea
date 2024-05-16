@@ -44,6 +44,8 @@
         <column name="dynamic_properties_lob" sql-type="VARCHAR(2000)" />
       </property>
       <subclass name="AbstractShipBattleEvent$ShipBattleInitiated" discriminator-value="ShipBattleInitiated" />
+      <subclass name="AbstractShipBattleEvent$ShipBattleMoveMade" discriminator-value="ShipBattleMoveMade" />
+      <subclass name="AbstractShipBattleEvent$ShipBattleLootTaken" discriminator-value="ShipBattleLootTaken" />
     </subclass>
   </class>
 </hibernate-mapping>

@@ -255,6 +255,276 @@ public abstract class AbstractShipBattleEvent extends AbstractEvent implements S
             getDynamicProperties().put("startedAt", value);
         }
 
+        public Integer getFirstRoundMover() {
+            Object val = getDynamicProperties().get("firstRoundMover");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setFirstRoundMover(Integer value) {
+            getDynamicProperties().put("firstRoundMover", value);
+        }
+
+        public String getFirstRoundAttackerShip() {
+            Object val = getDynamicProperties().get("firstRoundAttackerShip");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setFirstRoundAttackerShip(String value) {
+            getDynamicProperties().put("firstRoundAttackerShip", value);
+        }
+
+        public String getFirstRoundDefenderShip() {
+            Object val = getDynamicProperties().get("firstRoundDefenderShip");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setFirstRoundDefenderShip(String value) {
+            getDynamicProperties().put("firstRoundDefenderShip", value);
+        }
+
+    }
+
+    public static class ShipBattleMoveMade extends ShipBattleClobEvent implements ShipBattleEvent.ShipBattleMoveMade {
+
+        @Override
+        public String getEventType() {
+            return "ShipBattleMoveMade";
+        }
+
+        public Integer getAttackerCommand() {
+            Object val = getDynamicProperties().get("attackerCommand");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setAttackerCommand(Integer value) {
+            getDynamicProperties().put("attackerCommand", value);
+        }
+
+        public Integer getDefenderCommand() {
+            Object val = getDynamicProperties().get("defenderCommand");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setDefenderCommand(Integer value) {
+            getDynamicProperties().put("defenderCommand", value);
+        }
+
+        public Long getRoundNumber() {
+            Object val = getDynamicProperties().get("roundNumber");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setRoundNumber(Long value) {
+            getDynamicProperties().put("roundNumber", value);
+        }
+
+        public Long getDefenderDamageTaken() {
+            Object val = getDynamicProperties().get("defenderDamageTaken");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setDefenderDamageTaken(Long value) {
+            getDynamicProperties().put("defenderDamageTaken", value);
+        }
+
+        public Long getAttackerDamageTaken() {
+            Object val = getDynamicProperties().get("attackerDamageTaken");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setAttackerDamageTaken(Long value) {
+            getDynamicProperties().put("attackerDamageTaken", value);
+        }
+
+        public Boolean getIsBattleEnded() {
+            Object val = getDynamicProperties().get("isBattleEnded");
+            if (val instanceof Boolean) {
+                return (Boolean) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Boolean.class);
+        }
+
+        public void setIsBattleEnded(Boolean value) {
+            getDynamicProperties().put("isBattleEnded", value);
+        }
+
+        public Integer getWinner() {
+            Object val = getDynamicProperties().get("winner");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setWinner(Integer value) {
+            getDynamicProperties().put("winner", value);
+        }
+
+        public BigInteger getNextRoundStartedAt() {
+            Object val = getDynamicProperties().get("nextRoundStartedAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setNextRoundStartedAt(BigInteger value) {
+            getDynamicProperties().put("nextRoundStartedAt", value);
+        }
+
+        public Integer getNextRoundMover() {
+            Object val = getDynamicProperties().get("nextRoundMover");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setNextRoundMover(Integer value) {
+            getDynamicProperties().put("nextRoundMover", value);
+        }
+
+        public String getNextRoundAttackerShip() {
+            Object val = getDynamicProperties().get("nextRoundAttackerShip");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setNextRoundAttackerShip(String value) {
+            getDynamicProperties().put("nextRoundAttackerShip", value);
+        }
+
+        public String getNextRoundDefenderShip() {
+            Object val = getDynamicProperties().get("nextRoundDefenderShip");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setNextRoundDefenderShip(String value) {
+            getDynamicProperties().put("nextRoundDefenderShip", value);
+        }
+
+    }
+
+    public static class ShipBattleLootTaken extends ShipBattleClobEvent implements ShipBattleEvent.ShipBattleLootTaken {
+
+        @Override
+        public String getEventType() {
+            return "ShipBattleLootTaken";
+        }
+
+        public Integer getChoice() {
+            Object val = getDynamicProperties().get("choice");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setChoice(Integer value) {
+            getDynamicProperties().put("choice", value);
+        }
+
+        public ItemIdQuantityPair[] getLoot() {
+            Object val = getDynamicProperties().get("loot");
+            if (val instanceof ItemIdQuantityPair[]) {
+                return (ItemIdQuantityPair[]) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPair[].class);
+        }
+
+        public void setLoot(ItemIdQuantityPair[] value) {
+            getDynamicProperties().put("loot", value);
+        }
+
+        public BigInteger getLootedAt() {
+            Object val = getDynamicProperties().get("lootedAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setLootedAt(BigInteger value) {
+            getDynamicProperties().put("lootedAt", value);
+        }
+
+        public Long getIncreasedExperience() {
+            Object val = getDynamicProperties().get("increasedExperience");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setIncreasedExperience(Long value) {
+            getDynamicProperties().put("increasedExperience", value);
+        }
+
+        public Integer getNewLevel() {
+            Object val = getDynamicProperties().get("newLevel");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setNewLevel(Integer value) {
+            getDynamicProperties().put("newLevel", value);
+        }
+
+        public Long getLoserIncreasedExperience() {
+            Object val = getDynamicProperties().get("loserIncreasedExperience");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setLoserIncreasedExperience(Long value) {
+            getDynamicProperties().put("loserIncreasedExperience", value);
+        }
+
+        public Integer getLoserNewLevel() {
+            Object val = getDynamicProperties().get("loserNewLevel");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setLoserNewLevel(Integer value) {
+            getDynamicProperties().put("loserNewLevel", value);
+        }
+
     }
 
 

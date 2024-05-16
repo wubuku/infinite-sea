@@ -17,6 +17,10 @@ import org.dddml.suiinfinitesea.domain.Command;
 public interface ShipBattleApplicationService {
     void when(ShipBattleCommands.InitiateBattle c);
 
+    void when(ShipBattleCommands.MakeMove c);
+
+    void when(ShipBattleCommands.TakeLoot c);
+
     ShipBattleState get(String id);
 
     Iterable<ShipBattleState> getAll(Integer firstResult, Integer maxResults);

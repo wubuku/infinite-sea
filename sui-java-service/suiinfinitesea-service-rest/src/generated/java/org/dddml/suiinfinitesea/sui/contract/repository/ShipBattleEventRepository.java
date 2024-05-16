@@ -15,4 +15,8 @@ public interface ShipBattleEventRepository extends JpaRepository<AbstractShipBat
 
     AbstractShipBattleEvent.ShipBattleInitiated findFirstShipBattleInitiatedByOrderBySuiTimestampDesc();
 
+    AbstractShipBattleEvent.ShipBattleMoveMade findFirstShipBattleMoveMadeByOrderBySuiTimestampDesc();
+
+    AbstractShipBattleEvent.ShipBattleLootTaken findFirstShipBattleLootTakenByOrderBySuiTimestampDesc();
+
 }

@@ -31,7 +31,7 @@ public class HibernateShipBattleStateRepository implements ShipBattleStateReposi
         return this.sessionFactory.getCurrentSession();
     }
     
-    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Initiator", "Responder", "Status", "RoundNumber", "RoundMover", "RoundStartedAt", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
+    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Initiator", "Responder", "Status", "InitiatorExperiences", "ResponderExperiences", "EndedAt", "Winner", "RoundNumber", "RoundStartedAt", "RoundMover", "RoundAttackerShip", "RoundDefenderShip", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
     
     private ReadOnlyProxyGenerator readOnlyProxyGenerator;
     

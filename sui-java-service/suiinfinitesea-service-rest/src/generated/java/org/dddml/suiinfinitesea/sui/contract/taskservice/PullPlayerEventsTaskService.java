@@ -31,14 +31,4 @@ public class PullPlayerEventsTaskService {
         playerEventService.pullPlayerAirdroppedEvents();
     }
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.player-items-deducted.fixed-delay:5000}")
-    public void pullPlayerItemsDeductedEvents() {
-        playerEventService.pullPlayerItemsDeductedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.player-experience-and-items-increased.fixed-delay:5000}")
-    public void pullPlayerExperienceAndItemsIncreasedEvents() {
-        playerEventService.pullPlayerExperienceAndItemsIncreasedEvents();
-    }
-
 }

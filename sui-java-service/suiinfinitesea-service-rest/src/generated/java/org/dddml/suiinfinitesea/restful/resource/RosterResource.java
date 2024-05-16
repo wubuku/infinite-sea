@@ -171,11 +171,11 @@ public class RosterResource {
     }
 
 
-    @PutMapping("{rosterId}/_commands/SetSail")
-    public void setSail(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.SetSail content) {
+    @PutMapping("{rosterId}/_commands/CreateEnvironmentRoster")
+    public void createEnvironmentRoster(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.CreateEnvironmentRoster content) {
         try {
 
-            RosterCommands.SetSail cmd = content;//.toSetSail();
+            RosterCommands.CreateEnvironmentRoster cmd = content;//.toCreateEnvironmentRoster();
             RosterId idObj = RosterResourceUtils.parseIdString(rosterId);
             if (cmd.getRosterId() == null) {
                 cmd.setRosterId(idObj);
@@ -194,6 +194,96 @@ public class RosterResource {
         try {
 
             RosterCommands.UpdateLocation cmd = content;//.toUpdateLocation();
+            RosterId idObj = RosterResourceUtils.parseIdString(rosterId);
+            if (cmd.getRosterId() == null) {
+                cmd.setRosterId(idObj);
+            } else if (!cmd.getRosterId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", rosterId, cmd.getRosterId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            rosterApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
+    @PutMapping("{rosterId}/_commands/AdjustShipsPosition")
+    public void adjustShipsPosition(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.AdjustShipsPosition content) {
+        try {
+
+            RosterCommands.AdjustShipsPosition cmd = content;//.toAdjustShipsPosition();
+            RosterId idObj = RosterResourceUtils.parseIdString(rosterId);
+            if (cmd.getRosterId() == null) {
+                cmd.setRosterId(idObj);
+            } else if (!cmd.getRosterId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", rosterId, cmd.getRosterId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            rosterApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
+    @PutMapping("{rosterId}/_commands/TransferShip")
+    public void transferShip(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.TransferShip content) {
+        try {
+
+            RosterCommands.TransferShip cmd = content;//.toTransferShip();
+            RosterId idObj = RosterResourceUtils.parseIdString(rosterId);
+            if (cmd.getRosterId() == null) {
+                cmd.setRosterId(idObj);
+            } else if (!cmd.getRosterId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", rosterId, cmd.getRosterId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            rosterApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
+    @PutMapping("{rosterId}/_commands/TransferShipInventory")
+    public void transferShipInventory(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.TransferShipInventory content) {
+        try {
+
+            RosterCommands.TransferShipInventory cmd = content;//.toTransferShipInventory();
+            RosterId idObj = RosterResourceUtils.parseIdString(rosterId);
+            if (cmd.getRosterId() == null) {
+                cmd.setRosterId(idObj);
+            } else if (!cmd.getRosterId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", rosterId, cmd.getRosterId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            rosterApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
+    @PutMapping("{rosterId}/_commands/TakeOutShipInventory")
+    public void takeOutShipInventory(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.TakeOutShipInventory content) {
+        try {
+
+            RosterCommands.TakeOutShipInventory cmd = content;//.toTakeOutShipInventory();
+            RosterId idObj = RosterResourceUtils.parseIdString(rosterId);
+            if (cmd.getRosterId() == null) {
+                cmd.setRosterId(idObj);
+            } else if (!cmd.getRosterId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", rosterId, cmd.getRosterId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            rosterApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
+    @PutMapping("{rosterId}/_commands/PutInShipInventory")
+    public void putInShipInventory(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.PutInShipInventory content) {
+        try {
+
+            RosterCommands.PutInShipInventory cmd = content;//.toPutInShipInventory();
             RosterId idObj = RosterResourceUtils.parseIdString(rosterId);
             if (cmd.getRosterId() == null) {
                 cmd.setRosterId(idObj);

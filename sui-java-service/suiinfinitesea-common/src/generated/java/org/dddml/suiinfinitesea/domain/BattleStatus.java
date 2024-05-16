@@ -6,13 +6,11 @@
 
 package org.dddml.suiinfinitesea.domain;
 
-public class RosterStatus {
-    public static final Integer AT_ANCHOR = 0;
+public class BattleStatus {
+    public static final Integer IN_PROGRESS = 0;
 
-    public static final Integer UNDERWAY = 1;
+    public static final Integer ENDED = 1;
 
-    public static final Integer IN_BATTLE = 2;
-
-    public static final Integer DESTROYED = 3;
+    public static final Integer LOOTED = 2;
 
 }

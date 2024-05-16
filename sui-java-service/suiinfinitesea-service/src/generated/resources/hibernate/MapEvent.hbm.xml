@@ -46,6 +46,7 @@
       <subclass name="AbstractMapEvent$InitMapEvent" discriminator-value="InitMapEvent" />
       <subclass name="AbstractMapEvent$IslandAdded" discriminator-value="IslandAdded" />
       <subclass name="AbstractMapEvent$MapIslandClaimed" discriminator-value="MapIslandClaimed" />
+      <subclass name="AbstractMapEvent$IslandResourcesGathered" discriminator-value="IslandResourcesGathered" />
     </subclass>
   </class>
 </hibernate-mapping>

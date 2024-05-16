@@ -15,6 +15,8 @@ import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
 import org.dddml.suiinfinitesea.sui.contract.DomainBeanUtils;
 import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleInitiated;
+import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleMoveMade;
+import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleLootTaken;
 import org.dddml.suiinfinitesea.sui.contract.repository.ShipBattleEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +79,86 @@ public class ShipBattleEventService {
             return;
         }
         shipBattleEventRepository.save(shipBattleInitiated);
+    }
+
+    @Transactional
+    public void pullShipBattleMoveMadeEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getShipBattleMoveMadeEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<ShipBattleMoveMade> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SHIP_BATTLE_MODULE_SHIP_BATTLE_MOVE_MADE,
+                    cursor, limit, false, ShipBattleMoveMade.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<ShipBattleMoveMade> eventEnvelope : eventPage.getData()) {
+                    saveShipBattleMoveMade(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getShipBattleMoveMadeEventNextCursor() {
+        AbstractShipBattleEvent lastEvent = shipBattleEventRepository.findFirstShipBattleMoveMadeByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveShipBattleMoveMade(SuiMoveEventEnvelope<ShipBattleMoveMade> eventEnvelope) {
+        AbstractShipBattleEvent.ShipBattleMoveMade shipBattleMoveMade = DomainBeanUtils.toShipBattleMoveMade(eventEnvelope);
+        if (shipBattleEventRepository.findById(shipBattleMoveMade.getShipBattleEventId()).isPresent()) {
+            return;
+        }
+        shipBattleEventRepository.save(shipBattleMoveMade);
+    }
+
+    @Transactional
+    public void pullShipBattleLootTakenEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getShipBattleLootTakenEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<ShipBattleLootTaken> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.SHIP_BATTLE_MODULE_SHIP_BATTLE_LOOT_TAKEN,
+                    cursor, limit, false, ShipBattleLootTaken.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<ShipBattleLootTaken> eventEnvelope : eventPage.getData()) {
+                    saveShipBattleLootTaken(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getShipBattleLootTakenEventNextCursor() {
+        AbstractShipBattleEvent lastEvent = shipBattleEventRepository.findFirstShipBattleLootTakenByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveShipBattleLootTaken(SuiMoveEventEnvelope<ShipBattleLootTaken> eventEnvelope) {
+        AbstractShipBattleEvent.ShipBattleLootTaken shipBattleLootTaken = DomainBeanUtils.toShipBattleLootTaken(eventEnvelope);
+        if (shipBattleEventRepository.findById(shipBattleLootTaken.getShipBattleEventId()).isPresent()) {
+            return;
+        }
+        shipBattleEventRepository.save(shipBattleLootTaken);
     }
 
 

@@ -325,6 +325,51 @@ public abstract class AbstractMapEvent extends AbstractEvent implements MapEvent
 
     }
 
+    public static class IslandResourcesGathered extends MapClobEvent implements MapEvent.IslandResourcesGathered {
+
+        @Override
+        public String getEventType() {
+            return "IslandResourcesGathered";
+        }
+
+        public Coordinates getCoordinates() {
+            Object val = getDynamicProperties().get("coordinates");
+            if (val instanceof Coordinates) {
+                return (Coordinates) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
+        }
+
+        public void setCoordinates(Coordinates value) {
+            getDynamicProperties().put("coordinates", value);
+        }
+
+        public ItemIdQuantityPair[] getResources() {
+            Object val = getDynamicProperties().get("resources");
+            if (val instanceof ItemIdQuantityPair[]) {
+                return (ItemIdQuantityPair[]) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, ItemIdQuantityPair[].class);
+        }
+
+        public void setResources(ItemIdQuantityPair[] value) {
+            getDynamicProperties().put("resources", value);
+        }
+
+        public BigInteger getGatheredAt() {
+            Object val = getDynamicProperties().get("gatheredAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setGatheredAt(BigInteger value) {
+            getDynamicProperties().put("gatheredAt", value);
+        }
+
+    }
+
 
 }
 

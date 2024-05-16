@@ -23,6 +23,12 @@ public class ShipBattleInitiated {
 
     private BigInteger startedAt;
 
+    private Integer firstRoundMover;
+
+    private String firstRoundAttackerShip;
+
+    private String firstRoundDefenderShip;
+
     public String getId() {
         return id;
     }
@@ -55,6 +61,30 @@ public class ShipBattleInitiated {
         this.startedAt = startedAt;
     }
 
+    public Integer getFirstRoundMover() {
+        return firstRoundMover;
+    }
+
+    public void setFirstRoundMover(Integer firstRoundMover) {
+        this.firstRoundMover = firstRoundMover;
+    }
+
+    public String getFirstRoundAttackerShip() {
+        return firstRoundAttackerShip;
+    }
+
+    public void setFirstRoundAttackerShip(String firstRoundAttackerShip) {
+        this.firstRoundAttackerShip = firstRoundAttackerShip;
+    }
+
+    public String getFirstRoundDefenderShip() {
+        return firstRoundDefenderShip;
+    }
+
+    public void setFirstRoundDefenderShip(String firstRoundDefenderShip) {
+        this.firstRoundDefenderShip = firstRoundDefenderShip;
+    }
+
     @Override
     public String toString() {
         return "ShipBattleInitiated{" +
@@ -62,6 +92,9 @@ public class ShipBattleInitiated {
                 ", initiatorId=" + '\'' + initiatorId + '\'' +
                 ", responderId=" + '\'' + responderId + '\'' +
                 ", startedAt=" + startedAt +
+                ", firstRoundMover=" + firstRoundMover +
+                ", firstRoundAttackerShip=" + '\'' + firstRoundAttackerShip + '\'' +
+                ", firstRoundDefenderShip=" + '\'' + firstRoundDefenderShip + '\'' +
                 '}';
     }
 

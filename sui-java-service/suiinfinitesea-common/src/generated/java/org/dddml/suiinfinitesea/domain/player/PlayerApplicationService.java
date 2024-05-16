@@ -21,10 +21,6 @@ public interface PlayerApplicationService {
 
     void when(PlayerCommands.Airdrop c);
 
-    void when(PlayerCommands.DeductItems c);
-
-    void when(PlayerCommands.IncreaseExperienceAndItems c);
-
     PlayerState get(String id);
 
     Iterable<PlayerState> getAll(Integer firstResult, Integer maxResults);

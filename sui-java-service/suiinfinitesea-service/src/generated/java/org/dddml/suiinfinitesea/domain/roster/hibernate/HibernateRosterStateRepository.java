@@ -31,7 +31,7 @@ public class HibernateRosterStateRepository implements RosterStateRepository {
         return this.sessionFactory.getCurrentSession();
     }
     
-    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("RosterId", "Status", "Speed", "ShipIds", "Ships", "UpdatedCoordinates", "CoordinatesUpdatedAt", "TargetCoordinates", "ShipBattleId", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted", "RosterShipsItems"));
+    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("RosterId", "Status", "Speed", "ShipIds", "Ships", "UpdatedCoordinates", "CoordinatesUpdatedAt", "TargetCoordinates", "ShipBattleId", "EnvironmentOwned", "BaseExperience", "EnergyVault", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted", "RosterShipsItems"));
     
     private ReadOnlyProxyGenerator readOnlyProxyGenerator;
     

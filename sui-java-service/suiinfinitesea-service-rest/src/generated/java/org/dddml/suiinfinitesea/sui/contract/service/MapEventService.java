@@ -17,6 +17,7 @@ import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.map.InitMapEvent;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
 import org.dddml.suiinfinitesea.sui.contract.map.MapIslandClaimed;
+import org.dddml.suiinfinitesea.sui.contract.map.IslandResourcesGathered;
 import org.dddml.suiinfinitesea.sui.contract.repository.MapEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +160,46 @@ public class MapEventService {
             return;
         }
         mapEventRepository.save(mapIslandClaimed);
+    }
+
+    @Transactional
+    public void pullIslandResourcesGatheredEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getIslandResourcesGatheredEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<IslandResourcesGathered> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.MAP_MODULE_ISLAND_RESOURCES_GATHERED,
+                    cursor, limit, false, IslandResourcesGathered.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<IslandResourcesGathered> eventEnvelope : eventPage.getData()) {
+                    saveIslandResourcesGathered(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getIslandResourcesGatheredEventNextCursor() {
+        AbstractMapEvent lastEvent = mapEventRepository.findFirstIslandResourcesGatheredByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveIslandResourcesGathered(SuiMoveEventEnvelope<IslandResourcesGathered> eventEnvelope) {
+        AbstractMapEvent.IslandResourcesGathered islandResourcesGathered = DomainBeanUtils.toIslandResourcesGathered(eventEnvelope);
+        if (mapEventRepository.findById(islandResourcesGathered.getMapEventId()).isPresent()) {
+            return;
+        }
+        mapEventRepository.save(islandResourcesGathered);
     }
 
 

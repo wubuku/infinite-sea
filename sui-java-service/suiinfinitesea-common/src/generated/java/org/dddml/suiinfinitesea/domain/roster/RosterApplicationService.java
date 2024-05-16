@@ -17,11 +17,21 @@ import org.dddml.suiinfinitesea.domain.Command;
 public interface RosterApplicationService {
     void when(RosterCommands.Create c);
 
+    void when(RosterCommands.CreateEnvironmentRoster c);
+
     void when(RosterCommands.AddShip c);
 
-    void when(RosterCommands.SetSail c);
-
     void when(RosterCommands.UpdateLocation c);
+
+    void when(RosterCommands.AdjustShipsPosition c);
+
+    void when(RosterCommands.TransferShip c);
+
+    void when(RosterCommands.TransferShipInventory c);
+
+    void when(RosterCommands.TakeOutShipInventory c);
+
+    void when(RosterCommands.PutInShipInventory c);
 
     RosterState get(RosterId id);
 

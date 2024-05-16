@@ -14,20 +14,18 @@ import java.math.*;
 import java.util.*;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class RosterSetSail {
+public class RosterShipInventoryTransferred {
     private String id;
 
     private RosterIdForEvent rosterId;
 
     private BigInteger version;
 
-    private CoordinatesForEvent targetCoordinates;
+    private String fromShipId;
 
-    private BigInteger setSailAt;
+    private String toShipId;
 
-    private CoordinatesForEvent updatedCoordinates;
-
-    private BigInteger energyCost;
+    private ItemIdQuantityPairsForEvent itemIdQuantityPairs;
 
     public String getId() {
         return id;
@@ -53,48 +51,39 @@ public class RosterSetSail {
         this.version = version;
     }
 
-    public CoordinatesForEvent getTargetCoordinates() {
-        return targetCoordinates;
+    public String getFromShipId() {
+        return fromShipId;
     }
 
-    public void setTargetCoordinates(CoordinatesForEvent targetCoordinates) {
-        this.targetCoordinates = targetCoordinates;
+    public void setFromShipId(String fromShipId) {
+        this.fromShipId = fromShipId;
     }
 
-    public BigInteger getSetSailAt() {
-        return setSailAt;
+    public String getToShipId() {
+        return toShipId;
     }
 
-    public void setSetSailAt(BigInteger setSailAt) {
-        this.setSailAt = setSailAt;
+    public void setToShipId(String toShipId) {
+        this.toShipId = toShipId;
     }
 
-    public CoordinatesForEvent getUpdatedCoordinates() {
-        return updatedCoordinates;
+    public ItemIdQuantityPairsForEvent getItemIdQuantityPairs() {
+        return itemIdQuantityPairs;
     }
 
-    public void setUpdatedCoordinates(CoordinatesForEvent updatedCoordinates) {
-        this.updatedCoordinates = updatedCoordinates;
-    }
-
-    public BigInteger getEnergyCost() {
-        return energyCost;
-    }
-
-    public void setEnergyCost(BigInteger energyCost) {
-        this.energyCost = energyCost;
+    public void setItemIdQuantityPairs(ItemIdQuantityPairsForEvent itemIdQuantityPairs) {
+        this.itemIdQuantityPairs = itemIdQuantityPairs;
     }
 
     @Override
     public String toString() {
-        return "RosterSetSail{" +
+        return "RosterShipInventoryTransferred{" +
                 "id=" + '\'' + id + '\'' +
                 ", rosterId=" + rosterId +
                 ", version=" + version +
-                ", targetCoordinates=" + targetCoordinates +
-                ", setSailAt=" + setSailAt +
-                ", updatedCoordinates=" + updatedCoordinates +
-                ", energyCost=" + energyCost +
+                ", fromShipId=" + '\'' + fromShipId + '\'' +
+                ", toShipId=" + '\'' + toShipId + '\'' +
+                ", itemIdQuantityPairs=" + itemIdQuantityPairs +
                 '}';
     }
 

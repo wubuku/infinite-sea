@@ -15,10 +15,22 @@ public interface RosterEventRepository extends JpaRepository<AbstractRosterEvent
 
     AbstractRosterEvent.RosterCreated findFirstRosterCreatedByOrderBySuiTimestampDesc();
 
+    AbstractRosterEvent.EnvironmentRosterCreated findFirstEnvironmentRosterCreatedByOrderBySuiTimestampDesc();
+
     AbstractRosterEvent.RosterShipAdded findFirstRosterShipAddedByOrderBySuiTimestampDesc();
 
     AbstractRosterEvent.RosterSetSail findFirstRosterSetSailByOrderBySuiTimestampDesc();
 
     AbstractRosterEvent.RosterLocationUpdated findFirstRosterLocationUpdatedByOrderBySuiTimestampDesc();
+
+    AbstractRosterEvent.RosterShipsPositionAdjusted findFirstRosterShipsPositionAdjustedByOrderBySuiTimestampDesc();
+
+    AbstractRosterEvent.RosterShipTransferred findFirstRosterShipTransferredByOrderBySuiTimestampDesc();
+
+    AbstractRosterEvent.RosterShipInventoryTransferred findFirstRosterShipInventoryTransferredByOrderBySuiTimestampDesc();
+
+    AbstractRosterEvent.RosterShipInventoryTakenOut findFirstRosterShipInventoryTakenOutByOrderBySuiTimestampDesc();
+
+    AbstractRosterEvent.RosterShipInventoryPutIn findFirstRosterShipInventoryPutInByOrderBySuiTimestampDesc();
 
 }

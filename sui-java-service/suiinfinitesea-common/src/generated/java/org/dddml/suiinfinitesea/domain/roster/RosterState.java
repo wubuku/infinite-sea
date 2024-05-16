@@ -36,6 +36,12 @@ public interface RosterState extends VersionedSuiMoveObject
 
     String getShipBattleId();
 
+    Boolean getEnvironmentOwned();
+
+    Long getBaseExperience();
+
+    java.math.BigInteger getEnergyVault();
+
     Long getOffChainVersion();
 
     String getCreatedBy();
@@ -72,6 +78,12 @@ public interface RosterState extends VersionedSuiMoveObject
         void setTargetCoordinates(Coordinates targetCoordinates);
 
         void setShipBattleId(String shipBattleId);
+
+        void setEnvironmentOwned(Boolean environmentOwned);
+
+        void setBaseExperience(Long baseExperience);
+
+        void setEnergyVault(java.math.BigInteger energyVault);
 
         void setOffChainVersion(Long offChainVersion);
 

@@ -225,10 +225,6 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState 
             when((AbstractPlayerEvent.IslandClaimed)e);
         } else if (e instanceof AbstractPlayerEvent.PlayerAirdropped) {
             when((AbstractPlayerEvent.PlayerAirdropped)e);
-        } else if (e instanceof AbstractPlayerEvent.PlayerItemsDeducted) {
-            when((AbstractPlayerEvent.PlayerItemsDeducted)e);
-        } else if (e instanceof AbstractPlayerEvent.PlayerExperienceAndItemsIncreased) {
-            when((AbstractPlayerEvent.PlayerExperienceAndItemsIncreased)e);
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported event type: %1$s", e.getClass().getName()));
         }
@@ -391,108 +387,6 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState 
 //
 //public class AirdropLogic {
 //    public static PlayerState mutate(PlayerState playerState, Long itemId, Long quantity, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
-//    }
-//}
-
-        if (this != updatedPlayerState) { merge(updatedPlayerState); } //else do nothing
-
-    }
-
-    public void when(AbstractPlayerEvent.PlayerItemsDeducted e) {
-        throwOnWrongEvent(e);
-
-        ItemIdQuantityPair[] items = e.getItems();
-        ItemIdQuantityPair[] Items = items;
-        Long suiTimestamp = e.getSuiTimestamp();
-        Long SuiTimestamp = suiTimestamp;
-        String suiTxDigest = e.getSuiTxDigest();
-        String SuiTxDigest = suiTxDigest;
-        BigInteger suiEventSeq = e.getSuiEventSeq();
-        BigInteger SuiEventSeq = suiEventSeq;
-        String suiPackageId = e.getSuiPackageId();
-        String SuiPackageId = suiPackageId;
-        String suiTransactionModule = e.getSuiTransactionModule();
-        String SuiTransactionModule = suiTransactionModule;
-        String suiSender = e.getSuiSender();
-        String SuiSender = suiSender;
-        String suiType = e.getSuiType();
-        String SuiType = suiType;
-        String eventStatus = e.getEventStatus();
-        String EventStatus = eventStatus;
-
-        if (this.getCreatedBy() == null){
-            this.setCreatedBy(e.getCreatedBy());
-        }
-        if (this.getCreatedAt() == null){
-            this.setCreatedAt(e.getCreatedAt());
-        }
-        this.setUpdatedBy(e.getCreatedBy());
-        this.setUpdatedAt(e.getCreatedAt());
-
-        PlayerState updatedPlayerState = (PlayerState) ReflectUtils.invokeStaticMethod(
-                    "org.dddml.suiinfinitesea.domain.player.DeductItemsLogic",
-                    "mutate",
-                    new Class[]{PlayerState.class, ItemIdQuantityPair[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, items, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
-            );
-
-//package org.dddml.suiinfinitesea.domain.player;
-//
-//public class DeductItemsLogic {
-//    public static PlayerState mutate(PlayerState playerState, ItemIdQuantityPair[] items, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
-//    }
-//}
-
-        if (this != updatedPlayerState) { merge(updatedPlayerState); } //else do nothing
-
-    }
-
-    public void when(AbstractPlayerEvent.PlayerExperienceAndItemsIncreased e) {
-        throwOnWrongEvent(e);
-
-        Long experience = e.getExperience();
-        Long Experience = experience;
-        ItemIdQuantityPair[] items = e.getItems();
-        ItemIdQuantityPair[] Items = items;
-        Integer newLevel = e.getNewLevel();
-        Integer NewLevel = newLevel;
-        Long suiTimestamp = e.getSuiTimestamp();
-        Long SuiTimestamp = suiTimestamp;
-        String suiTxDigest = e.getSuiTxDigest();
-        String SuiTxDigest = suiTxDigest;
-        BigInteger suiEventSeq = e.getSuiEventSeq();
-        BigInteger SuiEventSeq = suiEventSeq;
-        String suiPackageId = e.getSuiPackageId();
-        String SuiPackageId = suiPackageId;
-        String suiTransactionModule = e.getSuiTransactionModule();
-        String SuiTransactionModule = suiTransactionModule;
-        String suiSender = e.getSuiSender();
-        String SuiSender = suiSender;
-        String suiType = e.getSuiType();
-        String SuiType = suiType;
-        String eventStatus = e.getEventStatus();
-        String EventStatus = eventStatus;
-
-        if (this.getCreatedBy() == null){
-            this.setCreatedBy(e.getCreatedBy());
-        }
-        if (this.getCreatedAt() == null){
-            this.setCreatedAt(e.getCreatedAt());
-        }
-        this.setUpdatedBy(e.getCreatedBy());
-        this.setUpdatedAt(e.getCreatedAt());
-
-        PlayerState updatedPlayerState = (PlayerState) ReflectUtils.invokeStaticMethod(
-                    "org.dddml.suiinfinitesea.domain.player.IncreaseExperienceAndItemsLogic",
-                    "mutate",
-                    new Class[]{PlayerState.class, Long.class, ItemIdQuantityPair[].class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, experience, items, newLevel, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
-            );
-
-//package org.dddml.suiinfinitesea.domain.player;
-//
-//public class IncreaseExperienceAndItemsLogic {
-//    public static PlayerState mutate(PlayerState playerState, Long experience, ItemIdQuantityPair[] items, Integer newLevel, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
 //    }
 //}
 

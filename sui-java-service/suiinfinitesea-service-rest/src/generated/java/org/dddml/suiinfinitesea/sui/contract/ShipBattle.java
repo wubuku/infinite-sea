@@ -25,11 +25,23 @@ public class ShipBattle {
 
     private Integer status;
 
+    private Long[] initiatorExperiences;
+
+    private Long[] responderExperiences;
+
+    private BigInteger endedAt;
+
+    private Integer winner;
+
     private Long roundNumber;
+
+    private BigInteger roundStartedAt;
 
     private Integer roundMover;
 
-    private BigInteger roundStartedAt;
+    private String roundAttackerShip;
+
+    private String roundDefenderShip;
 
     private BigInteger version;
 
@@ -73,12 +85,52 @@ public class ShipBattle {
         this.status = status;
     }
 
+    public Long[] getInitiatorExperiences() {
+        return initiatorExperiences;
+    }
+
+    public void setInitiatorExperiences(Long[] initiatorExperiences) {
+        this.initiatorExperiences = initiatorExperiences;
+    }
+
+    public Long[] getResponderExperiences() {
+        return responderExperiences;
+    }
+
+    public void setResponderExperiences(Long[] responderExperiences) {
+        this.responderExperiences = responderExperiences;
+    }
+
+    public BigInteger getEndedAt() {
+        return endedAt;
+    }
+
+    public void setEndedAt(BigInteger endedAt) {
+        this.endedAt = endedAt;
+    }
+
+    public Integer getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Integer winner) {
+        this.winner = winner;
+    }
+
     public Long getRoundNumber() {
         return roundNumber;
     }
 
     public void setRoundNumber(Long roundNumber) {
         this.roundNumber = roundNumber;
+    }
+
+    public BigInteger getRoundStartedAt() {
+        return roundStartedAt;
+    }
+
+    public void setRoundStartedAt(BigInteger roundStartedAt) {
+        this.roundStartedAt = roundStartedAt;
     }
 
     public Integer getRoundMover() {
@@ -89,12 +141,20 @@ public class ShipBattle {
         this.roundMover = roundMover;
     }
 
-    public BigInteger getRoundStartedAt() {
-        return roundStartedAt;
+    public String getRoundAttackerShip() {
+        return roundAttackerShip;
     }
 
-    public void setRoundStartedAt(BigInteger roundStartedAt) {
-        this.roundStartedAt = roundStartedAt;
+    public void setRoundAttackerShip(String roundAttackerShip) {
+        this.roundAttackerShip = roundAttackerShip;
+    }
+
+    public String getRoundDefenderShip() {
+        return roundDefenderShip;
+    }
+
+    public void setRoundDefenderShip(String roundDefenderShip) {
+        this.roundDefenderShip = roundDefenderShip;
     }
 
     public BigInteger getVersion() {
@@ -113,9 +173,15 @@ public class ShipBattle {
                 ", initiator=" + '\'' + initiator + '\'' +
                 ", responder=" + '\'' + responder + '\'' +
                 ", status=" + status +
+                ", initiatorExperiences=" + Arrays.toString(initiatorExperiences) +
+                ", responderExperiences=" + Arrays.toString(responderExperiences) +
+                ", endedAt=" + endedAt +
+                ", winner=" + winner +
                 ", roundNumber=" + roundNumber +
-                ", roundMover=" + roundMover +
                 ", roundStartedAt=" + roundStartedAt +
+                ", roundMover=" + roundMover +
+                ", roundAttackerShip=" + '\'' + roundAttackerShip + '\'' +
+                ", roundDefenderShip=" + '\'' + roundDefenderShip + '\'' +
                 ", version=" + version +
                 '}';
     }

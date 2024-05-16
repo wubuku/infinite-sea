@@ -47,11 +47,11 @@ public abstract class AbstractShipBattleAggregate extends AbstractAggregate impl
         }
 
         @Override
-        public void initiateBattle(RosterId initiator, RosterId responder, String clock, Long offChainVersion, String commandId, String requesterId, ShipBattleCommands.InitiateBattle c) {
-            java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory = () -> newShipBattleInitiated(initiator, responder, clock, offChainVersion, commandId, requesterId);
+        public void initiateBattle(String player, RosterId initiator, RosterId responder, String clock, Long offChainVersion, String commandId, String requesterId, ShipBattleCommands.InitiateBattle c) {
+            java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory = () -> newShipBattleInitiated(player, initiator, responder, clock, offChainVersion, commandId, requesterId);
             ShipBattleEvent.ShipBattleInitiated e;
             try {
-                e = verifyInitiateBattle(eventFactory, initiator, responder, c);
+                e = verifyInitiateBattle(eventFactory, player, initiator, responder, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -59,7 +59,34 @@ public abstract class AbstractShipBattleAggregate extends AbstractAggregate impl
             apply(e);
         }
 
-        protected ShipBattleEvent.ShipBattleInitiated verifyInitiateBattle(java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory, RosterId initiator, RosterId responder, ShipBattleCommands.InitiateBattle c) {
+        @Override
+        public void makeMove(String player, RosterId initiator, RosterId responder, String clock, Integer attackerCommand, Long offChainVersion, String commandId, String requesterId, ShipBattleCommands.MakeMove c) {
+            java.util.function.Supplier<ShipBattleEvent.ShipBattleMoveMade> eventFactory = () -> newShipBattleMoveMade(player, initiator, responder, clock, attackerCommand, offChainVersion, commandId, requesterId);
+            ShipBattleEvent.ShipBattleMoveMade e;
+            try {
+                e = verifyMakeMove(eventFactory, player, initiator, responder, attackerCommand, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
+        @Override
+        public void takeLoot(String player, String loserPlayer, RosterId initiator, RosterId responder, String experienceTable, String clock, Integer choice, Long offChainVersion, String commandId, String requesterId, ShipBattleCommands.TakeLoot c) {
+            java.util.function.Supplier<ShipBattleEvent.ShipBattleLootTaken> eventFactory = () -> newShipBattleLootTaken(player, loserPlayer, initiator, responder, experienceTable, clock, choice, offChainVersion, commandId, requesterId);
+            ShipBattleEvent.ShipBattleLootTaken e;
+            try {
+                e = verifyTakeLoot(eventFactory, player, loserPlayer, initiator, responder, experienceTable, choice, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
+        protected ShipBattleEvent.ShipBattleInitiated verifyInitiateBattle(java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory, String player, RosterId initiator, RosterId responder, ShipBattleCommands.InitiateBattle c) {
+            String Player = player;
             RosterId Initiator = initiator;
             RosterId Responder = responder;
 
@@ -67,13 +94,13 @@ public abstract class AbstractShipBattleAggregate extends AbstractAggregate impl
                     "org.dddml.suiinfinitesea.domain.shipbattle.InitiateBattleLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, ShipBattleState.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), initiator, responder, VerificationContext.forCommand(c)}
+                    new Object[]{eventFactory, getState(), player, initiator, responder, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.shipbattle;
 //
 //public class InitiateBattleLogic {
-//    public static ShipBattleEvent.ShipBattleInitiated verify(java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory, ShipBattleState shipBattleState, RosterId initiator, RosterId responder, VerificationContext verificationContext) {
+//    public static ShipBattleEvent.ShipBattleInitiated verify(java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory, ShipBattleState shipBattleState, String player, RosterId initiator, RosterId responder, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -81,13 +108,126 @@ public abstract class AbstractShipBattleAggregate extends AbstractAggregate impl
         }
            
 
-        protected AbstractShipBattleEvent.ShipBattleInitiated newShipBattleInitiated(RosterId initiator, RosterId responder, String clock, Long offChainVersion, String commandId, String requesterId) {
+        protected ShipBattleEvent.ShipBattleMoveMade verifyMakeMove(java.util.function.Supplier<ShipBattleEvent.ShipBattleMoveMade> eventFactory, String player, RosterId initiator, RosterId responder, Integer attackerCommand, ShipBattleCommands.MakeMove c) {
+            String Player = player;
+            RosterId Initiator = initiator;
+            RosterId Responder = responder;
+            Integer AttackerCommand = attackerCommand;
+
+            ShipBattleEvent.ShipBattleMoveMade e = (ShipBattleEvent.ShipBattleMoveMade) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.shipbattle.MakeMoveLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, ShipBattleState.class, Integer.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), player, initiator, responder, attackerCommand, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.shipbattle;
+//
+//public class MakeMoveLogic {
+//    public static ShipBattleEvent.ShipBattleMoveMade verify(java.util.function.Supplier<ShipBattleEvent.ShipBattleMoveMade> eventFactory, ShipBattleState shipBattleState, String player, RosterId initiator, RosterId responder, Integer attackerCommand, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
+        protected ShipBattleEvent.ShipBattleLootTaken verifyTakeLoot(java.util.function.Supplier<ShipBattleEvent.ShipBattleLootTaken> eventFactory, String player, String loserPlayer, RosterId initiator, RosterId responder, String experienceTable, Integer choice, ShipBattleCommands.TakeLoot c) {
+            String Player = player;
+            String LoserPlayer = loserPlayer;
+            RosterId Initiator = initiator;
+            RosterId Responder = responder;
+            String ExperienceTable = experienceTable;
+            Integer Choice = choice;
+
+            ShipBattleEvent.ShipBattleLootTaken e = (ShipBattleEvent.ShipBattleLootTaken) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.shipbattle.TakeLootLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, ShipBattleState.class, Integer.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), player, loserPlayer, initiator, responder, experienceTable, choice, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.shipbattle;
+//
+//public class TakeLootLogic {
+//    public static ShipBattleEvent.ShipBattleLootTaken verify(java.util.function.Supplier<ShipBattleEvent.ShipBattleLootTaken> eventFactory, ShipBattleState shipBattleState, String player, String loserPlayer, RosterId initiator, RosterId responder, String experienceTable, Integer choice, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
+        protected AbstractShipBattleEvent.ShipBattleInitiated newShipBattleInitiated(String player, RosterId initiator, RosterId responder, String clock, Long offChainVersion, String commandId, String requesterId) {
             ShipBattleEventId eventId = new ShipBattleEventId(getState().getId(), null);
             AbstractShipBattleEvent.ShipBattleInitiated e = new AbstractShipBattleEvent.ShipBattleInitiated();
 
             e.setInitiatorId(null);
             e.setResponderId(null);
             e.setStartedAt(null);
+            e.setFirstRoundMover(null);
+            e.setFirstRoundAttackerShip(null);
+            e.setFirstRoundDefenderShip(null);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setShipBattleEventId(eventId);
+            return e;
+        }
+
+        protected AbstractShipBattleEvent.ShipBattleMoveMade newShipBattleMoveMade(String player, RosterId initiator, RosterId responder, String clock, Integer attackerCommand, Long offChainVersion, String commandId, String requesterId) {
+            ShipBattleEventId eventId = new ShipBattleEventId(getState().getId(), null);
+            AbstractShipBattleEvent.ShipBattleMoveMade e = new AbstractShipBattleEvent.ShipBattleMoveMade();
+
+            e.setAttackerCommand(attackerCommand);
+            e.setDefenderCommand(null);
+            e.setRoundNumber(null);
+            e.setDefenderDamageTaken(null);
+            e.setAttackerDamageTaken(null);
+            e.setIsBattleEnded(null);
+            e.setWinner(null);
+            e.setNextRoundStartedAt(null);
+            e.setNextRoundMover(null);
+            e.setNextRoundAttackerShip(null);
+            e.setNextRoundDefenderShip(null);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setShipBattleEventId(eventId);
+            return e;
+        }
+
+        protected AbstractShipBattleEvent.ShipBattleLootTaken newShipBattleLootTaken(String player, String loserPlayer, RosterId initiator, RosterId responder, String experienceTable, String clock, Integer choice, Long offChainVersion, String commandId, String requesterId) {
+            ShipBattleEventId eventId = new ShipBattleEventId(getState().getId(), null);
+            AbstractShipBattleEvent.ShipBattleLootTaken e = new AbstractShipBattleEvent.ShipBattleLootTaken();
+
+            e.setChoice(choice);
+            e.setLoot(null);
+            e.setLootedAt(null);
+            e.setIncreasedExperience(null);
+            e.setNewLevel(null);
+            e.setLoserIncreasedExperience(null);
+            e.setLoserNewLevel(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

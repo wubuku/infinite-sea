@@ -26,11 +26,19 @@ public interface ShipBattleState extends VersionedSuiMoveObject
 
     Integer getStatus();
 
+    BigInteger getEndedAt();
+
+    Integer getWinner();
+
     Long getRoundNumber();
+
+    BigInteger getRoundStartedAt();
 
     Integer getRoundMover();
 
-    BigInteger getRoundStartedAt();
+    String getRoundAttackerShip();
+
+    String getRoundDefenderShip();
 
     Long getOffChainVersion();
 
@@ -46,6 +54,10 @@ public interface ShipBattleState extends VersionedSuiMoveObject
 
     Boolean getDeleted();
 
+    List<Long> getInitiatorExperiences();
+
+    List<Long> getResponderExperiences();
+
     interface MutableShipBattleState extends ShipBattleState, VersionedSuiMoveObject.MutableVersionedSuiMoveObject {
         void setId(String id);
 
@@ -55,11 +67,19 @@ public interface ShipBattleState extends VersionedSuiMoveObject
 
         void setStatus(Integer status);
 
+        void setEndedAt(BigInteger endedAt);
+
+        void setWinner(Integer winner);
+
         void setRoundNumber(Long roundNumber);
+
+        void setRoundStartedAt(BigInteger roundStartedAt);
 
         void setRoundMover(Integer roundMover);
 
-        void setRoundStartedAt(BigInteger roundStartedAt);
+        void setRoundAttackerShip(String roundAttackerShip);
+
+        void setRoundDefenderShip(String roundDefenderShip);
 
         void setOffChainVersion(Long offChainVersion);
 
@@ -74,6 +94,10 @@ public interface ShipBattleState extends VersionedSuiMoveObject
         void setActive(Boolean active);
 
         void setDeleted(Boolean deleted);
+
+        void setInitiatorExperiences(List<Long> initiatorExperiences);
+
+        void setResponderExperiences(List<Long> responderExperiences);
 
 
         void mutate(Event e);

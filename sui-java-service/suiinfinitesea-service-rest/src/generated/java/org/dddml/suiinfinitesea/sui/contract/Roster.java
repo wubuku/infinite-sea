@@ -17,6 +17,26 @@ public class Roster {
 
     private UID id;
 
+    private String adminCap;
+
+    private BigInteger schemaVersion;
+
+    public String getAdminCap() {
+        return adminCap;
+    }
+
+    public void setAdminCap(String adminCap) {
+        this.adminCap = adminCap;
+    }
+
+    public BigInteger getSchemaVersion() {
+        return schemaVersion;
+    }
+
+    public void setSchemaVersion(BigInteger schemaVersion) {
+        this.schemaVersion = schemaVersion;
+    }
+
     private RosterId rosterId;
 
     private Long offChainVersion;
@@ -36,6 +56,12 @@ public class Roster {
     private Coordinates targetCoordinates;
 
     private String shipBattleId;
+
+    private Boolean environmentOwned;
+
+    private Long baseExperience;
+
+    private java.math.BigInteger energyVault;
 
     private BigInteger version;
 
@@ -127,6 +153,30 @@ public class Roster {
         this.shipBattleId = shipBattleId;
     }
 
+    public Boolean getEnvironmentOwned() {
+        return environmentOwned;
+    }
+
+    public void setEnvironmentOwned(Boolean environmentOwned) {
+        this.environmentOwned = environmentOwned;
+    }
+
+    public Long getBaseExperience() {
+        return baseExperience;
+    }
+
+    public void setBaseExperience(Long baseExperience) {
+        this.baseExperience = baseExperience;
+    }
+
+    public java.math.BigInteger getEnergyVault() {
+        return energyVault;
+    }
+
+    public void setEnergyVault(java.math.BigInteger energyVault) {
+        this.energyVault = energyVault;
+    }
+
     public BigInteger getVersion() {
         return version;
     }
@@ -149,6 +199,9 @@ public class Roster {
                 ", coordinatesUpdatedAt=" + coordinatesUpdatedAt +
                 ", targetCoordinates=" + targetCoordinates +
                 ", shipBattleId=" + '\'' + shipBattleId + '\'' +
+                ", environmentOwned=" + environmentOwned +
+                ", baseExperience=" + baseExperience +
+                ", energyVault=" + energyVault +
                 ", version=" + version +
                 '}';
     }

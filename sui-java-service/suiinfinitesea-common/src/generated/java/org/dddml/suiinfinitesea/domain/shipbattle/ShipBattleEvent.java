@@ -34,6 +34,96 @@ public interface ShipBattleEvent extends Event, SuiEventEnvelope, SuiMoveEvent, 
 
         void setStartedAt(BigInteger value);
 
+        Integer getFirstRoundMover();
+
+        void setFirstRoundMover(Integer value);
+
+        String getFirstRoundAttackerShip();
+
+        void setFirstRoundAttackerShip(String value);
+
+        String getFirstRoundDefenderShip();
+
+        void setFirstRoundDefenderShip(String value);
+
+    }
+
+    interface ShipBattleMoveMade extends ShipBattleEvent {
+        Integer getAttackerCommand();
+
+        void setAttackerCommand(Integer value);
+
+        Integer getDefenderCommand();
+
+        void setDefenderCommand(Integer value);
+
+        Long getRoundNumber();
+
+        void setRoundNumber(Long value);
+
+        Long getDefenderDamageTaken();
+
+        void setDefenderDamageTaken(Long value);
+
+        Long getAttackerDamageTaken();
+
+        void setAttackerDamageTaken(Long value);
+
+        Boolean getIsBattleEnded();
+
+        void setIsBattleEnded(Boolean value);
+
+        Integer getWinner();
+
+        void setWinner(Integer value);
+
+        BigInteger getNextRoundStartedAt();
+
+        void setNextRoundStartedAt(BigInteger value);
+
+        Integer getNextRoundMover();
+
+        void setNextRoundMover(Integer value);
+
+        String getNextRoundAttackerShip();
+
+        void setNextRoundAttackerShip(String value);
+
+        String getNextRoundDefenderShip();
+
+        void setNextRoundDefenderShip(String value);
+
+    }
+
+    interface ShipBattleLootTaken extends ShipBattleEvent {
+        Integer getChoice();
+
+        void setChoice(Integer value);
+
+        ItemIdQuantityPair[] getLoot();
+
+        void setLoot(ItemIdQuantityPair[] value);
+
+        BigInteger getLootedAt();
+
+        void setLootedAt(BigInteger value);
+
+        Long getIncreasedExperience();
+
+        void setIncreasedExperience(Long value);
+
+        Integer getNewLevel();
+
+        void setNewLevel(Integer value);
+
+        Long getLoserIncreasedExperience();
+
+        void setLoserIncreasedExperience(Long value);
+
+        Integer getLoserNewLevel();
+
+        void setLoserNewLevel(Integer value);
+
     }
 
     String getId();

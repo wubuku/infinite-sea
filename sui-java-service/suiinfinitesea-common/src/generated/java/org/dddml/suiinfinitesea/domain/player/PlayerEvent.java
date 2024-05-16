@@ -50,28 +50,6 @@ public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
     }
 
-    interface PlayerItemsDeducted extends PlayerEvent {
-        ItemIdQuantityPair[] getItems();
-
-        void setItems(ItemIdQuantityPair[] value);
-
-    }
-
-    interface PlayerExperienceAndItemsIncreased extends PlayerEvent {
-        Long getExperience();
-
-        void setExperience(Long value);
-
-        ItemIdQuantityPair[] getItems();
-
-        void setItems(ItemIdQuantityPair[] value);
-
-        Integer getNewLevel();
-
-        void setNewLevel(Integer value);
-
-    }
-
     String getId();
 
     //void setId(String id);

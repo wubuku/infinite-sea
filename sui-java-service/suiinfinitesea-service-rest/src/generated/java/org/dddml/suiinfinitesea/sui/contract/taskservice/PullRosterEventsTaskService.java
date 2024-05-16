@@ -21,6 +21,11 @@ public class PullRosterEventsTaskService {
         rosterEventService.pullRosterCreatedEvents();
     }
 
+    @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.environment-roster-created.fixed-delay:5000}")
+    public void pullEnvironmentRosterCreatedEvents() {
+        rosterEventService.pullEnvironmentRosterCreatedEvents();
+    }
+
     @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.roster-ship-added.fixed-delay:5000}")
     public void pullRosterShipAddedEvents() {
         rosterEventService.pullRosterShipAddedEvents();
@@ -34,6 +39,31 @@ public class PullRosterEventsTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.roster-location-updated.fixed-delay:5000}")
     public void pullRosterLocationUpdatedEvents() {
         rosterEventService.pullRosterLocationUpdatedEvents();
+    }
+
+    @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.roster-ships-position-adjusted.fixed-delay:5000}")
+    public void pullRosterShipsPositionAdjustedEvents() {
+        rosterEventService.pullRosterShipsPositionAdjustedEvents();
+    }
+
+    @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.roster-ship-transferred.fixed-delay:5000}")
+    public void pullRosterShipTransferredEvents() {
+        rosterEventService.pullRosterShipTransferredEvents();
+    }
+
+    @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.roster-ship-inventory-transferred.fixed-delay:5000}")
+    public void pullRosterShipInventoryTransferredEvents() {
+        rosterEventService.pullRosterShipInventoryTransferredEvents();
+    }
+
+    @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.roster-ship-inventory-taken-out.fixed-delay:5000}")
+    public void pullRosterShipInventoryTakenOutEvents() {
+        rosterEventService.pullRosterShipInventoryTakenOutEvents();
+    }
+
+    @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.roster-ship-inventory-put-in.fixed-delay:5000}")
+    public void pullRosterShipInventoryPutInEvents() {
+        rosterEventService.pullRosterShipInventoryPutInEvents();
     }
 
 }

@@ -46,9 +46,15 @@ public class SuiShipBattleStateRetriever {
         shipBattleState.setInitiator(shipBattle.getInitiator());
         shipBattleState.setResponder(shipBattle.getResponder());
         shipBattleState.setStatus(shipBattle.getStatus());
+        shipBattleState.setInitiatorExperiences(Arrays.asList(shipBattle.getInitiatorExperiences()));
+        shipBattleState.setResponderExperiences(Arrays.asList(shipBattle.getResponderExperiences()));
+        shipBattleState.setEndedAt(shipBattle.getEndedAt());
+        shipBattleState.setWinner(shipBattle.getWinner());
         shipBattleState.setRoundNumber(shipBattle.getRoundNumber());
-        shipBattleState.setRoundMover(shipBattle.getRoundMover());
         shipBattleState.setRoundStartedAt(shipBattle.getRoundStartedAt());
+        shipBattleState.setRoundMover(shipBattle.getRoundMover());
+        shipBattleState.setRoundAttackerShip(shipBattle.getRoundAttackerShip());
+        shipBattleState.setRoundDefenderShip(shipBattle.getRoundDefenderShip());
         return shipBattleState;
     }
 

@@ -14,20 +14,18 @@ import java.math.*;
 import java.util.*;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class RosterSetSail {
+public class RosterShipTransferred {
     private String id;
 
     private RosterIdForEvent rosterId;
 
     private BigInteger version;
 
-    private CoordinatesForEvent targetCoordinates;
+    private String shipId;
 
-    private BigInteger setSailAt;
+    private RosterIdForEvent toRosterId;
 
-    private CoordinatesForEvent updatedCoordinates;
-
-    private BigInteger energyCost;
+    private BigInteger toPosition;
 
     public String getId() {
         return id;
@@ -53,48 +51,39 @@ public class RosterSetSail {
         this.version = version;
     }
 
-    public CoordinatesForEvent getTargetCoordinates() {
-        return targetCoordinates;
+    public String getShipId() {
+        return shipId;
     }
 
-    public void setTargetCoordinates(CoordinatesForEvent targetCoordinates) {
-        this.targetCoordinates = targetCoordinates;
+    public void setShipId(String shipId) {
+        this.shipId = shipId;
     }
 
-    public BigInteger getSetSailAt() {
-        return setSailAt;
+    public RosterIdForEvent getToRosterId() {
+        return toRosterId;
     }
 
-    public void setSetSailAt(BigInteger setSailAt) {
-        this.setSailAt = setSailAt;
+    public void setToRosterId(RosterIdForEvent toRosterId) {
+        this.toRosterId = toRosterId;
     }
 
-    public CoordinatesForEvent getUpdatedCoordinates() {
-        return updatedCoordinates;
+    public BigInteger getToPosition() {
+        return toPosition;
     }
 
-    public void setUpdatedCoordinates(CoordinatesForEvent updatedCoordinates) {
-        this.updatedCoordinates = updatedCoordinates;
-    }
-
-    public BigInteger getEnergyCost() {
-        return energyCost;
-    }
-
-    public void setEnergyCost(BigInteger energyCost) {
-        this.energyCost = energyCost;
+    public void setToPosition(BigInteger toPosition) {
+        this.toPosition = toPosition;
     }
 
     @Override
     public String toString() {
-        return "RosterSetSail{" +
+        return "RosterShipTransferred{" +
                 "id=" + '\'' + id + '\'' +
                 ", rosterId=" + rosterId +
                 ", version=" + version +
-                ", targetCoordinates=" + targetCoordinates +
-                ", setSailAt=" + setSailAt +
-                ", updatedCoordinates=" + updatedCoordinates +
-                ", energyCost=" + energyCost +
+                ", shipId=" + '\'' + shipId + '\'' +
+                ", toRosterId=" + toRosterId +
+                ", toPosition=" + toPosition +
                 '}';
     }
 

@@ -48,6 +48,25 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
     }
 
+    interface EnvironmentRosterCreated extends RosterEvent {
+        Coordinates getCoordinates();
+
+        void setCoordinates(Coordinates value);
+
+        Long getShipResourceQuantity();
+
+        void setShipResourceQuantity(Long value);
+
+        Long getShipBaseResourceQuantity();
+
+        void setShipBaseResourceQuantity(Long value);
+
+        Long getBaseExperience();
+
+        void setBaseExperience(Long value);
+
+    }
+
     interface RosterShipAdded extends RosterEvent {
         String getShip();
 
@@ -72,6 +91,10 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
         void setUpdatedCoordinates(Coordinates value);
 
+        BigInteger getEnergyCost();
+
+        void setEnergyCost(BigInteger value);
+
     }
 
     interface RosterLocationUpdated extends RosterEvent {
@@ -86,6 +109,69 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
         Integer getNewStatus();
 
         void setNewStatus(Integer value);
+
+    }
+
+    interface RosterShipsPositionAdjusted extends RosterEvent {
+        BigInteger[] getPositions();
+
+        void setPositions(BigInteger[] value);
+
+        String[] getShipIds();
+
+        void setShipIds(String[] value);
+
+    }
+
+    interface RosterShipTransferred extends RosterEvent {
+        String getShipId();
+
+        void setShipId(String value);
+
+        RosterId getToRosterId();
+
+        void setToRosterId(RosterId value);
+
+        BigInteger getToPosition();
+
+        void setToPosition(BigInteger value);
+
+    }
+
+    interface RosterShipInventoryTransferred extends RosterEvent {
+        String getFromShipId();
+
+        void setFromShipId(String value);
+
+        String getToShipId();
+
+        void setToShipId(String value);
+
+        ItemIdQuantityPairs getItemIdQuantityPairs();
+
+        void setItemIdQuantityPairs(ItemIdQuantityPairs value);
+
+    }
+
+    interface RosterShipInventoryTakenOut extends RosterEvent {
+        String getShipId();
+
+        void setShipId(String value);
+
+        ItemIdQuantityPairs getItemIdQuantityPairs();
+
+        void setItemIdQuantityPairs(ItemIdQuantityPairs value);
+
+    }
+
+    interface RosterShipInventoryPutIn extends RosterEvent {
+        String getShipId();
+
+        void setShipId(String value);
+
+        ItemIdQuantityPairs getItemIdQuantityPairs();
+
+        void setItemIdQuantityPairs(ItemIdQuantityPairs value);
 
     }
 

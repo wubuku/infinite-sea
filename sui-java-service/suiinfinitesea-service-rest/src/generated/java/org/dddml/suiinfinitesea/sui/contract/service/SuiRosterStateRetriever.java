@@ -55,6 +55,9 @@ public class SuiRosterStateRetriever {
         rosterState.setCoordinatesUpdatedAt(roster.getCoordinatesUpdatedAt());
         rosterState.setTargetCoordinates(DomainBeanUtils.toCoordinates(roster.getTargetCoordinates()));
         rosterState.setShipBattleId(roster.getShipBattleId());
+        rosterState.setEnvironmentOwned(roster.getEnvironmentOwned());
+        rosterState.setBaseExperience(roster.getBaseExperience());
+        rosterState.setEnergyVault(roster.getEnergyVault());
         if (roster.getShips() != null) {
             String rosterShipsItemTableId = roster.getShips().getFields().getId().getId();
             List<RosterShipsItemState> rosterShipsItems = getRosterShipsItems(rosterState, rosterShipsItemTableId);

@@ -72,6 +72,19 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
             apply(e);
         }
 
+        @Override
+        public void gatherIslandResources(String player, String clock, Long offChainVersion, String commandId, String requesterId, MapCommands.GatherIslandResources c) {
+            java.util.function.Supplier<MapEvent.IslandResourcesGathered> eventFactory = () -> newIslandResourcesGathered(player, clock, offChainVersion, commandId, requesterId);
+            MapEvent.IslandResourcesGathered e;
+            try {
+                e = verifyGatherIslandResources(eventFactory, player, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
         protected MapEvent.InitMapEvent verify__Init__(java.util.function.Supplier<MapEvent.InitMapEvent> eventFactory, MapCommands.__Init__ c) {
 
             MapEvent.InitMapEvent e = (MapEvent.InitMapEvent) ReflectUtils.invokeStaticMethod(
@@ -137,6 +150,27 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
         }
            
 
+        protected MapEvent.IslandResourcesGathered verifyGatherIslandResources(java.util.function.Supplier<MapEvent.IslandResourcesGathered> eventFactory, String player, MapCommands.GatherIslandResources c) {
+            String Player = player;
+
+            MapEvent.IslandResourcesGathered e = (MapEvent.IslandResourcesGathered) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.map.GatherIslandResourcesLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, MapState.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), player, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.map;
+//
+//public class GatherIslandResourcesLogic {
+//    public static MapEvent.IslandResourcesGathered verify(java.util.function.Supplier<MapEvent.IslandResourcesGathered> eventFactory, MapState mapState, String player, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
         protected AbstractMapEvent.InitMapEvent newInitMapEvent(Long offChainVersion, String commandId, String requesterId) {
             MapEventId eventId = new MapEventId(getState().getId(), null);
             AbstractMapEvent.InitMapEvent e = new AbstractMapEvent.InitMapEvent();
@@ -188,6 +222,30 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
             e.setCoordinates(coordinates);
             e.setClaimedBy(claimedBy);
             e.setClaimedAt(claimedAt);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setMapEventId(eventId);
+            return e;
+        }
+
+        protected AbstractMapEvent.IslandResourcesGathered newIslandResourcesGathered(String player, String clock, Long offChainVersion, String commandId, String requesterId) {
+            MapEventId eventId = new MapEventId(getState().getId(), null);
+            AbstractMapEvent.IslandResourcesGathered e = new AbstractMapEvent.IslandResourcesGathered();
+
+            e.setCoordinates(null);
+            e.setResources(null);
+            e.setGatheredAt(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

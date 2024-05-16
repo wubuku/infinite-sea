@@ -123,6 +123,42 @@ public class RosterStateDto {
         this.shipBattleId = shipBattleId;
     }
 
+    private Boolean environmentOwned;
+
+    public Boolean getEnvironmentOwned()
+    {
+        return this.environmentOwned;
+    }
+
+    public void setEnvironmentOwned(Boolean environmentOwned)
+    {
+        this.environmentOwned = environmentOwned;
+    }
+
+    private Long baseExperience;
+
+    public Long getBaseExperience()
+    {
+        return this.baseExperience;
+    }
+
+    public void setBaseExperience(Long baseExperience)
+    {
+        this.baseExperience = baseExperience;
+    }
+
+    private java.math.BigInteger energyVault;
+
+    public java.math.BigInteger getEnergyVault()
+    {
+        return this.energyVault;
+    }
+
+    public void setEnergyVault(java.math.BigInteger energyVault)
+    {
+        this.energyVault = energyVault;
+    }
+
     private BigInteger version;
 
     public BigInteger getVersion()
@@ -284,6 +320,15 @@ public class RosterStateDto {
             }
             if (returnedFieldsContains("ShipBattleId")) {
                 dto.setShipBattleId(state.getShipBattleId());
+            }
+            if (returnedFieldsContains("EnvironmentOwned")) {
+                dto.setEnvironmentOwned(state.getEnvironmentOwned());
+            }
+            if (returnedFieldsContains("BaseExperience")) {
+                dto.setBaseExperience(state.getBaseExperience());
+            }
+            if (returnedFieldsContains("EnergyVault")) {
+                dto.setEnergyVault(state.getEnergyVault());
             }
             if (returnedFieldsContains("Version")) {
                 dto.setVersion(state.getVersion());

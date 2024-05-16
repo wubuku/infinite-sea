@@ -130,6 +130,109 @@ public class RosterCommands {
 
     }
 
+    public static class CreateEnvironmentRoster extends AbstractRosterCommand implements RosterCommand {
+
+        public String getCommandType() {
+            return "CreateEnvironmentRoster";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Roster Id
+         */
+        private RosterId rosterId;
+
+        public RosterId getRosterId() {
+            return this.rosterId;
+        }
+
+        public void setRosterId(RosterId rosterId) {
+            this.rosterId = rosterId;
+        }
+
+        /**
+         * Coordinates
+         */
+        private Coordinates coordinates;
+
+        public Coordinates getCoordinates() {
+            return this.coordinates;
+        }
+
+        public void setCoordinates(Coordinates coordinates) {
+            this.coordinates = coordinates;
+        }
+
+        /**
+         * Ship Resource Quantity
+         */
+        private Long shipResourceQuantity;
+
+        public Long getShipResourceQuantity() {
+            return this.shipResourceQuantity;
+        }
+
+        public void setShipResourceQuantity(Long shipResourceQuantity) {
+            this.shipResourceQuantity = shipResourceQuantity;
+        }
+
+        /**
+         * Ship Base Resource Quantity
+         */
+        private Long shipBaseResourceQuantity;
+
+        public Long getShipBaseResourceQuantity() {
+            return this.shipBaseResourceQuantity;
+        }
+
+        public void setShipBaseResourceQuantity(Long shipBaseResourceQuantity) {
+            this.shipBaseResourceQuantity = shipBaseResourceQuantity;
+        }
+
+        /**
+         * Base Experience
+         */
+        private Long baseExperience;
+
+        public Long getBaseExperience() {
+            return this.baseExperience;
+        }
+
+        public void setBaseExperience(Long baseExperience) {
+            this.baseExperience = baseExperience;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
     public static class AddShip extends AbstractRosterCommand implements RosterCommand {
 
         public String getCommandType() {
@@ -218,6 +321,19 @@ public class RosterCommands {
         }
 
         /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
          * Target Coordinates
          */
         private Coordinates targetCoordinates;
@@ -292,6 +408,443 @@ public class RosterCommands {
 
         public void setClock(String clock) {
             this.clock = clock;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class AdjustShipsPosition extends AbstractRosterCommand implements RosterCommand {
+
+        public String getCommandType() {
+            return "AdjustShipsPosition";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Roster Id
+         */
+        private RosterId rosterId;
+
+        public RosterId getRosterId() {
+            return this.rosterId;
+        }
+
+        public void setRosterId(RosterId rosterId) {
+            this.rosterId = rosterId;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * Positions
+         */
+        private BigInteger[] positions;
+
+        public BigInteger[] getPositions() {
+            return this.positions;
+        }
+
+        public void setPositions(BigInteger[] positions) {
+            this.positions = positions;
+        }
+
+        /**
+         * Ship Ids
+         */
+        private String[] shipIds;
+
+        public String[] getShipIds() {
+            return this.shipIds;
+        }
+
+        public void setShipIds(String[] shipIds) {
+            this.shipIds = shipIds;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class TransferShip extends AbstractRosterCommand implements RosterCommand {
+
+        public String getCommandType() {
+            return "TransferShip";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Roster Id
+         */
+        private RosterId rosterId;
+
+        public RosterId getRosterId() {
+            return this.rosterId;
+        }
+
+        public void setRosterId(RosterId rosterId) {
+            this.rosterId = rosterId;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * Ship Id
+         */
+        private String shipId;
+
+        public String getShipId() {
+            return this.shipId;
+        }
+
+        public void setShipId(String shipId) {
+            this.shipId = shipId;
+        }
+
+        /**
+         * To Roster
+         */
+        private RosterId toRoster;
+
+        public RosterId getToRoster() {
+            return this.toRoster;
+        }
+
+        public void setToRoster(RosterId toRoster) {
+            this.toRoster = toRoster;
+        }
+
+        /**
+         * To Position
+         */
+        private BigInteger toPosition;
+
+        public BigInteger getToPosition() {
+            return this.toPosition;
+        }
+
+        public void setToPosition(BigInteger toPosition) {
+            this.toPosition = toPosition;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class TransferShipInventory extends AbstractRosterCommand implements RosterCommand {
+
+        public String getCommandType() {
+            return "TransferShipInventory";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Roster Id
+         */
+        private RosterId rosterId;
+
+        public RosterId getRosterId() {
+            return this.rosterId;
+        }
+
+        public void setRosterId(RosterId rosterId) {
+            this.rosterId = rosterId;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * From Ship Id
+         */
+        private String fromShipId;
+
+        public String getFromShipId() {
+            return this.fromShipId;
+        }
+
+        public void setFromShipId(String fromShipId) {
+            this.fromShipId = fromShipId;
+        }
+
+        /**
+         * To Ship Id
+         */
+        private String toShipId;
+
+        public String getToShipId() {
+            return this.toShipId;
+        }
+
+        public void setToShipId(String toShipId) {
+            this.toShipId = toShipId;
+        }
+
+        /**
+         * Item Id Quantity Pairs
+         */
+        private ItemIdQuantityPairs itemIdQuantityPairs;
+
+        public ItemIdQuantityPairs getItemIdQuantityPairs() {
+            return this.itemIdQuantityPairs;
+        }
+
+        public void setItemIdQuantityPairs(ItemIdQuantityPairs itemIdQuantityPairs) {
+            this.itemIdQuantityPairs = itemIdQuantityPairs;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class TakeOutShipInventory extends AbstractRosterCommand implements RosterCommand {
+
+        public String getCommandType() {
+            return "TakeOutShipInventory";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Roster Id
+         */
+        private RosterId rosterId;
+
+        public RosterId getRosterId() {
+            return this.rosterId;
+        }
+
+        public void setRosterId(RosterId rosterId) {
+            this.rosterId = rosterId;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Ship Id
+         */
+        private String shipId;
+
+        public String getShipId() {
+            return this.shipId;
+        }
+
+        public void setShipId(String shipId) {
+            this.shipId = shipId;
+        }
+
+        /**
+         * Item Id Quantity Pairs
+         */
+        private ItemIdQuantityPairs itemIdQuantityPairs;
+
+        public ItemIdQuantityPairs getItemIdQuantityPairs() {
+            return this.itemIdQuantityPairs;
+        }
+
+        public void setItemIdQuantityPairs(ItemIdQuantityPairs itemIdQuantityPairs) {
+            this.itemIdQuantityPairs = itemIdQuantityPairs;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class PutInShipInventory extends AbstractRosterCommand implements RosterCommand {
+
+        public String getCommandType() {
+            return "PutInShipInventory";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Roster Id
+         */
+        private RosterId rosterId;
+
+        public RosterId getRosterId() {
+            return this.rosterId;
+        }
+
+        public void setRosterId(RosterId rosterId) {
+            this.rosterId = rosterId;
+        }
+
+        /**
+         * Player
+         */
+        private String player;
+
+        public String getPlayer() {
+            return this.player;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Ship Id
+         */
+        private String shipId;
+
+        public String getShipId() {
+            return this.shipId;
+        }
+
+        public void setShipId(String shipId) {
+            this.shipId = shipId;
+        }
+
+        /**
+         * Item Id Quantity Pairs
+         */
+        private ItemIdQuantityPairs itemIdQuantityPairs;
+
+        public ItemIdQuantityPairs getItemIdQuantityPairs() {
+            return this.itemIdQuantityPairs;
+        }
+
+        public void setItemIdQuantityPairs(ItemIdQuantityPairs itemIdQuantityPairs) {
+            this.itemIdQuantityPairs = itemIdQuantityPairs;
         }
 
         /**

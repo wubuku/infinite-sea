@@ -391,6 +391,9 @@ public class M {
             "ships",
             "coordinatesUpdatedAt",
             "shipBattleId",
+            "environmentOwned",
+            "baseExperience",
+            "energyVault",
             "version",
             "offChainVersion",
             "createdBy",
@@ -413,6 +416,9 @@ public class M {
             "ObjectTable",
             "BigInteger",
             "String",
+            "Boolean",
+            "Long",
+            "java.math.BigInteger",
             "BigInteger",
             "Long",
             "String",
@@ -451,6 +457,12 @@ public class M {
         aliasMap.put("CoordinatesUpdatedAt", "coordinatesUpdatedAt");
         aliasMap.put("shipBattleId", "shipBattleId");
         aliasMap.put("ShipBattleId", "shipBattleId");
+        aliasMap.put("environmentOwned", "environmentOwned");
+        aliasMap.put("EnvironmentOwned", "environmentOwned");
+        aliasMap.put("baseExperience", "baseExperience");
+        aliasMap.put("BaseExperience", "baseExperience");
+        aliasMap.put("energyVault", "energyVault");
+        aliasMap.put("EnergyVault", "energyVault");
         aliasMap.put("version", "version");
         aliasMap.put("Version", "version");
         aliasMap.put("offChainVersion", "offChainVersion");
@@ -618,9 +630,13 @@ public class M {
             "initiator",
             "responder",
             "status",
+            "endedAt",
+            "winner",
             "roundNumber",
-            "roundMover",
             "roundStartedAt",
+            "roundMover",
+            "roundAttackerShip",
+            "roundDefenderShip",
             "version",
             "offChainVersion",
             "createdBy",
@@ -636,9 +652,13 @@ public class M {
             "String",
             "String",
             "Integer",
-            "Long",
-            "Integer",
             "BigInteger",
+            "Integer",
+            "Long",
+            "BigInteger",
+            "Integer",
+            "String",
+            "String",
             "BigInteger",
             "Long",
             "String",
@@ -669,12 +689,20 @@ public class M {
         aliasMap.put("Responder", "responder");
         aliasMap.put("status", "status");
         aliasMap.put("Status", "status");
+        aliasMap.put("endedAt", "endedAt");
+        aliasMap.put("EndedAt", "endedAt");
+        aliasMap.put("winner", "winner");
+        aliasMap.put("Winner", "winner");
         aliasMap.put("roundNumber", "roundNumber");
         aliasMap.put("RoundNumber", "roundNumber");
-        aliasMap.put("roundMover", "roundMover");
-        aliasMap.put("RoundMover", "roundMover");
         aliasMap.put("roundStartedAt", "roundStartedAt");
         aliasMap.put("RoundStartedAt", "roundStartedAt");
+        aliasMap.put("roundMover", "roundMover");
+        aliasMap.put("RoundMover", "roundMover");
+        aliasMap.put("roundAttackerShip", "roundAttackerShip");
+        aliasMap.put("RoundAttackerShip", "roundAttackerShip");
+        aliasMap.put("roundDefenderShip", "roundDefenderShip");
+        aliasMap.put("RoundDefenderShip", "roundDefenderShip");
         aliasMap.put("version", "version");
         aliasMap.put("Version", "version");
         aliasMap.put("offChainVersion", "offChainVersion");
