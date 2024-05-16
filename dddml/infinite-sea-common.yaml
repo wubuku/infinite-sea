@@ -184,7 +184,7 @@ valueObjects:
 
   ItemIdQuantityPairs:
     module: "Common"
-    hibernateMappingType: JsonObject
+    hibernateMappingType: ItemIdQuantityPairs
     properties:
       Items:
         itemType: ItemIdQuantityPair

@@ -24,6 +24,10 @@ configuration:
         mappingType: "io.hypersistence.utils.hibernate.type.json.JsonType"
         parameters:
           "org.hibernate.type.ParameterType": "java.util.HashMap"
+      ItemIdQuantityPairs:
+        mappingType: "io.hypersistence.utils.hibernate.type.json.JsonType"
+        parameters:
+          "org.hibernate.type.ParameterType": "org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs"
 
 
 typeDefinitions:
