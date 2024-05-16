@@ -23,8 +23,8 @@ sui:
       #url: "https://fullnode.devnet.sui.io/"
       url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "AFwb6mAfAbZJRpHQxMep3pFZd7F2c3XHSGFmdAZ12nP6"
-      default: "B16pA8PCp9jhMTBZUHC4bKCdr2Po1quPLMbxK2x9XhoZ"
+      common: "3iLbwMdpsauBVkX72XKdKH7eBeLWPeVJ85zygxPF1E3n"
+      default: "3iNkfZ7QjX7VcoMRX44EVbhpVRzAg4oQ6VkPQ65e9dPH"
 #    pull-day-summary-events:
 #      day-summary-created:
 #        fixed-delay: 6000
