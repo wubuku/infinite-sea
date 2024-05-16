@@ -1,0 +1,123 @@
+{
+  "ItemUnused": {
+    "ItemId": 0,
+    "Name": "UNUSED_ITEM",
+    "ChineseName": "未使用",
+    "RequiredForCompletion": "false",
+    "SellsFor": 1,
+    "Quantity": 0
+  },
+  "ItemPotatoSeeds": {
+    "ItemId": 1,
+    "Name": "PotatoSeeds",
+    "ChineseName": "土豆种子",
+    "RequiredForCompletion": "false",
+    "SellsFor": 1,
+    "Quantity": 0
+  },
+  "ItemPotatoes": {
+    "ItemId": 101,
+    "Name": "Potatoes",
+    "ChineseName": "土豆",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 0
+  },
+  "ItemCottonSeeds": {
+    "ItemId": 2,
+    "Name": "CottonSeeds",
+    "ChineseName": "棉花种子",
+    "RequiredForCompletion": "true",
+    "SellsFor": 5,
+    "Quantity": 200
+  },
+  "ItemCottons": {
+    "ItemId": 102,
+    "Name": "Cottons",
+    "ChineseName": "棉花",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 100
+  },
+  "ItemBronzeBar": {
+    "ItemId": 1001,
+    "Name": "BronzeBar",
+    "ChineseName": "铜条",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 0
+  },
+  "ItemNormalLogs": {
+    "ItemId": 200,
+    "Name": "NormalLogs",
+    "ChineseName": "木头",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 100
+  },
+  "ItemShip": {
+    "ItemId": 1000000001,
+    "Name": "Ship",
+    "ChineseName": "船",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 0
+  },
+  "ItemCopperOre": {
+    "ItemId": 301,
+    "Name": "CopperOre",
+    "ChineseName": "铜",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 100
+  },
+  "ItemTinOre": {
+    "ItemId": 302,
+    "Name": "TinOre",
+    "ChineseName": "锡",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 0
+  },
+  "ResourceTypeWoodcutting": {
+    "ItemId": 2000000001,
+    "Name": "ResourceTypeWoodcutting",
+    "ChineseName": "伐木资源",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 200
+  },
+  "ResourceTypeFishing": {
+    "ItemId": 2000000002,
+    "Name": "ResourceTypeFishing",
+    "ChineseName": "捕鱼资源",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 0
+  },
+  "ResourceTypeMining": {
+    "ItemId": 2000000003,
+    "Name": "ResourceTypeMining",
+    "ChineseName": "挖矿资源",
+    "RequiredForCompletion": "true",
+    "SellsFor": 1,
+    "Quantity": 200
+  },
+  "CraftingResources": [
+    {
+      "ItemId": 102,
+      "Name": "Cottons",
+      "Quantity": 3
+    },
+    {
+      "ItemId": 200,
+      "Name": "NormalLogs",
+      "Quantity": 3
+    },
+    {
+      "ItemId": 301,
+      "Name": "CopperOre",
+      "Quantity": 3
+    }
+  ]
+}
