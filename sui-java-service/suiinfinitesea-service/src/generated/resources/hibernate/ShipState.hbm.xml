@@ -25,7 +25,7 @@
     <property name="buildingExpenses">
       <column name="building_expenses" sql-type="json" />
       <type name="io.hypersistence.utils.hibernate.type.json.JsonType">
-        <param name="org.hibernate.type.ParameterType">java.util.HashMap</param>
+        <param name="org.hibernate.type.ParameterType">org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs</param>
       </type>
     </property>
     <property name="version">
