@@ -289,7 +289,7 @@ public class PlayerResource {
  
     public static class PlayerResourceUtils {
 
-        public static void setNullIdOrThrowOnInconsistentIds(String id, PlayerCommand value) {
+        public static void setNullIdOrThrowOnInconsistentIds(String id, org.dddml.suiinfinitesea.domain.player.PlayerCommand value) {
             String idObj = id;
             if (value.getId() == null) {
                 value.setId(idObj);

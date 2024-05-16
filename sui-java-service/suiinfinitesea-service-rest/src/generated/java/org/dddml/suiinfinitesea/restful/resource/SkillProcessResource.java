@@ -312,7 +312,7 @@ public class SkillProcessResource {
             return formatter.parse(idString);
         }
 
-        public static void setNullIdOrThrowOnInconsistentIds(String skillProcessId, SkillProcessCommand value) {
+        public static void setNullIdOrThrowOnInconsistentIds(String skillProcessId, org.dddml.suiinfinitesea.domain.skillprocess.SkillProcessCommand value) {
             SkillProcessId idObj = parseIdString(skillProcessId);
             if (value.getSkillProcessId() == null) {
                 value.setSkillProcessId(idObj);

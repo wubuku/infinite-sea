@@ -235,7 +235,7 @@ public class ShipResource {
  
     public static class ShipResourceUtils {
 
-        public static void setNullIdOrThrowOnInconsistentIds(String id, ShipCommand value) {
+        public static void setNullIdOrThrowOnInconsistentIds(String id, org.dddml.suiinfinitesea.domain.ship.ShipCommand value) {
             String idObj = id;
             if (value.getId() == null) {
                 value.setId(idObj);

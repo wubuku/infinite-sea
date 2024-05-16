@@ -271,7 +271,7 @@ public class ItemResource {
  
     public static class ItemResourceUtils {
 
-        public static void setNullIdOrThrowOnInconsistentIds(Long itemId, ItemCommand value) {
+        public static void setNullIdOrThrowOnInconsistentIds(Long itemId, org.dddml.suiinfinitesea.domain.item.ItemCommand value) {
             Long idObj = itemId;
             if (value.getItemId() == null) {
                 value.setItemId(idObj);

@@ -276,7 +276,7 @@ public class ItemCreationResource {
             return formatter.parse(idString);
         }
 
-        public static void setNullIdOrThrowOnInconsistentIds(String itemCreationId, ItemCreationCommand value) {
+        public static void setNullIdOrThrowOnInconsistentIds(String itemCreationId, org.dddml.suiinfinitesea.domain.itemcreation.ItemCreationCommand value) {
             SkillTypeItemIdPair idObj = parseIdString(itemCreationId);
             if (value.getItemCreationId() == null) {
                 value.setItemCreationId(idObj);

@@ -271,7 +271,7 @@ public class ExperienceTableResource {
  
     public static class ExperienceTableResourceUtils {
 
-        public static void setNullIdOrThrowOnInconsistentIds(String id, ExperienceTableCommand value) {
+        public static void setNullIdOrThrowOnInconsistentIds(String id, org.dddml.suiinfinitesea.domain.experiencetable.ExperienceTableCommand value) {
             String idObj = id;
             if (value.getId() == null) {
                 value.setId(idObj);

@@ -338,7 +338,7 @@ public class MapResource {
  
     public static class MapResourceUtils {
 
-        public static void setNullIdOrThrowOnInconsistentIds(String id, MapCommand value) {
+        public static void setNullIdOrThrowOnInconsistentIds(String id, org.dddml.suiinfinitesea.domain.map.MapCommand value) {
             String idObj = id;
             if (value.getId() == null) {
                 value.setId(idObj);

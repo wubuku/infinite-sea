@@ -438,7 +438,7 @@ public class RosterResource {
             return formatter.parse(idString);
         }
 
-        public static void setNullIdOrThrowOnInconsistentIds(String rosterId, RosterCommand value) {
+        public static void setNullIdOrThrowOnInconsistentIds(String rosterId, org.dddml.suiinfinitesea.domain.roster.RosterCommand value) {
             RosterId idObj = parseIdString(rosterId);
             if (value.getRosterId() == null) {
                 value.setRosterId(idObj);
