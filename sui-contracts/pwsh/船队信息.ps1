@@ -71,4 +71,49 @@ catch {
     "返回的结果为:$getRosterResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
     Set-Location $startLocation
     return    
-}       
+}  
+
+
+foreach ($shipId in $shipIds) {
+    "`船只 $shipId 相关信息如下：" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow  
+    try {
+        $shipResult = sui client object $shipId --json 
+        if (-not ('System.Object[]' -eq $shipResult.GetType())) {
+            "船只 $shipId 时返回信息： $shipResult" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Red
+            Set-Location $startLocation
+            return
+        }
+        $shipObj = $shipResult | ConvertFrom-Json
+        "健康点(attack): $($shipObj.content.fields.attack)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
+        "攻击(speed): $($shipObj.content.fields.speed)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
+        "防御值(protection): $($shipObj.content.fields.protection)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
+        "速度(speed): $($shipObj.content.fields.speed)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
+        $items = $shipObj.content.fields.building_expenses.fields.items
+        if ($null -ne $items -and $items.Length -gt 0) {
+            "此船由以下资源建造而来：" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Yellow
+            foreach ($item in $items) {
+                "   Item Id: $($item.fields.item_id) -> quantity: $($item.fields.quantity)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
+            }
+        }
+        $inventory = $shipObj.content.fields.inventory
+        if ($null -ne $inventory -and $inventory.Length -gt 0) {
+            "此船装载以下物资：" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Yellow
+            foreach ($resouce in $inventory) {
+                "   Item Id: $($resouce.fields.item_id) -> quantity: $($resouce.fields.quantity)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
+            }
+        }
+        else {
+            "没有装载任何物资。" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Yellow
+        }
+
+    }
+    catch {
+        "查询船只 $shipId 信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+        "返回的结果为:$shipResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        Set-Location $startLocation
+        return    
+    }
+}
+
+
+Set-Location $startLocation
