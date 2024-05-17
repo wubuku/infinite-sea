@@ -25,6 +25,10 @@ public interface SkillProcessEvent extends Event, SuiEventEnvelope, SuiMoveEvent
     }
 
     interface ProductionProcessStarted extends SkillProcessEvent {
+        Long getBatchSize();
+
+        void setBatchSize(Long value);
+
         Long getItemId();
 
         void setItemId(Long value);
@@ -141,6 +145,10 @@ public interface SkillProcessEvent extends Event, SuiEventEnvelope, SuiMoveEvent
     }
 
     interface CreationProcessStarted extends SkillProcessEvent {
+        Long getBatchSize();
+
+        void setBatchSize(Long value);
+
         Long getItemId();
 
         void setItemId(Long value);

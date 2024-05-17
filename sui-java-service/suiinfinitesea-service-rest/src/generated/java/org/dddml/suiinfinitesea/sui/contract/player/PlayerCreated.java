@@ -17,6 +17,8 @@ import java.util.*;
 public class PlayerCreated {
     private String id;
 
+    private String name;
+
     private String owner;
 
     public String getId() {
@@ -25,6 +27,14 @@ public class PlayerCreated {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getOwner() {
@@ -39,6 +49,7 @@ public class PlayerCreated {
     public String toString() {
         return "PlayerCreated{" +
                 "id=" + '\'' + id + '\'' +
+                ", name=" + '\'' + name + '\'' +
                 ", owner=" + '\'' + owner + '\'' +
                 '}';
     }

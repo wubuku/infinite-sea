@@ -22,6 +22,10 @@ public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
     }
 
     interface PlayerCreated extends PlayerEvent {
+        String getName();
+
+        void setName(String value);
+
         String getOwner();
 
         void setOwner(String value);

@@ -17,7 +17,7 @@ public interface PlayerAggregate {
 
     List<Event> getChanges();
 
-    void create(Long offChainVersion, String commandId, String requesterId, PlayerCommands.Create c);
+    void create(String name, Long offChainVersion, String commandId, String requesterId, PlayerCommands.Create c);
 
     void claimIsland(String map, Coordinates coordinates, String clock, String rosterTable, Long offChainVersion, String commandId, String requesterId, PlayerCommands.ClaimIsland c);
 

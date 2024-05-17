@@ -21,6 +21,8 @@ public class ProductionProcessStarted {
 
     private BigInteger version;
 
+    private Long batchSize;
+
     private Long itemId;
 
     private BigInteger energyCost;
@@ -53,6 +55,14 @@ public class ProductionProcessStarted {
 
     public void setVersion(BigInteger version) {
         this.version = version;
+    }
+
+    public Long getBatchSize() {
+        return batchSize;
+    }
+
+    public void setBatchSize(Long batchSize) {
+        this.batchSize = batchSize;
     }
 
     public Long getItemId() {
@@ -101,6 +111,7 @@ public class ProductionProcessStarted {
                 "id=" + '\'' + id + '\'' +
                 ", skillProcessId=" + skillProcessId +
                 ", version=" + version +
+                ", batchSize=" + batchSize +
                 ", itemId=" + itemId +
                 ", energyCost=" + energyCost +
                 ", startedAt=" + startedAt +

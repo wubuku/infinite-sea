@@ -46,6 +46,7 @@ public class SuiPlayerStateRetriever {
         playerState.setOwner(player.getOwner());
         playerState.setLevel(player.getLevel());
         playerState.setExperience(player.getExperience());
+        playerState.setName(player.getName());
         playerState.setClaimedIsland(DomainBeanUtils.toCoordinates(player.getClaimedIsland()));
         playerState.setInventory(java.util.Arrays.stream(player.getInventory()).map(x -> DomainBeanUtils.toItemIdQuantityPair(x)).collect(java.util.stream.Collectors.toSet()));
         return playerState;

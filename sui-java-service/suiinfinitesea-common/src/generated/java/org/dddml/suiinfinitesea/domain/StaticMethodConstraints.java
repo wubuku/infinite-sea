@@ -77,8 +77,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.player.CreateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, VerificationContext.class},
-                    new String[]{"_", "_"}
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, String.class, VerificationContext.class},
+                    new String[]{"_", "_", "name"}
             );
 
 
@@ -109,8 +109,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.skillprocess.StartProductionLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new String[]{"_", "_", "player", "itemProduction"}
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, Long.class, VerificationContext.class},
+                    new String[]{"_", "_", "batchSize", "player", "itemProduction"}
             );
 
 
@@ -141,8 +141,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.skillprocess.StartCreationLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new String[]{"_", "_", "player", "itemCreation"}
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, Long.class, VerificationContext.class},
+                    new String[]{"_", "_", "batchSize", "player", "itemCreation"}
             );
 
 
@@ -373,8 +373,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.player.CreateLogic",
                     "mutate",
-                    new Class[]{PlayerState.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "owner", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+                    new Class[]{PlayerState.class, String.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "name", "owner", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 

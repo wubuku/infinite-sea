@@ -51,7 +51,7 @@ public abstract class AbstractPlayerApplicationService implements PlayerApplicat
     }
 
     public void when(PlayerCommands.Create c) {
-        update(c, ar -> ar.create(c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+        update(c, ar -> ar.create(c.getName(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public void when(PlayerCommands.ClaimIsland c) {

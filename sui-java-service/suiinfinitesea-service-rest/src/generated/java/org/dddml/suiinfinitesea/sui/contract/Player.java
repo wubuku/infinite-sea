@@ -25,6 +25,8 @@ public class Player {
 
     private Long experience;
 
+    private String name;
+
     private Coordinates claimedIsland;
 
     private ItemIdQuantityPair[] inventory;
@@ -71,6 +73,14 @@ public class Player {
         this.experience = experience;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Coordinates getClaimedIsland() {
         return claimedIsland;
     }
@@ -103,6 +113,7 @@ public class Player {
                 ", owner=" + '\'' + owner + '\'' +
                 ", level=" + level +
                 ", experience=" + experience +
+                ", name=" + '\'' + name + '\'' +
                 ", claimedIsland=" + claimedIsland +
                 ", inventory=" + Arrays.toString(inventory) +
                 ", version=" + version +

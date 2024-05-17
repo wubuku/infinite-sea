@@ -238,6 +238,18 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
             return "ProductionProcessStarted";
         }
 
+        public Long getBatchSize() {
+            Object val = getDynamicProperties().get("batchSize");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setBatchSize(Long value) {
+            getDynamicProperties().put("batchSize", value);
+        }
+
         public Long getItemId() {
             Object val = getDynamicProperties().get("itemId");
             if (val instanceof Long) {
@@ -584,6 +596,18 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
         @Override
         public String getEventType() {
             return "CreationProcessStarted";
+        }
+
+        public Long getBatchSize() {
+            Object val = getDynamicProperties().get("batchSize");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setBatchSize(Long value) {
+            getDynamicProperties().put("batchSize", value);
         }
 
         public Long getItemId() {

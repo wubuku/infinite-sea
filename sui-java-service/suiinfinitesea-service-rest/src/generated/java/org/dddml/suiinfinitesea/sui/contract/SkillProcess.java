@@ -35,6 +35,8 @@ public class SkillProcess {
 
     private ItemIdQuantityPairs productionMaterials;
 
+    private Long batchSize;
+
     private BigInteger version;
 
     public UID getId() {
@@ -117,6 +119,14 @@ public class SkillProcess {
         this.productionMaterials = productionMaterials;
     }
 
+    public Long getBatchSize() {
+        return batchSize;
+    }
+
+    public void setBatchSize(Long batchSize) {
+        this.batchSize = batchSize;
+    }
+
     public BigInteger getVersion() {
         return version;
     }
@@ -138,6 +148,7 @@ public class SkillProcess {
                 ", endedAt=" + endedAt +
                 ", energyVault=" + energyVault +
                 ", productionMaterials=" + productionMaterials +
+                ", batchSize=" + batchSize +
                 ", version=" + version +
                 '}';
     }

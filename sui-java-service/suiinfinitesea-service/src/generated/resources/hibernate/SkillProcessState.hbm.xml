@@ -41,6 +41,9 @@
         <param name="org.hibernate.type.ParameterType">org.dddml.suiinfinitesea.domain.ItemIdQuantityPairs</param>
       </type>
     </property>
+    <property name="batchSize">
+      <column name="batch_size" />
+    </property>
     <property name="version">
       <column name="version" sql-type="DECIMAL(20,0)" />
     </property>

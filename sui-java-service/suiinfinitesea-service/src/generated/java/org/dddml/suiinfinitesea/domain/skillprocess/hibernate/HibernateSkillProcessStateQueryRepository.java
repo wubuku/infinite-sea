@@ -31,7 +31,7 @@ public class HibernateSkillProcessStateQueryRepository implements SkillProcessSt
         return this.sessionFactory.getCurrentSession();
     }
     
-    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("SkillProcessId", "ItemId", "StartedAt", "CreationTime", "Completed", "EndedAt", "EnergyVault", "ProductionMaterials", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
+    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("SkillProcessId", "ItemId", "StartedAt", "CreationTime", "Completed", "EndedAt", "EnergyVault", "ProductionMaterials", "BatchSize", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
     
     private ReadOnlyProxyGenerator readOnlyProxyGenerator;
     

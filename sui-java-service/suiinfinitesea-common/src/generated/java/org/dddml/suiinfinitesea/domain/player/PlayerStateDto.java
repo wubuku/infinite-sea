@@ -63,6 +63,18 @@ public class PlayerStateDto {
         this.experience = experience;
     }
 
+    private String name;
+
+    public String getName()
+    {
+        return this.name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
     private Coordinates claimedIsland;
 
     public Coordinates getClaimedIsland()
@@ -209,6 +221,9 @@ public class PlayerStateDto {
             }
             if (returnedFieldsContains("Experience")) {
                 dto.setExperience(state.getExperience());
+            }
+            if (returnedFieldsContains("Name")) {
+                dto.setName(state.getName());
             }
             if (returnedFieldsContains("ClaimedIsland")) {
                 dto.setClaimedIsland(state.getClaimedIsland());

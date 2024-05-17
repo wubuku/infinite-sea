@@ -26,6 +26,8 @@ public interface PlayerState extends VersionedSuiMoveObject
 
     Long getExperience();
 
+    String getName();
+
     Coordinates getClaimedIsland();
 
     Long getOffChainVersion();
@@ -52,6 +54,8 @@ public interface PlayerState extends VersionedSuiMoveObject
         void setLevel(Integer level);
 
         void setExperience(Long experience);
+
+        void setName(String name);
 
         void setClaimedIsland(Coordinates claimedIsland);
 

@@ -403,6 +403,7 @@ public class DomainBeanUtils {
 
         AbstractPlayerEvent.PlayerCreated playerCreated = new AbstractPlayerEvent.PlayerCreated();
         playerCreated.setId(contractEvent.getId());
+        playerCreated.setName(contractEvent.getName());
         playerCreated.setOwner(contractEvent.getOwner());
         playerCreated.setVersion(BigInteger.valueOf(-1));
 
@@ -482,6 +483,7 @@ public class DomainBeanUtils {
         AbstractSkillProcessEvent.ProductionProcessStarted productionProcessStarted = new AbstractSkillProcessEvent.ProductionProcessStarted();
         productionProcessStarted.setId_(contractEvent.getId());
         productionProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
+        productionProcessStarted.setBatchSize(contractEvent.getBatchSize());
         productionProcessStarted.setItemId(contractEvent.getItemId());
         productionProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
         productionProcessStarted.setStartedAt(contractEvent.getStartedAt());
@@ -584,6 +586,7 @@ public class DomainBeanUtils {
         AbstractSkillProcessEvent.CreationProcessStarted creationProcessStarted = new AbstractSkillProcessEvent.CreationProcessStarted();
         creationProcessStarted.setId_(contractEvent.getId());
         creationProcessStarted.setSkillProcessId(DomainBeanUtils.toSkillProcessId(contractEvent.getSkillProcessId()));
+        creationProcessStarted.setBatchSize(contractEvent.getBatchSize());
         creationProcessStarted.setItemId(contractEvent.getItemId());
         creationProcessStarted.setEnergyCost(contractEvent.getEnergyCost());
         creationProcessStarted.setResourceCost(contractEvent.getResourceCost());

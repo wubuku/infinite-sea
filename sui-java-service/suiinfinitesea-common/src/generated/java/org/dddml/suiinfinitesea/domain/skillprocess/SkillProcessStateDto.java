@@ -123,6 +123,18 @@ public class SkillProcessStateDto {
         this.productionMaterials = productionMaterials;
     }
 
+    private Long batchSize;
+
+    public Long getBatchSize()
+    {
+        return this.batchSize;
+    }
+
+    public void setBatchSize(Long batchSize)
+    {
+        this.batchSize = batchSize;
+    }
+
     private BigInteger version;
 
     public BigInteger getVersion()
@@ -262,6 +274,9 @@ public class SkillProcessStateDto {
             }
             if (returnedFieldsContains("ProductionMaterials")) {
                 dto.setProductionMaterials(state.getProductionMaterials());
+            }
+            if (returnedFieldsContains("BatchSize")) {
+                dto.setBatchSize(state.getBatchSize());
             }
             if (returnedFieldsContains("Version")) {
                 dto.setVersion(state.getVersion());

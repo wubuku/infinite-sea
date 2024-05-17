@@ -47,11 +47,11 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void create(Long offChainVersion, String commandId, String requesterId, PlayerCommands.Create c) {
-            java.util.function.Supplier<PlayerEvent.PlayerCreated> eventFactory = () -> newPlayerCreated(offChainVersion, commandId, requesterId);
+        public void create(String name, Long offChainVersion, String commandId, String requesterId, PlayerCommands.Create c) {
+            java.util.function.Supplier<PlayerEvent.PlayerCreated> eventFactory = () -> newPlayerCreated(name, offChainVersion, commandId, requesterId);
             PlayerEvent.PlayerCreated e;
             try {
-                e = verifyCreate(eventFactory, c);
+                e = verifyCreate(eventFactory, name, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -85,19 +85,20 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             apply(e);
         }
 
-        protected PlayerEvent.PlayerCreated verifyCreate(java.util.function.Supplier<PlayerEvent.PlayerCreated> eventFactory, PlayerCommands.Create c) {
+        protected PlayerEvent.PlayerCreated verifyCreate(java.util.function.Supplier<PlayerEvent.PlayerCreated> eventFactory, String name, PlayerCommands.Create c) {
+            String Name = name;
 
             PlayerEvent.PlayerCreated e = (PlayerEvent.PlayerCreated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.player.CreateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, PlayerState.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, String.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), name, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.player;
 //
 //public class CreateLogic {
-//    public static PlayerEvent.PlayerCreated verify(java.util.function.Supplier<PlayerEvent.PlayerCreated> eventFactory, PlayerState playerState, VerificationContext verificationContext) {
+//    public static PlayerEvent.PlayerCreated verify(java.util.function.Supplier<PlayerEvent.PlayerCreated> eventFactory, PlayerState playerState, String name, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -149,10 +150,11 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
            
 
-        protected AbstractPlayerEvent.PlayerCreated newPlayerCreated(Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractPlayerEvent.PlayerCreated newPlayerCreated(String name, Long offChainVersion, String commandId, String requesterId) {
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.PlayerCreated e = new AbstractPlayerEvent.PlayerCreated();
 
+            e.setName(name);
             e.setOwner(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);

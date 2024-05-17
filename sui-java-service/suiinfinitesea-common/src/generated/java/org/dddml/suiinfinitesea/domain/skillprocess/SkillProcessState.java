@@ -36,6 +36,8 @@ public interface SkillProcessState extends VersionedSuiMoveObject
 
     ItemIdQuantityPairs getProductionMaterials();
 
+    Long getBatchSize();
+
     Long getOffChainVersion();
 
     String getCreatedBy();
@@ -68,6 +70,8 @@ public interface SkillProcessState extends VersionedSuiMoveObject
         void setEnergyVault(java.math.BigInteger energyVault);
 
         void setProductionMaterials(ItemIdQuantityPairs productionMaterials);
+
+        void setBatchSize(Long batchSize);
 
         void setOffChainVersion(Long offChainVersion);
 

@@ -89,6 +89,19 @@ public class SkillProcessCommands {
         }
 
         /**
+         * Batch Size
+         */
+        private Long batchSize;
+
+        public Long getBatchSize() {
+            return this.batchSize;
+        }
+
+        public void setBatchSize(Long batchSize) {
+            this.batchSize = batchSize;
+        }
+
+        /**
          * Player
          */
         private String player;
@@ -446,6 +459,19 @@ public class SkillProcessCommands {
 
         public void setSkillProcessId(SkillProcessId skillProcessId) {
             this.skillProcessId = skillProcessId;
+        }
+
+        /**
+         * Batch Size
+         */
+        private Long batchSize;
+
+        public Long getBatchSize() {
+            return this.batchSize;
+        }
+
+        public void setBatchSize(Long batchSize) {
+            this.batchSize = batchSize;
         }
 
         /**

@@ -491,6 +491,7 @@ public class M {
             "owner",
             "level",
             "experience",
+            "name",
             "version",
             "offChainVersion",
             "createdBy",
@@ -508,6 +509,7 @@ public class M {
             "String",
             "Integer",
             "Long",
+            "String",
             "BigInteger",
             "Long",
             "String",
@@ -540,6 +542,8 @@ public class M {
         aliasMap.put("Level", "level");
         aliasMap.put("experience", "experience");
         aliasMap.put("Experience", "experience");
+        aliasMap.put("name", "name");
+        aliasMap.put("Name", "name");
         aliasMap.put("version", "version");
         aliasMap.put("Version", "version");
         aliasMap.put("offChainVersion", "offChainVersion");
@@ -604,6 +608,7 @@ public class M {
             "completed",
             "endedAt",
             "energyVault",
+            "batchSize",
             "version",
             "offChainVersion",
             "createdBy",
@@ -624,6 +629,7 @@ public class M {
             "Boolean",
             "BigInteger",
             "java.math.BigInteger",
+            "Long",
             "BigInteger",
             "Long",
             "String",
@@ -661,6 +667,8 @@ public class M {
         aliasMap.put("EndedAt", "endedAt");
         aliasMap.put("energyVault", "energyVault");
         aliasMap.put("EnergyVault", "energyVault");
+        aliasMap.put("batchSize", "batchSize");
+        aliasMap.put("BatchSize", "batchSize");
         aliasMap.put("version", "version");
         aliasMap.put("Version", "version");
         aliasMap.put("offChainVersion", "offChainVersion");

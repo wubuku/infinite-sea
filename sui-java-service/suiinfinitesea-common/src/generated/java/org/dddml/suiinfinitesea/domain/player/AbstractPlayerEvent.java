@@ -219,6 +219,18 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
             return "PlayerCreated";
         }
 
+        public String getName() {
+            Object val = getDynamicProperties().get("name");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setName(String value) {
+            getDynamicProperties().put("name", value);
+        }
+
         public String getOwner() {
             Object val = getDynamicProperties().get("owner");
             if (val instanceof String) {

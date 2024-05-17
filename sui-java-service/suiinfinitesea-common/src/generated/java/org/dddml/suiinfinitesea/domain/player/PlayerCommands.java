@@ -38,6 +38,19 @@ public class PlayerCommands {
         }
 
         /**
+         * Name
+         */
+        private String name;
+
+        public String getName() {
+            return this.name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        /**
          * Off Chain Version
          */
         private Long offChainVersion;

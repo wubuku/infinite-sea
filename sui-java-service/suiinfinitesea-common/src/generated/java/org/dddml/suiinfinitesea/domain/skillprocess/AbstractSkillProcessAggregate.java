@@ -119,21 +119,22 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
         }
            
 
-        protected SkillProcessEvent.ProductionProcessStarted verifyStartProduction(java.util.function.Supplier<SkillProcessEvent.ProductionProcessStarted> eventFactory, String player, SkillTypeItemIdPair itemProduction, SkillProcessCommands.StartProduction c) {
+        protected SkillProcessEvent.ProductionProcessStarted verifyStartProduction(java.util.function.Supplier<SkillProcessEvent.ProductionProcessStarted> eventFactory, Long batchSize, String player, SkillTypeItemIdPair itemProduction, SkillProcessCommands.StartProduction c) {
+            Long BatchSize = batchSize;
             String Player = player;
             SkillTypeItemIdPair ItemProduction = itemProduction;
 
             SkillProcessEvent.ProductionProcessStarted e = (SkillProcessEvent.ProductionProcessStarted) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.skillprocess.StartProductionLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), player, itemProduction, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, Long.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), batchSize, player, itemProduction, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.skillprocess;
 //
 //public class StartProductionLogic {
-//    public static SkillProcessEvent.ProductionProcessStarted verify(java.util.function.Supplier<SkillProcessEvent.ProductionProcessStarted> eventFactory, SkillProcessState skillProcessState, String player, SkillTypeItemIdPair itemProduction, VerificationContext verificationContext) {
+//    public static SkillProcessEvent.ProductionProcessStarted verify(java.util.function.Supplier<SkillProcessEvent.ProductionProcessStarted> eventFactory, SkillProcessState skillProcessState, Long batchSize, String player, SkillTypeItemIdPair itemProduction, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -211,21 +212,22 @@ public abstract class AbstractSkillProcessAggregate extends AbstractAggregate im
         }
            
 
-        protected SkillProcessEvent.CreationProcessStarted verifyStartCreation(java.util.function.Supplier<SkillProcessEvent.CreationProcessStarted> eventFactory, String player, SkillTypeItemIdPair itemCreation, SkillProcessCommands.StartCreation c) {
+        protected SkillProcessEvent.CreationProcessStarted verifyStartCreation(java.util.function.Supplier<SkillProcessEvent.CreationProcessStarted> eventFactory, Long batchSize, String player, SkillTypeItemIdPair itemCreation, SkillProcessCommands.StartCreation c) {
+            Long BatchSize = batchSize;
             String Player = player;
             SkillTypeItemIdPair ItemCreation = itemCreation;
 
             SkillProcessEvent.CreationProcessStarted e = (SkillProcessEvent.CreationProcessStarted) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.skillprocess.StartCreationLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), player, itemCreation, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, SkillProcessState.class, Long.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), batchSize, player, itemCreation, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.skillprocess;
 //
 //public class StartCreationLogic {
-//    public static SkillProcessEvent.CreationProcessStarted verify(java.util.function.Supplier<SkillProcessEvent.CreationProcessStarted> eventFactory, SkillProcessState skillProcessState, String player, SkillTypeItemIdPair itemCreation, VerificationContext verificationContext) {
+//    public static SkillProcessEvent.CreationProcessStarted verify(java.util.function.Supplier<SkillProcessEvent.CreationProcessStarted> eventFactory, SkillProcessState skillProcessState, Long batchSize, String player, SkillTypeItemIdPair itemCreation, VerificationContext verificationContext) {
 //    }
 //}
 
