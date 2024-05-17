@@ -61,6 +61,7 @@ module infinite_sea::skill_process_aggregate {
 
     public fun start_production(
         skill_process: &mut skill_process::SkillProcess,
+        batch_size: u32,
         player: &mut Player,
         item_production: &ItemProduction,
         clock: &Clock,
@@ -68,6 +69,7 @@ module infinite_sea::skill_process_aggregate {
         ctx: &mut tx_context::TxContext,
     ) {
         let production_process_started = skill_process_start_production_logic::verify(
+            batch_size,
             player,
             item_production,
             clock,
@@ -177,6 +179,7 @@ module infinite_sea::skill_process_aggregate {
 
     public fun start_creation(
         skill_process: &mut skill_process::SkillProcess,
+        batch_size: u32,
         player: &mut Player,
         item_creation: &ItemCreation,
         clock: &Clock,
@@ -184,6 +187,7 @@ module infinite_sea::skill_process_aggregate {
         ctx: &mut tx_context::TxContext,
     ) {
         let creation_process_started = skill_process_start_creation_logic::verify(
+            batch_size,
             player,
             item_creation,
             clock,

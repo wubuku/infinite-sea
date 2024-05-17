@@ -41,6 +41,10 @@ aggregates:
         description: "Actual input materials for production"
         defaultLogic:
           Move: "std::option::none()"
+      BatchSize:
+        type: u32
+        defaultLogic:
+          Move: "1"
 
     methods:
       Create:
@@ -79,6 +83,9 @@ aggregates:
 
       StartProduction:
         inheritsFrom: SkillProcessTemplate.StartProduction
+        parameters:
+          BatchSize:
+            type: u32
         event:
           name: ProductionProcessStarted
 
@@ -109,6 +116,9 @@ aggregates:
 
       StartCreation:
         inheritsFrom: SkillProcessTemplate.StartCreation
+        parameters:
+          BatchSize:
+            type: u32
         event:
           name: CreationProcessStarted
 

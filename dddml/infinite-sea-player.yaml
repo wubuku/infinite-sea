@@ -36,6 +36,9 @@ aggregates:
         type: u32
         defaultLogic:
           Move: "0"
+      Name:
+        type: String
+        length: 50
       ClaimedIsland:
         type: Coordinates
         optional: true
@@ -49,9 +52,6 @@ aggregates:
       #    Move: "std::vector::empty()"
       #Items:
       #  itemType: PlayerItem
-      #Nickname:
-      #  type: AsciiString
-      #  length: 50
       #Intro:
       #  type: String
       #  length: 350
@@ -68,6 +68,9 @@ aggregates:
     methods:
       Create:
         isCreationCommand: true
+        parameters:
+          Name:
+            type: String
         event:
           isObjectShared: true # Share the object after created.
           name: PlayerCreated

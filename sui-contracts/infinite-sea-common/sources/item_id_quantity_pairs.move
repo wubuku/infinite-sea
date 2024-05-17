@@ -25,6 +25,14 @@ module infinite_sea_common::item_id_quantity_pairs {
         item_id_quantity_pairs
     }
 
+    public fun new_by_vector(items: vector<ItemIdQuantityPair>):ItemIdQuantityPairs {
+        let item_id_quantity_pairs = ItemIdQuantityPairs {
+            items,
+        };
+        validate(&item_id_quantity_pairs);
+        item_id_quantity_pairs
+    }
+
     fun validate(item_id_quantity_pairs: &ItemIdQuantityPairs) {
         let _ = item_id_quantity_pairs;
     }

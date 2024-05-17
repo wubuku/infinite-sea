@@ -15,16 +15,18 @@ module infinite_sea::skill_process_service {
 
     public entry fun start_creation(
         skill_process: &mut SkillProcess,
+        batch_size: u32,
         player: &mut Player,
         item_creation: &ItemCreation,
         clock: &Clock,
         energy: Coin<ENERGY>,
         ctx: &mut tx_context::TxContext,
     ) {
-        let energy_cost = item_creation::energy_cost(item_creation);
+        let energy_cost = item_creation::energy_cost(item_creation) * (batch_size as u64);
         let energy_b = coin_util::split_up_and_into_balance(energy, energy_cost, ctx);
         skill_process_aggregate::start_creation(
             skill_process,
+            batch_size,
             player,
             item_creation,
             clock,
@@ -35,16 +37,18 @@ module infinite_sea::skill_process_service {
 
     public entry fun start_production(
         skill_process: &mut SkillProcess,
+        batch_size: u32,
         player: &mut Player,
         item_production: &ItemProduction,
         clock: &Clock,
         energy: Coin<ENERGY>,
         ctx: &mut tx_context::TxContext,
     ) {
-        let energy_cost = item_production::energy_cost(item_production);
+        let energy_cost = item_production::energy_cost(item_production) * (batch_size as u64);
         let energy_b = coin_util::split_up_and_into_balance(energy, energy_cost, ctx);
         skill_process_aggregate::start_production(
             skill_process,
+            batch_size,
             player,
             item_production,
             clock,

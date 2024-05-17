@@ -66,6 +66,7 @@ module infinite_sea::skill_process {
         ended_at: u64,
         energy_vault: Balance<ENERGY>,
         production_materials: Option<ItemIdQuantityPairs>,
+        batch_size: u32,
     }
 
     public fun id(skill_process: &SkillProcess): object::ID {
@@ -136,6 +137,14 @@ module infinite_sea::skill_process {
         skill_process.production_materials = production_materials;
     }
 
+    public fun batch_size(skill_process: &SkillProcess): u32 {
+        skill_process.batch_size
+    }
+
+    public(friend) fun set_batch_size(skill_process: &mut SkillProcess, batch_size: u32) {
+        skill_process.batch_size = batch_size;
+    }
+
     fun new_skill_process(
         skill_process_id: SkillProcessId,
         ctx: &mut TxContext,
@@ -151,6 +160,7 @@ module infinite_sea::skill_process {
             ended_at: 0,
             energy_vault: sui::balance::zero(),
             production_materials: std::option::none(),
+            batch_size: 1,
         }
     }
 
@@ -184,6 +194,7 @@ module infinite_sea::skill_process {
         id: object::ID,
         skill_process_id: SkillProcessId,
         version: u64,
+        batch_size: u32,
         item_id: u32,
         energy_cost: u64,
         started_at: u64,
@@ -197,6 +208,10 @@ module infinite_sea::skill_process {
 
     public fun production_process_started_skill_process_id(production_process_started: &ProductionProcessStarted): SkillProcessId {
         production_process_started.skill_process_id
+    }
+
+    public fun production_process_started_batch_size(production_process_started: &ProductionProcessStarted): u32 {
+        production_process_started.batch_size
     }
 
     public fun production_process_started_item_id(production_process_started: &ProductionProcessStarted): u32 {
@@ -221,6 +236,7 @@ module infinite_sea::skill_process {
 
     public(friend) fun new_production_process_started(
         skill_process: &SkillProcess,
+        batch_size: u32,
         item_id: u32,
         energy_cost: u64,
         started_at: u64,
@@ -231,6 +247,7 @@ module infinite_sea::skill_process {
             id: id(skill_process),
             skill_process_id: skill_process_id(skill_process),
             version: version(skill_process),
+            batch_size,
             item_id,
             energy_cost,
             started_at,
@@ -462,6 +479,7 @@ module infinite_sea::skill_process {
         id: object::ID,
         skill_process_id: SkillProcessId,
         version: u64,
+        batch_size: u32,
         item_id: u32,
         energy_cost: u64,
         resource_cost: u32,
@@ -475,6 +493,10 @@ module infinite_sea::skill_process {
 
     public fun creation_process_started_skill_process_id(creation_process_started: &CreationProcessStarted): SkillProcessId {
         creation_process_started.skill_process_id
+    }
+
+    public fun creation_process_started_batch_size(creation_process_started: &CreationProcessStarted): u32 {
+        creation_process_started.batch_size
     }
 
     public fun creation_process_started_item_id(creation_process_started: &CreationProcessStarted): u32 {
@@ -499,6 +521,7 @@ module infinite_sea::skill_process {
 
     public(friend) fun new_creation_process_started(
         skill_process: &SkillProcess,
+        batch_size: u32,
         item_id: u32,
         energy_cost: u64,
         resource_cost: u32,
@@ -509,6 +532,7 @@ module infinite_sea::skill_process {
             id: id(skill_process),
             skill_process_id: skill_process_id(skill_process),
             version: version(skill_process),
+            batch_size,
             item_id,
             energy_cost,
             resource_cost,
@@ -650,6 +674,7 @@ module infinite_sea::skill_process {
             ended_at: _ended_at,
             energy_vault,
             production_materials: _production_materials,
+            batch_size: _batch_size,
         } = skill_process;
         object::delete(id);
         sui::balance::destroy_zero(energy_vault);

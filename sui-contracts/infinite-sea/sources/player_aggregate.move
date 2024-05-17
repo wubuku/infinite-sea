@@ -12,6 +12,7 @@ module infinite_sea::player_aggregate {
     use infinite_sea::player_create_logic;
     use infinite_sea::roster::RosterTable;
     use infinite_sea_common::coordinates::{Self, Coordinates};
+    use std::string::String;
     use sui::clock::Clock;
     use sui::tx_context;
 
@@ -28,9 +29,11 @@ module infinite_sea::player_aggregate {
     const EInvalidPublisher: u64 = 50;
 
     public entry fun create(
+        name: String,
         ctx: &mut tx_context::TxContext,
     ) {
         let player_created = player_create_logic::verify(
+            name,
             ctx,
         );
         let player = player_create_logic::mutate(

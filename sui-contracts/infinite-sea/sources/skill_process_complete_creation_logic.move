@@ -47,9 +47,10 @@ module infinite_sea::skill_process_complete_creation_logic {
         let ended_at = clock::timestamp_ms(clock) / 1000;
         assert!(ended_at >= started_at + creation_time, EStillInProgress);
 
+        let batch_size = skill_process::batch_size(skill_process);
         let successful = true; //todo always successful for now
-        let quantity = item_creation::base_quantity(item_creation);
-        let increased_experience = item_creation::base_experience(item_creation);
+        let quantity = item_creation::base_quantity(item_creation) * batch_size;
+        let increased_experience = item_creation::base_experience(item_creation) * batch_size;
         let new_level = experience_table_util::calculate_new_level(player, experience_table, increased_experience);
         skill_process::new_creation_process_completed(
             skill_process,

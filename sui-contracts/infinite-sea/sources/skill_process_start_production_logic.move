@@ -6,6 +6,7 @@ module infinite_sea::skill_process_start_production_logic {
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_id_quantity_pairs;
     use infinite_sea_common::item_production::{Self, ItemProduction};
+    use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::player::{Self, Player};
     use infinite_sea::player_properties;
@@ -25,6 +26,7 @@ module infinite_sea::skill_process_start_production_logic {
     const EItemProduceIndividuals: u64 = 24;
 
     public(friend) fun verify(
+        batch_size: u32,
         player: &mut Player,
         item_production: &ItemProduction,
         clock: &Clock,
@@ -48,16 +50,18 @@ module infinite_sea::skill_process_start_production_logic {
 
         let base_creation_time = item_production::base_creation_time(item_production);
         let energy_cost = balance::value(energy);
-        assert!(energy_cost >= item_production::energy_cost(item_production), ENotEnoughEnergy);
-        let creation_time = base_creation_time; // todo level-based or XXX-based creation time calculation?
-        let production_materials = item_production::production_materials(item_production);
+        assert!(energy_cost >= item_production::energy_cost(item_production) * (batch_size as u64), ENotEnoughEnergy);
+        let creation_time = base_creation_time * (batch_size as u64); // todo level-based or XXX-based creation time calculation?
+        let production_materials = sorted_vector_util::item_id_quantity_pairs_multiply(
+            item_id_quantity_pairs::borrow_items(&item_production::production_materials(item_production)), batch_size);
         skill_process::new_production_process_started(
             skill_process,
+            batch_size,
             item_id,
             energy_cost,
             clock::timestamp_ms(clock) / 1000,
             creation_time,
-            production_materials,
+            item_id_quantity_pairs::new_by_vector(production_materials),
         )
     }
 
@@ -77,11 +81,13 @@ module infinite_sea::skill_process_start_production_logic {
         let production_materials = skill_process::production_process_started_production_materials(
             production_process_started
         );
+        let batch_size = skill_process::production_process_started_batch_size(production_process_started);
         skill_process::set_item_id(skill_process, item_id);
         skill_process::set_started_at(skill_process, started_at);
         skill_process::set_creation_time(skill_process, creation_time);
         skill_process::set_completed(skill_process, false);
         skill_process::set_ended_at(skill_process, 0);
+        skill_process::set_batch_size(skill_process, batch_size);
 
         let energy_vault = skill_process::borrow_mut_energy_vault(skill_process);
         balance::join(energy_vault, energy);

@@ -7,6 +7,7 @@ module infinite_sea::player {
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
     use std::option::{Self, Option};
+    use std::string::String;
     use sui::event;
     use sui::object::{Self, UID};
     use sui::transfer;
@@ -40,6 +41,7 @@ module infinite_sea::player {
         owner: address,
         level: u16,
         experience: u32,
+        name: String,
         claimed_island: Option<Coordinates>,
         inventory: vector<ItemIdQuantityPair>,
     }
@@ -76,6 +78,15 @@ module infinite_sea::player {
         player.experience = experience;
     }
 
+    public fun name(player: &Player): String {
+        player.name
+    }
+
+    public(friend) fun set_name(player: &mut Player, name: String) {
+        assert!(std::string::length(&name) <= 50, EDataTooLong);
+        player.name = name;
+    }
+
     public fun claimed_island(player: &Player): Option<Coordinates> {
         player.claimed_island
     }
@@ -102,15 +113,18 @@ module infinite_sea::player {
 
     public(friend) fun new_player(
         owner: address,
+        name: String,
         inventory: vector<ItemIdQuantityPair>,
         ctx: &mut TxContext,
     ): Player {
+        assert!(std::string::length(&name) <= 50, EDataTooLong);
         Player {
             id: object::new(ctx),
             version: 0,
             owner,
             level: 1,
             experience: 0,
+            name,
             claimed_island: std::option::none(),
             inventory,
         }
@@ -118,6 +132,7 @@ module infinite_sea::player {
 
     struct PlayerCreated has copy, drop {
         id: option::Option<object::ID>,
+        name: String,
         owner: address,
     }
 
@@ -129,15 +144,21 @@ module infinite_sea::player {
         player_created.id = option::some(id);
     }
 
+    public fun player_created_name(player_created: &PlayerCreated): String {
+        player_created.name
+    }
+
     public fun player_created_owner(player_created: &PlayerCreated): address {
         player_created.owner
     }
 
     public(friend) fun new_player_created(
+        name: String,
         owner: address,
     ): PlayerCreated {
         PlayerCreated {
             id: option::none(),
+            name,
             owner,
         }
     }
@@ -225,6 +246,7 @@ module infinite_sea::player {
             owner: _owner,
             level: _level,
             experience: _experience,
+            name: _name,
             claimed_island: _claimed_island,
             inventory: _inventory,
         } = player;

@@ -41,6 +41,27 @@ module infinite_sea_common::sorted_vector_util {
         items
     }
 
+    public fun item_id_quantity_pairs_multiply(
+        item_id_quantity_pairs: &vector<ItemIdQuantityPair>,
+        multiplier: u32,
+    ): vector<ItemIdQuantityPair> {
+        let items = std::vector::empty();
+        let l = std::vector::length(item_id_quantity_pairs);
+        let i = 0;
+        while (i < l) {
+            let pair = *std::vector::borrow(item_id_quantity_pairs, i);
+            let item_id = infinite_sea_common::item_id_quantity_pair::item_id(&pair);
+            let quantity = infinite_sea_common::item_id_quantity_pair::quantity(&pair);
+            insert_or_add_item_id_quantity_pair(
+                &mut items,
+                infinite_sea_common::item_id_quantity_pair::new(item_id, quantity * multiplier)
+            );
+            i = i + 1;
+        };
+        items
+    }
+
+
     /// "merged" is a vector already sorted in ascending order by "item_id",
     /// merge the "other" vector into "merged" while maintaining its order.
     public fun merge_item_id_quantity_pairs(
