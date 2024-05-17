@@ -201,6 +201,15 @@ valueObjects:
           Move: >-
             let items = infinite_sea_common::sorted_vector_util::new_item_id_quantity_pairs(item_id_list, item_quantity_list);
                     {_INSTANTIATE_STRUCT_}
+      NewByVector:
+        isConstructor: true
+        parameters:
+          Items:
+            itemType: ItemIdQuantityPair
+        implementationLogic:
+          Move: >-
+            {_INSTANTIATE_STRUCT_}
+
 #        constants:
 #          EEmptyList:
 #            constantExpression:

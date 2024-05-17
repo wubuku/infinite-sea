@@ -6,6 +6,8 @@ services:
           SkillProcess:
             referenceType: SkillProcess
             isMutableReference: true
+          BatchSize:
+            type: u32
           Player:
             referenceType: Player
             isMutableReference: true
@@ -22,6 +24,8 @@ services:
           SkillProcess:
             referenceType: SkillProcess
             isMutableReference: true
+          BatchSize:
+            type: u32
           Player:
             referenceType: Player
             isMutableReference: true

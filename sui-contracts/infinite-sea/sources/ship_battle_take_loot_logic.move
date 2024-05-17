@@ -5,6 +5,7 @@ module infinite_sea::ship_battle_take_loot_logic {
 
     use sui::clock;
     use sui::clock::Clock;
+    use sui::object::ID;
     use sui::object_table;
     use sui::tx_context::TxContext;
     use infinite_sea_common::battle_status;
@@ -58,7 +59,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         assert!(option::is_some(&ship_battle::winner(ship_battle)), EWinnerNotSet);
         let now_time = clock::timestamp_ms(clock) / 1000;
         let winner = option::extract(&mut ship_battle::winner(ship_battle));
-        let winner_roster: &Roster;
+        let winner_roster: &mut Roster;
         let loser_roster: &mut Roster;
         let winner_increased_experience: u32;
         let loser_increased_experience: u32;
@@ -120,6 +121,27 @@ module infinite_sea::ship_battle_take_loot_logic {
             i = i + 1;
         };
         roster::set_ship_ids(loser_roster, ship_ids);
+
+        // Remove ship with 0 health points from the winner roster.
+        let ship_ids = roster::ship_ids(winner_roster);
+        let ships = roster::borrow_mut_ships(winner_roster);
+        let i = 0;
+        let l = vector::length(&ship_ids);
+        let new_ship_ids = vector::empty<ID>();
+        while (i < l) {
+            let ship_id = vector::borrow(&ship_ids, i);
+            let ship = object_table::borrow(ships, *ship_id);
+            if (ship::health_points(ship) == 0) {
+                let ship_obj = object_table::remove(ships, *ship_id);
+                ship::drop_ship(ship_obj); // Maybe remove and drop ship in "mutate" function would be better?
+            } else {
+                vector::push_back(&mut new_ship_ids, *ship_id);
+            };
+            i = i + 1;
+        };
+        roster::set_ship_ids(winner_roster, new_ship_ids);
+        let new_speed = roster_util::calculate_roster_speed(winner_roster);
+        roster::set_speed(winner_roster, new_speed);
 
         let base_experience = roster::base_experience(loser_roster);
         if (roster::environment_owned(loser_roster) && option::is_some(&base_experience)) {
