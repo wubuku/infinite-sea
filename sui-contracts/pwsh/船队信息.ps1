@@ -29,7 +29,7 @@ try {
         return
     }
     $getRosterResultObj = $getRosterResult | ConvertFrom-Json
-    "目标船队编号： $($getRosterResultObj.content.fields.roster_id.fields.sequence_number) " | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Yellow
+    "船队编号： $($getRosterResultObj.content.fields.roster_id.fields.sequence_number) " | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Yellow
     $rosterCurrentShipCount = $getRosterResultObj.content.fields.ships.fields.size
     "目前拥有船只数量：$rosterCurrentShipCount 只。" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Yellow
     $shipIds = $getRosterResultObj.content.fields.ship_ids
@@ -84,8 +84,8 @@ foreach ($shipId in $shipIds) {
             return
         }
         $shipObj = $shipResult | ConvertFrom-Json
-        "健康点(attack): $($shipObj.content.fields.attack)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
-        "攻击(speed): $($shipObj.content.fields.speed)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
+        "健康点(health_points): $($shipObj.content.fields.health_points)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
+        "攻击(attack): $($shipObj.content.fields.attack)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
         "防御值(protection): $($shipObj.content.fields.protection)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
         "速度(speed): $($shipObj.content.fields.speed)" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
         $items = $shipObj.content.fields.building_expenses.fields.items
