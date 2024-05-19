@@ -1,12 +1,14 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::player_claim_island_logic {
     use std::option;
+    use std::vector;
 
     use sui::clock;
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::roster_status;
+    use infinite_sea_common::skill_type;
     use infinite_sea_common::sorted_vector_util;
 
     use infinite_sea::map::{Self, Map};
@@ -16,6 +18,8 @@ module infinite_sea::player_claim_island_logic {
     use infinite_sea::roster;
     use infinite_sea::roster::RosterTable;
     use infinite_sea::roster_aggregate;
+    use infinite_sea::skill_process::SkillProcessTable;
+    use infinite_sea::skill_process_aggregate;
 
     friend infinite_sea::player_aggregate;
 
@@ -27,6 +31,7 @@ module infinite_sea::player_claim_island_logic {
         coordinates: Coordinates,
         clock: &Clock,
         roster_table: &mut RosterTable,
+        skill_process_table: &mut SkillProcessTable,
         player: &player::Player,
         ctx: &TxContext,
     ): player::IslandClaimed {
@@ -40,6 +45,7 @@ module infinite_sea::player_claim_island_logic {
         island_claimed: &player::IslandClaimed,
         map: &mut Map,
         roster_table: &mut RosterTable,
+        skill_process_table: &mut SkillProcessTable,
         player: &mut player::Player,
         ctx: &mut TxContext, // modify the reference to mutable if needed
     ) {
@@ -65,5 +71,22 @@ module infinite_sea::player_claim_island_logic {
             roster::share_object(r);
             roster_sequence_number = roster_sequence_number + 1;
         };
+
+        // create skill processes after claiming the island
+        let skill_types = vector[
+            skill_type::mining(), skill_type::woodcutting(), skill_type::farming(), skill_type::crafting()
+        ];
+        let i = 0;
+        let l = vector::length(&skill_types);
+        while (i < l) {
+            let skill_type = *vector::borrow(&skill_types, i);
+            let max_seq_number = infinite_sea::skill_process_util::skill_type_max_sequence_number(skill_type);
+            let seq_number = 0;
+            while (seq_number <= max_seq_number) {
+                skill_process_aggregate::create(skill_type, player_id, seq_number, player, skill_process_table, ctx);
+                seq_number = seq_number + 1;
+            };
+            i = i + 1;
+        }
     }
 }

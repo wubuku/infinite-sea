@@ -13,15 +13,15 @@ aggregates:
         - Roster.TakeOutShipInventory
         - ShipBattle.TakeLoot
         - "infinite_sea::player_properties"
-    friends:
-      - SkillProcess.StartProduction
-      - SkillProcess.CompleteProduction
-      - SkillProcess.StartShipProduction
-      - SkillProcess.CompleteShipProduction
-      - SkillProcess.StartCreation
-      - SkillProcess.CompleteCreation
-      #- SkillProcess.StartMutexCreation
-      #- SkillProcess.CompleteMutexCreation
+#    friends:
+#      - SkillProcess.StartProduction
+#      - SkillProcess.CompleteProduction
+#      - SkillProcess.StartShipProduction
+#      - SkillProcess.CompleteShipProduction
+#      - SkillProcess.StartCreation
+#      - SkillProcess.CompleteCreation
+#      #- SkillProcess.StartMutexCreation
+#      #- SkillProcess.CompleteMutexCreation
     id:
       name: Id
       type: UID
@@ -91,6 +91,10 @@ aggregates:
             isIgnoredInEvent: true
           RosterTable:
             referenceType: RosterTable
+            isMutableReference: true
+            isIgnoredInEvent: true
+          SkillProcessTable:
+            referenceType: SkillProcessTable
             isMutableReference: true
             isIgnoredInEvent: true
         event:

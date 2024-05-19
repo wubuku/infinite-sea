@@ -11,17 +11,12 @@ module infinite_sea::player_aggregate {
     use infinite_sea::player_claim_island_logic;
     use infinite_sea::player_create_logic;
     use infinite_sea::roster::RosterTable;
+    use infinite_sea::skill_process::SkillProcessTable;
     use infinite_sea_common::coordinates::{Self, Coordinates};
     use std::string::String;
     use sui::clock::Clock;
     use sui::tx_context;
 
-    friend infinite_sea::skill_process_start_production_logic;
-    friend infinite_sea::skill_process_complete_production_logic;
-    friend infinite_sea::skill_process_start_ship_production_logic;
-    friend infinite_sea::skill_process_complete_ship_production_logic;
-    friend infinite_sea::skill_process_start_creation_logic;
-    friend infinite_sea::skill_process_complete_creation_logic;
     friend infinite_sea::skill_process_service;
     friend infinite_sea::roster_service;
     friend infinite_sea::ship_battle_service;
@@ -52,6 +47,7 @@ module infinite_sea::player_aggregate {
         coordinates_y: u32,
         clock: &Clock,
         roster_table: &mut RosterTable,
+        skill_process_table: &mut SkillProcessTable,
         ctx: &mut tx_context::TxContext,
     ) {
         let coordinates: Coordinates = coordinates::new(
@@ -63,6 +59,7 @@ module infinite_sea::player_aggregate {
             coordinates,
             clock,
             roster_table,
+            skill_process_table,
             player,
             ctx,
         );
@@ -70,6 +67,7 @@ module infinite_sea::player_aggregate {
             &island_claimed,
             map,
             roster_table,
+            skill_process_table,
             player,
             ctx,
         );

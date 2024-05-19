@@ -6,6 +6,8 @@ aggregates:
       CRUD_IT_NO_DELETE: true
       NO_MOVE_EVENT_MODULE: true
       ShouldIssuePublisherObject: true
+    friends:
+      - Player.ClaimIsland
     id:
       name: SkillProcessId
       type: SkillProcessId

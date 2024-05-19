@@ -19,7 +19,7 @@ public interface PlayerAggregate {
 
     void create(String name, Long offChainVersion, String commandId, String requesterId, PlayerCommands.Create c);
 
-    void claimIsland(String map, Coordinates coordinates, String clock, String rosterTable, Long offChainVersion, String commandId, String requesterId, PlayerCommands.ClaimIsland c);
+    void claimIsland(String map, Coordinates coordinates, String clock, String rosterTable, String skillProcessTable, Long offChainVersion, String commandId, String requesterId, PlayerCommands.ClaimIsland c);
 
     void airdrop(Long itemId, Long quantity, Long offChainVersion, String commandId, String requesterId, PlayerCommands.Airdrop c);
 

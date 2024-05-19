@@ -60,8 +60,8 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void claimIsland(String map, Coordinates coordinates, String clock, String rosterTable, Long offChainVersion, String commandId, String requesterId, PlayerCommands.ClaimIsland c) {
-            java.util.function.Supplier<PlayerEvent.IslandClaimed> eventFactory = () -> newIslandClaimed(map, coordinates, clock, rosterTable, offChainVersion, commandId, requesterId);
+        public void claimIsland(String map, Coordinates coordinates, String clock, String rosterTable, String skillProcessTable, Long offChainVersion, String commandId, String requesterId, PlayerCommands.ClaimIsland c) {
+            java.util.function.Supplier<PlayerEvent.IslandClaimed> eventFactory = () -> newIslandClaimed(map, coordinates, clock, rosterTable, skillProcessTable, offChainVersion, commandId, requesterId);
             PlayerEvent.IslandClaimed e;
             try {
                 e = verifyClaimIsland(eventFactory, map, coordinates, c);
@@ -173,7 +173,7 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             return e;
         }
 
-        protected AbstractPlayerEvent.IslandClaimed newIslandClaimed(String map, Coordinates coordinates, String clock, String rosterTable, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractPlayerEvent.IslandClaimed newIslandClaimed(String map, Coordinates coordinates, String clock, String rosterTable, String skillProcessTable, Long offChainVersion, String commandId, String requesterId) {
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.IslandClaimed e = new AbstractPlayerEvent.IslandClaimed();
 

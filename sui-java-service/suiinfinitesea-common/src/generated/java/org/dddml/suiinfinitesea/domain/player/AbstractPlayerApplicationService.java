@@ -55,7 +55,7 @@ public abstract class AbstractPlayerApplicationService implements PlayerApplicat
     }
 
     public void when(PlayerCommands.ClaimIsland c) {
-        update(c, ar -> ar.claimIsland(c.getMap(), c.getCoordinates(), c.getClock(), c.getRosterTable(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+        update(c, ar -> ar.claimIsland(c.getMap(), c.getCoordinates(), c.getClock(), c.getRosterTable(), c.getSkillProcessTable(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public void when(PlayerCommands.Airdrop c) {

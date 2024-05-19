@@ -141,6 +141,19 @@ public class PlayerCommands {
         }
 
         /**
+         * Skill Process Table
+         */
+        private String skillProcessTable;
+
+        public String getSkillProcessTable() {
+            return this.skillProcessTable;
+        }
+
+        public void setSkillProcessTable(String skillProcessTable) {
+            this.skillProcessTable = skillProcessTable;
+        }
+
+        /**
          * Off Chain Version
          */
         private Long offChainVersion;
