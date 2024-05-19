@@ -2,7 +2,7 @@
 $farming = 0
 $woodcutting = 1
 #fishing=2
-#$mining=3
+$mining = 3
 $crafting = 6
 #township=7
 #sailing=8
@@ -27,9 +27,12 @@ $dataJson | Add-Member -MemberType NoteProperty -Name "common" -Value $dataCommo
 $dataJson | Add-Member -MemberType NoteProperty -Name "main" -Value $dataMain
 
 #要不要种一次棉花
-$executeFarming = $false
-#要不要伐木一次？
-$executeWooding = $false
+$testSkillProcessFarming = $true
+#要不要测试伐木进程一次？
+$testSkillProcessWooding = $true
+
+
+$playerName = 'John'
 
 
 
@@ -419,9 +422,6 @@ foreach ($item in $itemArray) {
 }
 "添加了" + $itemArray.Count + "个Item。`n" | Tee-Object $logFile -Append | Write-Host 
 
-#将目录切换到当前文件相同的位置
-Set-Location $startLocation
-
 
 "------------------------------------- 重新发布 infinite-sea -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
@@ -564,13 +564,13 @@ $fileContent | Set-Content $file
 "Move.toml文件更新完成。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host
 
 "`n休息一下，以免不能及时同步..." | Write-Host
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 5
 "休息完成，继续干活...· `n" | Write-Host
 
 "`n创建一个PLAYER..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
 $playId = ""
 try {
-    $result = sui client call --package $mainPackageId --module player_aggregate --function create --gas-budget 11000000 --json
+    $result = sui client call --package $mainPackageId --module player_aggregate --function create --args $playerName --gas-budget 11000000 --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "创建Player时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
@@ -632,9 +632,11 @@ catch {
 
 $claimFile = "$startLocation\claim_island.json"
 
+$rosterIds = @()
+$skillProcessIds = @()
 "`n用户宣称Claim这个小岛($coordinates_x,$coordinates_y)..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
 try {
-    $result = sui client call --package $mainPackageId --module player_aggregate --function claim_island --args $playId $mapId $coordinates_x $coordinates_y $clock $rosterTableId  --gas-budget 44000000 --json
+    $result = sui client call --package $mainPackageId --module player_aggregate --function claim_island --args $playId $mapId $coordinates_x $coordinates_y $clock $rosterTableId $skillProcessTableId --gas-budget 4999000000 --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "调用接口返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
@@ -642,10 +644,17 @@ try {
     }
     $resultObj = $result | ConvertFrom-Json   
     "宣称小岛成功。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor  Yellow 
-    $jsonAgain = $resultObj | ConvertTo-Json
+    foreach ($obj in $resultObj.objectChanges) {
+        if ($obj.objectType -like "*::roster::Roster") {
+            $rosterIds += $obj.objectId
+        }
+        elseif ($obj.objectType -like "*::skill_process::SkillProcess") {
+            $skillProcessIds += $obj.objectId
+        }
+    }
+    #$jsonAgain = $resultObj | ConvertTo-Json
     #$jsonAgain | Tee-Object -FilePath $claimFile -Append 
-    $jsonAgain | Set-Content -Path $claimFile 
-
+    #$jsonAgain | Set-Content -Path $claimFile 
 }
 catch {
     "宣称Claim小岛失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
@@ -653,8 +662,111 @@ catch {
     Set-Location $startLocation 
     return    
 }
+if ($rosterIds.Length -gt 0) {
+    "获取Player的船队信息：" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor  Yellow 
+    $playerRostersFile = "$startLocation\rosters.json"
+    $RosterData = New-Object -TypeName PSObject
+    $resultRosterInfo = ""
+    foreach ($rosterId in $rosterIds) {        
+        try {
+            $resultRosterInfo = sui client object $rosterId --json 
+            if (-not ('System.Object[]' -eq $resultRosterInfo.GetType())) {
+                "获取Roster $rosterId 信息时返回 $resultRosterInfo" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resutJson = $resultRosterInfo | ConvertFrom-Json
+            $sequence_number = $resutJson.content.fields.roster_id.fields.sequence_number
+            "   船队编号： $sequence_number，船队Id: $rosterId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            $RosterData | Add-Member -MemberType NoteProperty -Name $sequence_number -Value $rosterId
+        }
+        catch {
+            "获取船队 $rosterId 信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+            "返回的结果为:$resultRosterInfo" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation
+            return    
+        }
+    }
+    $RosterData | ConvertTo-Json | Tee-Object -FilePath $playerRostersFile | Write-Host -ForegroundColor Green
+}
+else {
+    "没有给Player分配船队？船队数量为0。请检查原因" | Tee-Object -FilePath $logFile -Append  | Write-Host -ForegroundColor Red
+    Set-Location $startLocation
+    return    
+}
 
-if ($executeFarming) {
+$SkillProcessCraftingId = ""
+$SkillProcessFarming1Id = ""
+$SkillProcessFarming2Id = ""
+$SkillProcessMiningId = ""
+$SkillProcessWoodingId = ""
+if ($skillProcessIds.Length -gt 0) {
+    "获取Player的技能信息：" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor  Yellow 
+    $resultSkillInfo = ""
+    foreach ($skillId in $skillProcessIds) {        
+        try {
+            $resultSkillInfo = sui client object $skillId --json 
+            if (-not ('System.Object[]' -eq $resultSkillInfo.GetType())) {
+                "获取技能过程 $skillId 信息时返回 $resultSkillInfo" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resutJson = $resultSkillInfo | ConvertFrom-Json
+            $sequence_number = $resutJson.content.fields.skill_process_id.fields.sequence_number
+            $skill_type = $resutJson.content.fields.skill_process_id.fields.skill_type
+            if ($skill_type -eq $farming) {
+                if ($sequence_number -eq 0) {
+                    $SkillProcessFarming1Id = $skillId
+                    $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessFarming1" -Value $skillId 
+                    "种棉花进程1(Sequence number:$sequence_number,Skill type:$skill_type): $skillId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+                }
+                elseif ($sequence_number -eq 1) {
+                    $SkillProcessFarming2Id = $skillId
+                    $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessFarming2" -Value $skillId 
+                    "种棉花进程2(Sequence number:$sequence_number,Skill type:$skill_type): $skillId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+                }
+                else {
+                    "种棉花？【Sequence number:$sequence_number,Skill type:$skill_type】: $skillId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+                }
+            }
+            elseif ($skill_type -eq $woodcutting) {
+                $SkillProcessWoodingId = $skillId
+                $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessWooding" -Value $skillId 
+                "伐木进程(Sequence number:$sequence_number,Skill type:$skill_type): $skillId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+            }
+            elseif ($skill_type -eq $mining) {
+                $SkillProcessMiningId = $skillId
+                $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessMining" -Value $skillId 
+                "挖矿进程(Sequence number:$sequence_number,Skill type:$skill_type): $skillId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+            }
+            elseif ($skill_type -eq $crafting) {
+                $SkillProcessCraftingId = $skillId
+                $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessCrafting" -Value $skillId 
+                "造船进程(Sequence number:$sequence_number,Skill type:$skill_type): $skillId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+                
+            }
+            else {
+                "错误，无法识别(Sequence number:$sequence_number,Skill type:$skill_type): $skillId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+                Set-Location $startLocation
+            }
+            
+        }
+        catch {
+            "获取技能过程 $skillId 信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+            "返回的结果为:$resultSkillInfo" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation
+            return    
+        }
+    }
+}
+else {
+    "没有给 Player 分配技能吗，请检查原因。" | Tee-Object -FilePath $logFile -Append  | Write-Host -ForegroundColor Red
+    Set-Location $startLocation
+    return    
+}
+
+
+if ($testSkillProcessFarming) {
     "现在开始创建一个配方Item Production,使用棉花种子种植棉花..." | Tee-Object $logFile -Append | Write-Host 
     $itemCottonSeedsId = "[" + $($itemData.ItemCottonSeeds.ItemId) + "]"
     $itemProductionCottonSeedsToCottonId = ''
@@ -688,81 +800,82 @@ if ($executeFarming) {
         return  
     }
 
-    $skillProcessId = ""
-    "`n创建一个生产流程(farming)" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    try {
-        $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $farming $playId '1' $playId $skillProcessTableId --gas-budget 11000000 --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "创建生产流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
-        }
-        $resultObj = $result | ConvertFrom-Json
-        foreach ($object in $resultObj.objectChanges) {
-            if ($object.objectType -like "*skill_process::SkillProcess") {
-                $skillProcessId = $object.objectId
-                $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessFarming" -Value $skillProcessId 
-                "创建成功,SkillProcess Id: $skillProcessId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-                break;   
-            }
-        }
-    }
-    catch {
-        "创建生产流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
-    if ($skillProcessId -eq "") {
-        "虽然执行了创建生产流程的接口，但是没有获取 SkillProcess Id，所以请检查原因。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation 
-        return    
-    }
+    # $skillProcessId = ""
+    # "`n创建一个生产流程(farming)" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    # try {
+    #     $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $farming $playId '1' $playId $skillProcessTableId --gas-budget 11000000 --json
+    #     if (-not ('System.Object[]' -eq $result.GetType())) {
+    #         "创建生产流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    #         Set-Location $startLocation
+    #         return
+    #     }
+    #     $resultObj = $result | ConvertFrom-Json
+    #     foreach ($object in $resultObj.objectChanges) {
+    #         if ($object.objectType -like "*skill_process::SkillProcess") {
+    #             $skillProcessId = $object.objectId
+    #             $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessFarming" -Value $skillProcessId 
+    #             "创建成功,SkillProcess Id: $skillProcessId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+    #             break;   
+    #         }
+    #     }
+    # }
+    # catch {
+    #     "创建生产流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    #     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    #     Set-Location $startLocation 
+    #     return    
+    # }
+    # if ($skillProcessId -eq "") {
+    #     "虽然执行了创建生产流程的接口，但是没有获取 SkillProcess Id，所以请检查原因。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    #     Set-Location $startLocation 
+    #     return    
+    # }
 
+    $batchSize = 1
 
-    "`n开始这个生产流程..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    "`n开始种棉花流程..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     try {
-        $result = sui client call --package $mainPackageId --module skill_process_service --function start_production --args $skillProcessId $playId $itemProductionCottonSeedsToCottonId $clock $energyId --gas-budget 11000000 --json
+        $result = sui client call --package $mainPackageId --module skill_process_service --function start_production --args $SkillProcessFarming1Id $batchSize $playId $itemProductionCottonSeedsToCottonId $clock $energyId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
-            "开始生产流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "开始种棉花流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json    
-        "生产流程已经开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        "种棉花流程已经开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     }
     catch {
-        "开始生产流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "开始种棉花流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
         Set-Location $startLocation 
         return    
     }
 
 
-    "休息一下，因为结束这个生产流程需要等待$costTime 秒钟..." | Write-Host
-    Start-Sleep -Seconds $costTime
+    "休息一下，因为结束种棉花流程需要等待$costTime 秒钟..." | Write-Host
+    Start-Sleep -Seconds ($costTime * $batchSize)
     "休息完成，继续干活...· `n" | Write-Host
 
-    "`n结束这个生产流程..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    "`n结束种棉花流程..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     try {
-        $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_production --args $skillProcessId $playId $itemProductionCottonSeedsToCottonId $experienceTableId $clock --gas-budget 42000000 --json
+        $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_production --args $SkillProcessFarming1Id $playId $itemProductionCottonSeedsToCottonId $experienceTableId $clock --gas-budget 42000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
-            "结束生产流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "结束种棉花流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             Set-Location $startLocation
             return
         }
         $resultObj = $result | ConvertFrom-Json    
-        "生产流程已经结束。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        "种棉花流程已经结束。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     }
     catch {
-        "结束生产流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "结束种棉花流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
         Set-Location $startLocation 
         return    
     }
 }
 
-if ($executeWooding) {
+if ($testSkillProcessWooding) {
     $itemCreationWoodingId = $null
     #伐木一次耗费的时间（秒）
     $woodcuttingTime = 3
@@ -799,35 +912,35 @@ if ($executeWooding) {
     "`nPlayer获得了小岛之后，他拥有了一些伐木资源，他打算伐木...." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
     "那么首先创建一个伐木的Skill Process吧...." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
 
-    $skillProcessWoodingId = $null
-    try {
-        $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $woodcutting $playId '0' $playId $skillProcessTableId --gas-budget 11000000 --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "创建伐木训练过程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
-        }
-        $resultObj = $result | ConvertFrom-Json   
-        foreach ($object in $resultObj.objectChanges) {
-            if ($object.objectType -like "*::skill_process::SkillProcess") {
-                $skillProcessWoodingId = $object.objectId
-                $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessWooding" -Value $skillProcessWoodingId 
-                "伐木训练过程制作完成。 SkillProcessWoodingId Id: $skillProcessWoodingId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-                break;   
-            }
-        } 
-    }
-    catch {
-        "伐木训练过程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
-    if ($null -eq $skillProcessWoodingId) {
-        "SkillProcessWoodingId Id 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation 
-        return    
-    }
+    # $skillProcessWoodingId = $null
+    # try {
+    #     $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $woodcutting $playId '0' $playId $skillProcessTableId --gas-budget 11000000 --json
+    #     if (-not ('System.Object[]' -eq $result.GetType())) {
+    #         "创建伐木训练过程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    #         Set-Location $startLocation
+    #         return
+    #     }
+    #     $resultObj = $result | ConvertFrom-Json   
+    #     foreach ($object in $resultObj.objectChanges) {
+    #         if ($object.objectType -like "*::skill_process::SkillProcess") {
+    #             $skillProcessWoodingId = $object.objectId
+    #             $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessWooding" -Value $skillProcessWoodingId 
+    #             "伐木训练过程制作完成。 SkillProcessWoodingId Id: $skillProcessWoodingId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+    #             break;   
+    #         }
+    #     } 
+    # }
+    # catch {
+    #     "伐木训练过程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    #     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    #     Set-Location $startLocation 
+    #     return    
+    # }
+    # if ($null -eq $skillProcessWoodingId) {
+    #     "SkillProcessWoodingId Id 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    #     Set-Location $startLocation 
+    #     return    
+    # }
 
     "伐木开始前，先看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
     $payerWoodingResouceQuantityBeforeStart = 0
@@ -846,7 +959,7 @@ if ($executeWooding) {
                 $payerWoodingResouceQuantityBeforeStart = $($object.fields.quantity)
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeWoodcutting.ChineseName)[$($itemData.ResourceTypeWoodcutting.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
             }
-            elseif ($($object.fields.item_id -eq $itemData.NormalLogs.ItemId)) {
+            elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
                 $playerLogsQuantityBeforeStart = $($object.fields.quantity)
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.NormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
@@ -862,10 +975,10 @@ if ($executeWooding) {
         return    
     }
 
-
+    $batchSize = 1
     "`n伐木开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     try {
-        $result = sui client call --package $mainPackageId --module skill_process_service --function start_creation --args $skillProcessWoodingId $playId $itemCreationWoodingId $clock $energyId --gas-budget 11000000 --json
+        $result = sui client call --package $mainPackageId --module skill_process_service --function start_creation --args $SkillProcessWoodingId $batchSize $playId $itemCreationWoodingId $clock $energyId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "开始伐木时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             Set-Location $startLocation
@@ -900,7 +1013,7 @@ if ($executeWooding) {
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeWoodcutting.ChineseName)[$($itemData.ResourceTypeWoodcutting.Name)]，" +
                 "可以看到数量减少了: " + ($payerWoodingResouceQuantityBeforeStart - $payerWoodingResouceQuantityAfterStart ) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
             }
-            elseif ($($object.fields.item_id -eq $itemData.NormalLogs.ItemId)) {
+            elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
                 $playerLogsQuantityAfterStart = $($object.fields.quantity)
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.NormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
@@ -917,7 +1030,7 @@ if ($executeWooding) {
     }
 
     "`n伐木中...需要等待$woodcuttingTime 秒钟..." | Write-Host
-    Start-Sleep -Seconds $woodcuttingTime
+    Start-Sleep -Seconds ($woodcuttingTime * $batchSize)
     "该收工了...· `n" | Write-Host
 
 
@@ -956,7 +1069,7 @@ if ($executeWooding) {
                 $payerWoodingResouceQuantityAfterFinish = $($object.fields.quantity)
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeWoodcutting.ChineseName)[$($itemData.ResourceTypeWoodcutting.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
             }
-            elseif ($($object.fields.item_id -eq $itemData.NormalLogs.ItemId)) {
+            elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
                 $playerLogsQuantityAfterFinish = $($object.fields.quantity)
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.NormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]，" + 
                 "可以看到数量增加了: " + ($playerLogsQuantityAfterFinish - $playerLogsQuantityBeforeStart) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
@@ -974,7 +1087,6 @@ if ($executeWooding) {
         return    
     }
 }
-
 
 $itemProductionCraftingId = $null
 #造船一次耗费的时间（秒）
@@ -1020,36 +1132,36 @@ if ($null -eq $itemProductionCraftingId) {
     return    
 }
 
-$skillProcessCraftingId = ""
-"`n接着创建一个造船流程(crafting)" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-try {
-    $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $crafting $playId '0' $playId $skillProcessTableId --gas-budget 24000000 --json
-    if (-not ('System.Object[]' -eq $result.GetType())) {
-        "创建生产流程(crafting)返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    $resultObj = $result | ConvertFrom-Json
-    foreach ($object in $resultObj.objectChanges) {
-        if ($object.objectType -like "*skill_process::SkillProcess") {
-            $skillProcessCraftingId = $object.objectId
-            $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessCrafting" -Value $skillProcessCraftingId 
-            "创建成功,SkillProcess Id: $skillProcessCraftingId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-            break;   
-        }
-    }
-}
-catch {
-    "创建生产流程(crafting)失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLocation 
-    return    
-}
-if ($skillProcessCraftingId -eq "") {
-    "虽然执行了创建生产流程(crafting)的接口，但是没有获取 SkillProcess Id，所以请检查原因。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    Set-Location $startLocation 
-    return    
-}
+# $skillProcessCraftingId = ""
+# "`n接着创建一个造船流程(crafting)" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+# try {
+#     $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $crafting $playId '0' $playId $skillProcessTableId --gas-budget 24000000 --json
+#     if (-not ('System.Object[]' -eq $result.GetType())) {
+#         "创建生产流程(crafting)返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     $resultObj = $result | ConvertFrom-Json
+#     foreach ($object in $resultObj.objectChanges) {
+#         if ($object.objectType -like "*skill_process::SkillProcess") {
+#             $skillProcessCraftingId = $object.objectId
+#             $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessCrafting" -Value $skillProcessCraftingId 
+#             "创建成功,SkillProcess Id: $skillProcessCraftingId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+#             break;   
+#         }
+#     }
+# }
+# catch {
+#     "创建生产流程(crafting)失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+#     Set-Location $startLocation 
+#     return    
+# }
+# if ($skillProcessCraftingId -eq "") {
+#     "虽然执行了创建生产流程(crafting)的接口，但是没有获取 SkillProcess Id，所以请检查原因。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#     Set-Location $startLocation 
+#     return    
+# }
 
 
 $dataJson | ConvertTo-Json | Set-Content -Path $dataFile 
