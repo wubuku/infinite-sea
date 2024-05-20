@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost/test7?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
     username: root
-    password: 123456
+    password: qingdao
 #    url: jdbc:mysql://localhost/test2?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
 #    username: root
 

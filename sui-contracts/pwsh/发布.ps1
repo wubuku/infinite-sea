@@ -961,7 +961,7 @@ if ($testSkillProcessWooding) {
             }
             elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
                 $playerLogsQuantityBeforeStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.NormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
             else {
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
@@ -1015,7 +1015,7 @@ if ($testSkillProcessWooding) {
             }
             elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
                 $playerLogsQuantityAfterStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.NormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
             else {
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
@@ -1071,7 +1071,7 @@ if ($testSkillProcessWooding) {
             }
             elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
                 $playerLogsQuantityAfterFinish = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.NormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]，" + 
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]，" + 
                 "可以看到数量增加了: " + ($playerLogsQuantityAfterFinish - $playerLogsQuantityBeforeStart) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             
             }
