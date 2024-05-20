@@ -502,6 +502,69 @@ curl -X GET "http://{domain.port}/api/Maps/{main.map}" -H "accept: application/j
 
 ### 玩家
 
+创建玩家（Player)
+
+* 其中 {playName}为玩家名称
+
+```
+sui client call --package {main.PackageId} --module player_aggregate --function create --args {playerName} --gas-budget 11000000 --json
+```
+
+如果成功，将得到下列 JSON 格式的响应，找到如下所示部分：
+
+```json
+{
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 37846616
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::player::Player",
+      "objectId": "0x08bd581011fb1018d1f8d4cac006d05f7008a16d3f3a47f867fcc679d33a74a5",
+      "version": "37846616",
+      "digest": "5XNGiL6DMYNoVnaXZ5yoGmE2iEkJjXbhT7EQajEGJXe9"
+    }
+```
+
+其中之 `objectId` 即为新创建玩家之 Id。
+
+在之后的章节中，我们使用 {playId} 来引用它。
+
+### 占领 (Claim) 岛屿
+
+Player 登录之后，可以对无人占领的岛屿进行占领(Claim)。
+
+```json
+sui client call --package {main.PackageId} \
+--module player_aggregate \
+--function claim_island \
+--args {playId} \
+{main.Map} \
+{coordinates_x} \
+{coordinates_y} \
+{clock} \
+{main.RosterTable} \
+{main.SkillProcessTable} 
+--gas-budget 4999000000 --json
+```
+
+* {main.PackageId} main合约之包 Id
+* {playId} 玩家 Id
+* {main.map} main合约发布时得到的地图Id
+* {coordinates_x} Claim的岛屿的横坐标
+* {coordinates_y} Claim的岛屿的纵坐标
+* {clock} 当前时间，采用固定值 `0x6`
+* {main.RosterTable} main 合约发布时得到的所有船队的 Table 的 Id，该 Table 中包含了所有玩家以及环境生成的所有船队，其 Key 为（玩家Id + 船队序号[0-4])
+* {main.SkillProcessTable} main合约发布时得到的所有技能流程 Table，该 Table 中包含了所有玩家的所能执行的所有流程（Farming,WoodCutting,Mining,Scrafting)，其 Key 为(玩家Id + SkillTypeId)
+
+
+
+
+
+
+
 
 
 ### 以下先忽略-----------------------------------
