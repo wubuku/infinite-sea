@@ -438,6 +438,9 @@ sui client object {mapLocationId} --json
 
 `resources`中又包含 `fields`属性，其中 `item_id`为资源Id，`item_id:2`表示“棉花种子”,`quantity`为该资源的数量。
 
+
+### 以下先忽略-----------------------------------
+
 ### 创建 Item 生产配方
 
 该函数的参数：
