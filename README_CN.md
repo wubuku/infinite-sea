@@ -235,8 +235,7 @@ wubuku/dddappp:0.0.1 \
 
 ### <a id="map"></a>地图
 
-使用以下 CLI 命令可以得到地图的相关信息：
-[](https://)
+使用以下 CLI 命令可以得到地图的相关信息(SUI)：
 
 ```shell
 sui client object {main.map} --json
@@ -284,7 +283,7 @@ sui client object {main.map} --json
 
 我们主要关注其中的 `content.locations`属性部分，该部分表示地图上目前已经添加的岛屿。
 
-使用curl执行以下请求：
+使用 curl 执行以下请求(SUI)：
 
 ```
 curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":[$content.locaions.fields.id.id]}' https://fullnode.testnet.sui.io/
@@ -334,7 +333,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"me
 
 表明在地图上中存在两个岛屿，它们的坐标分别是（51,51）和(50,50)。对象类型为：{main.packageId}::map_location::MapLocation，对象标识(id)分别为：0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692 和 0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b。
 
-进一步在控制台执行命令如下：
+进一步在控制台执行命令如下(SUI)：
 
 ```
 sui client object {mapLocationId} --json
@@ -437,6 +436,72 @@ sui client object {mapLocationId} --json
 其中之 `fileds`表示其坐标位置，`gathered_at`表示上一次收集资源的时间，`occupied_by`表示此岛屿目前被谁占领，如果没有呗占领则为 `null`，否则为玩家(Player)之Id，`resouces`为该岛屿目前所拥有的资源列表。
 
 `resources`中又包含 `fields`属性，其中 `item_id`为资源Id，`item_id:2`表示“棉花种子”,`quantity`为该资源的数量。
+
+上面一系列的查询操作，均是在链上(SUI)操作完成，可以看到比较繁琐。
+
+下面我们使用链下（indexer) 的 Java-Service服务，根据 Map 的 Id 直接查询，请求如下：
+
+```curl
+curl -X GET "http://{domain.port}/api/Maps/{main.map}" -H "accept: application/json"
+```
+
+```json
+{
+  "id": "0xf36cfa34890b5f6845f538bdcb678e3822443c9b1f4f700db2a66a127d6d7162",
+  "version": 4,
+  "offChainVersion": 1,
+  "locations": [
+    {
+      "coordinates": {
+        "x": 50,
+        "y": 50
+      },
+      "type": 0,
+      "occupiedBy": "0x05c6464186392942be5949947b2830a17343ce66b5bae374d3345c5a05eb1b16",
+      "gatheredAt": 1716178988,
+      "offChainVersion": 4,
+      "mapId": "0xf36cfa34890b5f6845f538bdcb678e3822443c9b1f4f700db2a66a127d6d7162"
+    },
+    {
+      "coordinates": {
+        "x": 60,
+        "y": 60
+      },
+      "type": 0,
+      "gatheredAt": 0,
+      "offChainVersion": 0,
+      "mapId": "0xf36cfa34890b5f6845f538bdcb678e3822443c9b1f4f700db2a66a127d6d7162",
+      "resources": [
+        {
+          "itemId": 2,
+          "quantity": 200
+        },
+        {
+          "itemId": 2000000003,
+          "quantity": 200
+        },
+        {
+          "itemId": 2000000001,
+          "quantity": 200
+        }
+      ]
+    }
+  ]
+}
+```
+
+
+
+我们重点关注其 `locations`属性，该属性为数组形式，每一个元素均代表一个坐标点也就是一个岛屿。
+元素中如果显示 `occupiedBy`，表示该岛屿已经被玩家占有，其值为该玩家的Id。
+`gatheredAt`表示岛上资源上次被收集的时间。
+`resources`属性表示该岛上可以被收集的资源（种类和数量，种类请参照 资源常量 ）。
+
+如果某个元素没有显示 `resources` 属性通常表示该岛屿上的资源被玩家收集过，还未生成新的待收集资源。
+
+
+### 玩家
+
 
 
 ### 以下先忽略-----------------------------------
