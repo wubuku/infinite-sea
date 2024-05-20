@@ -26,6 +26,8 @@ $dataJson | Add-Member -MemberType NoteProperty -Name "coin" -Value $dataCoin
 $dataJson | Add-Member -MemberType NoteProperty -Name "common" -Value $dataCommon
 $dataJson | Add-Member -MemberType NoteProperty -Name "main" -Value $dataMain
 
+#要不要测试挖矿
+$testSkillProcessMining = $true
 #要不要种一次棉花
 $testSkillProcessFarming = $true
 #要不要测试伐木进程一次？
@@ -765,9 +767,196 @@ else {
     return    
 }
 
+if ($testSkillProcessMining) {
+    $itemCreationMiningId = $null
+    #挖矿一次耗费的时间（秒）
+    $miningTime = 3
+    $resource_cost = 1
+    $requirements_level = 1
+    $base_quantity = 1
+    $base_experience = 10
+    $energy_cost = 1
+    $success_rate = 100
+    "`n生成挖矿配方 Item Creation..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    try {
+        $result = sui client call --package $commonPackageId --module item_creation_aggregate --function create --args $mining $($itemData.ItemCopperOre.ItemId) $commonPublisherId $resource_cost $requirements_level $base_quantity $base_experience $miningTime $energy_cost $success_rate  $itemCreationTableId --gas-budget 44000000 --json
+        if (-not ('System.Object[]' -eq $result.GetType())) {
+            "制作挖矿配方返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            Set-Location $startLocation
+            return
+        }
+        $resultObj = $result | ConvertFrom-Json   
+        foreach ($object in $resultObj.objectChanges) {
+            if ($object.objectType -like "*::item_creation::ItemCreation") {
+                $itemCreationMiningId = $object.objectId
+                $dataCommon | Add-Member -MemberType NoteProperty -Name "ItemCreationMining" -Value $itemCreationMiningId 
+                "挖矿配方制作完成。 ItemCreationMining Id: $itemCreationWoodingId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+                break;   
+            }
+        } 
+    }
+    catch {
+        "制作挖矿配方失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        Set-Location $startLocation 
+        return    
+    }
+    if ($null -eq $itemCreationMiningId) {
+        "ItemCreationMining Id 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        Set-Location $startLocation 
+        return    
+    }
+    
+    "挖矿开始前，先看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+    $payerMiningResouceQuantityBeforeStart = 0
+    $playerCopperOreQuantityBeforeStart = 0
+    try {
+        $result = sui client object $playId --json
+        if (-not ('System.Object[]' -eq $result.GetType())) {
+            "获取Player信息失败: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            Set-Location $startLocation
+            return
+        }
+        $resultObj = $result | ConvertFrom-Json   
+        #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+        foreach ($object in $resultObj.content.fields.inventory) {
+            if ($($object.fields.item_id -eq $itemData.ResourceTypeMining.ItemId)) {
+                $payerMiningResouceQuantityBeforeStart = $($object.fields.quantity)
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeMining.ChineseName)[$($itemData.ResourceTypeMining.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+            }
+            elseif ($($object.fields.item_id -eq $itemData.ItemCopperOre.ItemId)) {
+                $playerCopperOreQuantityBeforeStart = $($object.fields.quantity)
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemCopperOre.ChineseName)[$($itemData.ItemCopperOre.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+            else {
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+            }
+        } 
+    }
+    catch {
+        "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        Set-Location $startLocation 
+        return    
+    }
+
+    $batchSize = 1
+    "`n开始挖矿..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    try {
+        $result = sui client call --package $mainPackageId --module skill_process_service --function start_creation --args $SkillProcessMiningId $batchSize $playId $itemCreationMiningId $clock $energyId --gas-budget 11000000 --json
+        if (-not ('System.Object[]' -eq $result.GetType())) {
+            "开始挖矿时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            Set-Location $startLocation
+            return
+        }
+        $resultObj = $result | ConvertFrom-Json    
+        "挖矿已经开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    }
+    catch {
+        "开始挖矿失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        Set-Location $startLocation 
+        return    
+    }
+
+
+    "挖矿开始后，再看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+    $payerMiningResouceQuantityAfterStart = 0
+    $playerCopperOreQuantityAfterStart = 0
+    try {
+        $result = sui client object $playId --json
+        if (-not ('System.Object[]' -eq $result.GetType())) {
+            "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            Set-Location $startLocation
+            return
+        }
+        $resultObj = $result | ConvertFrom-Json   
+        #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+        foreach ($object in $resultObj.content.fields.inventory) {
+            if ($($object.fields.item_id -eq $itemData.ResourceTypeMining.ItemId)) {
+                $payerMiningResouceQuantityAfterStart = $($object.fields.quantity)
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeMining.ChineseName)[$($itemData.ResourceTypeMining.Name)]，" +
+                "可以看到数量减少了: " + ($payerMiningResouceQuantityBeforeStart - $payerMiningResouceQuantityAfterStart ) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+            }
+            elseif ($($object.fields.item_id -eq $itemData.ItemCopperOre.ItemId)) {
+                $playerCopperOreQuantityAfterStart = $($object.fields.quantity)
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemCopperOre.ChineseName)[$($itemData.ItemCopperOre.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+            else {
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+            }
+        } 
+    }
+    catch {
+        "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        Set-Location $startLocation 
+        return    
+    }
+
+    "`n挖矿中...需要等待 ($miningTime * $batchSize) 秒钟..." | Write-Host
+    Start-Sleep -Seconds ($miningTime * $batchSize)
+    "该收工了...· `n" | Write-Host
+
+
+    "`n来，现在结束挖矿..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    try {
+        $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_creation --args $SkillProcessMiningId $playId $itemCreationMiningId $experienceTableId $clock --gas-budget 42000000 --json
+        if (-not ('System.Object[]' -eq $result.GetType())) {
+            "结束挖矿流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            Set-Location $startLocation
+            return
+        }
+        $resultObj = $result | ConvertFrom-Json    
+        "挖矿流程已经结束。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    }
+    catch {
+        "结束挖矿流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        Set-Location $startLocation 
+        return    
+    }
+
+
+    "挖矿结束后，再来看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+    $payerMiningResouceQuantityAfterFinish = 0
+    $playerCopperOreQuantityAfterFinish = 0
+    try {
+        $result = sui client object $playId --json
+        if (-not ('System.Object[]' -eq $result.GetType())) {
+            "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            Set-Location $startLocation
+            return
+        }
+        $resultObj = $result | ConvertFrom-Json   
+        foreach ($object in $resultObj.content.fields.inventory) {
+            if ($($object.fields.item_id -eq $itemData.ResourceTypeMining.ItemId)) {
+                $payerMiningResouceQuantityAfterFinish = $($object.fields.quantity)
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeMining.ChineseName)[$($itemData.ResourceTypeMining.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+            }
+            elseif ($($object.fields.item_id -eq $itemData.ItemCopperOre.ItemId)) {
+                $playerCopperOreQuantityAfterFinish = $($object.fields.quantity)
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemCopperOre.ChineseName)[$($itemData.ItemCopperOre.Name)]，" + 
+                "可以看到数量增加了: " + ($playerCopperOreQuantityAfterFinish - $playerCopperOreQuantityBeforeStart) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            
+            }
+            else {
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+            }
+        } 
+    }
+    catch {
+        "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        Set-Location $startLocation 
+        return    
+    }
+
+}
+
 
 if ($testSkillProcessFarming) {
-    "现在开始创建一个配方Item Production,使用棉花种子种植棉花..." | Tee-Object $logFile -Append | Write-Host 
+    "`n现在开始创建一个配方Item Production,使用棉花种子种植棉花..." | Tee-Object $logFile -Append | Write-Host 
     $itemCottonSeedsId = "[" + $($itemData.ItemCottonSeeds.ItemId) + "]"
     $itemProductionCottonSeedsToCottonId = ''
     $costTime = 5
@@ -961,7 +1150,7 @@ if ($testSkillProcessWooding) {
             }
             elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
                 $playerLogsQuantityBeforeStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.ItemNormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
             else {
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
@@ -1015,7 +1204,7 @@ if ($testSkillProcessWooding) {
             }
             elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
                 $playerLogsQuantityAfterStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.ItemNormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
             else {
                 "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
@@ -1071,7 +1260,7 @@ if ($testSkillProcessWooding) {
             }
             elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
                 $playerLogsQuantityAfterFinish = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.NormalLogs.Name)]，" + 
+                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.ItemNormalLogs.Name)]，" + 
                 "可以看到数量增加了: " + ($playerLogsQuantityAfterFinish - $playerLogsQuantityBeforeStart) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             
             }
