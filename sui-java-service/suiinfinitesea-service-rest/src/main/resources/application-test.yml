@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost/test7?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
     username: root
-    password: qingdao
+    password: 123456
 #    url: jdbc:mysql://localhost/test2?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
 #    username: root
 
@@ -23,8 +23,8 @@ sui:
       #url: "https://fullnode.devnet.sui.io/"
       url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "DzbCrgkwdrdADnauKLFFAJsAHnRyX2i2CBmAnBm1A98"
-      default: "FtXxnFjM9apbj5nLHHxTWzMPz4vM7wXBfM7gUQSTvV31"
+      common: "3aL8yvBZpX3GUKfS5UV7ofgjTpeq1kTk8tP8kf4NbFYz"
+      default: "9A63Jsbgtzjk45yPYaLUxhwRX9yziwnGwT2pyDCfR77y"
 #    pull-day-summary-events:
 #      day-summary-created:
 #        fixed-delay: 6000
