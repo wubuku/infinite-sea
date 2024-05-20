@@ -615,7 +615,9 @@ foreach ($resouce in $islandResources) {
 $islandResources_ = "[" + ($islandResourceIds -join ",") + "]"
 $islandResourceQuantities_ = "[" + ($islandResourceQuantities -join ",") + "]"
 try {
-    $result = sui client call --package $mainPackageId --module map_aggregate --function add_island --args $mapId $mapAdminCap $coordinates_x $coordinates_y $islandResources_ $islandResourceQuantities_  --gas-budget 11000000 --json
+    $command = "sui client call --package $mainPackageId --module map_aggregate --function add_island --args $mapId $mapAdminCap $coordinates_x $coordinates_y $islandResources_ $islandResourceQuantities_  --gas-budget 11000000 --json"
+    $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+    $result = Invoke-Expression -Command $command
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "调用接口返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
