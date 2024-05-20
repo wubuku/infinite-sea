@@ -90,7 +90,7 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
 模型文件位于目录 `./dddml` 下。
 
 > **Tip**
-> 
+>
 > About DDDML, here is an introductory article: ["Introducing DDDML: The Key to Low-Code Development for Decentralized Applications"](https://github.com/wubuku/Dapp-LCDP-Demo/blob/main/IntroducingDDDML.md).
 
 ### 生成代码
@@ -165,12 +165,12 @@ wubuku/dddappp:0.0.1 \
 
 ### 技能常量
 
-| 技能    | 常量 | 说明 |
-| ------- | ---- | ---- |
-| farming |    0  | 种植 |
-|  woodcutting  | 1     | 伐木     |
-|mining|3|挖矿|
-|crafing|6|造船|
+| 技能        | 常量 | 说明 |
+| ----------- | ---- | ---- |
+| farming     | 0    | 种植 |
+| woodcutting | 1    | 伐木 |
+| mining      | 3    | 挖矿 |
+| crafing     | 6    | 造船 |
 
 ## 测试应用
 
@@ -236,6 +236,7 @@ wubuku/dddappp:0.0.1 \
 ### <a id="map"></a>地图
 
 使用以下 CLI 命令可以得到地图的相关信息：
+[](https://)
 
 ```shell
 sui client object {main.map} --json
@@ -433,135 +434,9 @@ sui client object {mapLocationId} --json
 
 我们把重点放在 `content.value.fields`属性。
 
-其中之`fileds`表示其坐标位置，`gathered_at`表示上一次收集资源的时间，`occupied_by`表示此岛屿目前被谁占领，如果没有呗占领则为 `null`，否则为玩家(Player)之Id，`resouces`为该岛屿目前所拥有的资源列表。
+其中之 `fileds`表示其坐标位置，`gathered_at`表示上一次收集资源的时间，`occupied_by`表示此岛屿目前被谁占领，如果没有呗占领则为 `null`，否则为玩家(Player)之Id，`resouces`为该岛屿目前所拥有的资源列表。
 
-`resources`中又包含`fields`属性，其中`item_id`为资源Id，`item_id:2`表示“棉花种子”,`quantity`为该资源的数量。
-
-### 发布 common 合约包
-
-发布 `./sui-contracts/infinite-sea-common` 目录下的合约项目包。
-
-记录下输出中的交易摘要，下面的命令我们使用占位符 `{COMMON_PACKAGE_PUBLISH_TRANSACTION_DIGEST}` 来表示它。
-
-记录下输出中的 Package ID，下面的命令使用占位符 `{COMMON_PACKAGE_ID}` 来表示它。
-
-记录下发布交易所创建的这些类型的对象的 ID：
-
-```text
-│  │ ObjectID: {COMMON_PACKAGE_PUBLISHER_ID}
-│  │ ObjectType: 0x2::package::Publisher
-
-│  │ ObjectID: {EXPERIENCE_TABLE_OBJECT_ID}
-│  │ ObjectType: {COMMON_PACKAGE_ID}::experience_table::ExperienceTable
-
-│  │ ObjectID: {ITEM_TABLE_OBJECT_ID}
-│  │ ObjectType: {COMMON_PACKAGE_ID}::item::ItemTable
-
-│  │ ObjectID: {ITEM_PRODUCTION_TABLE_OBJECT_ID}
-│  │ ObjectType: {COMMON_PACKAGE_ID}::item_production::ItemProductionTable
-
-│  │ ObjectID: {ITEM_CREATION_TABLE_OBJECT_ID}
-│  │ ObjectType: {DEFAULT_PACKAGE_ID}::item_creation::ItemCreationTable
-```
-
-### 发布 default 合约包
-
-发布 `./sui-contracts/infinite-sea` 目录下的合约项目包。
-
-记录发布该 default 合约项目的交易摘要，下面的命令使用占位符 `{DEFAULT_PACKAGE_PUBLISH_TRANSACTION_DIGEST}` 来表示它。
-
-记录下该项目的包 ID，下面我们使用占位符 `{DEFAULT_PACKAGE_ID}` 来表示它。
-
-并记录以下类型的对象的 ID：
-
-* 类型为 `0x...::player::PlayerTable` 的对象的 ID，下面我们使用占位符 `{PLAYER_ID}` 来表示它。
-* 类型为 `0x2::package::Publisher` 的对象的 ID，下面我们使用占位符 `{DEFAULT_PACKAGE_PUBLISHER_ID}` 来表示它。
-* 类型为 `{DEFAULT_PACKAGE_ID}::skill_process::SkillProcessTable` 的对象的 ID，下面我们使用占位符 `{SKILL_PROCESS_TABLE_OBJECT_ID}` 来表示它。
-
-### 初始化经验值表
-
-注意添加经验值表行项的函数参数：
-
-* experience_table: &mut experience_table::ExperienceTable,
-* level: u16,
-* {COMMON_PACKAGE_PUBLISHER_ID}
-* experience: u32,
-* difference: u32,
-
-我们在表中添加几行（注意，等级为 0 的第一行虽然没有用到，但是必须添加）：
-
-```shell
-sui client call --package {COMMON_PACKAGE_ID} --module experience_table_aggregate --function add_level \
---args {EXPERIENCE_TABLE_OBJECT_ID} {COMMON_PACKAGE_PUBLISHER_ID} '0' '0' '0' \
---gas-budget 11000000
-
-sui client call --package {COMMON_PACKAGE_ID} --module experience_table_aggregate --function add_level \
---args {EXPERIENCE_TABLE_OBJECT_ID} {COMMON_PACKAGE_PUBLISHER_ID} '1' '0' '0' \
---gas-budget 11000000
-
-sui client call --package {COMMON_PACKAGE_ID} --module experience_table_aggregate --function add_level \
---args {EXPERIENCE_TABLE_OBJECT_ID} {COMMON_PACKAGE_PUBLISHER_ID} '2' '83' '83' \
---gas-budget 11000000
-
-sui client call --package {COMMON_PACKAGE_ID} --module experience_table_aggregate --function add_level \
---args {EXPERIENCE_TABLE_OBJECT_ID} '3' '174' '91' \
---gas-budget 11000000
-```
-
-你可以这样查看经验表的初始化结果：
-
-```shell
-sui client object {EXPERIENCE_TABLE_OBJECT_ID}
-```
-
-### 创建 Item
-
-该函数的参数列表：
-
-* item_id: u32,
-* publisher: &sui:📦:Publisher,
-* name: std::ascii::String,
-* required_for_completion: bool,
-* sells_for: u32,
-* item_table: &mut item::ItemTable,
-
-添加第一条记录，这只是一条“占位符”记录，并不会在生产 item 的时候使用：
-
-```shell
-sui client call --package {COMMON_PACKAGE_ID} --module item_aggregate --function create \
---args \
-'0' \
-{COMMON_PACKAGE_PUBLISHER_ID} \
-'"UNUSED_ITEM"'  \
-'false' \
-'0' \
-{ITEM_TABLE_OBJECT_ID} \
---gas-budget 11000000
-```
-
-添加更多的记录：
-
-```shell
-sui client call --package {COMMON_PACKAGE_ID} --module item_aggregate --function create \
---args \
-'1' \
-{COMMON_PACKAGE_PUBLISHER_ID} \
-'"PotatoSeeds"'  \
-'false' \
-'10' \
-{ITEM_TABLE_OBJECT_ID} \
---gas-budget 11000000
-
-sui client call --package {COMMON_PACKAGE_ID} --module item_aggregate --function create \
---args \
-'2' \
-{COMMON_PACKAGE_PUBLISHER_ID} \
-'"Potatoes"'  \
-'false' \
-'80' \
-{ITEM_TABLE_OBJECT_ID} \
---gas-budget 11000000
-```
+`resources`中又包含 `fields`属性，其中 `item_id`为资源Id，`item_id:2`表示“棉花种子”,`quantity`为该资源的数量。
 
 ### 创建 Item 生产配方
 
@@ -822,4 +697,3 @@ In the `sui-java-service` directory, execute the following command to start the 
 ```shell
 mvn -pl suiinfinitesea-service-rest -am spring-boot:run
 ```
-
