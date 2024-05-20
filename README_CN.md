@@ -90,7 +90,7 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
 模型文件位于目录 `./dddml` 下。
 
 > **Tip**
->
+> 
 > About DDDML, here is an introductory article: ["Introducing DDDML: The Key to Low-Code Development for Decentralized Applications"](https://github.com/wubuku/Dapp-LCDP-Demo/blob/main/IntroducingDDDML.md).
 
 ### 生成代码
@@ -150,6 +150,28 @@ wubuku/dddappp:0.0.1 \
         item_id::cottons(); // 棉花
 ```
 
+### 资源(Item)常量
+
+| Item Id    | Name                    | 说明                                    |
+| ---------- | ----------------------- | --------------------------------------- |
+| 0          | UNUSED_ITEM             | 未使用                                  |
+| 2          | CottonSeeds             | 棉花种子                                |
+| 102        | Cotton                  | 棉花（由棉花种子种植得到）              |
+| 200        | Normal Log              | 木头（砍伐之后成品)                     |
+| 301        | CopperOre               | 铜（挖矿之后成品）                      |
+| 1000000001 | Ship                    | 船（建造得到）                          |
+| 2000000001 | ResourceTypeWoodcutting | 伐木资源(伐木Wooding之后得到 Normal Log |
+| 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
+
+### 技能常量
+
+| 技能    | 常量 | 说明 |
+| ------- | ---- | ---- |
+| farming |    0  | 种植 |
+|  woodcutting  | 1     | 伐木     |
+|mining|3|挖矿|
+|crafing|6|造船|
+
 ## 测试应用
 
 ### 发布合约
@@ -160,35 +182,41 @@ wubuku/dddappp:0.0.1 \
 
 依次发布以上3个合约会得到以下主要信息：
 
-```JSON
-{
-  "coin": {
-    "TreasuryCap": "0x75ed9440b6abd2bffe6bd353324eec06589a99c82a69c0f2c64d38a59ee2e1a9",
-    "PackageId": "0xbaa07a76f347f9026ed03c3739d821ee19fe8703af8111349af021b310f83a32",
-    "Digest": "7JtgVwMk3M5bo8ha8zfgXJkuR8LnUzYG5dGq76SrBwYK",
-    "EnergyId": "0x0d43be712cae4b1d21aae86f10bf0a366d7fd815fa292c95af6fea8b88561bab"
+```JSON{
+"coin": {
+    "TreasuryCap": "0x45bef3a9403c1af45551f958022a23c52399a8f9cdd95694097c26966ff2c50b",
+    "PackageId": "0xc88d834617796a46ad9076bb7c7929f20e2e4395441d6529b995ee4c6d91e1ab",
+    "Digest": "DUzQinWD7TyYK3yVb5AvWeVspKk1m75vyAv9t1huCbtX",
+    "EnergyId": "0xcc301d760ca2af0f383cb3cb730337a88c9f86cae47d6700d90ffab4a611e9d7"
   },
   "common": {
-    "Digest": "3iLbwMdpsauBVkX72XKdKH7eBeLWPeVJ85zygxPF1E3n",
-    "ItemTable": "0x84ff7c406df743983b8a80c7054eb6350993f22cb9060609c14b29b240a67a53",
-    "ItemCreationTable": "0x8c3f82d1f012176e5b55575d51e65f64835f02fada0ea330ea3fd9919eb221d4",
-    "ItemProductionTable": "0xacaf74c821504a8bf0c1fb064dc1d20783b92acff65d4ef19a18b70e26c4b60d",
-    "ExperienceTable": "0xad04393d861773508b4770a049c02cad90f1e52dc395d9e6a6aed12f448ff692",
-    "PackageId": "0xcbe9c3539c9b6bf871a0135c852e9f1950ce5d5711f36f8ae59a27bfc07bd0dd",
-    "Publisher": "0xcdf9df2077ee14f7ca0fc74f8e3cf648e8252b325f69140570cac823107b51a9",
-    "ItemProducitonCrafting": "0x6ef3d2b10974936a9d487f513746117d0f9ef5be5fe0e3e6223b893095fad2cf"
+    "Digest": "8WUmx5GSp3VLfZG4Ezockmgifkne47Gowxhj3pJ9ztrb",
+    "Publisher": "0x53001da8168d99f8733bfa1e88e5367fbddef584d4fbccb823d03c733eb8f183",
+    "PackageId": "0x60199eae5d0ae8e867fc64548eb7d01ff08b741d265adacb3f40cda17ec80aec",
+    "ExperienceTable": "0x6416b22fc0416eae49b3d6230ec817aec5ff3dcd760f781690e12f4e25fd10d2",
+    "ItemCreationTable": "0x837a5d2cb879c8831b9858db20bef8a1bb6cb0112916b2a177331d718907f41e",
+    "ItemTable": "0xabcdbb6ad9da21070c50cbd06eba4357d5cd29193a172dd218f5455a9bbbf367",
+    "ItemProductionTable": "0xc382590b7e266071fb67337086b9fb9fbb3468397def139172f7b665b8c1c2ff",
+    "ItemCreationMining": "0xad1a2084441878b0a77bdaaf451ca41424705d19c25b8bd589e30a3459fea4bb",
+    "ItemProductionFarming": "0xfbd287a0196e9a3d5abc975c4c98394aa76c474e448dfd5c7be1e10c10874045",
+    "ItemCreationWooding": "0x235588535c23089895f7e023546a55b19f5fce90726eb54b37d44dc352a8f90b",
+    "ItemProducitonCrafting": "0xb7f5dc6e57ae0da9b98686f5f27bc18f12d53f74edda3b21e8adefb56997d0ef"
   },
   "main": {
-    "Digest": "3iNkfZ7QjX7VcoMRX44EVbhpVRzAg4oQ6VkPQ65e9dPH",
-    "UpgradeCap": "0x325f5ac2bc9d84bad7e8efee60bf396019b95444fb06b639e5cef1e9602cb663",
-    "Publisher": "0x3b125d06c8df3338191eb0ff4c75b5c0d3359e977be1690cf41290179033c406",
-    "Map": "0x40c6913fde7c626bd74bedae48b182b15446865ea137c26c7a0d0cf29aa94444",
-    "RosterTable": "0x906084f1e0bab301ad34e26534268d68af1778f49d03a462577c369e106abbc2",
-    "PackageId": "0xa4b8a816c9a212ae4fd17c0326d25750118c8ce0f7887378b28ab9856e84ff7a",
-    "SkillProcessTable": "0xa647fbf8eb67caafeed97750ae7cebd5ffecde9c389486d97527f02704edc042",
-    "AdminCap": "0xf54f3864e61a27e5148055a88c4c943be6633d4deff166aca6f4373e4ad58b07",
-    "Player": "0x2b761f82d4586e5370684738c5dc5d8be325db58d5a3a6b4432dc3e513f10a2f",
-    "SkillProcessCrafting": "0xf5fcf9d0543c11f4010fc0bb86008508c43ca359355388977d51588aab4ecf8f"
+    "Digest": "8jcbCg8pwLC8xq3iBLhRgChu4n12BTpxnHmqgkB6cvqn",
+    "UpgradeCap": "0x126788288df9186075311e787a461a40fd3a21760ef664cc65f4ec275e13293c",
+    "Publisher": "0x261ddc1e04be8731547d5ec6574c5573677ded3ab3ffba861c0857fa2ea04357",
+    "PackageId": "0x336766298e8dee8b9bfa29622adbd07028e121cf04f353a286f111ea412aea2e",
+    "RosterTable": "0x60762e7810db62b88ab6332bd4ed38989fea82fa04f479e863907d0cb599822f",
+    "SkillProcessTable": "0x672a2e59388b87663762a03372553b6942bc6dcea4cd2ca5a3c752e32207ea97",
+    "AdminCap": "0x9bc77a40625e2d53508637325859bdd37304874d5a29d27d079869321250c464",
+    "Map": "0xc9bcf6235d0e24a1fbeaa565c0830d203f66122a86acf653ee96c5e8254c22ac",
+    "Player": "0x56a4639600c0698a5816da1f60446db563cec76c2a8138f4f696278d5f713bf6",
+    "SkillProcessMining": "0x06938825b815245399927b7b9ef0218fc0698639eb5082db101608dfc057a0ee",
+    "SkillProcessWooding": "0x12da910316deab3883a19d6de2a316e5557dd7614b7f04c09351f4a9bfa6e4bd",
+    "SkillProcessCrafting": "0x520599603c598d94620fb34d0546e68228e3a206a8fe9e2768f99a31aa74f1c6",
+    "SkillProcessFarming2": "0xa19ae193efbd03bdc3c9cdb00e5eff06d7f901f14884d6ca0e654edca75b7cb0",
+    "SkillProcessFarming1": "0xb54b805d077a7df5ed189a8a9573a3ddffa75db67c119048e6759b07cc996a8b"
   }
 }
 ```
@@ -205,41 +233,209 @@ wubuku/dddappp:0.0.1 \
 
 `main.Map` 的值为地图(map)的Id。
 
-### 地图
+### <a id="map"></a>地图
 
-使用以下 CLI 命令可以得到地图的相关信息
+使用以下 CLI 命令可以得到地图的相关信息：
 
 ```shell
 sui client object {main.map} --json
 ```
 
-能量（`ENERGY`）币的合约项目在 `./sui-contracts/infinite-sea-coin` 目录。
+可以得到以下信息：
 
-进入目录，发布合约：
-
-```shell
-sui client publish --gas-budget 200000000 --skip-dependency-verification --skip-fetch-latest-git-deps
+```JSON
+{
+  "objectId": "0xf36cfa34890b5f6845f538bdcb678e3822443c9b1f4f700db2a66a127d6d7162",
+  "version": "37717652",
+  "digest": "DwGg5Go9pTqb5fZXkmGzHKfUgDoTGDHZY8jYFRaGBQDW",
+  "type": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map::Map",
+  "owner": {
+    "Shared": {
+      "initial_shared_version": 37712887
+    }
+  },
+  "previousTransaction": "ErangDWTR3PgbEWDj8b7sy8Guao3No7c3ZFzt3zdioTM",
+  "storageRebate": "1907600",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map::Map",
+    "hasPublicTransfer": false,
+    "fields": {
+      "admin_cap": "0xcc29ec9bf6e72e413f6f699a765f62c84ab028716fb4a2f1333bddb3d26c6cf1",
+      "id": {
+        "id": "0xf36cfa34890b5f6845f538bdcb678e3822443c9b1f4f700db2a66a127d6d7162"
+      },
+      "locations": {
+        "type": "0x2::table::Table<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates, 0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation>",
+        "fields": {
+          "id": {
+            "id": "0xc64d10079ffcb61c167ad8793a585092939df129f7a284ee5fefebc57fc98dfe"
+          },
+          "size": "2"
+        }
+      },
+      "schema_version": "0",
+      "version": "3"
+    }
+  }
+}
 ```
 
-记录输出中的合约 Package ID。下面的命令使用占位符 `{COIN_PACKAGE_ID}` 来表示它。
+我们主要关注其中的 `content.locations`属性部分，该部分表示地图上目前已经添加的岛屿。
 
-记录输出中的 TreasuryCap 的 Object ID：
+使用curl执行以下请求：
 
-```text
-│  ┌──
-│  │ ObjectID: {ENERGY_COIN_TREASURY_CAP_OBJECT_ID}
-│  │ ObjectType: 0x2::coin::TreasuryCap<{COIN_PACKAGE_ID}::energy::ENERGY>
+```
+curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":[$content.locaions.fields.id.id]}' https://fullnode.testnet.sui.io/
 ```
 
-合约的发布者可以给自己 mint 一些代币：
+可以获得以下类似信息：
 
-```shell
-sui client call --package {COIN_PACKAGE_ID} --module energy --function mint \
---args {ENERGY_COIN_TREASURY_CAP_OBJECT_ID} '100000000' \
---gas-budget 19000000
+```JSON
+{
+	"jsonrpc": "2.0",
+	"result": {
+		"data": [{
+			"name": {
+				"type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates",
+				"value": {
+					"x": 51,
+					"y": 51
+				}
+			},
+			"bcsName": "9XmJiC4mP1y",
+			"type": "DynamicField",
+			"objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation",
+			"objectId": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692",
+			"version": 37717652,
+			"digest": "9H5nvaRUXbyULStSPsjUdDn7DXQS1nNFmVqKmRVyoMPn"
+		}, {
+			"name": {
+				"type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates",
+				"value": {
+					"x": 50,
+					"y": 50
+				}
+			},
+			"bcsName": "9N4dhPDnnU7",
+			"type": "DynamicField",
+			"objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation",
+			"objectId": "0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b",
+			"version": 37716508,
+			"digest": "BCn7aPsiJ2m935TZKXSbwozAt9U2MBzCrVtw1TVGbmJG"
+		}],
+		"nextCursor": "0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b",
+		"hasNextPage": false
+	},
+	"id": 1
+}
 ```
 
-记录 mint 获得的能量币的 Object ID。下面的命令使用占位符 `{ENERGY_COIN_OBJECT_ID_1}` 来表示它。
+表明在地图上中存在两个岛屿，它们的坐标分别是（51,51）和(50,50)。对象类型为：{main.packageId}::map_location::MapLocation，对象标识(id)分别为：0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692 和 0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b。
+
+进一步在控制台执行命令如下：
+
+```
+sui client object {mapLocationId} --json
+```
+
+可以得到以下格式返回信息：
+
+```json
+{
+  "objectId": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692",
+  "version": "37717652",
+  "digest": "9H5nvaRUXbyULStSPsjUdDn7DXQS1nNFmVqKmRVyoMPn",
+  "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates, 0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation>",
+  "owner": {
+    "ObjectOwner": "0xc64d10079ffcb61c167ad8793a585092939df129f7a284ee5fefebc57fc98dfe"
+  },
+  "previousTransaction": "ErangDWTR3PgbEWDj8b7sy8Guao3No7c3ZFzt3zdioTM",
+  "storageRebate": "2812000",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates, 0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation>",
+    "hasPublicTransfer": false,
+    "fields": {
+      "id": {
+        "id": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692"
+      },
+      "name": {
+        "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates",
+        "fields": {
+          "x": 51,
+          "y": 51
+        }
+      },
+      "value": {
+        "type": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation",
+        "fields": {
+          "coordinates": {
+            "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates",
+            "fields": {
+              "x": 51,
+              "y": 51
+            }
+          },
+          "gathered_at": "0",
+          "occupied_by": null,
+          "resources": [
+            {
+              "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::item_id_quantity_pair::ItemIdQuantityPair",
+              "fields": {
+                "item_id": 2,
+                "quantity": 200
+              }
+            },
+            {
+              "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::item_id_quantity_pair::ItemIdQuantityPair",
+              "fields": {
+                "item_id": 102,
+                "quantity": 100
+              }
+            },
+            {
+              "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::item_id_quantity_pair::ItemIdQuantityPair",
+              "fields": {
+                "item_id": 200,
+                "quantity": 100
+              }
+            },
+            {
+              "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::item_id_quantity_pair::ItemIdQuantityPair",
+              "fields": {
+                "item_id": 301,
+                "quantity": 100
+              }
+            },
+            {
+              "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::item_id_quantity_pair::ItemIdQuantityPair",
+              "fields": {
+                "item_id": 2000000001,
+                "quantity": 200
+              }
+            },
+            {
+              "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::item_id_quantity_pair::ItemIdQuantityPair",
+              "fields": {
+                "item_id": 2000000003,
+                "quantity": 200
+              }
+            }
+          ],
+          "type": 0
+        }
+      }
+    }
+  }
+}
+```
+
+我们把重点放在 `content.value.fields`属性。
+
+其中之`fileds`表示其坐标位置，`gathered_at`表示上一次收集资源的时间，`occupied_by`表示此岛屿目前被谁占领，如果没有呗占领则为 `null`，否则为玩家(Player)之Id，`resouces`为该岛屿目前所拥有的资源列表。
+
+`resources`中又包含`fields`属性，其中`item_id`为资源Id，`item_id:2`表示“棉花种子”,`quantity`为该资源的数量。
 
 ### 发布 common 合约包
 
@@ -626,3 +822,4 @@ In the `sui-java-service` directory, execute the following command to start the 
 ```shell
 mvn -pl suiinfinitesea-service-rest -am spring-boot:run
 ```
+
