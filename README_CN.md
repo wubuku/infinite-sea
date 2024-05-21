@@ -126,31 +126,9 @@ wubuku/dddappp:0.0.1 \
 值得一提的是，链下服务（off-chain service，有时候会被称为 indexer）是 100% 自动生成的。
 你甚至一行代码都不需要写，只需要配置一下发布合约的交易摘要，就可以直接使用了。
 
-#### Move 代码中的定义的常量
+#### 程序中使用的常量
 
-我们在 Move 代码中定义了一些常量。在下面的代码片段中，部分常量定义所在的模块以及用于获取常量的值的函数名：
-
-```move
-//
-        // 可以编写脚本来添加岛屿，以及为岛屿随机地生成资源。
-        //
-        // 添加岛屿时，应该初始化以下资源（在 item_id 模块中定义了返回 Item ID 常量的函数）：
-        item_id::resource_type_mining(); // Item Creation 需要的“资源”也抽象为 Item，这是执行挖矿操作所需的资源。
-        item_id::resource_type_woodcutting(); // 这是执行伐木操作所需的资源。
-        item_id::cotton_seeds(); // 这是种植棉花所需的“原材料”
-
-        //以便用户可以通过这些技能：
-        skill_type::mining(); // 这是一个 Item Creation 类型的技能
-        skill_type::woodcutting(); // Item Creation Skill
-        skill_type::farming(); // 这是一个 Item Production 类型的技能
-
-        //产出造船需要的 Items：
-        item_id::copper_ore(); // 铜矿
-        item_id::normal_logs(); // 普通原木
-        item_id::cottons(); // 棉花
-```
-
-### 资源(Item)常量
+#### Item（物品、资源） ID 常量
 
 | Item Id    | Name                    | 说明                                    |
 | ---------- | ----------------------- | --------------------------------------- |
@@ -163,7 +141,7 @@ wubuku/dddappp:0.0.1 \
 | 2000000001 | ResourceTypeWoodcutting | 伐木资源(伐木Wooding之后得到 Normal Log |
 | 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
 
-### 技能常量
+#### 技能常量
 
 | 技能        | 常量 | 说明 |
 | ----------- | ---- | ---- |
@@ -172,18 +150,48 @@ wubuku/dddappp:0.0.1 \
 | mining      | 3    | 挖矿 |
 | crafing     | 6    | 造船 |
 
+--------
+
+提示：我们在 Move 代码中定义了一些常量。
+在下面的 Move 代码片段中，包含部分常量定义所在的模块以及用于获取常量的值的函数名：
+
+```move
+//
+// 可以编写脚本来添加岛屿，以及为岛屿随机地生成资源。
+//
+// 添加岛屿时，应该初始化以下资源（在 item_id 模块中定义了返回 Item ID 常量的函数）：
+item_id::resource_type_mining(); // Item Creation 需要的“资源”也抽象为 Item，这是执行挖矿操作所需的资源。
+item_id::resource_type_woodcutting(); // 这是执行伐木操作所需的资源。
+item_id::cotton_seeds(); // 这是种植棉花所需的“原材料”
+
+//以便用户可以通过这些技能：
+skill_type::mining(); // 这是一个 Item Creation 类型的技能
+skill_type::woodcutting(); // Item Creation Skill
+skill_type::farming(); // 这是一个 Item Production 类型的技能
+
+//产出造船需要的 Items：
+item_id::copper_ore(); // 铜矿
+item_id::normal_logs(); // 普通原木
+item_id::cottons(); // 棉花
+```
+
 ## 测试应用
 
 ### 发布合约
 
-1. Coin合约
-2. Common合约
-3. main合约
+链上合约包括三个项目（包）：
 
-依次发布以上3个合约会得到以下主要信息：
+1. Coin 合约项目
+2. Common 合约项目
+3. Main 合约项目
 
-```JSON{
-"coin": {
+#### Testnet 发布信息
+
+我们在 testnet 发布以上 3 个合约包，相关信息记录如下：
+
+```json
+{
+  "coin": {
     "TreasuryCap": "0x45bef3a9403c1af45551f958022a23c52399a8f9cdd95694097c26966ff2c50b",
     "PackageId": "0xc88d834617796a46ad9076bb7c7929f20e2e4395441d6529b995ee4c6d91e1ab",
     "Digest": "DUzQinWD7TyYK3yVb5AvWeVspKk1m75vyAv9t1huCbtX",
@@ -200,7 +208,7 @@ wubuku/dddappp:0.0.1 \
     "ItemCreationMining": "0xad1a2084441878b0a77bdaaf451ca41424705d19c25b8bd589e30a3459fea4bb",
     "ItemProductionFarming": "0xfbd287a0196e9a3d5abc975c4c98394aa76c474e448dfd5c7be1e10c10874045",
     "ItemCreationWooding": "0x235588535c23089895f7e023546a55b19f5fce90726eb54b37d44dc352a8f90b",
-    "ItemProducitonCrafting": "0xb7f5dc6e57ae0da9b98686f5f27bc18f12d53f74edda3b21e8adefb56997d0ef"
+    "ItemProductionCrafting": "0xb7f5dc6e57ae0da9b98686f5f27bc18f12d53f74edda3b21e8adefb56997d0ef"
   },
   "main": {
     "Digest": "8jcbCg8pwLC8xq3iBLhRgChu4n12BTpxnHmqgkB6cvqn",
@@ -221,27 +229,24 @@ wubuku/dddappp:0.0.1 \
 }
 ```
 
-举例说明：
+解释如下：
 
-`coin.packageid` 表示 coin 合约包的 Id。
+* `coin.packageid`：Coin 合约包的 Id。
+* `common.PackageId`：Common 合约包的 Id。
+* `main.Digest`：发布 Main 包交易的摘要。
+* `coin.EnergyId`：Mint 获得的能量币（`ENERGY`）的 Object ID。
+* `main.Map`：地图（map）的 Object ID。
 
-`common.PackageId` 表示 common 合约包的 Id。
 
-`main.Digest` 表示发布 main合约时得到的摘要信息。
+### 获取地图信息
 
-`coin.EnergyId` 表示 mint 获得的能量 `ENERGY` 币的 Object ID。
-
-`main.Map` 的值为地图(map)的Id。
-
-### <a id="map"></a>地图
-
-使用以下 CLI 命令可以得到地图的相关信息(SUI)：
+使用以下 Sui CLI 命令可以取得地图对象的信息：
 
 ```shell
 sui client object {main.map} --json
 ```
 
-可以得到以下信息：
+输出信息类似下面这样：
 
 ```JSON
 {
@@ -283,7 +288,7 @@ sui client object {main.map} --json
 
 我们主要关注其中的 `content.locations`属性部分，该部分表示地图上目前已经添加的岛屿。
 
-使用 curl 执行以下请求(SUI)：
+可以使用 curl 请求 Sui JSON RPC 接口：
 
 ```
 curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":[$content.locaions.fields.id.id]}' https://fullnode.testnet.sui.io/
@@ -331,15 +336,17 @@ curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"me
 }
 ```
 
-表明在地图上中存在两个岛屿，它们的坐标分别是（51,51）和(50,50)。对象类型为：{main.packageId}::map_location::MapLocation，对象标识(id)分别为：0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692 和 0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b。
+在上面的输出的例子中，地图上中存在两个岛屿，它们的坐标分别是 `(51, 51)` 和 `(50, 50)`。
+对象类型为：`{main.packageId}::map_location::MapLocation`，对象 ID 分别为 
+`0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692` 和 `0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b`。
 
-进一步在控制台执行命令如下(SUI)：
+可以在控制台执行 Sui CLI 命令：
 
 ```
 sui client object {mapLocationId} --json
 ```
 
-可以得到以下格式返回信息：
+可以得到类似以下的输出信息：
 
 ```json
 {
@@ -431,19 +438,29 @@ sui client object {mapLocationId} --json
 }
 ```
 
-我们把重点放在 `content.value.fields`属性。
+注意 `content.value.fields` 属性。 其中 `fileds` 包含位置坐标，
+`gathered_at` 表示上一次收集资源的时间，
+`occupied_by`表示此岛屿目前被谁（哪个玩家）占领，
+如果没有被占领则为 `null` 或不存在相应的键值对，否则为玩家 ID（Player ID），
+`resouces` 为该岛屿目前所拥有的资源列表。
 
-其中之 `fileds`表示其坐标位置，`gathered_at`表示上一次收集资源的时间，`occupied_by`表示此岛屿目前被谁占领，如果没有呗占领则为 `null`，否则为玩家(Player)之Id，`resouces`为该岛屿目前所拥有的资源列表。
+`resources` 中包含 `fields` 属性，其中 `item_id` 为资源 ID，
+其中，`item_id` 为 2 时表示“棉花种子”（前端可以可以定义一个常量列表）,
+`quantity` 为该资源的数量。
 
-`resources`中又包含 `fields`属性，其中 `item_id`为资源Id，`item_id:2`表示“棉花种子”,`quantity`为该资源的数量。
+上面一系列的查询操作，均是在通过 Sui JSON RPC 接口读取链上的数据完成（可能比较繁琐）。
 
-上面一系列的查询操作，均是在链上(SUI)操作完成，可以看到比较繁琐。
+#### 使用链下查询服务（indexer）获取地图信息
 
-下面我们使用链下（indexer) 的 Java-Service服务，根据 Map 的 Id 直接查询，请求如下：
+我们的低代码工具生成的链下 Java 服务（indexer）包含了很多开箱即用的查询接口。
+其中，包含根据 Map 的对象 Id 查询 Map 信息的接口。
+可使用 curl 命令发动测试请求，如下：
 
 ```curl
 curl -X GET "http://{domain.port}/api/Maps/{main.map}" -H "accept: application/json"
 ```
+
+返回的地图信息类似：
 
 ```json
 {
@@ -490,27 +507,27 @@ curl -X GET "http://{domain.port}/api/Maps/{main.map}" -H "accept: application/j
 }
 ```
 
+注意 `locations`属性，该属性为数组，每一个元素均代表一个位置点（目前地图上的位置点只有岛屿）。
+元素中如果包含 `occupiedBy` 属性，表示该岛屿已经被玩家占有，其值为 Player ID。
+`gatheredAt` 表示该岛屿的上次资源收集时间。
+`resources` 属性包含该岛屿可以被收集的资源的 Item ID 和数量（岛屿可采集的“资源”我们也抽象为 Item，即“物品”）。
+
+如果返回的岛屿元素中不包含 `resources` 属性。这通常表示该岛屿的资源已经被玩家收集过，还没有“再生的待收集资源”。
 
 
-我们重点关注其 `locations`属性，该属性为数组形式，每一个元素均代表一个坐标点也就是一个岛屿。
-元素中如果显示 `occupiedBy`，表示该岛屿已经被玩家占有，其值为该玩家的Id。
-`gatheredAt`表示岛上资源上次被收集的时间。
-`resources`属性表示该岛上可以被收集的资源（种类和数量，种类请参照 资源常量 ）。
+### 创建玩家对象
 
-如果某个元素没有显示 `resources` 属性通常表示该岛屿上的资源被玩家收集过，还未生成新的待收集资源。
-
-
-### 玩家
-
-创建玩家（Player)
-
-* 其中 {playName}为玩家名称
+使用 Sui CLI 创建玩家（Player)：
 
 ```
 sui client call --package {main.PackageId} --module player_aggregate --function create --args {playerName} --gas-budget 11000000 --json
 ```
 
-如果成功，将得到下列 JSON 格式的响应，找到如下所示部分：
+解释：
+
+* 其中 `{playName}` 为玩家名称。
+
+如果成功，得到 JSON 响应大致如下（这里只展示玩家对象的创建信息）：
 
 ```json
 {
@@ -528,15 +545,16 @@ sui client call --package {main.PackageId} --module player_aggregate --function 
     }
 ```
 
-其中之 `objectId` 即为新创建玩家之 Id。
+其中 `objectId` 即为新创建的玩家对象的 ID。
+在后面的测试中，需要用到玩家对象 ID 的地方，我们使用占位符 `{playId}` 来表示。
 
-在之后的章节中，我们使用 {playId} 来引用它。
+### 占领（Claim）岛屿
 
-### 占领 (Claim) 岛屿
+用户在创建玩家（Player）对象之后，可以对无人占领的岛屿进行占领（Claim）。
 
-Player 登录之后，可以对无人占领的岛屿进行占领(Claim)。
+使用 Sui CLI 执行占领：
 
-```json
+```shell
 sui client call --package {main.PackageId} \
 --module player_aggregate \
 --function claim_island \
@@ -550,130 +568,18 @@ sui client call --package {main.PackageId} \
 --gas-budget 4999000000 --json
 ```
 
-* {main.PackageId} main合约之包 Id
-* {playId} 玩家 Id
-* {main.map} main合约发布时得到的地图Id
-* {coordinates_x} Claim的岛屿的横坐标
-* {coordinates_y} Claim的岛屿的纵坐标
-* {clock} 当前时间，采用固定值 `0x6`
-* {main.RosterTable} main 合约发布时得到的所有船队的 Table 的 Id，该 Table 中包含了所有玩家以及环境生成的所有船队，其 Key 为（玩家Id + 船队序号[0-4])
-* {main.SkillProcessTable} main合约发布时得到的所有技能流程 Table，该 Table 中包含了所有玩家的所能执行的所有流程（Farming,WoodCutting,Mining,Scrafting)，其 Key 为(玩家Id + SkillTypeId)
+解释：
 
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{playId}`：玩家对象 ID。
+* `{main.map}`：地图对象的 ID。在 Main 合约包发布的时候，自动执行的初始化函数会创建地图对象。
+* `{coordinates_x}`：Claim 的岛屿的 X 坐标值。
+* `{coordinates_y}`：Claim 的岛屿的 Y 坐标值。
+* `{clock}`：时钟对象的 ID。Sui 的时间对象 ID 是个固定值：`0x6`。
+* `{main.RosterTable}`: Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 中包含了包含所有的船队的“索引信息”。包含“玩家”以及“环境”船队。该 Table 的 Key 是“玩家 ID + 船队序号 `[0-4]`”的组合。
+* `{main.SkillProcessTable}` Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 包含所有技能流程（可以理解使用技能的“生产线”）的“索引信息”。
+    这里的技能包括 Farming、WoodCutting、Mining、 Crafting。该 Table 的 Key 为“玩家 ID + SkillTypeId”的组合。
 
-
-
-
-
-
-
-
-### 以下先忽略-----------------------------------
-
-### 创建 Item 生产配方
-
-该函数的参数：
-
-* item_production_id_skill_type: u8,
-* item_production_id_item_id: u32,
-* publisher: &sui:📦:Publisher,
-* production_materials_item_id_list: vector<u32>,
-* production_materials_item_quantity_list: vector<u32>,
-* requirements_level: u16,
-* base_quantity: u32,
-* base_experience: u32,
-* base_creation_time: u64,
-* energy_cost: u64,
-* success_rate: u16,
-* item_production_table: &mut item_production::ItemProductionTable,
-
-我们假设要创建一个“农业”生产配方：种植一份土豆需要 3 个“土豆种子”，等级 1 就可以种植，产出数量为 10，增加经验值为 85，需要 5 秒钟，消耗 100 个单位的能量币，成功率 100%。
-
-执行命令：
-
-```shell
-sui client call --package {COMMON_PACKAGE_ID} --module item_production_aggregate --function create \
---args '0' '2' {COMMON_PACKAGE_PUBLISHER_ID} \
-'[1]' '[3]' \
-'1' '10' '85' '5' '5' '100' \
-{ITEM_PRODUCTION_TABLE_OBJECT_ID} \
---gas-budget 11000000
-```
-
-记录下创建好的生产配方 Object ID，下面我们以占位符 `{ITEM_PRODUCTION_OBJECT_ID_1}` 来表示它。
-
-```text
-│  │ ObjectID: {ITEM_PRODUCTION_OBJECT_ID_1}                                                                                              │
-│  │ ObjectType: 0x...::item_production::ItemProduction                                                            │
-```
-
-### 创建玩家
-
-```shell
-sui client call --package {DEFAULT_PACKAGE_ID} --module player_aggregate --function create \
---gas-budget 11000000
-```
-
-记录创建的玩家对象的 ID，下面我们以占位符 `{PLAYER_ID}` 来表示它：
-
-```text
-│  │ ObjectID: {PLAYER_ID}
-│  │ ObjectType: 0x...::player::Player
-```
-
-### 给玩家空投一些资源（Items）
-
-这个方法只有管理员可以使用。参数：
-
-* player: &mut player::Player,
-* publisher: &sui:📦:Publisher,
-* item_id: u32,
-* quantity: u32,
-
-这里我们假设给玩家空投 100 个土豆种子：
-
-```shell
-sui client call --package {DEFAULT_PACKAGE_ID} --module player_aggregate --function airdrop \
---args {PLAYER_ID} \
-{DEFAULT_PACKAGE_PUBLISHER_ID} \
-'1' '100' \
---gas-budget 11000000
-```
-
-### 创建一个生产流程
-
-参数：
-
-* skill_process_id_skill_type: u8,
-* skill_process_id_player_id: ID,
-* player: &Player,
-* skill_process_table: &mut skill_process::SkillProcessTable,
-
-执行命令：
-
-```shell
-sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregate --function create \
---args '0' {PLAYER_ID} \
-{PLAYER_ID} \
-"{SKILL_PROCESS_TABLE_OBJECT_ID}" \
---gas-budget 11000000
-```
-
-一个示例命令：
-
-```shell
-sui client call --package 0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc89731fa517fb8 --module skill_process_aggregate --function create \
---args '0' 0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
-0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
-0x5689f9e28f3bf359604de4eb85a1c7a55520bd4097b54b42e1acb23c1fc44279 \
---gas-budget 11000000
-```
-
-记录下创建好的生产流程的对象 ID，下面我们以占位符 `{SKILL_PROCESS_OBJECT_ID_1}` 来表示它：
-
-```text
-│  │ ObjectID: {SKILL_PROCESS_OBJECT_ID_1}
-│  │ ObjectType: 0x::skill_process::SkillProcess
-```
 
 ### 开始生产流程
 
@@ -726,6 +632,108 @@ sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregat
 ```shell
 sui client object {PLAYER_ID} --json
 ```
+
+
+-----------------------------------
+
+注意，以下创建“生产配方”等章节所描述的是“管理员”的后台操作。
+开发“玩家”用户界面时，可以先忽略这部分阐述。
+
+
+### 创建 Item 生产配方
+
+该函数的参数：
+
+* item_production_id_skill_type: u8,
+* item_production_id_item_id: u32,
+* publisher: &sui:📦:Publisher,
+* production_materials_item_id_list: vector<u32>,
+* production_materials_item_quantity_list: vector<u32>,
+* requirements_level: u16,
+* base_quantity: u32,
+* base_experience: u32,
+* base_creation_time: u64,
+* energy_cost: u64,
+* success_rate: u16,
+* item_production_table: &mut item_production::ItemProductionTable,
+
+我们假设要创建一个“农业”生产配方：种植一份土豆需要 3 个“土豆种子”，等级 1 就可以种植，产出数量为 10，增加经验值为 85，需要 5 秒钟，消耗 100 个单位的能量币，成功率 100%。
+
+执行命令：
+
+```shell
+sui client call --package {COMMON_PACKAGE_ID} --module item_production_aggregate --function create \
+--args '0' '2' {COMMON_PACKAGE_PUBLISHER_ID} \
+'[1]' '[3]' \
+'1' '10' '85' '5' '5' '100' \
+{ITEM_PRODUCTION_TABLE_OBJECT_ID} \
+--gas-budget 11000000
+```
+
+记录下创建好的生产配方 Object ID，下面我们以占位符 `{ITEM_PRODUCTION_OBJECT_ID_1}` 来表示它。
+
+```text
+│  │ ObjectID: {ITEM_PRODUCTION_OBJECT_ID_1}                                                                                              │
+│  │ ObjectType: 0x...::item_production::ItemProduction                                                            │
+```
+
+### 给玩家空投一些资源（Items）
+
+这个方法只有管理员可以使用。参数：
+
+* player: &mut player::Player,
+* publisher: &sui:📦:Publisher,
+* item_id: u32,
+* quantity: u32,
+
+这里我们假设给玩家空投 100 个土豆种子：
+
+```shell
+sui client call --package {DEFAULT_PACKAGE_ID} --module player_aggregate --function airdrop \
+--args {PLAYER_ID} \
+{DEFAULT_PACKAGE_PUBLISHER_ID} \
+'1' '100' \
+--gas-budget 11000000
+```
+
+### 创建一个生产流程
+
+目前生成流程在玩家认领岛屿时会自动创建。这里我们假设管理员手动创建一个生产流程。
+
+参数：
+
+* skill_process_id_skill_type: u8,
+* skill_process_id_player_id: ID,
+* player: &Player,
+* skill_process_table: &mut skill_process::SkillProcessTable,
+
+执行命令：
+
+```shell
+sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregate --function create \
+--args '0' {PLAYER_ID} \
+{PLAYER_ID} \
+"{SKILL_PROCESS_TABLE_OBJECT_ID}" \
+--gas-budget 11000000
+```
+
+一个示例命令：
+
+```shell
+sui client call --package 0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc89731fa517fb8 --module skill_process_aggregate --function create \
+--args '0' 0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
+0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
+0x5689f9e28f3bf359604de4eb85a1c7a55520bd4097b54b42e1acb23c1fc44279 \
+--gas-budget 11000000
+```
+
+记录下创建好的生产流程的对象 ID，下面我们以占位符 `{SKILL_PROCESS_OBJECT_ID_1}` 来表示它：
+
+```text
+│  │ ObjectID: {SKILL_PROCESS_OBJECT_ID_1}
+│  │ ObjectType: 0x::skill_process::SkillProcess
+```
+
 
 [TBD]
 
