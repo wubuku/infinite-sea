@@ -601,7 +601,7 @@ Start-Sleep -Seconds 2
 $coordinates_x = 50
 $coordinates_y = 50
 
-$islandResources = $itemData.ItemCottons, $itemData.ItemNormalLogs, $itemData.ItemCopperOre, $itemData.ItemCottonSeeds, $itemData.ResourceTypeWoodcutting, $itemData.ResourceTypeMining
+$islandResources = $itemData.ItemCottonSeeds, $itemData.ResourceTypeWoodcutting, $itemData.ResourceTypeMining , $itemData.ItemCottons, $itemData.ItemNormalLogs, $itemData.ItemCopperOre
 $islandResourceIds = @()
 $islandResourceQuantities = @()
 #$islandResourceQuantities = (200, 100, 200, 200)

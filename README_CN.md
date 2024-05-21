@@ -90,7 +90,7 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
 模型文件位于目录 `./dddml` 下。
 
 > **Tip**
-> 
+>
 > About DDDML, here is an introductory article: ["Introducing DDDML: The Key to Low-Code Development for Decentralized Applications"](https://github.com/wubuku/Dapp-LCDP-Demo/blob/main/IntroducingDDDML.md).
 
 ### 生成代码
@@ -152,6 +152,7 @@ wubuku/dddappp:0.0.1 \
 
 ### 资源(Item)常量
 
+
 | Item Id    | Name                    | 说明                                    |
 | ---------- | ----------------------- | --------------------------------------- |
 | 0          | UNUSED_ITEM             | 未使用                                  |
@@ -164,6 +165,7 @@ wubuku/dddappp:0.0.1 \
 | 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
 
 ### 技能常量
+
 
 | 技能        | 常量 | 说明 |
 | ----------- | ---- | ---- |
@@ -527,7 +529,7 @@ sui client call --package {main.PackageId} --module player_aggregate --function 
 
 其中之 `objectId` 即为新创建玩家之 Id。
 
-在之后的章节中，我们使用 {playId} 来引用它。
+在之后的章节中，我们使用 {playerId} 来引用它。
 
 ### 占领 (Claim) 岛屿
 
@@ -548,7 +550,7 @@ sui client call --package {main.PackageId} \
 ```
 
 * {main.PackageId} main合约之包 Id
-* {playId} 玩家 Id
+* {playerId} 玩家 Id
 * {main.map} main合约发布时得到的地图Id
 * {coordinates_x} Claim的岛屿的横坐标
 * {coordinates_y} Claim的岛屿的纵坐标
@@ -817,4 +819,3 @@ In the `sui-java-service` directory, execute the following command to start the 
 ```shell
 mvn -pl suiinfinitesea-service-rest -am spring-boot:run
 ```
-
