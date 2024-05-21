@@ -323,7 +323,7 @@ sui client object {mapLocationId} --json
 可以得到类似以下的输出信息：
 
 ```json
-{
+
   "objectId": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692",
   "version": "37717652",
   "digest": "9H5nvaRUXbyULStSPsjUdDn7DXQS1nNFmVqKmRVyoMPn",
@@ -366,27 +366,6 @@ sui client object {mapLocationId} --json
               "fields": {
                 "item_id": 2,
                 "quantity": 200
-              }
-            },
-            {
-              "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::item_id_quantity_pair::ItemIdQuantityPair",
-              "fields": {
-                "item_id": 102,
-                "quantity": 100
-              }
-            },
-            {
-              "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::item_id_quantity_pair::ItemIdQuantityPair",
-              "fields": {
-                "item_id": 200,
-                "quantity": 100
-              }
-            },
-            {
-              "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::item_id_quantity_pair::ItemIdQuantityPair",
-              "fields": {
-                "item_id": 301,
-                "quantity": 100
               }
             },
             {
@@ -815,7 +794,7 @@ sui client call --package {main.PackageId} \
 
 其 `objectId` 为技能进程的 Id。
 
-同样我们注意到类型为 `0x2::dynamic_field::Field<{common.PackageId}::skill_process_id::SkillProcessId, 0x2::object::ID> 的元素,我们将`其 `objectId ` 记录为 {SkillProcessId}。
+同样我们注意到类型为 `0x2::dynamic_field::Field<{common.PackageId}::skill_process_id::SkillProcessId, 0x2::object::ID>    `的元素,我们将 `其 objectId ` 记录为 {SkillProcessId}。
 
 #### 玩家的船队
 
@@ -923,7 +902,7 @@ sui client object {SkillProcessId} --json
 }
 ```
 
-将目光聚焦在 `content.fields.name` 属性。其中的 `fields` 属性又包含了以下 3 个 属性：
+将目光聚焦在 `content.fields.name`.`fields` 属性，其又包含了以下 3 个 属性：
 
 * player_id : 玩家 ID。
 * skill_type：技能类型。
