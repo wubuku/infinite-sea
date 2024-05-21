@@ -130,7 +130,6 @@ wubuku/dddappp:0.0.1 \
 
 #### Item（物品、资源） ID 常量
 
-
 | Item Id    | Name                    | 说明                                    |
 | ---------- | ----------------------- | --------------------------------------- |
 | 0          | UNUSED_ITEM             | 未使用                                  |
@@ -143,7 +142,6 @@ wubuku/dddappp:0.0.1 \
 | 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
 
 #### 技能常量
-
 
 | 技能        | 常量 | 说明 |
 | ----------- | ---- | ---- |
@@ -218,9 +216,8 @@ wubuku/dddappp:0.0.1 \
 
 这些属性是合约发布之后，后台调用接口生成的关于生产制造的配方的 ID，前端可以将它们视为常量使用。
 
-
-| 配方   | 调用占位符                 | 说明                                 |
-| ------ | -------------------------- | ------------------------------------ |
+| 配方   | 调用占位符                   | 说明                                 |
+| ------ | ---------------------------- | ------------------------------------ |
 | 挖矿   | {`ItemCreationMining`}     | 开始挖矿进程和结束挖矿进程时使用     |
 | 伐木   | {`ItemCreationWooding`}    | 开始伐木进程和结束伐木进程时使用     |
 | 种棉花 | {`ItemProductionFarming`}  | 开始种植棉花进程和结束棉花进程时使用 |
@@ -571,7 +568,7 @@ curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: applicat
 * `name`：玩家的名字。
 * `claimedIsland`：玩家所占领的岛屿的坐标。
 * `inventory`：玩家目前拥有的物品（包括“资源”）库存，其中数组元素的 `item_id` 属性为物品（资源）的 ID，`quantity` 为库存数量。
-    库存在进行生产活动时（种植，挖矿，伐木，造船等）时会减少或增加（原材料 item 数量会减少，产出结果 item 数量会增加）。
+  库存在进行生产活动时（种植，挖矿，伐木，造船等）时会减少或增加（原材料 item 数量会减少，产出结果 item 数量会增加）。
 
 ### 占领（Claim）岛屿
 
@@ -859,15 +856,13 @@ sui client call --package {main.PackageId} \
 
 * 类型为 `{main.PackageId}::roster::Roster` 的元素，为玩家的船队信息。目前玩家在占领岛屿时，合约会创建 5 个船队对象。元素中的 `objectId` 属性为船队的对象 Id。
 * 类型为 `0x2::dynamic_field::Field<{common.PackageId}::roster_id::RosterId, 0x2::object::ID>` 对象，
-    是一个“保存船队信息的 Table”的“动态字段”子对象。
-    通过这个对象，可以查询到船队的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。我们下面将船队的对象 ID 使用占位符 `{RosterObjectId}` 表示。
-* 类型为 `{main.PackageId}::skill_process::SkillProcess` 的元素，该元素为玩家的“技能进程”对象。目前认领岛屿时，会创建 5 个这样的对象。
-* 类型为 `0x2::dynamic_field::Field<{common.PackageId}::skill_process_id::SkillProcessId, 0x2::object::ID>` 的对象，
-    是一个“保存技能进程信息的 Table”的“动态字段”子对象。
-    这个对象的 ID 我们使用占位符 `{SkillProcess_dynamic_field_ObjectId}` 表示。
-    通过这个对象，可以查询到技能进程的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。
-    我们下面将技能进程的对象 ID 使用占位符 `{SkillProcessObjectId}` 表示。
-
+  是一个“保存船队信息的 Table”的“动态字段”子对象。
+  通过这个对象，可以查询到船队的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。我们下面将船队的对象 ID 使用占位符 `{RosterObjectId}` 表示。
+* 类型为 `{main.PackageId}::skill_process::SkillProcess` 的元素，该元素为玩家的“技能进程”对象。目前占领岛屿时，会创建 5 个这样的对象。
+* 类型为 `0x2::dynamic_field::Field<{common.PackageId}::skill_process_id::SkillProcessId, 0x2::object::ID>` 的对象，是一个“保存技能进程信息的 Table”的“动态字段”子对象。
+  这个对象的 ID 我们使用占位符 `{SkillProcess_dynamic_field_ObjectId}` 表示。
+  通过这个对象，可以查询到技能进程的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。
+  我们下面将技能进程的对象 ID 使用占位符 `{SkillProcessObjectId}` 表示。
 
 #### 查询玩家的船队
 
@@ -957,14 +952,12 @@ sui client object {RosterObjectId} --json
 可以将玩家的技能进程理解为制造物品（Item）的“生产线”。
 玩家在占领一个岛屿之后，目前合约会为之自动创建 4 类 5 条这样的“生产线”。
 
-
-| 类型                 | 对应技能类型常量值 | “生产线”数量 | 示例命令使用的“占位符”                                       |
-| -------------------- | ------------------ | -------------- |----------------------------------------------------|
+| 类型                 | 对应技能类型常量值 | “生产线”数量 | 示例命令使用的“占位符”                               |
+| -------------------- | ------------------ | -------------- | ------------------------------------------------------ |
 | 种植(Farming)        | 0                  | 2              | `{SkillProcessFarming1}`, `{SkillProcessFarming2}` |
-| 伐木(WoodCuttinging) | 1                  | 1              | `{SkillProcessWooding}`                            |
-| 挖矿(Mining)         | 3                  | 1              | `{SkillProcessMining}`                             |
-| 造船(Crafting)       | 6                  | 1              | `{SkillProcessCrafting}`                            |
-
+| 伐木(WoodCuttinging) | 1                  | 1              | `{SkillProcessWooding}`                              |
+| 挖矿(Mining)         | 3                  | 1              | `{SkillProcessMining}`                               |
+| 造船(Crafting)       | 6                  | 1              | `{SkillProcessCrafting}`                             |
 
 执行 Sui CLI 命令：
 
@@ -1015,9 +1008,18 @@ sui client object {SkillProcess_dynamic_field_ObjectId} --json
 
 依次查询前一步得到的 5 个 `{SkillProcess_dynamic_field_ObjectId}`，可以获取上面提及的 4 类 5 条“生产线”的 ID 信息。
 
+上述 `skil_type`，`sequence_number` 以及 `content.fields.name.value` 与前文中的技能进程占位符之间存在以下对应关系：
+
+| skill_type | sequence_number | content.fields.name.value  |
+| ---------- | --------------- | -------------------------- |
+| 0          | 0               | `{SkillProcessFarming1}` |
+| 0          | 1               | `{SkillProcessFarming2}` |
+| 1          | 0               | `{SkillProcessWooding}`  |
+| 3          | 0               | `{SkillProcessMining}`   |
+| 6          | 0               | `{SkillProcessCrafting}` |
+
 通过 Sui JSON RPC 查询玩家的船队信息或技能进程信息，过程略显繁琐。
 我们的链下查询服务（indexer）提供了更便捷的接口。
-
 
 #### 通过 indexer 查询玩家的船队
 
@@ -1397,8 +1399,8 @@ curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={pla
 船队元素包含的属性：
 
 * `rosterId` 为船队的业务主键 ID。
-    其下的属性 `playerId ` 为船队所属玩家 ID，
-    `sequenceNumber` 为该船队的编号。
+  其下的属性 `playerId ` 为船队所属玩家 ID，
+  `sequenceNumber` 为该船队的编号。
 * `id_` 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
 * `status` 为船队的状态。0：停泊中，1：行进中，2：战斗中，3：已损毁。
 * `speed` 为船队的速度。
@@ -1420,7 +1422,6 @@ curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={pla
 * `value.building_expenses.fields.items` 是该船只的建造原料列表。
 * `value.building_expenses.fields.items.fields.item_id` 建造原料的 Item ID。
 * `value.building_expenses.fields.items.fields.quantity` 建造原料的数量。
-
 
 #### 通过 indexer 查询玩家的技能进程
 
@@ -1532,25 +1533,25 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 元素包含的属性：
 
 * `skillProcessId` 为技能进程的业务主键 ID。
-    其中 `skillType` 表示技能类型，
-    `playerId` 为玩家对象 ID，
-    `sequenceNumber` 为该技能的“生产线”序列号。
-    目前，除了农业（farming）有 0 和 1，其他技能这里都是 0。
+  其中 `skillType` 表示技能类型，
+  `playerId` 为玩家对象 ID，
+  `sequenceNumber` 为该技能的“生产线”序列号。
+  目前，除了农业（farming）有 0 和 1，其他技能这里都是 0。
 * `itemId` 为该技能进程的产出成品的 Item ID。
 * `startedAt` 技能进程的最后一次启动时间。这是一个以秒数计算的 Unix 时间。
 * `completed` 最后一次“生产”是否已完成。
-    如果完成，可以开始下一次生产；
-    如果没有完成，但是“时间已到”，那么前端可以调用 complete 方法来获取制造结果，
-    并更新“生产线”的状态。
+  如果完成，可以开始下一次生产；
+  如果没有完成，但是“时间已到”，那么前端可以调用相应的 complete 方法来获取制造结果，
+  并更新“生产线”的状态。
 * `endedAt` 最后一次“生产”的结束时间。
 * `energyVault` 消耗能量币的数量。
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
-    “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+  “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
 
+---
 
-----------------------------------------------------
 以下待修改
-----------------------------------------------------
+----------
 
 ### 开始生产流程
 
