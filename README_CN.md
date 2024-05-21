@@ -169,41 +169,42 @@ wubuku/dddappp:0.0.1 \
 ```json
 {
   "coin": {
-    "TreasuryCap": "0x45bef3a9403c1af45551f958022a23c52399a8f9cdd95694097c26966ff2c50b",
-    "PackageId": "0xc88d834617796a46ad9076bb7c7929f20e2e4395441d6529b995ee4c6d91e1ab",
-    "Digest": "DUzQinWD7TyYK3yVb5AvWeVspKk1m75vyAv9t1huCbtX",
-    "EnergyId": "0xcc301d760ca2af0f383cb3cb730337a88c9f86cae47d6700d90ffab4a611e9d7"
+    "TreasuryCap": "0xb832e0d3c39dddab7181e08bb193e7b813770139b2401f29a3c683ee3d1296c7",
+    "PackageId": "0xcf2c3b147d64badb2fbe9e8574004dd8a30b9dc417e0a26eaaddfcfbc0cbc532",
+    "Digest": "FA5PHdEzLWZ8S6oXZ8DtHwd5yUEVD3fwLtSzszbhXuiE",
+    "EnergyId": "0x30205ca82aeab727937149fa9456ab8553cb0494350ac158f20dfdd3de466403"
   },
   "common": {
-    "Digest": "8WUmx5GSp3VLfZG4Ezockmgifkne47Gowxhj3pJ9ztrb",
-    "Publisher": "0x53001da8168d99f8733bfa1e88e5367fbddef584d4fbccb823d03c733eb8f183",
-    "PackageId": "0x60199eae5d0ae8e867fc64548eb7d01ff08b741d265adacb3f40cda17ec80aec",
-    "ExperienceTable": "0x6416b22fc0416eae49b3d6230ec817aec5ff3dcd760f781690e12f4e25fd10d2",
-    "ItemCreationTable": "0x837a5d2cb879c8831b9858db20bef8a1bb6cb0112916b2a177331d718907f41e",
-    "ItemTable": "0xabcdbb6ad9da21070c50cbd06eba4357d5cd29193a172dd218f5455a9bbbf367",
-    "ItemProductionTable": "0xc382590b7e266071fb67337086b9fb9fbb3468397def139172f7b665b8c1c2ff",
-    "ItemCreationMining": "0xad1a2084441878b0a77bdaaf451ca41424705d19c25b8bd589e30a3459fea4bb",
-    "ItemProductionFarming": "0xfbd287a0196e9a3d5abc975c4c98394aa76c474e448dfd5c7be1e10c10874045",
-    "ItemCreationWooding": "0x235588535c23089895f7e023546a55b19f5fce90726eb54b37d44dc352a8f90b",
-    "ItemProductionCrafting": "0xb7f5dc6e57ae0da9b98686f5f27bc18f12d53f74edda3b21e8adefb56997d0ef"
+    "Digest": "QnDYV5DtMK6C3wX8rWkQcoe9woRoGGmx2mAUkA1mbq2",
+    "ItemTable": "0x33bb3e6b51a0ef9197ac577d67ccf4f31df3a5a098400e07e1de9bafe64d4039",
+    "ExperienceTable": "0x48a5284bd638ddae564f268c910726b461e47dc1aac8f4b104e4373b5d5ea738",
+    "ItemCreationTable": "0x775322c064f71e411cc1b24388627a2ebf8a7efa86005b795f0fcdc0e7afc841",
+    "PackageId": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487",
+    "Publisher": "0xe10e7b40567e52ad7fadf0e9e5e9dbd22e01aea6e571e78a180665058d610195",
+    "ItemProductionTable": "0xe4976f4a8a5b3660afd00e3d507d858dfdbc3825005df34ec330d116a2925fc3",
+    "ItemCreationMining": "0x6a5cb4777086f63569f03f186ce0cfcbd8d32e523cf39ee8b13140244da27ad3",
+    "ItemProductionFarming": "0x7adeee1b2bc8fdff2d63d9ebf2746aa9ff25efacfc8c3451c7f8ba4e07094cd7",
+    "ItemCreationWooding": "0xd8c1474f9a8e957f2c29e360f9ed037c3a92da9122a3c7b0e18d6fb45de40154",
+    "ItemProductionCrafting": "0xe41a615e902dae33fc22671ba2d43462e2f89236ecef3e182fafa6f9f3dbda44"
   },
   "main": {
-    "Digest": "8jcbCg8pwLC8xq3iBLhRgChu4n12BTpxnHmqgkB6cvqn",
-    "UpgradeCap": "0x126788288df9186075311e787a461a40fd3a21760ef664cc65f4ec275e13293c",
-    "Publisher": "0x261ddc1e04be8731547d5ec6574c5573677ded3ab3ffba861c0857fa2ea04357",
-    "PackageId": "0x336766298e8dee8b9bfa29622adbd07028e121cf04f353a286f111ea412aea2e",
-    "RosterTable": "0x60762e7810db62b88ab6332bd4ed38989fea82fa04f479e863907d0cb599822f",
-    "SkillProcessTable": "0x672a2e59388b87663762a03372553b6942bc6dcea4cd2ca5a3c752e32207ea97",
-    "AdminCap": "0x9bc77a40625e2d53508637325859bdd37304874d5a29d27d079869321250c464",
-    "Map": "0xc9bcf6235d0e24a1fbeaa565c0830d203f66122a86acf653ee96c5e8254c22ac",
-    "Player": "0x56a4639600c0698a5816da1f60446db563cec76c2a8138f4f696278d5f713bf6",
-    "SkillProcessMining": "0x06938825b815245399927b7b9ef0218fc0698639eb5082db101608dfc057a0ee",
-    "SkillProcessWooding": "0x12da910316deab3883a19d6de2a316e5557dd7614b7f04c09351f4a9bfa6e4bd",
-    "SkillProcessCrafting": "0x520599603c598d94620fb34d0546e68228e3a206a8fe9e2768f99a31aa74f1c6",
-    "SkillProcessFarming2": "0xa19ae193efbd03bdc3c9cdb00e5eff06d7f901f14884d6ca0e654edca75b7cb0",
-    "SkillProcessFarming1": "0xb54b805d077a7df5ed189a8a9573a3ddffa75db67c119048e6759b07cc996a8b"
+    "Digest": "9VfayLCVLp7hBPGLpQyoztgiuqLerAzhwqLELdpR9RQh",
+    "PackageId": "0x8d4b0f3b3be41e525ec63e252f14b52e149ead9b2904f55a8b3878044999b56b",
+    "Publisher": "0x90b70a3bbcd0b0d5d203e2d6cf77c65a3a0025b7671bab64d71c58a91d4b5b0f",
+    "RosterTable": "0x920ce5e3b3afc1f6a312f59aec8b9e80b6ebe11c86f4ec5ae3f5cebc1ec34a7f",
+    "AdminCap": "0x9b341caeae5a72ac6fc497fbd426b48565b2be69e7a73d90aadfb6a9b479f459",
+    "UpgradeCap": "0xb0c8b32183ee7e40241a6969121a75e071426382f8279d7208d11ef691fa3d3e",
+    "SkillProcessTable": "0xc90ce4d672d492d82ef1ec642b5ee2bd8756482f5372b8473ad7e5e063dfe209",
+    "Map": "0xc9fa916b2613408af026091b17b505a3f49af001ff0c774516de5a1414716bd7",
+    "Player": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+    "SkillProcessFarming1": "0x3a2b5e7b36111f2fb9f6423c6c2ef5a5cba73f441af6fec0cb616ee37698356b",
+    "SkillProcessWooding": "0x9ced723bd1cd3a36aa7b778c6596f1ebf0182fd3f65c9e4144bfe623f7c7909b",
+    "SkillProcessFarming2": "0xb70e54cfca7a3f6fa68bc616e761a47789f6013e51aa2d616f61e5e10982bbab",
+    "SkillProcessMining": "0xbd0d065237b2b11136c9d2f3d88cdc8909e1869a7ab44bf0398d373571701629",
+    "SkillProcessCrafting": "0xf9c94a70f9fe017e5f3e9cba022d3b82b48382f3b8581fe1e48b1256885bc6b3"
   }
 }
+
 ```
 
 解释如下：
@@ -822,51 +823,72 @@ sui client object {RosterId} --json
 
 ```json
 {
-  "coin": {
-    "TreasuryCap": "0xb832e0d3c39dddab7181e08bb193e7b813770139b2401f29a3c683ee3d1296c7",
-    "PackageId": "0xcf2c3b147d64badb2fbe9e8574004dd8a30b9dc417e0a26eaaddfcfbc0cbc532",
-    "Digest": "FA5PHdEzLWZ8S6oXZ8DtHwd5yUEVD3fwLtSzszbhXuiE",
-    "EnergyId": "0x30205ca82aeab727937149fa9456ab8553cb0494350ac158f20dfdd3de466403"
+  "objectId": "0x8b1fe8c0bae52a1eccd9dcd0d3b5dbc081549950e6b3326ff6fd9c75bb09861b",
+  "version": "38222489",
+  "digest": "FvUvdSzCyqmP19QxmzsoxvzAuKeSFmPEoHGMv6sDUDcZ",
+  "type": "0x8d4b0f3b3be41e525ec63e252f14b52e149ead9b2904f55a8b3878044999b56b::roster::Roster",
+  "owner": {
+    "Shared": {
+      "initial_shared_version": 38222489
+    }
   },
-  "common": {
-    "Digest": "QnDYV5DtMK6C3wX8rWkQcoe9woRoGGmx2mAUkA1mbq2",
-    "ItemTable": "0x33bb3e6b51a0ef9197ac577d67ccf4f31df3a5a098400e07e1de9bafe64d4039",
-    "ExperienceTable": "0x48a5284bd638ddae564f268c910726b461e47dc1aac8f4b104e4373b5d5ea738",
-    "ItemCreationTable": "0x775322c064f71e411cc1b24388627a2ebf8a7efa86005b795f0fcdc0e7afc841",
-    "PackageId": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487",
-    "Publisher": "0xe10e7b40567e52ad7fadf0e9e5e9dbd22e01aea6e571e78a180665058d610195",
-    "ItemProductionTable": "0xe4976f4a8a5b3660afd00e3d507d858dfdbc3825005df34ec330d116a2925fc3",
-    "ItemCreationMining": "0x6a5cb4777086f63569f03f186ce0cfcbd8d32e523cf39ee8b13140244da27ad3",
-    "ItemProductionFarming": "0x7adeee1b2bc8fdff2d63d9ebf2746aa9ff25efacfc8c3451c7f8ba4e07094cd7",
-    "ItemCreationWooding": "0xd8c1474f9a8e957f2c29e360f9ed037c3a92da9122a3c7b0e18d6fb45de40154",
-    "ItemProductionCrafting": "0xe41a615e902dae33fc22671ba2d43462e2f89236ecef3e182fafa6f9f3dbda44"
-  },
-  "main": {
-    "Digest": "9VfayLCVLp7hBPGLpQyoztgiuqLerAzhwqLELdpR9RQh",
-    "PackageId": "0x8d4b0f3b3be41e525ec63e252f14b52e149ead9b2904f55a8b3878044999b56b",
-    "Publisher": "0x90b70a3bbcd0b0d5d203e2d6cf77c65a3a0025b7671bab64d71c58a91d4b5b0f",
-    "RosterTable": "0x920ce5e3b3afc1f6a312f59aec8b9e80b6ebe11c86f4ec5ae3f5cebc1ec34a7f",
-    "AdminCap": "0x9b341caeae5a72ac6fc497fbd426b48565b2be69e7a73d90aadfb6a9b479f459",
-    "UpgradeCap": "0xb0c8b32183ee7e40241a6969121a75e071426382f8279d7208d11ef691fa3d3e",
-    "SkillProcessTable": "0xc90ce4d672d492d82ef1ec642b5ee2bd8756482f5372b8473ad7e5e063dfe209",
-    "Map": "0xc9fa916b2613408af026091b17b505a3f49af001ff0c774516de5a1414716bd7",
-    "Player": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
-    "SkillProcessFarming1": "0x3a2b5e7b36111f2fb9f6423c6c2ef5a5cba73f441af6fec0cb616ee37698356b",
-    "SkillProcessWooding": "0x9ced723bd1cd3a36aa7b778c6596f1ebf0182fd3f65c9e4144bfe623f7c7909b",
-    "SkillProcessFarming2": "0xb70e54cfca7a3f6fa68bc616e761a47789f6013e51aa2d616f61e5e10982bbab",
-    "SkillProcessMining": "0xbd0d065237b2b11136c9d2f3d88cdc8909e1869a7ab44bf0398d373571701629",
-    "SkillProcessCrafting": "0xf9c94a70f9fe017e5f3e9cba022d3b82b48382f3b8581fe1e48b1256885bc6b3"
+  "previousTransaction": "D1xCRt3k13KSmpDQGpL8GJcEh2pUf9erMzCm1vURjfco",
+  "storageRebate": "2462400",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x8d4b0f3b3be41e525ec63e252f14b52e149ead9b2904f55a8b3878044999b56b::roster::Roster",
+    "hasPublicTransfer": false,
+    "fields": {
+      "admin_cap": "0x5ca182644b2013ed1fbdcc7af8ea5f75a17244af587d10ea6a442666f3dbeb69",
+      "base_experience": null,
+      "coordinates_updated_at": "0",
+      "energy_vault": "0",
+      "environment_owned": false,
+      "id": {
+        "id": "0x8b1fe8c0bae52a1eccd9dcd0d3b5dbc081549950e6b3326ff6fd9c75bb09861b"
+      },
+      "roster_id": {
+        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::roster_id::RosterId",
+        "fields": {
+          "player_id": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+          "sequence_number": 1
+        }
+      },
+      "schema_version": "0",
+      "ship_battle_id": null,
+      "ship_ids": [],
+      "ships": {
+        "type": "0x2::object_table::ObjectTable<0x2::object::ID, 0x8d4b0f3b3be41e525ec63e252f14b52e149ead9b2904f55a8b3878044999b56b::ship::Ship>",
+        "fields": {
+          "id": {
+            "id": "0x05967ae35658e974c23dd2e6d64b3831ce03e1e8740b7635c61323fdc8cd89c2"
+          },
+          "size": "0"
+        }
+      },
+      "speed": 0,
+      "status": 0,
+      "target_coordinates": null,
+      "updated_coordinates": {
+        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::coordinates::Coordinates",
+        "fields": {
+          "x": 50,
+          "y": 50
+        }
+      },
+      "version": "0"
+    }
   }
 }
 ```
 
-注意其 `content.fields.name` 属性。可以看到其 `type` 为 `{common.PackageId}::roster_id::RosterId`，其 `fields` 中包括 `player_id` 和 `sequence_number` ，其中 `player_id` 为玩家的 Id， `sequence_number` 为船队编号。
+注意其 `content.fields.roster_id` 属性。可以看到其 `type` 为 `{common.PackageId}::roster_id::RosterId`，其 `fields` 中包括 `player_id` 和 `sequence_number` ，其中 `player_id` 为玩家的 ID， `sequence_number` 为船队编号。
 
 每个玩家有 5 个船队，编号依次为 0，1，2，3，4。
 
 其中 0 号船队为默认船队，即  Unassigned Roster。
 
-当玩家执行造船进程成功得到的船只默认存放到该船队。
+当玩家执行造船进程成功得到的船只默认加入到该船队。
 
 注意：目前该船队中不包括任何船只，当玩家将船只移入该船队后，将呈现更多的属性，我们在后面的章节将会依次提到并解释。
 
@@ -940,14 +962,400 @@ sui client object {SkillProcessId} --json
 使用以下 Sui CLI 命令可以取得指定玩家的船队信息：
 
 ```powershell
-curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={playerId}" -H "accept: application/json"
+curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={playerId}" \
+         -H "accept: application/json"
 ```
 
 输出信息类似下面这样：
 
 ```json
-
+[
+    {
+        "rosterId": {
+            "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+            "sequenceNumber": 0
+        },
+        "id_": "0x4d92b147c3f3d11dda09709e21a9362735bc0e773bb39b0d161f5ecd9f2a3bff",
+        "status": 0,
+        "speed": 4,
+        "ships": {
+            "id": "0xde8410c83dd8827bbd039f41cccdb40be523db31546f29ab065a0944e8a274a0",
+            "size": 1
+        },
+        "updatedCoordinates": {
+            "x": 50,
+            "y": 50
+        },
+        "coordinatesUpdatedAt": 0,
+        "environmentOwned": false,
+        "energyVault": 0,
+        "version": 9,
+        "offChainVersion": 9,
+        "rosterShipsItems": [
+            {
+                "key": "0x17f835a304db4c0cc106e35f194d4f8c658a2ede0f00ca9f01b7878c7d5586cd",
+                "value": {
+                    "owner": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "building_expenses": {
+                        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pairs::ItemIdQuantityPairs",
+                        "fields": {
+                            "items": [
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 102,
+                                        "quantity": 4
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 200,
+                                        "quantity": 4
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 301,
+                                        "quantity": 7
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "attack": 5,
+                    "protection": 4,
+                    "id": {
+                        "id": "0x17f835a304db4c0cc106e35f194d4f8c658a2ede0f00ca9f01b7878c7d5586cd"
+                    },
+                    "health_points": 20,
+                    "version": "0",
+                    "speed": 4
+                },
+                "offChainVersion": 0,
+                "rosterId": {
+                    "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "sequenceNumber": 0
+                }
+            }
+        ],
+        "shipIds": [
+            "0x17f835a304db4c0cc106e35f194d4f8c658a2ede0f00ca9f01b7878c7d5586cd"
+        ]
+    },
+    {
+        "rosterId": {
+            "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+            "sequenceNumber": 1
+        },
+        "id_": "0x8b1fe8c0bae52a1eccd9dcd0d3b5dbc081549950e6b3326ff6fd9c75bb09861b",
+        "status": 0,
+        "speed": 0,
+        "ships": {
+            "id": "0x05967ae35658e974c23dd2e6d64b3831ce03e1e8740b7635c61323fdc8cd89c2",
+            "size": 0
+        },
+        "updatedCoordinates": {
+            "x": 50,
+            "y": 50
+        },
+        "coordinatesUpdatedAt": 0,
+        "environmentOwned": false,
+        "energyVault": 0,
+        "version": 0,
+        "offChainVersion": 0
+    },
+    {
+        "rosterId": {
+            "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+            "sequenceNumber": 2
+        },
+        "id_": "0x1a66c3613c83e7e88c3e9ee111306f8327a5b6f9ec6f1361b07588c26fcaca65",
+        "status": 0,
+        "speed": 0,
+        "ships": {
+            "id": "0xee0f09701ce72eafe2c4943a6a0edf65ac6cc8b00d805cee1ddffa55a5959533",
+            "size": 0
+        },
+        "updatedCoordinates": {
+            "x": 50,
+            "y": 50
+        },
+        "coordinatesUpdatedAt": 0,
+        "environmentOwned": false,
+        "energyVault": 0,
+        "version": 0,
+        "offChainVersion": 0
+    },
+    {
+        "rosterId": {
+            "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+            "sequenceNumber": 3
+        },
+        "id_": "0x302126a4537c8189d8d94cc45e4127c8c7069dfa352de9195588a741870dfdcc",
+        "status": 0,
+        "speed": 0,
+        "ships": {
+            "id": "0xe61990569be23b7325ec8d418445c14f4173a7cfea1ac62b42a7439cba0b068f",
+            "size": 0
+        },
+        "updatedCoordinates": {
+            "x": 50,
+            "y": 50
+        },
+        "coordinatesUpdatedAt": 0,
+        "environmentOwned": false,
+        "energyVault": 0,
+        "version": 0,
+        "offChainVersion": 0
+    },
+    {
+        "rosterId": {
+            "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+            "sequenceNumber": 4
+        },
+        "id_": "0xb490508e29aebda93bb90868f1bb9d455810785d8eda48b5c72e3b05012387a3",
+        "status": 0,
+        "speed": 4,
+        "ships": {
+            "id": "0x20a0743fe4a541e1ea9483035758273b1d3dc02627c675ea19bd5ba4a1df95de",
+            "size": 4
+        },
+        "updatedCoordinates": {
+            "x": 50,
+            "y": 50
+        },
+        "coordinatesUpdatedAt": 0,
+        "environmentOwned": false,
+        "energyVault": 0,
+        "version": 0,
+        "offChainVersion": 0,
+        "rosterShipsItems": [
+            {
+                "key": "0xe80a2fbcb21a9a2b318b30bf478fef5ef0c35e542460f0432d6470ee6c3e1eb6",
+                "value": {
+                    "owner": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "building_expenses": {
+                        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pairs::ItemIdQuantityPairs",
+                        "fields": {
+                            "items": [
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 102,
+                                        "quantity": 4
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 200,
+                                        "quantity": 5
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 301,
+                                        "quantity": 6
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "attack": 5,
+                    "protection": 5,
+                    "id": {
+                        "id": "0xe80a2fbcb21a9a2b318b30bf478fef5ef0c35e542460f0432d6470ee6c3e1eb6"
+                    },
+                    "health_points": 20,
+                    "version": "0",
+                    "speed": 4
+                },
+                "offChainVersion": 0,
+                "rosterId": {
+                    "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "sequenceNumber": 4
+                }
+            },
+            {
+                "key": "0x273bd00b0df174f6595fcd5f6e8dbe8344a38a5f6aa4516e0002b49def8c39c4",
+                "value": {
+                    "owner": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "building_expenses": {
+                        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pairs::ItemIdQuantityPairs",
+                        "fields": {
+                            "items": [
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 102,
+                                        "quantity": 6
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 200,
+                                        "quantity": 5
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 301,
+                                        "quantity": 4
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "attack": 4,
+                    "protection": 5,
+                    "id": {
+                        "id": "0x273bd00b0df174f6595fcd5f6e8dbe8344a38a5f6aa4516e0002b49def8c39c4"
+                    },
+                    "health_points": 20,
+                    "version": "0",
+                    "speed": 5
+                },
+                "offChainVersion": 0,
+                "rosterId": {
+                    "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "sequenceNumber": 4
+                }
+            },
+            {
+                "key": "0x80dc17e475a259cde1a114689d110f8aa109e0bcabcf85b4876371ebc813f744",
+                "value": {
+                    "owner": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "building_expenses": {
+                        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pairs::ItemIdQuantityPairs",
+                        "fields": {
+                            "items": [
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 102,
+                                        "quantity": 6
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 200,
+                                        "quantity": 4
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 301,
+                                        "quantity": 5
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "attack": 5,
+                    "protection": 4,
+                    "id": {
+                        "id": "0x80dc17e475a259cde1a114689d110f8aa109e0bcabcf85b4876371ebc813f744"
+                    },
+                    "health_points": 20,
+                    "version": "0",
+                    "speed": 5
+                },
+                "offChainVersion": 0,
+                "rosterId": {
+                    "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "sequenceNumber": 4
+                }
+            },
+            {
+                "key": "0xdf17c004d47be86384895044a4df3325928a82706733e7a1562ab3ecd46957cf",
+                "value": {
+                    "owner": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "building_expenses": {
+                        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pairs::ItemIdQuantityPairs",
+                        "fields": {
+                            "items": [
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 102,
+                                        "quantity": 5
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 200,
+                                        "quantity": 6
+                                    }
+                                },
+                                {
+                                    "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::item_id_quantity_pair::ItemIdQuantityPair",
+                                    "fields": {
+                                        "item_id": 301,
+                                        "quantity": 4
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "attack": 4,
+                    "protection": 5,
+                    "id": {
+                        "id": "0xdf17c004d47be86384895044a4df3325928a82706733e7a1562ab3ecd46957cf"
+                    },
+                    "health_points": 20,
+                    "version": "0",
+                    "speed": 5
+                },
+                "offChainVersion": 0,
+                "rosterId": {
+                    "playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+                    "sequenceNumber": 4
+                }
+            }
+        ],
+        "shipIds": [
+            "0xe80a2fbcb21a9a2b318b30bf478fef5ef0c35e542460f0432d6470ee6c3e1eb6",
+            "0x273bd00b0df174f6595fcd5f6e8dbe8344a38a5f6aa4516e0002b49def8c39c4",
+            "0x80dc17e475a259cde1a114689d110f8aa109e0bcabcf85b4876371ebc813f744",
+            "0xdf17c004d47be86384895044a4df3325928a82706733e7a1562ab3ecd46957cf"
+        ]
+    }
+]
 ```
+
+该信息类型为数组，数组内的每个元素代表一个船队。
+
+在每一个船队元素中又有如下属性：
+
+* `rosterId` 船队的业务主键 ID。其下的属性 `playerId `  为船队所属玩家 ID，`sequenceNumber` 为该船队的编号。
+* `id_` 为 Sui 的船队对象 ID，即前面篇幅中提到的 {RosterId}，将其作为参数可以通过 Sui  CLI 查询船队在链上的信息。
+* `status` 为船队的状态，0：停泊中，1：行进中，2：战斗中，3：已损毁。
+* `speed` 为船队的速度。
+* `updatedCoordinates` 船队当前的位置坐标。
+* `environmentOwned` 是否是环境船队。
+* `coordinatesUpdatedAt` 船队位置最后更新时间。
+* `shipIds` 该船队包含的船只 ID 列表。
+* `rosterShipsItems` 该船队包含的船只元素列表。
+
+将焦点放在船队的 `rosterShipsItems` 属性，该属性为数组类型，其中的数组元素表示被包含的船只，主要包含以下属性：
+
+* `key` 为船只的 ID。
+* `attack` 为该船只的攻击值。
+*
+
+
+
+
+
+
 
 ----------------------------------------------------以下待修改------------------------------------------------------------------
 
