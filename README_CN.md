@@ -1468,7 +1468,19 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 现在对其重要属性做以下说明：
 
 * `skillProcessId` 为技能进程的业务主键 ID。其中 `skillType` 表示技能类型，`playerId` 为玩家 ID，`sequenceNumber` 为该技能的“生产线”序列号。
-*
+* `itemId` 该技能进程可生产的资源结果。
+* `startedAt` 该技能进程开始时间（生产线开动时间）。
+* `completed` 是否结束（？）。
+* `endedAt` 结束时间。
+* `energyVault` 消耗 ENERY coin 数量。
+* `batchSize` 本批次数量。比如本次一次性种植多少颗棉花种子。
+
+
+
+
+
+
+
 
 ----------------------------------------------------以下待修改------------------------------------------------------------------
 
