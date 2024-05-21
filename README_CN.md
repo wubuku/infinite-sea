@@ -130,6 +130,7 @@ wubuku/dddappp:0.0.1 \
 
 #### Item（物品、资源） ID 常量
 
+
 | Item Id    | Name                    | 说明                                    |
 | ---------- | ----------------------- | --------------------------------------- |
 | 0          | UNUSED_ITEM             | 未使用                                  |
@@ -142,6 +143,7 @@ wubuku/dddappp:0.0.1 \
 | 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
 
 #### 技能常量
+
 
 | 技能        | 常量 | 说明 |
 | ----------- | ---- | ---- |
@@ -211,6 +213,18 @@ wubuku/dddappp:0.0.1 \
 * `main.Digest`：发布 Main 包交易的摘要。
 * `coin.EnergyId`：Mint 获得的能量币（`ENERGY`）的 Object ID。
 * `main.Map`：地图（map）的 Object ID。
+
+特别注意 `common` 中的 `ItemCreationMining，ItemProductionFarming，ItemCreationWooding，ItemProducitonCrafting` 四个属性，现在解释说明如下：
+
+这些属性是合约发布之后，后台调用接口生成的关于生产制造的配方，将它们视为常量使用。
+
+
+| 配方   | 调用占位符                 | 说明                                 |
+| ------ | -------------------------- | ------------------------------------ |
+| 挖矿   | {`ItemCreationMining`}     | 开始挖矿进程和结束挖矿进程时使用     |
+| 伐木   | {`ItemCreationWooding`}    | 开始伐木进程和结束伐木进程时使用     |
+| 种棉花 | {`ItemProductionFarming`}  | 开始种植棉花进程和结束棉花进程时使用 |
+| 造船   | {`ItemProducitonCrafting`} | 开始造船进程和结束造船进程时使用     |
 
 ### 获取地图信息
 
@@ -808,32 +822,40 @@ sui client object {RosterId} --json
 
 ```json
 {
-  "objectId": "0x1859a93305fb450b9f788aa57cf1ae0c340266e57dad249da13e079a6c58a4aa",
-  "version": "38211112",
-  "digest": "H81ZQr4cT7D7z5HBpS2fBKgRMSCnXyjaQvNxSpcnJok4",
-  "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId, 0x2::object::ID>",
-  "owner": {
-    "ObjectOwner": "0xc36ee5a398f9848b35c0a6d62bb37ab10ecc68256d0fd44d5bea5f57a41e98d4"
+  "coin": {
+    "TreasuryCap": "0xb832e0d3c39dddab7181e08bb193e7b813770139b2401f29a3c683ee3d1296c7",
+    "PackageId": "0xcf2c3b147d64badb2fbe9e8574004dd8a30b9dc417e0a26eaaddfcfbc0cbc532",
+    "Digest": "FA5PHdEzLWZ8S6oXZ8DtHwd5yUEVD3fwLtSzszbhXuiE",
+    "EnergyId": "0x30205ca82aeab727937149fa9456ab8553cb0494350ac158f20dfdd3de466403"
   },
-  "previousTransaction": "B46Tg4tuvrazHvqnkH29V5Haie9RHYqKLyHs9aciFJqG",
-  "storageRebate": "2561200",
-  "content": {
-    "dataType": "moveObject",
-    "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId, 0x2::object::ID>",
-    "hasPublicTransfer": false,
-    "fields": {
-      "id": {
-        "id": "0x1859a93305fb450b9f788aa57cf1ae0c340266e57dad249da13e079a6c58a4aa"
-      },
-      "name": {
-        "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId",
-        "fields": {
-          "player_id": "0xc68695161ec629a13e5e749f08207436aa6b47ce1b66c1f0ff63f77d1cce7228",
-          "sequence_number": 2
-        }
-      },
-      "value": "0x3e69224c0b59c663f7a918efdeb2afb011b5dbddecc49f3bf4b4c0b4ba498a16"
-    }
+  "common": {
+    "Digest": "QnDYV5DtMK6C3wX8rWkQcoe9woRoGGmx2mAUkA1mbq2",
+    "ItemTable": "0x33bb3e6b51a0ef9197ac577d67ccf4f31df3a5a098400e07e1de9bafe64d4039",
+    "ExperienceTable": "0x48a5284bd638ddae564f268c910726b461e47dc1aac8f4b104e4373b5d5ea738",
+    "ItemCreationTable": "0x775322c064f71e411cc1b24388627a2ebf8a7efa86005b795f0fcdc0e7afc841",
+    "PackageId": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487",
+    "Publisher": "0xe10e7b40567e52ad7fadf0e9e5e9dbd22e01aea6e571e78a180665058d610195",
+    "ItemProductionTable": "0xe4976f4a8a5b3660afd00e3d507d858dfdbc3825005df34ec330d116a2925fc3",
+    "ItemCreationMining": "0x6a5cb4777086f63569f03f186ce0cfcbd8d32e523cf39ee8b13140244da27ad3",
+    "ItemProductionFarming": "0x7adeee1b2bc8fdff2d63d9ebf2746aa9ff25efacfc8c3451c7f8ba4e07094cd7",
+    "ItemCreationWooding": "0xd8c1474f9a8e957f2c29e360f9ed037c3a92da9122a3c7b0e18d6fb45de40154",
+    "ItemProductionCrafting": "0xe41a615e902dae33fc22671ba2d43462e2f89236ecef3e182fafa6f9f3dbda44"
+  },
+  "main": {
+    "Digest": "9VfayLCVLp7hBPGLpQyoztgiuqLerAzhwqLELdpR9RQh",
+    "PackageId": "0x8d4b0f3b3be41e525ec63e252f14b52e149ead9b2904f55a8b3878044999b56b",
+    "Publisher": "0x90b70a3bbcd0b0d5d203e2d6cf77c65a3a0025b7671bab64d71c58a91d4b5b0f",
+    "RosterTable": "0x920ce5e3b3afc1f6a312f59aec8b9e80b6ebe11c86f4ec5ae3f5cebc1ec34a7f",
+    "AdminCap": "0x9b341caeae5a72ac6fc497fbd426b48565b2be69e7a73d90aadfb6a9b479f459",
+    "UpgradeCap": "0xb0c8b32183ee7e40241a6969121a75e071426382f8279d7208d11ef691fa3d3e",
+    "SkillProcessTable": "0xc90ce4d672d492d82ef1ec642b5ee2bd8756482f5372b8473ad7e5e063dfe209",
+    "Map": "0xc9fa916b2613408af026091b17b505a3f49af001ff0c774516de5a1414716bd7",
+    "Player": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+    "SkillProcessFarming1": "0x3a2b5e7b36111f2fb9f6423c6c2ef5a5cba73f441af6fec0cb616ee37698356b",
+    "SkillProcessWooding": "0x9ced723bd1cd3a36aa7b778c6596f1ebf0182fd3f65c9e4144bfe623f7c7909b",
+    "SkillProcessFarming2": "0xb70e54cfca7a3f6fa68bc616e761a47789f6013e51aa2d616f61e5e10982bbab",
+    "SkillProcessMining": "0xbd0d065237b2b11136c9d2f3d88cdc8909e1869a7ab44bf0398d373571701629",
+    "SkillProcessCrafting": "0xf9c94a70f9fe017e5f3e9cba022d3b82b48382f3b8581fe1e48b1256885bc6b3"
   }
 }
 ```
@@ -853,6 +875,7 @@ sui client object {RosterId} --json
 可以将玩家的技能进程比喻为“生产线”。
 
 玩家在占领一个岛屿之后，系统会为之赋予 4 类 5 条“生产线”。
+
 
 | 类型                 | 对应技能类型常量值 | “生产线”数量 | 进程占位符                                  |
 | -------------------- | ------------------ | -------------- | ------------------------------------------- |
@@ -910,11 +933,21 @@ sui client object {SkillProcessId} --json
 
 依次查询前一步得到的 5 个 {SkillProcessId}，可以获取上面提及的 4 类 5 条“生产线” 信息。
 
+通过链上无论是查询玩家的船队信息还是技能进程信息，通过上面的示例可以发现比较繁琐。
 
+为此我们提供以下链下（indexer）服务。
 
+使用以下 Sui CLI 命令可以取得指定玩家的船队信息：
 
+```powershell
+curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={playerId}" -H "accept: application/json"
+```
 
+输出信息类似下面这样：
 
+```json
+
+```
 
 ----------------------------------------------------以下待修改------------------------------------------------------------------
 
