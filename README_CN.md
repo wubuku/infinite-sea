@@ -214,9 +214,9 @@ wubuku/dddappp:0.0.1 \
 * `coin.EnergyId`：Mint 获得的能量币（`ENERGY`）的 Object ID。
 * `main.Map`：地图（map）的 Object ID。
 
-特别注意 `common` 中的 `ItemCreationMining，ItemProductionFarming，ItemCreationWooding，ItemProducitonCrafting` 四个属性，现在解释说明如下：
+特别注意 `common` 中的 `ItemCreationMining，ItemProductionFarming，ItemCreationWooding，ItemProducitonCrafting` 四个属性：
 
-这些属性是合约发布之后，后台调用接口生成的关于生产制造的配方，将它们视为常量使用。
+这些属性是合约发布之后，后台调用接口生成的关于生产制造的配方的 ID，前端可以将它们视为常量使用。
 
 
 | 配方   | 调用占位符                 | 说明                                 |
@@ -286,41 +286,44 @@ curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"me
 
 ```JSON
 {
-	"jsonrpc": "2.0",
-	"result": {
-		"data": [{
-			"name": {
-				"type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates",
-				"value": {
-					"x": 51,
-					"y": 51
-				}
-			},
-			"bcsName": "9XmJiC4mP1y",
-			"type": "DynamicField",
-			"objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation",
-			"objectId": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692",
-			"version": 37717652,
-			"digest": "9H5nvaRUXbyULStSPsjUdDn7DXQS1nNFmVqKmRVyoMPn"
-		}, {
-			"name": {
-				"type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates",
-				"value": {
-					"x": 50,
-					"y": 50
-				}
-			},
-			"bcsName": "9N4dhPDnnU7",
-			"type": "DynamicField",
-			"objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation",
-			"objectId": "0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b",
-			"version": 37716508,
-			"digest": "BCn7aPsiJ2m935TZKXSbwozAt9U2MBzCrVtw1TVGbmJG"
-		}],
-		"nextCursor": "0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b",
-		"hasNextPage": false
-	},
-	"id": 1
+    "jsonrpc": "2.0",
+    "result": {
+        "data": [
+            {
+                "name": {
+                    "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates",
+                    "value": {
+                        "x": 51,
+                        "y": 51
+                    }
+                },
+                "bcsName": "9XmJiC4mP1y",
+                "type": "DynamicField",
+                "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation",
+                "objectId": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692",
+                "version": 37717652,
+                "digest": "9H5nvaRUXbyULStSPsjUdDn7DXQS1nNFmVqKmRVyoMPn"
+            },
+            {
+                "name": {
+                    "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates",
+                    "value": {
+                        "x": 50,
+                        "y": 50
+                    }
+                },
+                "bcsName": "9N4dhPDnnU7",
+                "type": "DynamicField",
+                "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation",
+                "objectId": "0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b",
+                "version": 37716508,
+                "digest": "BCn7aPsiJ2m935TZKXSbwozAt9U2MBzCrVtw1TVGbmJG"
+            }
+        ],
+        "nextCursor": "0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b",
+        "hasNextPage": false
+    },
+    "id": 1
 }
 ```
 
@@ -512,6 +515,62 @@ sui client call --package {main.PackageId} --module player_aggregate --function 
 
 其中 `objectId` 即为新创建的玩家对象的 ID。
 在后面的测试中，需要用到玩家对象 ID 的地方，我们使用占位符 `{playerId}` 来表示。
+
+### 查询玩家信息
+
+可以使用 curl 命令查询指定钱包地址所拥有的玩家信息：
+
+```powershell
+curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: application/json"
+```
+
+其中 {owner} 为指定钱包地址。
+
+可以获得如下格式的输出：
+
+```json
+[
+    {
+        "id": "0x05c6464186392942be5949947b2830a17343ce66b5bae374d3345c5a05eb1b16",
+        "owner": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+        "level": 2,
+        "experience": 105,
+        "name": "John",
+        "claimedIsland": {
+            "x": 50,
+            "y": 50
+        },
+        "version": 1,
+        "offChainVersion": 1,
+        "inventory": [
+            {
+                "itemId": 2000000001,
+                "quantity": 199
+            },
+            {
+                "itemId": 102,
+                "quantity": 105
+            },
+            {
+                "itemId": 2000000003,
+                "quantity": 199
+            }
+        ]
+    }
+]
+```
+
+数据格式为元素数组。如果数组为空，表示该钱包未拥有任何玩家，需要先创建一个玩家。
+
+如果该数组不为空，表示该钱包地址下拥有数组中的玩家，元素属性解释如下：
+
+* `id` 为玩家 ID。
+* `owner` 钱包地址。
+* `level` 玩家等级。
+* `experience` 积分（经验值）。
+* `name` 玩家昵称。
+* `claimedIsland` 玩家占领的岛屿的坐标地址。
+* `inventory` 玩家目前拥有的资产（资源），`item_id`为资源（Item）ID，`quantity`为数量。该属性随占领岛屿，进行生产（种植，挖矿，伐木，造船），战斗输赢等变化。
 
 ### 占领（Claim）岛屿
 
@@ -1467,20 +1526,13 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 
 现在对其重要属性做以下说明：
 
-* `skillProcessId` 为技能进程的业务主键 ID。其中 `skillType` 表示技能类型，`playerId` 为玩家 ID，`sequenceNumber` 为该技能的“生产线”序列号。
-* `itemId` 该技能进程可生产的资源结果。
-* `startedAt` 该技能进程开始时间（生产线开动时间）。
-* `completed` 是否结束（？）。
+* `skillProcessId` 为技能进程的业务主键 ID。其中 `skillType` 表示技能类型，`playerId` 为玩家 ID，`sequenceNumber` 为该技能的“生产线”序列号，除了农业（farming）有 0 和 1，其他技能这里都是 0。
+* `itemId` 该技能进程可生产的资源结果（Item）ID。
+* `startedAt` 该技能进程开始时间（生产线开动时间）以秒数计算的 Unix 时间。
+* `completed` 是否已经完成。如果完成，可以开始下一次制造；如果没有完成，但是“时间已到”，那么可以调用 complete 方法，来获取制造结果，并更新状态。。
 * `endedAt` 结束时间。
 * `energyVault` 消耗 ENERY coin 数量。
 * `batchSize` 本批次数量。比如本次一次性种植多少颗棉花种子。
-
-
-
-
-
-
-
 
 ----------------------------------------------------以下待修改------------------------------------------------------------------
 
