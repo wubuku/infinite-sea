@@ -90,7 +90,7 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
 模型文件位于目录 `./dddml` 下。
 
 > **Tip**
->
+> 
 > About DDDML, here is an introductory article: ["Introducing DDDML: The Key to Low-Code Development for Decentralized Applications"](https://github.com/wubuku/Dapp-LCDP-Demo/blob/main/IntroducingDDDML.md).
 
 ### 生成代码
@@ -200,7 +200,7 @@ wubuku/dddappp:0.0.1 \
     "ItemCreationMining": "0xad1a2084441878b0a77bdaaf451ca41424705d19c25b8bd589e30a3459fea4bb",
     "ItemProductionFarming": "0xfbd287a0196e9a3d5abc975c4c98394aa76c474e448dfd5c7be1e10c10874045",
     "ItemCreationWooding": "0x235588535c23089895f7e023546a55b19f5fce90726eb54b37d44dc352a8f90b",
-    "ItemProducitonCrafting": "0xb7f5dc6e57ae0da9b98686f5f27bc18f12d53f74edda3b21e8adefb56997d0ef"
+    "ItemProductionCrafting": "0xb7f5dc6e57ae0da9b98686f5f27bc18f12d53f74edda3b21e8adefb56997d0ef"
   },
   "main": {
     "Digest": "8jcbCg8pwLC8xq3iBLhRgChu4n12BTpxnHmqgkB6cvqn",
@@ -490,15 +490,12 @@ curl -X GET "http://{domain.port}/api/Maps/{main.map}" -H "accept: application/j
 }
 ```
 
-
-
 我们重点关注其 `locations`属性，该属性为数组形式，每一个元素均代表一个坐标点也就是一个岛屿。
 元素中如果显示 `occupiedBy`，表示该岛屿已经被玩家占有，其值为该玩家的Id。
 `gatheredAt`表示岛上资源上次被收集的时间。
 `resources`属性表示该岛上可以被收集的资源（种类和数量，种类请参照 资源常量 ）。
 
 如果某个元素没有显示 `resources` 属性通常表示该岛屿上的资源被玩家收集过，还未生成新的待收集资源。
-
 
 ### 玩家
 
@@ -536,7 +533,7 @@ sui client call --package {main.PackageId} --module player_aggregate --function 
 
 Player 登录之后，可以对无人占领的岛屿进行占领(Claim)。
 
-```json
+```shell
 sui client call --package {main.PackageId} \
 --module player_aggregate \
 --function claim_island \
@@ -558,14 +555,6 @@ sui client call --package {main.PackageId} \
 * {clock} 当前时间，采用固定值 `0x6`
 * {main.RosterTable} main 合约发布时得到的所有船队的 Table 的 Id，该 Table 中包含了所有玩家以及环境生成的所有船队，其 Key 为（玩家Id + 船队序号[0-4])
 * {main.SkillProcessTable} main合约发布时得到的所有技能流程 Table，该 Table 中包含了所有玩家的所能执行的所有流程（Farming,WoodCutting,Mining,Scrafting)，其 Key 为(玩家Id + SkillTypeId)
-
-
-
-
-
-
-
-
 
 ### 以下先忽略-----------------------------------
 
@@ -828,3 +817,4 @@ In the `sui-java-service` directory, execute the following command to start the 
 ```shell
 mvn -pl suiinfinitesea-service-rest -am spring-boot:run
 ```
+

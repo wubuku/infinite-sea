@@ -1305,8 +1305,8 @@ try {
     foreach ($object in $resultObj.objectChanges) {
         if ($object.objectType -like "*::item_production::ItemProduction") {
             $itemProductionCraftingId = $object.objectId
-            $dataCommon | Add-Member -MemberType NoteProperty -Name "ItemProducitonCrafting" -Value $itemProductionCraftingId 
-            "造船配方制作完成。 ItemProducitonCraftingId: $itemProductionCraftingId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+            $dataCommon | Add-Member -MemberType NoteProperty -Name "ItemProductionCrafting" -Value $itemProductionCraftingId 
+            "造船配方制作完成。 ItemProductionCraftingId: $itemProductionCraftingId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
             break;   
         }
     } 
@@ -1318,7 +1318,7 @@ catch {
     return    
 }
 if ($null -eq $itemProductionCraftingId) {
-    "ItemProducitonCraftingId 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    "ItemProductionCraftingId 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
     Set-Location $startLocation 
     return    
 }
