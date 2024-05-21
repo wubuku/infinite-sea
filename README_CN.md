@@ -130,7 +130,6 @@ wubuku/dddappp:0.0.1 \
 
 #### Item（物品、资源） ID 常量
 
-
 | Item Id    | Name                    | 说明                                    |
 | ---------- | ----------------------- | --------------------------------------- |
 | 0          | UNUSED_ITEM             | 未使用                                  |
@@ -143,7 +142,6 @@ wubuku/dddappp:0.0.1 \
 | 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
 
 #### 技能常量
-
 
 | 技能        | 常量 | 说明 |
 | ----------- | ---- | ---- |
@@ -550,11 +548,7 @@ sui client call --package {main.PackageId} --module player_aggregate --function 
 其中 `objectId` 即为新创建的玩家对象的 ID。
 在后面的测试中，需要用到玩家对象 ID 的地方，我们使用占位符 `{playId}` 来表示。
 
-<<<<<<< HEAD
-在之后的章节中，我们使用 {playerId} 来引用它。
-=======
 ### 占领（Claim）岛屿
->>>>>>> d547c73fe524c4c706f7987c84fccb779940c221
 
 用户在创建玩家（Player）对象之后，可以对无人占领的岛屿进行占领（Claim）。
 
@@ -574,18 +568,7 @@ sui client call --package {main.PackageId} \
 --gas-budget 4999000000 --json
 ```
 
-<<<<<<< HEAD
-* {main.PackageId} main合约之包 Id
-* {playerId} 玩家 Id
-* {main.map} main合约发布时得到的地图Id
-* {coordinates_x} Claim的岛屿的横坐标
-* {coordinates_y} Claim的岛屿的纵坐标
-* {clock} 当前时间，采用固定值 `0x6`
-* {main.RosterTable} main 合约发布时得到的所有船队的 Table 的 Id，该 Table 中包含了所有玩家以及环境生成的所有船队，其 Key 为（玩家Id + 船队序号[0-4])
-* {main.SkillProcessTable} main合约发布时得到的所有技能流程 Table，该 Table 中包含了所有玩家的所能执行的所有流程（Farming,WoodCutting,Mining,Scrafting)，其 Key 为(玩家Id + SkillTypeId)
-=======
 解释：
->>>>>>> d547c73fe524c4c706f7987c84fccb779940c221
 
 * `{main.PackageId}`：Main 合约包的 ID。
 * `{playId}`：玩家对象 ID。
