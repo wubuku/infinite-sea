@@ -150,31 +150,6 @@ wubuku/dddappp:0.0.1 \
 | mining      | 3    | 挖矿 |
 | crafing     | 6    | 造船 |
 
---------
-
-提示：我们在 Move 代码中定义了一些常量。
-在下面的 Move 代码片段中，包含部分常量定义所在的模块以及用于获取常量的值的函数名：
-
-```move
-//
-// 可以编写脚本来添加岛屿，以及为岛屿随机地生成资源。
-//
-// 添加岛屿时，应该初始化以下资源（在 item_id 模块中定义了返回 Item ID 常量的函数）：
-item_id::resource_type_mining(); // Item Creation 需要的“资源”也抽象为 Item，这是执行挖矿操作所需的资源。
-item_id::resource_type_woodcutting(); // 这是执行伐木操作所需的资源。
-item_id::cotton_seeds(); // 这是种植棉花所需的“原材料”
-
-//以便用户可以通过这些技能：
-skill_type::mining(); // 这是一个 Item Creation 类型的技能
-skill_type::woodcutting(); // Item Creation Skill
-skill_type::farming(); // 这是一个 Item Production 类型的技能
-
-//产出造船需要的 Items：
-item_id::copper_ore(); // 铜矿
-item_id::normal_logs(); // 普通原木
-item_id::cottons(); // 棉花
-```
-
 ## 测试应用
 
 ### 发布合约
@@ -236,7 +211,6 @@ item_id::cottons(); // 棉花
 * `main.Digest`：发布 Main 包交易的摘要。
 * `coin.EnergyId`：Mint 获得的能量币（`ENERGY`）的 Object ID。
 * `main.Map`：地图（map）的 Object ID。
-
 
 ### 获取地图信息
 
@@ -337,7 +311,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"me
 ```
 
 在上面的输出的例子中，地图上中存在两个岛屿，它们的坐标分别是 `(51, 51)` 和 `(50, 50)`。
-对象类型为：`{main.packageId}::map_location::MapLocation`，对象 ID 分别为 
+对象类型为：`{main.packageId}::map_location::MapLocation`，对象 ID 分别为
 `0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692` 和 `0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b`。
 
 可以在控制台执行 Sui CLI 命令：
@@ -445,7 +419,7 @@ sui client object {mapLocationId} --json
 `resouces` 为该岛屿目前所拥有的资源列表。
 
 `resources` 中包含 `fields` 属性，其中 `item_id` 为资源 ID，
-其中，`item_id` 为 2 时表示“棉花种子”（前端可以可以定义一个常量列表）,
+其中，`item_id` 为 2 时表示“棉花种子”（前端可以定义一个常量列表）,
 `quantity` 为该资源的数量。
 
 上面一系列的查询操作，均是在通过 Sui JSON RPC 接口读取链上的数据完成（可能比较繁琐）。
@@ -514,7 +488,6 @@ curl -X GET "http://{domain.port}/api/Maps/{main.map}" -H "accept: application/j
 
 如果返回的岛屿元素中不包含 `resources` 属性。这通常表示该岛屿的资源已经被玩家收集过，还没有“再生的待收集资源”。
 
-
 ### 创建玩家对象
 
 使用 Sui CLI 创建玩家（Player)：
@@ -546,7 +519,7 @@ sui client call --package {main.PackageId} --module player_aggregate --function 
 ```
 
 其中 `objectId` 即为新创建的玩家对象的 ID。
-在后面的测试中，需要用到玩家对象 ID 的地方，我们使用占位符 `{playId}` 来表示。
+在后面的测试中，需要用到玩家对象 ID 的地方，我们使用占位符 `{playerId}` 来表示。
 
 ### 占领（Claim）岛屿
 
@@ -558,7 +531,7 @@ sui client call --package {main.PackageId} --module player_aggregate --function 
 sui client call --package {main.PackageId} \
 --module player_aggregate \
 --function claim_island \
---args {playId} \
+--args {playerId} \
 {main.Map} \
 {coordinates_x} \
 {coordinates_y} \
@@ -571,15 +544,400 @@ sui client call --package {main.PackageId} \
 解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{playId}`：玩家对象 ID。
+* `{playerId}`：玩家对象 ID。
 * `{main.map}`：地图对象的 ID。在 Main 合约包发布的时候，自动执行的初始化函数会创建地图对象。
 * `{coordinates_x}`：Claim 的岛屿的 X 坐标值。
 * `{coordinates_y}`：Claim 的岛屿的 Y 坐标值。
 * `{clock}`：时钟对象的 ID。Sui 的时间对象 ID 是个固定值：`0x6`。
 * `{main.RosterTable}`: Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 中包含了包含所有的船队的“索引信息”。包含“玩家”以及“环境”船队。该 Table 的 Key 是“玩家 ID + 船队序号 `[0-4]`”的组合。
 * `{main.SkillProcessTable}` Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 包含所有技能流程（可以理解使用技能的“生产线”）的“索引信息”。
-    这里的技能包括 Farming、WoodCutting、Mining、 Crafting。该 Table 的 Key 为“玩家 ID + SkillTypeId”的组合。
+  这里的技能包括 Farming、WoodCutting、Mining、 Crafting。该 Table 的 Key 为“玩家 ID + SkillTypeId”的组合。
 
+执行成功后返回内容节选重要部分如下：
+
+```json
+{
+  "digest": "B46Tg4tuvrazHvqnkH29V5Haie9RHYqKLyHs9aciFJqG",
+  "objectChanges": [
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::roster::Roster",
+      "objectId": "0x02d20edd0c5766b4919e7ba07a1f746b32a6c80b3db9efa11788ea16810fb089",
+      "version": "38211112",
+      "digest": "GXZs2Zs8122DyNzHMPPGatRBaFScKezt8rHGi8SNqBdt"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xc36ee5a398f9848b35c0a6d62bb37ab10ecc68256d0fd44d5bea5f57a41e98d4"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId, 0x2::object::ID>",
+      "objectId": "0x04c1fb0e3af31cbe59f965e541ffe65e040ed302929531548f39da27df5821d0",
+      "version": "38211112",
+      "digest": "CuLGgN7HJFpiNh7nfVTuzjN4KEbHCZKqgEwRGeQ179jt"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xc36ee5a398f9848b35c0a6d62bb37ab10ecc68256d0fd44d5bea5f57a41e98d4"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId, 0x2::object::ID>",
+      "objectId": "0x09b967f3212fc396f855847d76bf06cdf41e6f6948c7a62729f01cce69c1f47e",
+      "version": "38211112",
+      "digest": "FtEXZQtV2MYAC4YTe3BoAjfVUxqV3LynvPjjdJVTKyt"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xc36ee5a398f9848b35c0a6d62bb37ab10ecc68256d0fd44d5bea5f57a41e98d4"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId, 0x2::object::ID>",
+      "objectId": "0x1859a93305fb450b9f788aa57cf1ae0c340266e57dad249da13e079a6c58a4aa",
+      "version": "38211112",
+      "digest": "H81ZQr4cT7D7z5HBpS2fBKgRMSCnXyjaQvNxSpcnJok4"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xb24e3d045a031d342c8dced3950f015684c21f2da5d77a012004e10864a23bd7"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::skill_process_id::SkillProcessId, 0x2::object::ID>",
+      "objectId": "0x197ce1ce90645064b35132163f2355b2ca44d10e3694d1cf3890fa78e35001a1",
+      "version": "38211112",
+      "digest": "3unfu1sDB6Y3WmtFGBTLm1uS2bbVw5Kd3sft4T8dpTSz"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xb24e3d045a031d342c8dced3950f015684c21f2da5d77a012004e10864a23bd7"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::skill_process_id::SkillProcessId, 0x2::object::ID>",
+      "objectId": "0x1d70b9d3f5b4b6bed1b43da07efd18355b1e12cbdfbe84bca18dbc85b15f44c6",
+      "version": "38211112",
+      "digest": "CxmMZqrQKT6sDVEM8AjfA3VPezQKpB4idM6KZFtsskDy"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::roster::Roster",
+      "objectId": "0x244b6ed71ee283fd92c2004889a04462415227fb73e7aab7cf8cd99967de2541",
+      "version": "38211112",
+      "digest": "DD2ALt8yxHRmyhMNZ8oYJjFTc8LMCCxK8tDM2DJwxEG2"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::roster::Roster",
+      "objectId": "0x3e69224c0b59c663f7a918efdeb2afb011b5dbddecc49f3bf4b4c0b4ba498a16",
+      "version": "38211112",
+      "digest": "BiMdYs6yKUBP7HpR91xeCRNg5XbiV5soGXtGvFrBRUcK"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xb24e3d045a031d342c8dced3950f015684c21f2da5d77a012004e10864a23bd7"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::skill_process_id::SkillProcessId, 0x2::object::ID>",
+      "objectId": "0x46d1d9d3f3f818124f0b34870ca3f0c0c8631160829e317949b417afaeecb5c6",
+      "version": "38211112",
+      "digest": "D9RnLQxsumHt2JCZDFERJBptX9HHvK5Lb83eN2PFBAbw"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::skill_process::SkillProcess",
+      "objectId": "0x4f902c9fc5b792792e757a791182e5bbe2c12684d02796d01e34758709670c97",
+      "version": "38211112",
+      "digest": "BJqA8Z3TFTc3RLvgoRbdVq8ymtW7AF6HPNS2LdqTRXs2"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xb24e3d045a031d342c8dced3950f015684c21f2da5d77a012004e10864a23bd7"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::skill_process_id::SkillProcessId, 0x2::object::ID>",
+      "objectId": "0x65d7fe5a48eaf4ab32780db1e1bf286689095f7b28428cbfe20e6ad669a18dfb",
+      "version": "38211112",
+      "digest": "FuFv6KNUsmD8RbRKCZ6grUJcqcTEdKLkazgpjgh2vCHh"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::roster::Roster",
+      "objectId": "0x7fa10794b24d2c2abda8626cfd894700dc2fe504cbbfa80bb4f37862aebdf562",
+      "version": "38211112",
+      "digest": "EFNwseqmecrtiq6b2eTtgR4BQJTuy26Xk2v4g2uJUWLw"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xc36ee5a398f9848b35c0a6d62bb37ab10ecc68256d0fd44d5bea5f57a41e98d4"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId, 0x2::object::ID>",
+      "objectId": "0x8459e00114dcdc965dacbf9bff002827c771a75c97f0f8636219ac07ce1ee7cf",
+      "version": "38211112",
+      "digest": "DosuYbLzGqsKrBbp56MkbsiriXDMNsrXASghpoPCZA2k"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::roster::Roster",
+      "objectId": "0x8efcc4aa7c04df85a042fb537a041068211374c67204b5f29a58ead0693a302a",
+      "version": "38211112",
+      "digest": "rqsBuu7qMXQPBTnmnetmZSaaa5NobucCfBMaXV3u3bL"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xb24e3d045a031d342c8dced3950f015684c21f2da5d77a012004e10864a23bd7"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::skill_process_id::SkillProcessId, 0x2::object::ID>",
+      "objectId": "0x9b7b21e42e48b254720c40cbf96d78fde0e90fcf41fa44d9f575e2dd418a33e5",
+      "version": "38211112",
+      "digest": "H4XcSjApqTj6i1PsfyJwExs7a3AwP2y9BJQ6JSJC833D"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0xc36ee5a398f9848b35c0a6d62bb37ab10ecc68256d0fd44d5bea5f57a41e98d4"
+      },
+      "objectType": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId, 0x2::object::ID>",
+      "objectId": "0x9ceea46de035cb467288325a1d51a782cedb53dae9e9a48f82c700c1d3489ce0",
+      "version": "38211112",
+      "digest": "C3ErjMt9PWt3oneiAxLyWT4kMJeZeZuTiEwQ6KusRzuZ"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::skill_process::SkillProcess",
+      "objectId": "0xad00bf5bec692c71f9b765471cbca3149519b29e0436a89753006e99a1f0ca5f",
+      "version": "38211112",
+      "digest": "GTjHuUVGZwYrz1GCjQQL7Ztbma4zmL3TsW41ST6q7JpG"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::skill_process::SkillProcess",
+      "objectId": "0xb67c787d2eafb523e0aee3bfaf2f42174cd9e088df7958c1b09cfd276b6578b3",
+      "version": "38211112",
+      "digest": "3jK4itwTA9gQU5YFEY2XA5xkge2CyDR9BmmcNujZ7oXu"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::skill_process::SkillProcess",
+      "objectId": "0xc9acdba2a7b06e103064ba566643d0074dd689ceee03a306707e5e4345b476a8",
+      "version": "38211112",
+      "digest": "HndKvSZrgS42JSRib6PxDVib4XDB9oH8LzQqVwFDDnmC"
+    },
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 38211112
+        }
+      },
+      "objectType": "0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::skill_process::SkillProcess",
+      "objectId": "0xd8831b89fd4157aaf58b60eef3a7f437c429373a35d18177ae1660baffee2f95",
+      "version": "38211112",
+      "digest": "7HhHHHddK6h3LxEpz6Tn5Sg1gWgtDHXdvq5jHNvTZ7QC"
+    }
+  ]
+}
+```
+
+其中包含：
+
+类型为 `{main.PackageId}::roster::Roster` 的元素，该元素为玩家的船队信息一共为 5 个。
+
+其 `objectId` 为船队的标识 Id。
+
+另外与船队相关的是类型为 `0x2::dynamic_field::Field<{common.PackageId}::roster_id::RosterId, 0x2::object::ID>`，通过该类型的元素，我们可以查找对应的船队的编号，在这里我们将其 `objectId` 记录为 {RosterId}。
+
+类型为 `{main.PackageId}::skill_process::SkillProcess` 的元素，该元素为玩家的技能进程同样为 5 个。
+
+其 `objectId` 为技能进程的 Id。
+
+同样我们注意到类型为 `0x2::dynamic_field::Field<{common.PackageId}::skill_process_id::SkillProcessId, 0x2::object::ID> 的元素,我们将`其 `objectId ` 记录为 {SkillProcessId}。
+
+#### 玩家的船队
+
+根据上一步得到的 {RosterId}，使用以下 Sui CLI 命令可以取得玩家某一船队的信息：
+
+```shell
+sui client object {RosterId} --json
+```
+
+输出信息类似下面这样：
+
+```json
+{
+  "objectId": "0x1859a93305fb450b9f788aa57cf1ae0c340266e57dad249da13e079a6c58a4aa",
+  "version": "38211112",
+  "digest": "H81ZQr4cT7D7z5HBpS2fBKgRMSCnXyjaQvNxSpcnJok4",
+  "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId, 0x2::object::ID>",
+  "owner": {
+    "ObjectOwner": "0xc36ee5a398f9848b35c0a6d62bb37ab10ecc68256d0fd44d5bea5f57a41e98d4"
+  },
+  "previousTransaction": "B46Tg4tuvrazHvqnkH29V5Haie9RHYqKLyHs9aciFJqG",
+  "storageRebate": "2561200",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId, 0x2::object::ID>",
+    "hasPublicTransfer": false,
+    "fields": {
+      "id": {
+        "id": "0x1859a93305fb450b9f788aa57cf1ae0c340266e57dad249da13e079a6c58a4aa"
+      },
+      "name": {
+        "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::roster_id::RosterId",
+        "fields": {
+          "player_id": "0xc68695161ec629a13e5e749f08207436aa6b47ce1b66c1f0ff63f77d1cce7228",
+          "sequence_number": 2
+        }
+      },
+      "value": "0x3e69224c0b59c663f7a918efdeb2afb011b5dbddecc49f3bf4b4c0b4ba498a16"
+    }
+  }
+}
+```
+
+注意其 `content.fields.name` 属性。可以看到其 `type` 为 `{common.PackageId}::roster_id::RosterId`，其 `fields` 中包括 `player_id` 和 `sequence_number` ，其中 `player_id` 为玩家的 Id， `sequence_number` 为船队编号。
+
+每个玩家有 5 个船队，编号依次为 0，1，2，3，4。
+
+其中 0 号船队为默认船队，即  Unassigned Roster。
+
+当玩家执行造船进程成功得到的船只默认存放到该船队。
+
+注意：目前该船队中不包括任何船只，当玩家将船只移入该船队后，将呈现更多的属性，我们在后面的章节将会依次提到并解释。
+
+#### 玩家技能进程
+
+可以将玩家的技能进程比喻为“生产线”。
+
+玩家在占领一个岛屿之后，系统会为之赋予 4 类 5 条“生产线”。
+
+| 类型                 | 对应技能类型常量值 | “生产线”数量 | 进程占位符                                  |
+| -------------------- | ------------------ | -------------- | ------------------------------------------- |
+| 种植(Farming)        | 0                  | 2              | SkillProcessFarming1 & SkillProcessFarming2 |
+| 伐木(WoodCuttinging) | 1                  | 1              | SkillProcessWooding                         |
+| 挖矿(Mining)         | 3                  | 1              | SkillProcessMining                          |
+| 造船(Crafting)       | 6                  | 1              | SkillProcessCrafting                        |
+
+通过在控制台执行 Sui CLI 命令：
+
+```shell
+sui client object {SkillProcessId} --json
+```
+
+得到下面类似的输出信息：
+
+```json
+{
+  "objectId": "0x197ce1ce90645064b35132163f2355b2ca44d10e3694d1cf3890fa78e35001a1",
+  "version": "38211112",
+  "digest": "3unfu1sDB6Y3WmtFGBTLm1uS2bbVw5Kd3sft4T8dpTSz",
+  "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::skill_process_id::SkillProcessId, 0x2::object::ID>",
+  "owner": {
+    "ObjectOwner": "0xb24e3d045a031d342c8dced3950f015684c21f2da5d77a012004e10864a23bd7"
+  },
+  "previousTransaction": "B46Tg4tuvrazHvqnkH29V5Haie9RHYqKLyHs9aciFJqG",
+  "storageRebate": "2667600",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::skill_process_id::SkillProcessId, 0x2::object::ID>",
+    "hasPublicTransfer": false,
+    "fields": {
+      "id": {
+        "id": "0x197ce1ce90645064b35132163f2355b2ca44d10e3694d1cf3890fa78e35001a1"
+      },
+      "name": {
+        "type": "0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::skill_process_id::SkillProcessId",
+        "fields": {
+          "player_id": "0xc68695161ec629a13e5e749f08207436aa6b47ce1b66c1f0ff63f77d1cce7228",
+          "sequence_number": 0,
+          "skill_type": 0
+        }
+      },
+      "value": "0xb67c787d2eafb523e0aee3bfaf2f42174cd9e088df7958c1b09cfd276b6578b3"
+    }
+  }
+}
+```
+
+将目光聚焦在 `content.fields.name` 属性。其中的 `fields` 属性又包含了以下 3 个 属性：
+
+* player_id : 玩家 ID。
+* skill_type：技能类型。
+* sequence_number：“生产线编号”。
+
+依次查询前一步得到的 5 个 {SkillProcessId}，可以获取上面提及的 4 类 5 条“生产线” 信息。
+
+
+
+
+
+
+
+----------------------------------------------------以下待修改------------------------------------------------------------------
 
 ### 开始生产流程
 
@@ -633,12 +991,10 @@ sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregat
 sui client object {PLAYER_ID} --json
 ```
 
-
------------------------------------
+---
 
 注意，以下创建“生产配方”等章节所描述的是“管理员”的后台操作。
 开发“玩家”用户界面时，可以先忽略这部分阐述。
-
 
 ### 创建 Item 生产配方
 
@@ -733,7 +1089,6 @@ sui client call --package 0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc8
 │  │ ObjectID: {SKILL_PROCESS_OBJECT_ID_1}
 │  │ ObjectType: 0x::skill_process::SkillProcess
 ```
-
 
 [TBD]
 
