@@ -204,7 +204,6 @@ wubuku/dddappp:0.0.1 \
     "SkillProcessCrafting": "0xf9c94a70f9fe017e5f3e9cba022d3b82b48382f3b8581fe1e48b1256885bc6b3"
   }
 }
-
 ```
 
 解释如下：
@@ -338,8 +337,7 @@ sui client object {mapLocationId} --json
 可以得到类似以下的输出信息：
 
 ```json
-
-  "objectId": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692",
+"objectId": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692",
   "version": "37717652",
   "digest": "9H5nvaRUXbyULStSPsjUdDn7DXQS1nNFmVqKmRVyoMPn",
   "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates, 0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation>",
@@ -959,6 +957,8 @@ sui client object {SkillProcessId} --json
 
 为此我们提供以下链下（indexer）服务。
 
+#### 玩家的船队 (indexer)
+
 使用以下 Sui CLI 命令可以取得指定玩家的船队信息：
 
 ```powershell
@@ -1349,13 +1349,126 @@ curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={pla
 
 * `key` 为船只的 ID。
 * `attack` 为该船只的攻击值。
+* `protection` 为该船只的防御值。
+* `speed` 为船只的速度。
+* `health_points` 为该船只的健康值。
+* `value` 是一个复杂元素，主要包含了该船只的建造原料信息。
+* `value.building_expenses.fields.items` 该船只的建造原料列表。
+* `value.building_expenses.fields.items.fields.item_id` 建造原料 ID。
+* `value.building_expenses.fields.items.fields.quantity` 建造原料数量。
+
+#### 玩家的技能进程 (indexer)
+
+使用以下 Sui CLI 命令可以取得指定玩家的船队信息：
+
+```powershell
+curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291" -H "accept: application/json"
+```
+
+输出信息类似下面这样：
+
+```json
+[{
+	"skillProcessId": {
+		"skillType": 0,
+		"playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+		"sequenceNumber": 0
+	},
+	"id_": "0x3a2b5e7b36111f2fb9f6423c6c2ef5a5cba73f441af6fec0cb616ee37698356b",
+	"itemId": 102,
+	"startedAt": 1716278816,
+	"creationTime": 5,
+	"completed": true,
+	"endedAt": 1716278829,
+	"energyVault": 5,
+	"batchSize": 1,
+	"version": 2,
+	"offChainVersion": 0
+}, {
+	"skillProcessId": {
+		"skillType": 0,
+		"playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+		"sequenceNumber": 1
+	},
+	"id_": "0xb70e54cfca7a3f6fa68bc616e761a47789f6013e51aa2d616f61e5e10982bbab",
+	"itemId": 0,
+	"startedAt": 0,
+	"creationTime": 0,
+	"completed": true,
+	"endedAt": 0,
+	"energyVault": 0,
+	"batchSize": 1,
+	"version": 0,
+	"offChainVersion": 0
+}, {
+	"skillProcessId": {
+		"skillType": 1,
+		"playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+		"sequenceNumber": 0
+	},
+	"id_": "0x9ced723bd1cd3a36aa7b778c6596f1ebf0182fd3f65c9e4144bfe623f7c7909b",
+	"itemId": 200,
+	"startedAt": 1716278848,
+	"creationTime": 3,
+	"completed": true,
+	"endedAt": 1716278861,
+	"energyVault": 5,
+	"batchSize": 1,
+	"version": 2,
+	"offChainVersion": 0
+}, {
+	"skillProcessId": {
+		"skillType": 3,
+		"playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+		"sequenceNumber": 0
+	},
+	"id_": "0xbd0d065237b2b11136c9d2f3d88cdc8909e1869a7ab44bf0398d373571701629",
+	"itemId": 301,
+	"startedAt": 1716278781,
+	"creationTime": 3,
+	"completed": true,
+	"endedAt": 1716278798,
+	"energyVault": 1,
+	"batchSize": 1,
+	"version": 2,
+	"offChainVersion": 0
+}, {
+	"skillProcessId": {
+		"skillType": 6,
+		"playerId": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
+		"sequenceNumber": 0
+	},
+	"id_": "0xf9c94a70f9fe017e5f3e9cba022d3b82b48382f3b8581fe1e48b1256885bc6b3",
+	"itemId": 1000000001,
+	"startedAt": 1716279939,
+	"creationTime": 3,
+	"completed": true,
+	"endedAt": 1716280103,
+	"energyVault": 50,
+	"productionMaterials": {
+		"items": [{
+			"itemId": 102,
+			"quantity": 4
+		}, {
+			"itemId": 200,
+			"quantity": 4
+		}, {
+			"itemId": 301,
+			"quantity": 7
+		}]
+	},
+	"batchSize": 1,
+	"version": 10,
+	"offChainVersion": 2
+}]
+```
+
+该信息类型是一个数组，数组中的每个元素都表示一个技能进程，也就是“生产线”。
+
+现在对其重要属性做以下说明：
+
+* `skillProcessId` 为技能进程的业务主键 ID。其中 `skillType` 表示技能类型，`playerId` 为玩家 ID，`sequenceNumber` 为该技能的“生产线”序列号。
 *
-
-
-
-
-
-
 
 ----------------------------------------------------以下待修改------------------------------------------------------------------
 

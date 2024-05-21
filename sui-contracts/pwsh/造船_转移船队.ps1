@@ -40,7 +40,7 @@ $rosters = $playerRostersJson | ConvertFrom-Json
 $craft = $true
 #造船数量
 #$cratingCount = 1
-$cratingCount = 4
+$cratingCount = 1
 #造船完成后加入的默认船队（目前只能为$rosters.0）
 $rosterId0 = $rosters.0
 #造船所消耗的时间 这个时间应该大于等于Item Production中的时间
@@ -70,7 +70,7 @@ if ($craft -and $cratingCount -ge 1) {
         $crafingResourceIds_ = "[" + ($crafingResourceIds -join ",") + "]"
         $crafingResourceQuantities_ = "[" + ($crafingResourceQuantities -join ",") + "]"
         try {
-            $result = sui client call --package $dataInfo.main.PackageId --module skill_process_service --function start_ship_production --args  $dataInfo.main.SkillProcessCrafting  $crafingResourceIds_ $crafingResourceQuantities_  $dataInfo.main.Player  $dataInfo.common.ItemProducitonCrafting $clock  $dataInfo.coin.EnergyId --gas-budget 42000000 --json
+            $result = sui client call --package $dataInfo.main.PackageId --module skill_process_service --function start_ship_production --args  $dataInfo.main.SkillProcessCrafting  $crafingResourceIds_ $crafingResourceQuantities_  $dataInfo.main.Player  $dataInfo.common.ItemProductionCrafting $clock  $dataInfo.coin.EnergyId --gas-budget 42000000 --json
             if (-not ('System.Object[]' -eq $result.GetType())) {
                 "建造第 $i 艘船时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
                 Set-Location $startLocation
@@ -93,8 +93,8 @@ if ($craft -and $cratingCount -ge 1) {
 
         "`n现在结束第 $i 艘船的建造..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
         try {
-            $commandCompleteShipProduction = "sui client call --package $($dataInfo.main.PackageId) --module skill_process_aggregate --function complete_ship_production --args  $($dataInfo.main.SkillProcessCrafting)  $rosterId0 $($dataInfo.main.Player)  $($dataInfo.common.ItemProducitonCrafting) $($dataInfo.common.ExperienceTable) $clock  --gas-budget 42000000 --json"
-            #$commandCompleteShipProduction | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+            $commandCompleteShipProduction = "sui client call --package $($dataInfo.main.PackageId) --module skill_process_aggregate --function complete_ship_production --args  $($dataInfo.main.SkillProcessCrafting)  $rosterId0 $($dataInfo.main.Player)  $($dataInfo.common.ItemProductionCrafting) $($dataInfo.common.ExperienceTable) $clock  --gas-budget 42000000 --json"
+            $commandCompleteShipProduction | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
             $result = Invoke-Expression -Command $commandCompleteShipProduction
             if (-not ('System.Object[]' -eq $result.GetType())) {
                 "结束第 $i 艘船建造返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
