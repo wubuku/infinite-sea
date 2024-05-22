@@ -1557,11 +1557,11 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 | 3          | 0               | `{SkillProcessMining}`   |
 | 6          | 0               | `{SkillProcessCrafting}` |
 
-### 开始生产挖矿流程
+### 开始挖矿流程
 
-玩家进行挖矿流程时，需要执行以下命令：
+玩家进行挖矿流程时，需要执行“开始挖矿流程”命令：
 
-可以使用如下 Sui CLI 开始挖矿：
+执行如下 Sui CLI 开始挖矿：
 
 ```powershell
 sui client call --package {main.PackageId} \
@@ -1569,7 +1569,7 @@ sui client call --package {main.PackageId} \
 --args {SkillProcessMining} \
 {batchSize} \
 {playerId} \
-{common.ItemCreationMiningId} \
+{common.ItemCreationMining} \
 {clock} \
 {energyId} \
 --gas-budget 11000000 --json
@@ -1581,139 +1581,122 @@ sui client call --package {main.PackageId} \
 * `{SkillProcessMining}` 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
 * `{playerId}` 玩家对象 ID。
-* {`common.ItemCreationMiningId}` 挖矿配方对象 ID。
+* {`common.ItemCreationMining}` 挖矿配方对象 ID。
 * `{clock}` 技能流程开始执行时间，固定值：0x6。
 * `{eneryId}` 能量币（`ENERGY`）的 Object ID。
 
+每一种生产制造进程都需要经历一定的时间，比如挖“一份”矿需要 3 秒钟，那么开始一次“挖矿”进程后，结合本次挖矿批次数量 ` batchSize`，则在经历  `batchSize` * 3 秒钟后，需要执行对应的“完成挖矿进程”来结束挖矿进程。
 
-### 完成生产流程
+在技能进程成功开始后，会扣除玩家相应的原材料资源。
 
-参数：
+### 结束挖矿流程
 
-* skill_process: &mut skill_process::SkillProcess,
-* player: &mut Player,
-* item_production: &ItemProduction,
-* experience_table: &ExperienceTable,
-* clock: &Clock,
+开始挖矿进程并经过所需时间之后，需执行“结束挖矿进程”来完成挖矿。
 
-执行：
+执行如下 Sui CLI 来结束挖矿：
 
-```shell
-sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregate --function complete_production \
---args "{SKILL_PROCESS_OBJECT_ID_1}" \
-"{PLAYER_ID}" \
-"{ITEM_PRODUCTION_OBJECT_ID_1}" \
-"{EXPERIENCE_TABLE_OBJECT_ID}" \
-"0x6" \
---gas-budget 11000000 --json > testnet_complete_skill_process.json
+```powershell
+sui client call --package {main.PackageId} \
+--module skill_process_aggregate \
+--function complete_creation \
+--args {SkillProcessMiningId} \
+{playerId} \
+{common.itemCreationMining} \
+{common.experienceTableId} \
+{clock} \
+ --gas-budget 42000000 --json
 ```
 
-接下来，就可以检查执行结果。
+参数解释：
 
-先获取玩家拥有的 Items 的 table ID：
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessMining}` 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `{playerId}` 玩家对象 ID。
+* {`common.ItemCreationMining}` 挖矿配方对象 ID。
+* `{common.experienceTableId}` 玩家积分（经验）等级表格对象 ID。
+* `{clock}` 技能流程开始执行时间，固定值：0x6。
 
-```shell
-sui client object {PLAYER_ID} --json
+在成功结束技能进程之后，玩家的对应产出成果的资源数量会增加。
+
+### 开始伐木进程
+
+除将参数 `{SkillProcessMining}`  更改为 `{SkillProcessWooding}`，
+
+将参数 `{common.ItemCreationMining}` 更改为 `{common.ItemCreationWooding}` 之外，
+
+其余参数与上述“开始挖矿进程”相同，这里不在赘述。
+
+### 结束伐木进程
+
+除将参数 `{SkillProcessMining}`  更改为 `{SkillProcessWooding}`，
+
+将参数 `{common.ItemCreationMining}` 更改为 `{common.ItemCreationWooding}` 之外，
+
+其余参数与上述“结束挖矿进程”相同，这里不在赘述。
+
+### 开始种植棉花进程
+
+种植棉花进程有两条“生产线”，对应的技能进程对象 ID 分别为 `{SkillProcessFarming1}` 和 `{SkillProcessFarming2}`。
+
+对于种植棉花这项技能来说，玩家可以同时开启两条“生产线”。
+
+我们以开启种植棉花的第一条“生产线”举例，需要执行以下 Sui CLI 命令：
+
+```powershell
+sui client call --package {main.PackageId} \
+--module skill_process_service \
+--function start_production 
+--args {SkillProcessFarming1} \
+{batchSize} \
+{playerId} \
+{common.ItemProductionFarming} \
+{clock} 
+{energyId} \
+--gas-budget 11000000 --json
 ```
 
----
+参数解释：
 
-注意，以下创建“生产配方”等章节所描述的是“管理员”的后台操作。
-开发“玩家”用户界面时，可以先忽略这部分阐述。
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessFarming1}` 种植棉花第一条“生产线”的 Move 对象 ID、
 
-### 创建 Item 生产配方
+  `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
+* `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `{playerId}` 玩家对象 ID。
+* {`common.ItemProductionFarming}` 种植棉花配方 Move 对象 ID。
+* `{clock}` 技能流程开始执行时间，固定值：0x6。
+* `{eneryId}` 能量币（`ENERGY`）的 Object ID。
 
-该函数的参数：
+### 结束种植棉花进程
 
-* item_production_id_skill_type: u8,
-* item_production_id_item_id: u32,
-* publisher: &sui:📦:Publisher,
-* production_materials_item_id_list: vector<u32>,
-* production_materials_item_quantity_list: vector<u32>,
-* requirements_level: u16,
-* base_quantity: u32,
-* base_experience: u32,
-* base_creation_time: u64,
-* energy_cost: u64,
-* success_rate: u16,
-* item_production_table: &mut item_production::ItemProductionTable,
+玩家要结束“种植棉花”进程，需要执行以下 Sui CLI 命令：
 
-我们假设要创建一个“农业”生产配方：种植一份土豆需要 3 个“土豆种子”，等级 1 就可以种植，产出数量为 10，增加经验值为 85，需要 5 秒钟，消耗 100 个单位的能量币，成功率 100%。
-
-执行命令：
-
-```shell
-sui client call --package {COMMON_PACKAGE_ID} --module item_production_aggregate --function create \
---args '0' '2' {COMMON_PACKAGE_PUBLISHER_ID} \
-'[1]' '[3]' \
-'1' '10' '85' '5' '5' '100' \
-{ITEM_PRODUCTION_TABLE_OBJECT_ID} \
---gas-budget 11000000
+```powershell
+sui client call --package {main.PackageId} \
+ --module skill_process_aggregate \
+--function complete_production \
+--args {SkillProcessFarming1} \
+{playerId} \
+{common.ItemProductionFarming} \
+{common.ExperienceTable} \
+{clock} \
+--gas-budget 42000000 --json
 ```
 
-记录下创建好的生产配方 Object ID，下面我们以占位符 `{ITEM_PRODUCTION_OBJECT_ID_1}` 来表示它。
+参数解释：
 
-```text
-│  │ ObjectID: {ITEM_PRODUCTION_OBJECT_ID_1}                                                                                              │
-│  │ ObjectType: 0x...::item_production::ItemProduction                                                            │
-```
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessFarming1}` 种植棉花第一条“生产线”的 Move 对象 ID、
 
-### 给玩家空投一些资源（Items）
+  另： `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
+* `{playerId}` 玩家对象 ID。
+* {`common.ItemProductionFarming}` 种植棉花配方 Move 对象 ID。
+* `{clock}` 技能流程开始执行时间，固定值：0x6。
+* `{common.ExperienceTable}` 玩家积分（经验）等级表格对象 ID。
 
-这个方法只有管理员可以使用。参数：
+结束种植棉花过程应该在达到完成种植进程所需时间之后。
 
-* player: &mut player::Player,
-* publisher: &sui:📦:Publisher,
-* item_id: u32,
-* quantity: u32,
 
-这里我们假设给玩家空投 100 个土豆种子：
-
-```shell
-sui client call --package {DEFAULT_PACKAGE_ID} --module player_aggregate --function airdrop \
---args {PLAYER_ID} \
-{DEFAULT_PACKAGE_PUBLISHER_ID} \
-'1' '100' \
---gas-budget 11000000
-```
-
-### 创建一个生产流程
-
-目前生成流程在玩家认领岛屿时会自动创建。这里我们假设管理员手动创建一个生产流程。
-
-参数：
-
-* skill_process_id_skill_type: u8,
-* skill_process_id_player_id: ID,
-* player: &Player,
-* skill_process_table: &mut skill_process::SkillProcessTable,
-
-执行命令：
-
-```shell
-sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregate --function create \
---args '0' {PLAYER_ID} \
-{PLAYER_ID} \
-"{SKILL_PROCESS_TABLE_OBJECT_ID}" \
---gas-budget 11000000
-```
-
-一个示例命令：
-
-```shell
-sui client call --package 0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc89731fa517fb8 --module skill_process_aggregate --function create \
---args '0' 0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
-0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
-0x5689f9e28f3bf359604de4eb85a1c7a55520bd4097b54b42e1acb23c1fc44279 \
---gas-budget 11000000
-```
-
-记录下创建好的生产流程的对象 ID，下面我们以占位符 `{SKILL_PROCESS_OBJECT_ID_1}` 来表示它：
-
-```text
-│  │ ObjectID: {SKILL_PROCESS_OBJECT_ID_1}
-│  │ ObjectType: 0x::skill_process::SkillProcess
-```
 
 [TBD]
 
