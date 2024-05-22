@@ -1578,12 +1578,12 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessMining}` 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
-* `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
-* `{playerId}` 玩家对象 ID。
-* {`common.ItemCreationMining}` 挖矿配方对象 ID。
-* `{clock}` 技能流程开始执行时间，固定值：0x6。
-* `{eneryId}` 能量币（`ENERGY`）的 Object ID。
+* `{SkillProcessMining}`： 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `batchSize`： 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `{playerId}`： 玩家对象 ID。
+* {`common.ItemCreationMining}`： 挖矿配方对象 ID。
+* `{clock}` ：开始挖矿进程时间，固定值：0x6。
+* `{eneryId}` ：能量币（`ENERGY`）的 Object ID。
 
 每一种生产制造进程都需要经历一定的时间，比如挖“一份”矿需要 3 秒钟，那么开始一次“挖矿”进程后，结合本次挖矿批次数量 ` batchSize`，则在经历  `batchSize` * 3 秒钟后，需要执行对应的“完成挖矿进程”来结束挖矿进程。
 
@@ -1610,11 +1610,11 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessMining}` 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
-* `{playerId}` 玩家对象 ID。
-* {`common.ItemCreationMining}` 挖矿配方对象 ID。
-* `{common.experienceTableId}` 玩家积分（经验）等级表格对象 ID。
-* `{clock}` 技能流程开始执行时间，固定值：0x6。
+* `{SkillProcessMining}`： 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `{playerId}`： 玩家对象 ID。
+* {`common.ItemCreationMining}`：挖矿配方对象 ID。
+* `{common.experienceTableId}`： 玩家积分（经验）等级表格对象 ID。
+* `{clock}`： 结束挖矿进程时间，固定值：0x6。
 
 在成功结束技能进程之后，玩家的对应产出成果的资源数量会增加。
 
@@ -1658,14 +1658,14 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessFarming1}` 种植棉花第一条“生产线”的 Move 对象 ID、
+* `{SkillProcessFarming1}`： 种植棉花第一条“生产线”的 Move 对象 ID、
 
-  `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
+  `{SkillProcessFarming2}`： 为第二条“生产线”的 Move 对象 ID。
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
-* `{playerId}` 玩家对象 ID。
-* {`common.ItemProductionFarming}` 种植棉花配方 Move 对象 ID。
-* `{clock}` 技能流程开始执行时间，固定值：0x6。
-* `{eneryId}` 能量币（`ENERGY`）的 Object ID。
+* `{playerId}`： 玩家对象 ID。
+* {`common.ItemProductionFarming}`： 种植棉花配方 Move 对象 ID。
+* `{clock}：` 开始种植棉花进程时间，固定值：0x6。
+* `{eneryId}：` 能量币（`ENERGY`）的 Object ID。
 
 ### 结束种植棉花进程
 
@@ -1686,15 +1686,75 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessFarming1}` 种植棉花第一条“生产线”的 Move 对象 ID、
+* `{SkillProcessFarming1}`： 种植棉花第一条“生产线”的 Move 对象 ID、
 
   另： `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
-* `{playerId}` 玩家对象 ID。
-* {`common.ItemProductionFarming}` 种植棉花配方 Move 对象 ID。
-* `{clock}` 技能流程开始执行时间，固定值：0x6。
-* `{common.ExperienceTable}` 玩家积分（经验）等级表格对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* {`common.ItemProductionFarming}`： 种植棉花配方 Move 对象 ID。
+* `{clock}`： 结束种植棉花进程时间，固定值：0x6。
+* `{common.ExperienceTable}：` 玩家积分（经验）等级表格对象 ID。
 
 结束种植棉花过程应该在达到完成种植进程所需时间之后。
+
+### 开始造船进程
+
+玩家在占领岛屿后，可以造船并打造自己的船队。
+
+如果想要造船，可以执行以下 Sui CLI 命令开启造船流程：
+
+```powershell
+sui client call --package {main.PackageId} \
+--module skill_process_service \
+--function start_ship_production \
+--args  {SkillProcessCrafting} \
+{production_materials_item_id_list} \
+{production_materials_item_quantity_list} \
+{playerId} \
+{common.ItemProductionCrafting} \
+{$clock} \  
+{EnergyId} \
+--gas-budget 42000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `production_materials_item_id_list`： 造船所需的资源的 Item ID 的数组。通常为：[2000000001,2000000003,102]。
+* `production_materials_item_quantity_list`：造船所需资源数量的数组，与 `production_materials_item_id_list` 中的 Item ID 一一对应。如：[180,230,190]，每种资源数量最少 150，总数量为 600。具体每种资源数量由玩家指定。
+* `{SkillProcessCrafting}`：玩家造船技能的 Move 对象 ID。
+* `{playerId}`：玩家对象 ID。
+* {`common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
+* `{clock}`： 开始造船流程时间，固定值：0x6。
+* `{eneryId}`： 能量币（`ENERGY`）的 Object ID。
+
+### 结束造船进程
+
+经过所需的造船时间之后，需要调用下面的 Sui CLI 命令来结束造船进程。
+
+```powershell
+sui client call --package (main.PackageId) \
+--module skill_process_aggregate \
+--function complete_ship_production \
+--args  {SkillProcessCrafting} \n
+{rosterId} \
+{playerId}  \
+{ItemProductionCrafting} \
+{common.ExperienceTable} \
+{clock}  \
+--gas-budget 42000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessCrafting}`： 玩家造船技能的 Move 对象 ID。
+* `rosterId`：序号为 0 的玩家船队的 Move 对象 ID，即前文中提到的有特殊含义，容纳“Unassigned Ships”的船队 。
+* `{playerId}`： 玩家对象 ID。
+* {`common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
+* `{clock}`： 结束造船进程时间，固定值：0x6。
+* `{common.ExperienceTable}`： 玩家积分（经验）等级表格对象 ID。
+
+
 
 
 
