@@ -130,7 +130,6 @@ wubuku/dddappp:0.0.1 \
 
 #### Item（物品、资源） ID 常量
 
-
 | Item Id    | Name                    | 说明                                    |
 | ---------- | ----------------------- | --------------------------------------- |
 | 0          | UNUSED_ITEM             | 未使用                                  |
@@ -143,7 +142,6 @@ wubuku/dddappp:0.0.1 \
 | 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
 
 #### 技能常量
-
 
 | 技能        | 常量 | 说明 |
 | ----------- | ---- | ---- |
@@ -196,12 +194,7 @@ wubuku/dddappp:0.0.1 \
     "UpgradeCap": "0xb0c8b32183ee7e40241a6969121a75e071426382f8279d7208d11ef691fa3d3e",
     "SkillProcessTable": "0xc90ce4d672d492d82ef1ec642b5ee2bd8756482f5372b8473ad7e5e063dfe209",
     "Map": "0xc9fa916b2613408af026091b17b505a3f49af001ff0c774516de5a1414716bd7",
-    "Player": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
-    "SkillProcessFarming1": "0x3a2b5e7b36111f2fb9f6423c6c2ef5a5cba73f441af6fec0cb616ee37698356b",
-    "SkillProcessWooding": "0x9ced723bd1cd3a36aa7b778c6596f1ebf0182fd3f65c9e4144bfe623f7c7909b",
-    "SkillProcessFarming2": "0xb70e54cfca7a3f6fa68bc616e761a47789f6013e51aa2d616f61e5e10982bbab",
-    "SkillProcessMining": "0xbd0d065237b2b11136c9d2f3d88cdc8909e1869a7ab44bf0398d373571701629",
-    "SkillProcessCrafting": "0xf9c94a70f9fe017e5f3e9cba022d3b82b48382f3b8581fe1e48b1256885bc6b3"
+    "Player": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291"
   }
 }
 ```
@@ -213,14 +206,14 @@ wubuku/dddappp:0.0.1 \
 * `main.Digest`：发布 Main 包交易的摘要。
 * `coin.EnergyId`：Mint 获得的能量币（`ENERGY`）的 Object ID。
 * `main.Map`：地图（map）的 Object ID。
+* `common.ExperienceTable` 玩家积分（经验）等级表的 Object ID。
 
 特别注意 `common` 中的 `ItemCreationMining，ItemProductionFarming，ItemCreationWooding，ItemProducitonCrafting` 四个属性：
 
 这些属性是合约发布之后，后台调用接口生成的关于生产制造的配方的 ID，前端可以将它们视为常量使用。
 
-
-| 配方   | 调用占位符                 | 说明                                 |
-| ------ | -------------------------- | ------------------------------------ |
+| 配方   | 调用占位符                   | 说明                                 |
+| ------ | ---------------------------- | ------------------------------------ |
 | 挖矿   | {`ItemCreationMining`}     | 开始挖矿进程和结束挖矿进程时使用     |
 | 伐木   | {`ItemCreationWooding`}    | 开始伐木进程和结束伐木进程时使用     |
 | 种棉花 | {`ItemProductionFarming`}  | 开始种植棉花进程和结束棉花进程时使用 |
@@ -571,7 +564,7 @@ curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: applicat
 * `name`：玩家的名字。
 * `claimedIsland`：玩家所占领的岛屿的坐标。
 * `inventory`：玩家目前拥有的物品（包括“资源”）库存，其中数组元素的 `item_id` 属性为物品（资源）的 ID，`quantity` 为库存数量。
-    库存在进行生产活动时（种植，挖矿，伐木，造船等）时会减少或增加（原材料 item 数量会减少，产出结果 item 数量会增加）。
+  库存在进行生产活动时（种植，挖矿，伐木，造船等）时会减少或增加（原材料 item 数量会减少，产出结果 item 数量会增加）。
 
 ### 占领（Claim）岛屿
 
@@ -859,15 +852,13 @@ sui client call --package {main.PackageId} \
 
 * 类型为 `{main.PackageId}::roster::Roster` 的元素，为玩家的船队信息。目前玩家在占领岛屿时，合约会创建 5 个船队对象。元素中的 `objectId` 属性为船队的对象 Id。
 * 类型为 `0x2::dynamic_field::Field<{common.PackageId}::roster_id::RosterId, 0x2::object::ID>` 对象，
-    是一个“保存船队信息的 Table”的“动态字段”子对象。
-    通过这个对象，可以查询到船队的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。我们下面将船队的对象 ID 使用占位符 `{RosterObjectId}` 表示。
-* 类型为 `{main.PackageId}::skill_process::SkillProcess` 的元素，该元素为玩家的“技能进程”对象。目前认领岛屿时，会创建 5 个这样的对象。
-* 类型为 `0x2::dynamic_field::Field<{common.PackageId}::skill_process_id::SkillProcessId, 0x2::object::ID>` 的对象，
-    是一个“保存技能进程信息的 Table”的“动态字段”子对象。
-    这个对象的 ID 我们使用占位符 `{SkillProcess_dynamic_field_ObjectId}` 表示。
-    通过这个对象，可以查询到技能进程的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。
-    我们下面将技能进程的对象 ID 使用占位符 `{SkillProcessObjectId}` 表示。
-
+  是一个“保存船队信息的 Table”的“动态字段”子对象。
+  通过这个对象，可以查询到船队的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。我们下面将船队的对象 ID 使用占位符 `{RosterObjectId}` 表示。
+* 类型为 `{main.PackageId}::skill_process::SkillProcess` 的元素，该元素为玩家的“技能进程”对象。目前占领岛屿时，会创建 5 个这样的对象。
+* 类型为 `0x2::dynamic_field::Field<{common.PackageId}::skill_process_id::SkillProcessId, 0x2::object::ID>` 的对象，是一个“保存技能进程信息的 Table”的“动态字段”子对象。
+  这个对象的 ID 我们使用占位符 `{SkillProcess_dynamic_field_ObjectId}` 表示。
+  通过这个对象，可以查询到技能进程的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。
+  我们下面将技能进程的对象 ID 使用占位符 `{SkillProcessObjectId}` 表示。
 
 #### 查询玩家的船队
 
@@ -957,14 +948,12 @@ sui client object {RosterObjectId} --json
 可以将玩家的技能进程理解为制造物品（Item）的“生产线”。
 玩家在占领一个岛屿之后，目前合约会为之自动创建 4 类 5 条这样的“生产线”。
 
-
-| 类型                 | 对应技能类型常量值 | “生产线”数量 | 示例命令使用的“占位符”                                       |
-| -------------------- | ------------------ | -------------- |----------------------------------------------------|
+| 类型                 | 对应技能类型常量值 | “生产线”数量 | 示例命令使用的“占位符”                               |
+| -------------------- | ------------------ | -------------- | ------------------------------------------------------ |
 | 种植(Farming)        | 0                  | 2              | `{SkillProcessFarming1}`, `{SkillProcessFarming2}` |
-| 伐木(WoodCuttinging) | 1                  | 1              | `{SkillProcessWooding}`                            |
-| 挖矿(Mining)         | 3                  | 1              | `{SkillProcessMining}`                             |
-| 造船(Crafting)       | 6                  | 1              | `{SkillProcessCrafting}`                            |
-
+| 伐木(WoodCuttinging) | 1                  | 1              | `{SkillProcessWooding}`                              |
+| 挖矿(Mining)         | 3                  | 1              | `{SkillProcessMining}`                               |
+| 造船(Crafting)       | 6                  | 1              | `{SkillProcessCrafting}`                             |
 
 执行 Sui CLI 命令：
 
@@ -1015,9 +1004,18 @@ sui client object {SkillProcess_dynamic_field_ObjectId} --json
 
 依次查询前一步得到的 5 个 `{SkillProcess_dynamic_field_ObjectId}`，可以获取上面提及的 4 类 5 条“生产线”的 ID 信息。
 
+上述 `skil_type`，`sequence_number` 以及 `content.fields.name.value` 与前文中的技能进程占位符之间存在以下对应关系：
+
+| skill_type | sequence_number | content.fields.name.value  |
+| ---------- | --------------- | -------------------------- |
+| 0          | 0               | `{SkillProcessFarming1}` |
+| 0          | 1               | `{SkillProcessFarming2}` |
+| 1          | 0               | `{SkillProcessWooding}`  |
+| 3          | 0               | `{SkillProcessMining}`   |
+| 6          | 0               | `{SkillProcessCrafting}` |
+
 通过 Sui JSON RPC 查询玩家的船队信息或技能进程信息，过程略显繁琐。
 我们的链下查询服务（indexer）提供了更便捷的接口。
-
 
 #### 通过 indexer 查询玩家的船队
 
@@ -1397,8 +1395,8 @@ curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={pla
 船队元素包含的属性：
 
 * `rosterId` 为船队的业务主键 ID。
-    其下的属性 `playerId ` 为船队所属玩家 ID，
-    `sequenceNumber` 为该船队的编号。
+  其下的属性 `playerId ` 为船队所属玩家 ID，
+  `sequenceNumber` 为该船队的编号。
 * `id_` 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
 * `status` 为船队的状态。0：停泊中，1：行进中，2：战斗中，3：已损毁。
 * `speed` 为船队的速度。
@@ -1420,7 +1418,6 @@ curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={pla
 * `value.building_expenses.fields.items` 是该船只的建造原料列表。
 * `value.building_expenses.fields.items.fields.item_id` 建造原料的 Item ID。
 * `value.building_expenses.fields.items.fields.quantity` 建造原料的数量。
-
 
 #### 通过 indexer 查询玩家的技能进程
 
@@ -1532,176 +1529,174 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 元素包含的属性：
 
 * `skillProcessId` 为技能进程的业务主键 ID。
-    其中 `skillType` 表示技能类型，
-    `playerId` 为玩家对象 ID，
-    `sequenceNumber` 为该技能的“生产线”序列号。
-    目前，除了农业（farming）有 0 和 1，其他技能这里都是 0。
+  其中 `skillType` 表示技能类型，
+  `playerId` 为玩家对象 ID，
+  `sequenceNumber` 为该技能的“生产线”序列号。
+  目前，除了农业（farming）有 0 和 1，其他技能这里都是 0。
 * `itemId` 为该技能进程的产出成品的 Item ID。
+* id_ 为 Sui 的技能进程 Move 对象 ID（{SkillProcessObjectId}）。
 * `startedAt` 技能进程的最后一次启动时间。这是一个以秒数计算的 Unix 时间。
 * `completed` 最后一次“生产”是否已完成。
-    如果完成，可以开始下一次生产；
-    如果没有完成，但是“时间已到”，那么前端可以调用 complete 方法来获取制造结果，
-    并更新“生产线”的状态。
+  如果完成，可以开始下一次生产；
+  如果没有完成，但是“时间已到”，那么前端可以调用相应的 complete 方法来获取制造结果，
+  并更新“生产线”的状态。
 * `endedAt` 最后一次“生产”的结束时间。
 * `energyVault` 消耗能量币的数量。
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
-    “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+  “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `id_` 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
+* `id_` 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
 
+上述 `skil_type`，`sequence_number` 以及 `id_` 与前文中的技能进程占位符之间存在以下对应关系：
 
-----------------------------------------------------
-以下待修改
-----------------------------------------------------
+| skill_type | sequence_number | id_                        |
+| ---------- | --------------- | -------------------------- |
+| 0          | 0               | `{SkillProcessFarming1}` |
+| 0          | 1               | `{SkillProcessFarming2}` |
+| 1          | 0               | `{SkillProcessWooding}`  |
+| 3          | 0               | `{SkillProcessMining}`   |
+| 6          | 0               | `{SkillProcessCrafting}` |
 
-### 开始生产流程
+### 开始挖矿流程
 
-参数：
+玩家进行挖矿流程时，需要执行“开始挖矿流程”命令：
 
-* skill_process: &mut SkillProcess,
-* player: &mut Player,
-* item_production: &ItemProduction,
-* clock: &Clock,
-* energy: Coin<ENERGY>,
+执行如下 Sui CLI 开始挖矿：
 
-这样执行命令：
-
-```shell
-sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_service --function start_production \
---args "{SKILL_PROCESS_OBJECT_ID_1}" \
-"{PLAYER_ID}" \
-"{ITEM_PRODUCTION_OBJECT_ID_1}" \
-"0x6" \
-"{ENERGY_COIN_OBJECT_ID_1}" \
---gas-budget 11000000
+```powershell
+sui client call --package {main.PackageId} \
+--module skill_process_service --function start_creation \
+--args {SkillProcessMining} \
+{batchSize} \
+{playerId} \
+{common.ItemCreationMining} \
+{clock} \
+{energyId} \
+--gas-budget 11000000 --json
 ```
 
-### 完成生产流程
+参数解释：
 
-参数：
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessMining}` 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `{playerId}` 玩家对象 ID。
+* {`common.ItemCreationMining}` 挖矿配方对象 ID。
+* `{clock}` 技能流程开始执行时间，固定值：0x6。
+* `{eneryId}` 能量币（`ENERGY`）的 Object ID。
 
-* skill_process: &mut skill_process::SkillProcess,
-* player: &mut Player,
-* item_production: &ItemProduction,
-* experience_table: &ExperienceTable,
-* clock: &Clock,
+每一种生产制造进程都需要经历一定的时间，比如挖“一份”矿需要 3 秒钟，那么开始一次“挖矿”进程后，结合本次挖矿批次数量 ` batchSize`，则在经历  `batchSize` * 3 秒钟后，需要执行对应的“完成挖矿进程”来结束挖矿进程。
 
-执行：
+在技能进程成功开始后，会扣除玩家相应的原材料资源。
 
-```shell
-sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregate --function complete_production \
---args "{SKILL_PROCESS_OBJECT_ID_1}" \
-"{PLAYER_ID}" \
-"{ITEM_PRODUCTION_OBJECT_ID_1}" \
-"{EXPERIENCE_TABLE_OBJECT_ID}" \
-"0x6" \
---gas-budget 11000000 --json > testnet_complete_skill_process.json
+### 结束挖矿流程
+
+开始挖矿进程并经过所需时间之后，需执行“结束挖矿进程”来完成挖矿。
+
+执行如下 Sui CLI 来结束挖矿：
+
+```powershell
+sui client call --package {main.PackageId} \
+--module skill_process_aggregate \
+--function complete_creation \
+--args {SkillProcessMiningId} \
+{playerId} \
+{common.itemCreationMining} \
+{common.experienceTableId} \
+{clock} \
+ --gas-budget 42000000 --json
 ```
 
-接下来，就可以检查执行结果。
+参数解释：
 
-先获取玩家拥有的 Items 的 table ID：
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessMining}` 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `{playerId}` 玩家对象 ID。
+* {`common.ItemCreationMining}` 挖矿配方对象 ID。
+* `{common.experienceTableId}` 玩家积分（经验）等级表格对象 ID。
+* `{clock}` 技能流程开始执行时间，固定值：0x6。
 
-```shell
-sui client object {PLAYER_ID} --json
+在成功结束技能进程之后，玩家的对应产出成果的资源数量会增加。
+
+### 开始伐木进程
+
+除将参数 `{SkillProcessMining}`  更改为 `{SkillProcessWooding}`，
+
+将参数 `{common.ItemCreationMining}` 更改为 `{common.ItemCreationWooding}` 之外，
+
+其余参数与上述“开始挖矿进程”相同，这里不在赘述。
+
+### 结束伐木进程
+
+除将参数 `{SkillProcessMining}`  更改为 `{SkillProcessWooding}`，
+
+将参数 `{common.ItemCreationMining}` 更改为 `{common.ItemCreationWooding}` 之外，
+
+其余参数与上述“结束挖矿进程”相同，这里不在赘述。
+
+### 开始种植棉花进程
+
+种植棉花进程有两条“生产线”，对应的技能进程对象 ID 分别为 `{SkillProcessFarming1}` 和 `{SkillProcessFarming2}`。
+
+对于种植棉花这项技能来说，玩家可以同时开启两条“生产线”。
+
+我们以开启种植棉花的第一条“生产线”举例，需要执行以下 Sui CLI 命令：
+
+```powershell
+sui client call --package {main.PackageId} \
+--module skill_process_service \
+--function start_production 
+--args {SkillProcessFarming1} \
+{batchSize} \
+{playerId} \
+{common.ItemProductionFarming} \
+{clock} 
+{energyId} \
+--gas-budget 11000000 --json
 ```
 
----
+参数解释：
 
-注意，以下创建“生产配方”等章节所描述的是“管理员”的后台操作。
-开发“玩家”用户界面时，可以先忽略这部分阐述。
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessFarming1}` 种植棉花第一条“生产线”的 Move 对象 ID、
 
-### 创建 Item 生产配方
+  `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
+* `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `{playerId}` 玩家对象 ID。
+* {`common.ItemProductionFarming}` 种植棉花配方 Move 对象 ID。
+* `{clock}` 技能流程开始执行时间，固定值：0x6。
+* `{eneryId}` 能量币（`ENERGY`）的 Object ID。
 
-该函数的参数：
+### 结束种植棉花进程
 
-* item_production_id_skill_type: u8,
-* item_production_id_item_id: u32,
-* publisher: &sui:📦:Publisher,
-* production_materials_item_id_list: vector<u32>,
-* production_materials_item_quantity_list: vector<u32>,
-* requirements_level: u16,
-* base_quantity: u32,
-* base_experience: u32,
-* base_creation_time: u64,
-* energy_cost: u64,
-* success_rate: u16,
-* item_production_table: &mut item_production::ItemProductionTable,
+玩家要结束“种植棉花”进程，需要执行以下 Sui CLI 命令：
 
-我们假设要创建一个“农业”生产配方：种植一份土豆需要 3 个“土豆种子”，等级 1 就可以种植，产出数量为 10，增加经验值为 85，需要 5 秒钟，消耗 100 个单位的能量币，成功率 100%。
-
-执行命令：
-
-```shell
-sui client call --package {COMMON_PACKAGE_ID} --module item_production_aggregate --function create \
---args '0' '2' {COMMON_PACKAGE_PUBLISHER_ID} \
-'[1]' '[3]' \
-'1' '10' '85' '5' '5' '100' \
-{ITEM_PRODUCTION_TABLE_OBJECT_ID} \
---gas-budget 11000000
+```powershell
+sui client call --package {main.PackageId} \
+ --module skill_process_aggregate \
+--function complete_production \
+--args {SkillProcessFarming1} \
+{playerId} \
+{common.ItemProductionFarming} \
+{common.ExperienceTable} \
+{clock} \
+--gas-budget 42000000 --json
 ```
 
-记录下创建好的生产配方 Object ID，下面我们以占位符 `{ITEM_PRODUCTION_OBJECT_ID_1}` 来表示它。
+参数解释：
 
-```text
-│  │ ObjectID: {ITEM_PRODUCTION_OBJECT_ID_1}                                                                                              │
-│  │ ObjectType: 0x...::item_production::ItemProduction                                                            │
-```
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessFarming1}` 种植棉花第一条“生产线”的 Move 对象 ID、
 
-### 给玩家空投一些资源（Items）
+  另： `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
+* `{playerId}` 玩家对象 ID。
+* {`common.ItemProductionFarming}` 种植棉花配方 Move 对象 ID。
+* `{clock}` 技能流程开始执行时间，固定值：0x6。
+* `{common.ExperienceTable}` 玩家积分（经验）等级表格对象 ID。
 
-这个方法只有管理员可以使用。参数：
+结束种植棉花过程应该在达到完成种植进程所需时间之后。
 
-* player: &mut player::Player,
-* publisher: &sui:📦:Publisher,
-* item_id: u32,
-* quantity: u32,
 
-这里我们假设给玩家空投 100 个土豆种子：
-
-```shell
-sui client call --package {DEFAULT_PACKAGE_ID} --module player_aggregate --function airdrop \
---args {PLAYER_ID} \
-{DEFAULT_PACKAGE_PUBLISHER_ID} \
-'1' '100' \
---gas-budget 11000000
-```
-
-### 创建一个生产流程
-
-目前生成流程在玩家认领岛屿时会自动创建。这里我们假设管理员手动创建一个生产流程。
-
-参数：
-
-* skill_process_id_skill_type: u8,
-* skill_process_id_player_id: ID,
-* player: &Player,
-* skill_process_table: &mut skill_process::SkillProcessTable,
-
-执行命令：
-
-```shell
-sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_aggregate --function create \
---args '0' {PLAYER_ID} \
-{PLAYER_ID} \
-"{SKILL_PROCESS_TABLE_OBJECT_ID}" \
---gas-budget 11000000
-```
-
-一个示例命令：
-
-```shell
-sui client call --package 0x14ba8a9763d9883be8dcedce946efc25e5cbc80c4b8f09d1dbc89731fa517fb8 --module skill_process_aggregate --function create \
---args '0' 0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
-0x59e7a3b2d246f7c6852c2f8e953871668db8da387aa551116d1295d223335448 \
-0x5689f9e28f3bf359604de4eb85a1c7a55520bd4097b54b42e1acb23c1fc44279 \
---gas-budget 11000000
-```
-
-记录下创建好的生产流程的对象 ID，下面我们以占位符 `{SKILL_PROCESS_OBJECT_ID_1}` 来表示它：
-
-```text
-│  │ ObjectID: {SKILL_PROCESS_OBJECT_ID_1}
-│  │ ObjectType: 0x::skill_process::SkillProcess
-```
 
 [TBD]
 
