@@ -1624,7 +1624,7 @@ sui client call --package {main.PackageId} \
 
 将参数 `{common.ItemCreationMining}` 更改为 `{common.ItemCreationWooding}` 之外，
 
-其余参数与上述“开始挖矿进程”相同，这里不在赘述。
+其余参数与上述“开始挖矿进程”相同，这里不再赘述。
 
 ### 结束伐木进程
 
@@ -1632,7 +1632,7 @@ sui client call --package {main.PackageId} \
 
 将参数 `{common.ItemCreationMining}` 更改为 `{common.ItemCreationWooding}` 之外，
 
-其余参数与上述“结束挖矿进程”相同，这里不在赘述。
+其余参数与上述“结束挖矿进程”相同，这里不再赘述。
 
 ### 开始种植棉花进程
 
@@ -1640,7 +1640,7 @@ sui client call --package {main.PackageId} \
 
 对于种植棉花这项技能来说，玩家可以同时开启两条“生产线”。
 
-我们以开启种植棉花的第一条“生产线”举例，需要执行以下 Sui CLI 命令：
+我们以开启种植棉花的第一条“生产线”举例，执行以下 Sui CLI 命令：
 
 ```powershell
 sui client call --package {main.PackageId} \
@@ -1661,7 +1661,7 @@ sui client call --package {main.PackageId} \
 * `{SkillProcessFarming1}`： 种植棉花第一条“生产线”的 Move 对象 ID、
 
   `{SkillProcessFarming2}`： 为第二条“生产线”的 Move 对象 ID。
-* `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。“生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
 * `{playerId}`： 玩家对象 ID。
 * {`common.ItemProductionFarming}`： 种植棉花配方 Move 对象 ID。
 * `{clock}：` 开始种植棉花进程时间，固定值：0x6。
@@ -1694,11 +1694,11 @@ sui client call --package {main.PackageId} \
 * `{clock}`： 结束种植棉花进程时间，固定值：0x6。
 * `{common.ExperienceTable}：` 玩家积分（经验）等级表格对象 ID。
 
-结束种植棉花过程应该在达到完成种植进程所需时间之后。
+结束种植棉花过程应该在达到所需时间基础上进行。
 
 ### 开始造船进程
 
-玩家在占领岛屿后，可以造船并打造自己的船队。
+玩家在占领岛屿后，可以造船并管理自己的船队。
 
 如果想要造船，可以执行以下 Sui CLI 命令开启造船流程：
 
@@ -1721,7 +1721,7 @@ sui client call --package {main.PackageId} \
 * `{main.PackageId}`：Main 合约包的 ID。
 * {`production_materials_item_id_list}`： 造船所需的资源的 Item ID 的数组。通常为：[2000000001,2000000003,102]。
 * `{production_materials_item_quantity_list}`：造船所需资源数量的数组，与 `production_materials_item_id_list` 中的 Item ID 一一对应。如：[180,230,190]，每种资源数量最少 150，总数量为 600。具体每种资源数量由玩家指定。
-* `{SkillProcessCrafting}`：玩家造船技能的 Move 对象 ID。
+* `{SkillProcessCrafting}`：造船技能的 Move 对象 ID。
 * `{playerId}`：玩家对象 ID。
 * {`common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
 * `{clock}`： 开始造船流程时间，固定值：0x6。
@@ -1748,7 +1748,7 @@ sui client call --package (main.PackageId) \
 
 * `{main.PackageId}`：Main 合约包的 ID。
 * `{SkillProcessCrafting}`： 玩家造船技能的 Move 对象 ID。
-* {`rosterId}`：序号为 0 的玩家船队的 Move 对象 ID，即前文中提到的有特殊含义，容纳“Unassigned Ships”的船队 。
+* {`rosterId}`：序号为 0 的船队 Move 对象 ID，即前文中提到的有特殊含义容纳“Unassigned Ships”的船队 。
 * `{playerId}`： 玩家对象 ID。
 * {`common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
 * `{clock}`： 结束造船进程时间，固定值：0x6。
@@ -1756,7 +1756,7 @@ sui client call --package (main.PackageId) \
 
 ### 船队添加船只
 
-每个玩家有 5 支船队，默认编号为 0-4 ，其中编号为 0 的船队为 "unassigned roster"，玩家新建的船只先加入该船队。编号为 1-4 的船队，每支船队可以容纳 4 艘船，给这些船队中添加船只时，可以执行以下 Sui CLI 命令：
+每个玩家有 5 支船队，编号为 0-4 ，其中编号为 0 的船队为 "unassigned roster"，玩家新建的船只先加入该船队。编号 1-4 的船队，每支船队可以容纳 4 艘船，给这些船队中添加船只时，可以执行以下 Sui CLI 命令：
 
 ```powershell
 sui client call --package {main.PackageId} \
@@ -1773,11 +1773,11 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{sourceRoster}`：编号为 0 的玩家船队的 Move 对象 ID。
+* `{sourceRoster}`：编号为 0 的船队 Move 对象 ID。
 * `{playerId}`： 玩家对象 ID。
 * `{shipId}`：被添加船只的对象 ID。
-* {`targetRoster}`： 目标船队对象 ID，必须是编号 1-4 之一。
-* `{targetPosition}`： 将船只添加到目标船队的位置，格式 [{No}]，No 的取值范围为 0-3 或者空。如果为空，也就是 [] 将添加船只放于船只队列最后。
+* {`targetRoster}`： 目标船队对象 ID，必须是编号 1-4 的船队 ID 之一。
+* `{targetPosition}`： 将船只添加到目标船队的位置，格式 [{No}]，No 的取值范围为 0-3 或者空。如果为空，也就是 [] 将船只添加到船队末尾位置。
 
 ### 取消船只
 
