@@ -211,6 +211,7 @@ wubuku/dddappp:0.0.1 \
 * `main.Digest`：发布 Main 包交易的摘要。
 * `coin.EnergyId`：Mint 获得的能量币（`ENERGY`）的 Object ID。
 * `main.Map`：地图（map）的 Object ID。
+* `common.ExperienceTable` 玩家积分（经验）等级表的 Object ID。
 
 特别注意 `common` 中的 `ItemCreationMining，ItemProductionFarming，ItemCreationWooding，ItemProducitonCrafting` 四个属性：
 
@@ -1538,6 +1539,7 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
   `sequenceNumber` 为该技能的“生产线”序列号。
   目前，除了农业（farming）有 0 和 1，其他技能这里都是 0。
 * `itemId` 为该技能进程的产出成品的 Item ID。
+* id_ 为 Sui 的技能进程 Move 对象 ID（{SkillProcessObjectId}）。
 * `startedAt` 技能进程的最后一次启动时间。这是一个以秒数计算的 Unix 时间。
 * `completed` 最后一次“生产”是否已完成。
   如果完成，可以开始下一次生产；
@@ -1547,6 +1549,20 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 * `energyVault` 消耗能量币的数量。
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
   “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `id_` 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
+* `id_` 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
+
+上述 `skil_type`，`sequence_number` 以及 `id_` 与前文中的技能进程占位符之间存在以下对应关系：
+
+| skill_type | sequence_number | id_                        |
+| ---------- | --------------- | -------------------------- |
+| 0          | 0               | `{SkillProcessFarming1}` |
+| 0          | 1               | `{SkillProcessFarming2}` |
+| 1          | 0               | `{SkillProcessWooding}`  |
+| 3          | 0               | `{SkillProcessMining}`   |
+| 6          | 0               | `{SkillProcessCrafting}` |
+
+
 
 ---
 
