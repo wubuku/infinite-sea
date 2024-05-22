@@ -21,9 +21,9 @@ $startLocation = Get-Location;
 $logFile = "$startLocation\airdrop_$($dataInfo.main.Player).log"
 
 
-$item = $itemData.ItemNormalLogs
-# $item = $itemData.ItemCopperOre
-# $item = $itemData.ItemCottons
+#$item = $itemData.ItemNormalLogs
+#$item = $itemData.ItemCopperOre
+$item = $itemData.ItemCottons
 $quantity = 555
 
 "`n给 Player 空投 $quantity 个 $($item.Name) (Id=$($item.ItemId))种子..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow

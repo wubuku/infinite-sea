@@ -1719,8 +1719,8 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `production_materials_item_id_list`： 造船所需的资源的 Item ID 的数组。通常为：[2000000001,2000000003,102]。
-* `production_materials_item_quantity_list`：造船所需资源数量的数组，与 `production_materials_item_id_list` 中的 Item ID 一一对应。如：[180,230,190]，每种资源数量最少 150，总数量为 600。具体每种资源数量由玩家指定。
+* {`production_materials_item_id_list}`： 造船所需的资源的 Item ID 的数组。通常为：[2000000001,2000000003,102]。
+* `{production_materials_item_quantity_list}`：造船所需资源数量的数组，与 `production_materials_item_id_list` 中的 Item ID 一一对应。如：[180,230,190]，每种资源数量最少 150，总数量为 600。具体每种资源数量由玩家指定。
 * `{SkillProcessCrafting}`：玩家造船技能的 Move 对象 ID。
 * `{playerId}`：玩家对象 ID。
 * {`common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
@@ -1748,14 +1748,119 @@ sui client call --package (main.PackageId) \
 
 * `{main.PackageId}`：Main 合约包的 ID。
 * `{SkillProcessCrafting}`： 玩家造船技能的 Move 对象 ID。
-* `rosterId`：序号为 0 的玩家船队的 Move 对象 ID，即前文中提到的有特殊含义，容纳“Unassigned Ships”的船队 。
+* {`rosterId}`：序号为 0 的玩家船队的 Move 对象 ID，即前文中提到的有特殊含义，容纳“Unassigned Ships”的船队 。
 * `{playerId}`： 玩家对象 ID。
 * {`common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
 * `{clock}`： 结束造船进程时间，固定值：0x6。
 * `{common.ExperienceTable}`： 玩家积分（经验）等级表格对象 ID。
 
+### 船队添加船只
 
+每个玩家有 5 支船队，默认编号为 0-4 ，其中编号为 0 的船队为 "unassigned roster"，玩家新建的船只先加入该船队。编号为 1-4 的船队，每支船队可以容纳 4 艘船，给这些船队中添加船只时，可以执行以下 Sui CLI 命令：
 
+```powershell
+sui client call --package {main.PackageId} \
+ --module roster_aggregate \
+--function transfer_ship \
+--args  {sourceRoster} \
+{playerId} \
+{shipId}  \
+{targetRoster} \
+{targetPosition} \
+ --gas-budget 42000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{sourceRoster}`：编号为 0 的玩家船队的 Move 对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{shipId}`：被添加船只的对象 ID。
+* {`targetRoster}`： 目标船队对象 ID，必须是编号 1-4 之一。
+* `{targetPosition}`： 将船只添加到目标船队的位置，格式 [{No}]，No 的取值范围为 0-3 或者空。如果为空，也就是 [] 将添加船只放于船只队列最后。
+
+### 取消船只
+
+可以将编号 1-4 的船队中的指定船只取消，被取消的船只自动回到编号为 0 的“unassigned roster”船队。
+
+可以通过以下 Sui CLI 命令执行取消命令：
+
+```powershell
+sui client call --package {main.PackageId} \
+ --module roster_aggregate \
+--function transfer_ship \
+--args  {sourceRoster} \
+{playerId} \
+{shipId}  \
+{targetRoster} \
+{targetPosition} \
+ --gas-budget 42000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* {`sourceRoster}`：编号为 1-4 的玩家船队的 Move 对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{shipId}`：被取消船只的对象 ID。
+* {`targetRoster}`： 编号为 0 的玩家船队的 Move 对象 ID。
+* `{targetPosition}`： 取值 [] 表示取消的的船只置于“unassigned roster”船队的末尾。
+
+可以发现船队“添加船只”和“取消船只”是同一个接口。
+
+### 调整船只顺序
+
+玩家可以调整船队中现有船只的顺序。
+
+通过执行以下 Sui CLI 命令确定船队内所有船只的最终顺序：
+
+```powershell
+sui client call --package {main.PackageId} \
+--module roster_aggregate \
+--function adjust_ships_position \
+--args {rosteId} \
+{playerId} \
+{positions} \
+{shipIds}  \
+--gas-budget 4999000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{rosteId}`：调整船只顺序的船队的 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{shipIds}`： 变更顺序的船只的 ID 的数组。
+* {`positions}`： 与 `shipIds` 数组中船只对应的最新位置数组。
+
+### 船队航行
+
+通过以下的 Sui CLI 命令将指定船队移动到指定位置。
+
+```powershell
+sui client call --package (main.PackageId) \
+--module roster_service \
+--function set_sail \
+--args {roster} \
+{playerId} \
+{target_coordinates_x} \
+{target_coordinates_y} \
+{clock} \
+{energyId} \
+{energy_amount} \
+--gas-budget 11000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{roste}`：船队对象的 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{target_coordinates_x}`：航行目的地的横坐标。
+* {`target_coordinates_y}`： 航行目的地的纵坐标。
+* {`clock}`： 航行开始时间，固定值 `0x6`。
+* {`energyId}`：能量币（`ENERGY`）的 Object ID。
+* {`energy_amount}`： 本次航行需要花费能量币（`ENERGY`）数量。
 
 
 [TBD]
