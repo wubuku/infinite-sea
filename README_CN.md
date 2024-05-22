@@ -194,12 +194,7 @@ wubuku/dddappp:0.0.1 \
     "UpgradeCap": "0xb0c8b32183ee7e40241a6969121a75e071426382f8279d7208d11ef691fa3d3e",
     "SkillProcessTable": "0xc90ce4d672d492d82ef1ec642b5ee2bd8756482f5372b8473ad7e5e063dfe209",
     "Map": "0xc9fa916b2613408af026091b17b505a3f49af001ff0c774516de5a1414716bd7",
-    "Player": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291",
-    "SkillProcessFarming1": "0x3a2b5e7b36111f2fb9f6423c6c2ef5a5cba73f441af6fec0cb616ee37698356b",
-    "SkillProcessWooding": "0x9ced723bd1cd3a36aa7b778c6596f1ebf0182fd3f65c9e4144bfe623f7c7909b",
-    "SkillProcessFarming2": "0xb70e54cfca7a3f6fa68bc616e761a47789f6013e51aa2d616f61e5e10982bbab",
-    "SkillProcessMining": "0xbd0d065237b2b11136c9d2f3d88cdc8909e1869a7ab44bf0398d373571701629",
-    "SkillProcessCrafting": "0xf9c94a70f9fe017e5f3e9cba022d3b82b48382f3b8581fe1e48b1256885bc6b3"
+    "Player": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291"
   }
 }
 ```
@@ -1562,34 +1557,34 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 | 3          | 0               | `{SkillProcessMining}`   |
 | 6          | 0               | `{SkillProcessCrafting}` |
 
+### 开始生产挖矿流程
 
+玩家进行挖矿流程时，需要执行以下命令：
 
----
+可以使用如下 Sui CLI 开始挖矿：
 
-以下待修改
-----------
-
-### 开始生产流程
-
-参数：
-
-* skill_process: &mut SkillProcess,
-* player: &mut Player,
-* item_production: &ItemProduction,
-* clock: &Clock,
-* energy: Coin<ENERGY>,
-
-这样执行命令：
-
-```shell
-sui client call --package "{DEFAULT_PACKAGE_ID}" --module skill_process_service --function start_production \
---args "{SKILL_PROCESS_OBJECT_ID_1}" \
-"{PLAYER_ID}" \
-"{ITEM_PRODUCTION_OBJECT_ID_1}" \
-"0x6" \
-"{ENERGY_COIN_OBJECT_ID_1}" \
---gas-budget 11000000
+```powershell
+sui client call --package {main.PackageId} \
+--module skill_process_service --function start_creation \
+--args {SkillProcessMining} \
+{batchSize} \
+{playerId} \
+{common.ItemCreationMiningId} \
+{clock} \
+{energyId} \
+--gas-budget 11000000 --json
 ```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessMining}` 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `{playerId}` 玩家对象 ID。
+* {`common.ItemCreationMiningId}` 挖矿配方对象 ID。
+* `{clock}` 技能流程开始执行时间，固定值：0x6。
+* `{eneryId}` 能量币（`ENERGY`）的 Object ID。
+
 
 ### 完成生产流程
 
