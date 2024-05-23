@@ -2,7 +2,7 @@ $startLocation = Get-Location;
 
 $now = Get-Date
 $formattedNow = $now.ToString('yyyyMMddHHmmss')
-$logFile = "$startLocation\islandToShip.log"
+$logFile = "$startLocation\shipToIsland.log"
 
 $dataFile = "$startLocation\data.json"
 if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
@@ -45,13 +45,13 @@ catch {
     return    
 }
 
-"将岛上的资源部分转移到船队 $roster 的船只 $shipId 上。"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+"将船只 $shipId 上的部分资源转移到岛上。"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
 
 $BeforePutInPlayer = @{}
 $BeforePutInShip = @{}
 $change = @{}
 $AfterPutInShip = @{}
-"`n转移之前，看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+"转移之前，看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
 try {
     $result = sui client object $dataInfo.main.Player --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
@@ -81,7 +81,8 @@ try {
         return
     }
     $shipObj = $shipResult | ConvertFrom-Json
-    foreach ($object in $shipObj.content.fields.inventory) {
+    $shipInventory = $shipObj.content.fields.inventory
+    foreach ($object in $shipInventory) {
         "Item Id: $($object.fields.item_id),数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
         $BeforePutInShip.Add($object.fields.item_id, $object.fields.quantity)
     }
@@ -92,12 +93,11 @@ catch {
     Set-Location $startLocation
     return    
 }
-
 $islandResourceIds = @()
 $islandResourceQuantities = @()
-"`n从岛屿转移以下资源到指定船队的船只上：" | Tee-Object -FilePath $logFile -Append  |  Write-Host  -ForegroundColor Yellow
+"`n从船上将以下资源转移到岛上：" | Tee-Object -FilePath $logFile -Append  |  Write-Host  
 $random = New-Object System.Random  
-foreach ($resouce in $resultObj.content.fields.inventory.fields) {      
+foreach ($resouce in $shipInventory.fields) {      
     $quantity = $random.Next(0, $resouce.Quantity)  
     "Item Id:$($resouce.item_id),数量:$quantity"  | Tee-Object -FilePath $logFile -Append  |  Write-Host 
     $islandResourceIds += $resouce.item_id
@@ -109,7 +109,7 @@ $islandResourceQuantities_ = "[" + ($islandResourceQuantities -join ",") + "]"
 
 try {
     "`n执行资源转移。。。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-    $command = "sui client call --package $($dataInfo.main.PackageId)  --module roster_aggregate --function put_in_ship_inventory --args $roster $($dataInfo.main.Player) '0x6' $shipId $islandResources_  $islandResourceQuantities_ --gas-budget 11000000 --json" 
+    $command = "sui client call --package $($dataInfo.main.PackageId)  --module roster_aggregate --function take_out_ship_inventory --args $roster $($dataInfo.main.Player) '0x6' $shipId $islandResources_  $islandResourceQuantities_ --gas-budget 11000000 --json" 
     $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
     $putInShipInventoryResult = Invoke-Expression -Command $command
     if (-not ('System.Object[]' -eq $putInShipInventoryResult.GetType())) {
@@ -125,10 +125,9 @@ catch {
     "返回的结果为:$putInShipInventoryResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
     Set-Location $startLocation
     return    
-}
-    
+}    
 
-"转移之后，再看一下Player 当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+"`n转移之后，再看一下Player 当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
 try {
     $result = sui client object $dataInfo.main.Player --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
@@ -142,12 +141,12 @@ try {
         $quantityBefore = $BeforePutInPlayer[$itemId]
         $quantityChange = $change[$itemId]
         $quantityAfter = $object.fields.quantity
-        "Item Id($itemId),原有数量:$quantityBefore,减少数量:$quantityChange,当前数量:$quantityAfter，" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White -NoNewline
-        if ($quantityBefore - $quantityChange -eq $quantityAfter) {
-            "($quantityBefore - $quantityChange = $quantityAfter) OK"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+        "Item Id($itemId),原有数量:$quantityBefore,增加数量:$quantityChange,当前数量:$quantityAfter，" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White -NoNewline
+        if ($quantityBefore + $quantityChange -eq $quantityAfter) {
+            "($quantityBefore + $quantityChange = $quantityAfter) OK"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
         }
         else {
-            "($quantityBefore - $quantityChange ≠ $quantityAfter) NO"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "($quantityBefore + $quantityChange ≠ $quantityAfter) NO"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         }
     } 
 }
@@ -171,12 +170,12 @@ try {
         $quantityBefore = $BeforePutInShip[$itemId]
         $quantityChange = $change[$itemId]
         $quantityAfter = $object.fields.quantity
-        "Item Id($itemId),原有数量:$quantityBefore,增加数量:$quantityChange,当前数量:$quantityAfter，" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White -NoNewline
-        if ($quantityBefore + $quantityChange -eq $quantityAfter) {
-            "($quantityBefore + $quantityChange = $quantityAfter) OK"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+        "Item Id($itemId),原有数量:$quantityBefore,减少数量:$quantityChange,当前数量:$quantityAfter，" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White -NoNewline
+        if ($quantityBefore - $quantityChange -eq $quantityAfter) {
+            "($quantityBefore - $quantityChange = $quantityAfter) OK"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
         }
         else {
-            "($quantityBefore + $quantityChange ≠ $quantityAfter) NO"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "($quantityBefore - $quantityChange ≠ $quantityAfter) NO"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         }
     }
 }
