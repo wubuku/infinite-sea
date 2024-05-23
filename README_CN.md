@@ -130,6 +130,7 @@ wubuku/dddappp:0.0.1 \
 
 #### Item（物品、资源） ID 常量
 
+
 | Item Id    | Name                    | 说明                                    |
 | ---------- | ----------------------- | --------------------------------------- |
 | 0          | UNUSED_ITEM             | 未使用                                  |
@@ -142,6 +143,7 @@ wubuku/dddappp:0.0.1 \
 | 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
 
 #### 技能常量
+
 
 | 技能        | 常量 | 说明 |
 | ----------- | ---- | ---- |
@@ -212,8 +214,9 @@ wubuku/dddappp:0.0.1 \
 
 这些属性是合约发布之后，后台调用接口生成的关于生产制造的配方的 ID，前端可以将它们视为常量使用。
 
-| 配方   | 调用占位符                   | 说明                                 |
-| ------ | ---------------------------- | ------------------------------------ |
+
+| 配方   | 调用占位符                 | 说明                                 |
+| ------ | -------------------------- | ------------------------------------ |
 | 挖矿   | {`ItemCreationMining`}     | 开始挖矿进程和结束挖矿进程时使用     |
 | 伐木   | {`ItemCreationWooding`}    | 开始伐木进程和结束伐木进程时使用     |
 | 种棉花 | {`ItemProductionFarming`}  | 开始种植棉花进程和结束棉花进程时使用 |
@@ -948,12 +951,13 @@ sui client object {RosterObjectId} --json
 可以将玩家的技能进程理解为制造物品（Item）的“生产线”。
 玩家在占领一个岛屿之后，目前合约会为之自动创建 4 类 5 条这样的“生产线”。
 
-| 类型                 | 对应技能类型常量值 | “生产线”数量 | 示例命令使用的“占位符”                               |
-| -------------------- | ------------------ | -------------- | ------------------------------------------------------ |
+
+| 类型                 | 对应技能类型常量值 | “生产线”数量 | 示例命令使用的“占位符”                           |
+| -------------------- | ------------------ | -------------- | -------------------------------------------------- |
 | 种植(Farming)        | 0                  | 2              | `{SkillProcessFarming1}`, `{SkillProcessFarming2}` |
-| 伐木(WoodCuttinging) | 1                  | 1              | `{SkillProcessWooding}`                              |
-| 挖矿(Mining)         | 3                  | 1              | `{SkillProcessMining}`                               |
-| 造船(Crafting)       | 6                  | 1              | `{SkillProcessCrafting}`                             |
+| 伐木(WoodCuttinging) | 1                  | 1              | `{SkillProcessWooding}`                            |
+| 挖矿(Mining)         | 3                  | 1              | `{SkillProcessMining}`                             |
+| 造船(Crafting)       | 6                  | 1              | `{SkillProcessCrafting}`                           |
 
 执行 Sui CLI 命令：
 
@@ -1006,13 +1010,14 @@ sui client object {SkillProcess_dynamic_field_ObjectId} --json
 
 上述 `skil_type`，`sequence_number` 以及 `content.fields.name.value` 与前文中的技能进程占位符之间存在以下对应关系：
 
-| skill_type | sequence_number | content.fields.name.value  |
-| ---------- | --------------- | -------------------------- |
-| 0          | 0               | `{SkillProcessFarming1}` |
-| 0          | 1               | `{SkillProcessFarming2}` |
-| 1          | 0               | `{SkillProcessWooding}`  |
-| 3          | 0               | `{SkillProcessMining}`   |
-| 6          | 0               | `{SkillProcessCrafting}` |
+
+| skill_type | sequence_number | content.fields.name.value |
+| ---------- | --------------- | ------------------------- |
+| 0          | 0               | `{SkillProcessFarming1}`  |
+| 0          | 1               | `{SkillProcessFarming2}`  |
+| 1          | 0               | `{SkillProcessWooding}`   |
+| 3          | 0               | `{SkillProcessMining}`    |
+| 6          | 0               | `{SkillProcessCrafting}`  |
 
 通过 Sui JSON RPC 查询玩家的船队信息或技能进程信息，过程略显繁琐。
 我们的链下查询服务（indexer）提供了更便捷的接口。
@@ -1549,8 +1554,9 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 
 上述 `skil_type`，`sequence_number` 以及 `id_` 与前文中的技能进程占位符之间存在以下对应关系：
 
-| skill_type | sequence_number | id_                        |
-| ---------- | --------------- | -------------------------- |
+
+| skill_type | sequence_number | id_                      |
+| ---------- | --------------- | ------------------------ |
 | 0          | 0               | `{SkillProcessFarming1}` |
 | 0          | 1               | `{SkillProcessFarming2}` |
 | 1          | 0               | `{SkillProcessWooding}`  |
@@ -1853,14 +1859,108 @@ sui client call --package (main.PackageId) \
 
 参数解释：
 
-* `{main.PackageId}`：Main 合约包的 ID。
-* `{roste}`：船队对象的 ID。
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
 * `{playerId}`： 玩家对象 ID。
 * `{target_coordinates_x}`：航行目的地的横坐标。
 * {`target_coordinates_y}`： 航行目的地的纵坐标。
 * {`clock}`： 航行开始时间，固定值 `0x6`。
 * {`energyId}`：能量币（`ENERGY`）的 Object ID。
 * {`energy_amount}`： 本次航行需要花费能量币（`ENERGY`）数量。
+
+### 资源转移
+
+目前有三种资源转移方式：同船队船与船之间、将船上的资源转移到岛屿、将岛屿的资源转移到船上。
+
+#### 船与船之间资源转移
+
+只有同一船队之间的船只之间才可以进行资源的转移，可以通过以下的 Sui CLI 命令实现：
+
+```powershell
+sui client call --package {main.packageId} \
+--module roster_aggregate \
+--function transfer_ship_inventory \
+--args {roster} \
+{playerId} \
+{fromShipId} \
+{toShipId} \
+{itemIds} \
+{quantities} \
+ --gas-budget 11000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{fromShipId}`：转移资源船只对象 ID。
+* {`toShipId}`： 接收资源船只对象 ID。
+* {`itemIds}`： 转移资源（Item) 的 ID 的数组。
+  如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
+* {`quantities}`：转移资源（Item）的数量数组。
+  如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
+
+注意：对象 ID 为 `{fromShipId}` 和 `{toShipId}` 的船只均属于对象 ID 为 `{roste}` 的同一船队。
+
+
+#### 船只资源转移到岛屿
+
+停泊在玩家自己岛屿附近的玩家船只上的资源可以转移到岛屿，通过以下的 Sui CLI 命令实现：
+
+```powershell
+sui client call --package {main.packageId} \
+--module roster_aggregate \
+--function take_out_ship_inventory \
+--args {roster} \
+{playerId} \
+{clock} \
+{shipId} \
+{itemIds} \
+{quantities} \
+ --gas-budget 11000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{shipId}`：转移资源船只对象 ID。
+* `{clock}`转移时间，固定值`0x6`。
+* {`itemIds}`： 转移资源（Item) 的 ID 的数组。
+  如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
+* {`quantities}`：转移资源（Item）的数量数组。
+  如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
+
+#### 岛屿资源转移到船只
+
+同样可以将玩家自己岛屿上的资源转移到停泊在附近的玩家船只上，通过以下的 Sui CLI 命令实现：
+
+```powershell
+sui client call --package {main.packageId} \
+--module roster_aggregate \
+--function put_in_ship_inventory \
+--args {roster} \
+{playerId} \
+{clock} \
+{shipId} \
+{itemIds} \
+{quantities} \
+ --gas-budget 11000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{clock}` 转移时间，固定值 `0x6`。
+* `{shipId}`：转移资源船只对象 ID。
+* {`itemIds}`： 转移资源（Item) 的 ID 的数组。
+  如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
+* {`quantities}`：转移资源（Item）的数量数组。
+  如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
 
 
 [TBD]
