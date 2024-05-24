@@ -1868,6 +1868,80 @@ sui client call --package (main.PackageId) \
 * {`energyId}`：能量币（`ENERGY`）的 Object ID。
 * {`energy_amount}`： 本次航行需要花费能量币（`ENERGY`）数量。
 
+### 更新船队位置
+
+船队出发后，如果想知道船队在地图上的最新位置，可以通过执行以下的 Sui CLI 命令来实现：
+
+```powershell
+sui client call --package {main.PackageId} \
+--module roster_aggregate \
+--function update_location \
+--args {rosteId} \
+{clock} \
+--gas-budget 1000000 --json
+```
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
+* {`clock}`： 航行开始时间，固定值 `0x6`。
+
+执行以上命令之后，可以通过以下 Sui CLI 命令来查看船队信息：
+
+```powershell
+sui client object {roster}--json
+```
+
+其中 `{roster}` 为船队对象ID。
+
+以上命令可以得到如下类似输出信息：
+
+```json
+{
+  "objectId": "0xb490508e29aebda93bb90868f1bb9d455810785d8eda48b5c72e3b05012387a3",
+  ...
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x8d4b0f3b3be41e525ec63e252f14b52e149ead9b2904f55a8b3878044999b56b::roster::Roster",
+    "hasPublicTransfer": false,
+    "fields": {
+      ...
+      "ship_ids": [
+        "0x273bd00b0df174f6595fcd5f6e8dbe8344a38a5f6aa4516e0002b49def8c39c4",
+        "0xe80a2fbcb21a9a2b318b30bf478fef5ef0c35e542460f0432d6470ee6c3e1eb6",
+        "0xdf17c004d47be86384895044a4df3325928a82706733e7a1562ab3ecd46957cf",
+        "0x80dc17e475a259cde1a114689d110f8aa109e0bcabcf85b4876371ebc813f744"
+      ],
+      ...
+      "speed": 4,
+      "status": 1,
+      "target_coordinates": {
+        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::coordinates::Coordinates",
+        "fields": {
+          "x": 500,
+          "y": 500
+        }
+      },
+      "updated_coordinates": {
+        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::coordinates::Coordinates",
+        "fields": {
+          "x": 307,
+          "y": 307
+        }
+      },
+      "version": "17"
+    }
+  }
+}
+```
+
+在 `content.fields` 属性中可以看到以下几个重要属性：
+
+* `target_coordinates`：船队的航行目的地。
+  其 `fields` 为目的地坐标。
+* `updated_coordinates`：最后一次更新船队位置后的坐标信息。
+  其 `fields` 为最后一次更新时坐标。
+* `status` 为船队的状态。0：停泊中，1：行进中，2：战斗中，3：已损毁。
+
 ### 资源转移
 
 目前有三种资源转移方式：同船队船与船之间、船与岛屿之间（从船转移到岛屿和从岛屿转移到船）。
@@ -1902,7 +1976,6 @@ sui client call --package {main.packageId} \
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
 
 注意：对象 ID 为 `{fromShipId}` 和 `{toShipId}` 的船只均属于对象 ID 为 `{roste}` 的同一船队。
-
 
 #### 从船转移到岛屿
 
@@ -2107,7 +2180,6 @@ sui client call --package {main.packageId} \
 * `{common.ExperienceTable}`：玩家积分（经验）等级表格对象 ID。
 * `{clock}`： 战后清理时间，固定值 `0x6`。
 * `{choice}`：是否收集战利品。1：收集，2：放弃。
-
 
 [TBD]
 
