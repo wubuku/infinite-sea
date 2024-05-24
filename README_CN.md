@@ -1789,7 +1789,7 @@ sui client call --package {main.PackageId} \
 
 可以将编号 1-4 的船队中的指定船只取消，被取消的船只自动回到编号为 0 的“unassigned roster”船队。
 
-可以通过以下 Sui CLI 命令执行取消命令：
+通过以下 Sui CLI 命令执行取消命令：
 
 ```powershell
 sui client call --package {main.PackageId} \
@@ -1810,15 +1810,15 @@ sui client call --package {main.PackageId} \
 * `{playerId}`： 玩家对象 ID。
 * `{shipId}`：被取消船只的对象 ID。
 * {`targetRoster}`： 编号为 0 的玩家船队的 Move 对象 ID。
-* `{targetPosition}`： 取值 [] 表示取消的的船只置于“unassigned roster”船队的末尾。
+* `{targetPosition}`： ~~取值 [] ，表示将取消船只置于“unassigned roster”船队的末尾。~~
 
-可以发现船队“添加船只”和“取消船只”是同一个接口。
+船队“添加船只”和“取消船只”是同一个接口。
 
 ### 调整船只顺序
 
-玩家可以调整船队中现有船只的顺序。
+玩家可以调整船只在船队中的顺序。
 
-通过执行以下 Sui CLI 命令确定船队内所有船只的最终顺序：
+通过执行以下 Sui CLI 命令来确定船队中所有船只的最终顺序：
 
 ```powershell
 sui client call --package {main.PackageId} \
@@ -1834,14 +1834,14 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{rosteId}`：调整船只顺序的船队的 ID。
+* `{rosteId}`：船队对象 ID。
 * `{playerId}`： 玩家对象 ID。
 * `{shipIds}`： 变更顺序的船只的 ID 的数组。
-* {`positions}`： 与 `shipIds` 数组中船只对应的最新位置数组。
+* {`positions}`： 与 `shipIds` 数组中船只对应的调整后的位置数组。
 
 ### 船队航行
 
-通过以下的 Sui CLI 命令将指定船队移动到指定位置。
+通过以下 Sui CLI 命令将指定船队移动到指定位置。
 
 ```powershell
 sui client call --package (main.PackageId) \
@@ -1870,11 +1870,11 @@ sui client call --package (main.PackageId) \
 
 ### 资源转移
 
-目前有三种资源转移方式：同船队船与船之间、将船上的资源转移到岛屿、将岛屿的资源转移到船上。
+目前有三种资源转移方式：同船队船与船之间、船与岛屿之间（从船转移到岛屿和从岛屿转移到船）。
 
 #### 船与船之间资源转移
 
-只有同一船队之间的船只之间才可以进行资源的转移，可以通过以下的 Sui CLI 命令实现：
+只有同一船队的船只之间才可以进行资源转移，可以通过以下的 Sui CLI 命令实现：
 
 ```powershell
 sui client call --package {main.packageId} \
@@ -1904,9 +1904,9 @@ sui client call --package {main.packageId} \
 注意：对象 ID 为 `{fromShipId}` 和 `{toShipId}` 的船只均属于对象 ID 为 `{roste}` 的同一船队。
 
 
-#### 船只资源转移到岛屿
+#### 从船转移到岛屿
 
-停泊在玩家自己岛屿附近的玩家船只上的资源可以转移到岛屿，通过以下的 Sui CLI 命令实现：
+停泊在玩家自家岛屿附近的自家船只上的资源可以转移到自家岛屿，通过以下的 Sui CLI 命令实现：
 
 ```powershell
 sui client call --package {main.packageId} \
@@ -1933,9 +1933,9 @@ sui client call --package {main.packageId} \
 * {`quantities}`：转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
 
-#### 岛屿资源转移到船只
+#### 从岛屿转移到船
 
-同样可以将玩家自己岛屿上的资源转移到停泊在附近的玩家船只上，通过以下的 Sui CLI 命令实现：
+同样玩家可以将自家岛屿上的资源转移到停泊在附近的自家船只上，通过以下的 Sui CLI 命令实现：
 
 ```powershell
 sui client call --package {main.packageId} \
