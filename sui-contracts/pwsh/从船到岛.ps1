@@ -2,7 +2,7 @@ $startLocation = Get-Location;
 
 $now = Get-Date
 $formattedNow = $now.ToString('yyyyMMddHHmmss')
-$logFile = "$startLocation\shipToIsland.log"
+$logFile = "$startLocation\ShipToIsland.log"
 
 $dataFile = "$startLocation\data.json"
 if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
@@ -36,6 +36,8 @@ try {
     $rosterObj = $rosterInfoResult | ConvertFrom-Json
     if (-not $rosterObj.content.fields.ship_ids.Contains($shipId)) {
         "船队 $roster 内不包括船只 $shipId。"  | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        Set-Location $startLocation
+        return
     }
 }
 catch {
@@ -50,7 +52,7 @@ catch {
 $BeforePutInPlayer = @{}
 $BeforePutInShip = @{}
 $change = @{}
-$AfterPutInShip = @{}
+
 "转移之前，看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
 try {
     $result = sui client object $dataInfo.main.Player --json
@@ -117,7 +119,7 @@ try {
         Set-Location $startLocation
         return
     }
-    $setSailResultObj = $putInShipInventoryResult | ConvertFrom-Json
+    $putInShipInventoryObj = $putInShipInventoryResult | ConvertFrom-Json
     "转移完成。`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
 }
 catch {

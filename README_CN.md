@@ -1962,6 +1962,152 @@ sui client call --package {main.packageId} \
 * {`quantities}`：转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
 
+### 战斗
+
+玩家可以控制己方一只船队对其他玩家的船队或者环境船队发动进攻，进而发生战斗。
+
+玩家选择“自动进攻”时，系统需执行以下 Sui CLI 命令：
+
+```powershell
+sui client call --package {main.packageId} \
+--module ship_battle_service \
+--function initiate_battle_and_auto_play_till_end \
+--args {playerId} \
+{initiator} \
+{responder} \
+{clock} \
+--gas-budget 4999000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{initiator}`： 发起战斗作为挑战船队的对象 ID。
+* `{responder}`： 遭到攻击作为应战船队的对象 ID。
+* `{clock}`： 发起战斗时间，固定值 `0x6`。
+
+战斗结束后，在返回的输出中，含有一下类似信息：
+
+```Json
+  "objectChanges": [
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": "@{Shared=}",
+      "objectType": "0xaee83076475d11960108b6f4cb6e06b489397f17d22da8a7a0deb18354c16750::ship_battle::ShipBattle",
+      "objectId": "0x8cd018a1657ac59e9262873c967456bcb5a5cdfbaf5cf988dd75ea60cc715c4c",
+      "version": "35636581",
+      "digest": "Bu1roPeH4FA9M2vyagND9MCWZKMb1HMVn5uo9hym3p8k"
+    }
+]
+```
+
+我们记录类型（objectType）为 `ship_battle::ShipBattle` 的对象的 Move 对象 ID（objectId）的值为 `{ShipBattleId}`，用来表示本次战斗的唯一标识，通过该对象 ID，我们可以查看关于战斗的更多信息。
+
+### 查看战斗信息
+
+执行以下 Sui CLI 可以查看某次战斗的详细信息：
+
+```powershell
+sui client object {shipBattleId} --json
+```
+
+参数解释：
+
+* `{ShipBattleId}` 表示战斗的唯一标识。
+
+以上命令会得到以下类似输出信息：
+
+```json
+{
+  "objectId": "0x8cd018a1657ac59e9262873c967456bcb5a5cdfbaf5cf988dd75ea60cc715c4c",
+  "version": "35636638",
+  "digest": "CQkXm88LHAvmJ6nF6GXfyA1VN3AqyY1uD6j7y62SxsLP",
+  "type": "0xaee83076475d11960108b6f4cb6e06b489397f17d22da8a7a0deb18354c16750::ship_battle::ShipBattle",
+  "owner": {
+    "Shared": {
+      "initial_shared_version": 35636581
+    }
+  },
+  "previousTransaction": "FqiT1LWMkpJeseQJU7caZgKTsAWAurMegifYCCtSK7Vz",
+  "storageRebate": "2272400",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0xaee83076475d11960108b6f4cb6e06b489397f17d22da8a7a0deb18354c16750::ship_battle::ShipBattle",
+    "hasPublicTransfer": false,
+    "fields": {
+      "ended_at": "1715825128",
+      "id": {
+        "id": "0x8cd018a1657ac59e9262873c967456bcb5a5cdfbaf5cf988dd75ea60cc715c4c"
+      },
+      "initiator": "0x3dfb3f2ef35684c86a82095a46332146038ef75afc1bff4a16ec2d98a9fc8e11",
+      "initiator_experiences": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "responder": "0x7634886a12806eaeed4698f7a5034bfc5adb56b7055853e06d9c80130b2cc8cb",
+      "responder_experiences": [
+        8
+      ],
+      "round_attacker_ship": null,
+      "round_defender_ship": null,
+      "round_mover": null,
+      "round_number": 45,
+      "round_started_at": "1715825128",
+      "status": 2,
+      "version": "46",
+      "winner": 1
+    }
+  }
+}
+```
+
+我们重点关注 `content.fields` 属性，其中又包含了以下重要属性：
+
+* `ended_at` ：表示战斗结束时间，是一个以秒为计算单位的 UNIX 时间值。
+* `initiator` ：发起战斗的船队对象 ID。
+* `responder` ：应战船队对象 ID。
+* `round_number` ：战斗回合数。
+* `status`：战斗状态。0：进行中，1：已结束，2：已清理。
+* `winner`：表示获胜方是谁。1：挑战方获胜，0：应战方获胜。
+
+### 收集战利品
+
+如果玩家赢得了战斗，玩家可以决定在战后清理中是否搜索对方船队并收集战利品。
+
+如果对方是环境船队并且赢得了战斗，那么由系统进行战斗后清理工作。
+
+执行以下 Sui CLI 命令进行战后清理工作：
+
+```powershell
+sui client call --package {main.packageId} \
+--module ship_battle_aggregate \
+--function take_loot \
+--args {ShipBattleId}\
+{playerId} \
+{losterPlayerId} \
+{initiator} \
+{responder} \
+{common.ExperienceTable}
+{clock} \
+{choice} \
+--gas-budget 4999000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{playerId}`： 战斗发起方玩家对象 ID。
+* `{loser_player}`： 战斗应战方玩家对象 ID。
+* `{initiator}`： 发起战斗作为挑战船队的对象 ID。
+* `{responder}`： 遭到攻击作为应战船队的对象 ID。
+* `{common.ExperienceTable}`：玩家积分（经验）等级表格对象 ID。
+* `{clock}`： 战后清理时间，固定值 `0x6`。
+* `{choice}`：是否收集战利品。1：收集，2：放弃。
+
 
 [TBD]
 
