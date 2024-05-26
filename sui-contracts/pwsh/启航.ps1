@@ -22,45 +22,45 @@ $playerRostersJson = Get-Content -Raw -Path $playerRostersFile
 $rosters = $playerRostersJson | ConvertFrom-Json
 
 
-$environmentRosterJsonFile = "$startLocation\environment_roster.json"
-if (-not (Test-Path -Path $environmentRosterJsonFile -PathType Leaf)) {
-    "环境船队信息文件 $playerRostersFile 不存在 " | Write-Host  -ForegroundColor Red
-    return
-}
-
-$environmentRosterJson = Get-Content -Raw -Path $environmentRosterJsonFile
-$environmentRoster = $environmentRosterJson | ConvertFrom-Json
-
-#$environmentRoster.RosterId | Write-Host
-
-
 #用那个船队去挑战？3表示船队编号
 $roster = $rosters.4
 $energy_amount = 500
 
-
 #先查看一下目标船队的坐标
-$targetCoordinates = $null
+#$targetCoordinates = $null
+$targetCoordinates = [PSCustomObject]@{
+    x = 500
+    y = 500
+}
 $environmentRosterResult = ""
-try {
-    $environmentRosterResult = sui client object $environmentRoster.RosterId --json 
-    if (-not ('System.Object[]' -eq $environmentRosterResult.GetType())) {
-        "获取目标船队 $($environmentRoster.RosterId) 信息时返回: $environmentRosterResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation
+if ($null -eq $targetCoordinates) {
+    $environmentRosterJsonFile = "$startLocation\environment_roster.json"
+    if (-not (Test-Path -Path $environmentRosterJsonFile -PathType Leaf)) {
+        "环境船队信息文件 $playerRostersFile 不存在 " | Write-Host  -ForegroundColor Red
         return
     }
-    $environmentRosterObj = $environmentRosterResult | ConvertFrom-Json
-    $targetCoordinates = $environmentRosterObj.content.fields.updated_coordinates.fields
-    "`n将要攻击的目标船队当前坐标：($($targetCoordinates.x),$($targetCoordinates.y))" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-}
-catch {
-    "获取目标船队 $($environmentRoster.RosterId) 信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
-    "返回的结果为:$environmentRosterResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLocation
-    return    
-}
-if ($null -eq $environmentRosterResult) {    
-    "没能获取目标船队当前坐标，请先检查一下。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    $environmentRosterJson = Get-Content -Raw -Path $environmentRosterJsonFile
+    $environmentRoster = $environmentRosterJson | ConvertFrom-Json
+    try {
+        $environmentRosterResult = sui client object $environmentRoster.RosterId --json 
+        if (-not ('System.Object[]' -eq $environmentRosterResult.GetType())) {
+            "获取目标船队 $($environmentRoster.RosterId) 信息时返回: $environmentRosterResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            Set-Location $startLocation
+            return
+        }
+        $environmentRosterObj = $environmentRosterResult | ConvertFrom-Json
+        $targetCoordinates = $environmentRosterObj.content.fields.updated_coordinates.fields
+        "`n将要攻击的目标船队当前坐标：($($targetCoordinates.x),$($targetCoordinates.y))" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+    }
+    catch {
+        "获取目标船队 $($environmentRoster.RosterId) 信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+        "返回的结果为:$environmentRosterResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        Set-Location $startLocation
+        return    
+    }
+    if ($null -eq $environmentRosterResult) {    
+        "没能获取目标船队当前坐标，请先检查一下。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    }
 }
 
 try {
