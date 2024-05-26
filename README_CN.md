@@ -130,25 +130,25 @@ wubuku/dddappp:0.0.1 \
 
 #### Item（物品、资源） ID 常量
 
-| Item Id    | Name                    | 说明                                    |
-| ---------- | ----------------------- | --------------------------------------- |
-| 0          | UNUSED_ITEM             | 未使用                                  |
-| 2          | CottonSeeds             | 棉花种子                                |
-| 102        | Cotton                  | 棉花（由棉花种子种植得到）              |
-| 200        | Normal Log              | 木头（砍伐之后成品)                     |
-| 301        | CopperOre               | 铜（挖矿之后成品）                      |
-| 1000000001 | Ship                    | 船（建造得到）                          |
+| Item Id    | Name                    | 说明                            |
+|------------|-------------------------|-------------------------------|
+| 0          | UNUSED_ITEM             | 未使用                           |
+| 2          | CottonSeeds             | 棉花种子                          |
+| 102        | Cotton                  | 棉花（由棉花种子种植得到）                 |
+| 200        | Normal Log              | 木头（砍伐之后成品)                    |
+| 301        | CopperOre               | 铜（挖矿之后成品）                     |
+| 1000000001 | Ship                    | 船（建造得到）                       |
 | 2000000001 | ResourceTypeWoodcutting | 伐木资源(伐木Wooding之后得到 Normal Log |
 | 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
 
 #### 技能常量
 
-| 技能        | 常量 | 说明 |
-| ----------- | ---- | ---- |
-| farming     | 0    | 种植 |
-| woodcutting | 1    | 伐木 |
-| mining      | 3    | 挖矿 |
-| crafing     | 6    | 造船 |
+| 技能          | 常量 | 说明 |
+|-------------|----|----|
+| farming     | 0  | 种植 |
+| woodcutting | 1  | 伐木 |
+| mining      | 3  | 挖矿 |
+| crafing     | 6  | 造船 |
 
 ## 测试应用
 
@@ -208,16 +208,18 @@ wubuku/dddappp:0.0.1 \
 * `main.Map`：地图（map）的 Object ID。
 * `common.ExperienceTable` 玩家积分（经验）等级表的 Object ID。
 
-特别注意 `common` 中的 `ItemCreationMining，ItemProductionFarming，ItemCreationWooding，ItemProducitonCrafting` 四个属性：
+特别注意 `common` 中的 `ItemCreationMining`，`ItemProductionFarming`，`ItemCreationWooding`，`ItemProducitonCrafting` 属性。
+这几个属性的值，是“管理员”在后台设置的用于生产制造的“生产配方”的对象 ID。
+前端可以通过链下接口查询它们的值，缓存起来使用（一般不怎么改变，可以将它们视为“准常量”）。
 
-这些属性是合约发布之后，后台调用接口生成的关于生产制造的配方的 ID，前端可以将它们视为常量使用。
+我们在下面的示例命令中，通过占位符来引用这些值：
 
-| 配方   | 调用占位符                   | 说明                                 |
-| ------ | ---------------------------- | ------------------------------------ |
-| 挖矿   | {`ItemCreationMining`}     | 开始挖矿进程和结束挖矿进程时使用     |
-| 伐木   | {`ItemCreationWooding`}    | 开始伐木进程和结束伐木进程时使用     |
-| 种棉花 | {`ItemProductionFarming`}  | 开始种植棉花进程和结束棉花进程时使用 |
-| 造船   | {`ItemProducitonCrafting`} | 开始造船进程和结束造船进程时使用     |
+| 技能类型 | 占位符                        | 说明                 |
+|------|----------------------------|--------------------|
+| 挖矿   | `{ItemCreationMining}`     | 开始挖矿进程和结束挖矿进程时使用   |
+| 伐木   | `{ItemCreationWooding}`    | 开始伐木进程和结束伐木进程时使用   |
+| 种棉花  | `{ItemProductionFarming}`  | 开始种植棉花进程和结束棉花进程时使用 |
+| 造船   | `{ItemProducitonCrafting}` | 开始造船进程和结束造船进程时使用   |
 
 ### 获取地图信息
 
@@ -333,7 +335,8 @@ sui client object {mapLocationId} --json
 可以得到类似以下的输出信息：
 
 ```json
-"objectId": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692",
+{
+  "objectId": "0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692",
   "version": "37717652",
   "digest": "9H5nvaRUXbyULStSPsjUdDn7DXQS1nNFmVqKmRVyoMPn",
   "type": "0x2::dynamic_field::Field<0x2b853e8306950ffdabe20df1ae5703c27dfb909d53099558113251f8a0d0a596::coordinates::Coordinates, 0x1f1267f7197c3f118b5d1f147a9ceb9296318f786842ab743715f0645fda30dc::map_location::MapLocation>",
@@ -565,6 +568,26 @@ curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: applicat
 * `claimedIsland`：玩家所占领的岛屿的坐标。
 * `inventory`：玩家目前拥有的物品（包括“资源”）库存，其中数组元素的 `item_id` 属性为物品（资源）的 ID，`quantity` 为库存数量。
   库存在进行生产活动时（种植，挖矿，伐木，造船等）时会减少或增加（原材料 item 数量会减少，产出结果 item 数量会增加）。
+
+-------------------
+
+### 关于玩家的技能进程
+
+可以将技能进程（Skill Process）理解为制造物品（Item）的“生产线”。
+
+玩家在占领一个岛屿之后，目前合约会为之自动创建 4 类 5 条这样的“生产线”。其中农业（种植）技能有 2 条“生产线”，其他技能各有 1 条。
+
+注意，我们在下文的示例命令会使用一些占位符来引用“当前玩家”的技能进程对象 ID：
+
+| 技能类型               | 技能类型常量值 | “生产线”编号 | 示例命令使用的“占位符”             |
+|--------------------|---------|---------|--------------------------|
+| 种植(Farming)        | 0       | 0       | `{SkillProcessFarming1}` |
+| 种植(Farming)        | 0       | 1       | `{SkillProcessFarming2}` |
+| 伐木(WoodCutting)    | 1       | 0       | `{SkillProcessWooding}`  |
+| 挖矿(Mining)         | 3       | 0       | `{SkillProcessMining}`   |
+| 造船(Crafting)       | 6       | 0       | `{SkillProcessCrafting}` |
+
+-------------------
 
 ### 占领（Claim）岛屿
 
@@ -945,15 +968,6 @@ sui client object {RosterObjectId} --json
 
 #### 查询玩家技能进程
 
-可以将玩家的技能进程理解为制造物品（Item）的“生产线”。
-玩家在占领一个岛屿之后，目前合约会为之自动创建 4 类 5 条这样的“生产线”。
-
-| 类型                 | 对应技能类型常量值 | “生产线”数量 | 示例命令使用的“占位符”                               |
-| -------------------- | ------------------ | -------------- | ------------------------------------------------------ |
-| 种植(Farming)        | 0                  | 2              | `{SkillProcessFarming1}`, `{SkillProcessFarming2}` |
-| 伐木(WoodCuttinging) | 1                  | 1              | `{SkillProcessWooding}`                              |
-| 挖矿(Mining)         | 3                  | 1              | `{SkillProcessMining}`                               |
-| 造船(Crafting)       | 6                  | 1              | `{SkillProcessCrafting}`                             |
 
 执行 Sui CLI 命令：
 
@@ -996,26 +1010,22 @@ sui client object {SkillProcess_dynamic_field_ObjectId} --json
 }
 ```
 
-注意 `content.fields.name.fields` 的三个属性：
+其中 `content.fields.name.fields` 的三个属性：
 
-* `player_id`：玩家 ID。
+* `player_id`：玩家对象 ID。
 * `skill_type`：技能类型。
 * `sequence_number`：“生产线”的编号。
 
-依次查询前一步得到的 5 个 `{SkillProcess_dynamic_field_ObjectId}`，可以获取上面提及的 4 类 5 条“生产线”的 ID 信息。
+而 `content.fields.value` 为“生产线”对象的 ID。
 
-上述 `skil_type`，`sequence_number` 以及 `content.fields.name.value` 与前文中的技能进程占位符之间存在以下对应关系：
-
-| skill_type | sequence_number | content.fields.name.value  |
-| ---------- | --------------- | -------------------------- |
-| 0          | 0               | `{SkillProcessFarming1}` |
-| 0          | 1               | `{SkillProcessFarming2}` |
-| 1          | 0               | `{SkillProcessWooding}`  |
-| 3          | 0               | `{SkillProcessMining}`   |
-| 6          | 0               | `{SkillProcessCrafting}` |
+依次查询前一步得到的 5 个 `{SkillProcess_dynamic_field_ObjectId}`，可以获取上面 4 类 5 条“生产线”的对象 ID。
+我们下面的示例命令使用占位符引用它们（关于这些占位符的定义，见前文）。
 
 通过 Sui JSON RPC 查询玩家的船队信息或技能进程信息，过程略显繁琐。
 我们的链下查询服务（indexer）提供了更便捷的接口。
+
+
+### 通过 indexer 查询玩家的船队及技能进程
 
 #### 通过 indexer 查询玩家的船队
 
@@ -1419,6 +1429,7 @@ curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={pla
 * `value.building_expenses.fields.items.fields.item_id` 建造原料的 Item ID。
 * `value.building_expenses.fields.items.fields.quantity` 建造原料的数量。
 
+
 #### 通过 indexer 查询玩家的技能进程
 
 使用 curl 命令可以取得指定玩家的船队信息：
@@ -1534,7 +1545,7 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
   `sequenceNumber` 为该技能的“生产线”序列号。
   目前，除了农业（farming）有 0 和 1，其他技能这里都是 0。
 * `itemId` 为该技能进程的产出成品的 Item ID。
-* id_ 为 Sui 的技能进程 Move 对象 ID（{SkillProcessObjectId}）。
+* `id_` 为技能进程的 Sui Move 对象 ID（`{SkillProcessObjectId}`）。
 * `startedAt` 技能进程的最后一次启动时间。这是一个以秒数计算的 Unix 时间。
 * `completed` 最后一次“生产”是否已完成。
   如果完成，可以开始下一次生产；
@@ -1544,18 +1555,7 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 * `energyVault` 消耗能量币的数量。
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
   “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
-* `id_` 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
-* `id_` 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
 
-上述 `skil_type`，`sequence_number` 以及 `id_` 与前文中的技能进程占位符之间存在以下对应关系：
-
-| skill_type | sequence_number | id_                        |
-| ---------- | --------------- | -------------------------- |
-| 0          | 0               | `{SkillProcessFarming1}` |
-| 0          | 1               | `{SkillProcessFarming2}` |
-| 1          | 0               | `{SkillProcessWooding}`  |
-| 3          | 0               | `{SkillProcessMining}`   |
-| 6          | 0               | `{SkillProcessCrafting}` |
 
 ### 开始挖矿流程
 
@@ -1578,12 +1578,12 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessMining}` 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
-* `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
-* `{playerId}` 玩家对象 ID。
-* {`common.ItemCreationMining}` 挖矿配方对象 ID。
-* `{clock}` 技能流程开始执行时间，固定值：0x6。
-* `{eneryId}` 能量币（`ENERGY`）的 Object ID。
+* `{SkillProcessMining}`：挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `{batchSize}`：本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `{playerId}`：玩家对象 ID。
+* `{common.ItemCreationMining}`：挖矿配方对象 ID。
+* `{clock}`：时钟对象的 ID，固定值：0x6。
+* `{eneryId}`：能量币（`ENERGY`）的 Object ID。
 
 每一种生产制造进程都需要经历一定的时间，比如挖“一份”矿需要 3 秒钟，那么开始一次“挖矿”进程后，结合本次挖矿批次数量 ` batchSize`，则在经历  `batchSize` * 3 秒钟后，需要执行对应的“完成挖矿进程”来结束挖矿进程。
 
@@ -1610,11 +1610,11 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessMining}` 挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
-* `{playerId}` 玩家对象 ID。
-* {`common.ItemCreationMining}` 挖矿配方对象 ID。
-* `{common.experienceTableId}` 玩家积分（经验）等级表格对象 ID。
-* `{clock}` 技能流程开始执行时间，固定值：0x6。
+* `{SkillProcessMining}`：挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `{playerId}`：玩家对象 ID。
+* `{common.ItemCreationMining}`：挖矿配方对象 ID。
+* `{common.experienceTableId}`：玩家积分（经验）等级表格对象 ID。
+* `{clock}`：时钟对象 ID，固定值：0x6。
 
 在成功结束技能进程之后，玩家的对应产出成果的资源数量会增加。
 
@@ -1658,14 +1658,14 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessFarming1}` 种植棉花第一条“生产线”的 Move 对象 ID、
+* `{SkillProcessFarming1}`：为种植棉花第一条“生产线”的 Move 对象 ID；
+  `{SkillProcessFarming2}`：为第二条“生产线”的 Move 对象 ID。
+* `batchSize`：本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `{playerId}`：玩家对象 ID。
+* `{common.ItemProductionFarming}`：种植棉花的“配方”的 Sui Move 对象 ID。
+* `{clock}`：时钟对象 ID，固定值：0x6。
+* `{eneryId}`：能量币（`ENERGY`）的 Object ID。
 
-  `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
-* `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
-* `{playerId}` 玩家对象 ID。
-* {`common.ItemProductionFarming}` 种植棉花配方 Move 对象 ID。
-* `{clock}` 技能流程开始执行时间，固定值：0x6。
-* `{eneryId}` 能量币（`ENERGY`）的 Object ID。
 
 ### 结束种植棉花进程
 
@@ -1686,13 +1686,11 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessFarming1}` 种植棉花第一条“生产线”的 Move 对象 ID、
-
-  另： `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
-* `{playerId}` 玩家对象 ID。
-* {`common.ItemProductionFarming}` 种植棉花配方 Move 对象 ID。
-* `{clock}` 技能流程开始执行时间，固定值：0x6。
-* `{common.ExperienceTable}` 玩家积分（经验）等级表格对象 ID。
+* `{SkillProcessFarming1}`：种植棉花第一条“生产线”的 Move 对象 ID； `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
+* `{playerId}`：玩家对象 ID。
+* `{common.ItemProductionFarming}`：种植棉花配方 Move 对象 ID。
+* `{clock}`：时钟对象 ID，固定值：0x6。
+* `{common.ExperienceTable}`：玩家积分（经验）等级表格对象 ID。
 
 结束种植棉花过程应该在达到完成种植进程所需时间之后。
 
