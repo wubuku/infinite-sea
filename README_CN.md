@@ -516,7 +516,7 @@ sui client call --package {main.PackageId} --module player_aggregate --function 
 
 可以使用 curl 命令查询指定钱包地址所拥有的玩家对象：
 
-```powershell
+```shell
 curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: application/json"
 ```
 
@@ -1563,7 +1563,7 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 
 执行如下 Sui CLI 开始挖矿：
 
-```powershell
+```shell
 sui client call --package {main.PackageId} \
 --module skill_process_service --function start_creation \
 --args {SkillProcessMining} \
@@ -1595,7 +1595,7 @@ sui client call --package {main.PackageId} \
 
 执行如下 Sui CLI 来结束挖矿：
 
-```powershell
+```shell
 sui client call --package {main.PackageId} \
 --module skill_process_aggregate \
 --function complete_creation \
@@ -1624,7 +1624,7 @@ sui client call --package {main.PackageId} \
 
 将参数 `{common.ItemCreationMining}` 更改为 `{common.ItemCreationWooding}` 之外，
 
-其余参数与上述“开始挖矿进程”相同，这里不在赘述。
+其余参数与上述“开始挖矿进程”相同，这里不再赘述。
 
 ### 结束伐木进程
 
@@ -1632,7 +1632,7 @@ sui client call --package {main.PackageId} \
 
 将参数 `{common.ItemCreationMining}` 更改为 `{common.ItemCreationWooding}` 之外，
 
-其余参数与上述“结束挖矿进程”相同，这里不在赘述。
+其余参数与上述“结束挖矿进程”相同，这里不再赘述。
 
 ### 开始种植棉花进程
 
@@ -1640,17 +1640,17 @@ sui client call --package {main.PackageId} \
 
 对于种植棉花这项技能来说，玩家可以同时开启两条“生产线”。
 
-我们以开启种植棉花的第一条“生产线”举例，需要执行以下 Sui CLI 命令：
+我们以开启种植棉花的第一条“生产线”举例，执行以下 Sui CLI 命令：
 
-```powershell
+```shell
 sui client call --package {main.PackageId} \
 --module skill_process_service \
---function start_production 
+--function start_production \
 --args {SkillProcessFarming1} \
 {batchSize} \
 {playerId} \
 {common.ItemProductionFarming} \
-{clock} 
+{clock} \
 {energyId} \
 --gas-budget 11000000 --json
 ```
@@ -1669,11 +1669,13 @@ sui client call --package {main.PackageId} \
 
 ### 结束种植棉花进程
 
+结束种植棉花过程应该在达到完成种植进程所需时间之后。
+
 玩家要结束“种植棉花”进程，需要执行以下 Sui CLI 命令：
 
-```powershell
+```shell
 sui client call --package {main.PackageId} \
- --module skill_process_aggregate \
+--module skill_process_aggregate \
 --function complete_production \
 --args {SkillProcessFarming1} \
 {playerId} \
@@ -1686,13 +1688,510 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessFarming1}`：种植棉花第一条“生产线”的 Move 对象 ID； `{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
-* `{playerId}`：玩家对象 ID。
-* `{common.ItemProductionFarming}`：种植棉花配方 Move 对象 ID。
-* `{clock}`：时钟对象 ID，固定值：0x6。
-* `{common.ExperienceTable}`：玩家积分（经验）等级表格对象 ID。
+* `{SkillProcessFarming1}`： 种植棉花第一条“生产线”的 Move 对象 ID；`{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{common.ItemProductionFarming}`： 种植棉花配方 Move 对象 ID。
+* `{clock}`： 结束种植棉花进程时间，固定值：0x6。
+* `{common.ExperienceTable}：` 玩家积分（经验）等级表格对象 ID。
 
-结束种植棉花过程应该在达到完成种植进程所需时间之后。
+
+
+### 开始造船进程
+
+玩家在占领岛屿后，可以造船并管理自己的船队。
+
+如果想要造船，可以执行以下 Sui CLI 命令开启造船流程：
+
+```shell
+sui client call --package {main.PackageId} \
+--module skill_process_service \
+--function start_ship_production \
+--args  {SkillProcessCrafting} \
+{production_materials_item_id_list} \
+{production_materials_item_quantity_list} \
+{playerId} \
+{common.ItemProductionCrafting} \
+{clock} \
+{EnergyId} \
+--gas-budget 42000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{production_materials_item_id_list}`： 造船所需的资源的 Item ID 的数组。Testnet 上的当前值（“准常量”）：`[2000000001,2000000003,102]`。
+* `{production_materials_item_quantity_list}`：造船投入的资源数量的数组，与 `production_materials_item_id_list` 中的 Item ID 一一对应。
+  如：`[180,230,190]`，当前 testnet 合约要求每种资源数量最少 150，总数量为 600。在此限制下，具体每种资源投入的数量由玩家指定。
+* `{SkillProcessCrafting}`：造船技能的 Move 对象 ID。
+* `{playerId}`：玩家对象 ID。
+* `{common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
+* `{clock}`：时钟对象 ID，固定值：0x6。
+* `{eneryId}`： 能量币（`ENERGY`）的 Object ID。
+
+### 结束造船进程
+
+经过所需的造船时间之后，需要调用下面的 Sui CLI 命令来结束造船进程。
+
+```shell
+sui client call --package {main.PackageId} \
+--module skill_process_aggregate \
+--function complete_ship_production \
+--args  {SkillProcessCrafting} \
+{rosterId} \
+{playerId}  \
+{ItemProductionCrafting} \
+{common.ExperienceTable} \
+{clock}  \
+--gas-budget 42000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{SkillProcessCrafting}`： 玩家造船技能的 Move 对象 ID。
+* `{rosterId}`：序号为 0 的船队 Move 对象 ID，即前文中提到的有特殊含义容纳“Unassigned Ships”的船队 。
+* `{playerId}`： 玩家对象 ID。
+* `{common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
+* `{clock}`： 时钟对象 ID，固定值：0x6。
+* `{common.ExperienceTable}`： 玩家积分（经验）等级表格对象 ID。
+
+
+### 向船队添加船只
+
+每个玩家有 5 支船队，编号为 0-4 ，其中编号为 0 的船队为 "unassigned roster"，玩家新建的船只先加入该船队。
+编号 1-4 的船队，每支船队可以容纳 4 艘船。向这些船队中添加船只时，可以执行以下 Sui CLI 命令：
+
+```shell
+sui client call --package {main.PackageId} \
+--module roster_aggregate \
+--function transfer_ship \
+--args  {sourceRoster} \
+{playerId} \
+{shipId}  \
+{targetRoster} \
+{targetPosition} \
+ --gas-budget 42000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{sourceRoster}`：编号为 0 的船队 Move 对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{shipId}`：被添加船只的对象 ID。
+* `{targetRoster}`： 目标船队的对象 ID。必须是编号 1-4 的船队对象 ID 之一。
+* `{targetPosition}`： 将船只添加到目标船队的位置，格式 `[{Number}]`。
+  `{Number}` 的取值范围为 0-3 或者空。如果为空，也就是 `[]`，表示将船只添加到船队末尾位置。
+
+
+### 从船队中“取消”船只
+
+可以将编号 1-4 的船队中的指定船只取消，被取消的船只自动回到编号为 0 的“unassigned roster”船队。
+
+船队“添加船只”和“取消船只”是同一个接口。
+
+通过以下 Sui CLI 命令执行取消命令：
+
+```shell
+sui client call --package {main.PackageId} \
+--module roster_aggregate \
+--function transfer_ship \
+--args  {sourceRoster} \
+{playerId} \
+{shipId}  \
+{targetRoster} \
+{targetPosition} \
+ --gas-budget 42000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{sourceRoster}`：编号为 1-4 的玩家船队的 Move 对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{shipId}`：被取消船只的对象 ID。
+* `{targetRoster}`： 编号为 0 的玩家船队的 Move 对象 ID。
+* `{targetPosition}`： 一般取值 `[]`。将取消船只置于“unassigned roster”船队的末尾。
+
+
+### 调整船只顺序
+
+玩家可以调整船只在船队中的顺序。
+
+通过执行以下 Sui CLI 命令来确定船队中所有船只的最终顺序：
+
+```shell
+sui client call --package {main.PackageId} \
+--module roster_aggregate \
+--function adjust_ships_position \
+--args {rosteId} \
+{playerId} \
+{positions} \
+{shipIds}  \
+--gas-budget 4999000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包的 ID。
+* `{rosteId}`：船队对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{shipIds}`： 变更顺序的船只的 ID 的数组。
+* `{positions}`：船只的位置数组。注意 `shipIds` 和 `positions` 数组的长度必须相等。
+
+该合约函数的执行逻辑是依次执行由参数 `shipIds` 和 `positions` 组成的“船只位置调整指令”。
+为了确保调整的正确性，最简单的做法是，将船队所有位置的船只按照顺序传入 `shipIds` 和 `positions` 数组。
+
+
+### 船队航行
+
+通过以下 Sui CLI 命令将指定船队移动到指定位置。
+
+```shell
+sui client call --package {main.PackageId} \
+--module roster_service \
+--function set_sail \
+--args {roster} \
+{playerId} \
+{target_coordinates_x} \
+{target_coordinates_y} \
+{clock} \
+{energyId} \
+{energy_amount} \
+--gas-budget 11000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{target_coordinates_x}`：航行目的地的横坐标。
+* `{target_coordinates_y}`： 航行目的地的纵坐标。
+* `{clock}`：时钟对象 ID，固定值 `0x6`。
+* `{energyId}`：能量币（`ENERGY`）的 Object ID。
+* `{energy_amount}`： 本次航行需要花费能量币（`ENERGY`）数量。
+
+### 更新船队位置
+
+船队出发后，如果想知道船队在地图上的最新位置，可以通过执行以下的 Sui CLI 命令来实现：
+
+```shell
+sui client call --package {main.PackageId} \
+--module roster_aggregate \
+--function update_location \
+--args {rosteId} \
+{clock} \
+--gas-budget 1000000 --json
+```
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
+* `{clock}`： 航行开始时间，固定值 `0x6`。
+
+执行以上命令之后，可以通过以下 Sui CLI 命令来查看船队信息：
+
+```shell
+sui client object {roster}--json
+```
+
+其中 `{roster}` 为船队对象ID。
+
+以上命令可以得到如下类似输出信息：
+
+```json
+{
+  "objectId": "0xb490508e29aebda93bb90868f1bb9d455810785d8eda48b5c72e3b05012387a3",
+
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x8d4b0f3b3be41e525ec63e252f14b52e149ead9b2904f55a8b3878044999b56b::roster::Roster",
+    "hasPublicTransfer": false,
+    "fields": {
+
+      "ship_ids": [
+        "0x273bd00b0df174f6595fcd5f6e8dbe8344a38a5f6aa4516e0002b49def8c39c4",
+        "0xe80a2fbcb21a9a2b318b30bf478fef5ef0c35e542460f0432d6470ee6c3e1eb6",
+        "0xdf17c004d47be86384895044a4df3325928a82706733e7a1562ab3ecd46957cf",
+        "0x80dc17e475a259cde1a114689d110f8aa109e0bcabcf85b4876371ebc813f744"
+      ],
+
+      "speed": 4,
+      "status": 1,
+      "target_coordinates": {
+        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::coordinates::Coordinates",
+        "fields": {
+          "x": 500,
+          "y": 500
+        }
+      },
+      "updated_coordinates": {
+        "type": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487::coordinates::Coordinates",
+        "fields": {
+          "x": 307,
+          "y": 307
+        }
+      },
+      "version": "17"
+    }
+  }
+}
+```
+
+在 `content.fields` 属性中可以看到以下几个重要属性：
+
+* `target_coordinates`：船队的航行目的地。
+  其 `fields` 为目的地坐标。
+* `updated_coordinates`：最后一次更新船队位置后的坐标信息。
+  其 `fields` 为最后一次更新时坐标。
+* `status` 为船队的状态。0：停泊中，1：行进中，2：战斗中，3：已损毁。
+
+
+### 资源转移
+
+目前有三种资源转移方式：同船队船与船之间、船与岛屿之间（从船转移到岛屿和从岛屿转移到船）。
+
+#### 船与船之间资源转移
+
+只有同一船队的船只之间才可以进行资源转移，可以通过以下的 Sui CLI 命令实现：
+
+```shell
+sui client call --package {main.packageId} \
+--module roster_aggregate \
+--function transfer_ship_inventory \
+--args {roster} \
+{playerId} \
+{fromShipId} \
+{toShipId} \
+{itemIds} \
+{quantities} \
+ --gas-budget 11000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{fromShipId}`：转移资源船只对象 ID。
+* `{toShipId}`： 接收资源船只对象 ID。
+* `{itemIds}`： 转移资源（Item) 的 ID 的数组。
+  如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
+* `{quantities}`：转移资源（Item）的数量数组。
+  如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
+
+注意：对象 ID 为 `{fromShipId}` 和 `{toShipId}` 的船只均属于对象 ID 为 `{roste}` 的同一船队。
+
+
+#### 从船转移资源到岛屿
+
+停泊在玩家自家岛屿附近的自家船只上的资源可以转移到自家岛屿，通过以下的 Sui CLI 命令实现：
+
+```shell
+sui client call --package {main.packageId} \
+--module roster_aggregate \
+--function take_out_ship_inventory \
+--args {roster} \
+{playerId} \
+{clock} \
+{shipId} \
+{itemIds} \
+{quantities} \
+ --gas-budget 11000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{shipId}`：转移资源船只对象 ID。
+* `{clock}`：时钟对象 ID，固定值：0x6。
+* `{itemIds}`： 转移资源（Item) 的 ID 的数组。
+  如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
+* `{quantities}`：转移资源（Item）的数量数组。
+  如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
+
+
+#### 从岛屿转移资源到船
+
+同样玩家可以将自家岛屿上的资源转移到停泊在附近的自家船只上，通过以下的 Sui CLI 命令实现：
+
+```shell
+sui client call --package {main.packageId} \
+--module roster_aggregate \
+--function put_in_ship_inventory \
+--args {roster} \
+{playerId} \
+{clock} \
+{shipId} \
+{itemIds} \
+{quantities} \
+ --gas-budget 11000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{roste}`：船队对象 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{clock}`：时钟对象 ID，固定值：0x6。
+* `{shipId}`：转移资源船只对象 ID。
+* `{itemIds}`： 转移资源（Item) 的 ID 的数组。
+  如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
+* `{quantities}`：转移资源（Item）的数量数组。
+  如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
+
+
+### 战斗
+
+玩家可以控制己方一只船队对其他玩家的船队或者环境船队发动进攻，进而发生战斗。
+
+玩家选择“自动进攻”时，系统需执行以下 Sui CLI 命令：
+
+```shell
+sui client call --package {main.packageId} \
+--module ship_battle_service \
+--function initiate_battle_and_auto_play_till_end \
+--args {playerId} \
+{initiator} \
+{responder} \
+{clock} \
+--gas-budget 4999000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{playerId}`： 玩家对象 ID。
+* `{initiator}`： 发起战斗作为挑战船队的对象 ID。
+* `{responder}`： 遭到攻击作为应战船队的对象 ID。
+* `{clock}`：时钟对象 ID，固定值：0x6。
+
+战斗结束后，在返回的输出中，包含类似的内容：
+
+```Json
+{
+
+  "objectChanges": [
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": "@{Shared=}",
+      "objectType": "0xaee83076475d11960108b6f4cb6e06b489397f17d22da8a7a0deb18354c16750::ship_battle::ShipBattle",
+      "objectId": "0x8cd018a1657ac59e9262873c967456bcb5a5cdfbaf5cf988dd75ea60cc715c4c",
+      "version": "35636581",
+      "digest": "Bu1roPeH4FA9M2vyagND9MCWZKMb1HMVn5uo9hym3p8k"
+    }
+  ]
+  
+}
+```
+
+我们记录类型（objectType）为 `ship_battle::ShipBattle` 的对象的 Move 对象 ID（objectId）的值为占位符 `{ShipBattleId}`，
+用来表示本次战斗的唯一标识，通过该对象 ID，我们可以查看关于战斗的更多信息。
+
+
+### 查看战斗信息
+
+执行以下 Sui CLI 可以查看某次战斗的详细信息：
+
+```shell
+sui client object {shipBattleId} --json
+```
+
+参数解释：
+
+* `{ShipBattleId}` 表示战斗的唯一标识。
+
+以上命令会得到以下类似输出信息：
+
+```json
+{
+  "objectId": "0x8cd018a1657ac59e9262873c967456bcb5a5cdfbaf5cf988dd75ea60cc715c4c",
+  "version": "35636638",
+  "digest": "CQkXm88LHAvmJ6nF6GXfyA1VN3AqyY1uD6j7y62SxsLP",
+  "type": "0xaee83076475d11960108b6f4cb6e06b489397f17d22da8a7a0deb18354c16750::ship_battle::ShipBattle",
+  "owner": {
+    "Shared": {
+      "initial_shared_version": 35636581
+    }
+  },
+  "previousTransaction": "FqiT1LWMkpJeseQJU7caZgKTsAWAurMegifYCCtSK7Vz",
+  "storageRebate": "2272400",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0xaee83076475d11960108b6f4cb6e06b489397f17d22da8a7a0deb18354c16750::ship_battle::ShipBattle",
+    "hasPublicTransfer": false,
+    "fields": {
+      "ended_at": "1715825128",
+      "id": {
+        "id": "0x8cd018a1657ac59e9262873c967456bcb5a5cdfbaf5cf988dd75ea60cc715c4c"
+      },
+      "initiator": "0x3dfb3f2ef35684c86a82095a46332146038ef75afc1bff4a16ec2d98a9fc8e11",
+      "initiator_experiences": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "responder": "0x7634886a12806eaeed4698f7a5034bfc5adb56b7055853e06d9c80130b2cc8cb",
+      "responder_experiences": [
+        8
+      ],
+      "round_attacker_ship": null,
+      "round_defender_ship": null,
+      "round_mover": null,
+      "round_number": 45,
+      "round_started_at": "1715825128",
+      "status": 2,
+      "version": "46",
+      "winner": 1
+    }
+  }
+}
+```
+
+我们重点关注 `content.fields` 属性，其中又包含了以下重要属性：
+
+* `ended_at` ：表示战斗结束时间，是一个以秒为计算单位的 UNIX 时间值。
+* `initiator` ：发起战斗的船队对象 ID。
+* `responder` ：应战船队对象 ID。
+* `round_number` ：战斗回合数。
+* `status`：战斗状态。0：进行中，1：已结束，2：已清理。
+* `winner`：表示获胜方是谁。1：挑战方获胜，0：应战方获胜。
+
+### 收集战利品
+
+如果玩家赢得了战斗，玩家可以决定在战后清理中是否搜索对方船队并收集战利品。
+
+如果对方是环境船队并且赢得了战斗，那么由系统进行战斗后清理工作。
+
+执行以下 Sui CLI 命令进行战后清理工作：
+
+```shell
+sui client call --package {main.packageId} \
+--module ship_battle_aggregate \
+--function take_loot \
+--args {ShipBattleId}\
+{playerId} \
+{losterPlayerId} \
+{initiator} \
+{responder} \
+{common.ExperienceTable} \
+{clock} \
+{choice} \
+--gas-budget 4999000000 --json
+```
+
+参数解释：
+
+* `{main.PackageId}`：Main 合约包 ID。
+* `{playerId}`： 战斗发起方玩家对象 ID。
+* `{loser_player}`： 战斗应战方玩家对象 ID。
+* `{initiator}`： 发起战斗作为挑战船队的对象 ID。
+* `{responder}`： 遭到攻击作为应战船队的对象 ID。
+* `{common.ExperienceTable}`：玩家积分（经验）等级表格对象 ID。
 
 
 
