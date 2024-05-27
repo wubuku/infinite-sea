@@ -90,7 +90,7 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
 模型文件位于目录 `./dddml` 下。
 
 > **Tip**
->
+> 
 > About DDDML, here is an introductory article: ["Introducing DDDML: The Key to Low-Code Development for Decentralized Applications"](https://github.com/wubuku/Dapp-LCDP-Demo/blob/main/IntroducingDDDML.md).
 
 ### 生成代码
@@ -130,25 +130,25 @@ wubuku/dddappp:0.0.1 \
 
 #### Item（物品、资源） ID 常量
 
-| Item Id    | Name                    | 说明                            |
-|------------|-------------------------|-------------------------------|
-| 0          | UNUSED_ITEM             | 未使用                           |
-| 2          | CottonSeeds             | 棉花种子                          |
-| 102        | Cotton                  | 棉花（由棉花种子种植得到）                 |
-| 200        | Normal Log              | 木头（砍伐之后成品)                    |
-| 301        | CopperOre               | 铜（挖矿之后成品）                     |
-| 1000000001 | Ship                    | 船（建造得到）                       |
+| Item Id    | Name                    | 说明                                    |
+| ---------- | ----------------------- | --------------------------------------- |
+| 0          | UNUSED_ITEM             | 未使用                                  |
+| 2          | CottonSeeds             | 棉花种子                                |
+| 102        | Cotton                  | 棉花（由棉花种子种植得到）              |
+| 200        | Normal Log              | 木头（砍伐之后成品)                     |
+| 301        | CopperOre               | 铜（挖矿之后成品）                      |
+| 1000000001 | Ship                    | 船（建造得到）                          |
 | 2000000001 | ResourceTypeWoodcutting | 伐木资源(伐木Wooding之后得到 Normal Log |
 | 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
 
 #### 技能常量
 
-| 技能          | 常量 | 说明 |
-|-------------|----|----|
-| farming     | 0  | 种植 |
-| woodcutting | 1  | 伐木 |
-| mining      | 3  | 挖矿 |
-| crafing     | 6  | 造船 |
+| 技能        | 常量 | 说明 |
+| ----------- | ---- | ---- |
+| farming     | 0    | 种植 |
+| woodcutting | 1    | 伐木 |
+| mining      | 3    | 挖矿 |
+| crafing     | 6    | 造船 |
 
 ## 测试应用
 
@@ -214,12 +214,12 @@ wubuku/dddappp:0.0.1 \
 
 我们在下面的示例命令中，通过占位符来引用这些值：
 
-| 技能类型 | 占位符                        | 说明                 |
-|------|----------------------------|--------------------|
-| 挖矿   | `{ItemCreationMining}`     | 开始挖矿进程和结束挖矿进程时使用   |
-| 伐木   | `{ItemCreationWooding}`    | 开始伐木进程和结束伐木进程时使用   |
-| 种棉花  | `{ItemProductionFarming}`  | 开始种植棉花进程和结束棉花进程时使用 |
-| 造船   | `{ItemProducitonCrafting}` | 开始造船进程和结束造船进程时使用   |
+| 技能类型 | 占位符                     | 说明                                 |
+| -------- | -------------------------- | ------------------------------------ |
+| 挖矿     | `{ItemCreationMining}`     | 开始挖矿进程和结束挖矿进程时使用     |
+| 伐木     | `{ItemCreationWooding}`    | 开始伐木进程和结束伐木进程时使用     |
+| 种棉花   | `{ItemProductionFarming}`  | 开始种植棉花进程和结束棉花进程时使用 |
+| 造船     | `{ItemProducitonCrafting}` | 开始造船进程和结束造船进程时使用     |
 
 ### 获取地图信息
 
@@ -566,10 +566,10 @@ curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: applicat
 * `experience`：积分（“经验值”，这个名称从原型阶段就开始使用了，暂不作修改）。
 * `name`：玩家的名字。
 * `claimedIsland`：玩家所占领的岛屿的坐标。
-* `inventory`：玩家目前拥有的物品（包括“资源”）库存，其中数组元素的 `item_id` 属性为物品（资源）的 ID，`quantity` 为库存数量。
+* `inventory`：玩家目前拥有的物品（包括“资源”）库存，其中数组元素的 `item_id` 属性为物品（资源）的 ID，`quantity`： 为库存数量。
   库存在进行生产活动时（种植，挖矿，伐木，造船等）时会减少或增加（原材料 item 数量会减少，产出结果 item 数量会增加）。
 
--------------------
+---
 
 ### 关于玩家的技能进程
 
@@ -579,15 +579,15 @@ curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: applicat
 
 注意，我们在下文的示例命令会使用一些占位符来引用“当前玩家”的技能进程对象 ID：
 
-| 技能类型               | 技能类型常量值 | “生产线”编号 | 示例命令使用的“占位符”             |
-|--------------------|---------|---------|--------------------------|
-| 种植(Farming)        | 0       | 0       | `{SkillProcessFarming1}` |
-| 种植(Farming)        | 0       | 1       | `{SkillProcessFarming2}` |
-| 伐木(WoodCutting)    | 1       | 0       | `{SkillProcessWooding}`  |
-| 挖矿(Mining)         | 3       | 0       | `{SkillProcessMining}`   |
-| 造船(Crafting)       | 6       | 0       | `{SkillProcessCrafting}` |
+| 技能类型          | 技能类型常量值 | “生产线”编号 | 示例命令使用的“占位符” |
+| ----------------- | -------------- | -------------- | ------------------------ |
+| 种植(Farming)     | 0              | 0              | `{SkillProcessFarming1}` |
+| 种植(Farming)     | 0              | 1              | `{SkillProcessFarming2}` |
+| 伐木(WoodCutting) | 1              | 0              | `{SkillProcessWooding}`  |
+| 挖矿(Mining)      | 3              | 0              | `{SkillProcessMining}`   |
+| 造船(Crafting)    | 6              | 0              | `{SkillProcessCrafting}` |
 
--------------------
+---
 
 ### 占领（Claim）岛屿
 
@@ -618,7 +618,7 @@ sui client call --package {main.PackageId} \
 * `{coordinates_y}`：Claim 的岛屿的 Y 坐标值。
 * `{clock}`：时钟对象的 ID。Sui 的时间对象 ID 是个固定值：`0x6`。
 * `{main.RosterTable}`: Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 中包含了包含所有的船队的“索引信息”。包含“玩家”以及“环境”船队。该 Table 的 Key 是“玩家 ID + 船队序号 `[0-4]`”的组合。
-* `{main.SkillProcessTable}` Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 包含所有技能流程（可以理解使用技能的“生产线”）的“索引信息”。
+* `{main.SkillProcessTable}`： Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 包含所有技能流程（可以理解使用技能的“生产线”）的“索引信息”。
   这里的技能包括 Farming、WoodCutting、Mining、 Crafting。该 Table 的 Key 为“玩家 ID + SkillTypeId”的组合。
 
 执行成功后返回内容节选重要部分如下：
@@ -960,14 +960,13 @@ sui client object {RosterObjectId} --json
 `player_id` 为玩家的 ID，`sequence_number` 为船队编号。
 
 每个玩家有 5 个船队，编号依次为 0，1，2，3，4。
-其中 0 号船队有特殊含义，表示 “Unassigned Ships”。
+其中 0 号船队有特殊含义，表示 “Unassigned Roster”。
 当玩家造船进程执行成功，得到的船只会默认被加入到该船队。
 
 上面的查询结果中，新创建的船队对象中不包含船只信息。
 当玩家将船只移入该船队后，将呈现更多的属性。
 
 #### 查询玩家技能进程
-
 
 执行 Sui CLI 命令：
 
@@ -1023,7 +1022,6 @@ sui client object {SkillProcess_dynamic_field_ObjectId} --json
 
 通过 Sui JSON RPC 查询玩家的船队信息或技能进程信息，过程略显繁琐。
 我们的链下查询服务（indexer）提供了更便捷的接口。
-
 
 ### 通过 indexer 查询玩家的船队及技能进程
 
@@ -1404,17 +1402,17 @@ curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={pla
 返回的数据为 JSON 数组，数组内的每个元素代表一个船队。
 船队元素包含的属性：
 
-* `rosterId` 为船队的业务主键 ID。
+* `rosterId`： 为船队的业务主键 ID。
   其下的属性 `playerId ` 为船队所属玩家 ID，
   `sequenceNumber` 为该船队的编号。
-* `id_` 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
-* `status` 为船队的状态。0：停泊中，1：行进中，2：战斗中，3：已损毁。
-* `speed` 为船队的速度。
-* `updatedCoordinates` 船队最后一次更新的位置坐标。
-* `environmentOwned` 是否是“环境”船队。（用于 PvE。）
-* `coordinatesUpdatedAt` 船队位置坐标的最后更新时间。
-* `shipIds` 该船队包含的船只 ID 的列表。
-* `rosterShipsItems` 该船队包含的船只对象信息的列表。
+* `id_`： 为 Sui 的船队 Move 对象 ID（`{RosterObjectId}`）。
+* `status`： 为船队的状态。0：停泊中，1：行进中，2：战斗中，3：已损毁。
+* `speed`： 为船队的速度。
+* `updatedCoordinates`： 船队最后一次更新的位置坐标。
+* `environmentOwned`： 是否是“环境”船队。（用于 PvE。）
+* `coordinatesUpdatedAt`： 船队位置坐标的最后更新时间。
+* `shipIds`： 该船队包含的船只 ID 的列表。
+* `rosterShipsItems`： 该船队包含的船只对象信息的列表。
 
 注意船队的 `rosterShipsItems` 属性，该属性为 JSON 数组。
 其中的数组元素主要包含以下属性：
@@ -1428,7 +1426,6 @@ curl -X GET "http://yangjiefeng.natapp1.cc:80/api/Rosters?rosterId.playerId={pla
 * `value.building_expenses.fields.items` 是该船只的建造原料列表。
 * `value.building_expenses.fields.items.fields.item_id` 建造原料的 Item ID。
 * `value.building_expenses.fields.items.fields.quantity` 建造原料的数量。
-
 
 #### 通过 indexer 查询玩家的技能进程
 
@@ -1556,7 +1553,6 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
   “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
 
-
 ### 开始挖矿流程
 
 玩家进行挖矿流程时，需要执行“开始挖矿流程”命令：
@@ -1666,7 +1662,6 @@ sui client call --package {main.PackageId} \
 * `{clock}`：时钟对象 ID，固定值：0x6。
 * `{eneryId}`：能量币（`ENERGY`）的 Object ID。
 
-
 ### 结束种植棉花进程
 
 结束种植棉花过程应该在达到完成种植进程所需时间之后。
@@ -1694,8 +1689,6 @@ sui client call --package {main.PackageId} \
 * `{clock}`： 结束种植棉花进程时间，固定值：0x6。
 * `{common.ExperienceTable}：` 玩家积分（经验）等级表格对象 ID。
 
-
-
 ### 开始造船进程
 
 玩家在占领岛屿后，可以造船并管理自己的船队。
@@ -1719,14 +1712,14 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{production_materials_item_id_list}`： 造船所需的资源的 Item ID 的数组。Testnet 上的当前值（“准常量”）：`[2000000001,2000000003,102]`。
-* `{production_materials_item_quantity_list}`：造船投入的资源数量的数组，与 `production_materials_item_id_list` 中的 Item ID 一一对应。
+* `{SkillProcessCrafting}`：类型为 `&mut SkillProcess`。CLI 中可传入造船技能的 Move 对象 ID。
+* `{production_materials_item_id_list}`：类型为 `vector<u32>`。造船所需的资源的 Item ID 的数组。Testnet 上的当前值（“准常量”）：`[2000000001,2000000003,102]`。
+* `{production_materials_item_quantity_list}`：类型为 `vector<u32>`。造船投入的资源数量的数组，与 `production_materials_item_id_list` 中的 Item ID 一一对应。
   如：`[180,230,190]`，当前 testnet 合约要求每种资源数量最少 150，总数量为 600。在此限制下，具体每种资源投入的数量由玩家指定。
-* `{SkillProcessCrafting}`：造船技能的 Move 对象 ID。
-* `{playerId}`：玩家对象 ID。
-* `{common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
-* `{clock}`：时钟对象 ID，固定值：0x6。
-* `{eneryId}`： 能量币（`ENERGY`）的 Object ID。
+* `{playerId}`：类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{common.ItemProductionCrafting}`： 类型为 `&ItemProduction`。CLI 中可传入造船配方 Move 对象 ID。
+* `{clock}`：类型为 `&Clock`。CLI 中可传入固定值：0x6。
+* `{energyId}`： 类型为 `Balance<ENERGY>`。CLI 中可传入能量币（`ENERGY`）的 Object ID。
 
 ### 结束造船进程
 
@@ -1748,13 +1741,12 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessCrafting}`： 玩家造船技能的 Move 对象 ID。
-* `{rosterId}`：序号为 0 的船队 Move 对象 ID，即前文中提到的有特殊含义容纳“Unassigned Ships”的船队 。
-* `{playerId}`： 玩家对象 ID。
-* `{common.ItemProductionCrafting}`： 造船配方 Move 对象 ID。
-* `{clock}`： 时钟对象 ID，固定值：0x6。
-* `{common.ExperienceTable}`： 玩家积分（经验）等级表格对象 ID。
-
+* `{SkillProcessCrafting}`： 类型为 `&mut SkillProcess`。CLI 中可传入玩家造船技能的 Move 对象 ID。
+* `{rosterId}`：类型为 `&mut Roster`。CLI 中可传入序号为 0 的船队 Move 对象 ID，即前文中提到的有特殊含义容纳“Unassigned Ships”的船队 。
+* `{playerId}`： 类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{common.ItemProductionCrafting}`： 类型为 `&ItemProduction`。CLI 中可传入造船配方 Move 对象 ID。
+* `{common.ExperienceTable}`： 类型为 `&ExperienceTable`。CLI 中可传入玩家积分（经验）等级表格对象 ID。
+* `{clock}`： 类型为 `&Clock`。CLI 中可传入固定值：0x6。
 
 ### 向船队添加船只
 
@@ -1776,13 +1768,11 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{sourceRoster}`：编号为 0 的船队 Move 对象 ID。
-* `{playerId}`： 玩家对象 ID。
-* `{shipId}`：被添加船只的对象 ID。
-* `{targetRoster}`： 目标船队的对象 ID。必须是编号 1-4 的船队对象 ID 之一。
-* `{targetPosition}`： 将船只添加到目标船队的位置，格式 `[{Number}]`。
-  `{Number}` 的取值范围为 0-3 或者空。如果为空，也就是 `[]`，表示将船只添加到船队末尾位置。
-
+* `{sourceRoster}`：类型为 `&mut Roster`。CLI 中可传入编号为 0 的船队 Move 对象 ID。
+* `{playerId}`： 类型为 `&Player`。CLI 中可传入玩家对象 ID。
+* `{shipId}`：类型为 `ID`。CLI 中可传入被添加船只的对象 ID。
+* `{targetRoster}`： 类型为 `&mut Roster`。CLI 中可传入目标船队的对象 ID。必须是编号 1-4 的船队对象 ID 之一。
+* `{targetPosition}`： 类型为 `Option<u64>`。表示将船只添加到目标船队的位置，格式 `[{Number}]`。 `{Number}`的取值范围为 0-3 或者空。如果为空，也就是`[]`，表示将船只添加到船队末尾位置。
 
 ### 从船队中“取消”船只
 
@@ -1807,12 +1797,11 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{sourceRoster}`：编号为 1-4 的玩家船队的 Move 对象 ID。
-* `{playerId}`： 玩家对象 ID。
-* `{shipId}`：被取消船只的对象 ID。
-* `{targetRoster}`： 编号为 0 的玩家船队的 Move 对象 ID。
-* `{targetPosition}`： 一般取值 `[]`。将取消船只置于“unassigned roster”船队的末尾。
-
+* `{sourceRoster}`：类型为 `&mut Roster`。CLI 中可传入编号为 1-4 的玩家船队的 Move 对象 ID。
+* `{playerId}`： 类型为 `&Player`。CLI 中可传入玩家对象 ID。
+* `{shipId}`：类型为 `ID`。CLI 中可传入被取消船只的对象 ID。
+* `{targetRoster}`： 类型为 `&mut Roster`。CLI 中可传入编号为 0 的玩家船队的 Move 对象 ID。
+* `{targetPosition}`： 类型为 `Option<u64>`。CLI 中传入直接传入值 `[]`。意为将取消船只置于“unassigned roster”船队的末尾。
 
 ### 调整船只顺序
 
@@ -1834,14 +1823,13 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{rosteId}`：船队对象 ID。
-* `{playerId}`： 玩家对象 ID。
-* `{shipIds}`： 变更顺序的船只的 ID 的数组。
-* `{positions}`：船只的位置数组。注意 `shipIds` 和 `positions` 数组的长度必须相等。
+* `{rosteId}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
+* `{playerId}`： 类型为 `&Player`。CLI 中可传入玩家对象 ID。
+* `{shipIds}`： 类型为 `vector<ID>`。变更顺序的船只的 ID 的数组。
+* `{positions}`：类型为 `vector<u64>`。船只的位置数组。注意 `shipIds` 和 `positions` 数组的长度必须相等。
 
 该合约函数的执行逻辑是依次执行由参数 `shipIds` 和 `positions` 组成的“船只位置调整指令”。
 为了确保调整的正确性，最简单的做法是，将船队所有位置的船只按照顺序传入 `shipIds` 和 `positions` 数组。
-
 
 ### 船队航行
 
@@ -1864,13 +1852,13 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包 ID。
-* `{roste}`：船队对象 ID。
-* `{playerId}`： 玩家对象 ID。
-* `{target_coordinates_x}`：航行目的地的横坐标。
-* `{target_coordinates_y}`： 航行目的地的纵坐标。
-* `{clock}`：时钟对象 ID，固定值 `0x6`。
-* `{energyId}`：能量币（`ENERGY`）的 Object ID。
-* `{energy_amount}`： 本次航行需要花费能量币（`ENERGY`）数量。
+* `{roste}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
+* `{playerId}`： 类型为 `&palyer`。CLI 中可传入玩家对象 ID。
+* `{target_coordinates_x}`：类型为 `u32`。航行目的地的横坐标。
+* `{target_coordinates_y}`：类型为 `u32`。航行目的地的纵坐标，。
+* `{clock}`：类型为 `&Clock`。时钟对象 ID，固定值 `0x6`。
+* `{energyId}`：类型为 `Coin<ENERGY>`。CLI 中可传入能量币（`ENERGY`）的 Object ID。
+* `{energy_amount}`：类型为 `u64`。本次航行需要花费能量币（`ENERGY`）数量。
 
 ### 更新船队位置
 
@@ -1886,8 +1874,8 @@ sui client call --package {main.PackageId} \
 ```
 
 * `{main.PackageId}`：Main 合约包 ID。
-* `{roste}`：船队对象 ID。
-* `{clock}`： 航行开始时间，固定值 `0x6`。
+* `{roste}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
+* `{clock}`：类型为 `&Clock`。 航行开始时间，固定值 `0x6`。
 
 执行以上命令之后，可以通过以下 Sui CLI 命令来查看船队信息：
 
@@ -1946,7 +1934,6 @@ sui client object {roster}--json
   其 `fields` 为最后一次更新时坐标。
 * `status` 为船队的状态。0：停泊中，1：行进中，2：战斗中，3：已损毁。
 
-
 ### 资源转移
 
 目前有三种资源转移方式：同船队船与船之间、船与岛屿之间（从船转移到岛屿和从岛屿转移到船）。
@@ -1960,7 +1947,7 @@ sui client call --package {main.packageId} \
 --module roster_aggregate \
 --function transfer_ship_inventory \
 --args {roster} \
-{playerId} \
+{player} \
 {fromShipId} \
 {toShipId} \
 {itemIds} \
@@ -1971,17 +1958,16 @@ sui client call --package {main.packageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包 ID。
-* `{roste}`：船队对象 ID。
-* `{playerId}`： 玩家对象 ID。
-* `{fromShipId}`：转移资源船只对象 ID。
-* `{toShipId}`： 接收资源船只对象 ID。
-* `{itemIds}`： 转移资源（Item) 的 ID 的数组。
+* `{roste}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
+* `{player}`：类型为 `&Player`。 CLI 中可传入玩家对象 ID。
+* `{fromShipId}`：类型为 `ID`。CLI 中可传入转移资源船只对象 ID。
+* `{toShipId}`： 类型为 `ID`。CLI 中可传入接收资源船只对象 ID。
+* `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item) 的 ID 的数组。
   如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
-* `{quantities}`：转移资源（Item）的数量数组。
+* `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
 
 注意：对象 ID 为 `{fromShipId}` 和 `{toShipId}` 的船只均属于对象 ID 为 `{roste}` 的同一船队。
-
 
 #### 从船转移资源到岛屿
 
@@ -2003,15 +1989,14 @@ sui client call --package {main.packageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包 ID。
-* `{roste}`：船队对象 ID。
-* `{playerId}`： 玩家对象 ID。
-* `{shipId}`：转移资源船只对象 ID。
-* `{clock}`：时钟对象 ID，固定值：0x6。
-* `{itemIds}`： 转移资源（Item) 的 ID 的数组。
+* `{roste}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
+* `{playerId}`： 类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{clock}`：类型为 `&Clock`。时钟对象 ID，CLI 中可传入固定值：0x6。
+* `{shipId}`：类型为 `ID`。CLI 中可传入转移资源船只对象 ID。
+* `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item) 的 ID 的数组。
   如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
-* `{quantities}`：转移资源（Item）的数量数组。
+* `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
-
 
 #### 从岛屿转移资源到船
 
@@ -2033,15 +2018,14 @@ sui client call --package {main.packageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包 ID。
-* `{roste}`：船队对象 ID。
-* `{playerId}`： 玩家对象 ID。
-* `{clock}`：时钟对象 ID，固定值：0x6。
-* `{shipId}`：转移资源船只对象 ID。
-* `{itemIds}`： 转移资源（Item) 的 ID 的数组。
+* `{roste}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
+* `{playerId}`： 类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{clock}`：类型为 `&Clock`。CLI 中可传入固定值：0x6。
+* `{shipId}`：类型为 `ID`。CLI 中可传入转移资源船只对象 ID。
+* `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item) 的 ID 的数组。
   如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
-* `{quantities}`：转移资源（Item）的数量数组。
+* `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
-
 
 ### 战斗
 
@@ -2063,10 +2047,10 @@ sui client call --package {main.packageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包 ID。
-* `{playerId}`： 玩家对象 ID。
-* `{initiator}`： 发起战斗作为挑战船队的对象 ID。
-* `{responder}`： 遭到攻击作为应战船队的对象 ID。
-* `{clock}`：时钟对象 ID，固定值：0x6。
+* `{playerId}`： 类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{initiator}`： 类型为 `&mut Roster`。CLI 中可传入发起战斗作为挑战船队的对象 ID。
+* `{responder}`： 类型为 `&mut Roster`。CLI 中可传入遭到攻击作为应战船队的对象 ID。
+* `{clock}`：类型为 `&Clock`。CLI 中可传入固定值：0x6。
 
 战斗结束后，在返回的输出中，包含类似的内容：
 
@@ -2090,7 +2074,6 @@ sui client call --package {main.packageId} \
 
 我们记录类型（objectType）为 `ship_battle::ShipBattle` 的对象的 Move 对象 ID（objectId）的值为占位符 `{ShipBattleId}`，
 用来表示本次战斗的唯一标识，通过该对象 ID，我们可以查看关于战斗的更多信息。
-
 
 ### 查看战斗信息
 
@@ -2187,13 +2170,14 @@ sui client call --package {main.packageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包 ID。
-* `{playerId}`： 战斗发起方玩家对象 ID。
-* `{loser_player}`： 战斗应战方玩家对象 ID。
-* `{initiator}`： 发起战斗作为挑战船队的对象 ID。
-* `{responder}`： 遭到攻击作为应战船队的对象 ID。
-* `{common.ExperienceTable}`：玩家积分（经验）等级表格对象 ID。
-
-
+* `{ShipBattleId}`： 类型为 `&mut ShipBattle`。CLI 中可传入战斗对象 ID。
+* `{playerId}`： 类型为 `&mut Player`。CLI 中可传入战斗发起方玩家对象 ID。
+* `{loser_player}`： 类型为 `&mut Player`。CLI 中可传入战斗应战方玩家对象 ID。
+* `{initiator}`： 类型为 `&mut Roster`。CLI 中可传入发起战斗作为挑战船队的对象 ID。
+* `{responder}`： 类型为 `&mut Roster`。CLI 中可传入遭到攻击作为应战船队的对象 ID。
+* `{common.ExperienceTable}`：类型为 `&ExperienceTable`。CLI 中可传入玩家积分（经验）等级表格对象 ID。
+* `{clock}`：类型为 `&Clock`。CLI 中可传入固定值：0x6。
+* `{choice}`： 类型为 `u8`。获胜方对战利品的行动选择，1: 接受, 0: 放弃。
 
 [TBD]
 
@@ -2296,3 +2280,4 @@ In the `sui-java-service` directory, execute the following command to start the 
 ```shell
 mvn -pl suiinfinitesea-service-rest -am spring-boot:run
 ```
+

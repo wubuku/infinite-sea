@@ -15,13 +15,14 @@ $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
 #环境Player，如果没有值需要新造一个Player
-#$newPlayId = "0x1fa415c7004ec0eb4621e37245c6b682e207b957e083b5ebd48054149ae18d6f"
-$newPlayId = ""
+$newPlayId = "0x2217461e58168224e934178ca8e61edd70c3b0465aa980842211883a3a78bd21"
+#newPlayId = ""
+$playName = '葵 つかさ'
 if ($null -eq $newPlayId -or $newPlayId -eq "") {
     "`n创建一个PLAYER..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     $result = ""
     try {
-        $result = sui client call --package $dataInfo.main.PackageId --module player_aggregate --function create --gas-budget 11000000 --json
+        $result = sui client call --package $dataInfo.main.PackageId --module player_aggregate --function create --args $playName --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "创建Player时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             Set-Location $startLocation
