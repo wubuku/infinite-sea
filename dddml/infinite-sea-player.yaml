@@ -13,6 +13,8 @@ aggregates:
         - Roster.TakeOutShipInventory
         - ShipBattle.TakeLoot
         - "infinite_sea::player_properties"
+      # Generate scheduled method that pulls on-chain states of all instances
+      GENERATE_PULLING_ALL_ON_CHAIN_INSTANCE_STATES: true
 #    friends:
 #      - SkillProcess.StartProduction
 #      - SkillProcess.CompleteProduction
