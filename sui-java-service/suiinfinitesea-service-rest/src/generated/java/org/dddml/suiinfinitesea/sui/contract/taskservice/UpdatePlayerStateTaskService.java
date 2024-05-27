@@ -7,6 +7,7 @@ package org.dddml.suiinfinitesea.sui.contract.taskservice;
 
 import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.service.*;
+import org.dddml.suiinfinitesea.domain.player.PlayerStateQueryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class UpdatePlayerStateTaskService {
     @Autowired
     private PlayerEventService playerEventService;
 
+    @Autowired
+    private PlayerStateQueryRepository playerStateQueryRepository;
+
     @Scheduled(fixedDelayString = "${sui.contract.update-player-states.fixed-delay:5000}")
     @Transactional
     public void updatePlayerStates() {
@@ -31,6 +35,15 @@ public class UpdatePlayerStateTaskService {
             String objectId = e.getId();
             suiPlayerService.updatePlayerState(objectId);
             playerEventService.updateStatusToProcessed(e);
+        });
+    }
+
+    @Scheduled(fixedDelayString = "${sui.contract.update-all-player-states.fixed-delay:50000}")
+    @Transactional
+    public void updateAllPlayerStates() {
+        playerStateQueryRepository.getAll(0, Integer.MAX_VALUE).forEach(s -> {
+            String objectId = s.getId();
+            suiPlayerService.updatePlayerState(objectId);
         });
     }
 }
