@@ -627,13 +627,13 @@ sui client call --package {main.PackageId} \
 解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{playerId}`：玩家对象 ID。
-* `{main.map}`：地图对象的 ID。在 Main 合约包发布的时候，自动执行的初始化函数会创建地图对象。
-* `{coordinates_x}`：Claim 的岛屿的 X 坐标值。
-* `{coordinates_y}`：Claim 的岛屿的 Y 坐标值。
-* `{clock}`：时钟对象的 ID。Sui 的时间对象 ID 是个固定值：`0x6`。
-* `{main.RosterTable}`: Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 中包含了包含所有的船队的“索引信息”。包含“玩家”以及“环境”船队。该 Table 的 Key 是“玩家 ID + 船队序号 `[0-4]`”的组合。
-* `{main.SkillProcessTable}`： Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 包含所有技能流程（可以理解使用技能的“生产线”）的“索引信息”。
+* `{playerId}`：类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{main.map}`：类型为 `&mut Map`。CLI 中可传入地图对象的 ID。在 Main 合约包发布的时候，自动执行的初始化函数会创建地图对象。
+* `{coordinates_x}`：类型为 `u32`。Claim 的岛屿的 X 坐标值。
+* `{coordinates_y}`：类型为 `u32`。Claim 的岛屿的 Y 坐标值。
+* `{clock}`：类型为 `&Clockr`。时钟对象的 ID。Sui 的时间对象 ID 是个固定值：`0x6`。
+* `{main.RosterTable}`: 类型为 `&mut RosterTable`。Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 中包含了包含所有的船队的“索引信息”。包含“玩家”以及“环境”船队。该 Table 的 Key 是“玩家 ID + 船队序号 `[0-4]`”的组合。
+* `{main.SkillProcessTable}`： 类型为 ` &mut SkillProcessTable`。Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 包含所有技能流程（可以理解使用技能的“生产线”）的“索引信息”。
   这里的技能包括 Farming、WoodCutting、Mining、 Crafting。该 Table 的 Key 为“玩家 ID + SkillTypeId”的组合。
 
 执行成功后返回内容节选重要部分如下：
@@ -1588,12 +1588,12 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessMining}`：挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
-* `{batchSize}`：本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
-* `{playerId}`：玩家对象 ID。
-* `{common.ItemCreationMining}`：挖矿配方对象 ID。
-* `{clock}`：时钟对象的 ID，固定值：0x6。
-* `{eneryId}`：能量币（`ENERGY`）的 Object ID。
+* `{SkillProcessMining}`：类型为 `&mut SkillProcess`。CLI 中可传入挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `{batchSize}`：类型为 `u32`。本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `{playerId}`：类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{common.ItemCreationMining}`：类型为 `&ItemCreation`。CLI 中可传入挖矿配方对象 ID。
+* `{clock}`：类型为 `&Clock`。时钟对象的 ID，固定值：`0x6`。
+* `{eneryId}`：类型为 `Balance<ENERGY>`。CLI 中可传入能量币（`ENERGY`）的 Object ID。
 
 每一种生产制造进程都需要经历一定的时间，比如挖“一份”矿需要 3 秒钟，那么开始一次“挖矿”进程后，结合本次挖矿批次数量 ` batchSize`，则在经历  `batchSize` * 3 秒钟后，需要执行对应的“完成挖矿进程”来结束挖矿进程。
 
@@ -1620,11 +1620,11 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessMining}`：挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
-* `{playerId}`：玩家对象 ID。
-* `{common.ItemCreationMining}`：挖矿配方对象 ID。
-* `{common.experienceTableId}`：玩家积分（经验）等级表格对象 ID。
-* `{clock}`：时钟对象 ID，固定值：0x6。
+* `{SkillProcessMining}`：类型为 `&mut SkillProcess`。CLI 中可传入挖矿进程 Move 对象 ID，参考前文中的技能进程占位符。
+* `{playerId}`：类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{common.ItemCreationMining}`：类型为 `&ItemCreation`。CLI 中可传入挖矿配方对象 ID。
+* `{common.experienceTableId}`：类型为 `&ExperienceTable`。CLI 中可传入玩家积分（经验）等级表格对象 ID。
+* `{clock}`：类型为 ` &Clockr`。时钟对象 ID，固定值：`0x6`。
 
 在成功结束技能进程之后，玩家的对应产出成果的资源数量会增加。
 
@@ -1668,13 +1668,13 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessFarming1}`：为种植棉花第一条“生产线”的 Move 对象 ID；
+* `{SkillProcessFarming1}`：类型为 `&mut SkillProcess`。CLI 中可传入为种植棉花第一条“生产线”的 Move 对象 ID；
   `{SkillProcessFarming2}`：为第二条“生产线”的 Move 对象 ID。
-* `batchSize`：本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
-* `{playerId}`：玩家对象 ID。
-* `{common.ItemProductionFarming}`：种植棉花的“配方”的 Sui Move 对象 ID。
-* `{clock}`：时钟对象 ID，固定值：0x6。
-* `{eneryId}`：能量币（`ENERGY`）的 Object ID。
+* `batchSize`：类型为 `u32`。本批次的数量，即按照“生产配方”投产的“份数”。 “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
+* `{playerId}`：类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{common.ItemProductionFarming}`：类型为 `&ItemProduction`。CLI 中可传入种植棉花的“配方”的 Sui Move 对象 ID。
+* `{clock}`：类型为 `&Clock`。时钟对象 ID，固定值：0x6。
+* `{eneryId}`：类型为 `Balance<ENERGY>`。CLI 中可传入能量币（`ENERGY`）的 Object ID。
 
 ### 结束种植棉花进程
 
@@ -1697,11 +1697,11 @@ sui client call --package {main.PackageId} \
 参数解释：
 
 * `{main.PackageId}`：Main 合约包的 ID。
-* `{SkillProcessFarming1}`： 种植棉花第一条“生产线”的 Move 对象 ID；`{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
-* `{playerId}`： 玩家对象 ID。
-* `{common.ItemProductionFarming}`： 种植棉花配方 Move 对象 ID。
-* `{clock}`： 结束种植棉花进程时间，固定值：0x6。
-* `{common.ExperienceTable}：` 玩家积分（经验）等级表格对象 ID。
+* `{SkillProcessFarming1}`：  类型为 `&mut SkillProcess`。CLI 中可传入种植棉花第一条“生产线”的 Move 对象 ID；`{SkillProcessFarming2}` 为第二条“生产线”的 Move 对象 ID。
+* `{playerId}`： 类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{common.ItemProductionFarming}`： 类型为 `&ItemProduction`。CLI 中可传入种植棉花配方 Move 对象 ID。
+* `{common.ExperienceTable}：` 类型为 ` &ExperienceTable`。CLI 中可传入玩家积分（经验）等级表格对象 ID。
+* `{clock}`： 类型为 `&Clock`。结束种植棉花进程时间，固定值：0x6。
 
 ### 开始造船进程
 
