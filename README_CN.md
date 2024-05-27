@@ -210,7 +210,6 @@ wubuku/dddappp:0.0.1 \
 
 特别注意 `common` 中的 `ItemCreationMining`，`ItemProductionFarming`，`ItemCreationWooding`，`ItemProducitonCrafting` 属性。
 这几个属性的值，是“管理员”在后台设置的用于生产制造的“生产配方”的对象 ID。
-前端可以通过链下接口查询它们的值，缓存起来使用（一般不怎么改变，可以将它们视为“准常量”）。
 
 我们在下面的示例命令中，通过占位符来引用这些值：
 
@@ -220,6 +219,22 @@ wubuku/dddappp:0.0.1 \
 | 伐木     | `{ItemCreationWooding}`    | 开始伐木进程和结束伐木进程时使用     |
 | 种棉花   | `{ItemProductionFarming}`  | 开始种植棉花进程和结束棉花进程时使用 |
 | 造船     | `{ItemProducitonCrafting}` | 开始造船进程和结束造船进程时使用     |
+
+
+前端可以通过链下接口查询它们的值，缓存起来使用（一般不怎么改变，可以将它们视为“准常量”）。
+
+简单来说，你可以从链下 API 获取各种 Item（物品）的“生产配方”。对于 Creation 型的技能类型，请求这个接口：
+
+```shell
+curl -X GET "{indexer_api_base_url}/ItemCreations" -H "accept: application/json"
+```
+
+对于 Production 型的技能类型，请求这个接口：
+
+```shell
+curl -X GET "{indexer_api_base_url}/ItemProductions" -H "accept: application/json"
+```
+
 
 ### 获取地图信息
 
@@ -579,13 +594,13 @@ curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: applicat
 
 注意，我们在下文的示例命令会使用一些占位符来引用“当前玩家”的技能进程对象 ID：
 
-| 技能类型          | 技能类型常量值 | “生产线”编号 | 示例命令使用的“占位符” |
-| ----------------- | -------------- | -------------- | ------------------------ |
-| 种植(Farming)     | 0              | 0              | `{SkillProcessFarming1}` |
-| 种植(Farming)     | 0              | 1              | `{SkillProcessFarming2}` |
-| 伐木(WoodCutting) | 1              | 0              | `{SkillProcessWooding}`  |
-| 挖矿(Mining)      | 3              | 0              | `{SkillProcessMining}`   |
-| 造船(Crafting)    | 6              | 0              | `{SkillProcessCrafting}` |
+| 技能类型            | 技能类型常量值 | “生产线”编号 | 示例命令使用的技能进程对象 ID 占位符     |
+|-----------------|---------|---------|--------------------------|
+| 种植(Farming)     | 0       | 0       | `{SkillProcessFarming1}` |
+| 种植(Farming)     | 0       | 1       | `{SkillProcessFarming2}` |
+| 伐木(WoodCutting) | 1       | 0       | `{SkillProcessWooding}`  |
+| 挖矿(Mining)      | 3       | 0       | `{SkillProcessMining}`   |
+| 造船(Crafting)    | 6       | 0       | `{SkillProcessCrafting}` |
 
 ---
 
@@ -881,7 +896,6 @@ sui client call --package {main.PackageId} \
 * 类型为 `0x2::dynamic_field::Field<{common.PackageId}::skill_process_id::SkillProcessId, 0x2::object::ID>` 的对象，是一个“保存技能进程信息的 Table”的“动态字段”子对象。
   这个对象的 ID 我们使用占位符 `{SkillProcess_dynamic_field_ObjectId}` 表示。
   通过这个对象，可以查询到技能进程的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。
-  我们下面将技能进程的对象 ID 使用占位符 `{SkillProcessObjectId}` 表示。
 
 #### 查询玩家的船队
 
@@ -1542,7 +1556,7 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
   `sequenceNumber` 为该技能的“生产线”序列号。
   目前，除了农业（farming）有 0 和 1，其他技能这里都是 0。
 * `itemId` 为该技能进程的产出成品的 Item ID。
-* `id_` 为技能进程的 Sui Move 对象 ID（`{SkillProcessObjectId}`）。
+* `id_` 为技能进程的 Sui Move 对象 ID。
 * `startedAt` 技能进程的最后一次启动时间。这是一个以秒数计算的 Unix 时间。
 * `completed` 最后一次“生产”是否已完成。
   如果完成，可以开始下一次生产；
