@@ -82,6 +82,7 @@ module infinite_sea::skill_process_start_creation_logic {
         let skill_process_id = skill_process::skill_process_id(skill_process);
         let skill_type = skill_process_id::skill_type(&skill_process_id);
         let resource_type = item_id::resource_type_required_for_skill(skill_type);
+        let batch_size = skill_process::production_process_started_batch_size(creation_process_started);
 
         // skill_process_mutex_aggregate::lock(skill_process_mutex, skill_type, ctx);
 
@@ -90,6 +91,7 @@ module infinite_sea::skill_process_start_creation_logic {
         skill_process::set_creation_time(skill_process, creation_time);
         skill_process::set_completed(skill_process, false);
         skill_process::set_ended_at(skill_process, 0);
+        skill_process::set_batch_size(skill_process, batch_size);
 
         let energy_vault = skill_process::borrow_mut_energy_vault(skill_process);
         balance::join(energy_vault, energy);
