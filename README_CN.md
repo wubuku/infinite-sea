@@ -1727,9 +1727,9 @@ sui client call --package {main.PackageId} \
 
 * `{main.PackageId}`：Main 合约包的 ID。
 * `{SkillProcessCrafting}`：类型为 `&mut SkillProcess`。CLI 中可传入造船技能的 Move 对象 ID。
-* `{production_materials_item_id_list}`：类型为 `vector<u32>`。造船所需的资源的 Item ID 的数组。Testnet 上的当前值（“准常量”）：`[2000000001,2000000003,102]`。
+* `{production_materials_item_id_list}`：类型为 `vector<u32>`。造船所需的资源的 Item ID 的数组。Testnet 上的当前值（“准常量”）：`[200,301,102]`。
 * `{production_materials_item_quantity_list}`：类型为 `vector<u32>`。造船投入的资源数量的数组，与 `production_materials_item_id_list` 中的 Item ID 一一对应。
-  如：`[180,230,190]`，当前 testnet 合约要求每种资源数量最少 150，总数量为 600。在此限制下，具体每种资源投入的数量由玩家指定。
+  如：`[3,4,5]`，当前 testnet 合约要求每种资源数量最少 3，总数量为 15。在此限制下，具体每种资源投入的数量由玩家指定。
 * `{playerId}`：类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
 * `{common.ItemProductionCrafting}`： 类型为 `&ItemProduction`。CLI 中可传入造船配方 Move 对象 ID。
 * `{clock}`：类型为 `&Clock`。CLI 中可传入固定值：0x6。
