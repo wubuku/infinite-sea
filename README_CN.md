@@ -1889,7 +1889,7 @@ sui client call --package {main.PackageId} \
 
 * `{main.PackageId}`：Main 合约包 ID。
 * `{roste}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
-* `{clock}`：类型为 `&Clock`。 航行开始时间，固定值 `0x6`。
+* `{clock}`：类型为 `&Clock`。 当前时间，固定值 `0x6`。
 
 执行以上命令之后，可以通过以下 Sui CLI 命令来查看船队信息：
 
@@ -1977,7 +1977,7 @@ sui client call --package {main.packageId} \
 * `{fromShipId}`：类型为 `ID`。CLI 中可传入转移资源船只对象 ID。
 * `{toShipId}`： 类型为 `ID`。CLI 中可传入接收资源船只对象 ID。
 * `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item) 的 ID 的数组。
-  如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
+  如：`[102,200,301]`，表示要转移 Item ID 为 102、200、301 的三种资源。
 * `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
 
@@ -2008,7 +2008,7 @@ sui client call --package {main.packageId} \
 * `{clock}`：类型为 `&Clock`。时钟对象 ID，CLI 中可传入固定值：0x6。
 * `{shipId}`：类型为 `ID`。CLI 中可传入转移资源船只对象 ID。
 * `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item) 的 ID 的数组。
-  如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
+  如：`[102,200,301]`，表示要转移 Item ID 为 102、200、301 的三种资源。
 * `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
 
