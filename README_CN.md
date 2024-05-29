@@ -167,34 +167,30 @@ wubuku/dddappp:0.0.1 \
 ```json
 {
   "coin": {
-    "TreasuryCap": "0xb832e0d3c39dddab7181e08bb193e7b813770139b2401f29a3c683ee3d1296c7",
-    "PackageId": "0xcf2c3b147d64badb2fbe9e8574004dd8a30b9dc417e0a26eaaddfcfbc0cbc532",
-    "Digest": "FA5PHdEzLWZ8S6oXZ8DtHwd5yUEVD3fwLtSzszbhXuiE",
-    "EnergyId": "0x30205ca82aeab727937149fa9456ab8553cb0494350ac158f20dfdd3de466403"
+    "PackageId": "0x128dd26366a0a878aeb4836e6af1bd384373492751afa5fdb6ff7e6b819b1547",
+    "Digest": "4SLvrvRw83f6DdsdAr2wq7QdRzTzyZiEvuabGFw5z1dZ",
+    "EnergyId": "0xd8b9fa7fd1da6f29e3a6914255cdeb267522980d7b158b708c10373dc34905a8"
   },
   "common": {
-    "Digest": "QnDYV5DtMK6C3wX8rWkQcoe9woRoGGmx2mAUkA1mbq2",
-    "ItemTable": "0x33bb3e6b51a0ef9197ac577d67ccf4f31df3a5a098400e07e1de9bafe64d4039",
-    "ExperienceTable": "0x48a5284bd638ddae564f268c910726b461e47dc1aac8f4b104e4373b5d5ea738",
-    "ItemCreationTable": "0x775322c064f71e411cc1b24388627a2ebf8a7efa86005b795f0fcdc0e7afc841",
-    "PackageId": "0x9e1f56b7299081e61f81ba261fe333e98cb59a866dcf90e0c00df21180c96487",
-    "Publisher": "0xe10e7b40567e52ad7fadf0e9e5e9dbd22e01aea6e571e78a180665058d610195",
-    "ItemProductionTable": "0xe4976f4a8a5b3660afd00e3d507d858dfdbc3825005df34ec330d116a2925fc3",
-    "ItemCreationMining": "0x6a5cb4777086f63569f03f186ce0cfcbd8d32e523cf39ee8b13140244da27ad3",
-    "ItemProductionFarming": "0x7adeee1b2bc8fdff2d63d9ebf2746aa9ff25efacfc8c3451c7f8ba4e07094cd7",
-    "ItemCreationWooding": "0xd8c1474f9a8e957f2c29e360f9ed037c3a92da9122a3c7b0e18d6fb45de40154",
-    "ItemProductionCrafting": "0xe41a615e902dae33fc22671ba2d43462e2f89236ecef3e182fafa6f9f3dbda44"
+    "Digest": "3jgvvWtKiVYQY4MADu9MZXx1sG9iaoKzS5Fij4ZPD2er",
+    "ItemTable": "0x3795f90336763a60f0c552406f78b6ede3d3ba99ad0e8b9d026a816ed342a939",
+    "ExperienceTable": "0x3b5670133649b896136e5dfa26e4b608f9662b0320d201403e55d53b37f6e0a7",
+    "ItemProductionTable": "0x724c3360f94ad4760b92d5f989f204ecafe4c09e62d8f1c3c32db5ca7b41b0ba",
+    "PackageId": "0x80b55c61850000d866f341019365823c32a5f819f784c64c884e5d659e2d5a0f",
+    "ItemCreationTable": "0xfa196a0d52dcb11e42edc76507935dcff191a74b9fc500c660816d3ef55c0b3f",
+    "ItemCreationMining": "0xcd3d451262118e6aeeb9e94e87c4990dc241f84a7b3aa60b0401cf419caa7dfc",
+    "ItemProductionFarming": "0x027729483e9de6996535878788f7a10f3af788889d3e2709766601139198da7a",
+    "ItemCreationWooding": "0xfef7bb0b8bf9f028b734e48657250679e2af20b4047f0c89ce099eb9c47636cd",
+    "ItemProductionCrafting": "0xd97f7bf2bd3315265c5d37ae6774f0b331263c08e4b7c2b084cd8a863dd787cf"
   },
   "main": {
-    "Digest": "9VfayLCVLp7hBPGLpQyoztgiuqLerAzhwqLELdpR9RQh",
-    "PackageId": "0x8d4b0f3b3be41e525ec63e252f14b52e149ead9b2904f55a8b3878044999b56b",
-    "Publisher": "0x90b70a3bbcd0b0d5d203e2d6cf77c65a3a0025b7671bab64d71c58a91d4b5b0f",
-    "RosterTable": "0x920ce5e3b3afc1f6a312f59aec8b9e80b6ebe11c86f4ec5ae3f5cebc1ec34a7f",
-    "AdminCap": "0x9b341caeae5a72ac6fc497fbd426b48565b2be69e7a73d90aadfb6a9b479f459",
-    "UpgradeCap": "0xb0c8b32183ee7e40241a6969121a75e071426382f8279d7208d11ef691fa3d3e",
-    "SkillProcessTable": "0xc90ce4d672d492d82ef1ec642b5ee2bd8756482f5372b8473ad7e5e063dfe209",
-    "Map": "0xc9fa916b2613408af026091b17b505a3f49af001ff0c774516de5a1414716bd7",
-    "Player": "0xf07a26fe8ad373a65bca4c99aab65c2872b29156e0c6a677af01edf23058a291"
+    "Digest": "28VVTXTpwCwqdJNCcwUPyEMRwp9bjNDHVjSJ9XdNzNfR",
+    "RosterTable": "0x61fb2d0e985fa2acd257f4495bf0bc13f083c248bb604317415f08a645138e5c",
+    "PackageId": "0x6b5ec168cfe4029fef1abae76c5459bc4203f2186515ab638b6d765465c0e1c7",
+    "Publisher": "0x72125115394e65be1dc2d14de9c95b82902802833ed0e6b92d617c6bcbd5756a",
+    "SkillProcessTable": "0x897fee0c359ee90de31943bac058d1be1fea2810d1b119d0984b06bd4029d515",
+    "Map": "0xd903392c9ef9633bec1338414341e558369726bbbc17aa4d64b2c61547b9a9bd",
+    "UpgradeCap": "0xfdd03f8be325c10ecf302d11cde88a4ee220077be1a7eefc3dd1ca0436d354eb",
   }
 }
 ```
@@ -1889,7 +1885,7 @@ sui client call --package {main.PackageId} \
 
 * `{main.PackageId}`：Main 合约包 ID。
 * `{roste}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
-* `{clock}`：类型为 `&Clock`。 当前时间，固定值 `0x6`。
+* `{clock}`：类型为 `&Clock`。 时钟对象 ID，固定值 `0x6`。
 
 执行以上命令之后，可以通过以下 Sui CLI 命令来查看船队信息：
 
