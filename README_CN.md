@@ -1758,6 +1758,27 @@ sui client call --package {main.PackageId} \
 * `{common.ExperienceTable}`： 类型为 `&ExperienceTable`。CLI 中可传入玩家积分（经验）等级表格对象 ID。
 * `{clock}`： 类型为 `&Clock`。CLI 中可传入固定值：0x6。
 
+执行成功之后，可以得到以下相似的输出：
+```json
+{
+  "digest": "9XbgftdrKy6njbgkGHtXEG9Wj2LJY4QWguHccNmKv2Eq",  
+  "objectChanges": [
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "ObjectOwner": "0x710951e97963ae9567887249e001e8c67639f9ba3572829a36ce2c147530539f"
+      },
+      "objectType": "0xe32d611dfe833b8586b03e9502e46fb35a16e161a38c84d6074644e4251ab929::ship::Ship",
+      "objectId": "0x3531b5f3fb0633ee9cff7d5b411a1849f4a7227ebc345a135300b809b925ff59",
+      "version": "34681290",
+      "digest": "BGQiyfSUcMbVNHdf96ha91r1W7z9Kn8M5jXdHUw7KB4q"
+    }
+  ]
+}
+```
+类型（`objectType`）为 `{main.packageId}::ship::Ship` 的元素的对象 ID（`objectId`)即为新得到的船只的对象 ID。
+
 ### 向船队添加船只
 
 每个玩家有 5 支船队，编号为 0-4 ，其中编号为 0 的船队为 "unassigned roster"，玩家新建的船只先加入该船队。
