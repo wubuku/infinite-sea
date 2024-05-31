@@ -10,9 +10,11 @@
 
 ### Items
 
+在当前领域模型中，Items 表示“物品”。
+
 ### Skills
 
-Item（物品）有两种“生产/创造”方式：
+Items（物品）可以由两种方式“生产/创造”出来：
 
 * Item Production。需要“原材料”，生产时需要消耗一定数量的原材料（其他 Items，比如从CottonSeeds->Cottons）。
 * Item Creation。不需要原材料。
@@ -27,9 +29,14 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
   * 严格来说，它不太像生产型技能那样，后者主要是通过设置“生产配方”所需的（可能是多种）原材料 item 和数量来达到对技能的使用限制。
   * 不过，仍然可以将“一种创造型技能的使用配额”抽象为一个特殊的 Item(Id) 和 quantity 的 pair。
 
+### Item Creation 和 Item Production
+
+可以将它们理解为“生产配方”。
+
 ### Skill Processes
 
 实体 Skill Process（技能流程）表示执行 Item Production 或 Item Creation 的过程。
+一个通俗的比喻：Skill Process 就是“生产线”。
 
 #### Item Production 的 Skill Process
 
@@ -41,6 +48,7 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
 * 方法 StartShipProduction 的参数列表应该包含表示“实际投入的材料数量”的信息，因为它们可以大于 Item Production 中规定的（最少）数量。
 
 [TBD]
+
 
 ### 前后端待确认问题
 
@@ -130,25 +138,25 @@ wubuku/dddappp:0.0.1 \
 
 #### Item（物品、资源） ID 常量
 
-| Item Id    | Name                    | 说明                                    |
-| ---------- | ----------------------- | --------------------------------------- |
-| 0          | UNUSED_ITEM             | 未使用                                  |
-| 2          | CottonSeeds             | 棉花种子                                |
+| Item Id    | Name                    | 说明                         |
+|------------|-------------------------|----------------------------|
+| 0          | UNUSED_ITEM             | 未使用                        |
+| 2          | CottonSeeds             | 棉花种子                       |
 | 102        | Cotton                  | 棉花（由棉花种子种植得到）              |
-| 200        | Normal Log              | 木头（砍伐之后成品)                     |
-| 301        | CopperOre               | 铜（挖矿之后成品）                      |
-| 1000000001 | Ship                    | 船（建造得到）                          |
-| 2000000001 | ResourceTypeWoodcutting | 伐木资源(伐木Wooding之后得到 Normal Log |
-| 2000000003 | ResourceTypeMining      | 挖矿资源(挖矿Mining之后得到 CooperOre   |
+| 200        | Normal Log              | 木头（砍伐的成品）                  |
+| 301        | CopperOre               | 铜（挖矿的成品）                   |
+| 1000000001 | Ship                    | 船（建造得到）                    |
+| 2000000001 | ResourceTypeWoodcutting | 伐木消耗的资源。伐木后可以得到 Normal Log |
+| 2000000003 | ResourceTypeMining      | 挖矿消耗的资源。挖矿后可以得到 CooperOre  |
 
 #### 技能常量
 
-| 技能        | 常量 | 说明 |
-| ----------- | ---- | ---- |
-| farming     | 0    | 种植 |
-| woodcutting | 1    | 伐木 |
-| mining      | 3    | 挖矿 |
-| crafing     | 6    | 造船 |
+| 技能          | 常量 | 说明 |
+|-------------|----|----|
+| farming     | 0  | 种植 |
+| woodcutting | 1  | 伐木 |
+| mining      | 3  | 挖矿 |
+| crafing     | 6  | 造船 |
 
 ## 测试应用
 
@@ -210,12 +218,12 @@ wubuku/dddappp:0.0.1 \
 
 我们在下面的示例命令中，通过占位符来引用这些值：
 
-| 技能类型 | 占位符                     | 说明                                 |
-| -------- | -------------------------- | ------------------------------------ |
-| 挖矿     | `{ItemCreationMining}`     | 开始挖矿进程和结束挖矿进程时使用     |
-| 伐木     | `{ItemCreationWooding}`    | 开始伐木进程和结束伐木进程时使用     |
-| 种棉花   | `{ItemProductionFarming}`  | 开始种植棉花进程和结束棉花进程时使用 |
-| 造船     | `{ItemProducitonCrafting}` | 开始造船进程和结束造船进程时使用     |
+| 技能类型 | 占位符                        | 说明                 |
+|------|----------------------------|--------------------|
+| 挖矿   | `{ItemCreationMining}`     | 开始挖矿进程和结束挖矿进程时使用   |
+| 伐木   | `{ItemCreationWooding}`    | 开始伐木进程和结束伐木进程时使用   |
+| 种棉花  | `{ItemProductionFarming}`  | 开始种植棉花进程和结束棉花进程时使用 |
+| 造船   | `{ItemProducitonCrafting}` | 开始造船进程和结束造船进程时使用   |
 
 
 前端可以通过链下接口查询它们的值，缓存起来使用（一般不怎么改变，可以将它们视为“准常量”）。
@@ -591,13 +599,13 @@ curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: applicat
 
 注意，我们在下文的示例命令会使用一些占位符来引用“当前玩家”的技能进程对象 ID：
 
-| 技能类型            | 技能类型常量值 | “生产线”编号 | 示例命令使用的技能进程对象 ID 占位符     |
-|-----------------|---------|---------|--------------------------|
-| 种植(Farming)     | 0       | 0       | `{SkillProcessFarming1}` |
-| 种植(Farming)     | 0       | 1       | `{SkillProcessFarming2}` |
-| 伐木(WoodCutting) | 1       | 0       | `{SkillProcessWooding}`  |
-| 挖矿(Mining)      | 3       | 0       | `{SkillProcessMining}`   |
-| 造船(Crafting)    | 6       | 0       | `{SkillProcessCrafting}` |
+| 技能类型             | 技能类型常量值 | “生产线”编号 | 示例命令使用的技能进程对象 ID 占位符     |
+|------------------|---------|---------|--------------------------|
+| 种植 (Farming)     | 0       | 0       | `{SkillProcessFarming1}` |
+| 种植 (Farming)     | 0       | 1       | `{SkillProcessFarming2}` |
+| 伐木 (WoodCutting) | 1       | 0       | `{SkillProcessWooding}`  |
+| 挖矿 (Mining)      | 3       | 0       | `{SkillProcessMining}`   |
+| 造船 (Crafting)    | 6       | 0       | `{SkillProcessCrafting}` |
 
 ---
 
@@ -1564,13 +1572,15 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
   “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
 
-### 申请 ENERGY
+### 申请 ENERGY（on testnet）
 
-玩家在生产制造以及航行时都需要花费 `ENERGY`，余额不足时玩家可以使用以下 Sui CLI 命令申请 `ENERGY`：
+玩家在生产制造以及航行时都需要花费 `ENERGY` 代币。
+在测试网上，玩家可以使用以下 Sui CLI 命令申请 `ENERGY` 代币：
 
-```powershell
+```shell
 sui client call --package  {coin.PackageId} --module energy_faucet --function request_a_drop --args {coin.FaucetId} --json
 ```
+
 参数解释：
 
 * {main.PackageId}：Coin 合约包的 ID。
@@ -1611,21 +1621,27 @@ sui client call --package  {coin.PackageId} --module energy_faucet --function re
   "confirmedLocalExecution": true
 }
 ```
+
 在属性 `objectChanges` 中可以看到对象类型 `objectType` 为 `0x2::coin::Coin<{coin.PackageId}::energy::ENERGY>` 的对象，   
 在属性 `balanceChanges` 中可以看到货币类型 `coinType` 为 `{coin.PackageId}::energy::ENERGY` 和数量 `amount` 为 `100000000000` 的对象。 
 
 ### 查询 `ENERGY`余额
+
 玩家可以通过以下 `curl` 命令获取指定账户中的 `ENERGY` 余额：
-```powershell
+
+```shell
 curl -X POST \
 -H "Content-Type: application/json" \
 -d '{"jsonrpc":"2.0","id":1,"method":"suix_getCoins","params":["{accountAddress}","{coin.PackageId}::energy::ENERGY"]' https://fullnode.testnet.sui.io/
 ```
+
 参数解释：
+
 * `{accountAddress}`：类型为 `address`。玩家的 `Sui` 账户地址。
 * `{coin.PackageId}`: Coin 合约包 ID。
 
 可以获取以下格式的输出：
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -1651,6 +1667,7 @@ curl -X POST \
   "id": 1
 }
 ```
+
 属性 `result.data` 是包含货币类型（`coinType`） 为 `{coin.PackageId}::energy::ENERGY` 的对象数组。  
 数组中 `coinObjectId` 为账户中的货币对象 ID，可以作为开始“生产制造”的输入参数。  
 `balance` 之和即为账户 `{accountAddress}` 的 `ENERGY` 余额。
@@ -1850,7 +1867,8 @@ sui client call --package {main.PackageId} \
 * `{common.ExperienceTable}`： 类型为 `&ExperienceTable`。CLI 中可传入玩家积分（经验）等级表格对象 ID。
 * `{clock}`： 类型为 `&Clock`。CLI 中可传入固定值：0x6。
 
-执行成功之后，可以得到以下相似的输出：
+执行成功之后，可以看到类似下面的输出：
+
 ```json
 {
   "digest": "9XbgftdrKy6njbgkGHtXEG9Wj2LJY4QWguHccNmKv2Eq",  
@@ -1869,7 +1887,8 @@ sui client call --package {main.PackageId} \
   ]
 }
 ```
-类型（`objectType`）为 `{main.packageId}::ship::Ship` 的元素的对象 ID（`objectId`)即为新得到的船只的对象 ID。
+
+类型（`objectType`）为 `{main.packageId}::ship::Ship` 的元素的对象 ID（`objectId`）即为新得到的船只的对象 ID。
 
 ### 向船队添加船只
 
@@ -2085,7 +2104,7 @@ sui client call --package {main.packageId} \
 * `{player}`：类型为 `&Player`。 CLI 中可传入玩家对象 ID。
 * `{fromShipId}`：类型为 `ID`。CLI 中可传入转移资源船只对象 ID。
 * `{toShipId}`： 类型为 `ID`。CLI 中可传入接收资源船只对象 ID。
-* `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item) 的 ID 的数组。
+* `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item）的 ID 的数组。
   如：`[102,200,301]`，表示要转移 Item ID 为 102、200、301 的三种资源。
 * `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
@@ -2116,7 +2135,7 @@ sui client call --package {main.packageId} \
 * `{playerId}`： 类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
 * `{clock}`：类型为 `&Clock`。时钟对象 ID，CLI 中可传入固定值：0x6。
 * `{shipId}`：类型为 `ID`。CLI 中可传入转移资源船只对象 ID。
-* `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item) 的 ID 的数组。
+* `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item）的 ID 的数组。
   如：`[102,200,301]`，表示要转移 Item ID 为 102、200、301 的三种资源。
 * `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
@@ -2145,7 +2164,7 @@ sui client call --package {main.packageId} \
 * `{playerId}`： 类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
 * `{clock}`：类型为 `&Clock`。CLI 中可传入固定值：0x6。
 * `{shipId}`：类型为 `ID`。CLI 中可传入转移资源船只对象 ID。
-* `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item) 的 ID 的数组。
+* `{itemIds}`： 类型为 `vector<u32>`。转移资源（Item）的 ID 的数组。
   如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
 * `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
