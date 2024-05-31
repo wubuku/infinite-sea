@@ -169,7 +169,8 @@ wubuku/dddappp:0.0.1 \
   "coin": {
     "PackageId": "0x128dd26366a0a878aeb4836e6af1bd384373492751afa5fdb6ff7e6b819b1547",
     "Digest": "4SLvrvRw83f6DdsdAr2wq7QdRzTzyZiEvuabGFw5z1dZ",
-    "EnergyId": "0xd8b9fa7fd1da6f29e3a6914255cdeb267522980d7b158b708c10373dc34905a8"
+    "EnergyId": "0xd8b9fa7fd1da6f29e3a6914255cdeb267522980d7b158b708c10373dc34905a8",
+    "FaucetId": "0x09457dc9803e9f6aadfcbd39894ee6433484a51397e6be5a7149637a230ee9da"
   },
   "common": {
     "Digest": "3jgvvWtKiVYQY4MADu9MZXx1sG9iaoKzS5Fij4ZPD2er",
@@ -198,9 +199,9 @@ wubuku/dddappp:0.0.1 \
 解释如下：
 
 * `coin.packageid`：Coin 合约包的 Id。
+* `coin.FaucetId`：玩家用来请求 `ENERGY` 的水龙头的 Object ID。
 * `common.PackageId`：Common 合约包的 Id。
 * `main.Digest`：发布 Main 包交易的摘要。
-* `coin.EnergyId`：Mint 获得的能量币（`ENERGY`）的 Object ID。
 * `main.Map`：地图（map）的 Object ID。
 * `common.ExperienceTable` 玩家积分（经验）等级表的 Object ID。
 
