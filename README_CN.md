@@ -1566,7 +1566,7 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 
 ### 申请 ENERGY
 
-玩家在生产制造以及航行时都需要花费 `ENERGY`，玩家可以使用以下 Sui CLI 命令申请 `ENERGY`：
+玩家在生产制造以及航行时都需要花费 `ENERGY`，余额不足时玩家可以使用以下 Sui CLI 命令申请 `ENERGY`：
 
 ```powershell
 sui client call --package  {coin.PackageId} --module energy_faucet --function request_a_drop --args {coin.FaucetId} --json
@@ -1611,8 +1611,8 @@ sui client call --package  {coin.PackageId} --module energy_faucet --function re
   "confirmedLocalExecution": true
 }
 ```
-在 `objectChanges` 中可以看到对象类型`objectType` 为 `0x2::coin::Coin<{coin.PackageId}::energy::ENERGY>` 的对象，
-以及在 `balanceChanges` 中可以看到 `coinType` 为 `{coin.PackageId}::energy::ENERGY` 和数量 `amount` 为 `100000000000` 的对象。 
+在属性 `objectChanges` 中可以看到对象类型 `objectType` 为 `0x2::coin::Coin<{coin.PackageId}::energy::ENERGY>` 的对象，   
+在属性 `balanceChanges` 中可以看到货币类型 `coinType` 为 `{coin.PackageId}::energy::ENERGY` 和数量 `amount` 为 `100000000000` 的对象。 
 
 ### 查询 `ENERGY`余额
 玩家可以通过以下 `curl` 命令获取指定账户中的 `ENERGY` 余额：
@@ -1651,8 +1651,9 @@ curl -X POST \
   "id": 1
 }
 ```
-属性 `result.data` 是包含类型（`coinType`） 为 `{coin.PackageId}::energy::ENERGY` 的对象数组。
-数组中 `balance` 之和即为账户 `{accountAddress}` 的 `ENERGY` 余额。
+属性 `result.data` 是包含货币类型（`coinType`） 为 `{coin.PackageId}::energy::ENERGY` 的对象数组。  
+数组中 `coinObjectId` 为账户中的货币对象 ID，可以作为开始“生产制造”的输入参数。  
+`balance` 之和即为账户 `{accountAddress}` 的 `ENERGY` 余额。
 
 ### 开始挖矿流程
 
