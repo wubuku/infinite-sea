@@ -1564,6 +1564,96 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
   “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
 
+### 申请 ENERGY
+
+玩家在生产制造以及航行时都需要花费 `ENERGY`，玩家可以使用以下 Sui CLI 命令申请 `ENERGY`：
+
+```powershell
+sui client call --package  {coin.PackageId} --module energy_faucet --function request_a_drop --args {coin.FaucetId} --json
+```
+参数解释：
+
+* {main.PackageId}：Coin 合约包的 ID。
+* {coin.FaucetId}：类型为 `&mut EnergyFaucet`。CLI 中可传入 `ENERGY` 的水龙头对象 ID。
+
+该命令成功执行后，可获得以下类似输出：
+```json
+{
+  "digest": "23QgAnoCRm5eFxBc3eHGURW6My6VsUD2gGTUB7d9p8UQ",
+  "effects": {
+    "messageVersion": "v1",
+    "status": {
+      "status": "success"
+    }
+  },
+  "objectChanges": [   
+    {
+      "type": "created",
+      "sender": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b",
+      "owner": {
+        "AddressOwner": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b"
+      },
+      "objectType": "0x2::coin::Coin<0x9582e95e1507ae556aa3f708d19c48a5d65446d8c5cbf15b3ebed26eae6a8c87::energy::ENERGY>",
+      "objectId": "0x4acc392e33950370418c9c0aed0a3a2bc346f667e41fe3b227433a934b7777c9",
+      "version": "43412199",
+      "digest": "3Dee2vt3V1HKfkf2KMBG5uzSSnhj2agcPz8U9u1Y8Wgm"
+    }
+  ],
+  "balanceChanges": [
+    {
+      "owner": {
+        "AddressOwner": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b"
+      },
+      "coinType": "0x9582e95e1507ae556aa3f708d19c48a5d65446d8c5cbf15b3ebed26eae6a8c87::energy::ENERGY",
+      "amount": "100000000000"
+    }
+  ],
+  "confirmedLocalExecution": true
+}
+```
+在 `objectChanges` 中可以看到对象类型`objectType` 为 `0x2::coin::Coin<{coin.PackageId}::energy::ENERGY>` 的对象，
+以及在 `balanceChanges` 中可以看到 `coinType` 为 `{coin.PackageId}::energy::ENERGY` 和数量 `amount` 为 `100000000000` 的对象。 
+
+### 查询 `ENERGY`余额
+玩家可以通过以下 `curl` 命令获取指定账户中的 `ENERGY` 余额：
+```powershell
+curl -X POST \
+-H "Content-Type: application/json" \
+-d '{"jsonrpc":"2.0","id":1,"method":"suix_getCoins","params":["{accountAddress}","{coin.PackageId}::energy::ENERGY"]' https://fullnode.testnet.sui.io/
+```
+参数解释：
+* `{accountAddress}`：类型为 `address`。玩家的 `Sui` 账户地址。
+* `{coin.PackageId}`: Coin 合约包 ID。
+
+可以获取以下格式的输出：
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "data": [{
+      "coinType": "0x9582e95e1507ae556aa3f708d19c48a5d65446d8c5cbf15b3ebed26eae6a8c87::energy::ENERGY",
+      "coinObjectId": "0x4acc392e33950370418c9c0aed0a3a2bc346f667e41fe3b227433a934b7777c9",
+      "version": "43412199",
+      "digest": "3Dee2vt3V1HKfkf2KMBG5uzSSnhj2agcPz8U9u1Y8Wgm",
+      "balance": "100000000000",
+      "previousTransaction": "23QgAnoCRm5eFxBc3eHGURW6My6VsUD2gGTUB7d9p8UQ"
+    }, {
+      "coinType": "0x9582e95e1507ae556aa3f708d19c48a5d65446d8c5cbf15b3ebed26eae6a8c87::energy::ENERGY",
+      "coinObjectId": "0x6fb61f92a8a1e9215c9bfee2771353b95751d6a65677144af5fd489f68c74f54",
+      "version": "43412198",
+      "digest": "mBgH9LBehuzBAPLTxoXNHztNuNTdwMh6xRgVk3J4c4m",
+      "balance": "100000000000",
+      "previousTransaction": "DaYqN2zKr65WBETvpHcFamWCAzk5hte2goRGbVmkoQiS"
+    }],
+    "nextCursor": "0x6fb61f92a8a1e9215c9bfee2771353b95751d6a65677144af5fd489f68c74f54",
+    "hasNextPage": false
+  },
+  "id": 1
+}
+```
+属性 `result.data` 是包含类型（`coinType`） 为 `{coin.PackageId}::energy::ENERGY` 的对象数组。
+数组中 `balance` 之和即为账户 `{accountAddress}` 的 `ENERGY` 余额。
+
 ### 开始挖矿流程
 
 玩家进行挖矿流程时，需要执行“开始挖矿流程”命令：
