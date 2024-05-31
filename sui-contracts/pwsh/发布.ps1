@@ -36,6 +36,9 @@ $testSkillProcessWooding = $true
 
 $playerName = 'John'
 
+# Mint Energy Amount
+$mintAmout = '999444440000000'
+
 
 
 
@@ -158,12 +161,11 @@ for ($i = 0; $i -lt $fileContent.Count; $i++) {
 $fileContent | Set-Content $file
 "Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-"先给自己分配 Mint 100000000 ENERGY..." | Tee-Object -FilePath $logFile -Append | Write-Host
+"先给自己分配 Mint $mintAmount ENERGY..." | Tee-Object -FilePath $logFile -Append | Write-Host
 $mintJson = ""
-$minAmout = '100000000'
 $energyId = ""
 try {
-    $mintJson = sui client call --package $coinPackingId --module energy --function mint --args $treasuryCap $minAmout --gas-budget 19000000 --json
+    $mintJson = sui client call --package $coinPackingId --module energy --function mint --args $treasuryCap $mintAmout --gas-budget 19000000 --json
     if (-not ('System.Object[]' -eq $mintJson.GetType())) {
         "分配 Mint 失败: $mintJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
@@ -188,7 +190,7 @@ try {
             break
         }
     }
-    if ($minAmout -ne $mintedAmount) {
+    if ($mintAmout -ne $mintedAmount) {
         'Mint ENERGY Failed?' | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
         Set-Location $startLocation
         return
@@ -204,6 +206,34 @@ catch {
 if ($energyId -eq "") {
     "未能获取Coin<ENERGY> Id，请停下来检查一下什么情况。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
 }
+
+"`n创建一个水龙头..." | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+$createFaucetResult = ""
+$faucetAmount = $mintAmout / 2
+try {
+    $createFaucetResult = sui client call --package $coinPackingId --module energy_faucet --function create_faucet --args $energyId $faucetAmount --json
+    if (-not ('System.Object[]' -eq $createFaucetResult.GetType())) {
+        "创建水龙头时返回: $createFaucetResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    $FaucetResultObj = $createFaucetResult | ConvertFrom-Json
+    foreach ($object in $FaucetResultObj.objectChanges) {
+        if ($object.ObjectType -like '*energy_faucet::EnergyFaucet') {
+            $FaucetId = $object.objectId
+            "水龙头 Id: $FaucetId ，预存 Energy 数量： $faucetAmount" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            $dataCoin | Add-Member -MemberType NoteProperty -Name "FaucetId" -Value $FaucetId
+            break
+        }
+    }
+}
+catch {
+    "创建水龙头失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+    "返回的结果为:$createFaucetResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    Set-Location $startLocation
+    return    
+}
+"水龙头创建成功。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
 
 Set-Location $startLocation
 
