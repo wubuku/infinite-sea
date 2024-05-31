@@ -207,6 +207,10 @@ if ($energyId -eq "") {
     "未能获取Coin<ENERGY> Id，请停下来检查一下什么情况。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
 }
 
+"`n休息一下，以免不能及时同步..." | Write-Host
+Start-Sleep -Seconds 3
+"休息完成，继续干活..." | Write-Host
+
 "`n创建一个水龙头..." | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
 $createFaucetResult = ""
 $faucetAmount = $mintAmout / 2
@@ -233,7 +237,7 @@ catch {
     Set-Location $startLocation
     return    
 }
-"水龙头创建成功。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+"水龙头创建成功。よくできました❣" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
 
 Set-Location $startLocation
 
