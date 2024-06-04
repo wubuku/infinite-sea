@@ -23,7 +23,7 @@ public class UpdateRosterLocationTaskService {
 
     @Scheduled(fixedDelayString = "${sui.contract.update-all-roster-locations.fixed-delay:5000}")
     @Transactional
-    public void updateAllPlayerStates() {
+    public void updateAllRosterLocations() {
         rosterStateQueryRepository.getAll(0, Integer.MAX_VALUE).forEach(s -> {
             String objectId = s.getId_();
             if (s.getTargetCoordinates() == null ||
