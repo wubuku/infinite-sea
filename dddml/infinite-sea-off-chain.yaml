@@ -1,0 +1,13 @@
+aggregates:
+  RosterLocation:
+    id:
+      name: RosterObjectId
+      type: address
+    noSurrogateId: true
+    properties:
+      Coordinates:
+        type: Coordinates
+        description: "The quasi-real-time coordinates of the roster."
+      Status:
+        type: u8
+        description: "The quasi-real-time status of the roster."

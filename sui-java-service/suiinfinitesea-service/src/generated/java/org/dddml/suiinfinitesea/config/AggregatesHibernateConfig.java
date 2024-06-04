@@ -17,6 +17,9 @@ import org.dddml.suiinfinitesea.domain.roster.hibernate.*;
 import org.dddml.suiinfinitesea.domain.shipbattle.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.shipbattle.hibernate.*;
+import org.dddml.suiinfinitesea.domain.rosterlocation.*;
+import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.rosterlocation.hibernate.*;
 import org.dddml.suiinfinitesea.domain.item.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.item.hibernate.*;
@@ -229,6 +232,51 @@ public class AggregatesHibernateConfig {
                 shipBattleEventStore,
                 shipBattleStateRepository,
                 shipBattleStateQueryRepository
+        );
+        return applicationService;
+    }
+
+
+
+    @Bean
+    public RosterLocationStateRepository rosterLocationStateRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateRosterLocationStateRepository repository = new HibernateRosterLocationStateRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public RosterLocationStateQueryRepository rosterLocationStateQueryRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateRosterLocationStateQueryRepository repository = new HibernateRosterLocationStateQueryRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public HibernateRosterLocationEventStore rosterLocationEventStore(SessionFactory hibernateSessionFactory) {
+        HibernateRosterLocationEventStore eventStore = new HibernateRosterLocationEventStore();
+        eventStore.setSessionFactory(hibernateSessionFactory);
+        return eventStore;
+    }
+
+    @Bean
+    public AbstractRosterLocationApplicationService.SimpleRosterLocationApplicationService rosterLocationApplicationService(
+            @Qualifier("rosterLocationEventStore") EventStore rosterLocationEventStore,
+            RosterLocationStateRepository rosterLocationStateRepository,
+            RosterLocationStateQueryRepository rosterLocationStateQueryRepository
+    ) {
+        AbstractRosterLocationApplicationService.SimpleRosterLocationApplicationService applicationService = new AbstractRosterLocationApplicationService.SimpleRosterLocationApplicationService(
+                rosterLocationEventStore,
+                rosterLocationStateRepository,
+                rosterLocationStateQueryRepository
         );
         return applicationService;
     }

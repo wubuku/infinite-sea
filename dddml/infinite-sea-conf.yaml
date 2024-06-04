@@ -29,6 +29,8 @@ configuration:
         parameters:
           "org.hibernate.type.ParameterType": "{type}"
 
+  sui:
+    offChainObjectNames: [ "RosterLocation" ]
 
 typeDefinitions:
   ENERGY:
