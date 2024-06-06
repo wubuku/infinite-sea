@@ -1,5 +1,7 @@
 # Infinite Seas
 
+English | [中文版](./README_CN.md)
+
 We are creating a maritime trading, managing, and battling diplomatic fully on-chain game. 
 we believe the best fully onchain games should be fun and infinite (define by games that are non-session and infinitely large map) with an open economy design. 
 ![image](https://hackmd.io/_uploads/H1yiNQVkA.jpg)
@@ -43,6 +45,7 @@ what's fun about our game?
 
 
 # Dddappp engine We built
+
 We used dddappp, a low-code platform, to develop this game.
 Dddappp is a low-code framework with built-in indexer for general purpose Dapp development. You can say it is like a game engine which can significantly accelerate our development process. 
 
@@ -56,8 +59,15 @@ and we're done with the development of a fully on-chain game.
 
 [TBD]
 
-
 ## Programming
+
+> **Tip**
+>
+> You may notice that the Chinese version of this article is much longer than this English version.
+> Because of the developer community of this game, we will prioritize updating the Chinese version.
+> If you want more detailed information about the development,
+> perhaps you can check out the Chinese version first using software such as Google Translate.
+> Many apologies.
 
 ### Writing DDDML model files
 
