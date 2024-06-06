@@ -41,6 +41,8 @@ catch {
 }
 "当前 Energy 余额，总计：$requestBeforeAmount" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
 
+return
+
 $requestResult = ""
 $requestAmount = 100000000000
 try {

@@ -810,7 +810,7 @@ if ($testSkillProcessMining) {
     $resource_cost = 1
     $requirements_level = 1
     $base_quantity = 1
-    $base_experience = 10
+    $base_experience = 0
     $energy_cost = 1
     $success_rate = 100
     "`n生成挖矿配方 Item Creation..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
@@ -995,9 +995,9 @@ if ($testSkillProcessFarming) {
     "`n现在开始创建一个配方Item Production,使用棉花种子种植棉花..." | Tee-Object $logFile -Append | Write-Host 
     $itemCottonSeedsId = "[" + $($itemData.ItemCottonSeeds.ItemId) + "]"
     $itemProductionCottonSeedsToCottonId = ''
-    $costTime = 5
+    $costTime = 15
     try {
-        $result = sui client call --package $commonPackageId --module item_production_aggregate --function create --args '0' $itemData.ItemCottons.ItemId $commonPublisherId $itemCottonSeedsId '[1]' '1' '5' '85' $costTime '5' '100' $ItemProductionTableId --gas-budget 11000000 --json
+        $result = sui client call --package $commonPackageId --module item_production_aggregate --function create --args '0' $itemData.ItemCottons.ItemId $commonPublisherId $itemCottonSeedsId '[1]' '1' '5' '0' $costTime '5' '100' $ItemProductionTableId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "添加配方Item Production(种植棉花)时返回信息: $result `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             Set-Location $startLocation
@@ -1106,7 +1106,7 @@ if ($testSkillProcessWooding) {
     $woodcuttingTime = 3
     "`n搞一个伐木配方 Item Creation..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     try {
-        $result = sui client call --package $commonPackageId --module item_creation_aggregate --function create --args $woodcutting $($itemData.ItemNormalLogs.ItemId) $commonPublisherId 1 1 1 10 $woodcuttingTime 5 100  $itemCreationTableId --gas-budget 44000000 --json
+        $result = sui client call --package $commonPackageId --module item_creation_aggregate --function create --args $woodcutting $($itemData.ItemNormalLogs.ItemId) $commonPublisherId 1 1 1 0 $woodcuttingTime 1 100  $itemCreationTableId --gas-budget 44000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "制作伐木配方返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             Set-Location $startLocation
@@ -1315,7 +1315,7 @@ if ($testSkillProcessWooding) {
 
 $itemProductionCraftingId = $null
 #造船一次耗费的时间（秒）
-$craftingTime = 3
+$craftingTime = 15
 $crafingResourceIds = @()
 $crafingResourceQuantities = @()
 "`n搞一个造船配方 Item Production..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
@@ -1329,7 +1329,7 @@ $crafingResourceIds_ = "[" + ($crafingResourceIds -join ",") + "]"
 $crafingResourceQuantities_ = "[" + ($crafingResourceQuantities -join ",") + "]"
 
 try {
-    $result = sui client call --package $commonPackageId --module item_production_aggregate --function create --args  $crafting  $($itemData.ItemShip.ItemId)  $commonPublisherId $crafingResourceIds_ $crafingResourceQuantities_ 1 1 25 $craftingTime 10 100 $ItemProductionTableId --gas-budget 42000000 --json
+    $result = sui client call --package $commonPackageId --module item_production_aggregate --function create --args  $crafting  $($itemData.ItemShip.ItemId)  $commonPublisherId $crafingResourceIds_ $crafingResourceQuantities_ 1 1 0 $craftingTime 5 100 $ItemProductionTableId --gas-budget 42000000 --json
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "制作造船配方返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
