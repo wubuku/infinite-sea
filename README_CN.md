@@ -56,6 +56,8 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
 
 #### 位置坐标的表示问题
 
+需求是：假设岛屿均匀分布在地图上, 相邻的岛屿之间（从 A 岛 到离它最近的 B岛）的航行时间应该是 20 分钟——以 speed 为 5 的船/船队的速度计算。
+
 后端建议：
 
 * 合约（后端）的坐标值以 u32（无符号 32 位整数，其最大值为 `4,294,967,295`）表示，因为主流的智能合约语言（包括 Move）一般都没有“有符号整数”的类型。
@@ -2377,7 +2379,7 @@ sui client object 0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321
 如果获取的是 `ObjectTable` 类型的表，
 那么，`suix_getDynamicFields` 方法返回分页列表中的元素，`"type":"DynamicObject"`。
 
-### Test off-chain service
+### 测试链下服务（indexer）
 
 #### Configuring off-chain service
 

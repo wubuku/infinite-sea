@@ -44,7 +44,7 @@ what's fun about our game?
 * **The depth and variety of the game system make achieving the objectives uncertain**. While information about the economy is exposed, it is often difficult to judge what to build in an island next, what skill sets will develop next. As players gain experience, they learn the ins and outs of the system, but it is still sufficiently complex to be hard to master. 
 
 
-# Dddappp engine We built
+## The dddappp engine we built
 
 We used dddappp, a low-code platform, to develop this game.
 Dddappp is a low-code framework with built-in indexer for general purpose Dapp development. You can say it is like a game engine which can significantly accelerate our development process. 
@@ -59,15 +59,16 @@ and we're done with the development of a fully on-chain game.
 
 [TBD]
 
-## Programming
-
 > **Tip**
 >
-> You may notice that the Chinese version of this article is much longer than this English version.
+> You may notice that the [Chinese version](./README_CN.md) of this article is much longer than this English version.
 > Because of the developer community of this game, we will prioritize updating the Chinese version.
 > If you want more detailed information about the development,
-> perhaps you can check out the Chinese version first using software such as Google Translate.
+> perhaps you can check out the [Chinese version](./README_CN.md) first using software such as Google Translate.
 > Many apologies.
+
+
+## Programming
 
 ### Writing DDDML model files
 
@@ -80,6 +81,7 @@ The model files are located in the directory `. /dddml`.
 
 ### Generating code
 
+In repository root directory, run:
 
 ```shell
 docker run \
@@ -121,8 +123,14 @@ you just need to configure the digests of transactions that publish the contract
 
 ## Test application
 
+### Test on-chain contract
 
-### Test off-chain service
+[TBD]
+
+Refer to [Chinese version](./README_CN.md) for more information.
+
+
+### Test off-chain service (indexer)
 
 #### Configuring off-chain service
 
