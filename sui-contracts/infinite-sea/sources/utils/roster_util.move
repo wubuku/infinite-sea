@@ -170,7 +170,7 @@ module infinite_sea::roster_util {
         let updated_coordinates = roster::updated_coordinates(roster);
         let coordinates_updated_at = roster::coordinates_updated_at(roster);
         let new_status = old_status;
-        let (speed_numerator, speed_denominator) = speed_util::speed_to_coordinate_units_per_second(
+        let (speed_numerator, speed_denominator) = speed_util::speed_property_to_coordinate_units_per_second(
             roster::speed(roster)
         );
         let now_time = clock::timestamp_ms(clock) / 1000;
@@ -185,5 +185,14 @@ module infinite_sea::roster_util {
         };
         coordinates_updated_at = now_time;
         (updated_coordinates, coordinates_updated_at, new_status)
+    }
+
+    public fun calculate_total_time(origin: Coordinates, destination: Coordinates, speed_property: u32): u64 {
+        let distance = direct_route_util::get_distance(origin, destination);
+        let (speed_numerator, speed_denominator) = speed_util::speed_property_to_coordinate_units_per_second(
+            speed_property
+        );
+        let total_time = distance * (speed_denominator as u64) / (speed_numerator as u64);
+        total_time
     }
 }

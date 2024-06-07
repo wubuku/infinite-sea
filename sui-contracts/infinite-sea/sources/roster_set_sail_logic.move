@@ -1,6 +1,7 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::roster_set_sail_logic {
     use std::option;
+    use std::vector;
 
     use sui::balance;
     use sui::balance::Balance;
@@ -21,7 +22,8 @@ module infinite_sea::roster_set_sail_logic {
     const ERosterUnfitToSail: u64 = 10;
     const ENotEnoughEnergy: u64 = 11;
 
-    const MIN_SAIL_ENERGY: u64 = 500; //todo Is this a good value?
+    const ENERGY_AMOUNT_PER_SECOND_PER_SHIP: u64 = 1388889;
+    //const MIN_SAIL_ENERGY: u64 = 500;
 
     public(friend) fun verify(
         player: &Player,
@@ -50,9 +52,11 @@ module infinite_sea::roster_set_sail_logic {
             abort ERosterUnfitToSail
         };
         let energy_cost = balance::value(energy);
-        //let distance = direct_route_util::get_distance(updated_coordinates, target_coordinates);
-        //todo assert!(energy_cost >= /* get_energy_cost_by_distance() */, ENotEnoughEnergy);
-        assert!(energy_cost >= MIN_SAIL_ENERGY, ENotEnoughEnergy);
+        let total_time = roster_util::calculate_total_time(updated_coordinates, target_coordinates,
+            roster::speed(roster));
+        let ship_count = vector::length(roster::borrow_ship_ids(roster));
+        //assert!(energy_cost >= MIN_SAIL_ENERGY, ENotEnoughEnergy);
+        assert!(energy_cost >= total_time * ship_count * ENERGY_AMOUNT_PER_SECOND_PER_SHIP, ENotEnoughEnergy);
         let set_sail_at = clock::timestamp_ms(clock) / 1000;
         roster::new_roster_set_sail(roster, target_coordinates, set_sail_at, updated_coordinates, energy_cost)
     }
