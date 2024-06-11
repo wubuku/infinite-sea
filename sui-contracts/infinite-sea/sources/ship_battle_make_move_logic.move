@@ -10,6 +10,7 @@ module infinite_sea::ship_battle_make_move_logic {
     use sui::object_table;
     use sui::tx_context::TxContext;
     use infinite_sea_common::battle_status;
+    use infinite_sea_common::fight_to_death;
     use infinite_sea_common::item_id_quantity_pairs;
     use infinite_sea_common::roster_status;
     use infinite_sea_common::ship_battle_command;
@@ -49,10 +50,6 @@ module infinite_sea::ship_battle_make_move_logic {
 
         let defender_command: u8 = ship_battle_command::attack();//Unused for now
         let _ = player; //Unused for now
-        //
-        //permission_util::assert_sender_is_player_owner(player, ctx);
-        //ship_battle_util::assert_ids_are_consistent_and_player_is_current_round_mover(player, ship_battle, initiator, responder);
-        //
 
         let now_time = clock::timestamp_ms(clock) / 1000;
         let current_round_number = ship_battle::round_number(ship_battle);
@@ -80,11 +77,16 @@ module infinite_sea::ship_battle_make_move_logic {
         let seed_1 = object::id_to_bytes(&ship_battle::id(ship_battle));
         vector::append(&mut seed_1, vector[(current_round_number % 256 as u8)]);
 
-        let defender_damage_taken = ship_battle_util::perform_attack(
-            seed_1, clock,
-            ship::attack(attacker_ship), ship::protection(defender_ship), //attacker_ship, defender_ship,
-        );
+        // let defender_damage_taken = ship_battle_util::perform_attack(
+        //     seed_1, clock,
+        //     ship::attack(attacker_ship), ship::protection(defender_ship), //attacker_ship, defender_ship,
+        // );
         let defender_ship_hp = ship::health_points(defender_ship);
+        let attacker_ship_hp = ship::health_points(attacker_ship);
+        let (attacker_damage_taken, defender_damage_taken) = fight_to_death::perform(clock, seed_1,
+            ship::attack(attacker_ship), ship::protection(defender_ship), attacker_ship_hp,
+            ship::attack(defender_ship), ship::protection(attacker_ship), defender_ship_hp,
+        );
         if (defender_damage_taken >= defender_ship_hp) {
             defender_damage_taken = defender_ship_hp;
             defender_ship_hp = 0;
@@ -101,15 +103,15 @@ module infinite_sea::ship_battle_make_move_logic {
             is_batlle_ended = true;
             winner = option::some(*option::borrow(&round_mover));
         };
-        let attacker_damage_taken = 0;
-        let seed_2 = seed_1;
-        vector::append(&mut seed_2, vector[2]);
-        if (!is_batlle_ended) {
-            attacker_damage_taken = ship_battle_util::perform_attack(
-                seed_2, clock,
-                ship::attack(defender_ship), ship::protection(attacker_ship),
-            );
-            let attacker_ship_hp = ship::health_points(attacker_ship);
+        // let attacker_damage_taken = 0;
+        // let seed_2 = seed_1;
+        // vector::append(&mut seed_2, vector[2]);
+        if (attacker_damage_taken > 0) { //if (!is_batlle_ended) {
+            // attacker_damage_taken = ship_battle_util::perform_attack(
+            //     seed_2, clock,
+            //     ship::attack(defender_ship), ship::protection(attacker_ship),
+            // );
+            // let attacker_ship_hp = ship::health_points(attacker_ship);
             if (attacker_damage_taken >= attacker_ship_hp) {
                 attacker_damage_taken = attacker_ship_hp;
                 attacker_ship_hp = 0;
