@@ -19,8 +19,8 @@ $u32MaxHalf = 2147483647
 $original_x = 0 # $u32MaxHalf
 $original_y = 0 # $u32MaxHalf
 
-$block_width = 10 #5000
-$block_height = 10 #5000
+$block_width = 100 #5000
+$block_height = 100 #5000
 
 $horizontal_number = [Int32][Math]::Floor($u32Max / $block_width) 
 if ($horizontal_number % 2 -eq 1) {
@@ -33,15 +33,19 @@ if ($vertical_number % 2 -eq 1) {
 
 "一共存在 " + $horizontal_number * $vertical_number + " 个区" | Write-Host -ForegroundColor Blue
 
+$seqNo = 333
 
-
-$seqNo = 6
+#最多能有多少圈？
+$maxLoop = $horizontal_number
+if ($horizontal_number -ge $vertical_number) { 
+    $maxLoop = $vertical_number 
+}
 
 # 包括本圈在内一共多少区
 $current = 0 
 $next = 0
 $loop = 0
-for ($i = 1; $i -lt 10; $i++) {    
+for ($i = 1; $i -le $maxLoop ; $i++) {    
     $current = $current + (2 * $i - 1) * 4;
     $next = $current + (2 * ($i + 1) - 1) * 4
     if ($seqNo -le $current) {
@@ -49,16 +53,14 @@ for ($i = 1; $i -lt 10; $i++) {
         "位于第 " + $loop + " 圈" | Write-Host
         break;
     }
-    # elseif ( $quence -lt $next) {
-    #     $loop = $i + 1
-    #     "位于第 " + $loop + " 圈" | Write-Host
-    #     break;
-    # }
     if ( $seqNo -le $next) {
         $loop = $i + 1
         "位于第 " + $loop + " 圈" | Write-Host
         break;
     }
+}
+if ($loop -eq 0) {
+    "超范围了" | Write-Host -ForegroundColor Red
 }
 #$current_loop_block = 4
 #$blocks_per_quadrant = 1
