@@ -14,7 +14,7 @@ $dataInfo = $ComeFromFile | ConvertFrom-Json
 
 
 #释放的块序号
-$seqNo = 5
+$seqNo = 1
 
 
 $u32Max = 4294967295
@@ -22,7 +22,7 @@ $u32MaxHalf = 2147483647
 
 
 $rand_rate_x = 0.2
-$rand_rate_y = 0.2
+$rand_rate_y = 0.25
 
 $original_x = 0 # $u32MaxHalf
 $original_y = 0 # $u32MaxHalf
@@ -33,8 +33,8 @@ $island_width = 50 #5000
 $island_height = 50 #5000
 
 
-$block_width = 530 #50000
-$block_height = 540 #50000
+$block_width = 500 #50000
+$block_height = 500 #50000
 
 if ($block_width -lt $island_width -or $block_height -lt $island_height) {
     "分配区域的尺寸不能小于岛屿的尺寸" | Write-Host -ForegroundColor Red
@@ -288,14 +288,16 @@ for ($i = 0; $i -lt $column; $i++) {
         $m = (-1 * $rand_rate_y * 100)
         $n = ($rand_rate_y * 100 + 1)
         $coordinate.RateY = Get-Random -Minimum $m -Maximum $n
-        "，分别波动:($($coordinate.RateX/100),$($coordinate.RateY/100))后变为：" | Write-Host -ForegroundColor Green -NoNewline
+        "，分别波动:($($coordinate.RateX/100),$($coordinate.RateY/100)) 后变为" | Write-Host -ForegroundColor Green -NoNewline
         $coordinate.RandomX = $coordinate.InitX + ($island_width * $coordinate.RateX) / 100
         $coordinate.RandomY = $coordinate.InitY + ($island_height * $coordinate.RateY) / 100
-        "，($($coordinate.RandomX),$($coordinate.RandomY))" | Write-Host -ForegroundColor Green 
+        "($($coordinate.RandomX),$($coordinate.RandomY))" | Write-Host -ForegroundColor Green 
         $coordinates += $coordinate
     }
     "`n" | Write-Host
 }
+
+
 
 
 
