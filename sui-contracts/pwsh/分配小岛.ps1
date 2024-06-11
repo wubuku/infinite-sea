@@ -13,14 +13,51 @@ $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
 
+#释放的块序号
+$seqNo = 5
+
+
 $u32Max = 4294967295
 $u32MaxHalf = 2147483647
+
+
+$rand_rate_x = 0.2
+$rand_rate_y = 0.2
 
 $original_x = 0 # $u32MaxHalf
 $original_y = 0 # $u32MaxHalf
 
-$block_width = 100 #5000
-$block_height = 100 #5000
+
+
+$island_width = 50 #5000
+$island_height = 50 #5000
+
+
+$block_width = 530 #50000
+$block_height = 540 #50000
+
+if ($block_width -lt $island_width -or $block_height -lt $island_height) {
+    "分配区域的尺寸不能小于岛屿的尺寸" | Write-Host -ForegroundColor Red
+}
+
+
+#分配的区域可以放多少行小岛
+$line = [Int32][Math]::Floor($block_height / $island_height)
+#分配的区域可以放多少列小岛
+$column = [Int32][Math]::Floor($block_width / $island_width)
+
+#岛与岛之间纵向空隙总和
+$vertical_gap = $block_height % $island_height
+#岛与岛之间横向空隙总和
+$horizontal_gap = $block_width % $island_width
+
+#行与行之间的空隙，这里采用了直接除以多少行的做法，还可以采用除以($line-1)和除以($line+1)的做法。
+#直接除以行数，那么在第一行后才累加空隙，最后一行后防止剩余空隙
+$per_vertical_gap = [Int32][Math]::Floor($vertical_gap / $line)
+$per_horizontal_gap = [Int32][Math]::Floor($horizontal_gap / $column)
+
+"每块区域大小(宽: $block_width ,高: $block_height ),岛屿大小(宽: $island_width ,高: $island_height), 可以分配岛屿个数: $($line*$column) ,其中横向可以摆放 $column 列,纵向可以摆放 $line 行,列之间空隙 $per_vertical_gap ,行之间空隙 $per_horizontal_gap" | Write-Host -ForegroundColor Green
+
 
 $horizontal_number = [Int32][Math]::Floor($u32Max / $block_width) 
 if ($horizontal_number % 2 -eq 1) {
@@ -33,7 +70,6 @@ if ($vertical_number % 2 -eq 1) {
 
 "一共存在 " + $horizontal_number * $vertical_number + " 个区" | Write-Host -ForegroundColor Blue
 
-$seqNo = 333
 
 #最多能有多少圈？
 $maxLoop = $horizontal_number
@@ -225,6 +261,42 @@ else {
     }
 }
 "左下角坐标为：($left,$bottom)" | Write-Host -ForegroundColor Yellow
+
+Add-Type -TypeDefinition @"
+public class Coordinate{
+    public int InitX { get; set; }
+    public int InitY { get; set; }
+    public int RateX { get; set; }
+    public int RateY { get; set; }
+    public int RandomX { get; set; }
+    public int RandomY { get; set; }
+}
+"@
+$coordinates = @()
+for ($i = 0; $i -lt $column; $i++) {
+    "第 $($i+1) 列中心坐标" | Write-Host -ForegroundColor Red 
+    for ($j = 0; $j -lt $line; $j++) {
+        $x = $left + ($i) * ($per_horizontal_gap + $island_width) + $island_width / 2
+        $y = $bottom + ($j) * ($per_horizontal_gap + $island_height) + $island_height / 2
+        "初始：($x,$y)" | Write-Host -ForegroundColor Green -NoNewline
+        $coordinate = New-Object Coordinate
+        $coordinate.InitX = $x
+        $coordinate.InitY = $y
+        $a = (-1 * $rand_rate_x * 100)
+        $b = ($rand_rate_x * 100 + 1)
+        $coordinate.RateX = Get-Random -Minimum $a -Maximum $b 
+        $m = (-1 * $rand_rate_y * 100)
+        $n = ($rand_rate_y * 100 + 1)
+        $coordinate.RateY = Get-Random -Minimum $m -Maximum $n
+        "，分别波动:($($coordinate.RateX/100),$($coordinate.RateY/100))后变为：" | Write-Host -ForegroundColor Green -NoNewline
+        $coordinate.RandomX = $coordinate.InitX + ($island_width * $coordinate.RateX) / 100
+        $coordinate.RandomY = $coordinate.InitY + ($island_height * $coordinate.RateY) / 100
+        "，($($coordinate.RandomX),$($coordinate.RandomY))" | Write-Host -ForegroundColor Green 
+        $coordinates += $coordinate
+    }
+    "`n" | Write-Host
+}
+
 
 
 
