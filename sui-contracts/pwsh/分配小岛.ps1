@@ -2,7 +2,7 @@ $startLocation = Get-Location;
 
 $now = Get-Date
 $formattedNow = $now.ToString('yyyyMMddHHmmss')
-$logFile = "$startLocation\set_sail_$formattedNow.log"
+$logFile = "$startLocation\islands_$formattedNow.log"
 
 $dataFile = "$startLocation\data.json"
 if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
@@ -12,6 +12,14 @@ if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
 $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
+$itemDataFile = "$startLocation\item.json"
+if (-not (Test-Path -Path $itemDataFile -PathType Leaf)) {
+    "文件 $itemDataFile 不存在 " | Write-Host  -ForegroundColor Red
+    Set-Location $startLocation
+    return
+}
+$itemDataJson = Get-Content -Raw -Path $itemDataFile
+$itemData = $itemDataJson | ConvertFrom-Json
 
 #释放的块序号
 $seqNo = 1
@@ -20,9 +28,9 @@ $seqNo = 1
 $u32Max = 4294967295
 $u32MaxHalf = 2147483647
 
-
-$rand_rate_x = 0.2
-$rand_rate_y = 0.25
+#最终坐标在初始坐标上的随机波动范围
+$rand_rate_x = 0.3
+$rand_rate_y = 0.3
 
 $original_x = 0 # $u32MaxHalf
 $original_y = 0 # $u32MaxHalf
@@ -41,9 +49,9 @@ if ($block_width -lt $island_width -or $block_height -lt $island_height) {
 }
 
 
-#分配的区域可以放多少行小岛
+#分配的区域可以放多少 行 小岛
 $line = [Int32][Math]::Floor($block_height / $island_height)
-#分配的区域可以放多少列小岛
+#分配的区域可以放多少 列 小岛
 $column = [Int32][Math]::Floor($block_width / $island_width)
 
 #岛与岛之间纵向空隙总和
@@ -272,7 +280,8 @@ public class Coordinate{
     public int RandomY { get; set; }
 }
 "@
-$coordinates = @()
+$coordinates = @()     
+$random = New-Object System.Random  
 for ($i = 0; $i -lt $column; $i++) {
     "第 $($i+1) 列中心坐标" | Write-Host -ForegroundColor Red 
     for ($j = 0; $j -lt $line; $j++) {
@@ -284,10 +293,10 @@ for ($i = 0; $i -lt $column; $i++) {
         $coordinate.InitY = $y
         $a = (-1 * $rand_rate_x * 100)
         $b = ($rand_rate_x * 100 + 1)
-        $coordinate.RateX = Get-Random -Minimum $a -Maximum $b 
+        $coordinate.RateX = $random.Next($a, $b)
         $m = (-1 * $rand_rate_y * 100)
         $n = ($rand_rate_y * 100 + 1)
-        $coordinate.RateY = Get-Random -Minimum $m -Maximum $n
+        $coordinate.RateY = $random.Next($m, $n)
         "，分别波动:($($coordinate.RateX/100),$($coordinate.RateY/100)) 后变为" | Write-Host -ForegroundColor Green -NoNewline
         $coordinate.RandomX = $coordinate.InitX + ($island_width * $coordinate.RateX) / 100
         $coordinate.RandomY = $coordinate.InitY + ($island_height * $coordinate.RateY) / 100
@@ -295,6 +304,50 @@ for ($i = 0; $i -lt $column; $i++) {
         $coordinates += $coordinate
     }
     "`n" | Write-Host
+}
+
+
+#岛屿默认分配的资源，棉花种子必须放在第三位
+$islandResources = $itemData.ResourceTypeWoodcutting, $itemData.ResourceTypeMining , $itemData.ItemCottonSeeds
+$islandResourceIds = @()
+$islandResourceQuantities = @()
+
+"`n开始添加岛屿" | Write-Host -ForegroundColor Blue
+foreach ($coordinate in $coordinates) {
+    do {
+        $num1 = $random.Next(1, 150)
+        $num2 = $random.Next(1, 150)
+        $num3 = $random.Next(1, 150)
+    } while ((($num1 + $num2 + $num3) -ne 150) -or $num3 % 5 -ne 0)
+    $randomNums = @($num1, $num2, $num3)  
+    "初始坐标($($coordinate.InitX),$($coordinate.InitY))，实际坐标($($coordinate.RandomX),$($coordinate.RandomY))，附加以下资源：" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    for ($k = 0; $k -lt $islandResources.Count; $k++) {
+        "       $($islandResources[$k].Name) ($($islandResources[$k].ChineseName)),数量 $(150+$randomNums[$k])"  |   Write-Host -ForegroundColor Green
+        $islandResourceIds += $islandResources[$k].ItemId
+        $islandResourceQuantities += (150 + $randomNums[$k])
+    }
+    $islandResources_ = "[" + ($islandResourceIds -join ",") + "]"
+    $islandResourceQuantities_ = "[" + ($islandResourceQuantities -join ",") + "]"    
+    try {
+        $command = "sui client call --package $($dataInfo.main.PackageId) --module map_aggregate --function add_island --args $($dataInfo.main.Map) $($dataInfo.main.AdminCap) $($coordinate.RandomX) $($coordinate.RandomY) $islandResources_ $islandResourceQuantities_  --json"
+        $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+        $result = Invoke-Expression -Command $command
+        if (-not ('System.Object[]' -eq $result.GetType())) {
+            "调用接口返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            #Set-Location $startLocation
+            continue
+            #return
+        }
+        $resultObj = $result | ConvertFrom-Json   
+        "添加小岛成功。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green 
+    }
+    catch {
+        "添加小岛失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        #Set-Location $startLocation 
+        continue
+        #return    
+    }
 }
 
 
