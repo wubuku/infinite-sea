@@ -1,4 +1,4 @@
-module infinite_sea_coin::energy_faucet {
+module infinite_sea_faucet::energy_faucet {
     use sui::balance;
     use sui::balance::Balance;
     use sui::clock;
@@ -16,12 +16,6 @@ module infinite_sea_coin::energy_faucet {
 
     use infinite_sea_coin::energy::ENERGY;
 
-    #[test_only]
-    use std::debug;
-    #[test_only]
-    use sui::test_scenario;
-    #[test_only]
-    use sui::test_utils;
 
     #[allow(unused_const)]
     const EInvalidPublisher: u64 = 50;
@@ -29,8 +23,6 @@ module infinite_sea_coin::energy_faucet {
     const EInsufficientBalance: u64 = 70;
     const A_DROP_AMOUNT: u64 = 50_000_000_000;
 
-    ///每个玩家的ENERGY币上限
-    const MAX_AMOUT_PER_PLAYER: u64 = 200_000_000_000;
 
     struct ENERGY_FAUCET has drop {}
 
@@ -119,64 +111,77 @@ module infinite_sea_coin::energy_faucet {
         } = receipt;
     }
 
+    // ------------ tests ------------
+
+    #[test_only]
+    use std::debug;
+    #[test_only]
+    use sui::test_scenario;
+    #[test_only]
+    use sui::test_utils;
+
     #[allow(unused_const)]
     #[test_only]
-    const ADMIN: address = @0xAD;
+    const TEST_ADMIN: address = @0xAD;
     #[allow(unused_const)]
     #[test_only]
-    const ALICE: address = @0xA;
+    const TEST_ALICE: address = @0xA;
     #[allow(unused_const)]
     #[test_only]
-    const EBalanceMismatch: u64 = 80;
+    const ETestBalanceMismatch: u64 = 80;
+
+    // ENERGY Coin Limit per Player
+    #[test_only]
+    const MAX_AMOUT_PER_PLAYER: u64 = 200_000_000_000;
 
     #[test]
     fun test_faucet() {
-        let sc = test_scenario::begin(ADMIN);
-        test_utils::print(b"Init...");
+        let sc = test_scenario::begin(TEST_ADMIN);
+        test_utils::print(b"init ...");
         {
             init(ENERGY_FAUCET {}, test_scenario::ctx(&mut sc));
         };
         {
-            test_scenario::next_tx(&mut sc, ADMIN);
+            test_scenario::next_tx(&mut sc, TEST_ADMIN);
             let faucet = test_scenario::take_shared<EnergyFaucet>(&sc);
             test_utils::print(b"create testing balance:200000000000");
-            //创建200测试能量币
+            // create test energy coin balance
             let balance_testing = balance::create_for_testing<ENERGY>(MAX_AMOUT_PER_PLAYER);
-            test_utils::print(b"before join....");
-            //显示合并前水龙头里面的余额
+            test_utils::print(b"before join ...");
+            // print balance of faucet
             debug::print(&balance::value(&faucet.balance));
-            //将测试币合并到水龙头余额中
+            // merge test balance into the faucet
             balance::join(&mut faucet.balance, balance_testing);
-            test_utils::print(b"afer join....");
-            //显示合并后水龙头余额
+            test_utils::print(b"afer join ...");
+            // print balance of faucet
             debug::print(&balance::value(&faucet.balance));
             test_scenario::return_shared(faucet);
         };
         {
-            test_scenario::next_tx(&mut sc, ALICE);
+            test_scenario::next_tx(&mut sc, TEST_ALICE);
             let faucet = test_scenario::take_shared<EnergyFaucet>(&sc);
-            //创建一个表，值为0
+            // create the clock object, and the time is 0
             let clock = clock::create_for_testing(test_scenario::ctx(&mut sc));
-            //请求一次
-            test_utils::print(b"request first time....");
+            // request faucet for the first time
+            test_utils::print(b"request faucet first time ...");
             request_a_drop(&mut faucet, &clock, test_scenario::ctx(&mut sc));
-            test_utils::print(b"after first time request....");
+            test_utils::print(b"after first time request ...");
             debug::print(&balance::value(&faucet.balance));
-            test_utils::print(b"request again...");
-            //假设正好过了一天
+            test_utils::print(b"request again ...");
+            // assume that exactly one day has passed
             clock::set_for_testing(&mut clock, 24 * 60 * 60 * 1000);
             request_a_drop(&mut faucet, &clock, test_scenario::ctx(&mut sc));
-            test_utils::print(b"after second time request....");
+            test_utils::print(b"after second time request ...");
             debug::print(&balance::value(&faucet.balance));
             clock::destroy_for_testing(clock);
             test_scenario::return_shared(faucet);
         };
         {
-            test_scenario::next_tx(&mut sc, ALICE);
+            test_scenario::next_tx(&mut sc, TEST_ALICE);
             let energy = test_scenario::take_from_sender<Coin<ENERGY>>(&sc);
-            test_utils::print(b"Alice's ENERGY coin Amount:");
+            test_utils::print(b"Alice's ENERGY coin amount:");
             debug::print(&balance::value(coin::balance(&energy)));
-            assert!(balance::value(coin::balance(&energy)) == A_DROP_AMOUNT, EBalanceMismatch);
+            assert!(balance::value(coin::balance(&energy)) == A_DROP_AMOUNT, ETestBalanceMismatch);
             test_scenario::return_to_sender(&sc, energy);
         };
         test_scenario::end(sc);
