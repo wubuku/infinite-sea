@@ -22,7 +22,7 @@ $itemDataJson = Get-Content -Raw -Path $itemDataFile
 $itemData = $itemDataJson | ConvertFrom-Json
 
 #释放的块序号
-$seqNo = 1
+$seqNo = 49
 
 
 $u32Max = 4294967295
@@ -328,26 +328,26 @@ foreach ($coordinate in $coordinates) {
     }
     $islandResources_ = "[" + ($islandResourceIds -join ",") + "]"
     $islandResourceQuantities_ = "[" + ($islandResourceQuantities -join ",") + "]"    
-    try {
-        $command = "sui client call --package $($dataInfo.main.PackageId) --module map_aggregate --function add_island --args $($dataInfo.main.Map) $($dataInfo.main.AdminCap) $($coordinate.RandomX) $($coordinate.RandomY) $islandResources_ $islandResourceQuantities_  --json"
-        $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
-        $result = Invoke-Expression -Command $command
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "调用接口返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            #Set-Location $startLocation
-            continue
-            #return
-        }
-        $resultObj = $result | ConvertFrom-Json   
-        "添加小岛成功。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green 
-    }
-    catch {
-        "添加小岛失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        #Set-Location $startLocation 
-        continue
-        #return    
-    }
+    # try {
+    #     $command = "sui client call --package $($dataInfo.main.PackageId) --module map_aggregate --function add_island --args $($dataInfo.main.Map) $($dataInfo.main.AdminCap) $($coordinate.RandomX) $($coordinate.RandomY) $islandResources_ $islandResourceQuantities_  --json"
+    #     $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+    #     $result = Invoke-Expression -Command $command
+    #     if (-not ('System.Object[]' -eq $result.GetType())) {
+    #         "调用接口返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    #         #Set-Location $startLocation
+    #         continue
+    #         #return
+    #     }
+    #     $resultObj = $result | ConvertFrom-Json   
+    #     "添加小岛成功。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green 
+    # }
+    # catch {
+    #     "添加小岛失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    #     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    #     #Set-Location $startLocation 
+    #     continue
+    #     #return    
+    # }
 }
 
 

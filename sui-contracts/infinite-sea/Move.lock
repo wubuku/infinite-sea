@@ -2,7 +2,7 @@
 
 [move]
 version = 0
-manifest_digest = "3F8A135C48F58CF47F0C8E3D15E1E97E1AA249FBE9B6A85167B343F95E6AEB6F"
+manifest_digest = "955578F861A4123D9905D952938E9A6B85F109880488F558C1B3D50ACD2DB056"
 deps_digest = "060AD7E57DFB13104F21BE5F5C3759D03F0553FC3229247D9A7A6B45F50D03A3"
 
 dependencies = [
@@ -13,11 +13,11 @@ dependencies = [
 
 [[move.package]]
 name = "MoveStdlib"
-source = { local = "../../../../MystenLabs/sui/crates/sui-framework/packages/move-stdlib" }
+source = { git = "https://github.com/MystenLabs/sui.git", rev = "mainnet", subdir = "crates\\sui-framework\\packages\\move-stdlib" }
 
 [[move.package]]
 name = "Sui"
-source = { local = "../../../../MystenLabs/sui/crates/sui-framework/packages/sui-framework" }
+source = { git = "https://github.com/MystenLabs/sui.git", rev = "mainnet", subdir = "crates/sui-framework/packages/sui-framework" }
 
 dependencies = [
   { name = "MoveStdlib" },
@@ -25,7 +25,7 @@ dependencies = [
 
 [[move.package]]
 name = "infinite_sea_coin"
-source = { local = "../infinite-sea-coin" }
+source = { local = "..\\infinite-sea-coin" }
 
 dependencies = [
   { name = "Sui" },
@@ -33,13 +33,21 @@ dependencies = [
 
 [[move.package]]
 name = "infinite_sea_common"
-source = { local = "../infinite-sea-common" }
+source = { local = "..\\infinite-sea-common" }
 
 dependencies = [
   { name = "Sui" },
 ]
 
 [move.toolchain-version]
-compiler-version = "1.22.0"
+compiler-version = "1.27.0"
 edition = "legacy"
 flavor = "sui"
+
+[env]
+
+[env.testnet]
+chain-id = "4c78adac"
+original-published-id = "0x37e881a82f0346daaa0571e6257d0ea8908e2463a2cb21d6ca06381c220c733e"
+latest-published-id = "0x37e881a82f0346daaa0571e6257d0ea8908e2463a2cb21d6ca06381c220c733e"
+published-version = "1"
