@@ -1,13 +1,13 @@
 [package]
-published-at = "0xe2f2b2f8b1fd67114a934b351762bc3b3cbbc60ea6a4a017afbb71faa72053cb"
+#published-at = "0xe2f2b2f8b1fd67114a934b351762bc3b3cbbc60ea6a4a017afbb71faa72053cb"
 name = "infinite_sea_common"
 version = "0.0.1"
 
 [dependencies]
-#Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "mainnet" }
-Sui = { local = "../../../../MystenLabs/sui/crates/sui-framework/packages/sui-framework" }
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "mainnet" }
+#Sui = { local = "../../../../MystenLabs/sui/crates/sui-framework/packages/sui-framework" }
 
 [addresses]
-infinite_sea_common = "0xe2f2b2f8b1fd67114a934b351762bc3b3cbbc60ea6a4a017afbb71faa72053cb"
-#infinite_sea_common = "0x0"
+#infinite_sea_common = "0xe2f2b2f8b1fd67114a934b351762bc3b3cbbc60ea6a4a017afbb71faa72053cb"
+infinite_sea_common = "0x0"
 #sui = "0000000000000000000000000000000000000000000000000000000000000002"

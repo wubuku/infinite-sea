@@ -5,6 +5,7 @@ module infinite_sea_common::ship_util {
     use std::vector;
 
     use sui::object::ID;
+    use infinite_sea_common::roster_sequence_number::second;
 
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_id_quantity_pair;
@@ -38,9 +39,12 @@ module infinite_sea_common::ship_util {
         let speed = cottons_quantity;
         (
             health_points,
-            if (attack > NORMAL_SHIP_MAX_ATTACK) { NORMAL_SHIP_MAX_ATTACK } else { attack },
-            if (protection > NORMAL_SHIP_MAX_PROTECTION) { NORMAL_SHIP_MAX_PROTECTION } else { protection },
-            if (speed > NORMAL_SHIP_MAX_SPEED) { NORMAL_SHIP_MAX_SPEED } else { speed }
+            attack,
+            protection,
+            speed
+            // if (attack > NORMAL_SHIP_MAX_ATTACK) { NORMAL_SHIP_MAX_ATTACK } else { attack },
+            // if (protection > NORMAL_SHIP_MAX_PROTECTION) { NORMAL_SHIP_MAX_PROTECTION } else { protection },
+            // if (speed > NORMAL_SHIP_MAX_SPEED) { NORMAL_SHIP_MAX_SPEED } else { speed }
         )
     }
 
