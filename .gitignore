@@ -2,3 +2,17 @@ sui-contracts/*/build
 sui-contracts/*/testnet_*.json
 sui-contracts/testnet_*.json
 sui-java-service/scripts
+.idea/.gitignore
+.idea/infinite-sea.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+sui-contracts/publish.ps1
+sui-contracts/test.ps1
+sui-contracts/testnet-publish.ps1
+*.log
+sui-java-service/.idea/
+sui-java-service/suiinfinitesea-common/target/
+sui-java-service/suiinfinitesea-service-rest/target/
+sui-java-service/suiinfinitesea-service/target/
+sui-java-service/suiinfinitesea-service-cli/target/
