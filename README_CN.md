@@ -138,10 +138,12 @@ Skill（技能）要么是生产（Production）型的技能，要么是创造�
 
 ### 生成代码
 
+在代码库的根目录执行：
+
 ```shell
 docker run \
 -v .:/myapp \
-wubuku/dddappp:0.0.1 \
+wubuku/dddappp-sui:master \
 --dddmlDirectoryPath /myapp/dddml \
 --boundedContextName Dddml.SuiInfiniteSea \
 --suiMoveProjectDirectoryPath /myapp/sui-contracts \

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SuiPackageInitializer {
 
+    private final SuiPackageInitializationService nftPackageInitializationService;
+
     private final SuiPackageInitializationService commonPackageInitializationService;
 
     private final SuiPackageInitializationService defaultPackageInitializationService;
@@ -22,11 +24,26 @@ public class SuiPackageInitializer {
             MoveObjectIdGeneratorObjectRepository moveObjectIdGeneratorObjectRepository,
             SuiPackageRepository suiPackageRepository,
             SuiJsonRpcClient suiJsonRpcClient,
+            @Value("${sui.contract.package-publish-transactions.nft:}")
+            String nftPackagePublishTransactionDigest,
             @Value("${sui.contract.package-publish-transactions.common:}")
             String commonPackagePublishTransactionDigest,
             @Value("${sui.contract.package-publish-transactions.default:}")
             String defaultPackagePublishTransactionDigest
     ) {
+        if (nftPackagePublishTransactionDigest != null && !nftPackagePublishTransactionDigest.trim().isEmpty()) {
+            nftPackageInitializationService = new SuiPackageInitializationService(
+                    moveObjectIdGeneratorObjectRepository,
+                    suiPackageRepository,
+                    suiJsonRpcClient,
+                    nftPackagePublishTransactionDigest,
+                    ContractConstants.NFT_SUI_PACKAGE_NAME,
+                    ContractConstants::getNftPackageIdGeneratorObjectTypes
+            );
+        } else {
+            //throw new IllegalArgumentException("nftPackagePublishTransactionDigest is null");
+            nftPackageInitializationService = null;
+        }
         if (commonPackagePublishTransactionDigest != null && !commonPackagePublishTransactionDigest.trim().isEmpty()) {
             commonPackageInitializationService = new SuiPackageInitializationService(
                     moveObjectIdGeneratorObjectRepository,
@@ -57,6 +74,9 @@ public class SuiPackageInitializer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
+        if (nftPackageInitializationService != null) {
+            nftPackageInitializationService.init();
+        }
         if (commonPackageInitializationService != null) {
             commonPackageInitializationService.init();
         }

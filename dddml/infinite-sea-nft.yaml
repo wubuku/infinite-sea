@@ -96,6 +96,8 @@ aggregates:
             Owner:
               isOwner: true
       Update:
+        metadata:
+          ObjectMutableInVerificationFunction: true
         parameters:
           AvatarChange:
             referenceType: AvatarChange

@@ -18,6 +18,7 @@ module infinite_sea::ship_battle_aggregate {
     friend infinite_sea::roster_service;
     friend infinite_sea::ship_battle_service;
 
+    #[allow(unused_mut_ref)]
     public fun initiate_battle(
         player: &Player,
         initiator: &mut Roster,
@@ -43,6 +44,7 @@ module infinite_sea::ship_battle_aggregate {
         ship_battle
     }
 
+    #[allow(unused_mut_ref)]
     public entry fun make_move(
         ship_battle: &mut ship_battle::ShipBattle,
         player: &Player,

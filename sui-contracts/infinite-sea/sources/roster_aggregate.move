@@ -37,6 +37,7 @@ module infinite_sea::roster_aggregate {
 
     const EInvalidPublisher: u64 = 50;
 
+    #[allow(unused_mut_ref)]
     public(friend) fun create(
         roster_id_player_id: ID,
         roster_id_sequence_number: u8,
@@ -119,6 +120,7 @@ module infinite_sea::roster_aggregate {
         roster::emit_environment_roster_created(environment_roster_created);
     }
 
+    #[allow(unused_mut_ref)]
     public(friend) fun add_ship(
         roster: &mut roster::Roster,
         ship: Ship,
@@ -218,6 +220,7 @@ module infinite_sea::roster_aggregate {
         roster::emit_roster_ships_position_adjusted(roster_ships_position_adjusted);
     }
 
+    #[allow(unused_mut_ref)]
     public entry fun transfer_ship(
         roster: &mut roster::Roster,
         player: &Player,
