@@ -35,8 +35,6 @@ public class AvatarMinted {
 
     private Integer haircut;
 
-    private Long hairColor;
-
     private Integer skin;
 
     private Integer outfit;
@@ -135,14 +133,6 @@ public class AvatarMinted {
         this.haircut = haircut;
     }
 
-    public Long getHairColor() {
-        return hairColor;
-    }
-
-    public void setHairColor(Long hairColor) {
-        this.hairColor = hairColor;
-    }
-
     public Integer getSkin() {
         return skin;
     }
@@ -228,7 +218,6 @@ public class AvatarMinted {
                 ", eyes=" + eyes +
                 ", mouth=" + mouth +
                 ", haircut=" + haircut +
-                ", hairColor=" + hairColor +
                 ", skin=" + skin +
                 ", outfit=" + outfit +
                 ", accessories=" + Arrays.toString(accessories) +

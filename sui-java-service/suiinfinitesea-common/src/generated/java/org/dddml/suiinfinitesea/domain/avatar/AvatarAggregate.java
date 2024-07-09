@@ -17,7 +17,7 @@ public interface AvatarAggregate {
 
     List<Event> getChanges();
 
-    void mint(String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Long hairColor, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarCommands.Mint c);
+    void mint(String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarCommands.Mint c);
 
     void update(String avatarChange, Long offChainVersion, String commandId, String requesterId, AvatarCommands.Update c);
 

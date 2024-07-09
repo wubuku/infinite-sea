@@ -327,18 +327,6 @@ public abstract class AbstractAvatarEvent extends AbstractEvent implements Avata
             getDynamicProperties().put("haircut", value);
         }
 
-        public Long getHairColor() {
-            Object val = getDynamicProperties().get("hairColor");
-            if (val instanceof Long) {
-                return (Long) val;
-            }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
-        }
-
-        public void setHairColor(Long value) {
-            getDynamicProperties().put("hairColor", value);
-        }
-
         public Integer getSkin() {
             Object val = getDynamicProperties().get("skin");
             if (val instanceof Integer) {

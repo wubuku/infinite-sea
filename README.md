@@ -86,7 +86,7 @@ In repository root directory, run:
 ```shell
 docker run \
 -v .:/myapp \
-wubuku/dddappp:0.0.1 \
+wubuku/dddappp-sui:master \
 --dddmlDirectoryPath /myapp/dddml \
 --boundedContextName Dddml.SuiInfiniteSea \
 --suiMoveProjectDirectoryPath /myapp/sui-contracts \
@@ -98,6 +98,14 @@ wubuku/dddappp:0.0.1 \
 --enableMultipleMoveProjects
 ```
 
+> **Hint**
+>
+> Sometimes you may need to remove old containers and images:
+>
+> ```shell
+> docker rm $(docker ps -aq --filter "ancestor=wubuku/dddappp-sui:master")
+> docker rmi wubuku/dddappp-sui:master
+> ```
 
 ### Implementing business logic
 

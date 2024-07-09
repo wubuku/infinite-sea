@@ -272,7 +272,6 @@ public class DomainBeanUtils {
         avatarMinted.setEyes(contractEvent.getEyes());
         avatarMinted.setMouth(contractEvent.getMouth());
         avatarMinted.setHaircut(contractEvent.getHaircut());
-        avatarMinted.setHairColor(contractEvent.getHairColor());
         avatarMinted.setSkin(contractEvent.getSkin());
         avatarMinted.setOutfit(contractEvent.getOutfit());
         avatarMinted.setAccessories(contractEvent.getAccessories());

@@ -47,11 +47,11 @@ public abstract class AbstractAvatarAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void mint(String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Long hairColor, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarCommands.Mint c) {
-            java.util.function.Supplier<AvatarEvent.AvatarMinted> eventFactory = () -> newAvatarMinted(owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, hairColor, skin, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, offChainVersion, commandId, requesterId);
+        public void mint(String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarCommands.Mint c) {
+            java.util.function.Supplier<AvatarEvent.AvatarMinted> eventFactory = () -> newAvatarMinted(owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, skin, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, offChainVersion, commandId, requesterId);
             AvatarEvent.AvatarMinted e;
             try {
-                e = verifyMint(eventFactory, owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, hairColor, skin, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, c);
+                e = verifyMint(eventFactory, owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, skin, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -85,7 +85,7 @@ public abstract class AbstractAvatarAggregate extends AbstractAggregate implemen
             apply(e);
         }
 
-        protected AvatarEvent.AvatarMinted verifyMint(java.util.function.Supplier<AvatarEvent.AvatarMinted> eventFactory, String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Long hairColor, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, AvatarCommands.Mint c) {
+        protected AvatarEvent.AvatarMinted verifyMint(java.util.function.Supplier<AvatarEvent.AvatarMinted> eventFactory, String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, AvatarCommands.Mint c) {
             String Owner = owner;
             String Name = name;
             String ImageUrl = imageUrl;
@@ -95,7 +95,6 @@ public abstract class AbstractAvatarAggregate extends AbstractAggregate implemen
             Integer Eyes = eyes;
             Integer Mouth = mouth;
             Integer Haircut = haircut;
-            Long HairColor = hairColor;
             Integer Skin = skin;
             Integer Outfit = outfit;
             int[] Accessories = accessories;
@@ -109,14 +108,14 @@ public abstract class AbstractAvatarAggregate extends AbstractAggregate implemen
             AvatarEvent.AvatarMinted e = (AvatarEvent.AvatarMinted) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.avatar.MintLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, hairColor, skin, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, skin, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.avatar;
 //
 //public class MintLogic {
-//    public static AvatarEvent.AvatarMinted verify(java.util.function.Supplier<AvatarEvent.AvatarMinted> eventFactory, AvatarState avatarState, String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Long hairColor, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, VerificationContext verificationContext) {
+//    public static AvatarEvent.AvatarMinted verify(java.util.function.Supplier<AvatarEvent.AvatarMinted> eventFactory, AvatarState avatarState, String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -165,7 +164,7 @@ public abstract class AbstractAvatarAggregate extends AbstractAggregate implemen
         }
            
 
-        protected AbstractAvatarEvent.AvatarMinted newAvatarMinted(String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Long hairColor, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractAvatarEvent.AvatarMinted newAvatarMinted(String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId) {
             AvatarEventId eventId = new AvatarEventId(getState().getId(), null);
             AbstractAvatarEvent.AvatarMinted e = new AbstractAvatarEvent.AvatarMinted();
 
@@ -178,7 +177,6 @@ public abstract class AbstractAvatarAggregate extends AbstractAggregate implemen
             e.setEyes(eyes);
             e.setMouth(mouth);
             e.setHaircut(haircut);
-            e.setHairColor(hairColor);
             e.setSkin(skin);
             e.setOutfit(outfit);
             e.setAccessories(accessories);

@@ -135,18 +135,6 @@ public class AvatarStateDto {
         this.haircut = haircut;
     }
 
-    private Long hairColor;
-
-    public Long getHairColor()
-    {
-        return this.hairColor;
-    }
-
-    public void setHairColor(Long hairColor)
-    {
-        this.hairColor = hairColor;
-    }
-
     private Integer skin;
 
     public Integer getSkin()
@@ -397,9 +385,6 @@ public class AvatarStateDto {
             }
             if (returnedFieldsContains("Haircut")) {
                 dto.setHaircut(state.getHaircut());
-            }
-            if (returnedFieldsContains("HairColor")) {
-                dto.setHairColor(state.getHairColor());
             }
             if (returnedFieldsContains("Skin")) {
                 dto.setSkin(state.getSkin());

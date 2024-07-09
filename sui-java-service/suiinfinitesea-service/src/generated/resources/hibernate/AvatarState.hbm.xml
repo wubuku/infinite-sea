@@ -34,9 +34,6 @@
     <property name="haircut">
       <column name="haircut" />
     </property>
-    <property name="hairColor">
-      <column name="hair_color" />
-    </property>
     <property name="skin">
       <column name="skin" />
     </property>

@@ -155,19 +155,6 @@ public class AvatarCommands {
         }
 
         /**
-         * Hair Color
-         */
-        private Long hairColor;
-
-        public Long getHairColor() {
-            return this.hairColor;
-        }
-
-        public void setHairColor(Long hairColor) {
-            this.hairColor = hairColor;
-        }
-
-        /**
          * Skin
          */
         private Integer skin;

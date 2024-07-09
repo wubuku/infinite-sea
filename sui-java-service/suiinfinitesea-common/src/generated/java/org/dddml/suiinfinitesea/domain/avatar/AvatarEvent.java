@@ -58,10 +58,6 @@ public interface AvatarEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
         void setHaircut(Integer value);
 
-        Long getHairColor();
-
-        void setHairColor(Long value);
-
         Integer getSkin();
 
         void setSkin(Integer value);

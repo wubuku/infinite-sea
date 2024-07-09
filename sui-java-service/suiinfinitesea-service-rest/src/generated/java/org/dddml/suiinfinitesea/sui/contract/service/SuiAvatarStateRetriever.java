@@ -52,7 +52,6 @@ public class SuiAvatarStateRetriever {
         avatarState.setEyes(avatar.getEyes());
         avatarState.setMouth(avatar.getMouth());
         avatarState.setHaircut(avatar.getHaircut());
-        avatarState.setHairColor(avatar.getHairColor());
         avatarState.setSkin(avatar.getSkin());
         avatarState.setOutfit(avatar.getOutfit());
         avatarState.setAccessories(avatar.getAccessories());

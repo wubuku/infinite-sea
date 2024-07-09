@@ -16,7 +16,6 @@ module infinite_sea_nft::avatar_mint_logic {
         eyes: u8,
         mouth: u8,
         haircut: u8,
-        hair_color: u32,
         skin: u8,
         outfit: u8,
         accessories: vector<u8>,
@@ -39,7 +38,6 @@ module infinite_sea_nft::avatar_mint_logic {
             eyes,
             mouth,
             haircut,
-            hair_color,
             skin,
             outfit,
             accessories,
@@ -65,7 +63,6 @@ module infinite_sea_nft::avatar_mint_logic {
         let eyes = avatar::avatar_minted_eyes(avatar_minted);
         let mouth = avatar::avatar_minted_mouth(avatar_minted);
         let haircut = avatar::avatar_minted_haircut(avatar_minted);
-        let hair_color = avatar::avatar_minted_hair_color(avatar_minted);
         let skin = avatar::avatar_minted_skin(avatar_minted);
         let outfit = avatar::avatar_minted_outfit(avatar_minted);
         let accessories = avatar::avatar_minted_accessories(avatar_minted);
@@ -85,7 +82,6 @@ module infinite_sea_nft::avatar_mint_logic {
             eyes,
             mouth,
             haircut,
-            hair_color,
             skin,
             outfit,
             accessories,

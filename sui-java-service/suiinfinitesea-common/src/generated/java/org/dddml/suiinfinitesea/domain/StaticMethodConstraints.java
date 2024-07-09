@@ -32,8 +32,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.avatar.MintLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
-                    new String[]{"_", "_", "owner", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "hairColor", "skin", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges"}
+                    new Class[]{java.util.function.Supplier.class, AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
+                    new String[]{"_", "_", "owner", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "skin", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges"}
             );
 
 
@@ -376,8 +376,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.avatar.MintLogic",
                     "mutate",
-                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "owner", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "hairColor", "skin", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "owner", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "skin", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 

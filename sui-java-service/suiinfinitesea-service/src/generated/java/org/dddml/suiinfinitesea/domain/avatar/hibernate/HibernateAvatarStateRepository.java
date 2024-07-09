@@ -31,7 +31,7 @@ public class HibernateAvatarStateRepository implements AvatarStateRepository {
         return this.sessionFactory.getCurrentSession();
     }
     
-    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Owner", "Name", "ImageUrl", "Description", "BackgroundColor", "Race", "Eyes", "Mouth", "Haircut", "HairColor", "Skin", "Outfit", "Accessories", "Aura", "Symbols", "Effects", "Backgrounds", "Decorations", "Badges", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
+    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Owner", "Name", "ImageUrl", "Description", "BackgroundColor", "Race", "Eyes", "Mouth", "Haircut", "Skin", "Outfit", "Accessories", "Aura", "Symbols", "Effects", "Backgrounds", "Decorations", "Badges", "Version", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted"));
     
     private ReadOnlyProxyGenerator readOnlyProxyGenerator;
     

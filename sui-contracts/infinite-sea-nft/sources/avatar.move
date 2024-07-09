@@ -32,10 +32,10 @@ module infinite_sea_nft::avatar {
             std::string::utf8(b"creator"),
         ];
         let values = vector[
-            std::string::utf8(b"{{name}}"),
-            std::string::utf8(b"{{image_url}}"),
-            std::string::utf8(b"{{description}}"),
-            std::string::utf8(b"{Infinite Seas Team}"),
+            std::string::utf8(b"{name}"),
+            std::string::utf8(b"{image_url}"),
+            std::string::utf8(b"{description}"),
+            std::string::utf8(b"Infinite Seas Team"),
         ];
         let publisher = sui::package::claim(otw, ctx);
         let display = sui::display::new_with_fields<Avatar>(
@@ -58,7 +58,6 @@ module infinite_sea_nft::avatar {
         eyes: u8,
         mouth: u8,
         haircut: u8,
-        hair_color: u32,
         skin: u8,
         outfit: u8,
         accessories: vector<u8>,
@@ -153,14 +152,6 @@ module infinite_sea_nft::avatar {
         avatar.haircut = haircut;
     }
 
-    public fun hair_color(avatar: &Avatar): u32 {
-        avatar.hair_color
-    }
-
-    public(friend) fun set_hair_color(avatar: &mut Avatar, hair_color: u32) {
-        avatar.hair_color = hair_color;
-    }
-
     public fun skin(avatar: &Avatar): u8 {
         avatar.skin
     }
@@ -243,7 +234,6 @@ module infinite_sea_nft::avatar {
         eyes: u8,
         mouth: u8,
         haircut: u8,
-        hair_color: u32,
         skin: u8,
         outfit: u8,
         accessories: vector<u8>,
@@ -270,7 +260,6 @@ module infinite_sea_nft::avatar {
             eyes,
             mouth,
             haircut,
-            hair_color,
             skin,
             outfit,
             accessories,
@@ -294,7 +283,6 @@ module infinite_sea_nft::avatar {
         eyes: u8,
         mouth: u8,
         haircut: u8,
-        hair_color: u32,
         skin: u8,
         outfit: u8,
         accessories: vector<u8>,
@@ -350,10 +338,6 @@ module infinite_sea_nft::avatar {
         avatar_minted.haircut
     }
 
-    public fun avatar_minted_hair_color(avatar_minted: &AvatarMinted): u32 {
-        avatar_minted.hair_color
-    }
-
     public fun avatar_minted_skin(avatar_minted: &AvatarMinted): u8 {
         avatar_minted.skin
     }
@@ -400,7 +384,6 @@ module infinite_sea_nft::avatar {
         eyes: u8,
         mouth: u8,
         haircut: u8,
-        hair_color: u32,
         skin: u8,
         outfit: u8,
         accessories: vector<u8>,
@@ -422,7 +405,6 @@ module infinite_sea_nft::avatar {
             eyes,
             mouth,
             haircut,
-            hair_color,
             skin,
             outfit,
             accessories,
@@ -500,7 +482,6 @@ module infinite_sea_nft::avatar {
             eyes: _eyes,
             mouth: _mouth,
             haircut: _haircut,
-            hair_color: _hair_color,
             skin: _skin,
             outfit: _outfit,
             accessories: _accessories,

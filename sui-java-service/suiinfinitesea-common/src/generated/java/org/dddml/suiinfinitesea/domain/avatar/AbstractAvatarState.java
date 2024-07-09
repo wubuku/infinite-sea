@@ -115,16 +115,6 @@ public abstract class AbstractAvatarState implements AvatarState.SqlAvatarState 
         this.haircut = haircut;
     }
 
-    private Long hairColor;
-
-    public Long getHairColor() {
-        return this.hairColor;
-    }
-
-    public void setHairColor(Long hairColor) {
-        this.hairColor = hairColor;
-    }
-
     private Integer skin;
 
     public Integer getSkin() {
@@ -383,7 +373,6 @@ public abstract class AbstractAvatarState implements AvatarState.SqlAvatarState 
         this.setEyes(s.getEyes());
         this.setMouth(s.getMouth());
         this.setHaircut(s.getHaircut());
-        this.setHairColor(s.getHairColor());
         this.setSkin(s.getSkin());
         this.setOutfit(s.getOutfit());
         this.setAccessories(s.getAccessories());
@@ -418,8 +407,6 @@ public abstract class AbstractAvatarState implements AvatarState.SqlAvatarState 
         Integer Mouth = mouth;
         Integer haircut = e.getHaircut();
         Integer Haircut = haircut;
-        Long hairColor = e.getHairColor();
-        Long HairColor = hairColor;
         Integer skin = e.getSkin();
         Integer Skin = skin;
         Integer outfit = e.getOutfit();
@@ -467,14 +454,14 @@ public abstract class AbstractAvatarState implements AvatarState.SqlAvatarState 
         AvatarState updatedAvatarState = (AvatarState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.avatar.MintLogic",
                     "mutate",
-                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, hairColor, skin, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, skin, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.avatar;
 //
 //public class MintLogic {
-//    public static AvatarState mutate(AvatarState avatarState, String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Long hairColor, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarState, AvatarState.MutableAvatarState> mutationContext) {
+//    public static AvatarState mutate(AvatarState avatarState, String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarState, AvatarState.MutableAvatarState> mutationContext) {
 //    }
 //}
 

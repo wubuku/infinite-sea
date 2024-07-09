@@ -155,6 +155,16 @@ wubuku/dddappp-sui:master \
 --enableMultipleMoveProjects
 ```
 
+> **提示**
+>
+> 有时候，你可能需要移除旧的容器和镜像：
+>
+> ```shell
+> docker rm $(docker ps -aq --filter "ancestor=wubuku/dddappp-sui:master")
+> docker rmi wubuku/dddappp-sui:master
+> ```
+
+
 ### 实现业务逻辑
 
 在生成代码后，我们需要填充一些业务逻辑的实现。

@@ -51,7 +51,7 @@ public abstract class AbstractAvatarApplicationService implements AvatarApplicat
     }
 
     public void when(AvatarCommands.Mint c) {
-        update(c, ar -> ar.mint(c.getOwner(), c.getName(), c.getImageUrl(), c.getDescription(), c.getBackgroundColor(), c.getRace(), c.getEyes(), c.getMouth(), c.getHaircut(), c.getHairColor(), c.getSkin(), c.getOutfit(), c.getAccessories(), c.getAura(), c.getSymbols(), c.getEffects(), c.getBackgrounds(), c.getDecorations(), c.getBadges(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+        update(c, ar -> ar.mint(c.getOwner(), c.getName(), c.getImageUrl(), c.getDescription(), c.getBackgroundColor(), c.getRace(), c.getEyes(), c.getMouth(), c.getHaircut(), c.getSkin(), c.getOutfit(), c.getAccessories(), c.getAura(), c.getSymbols(), c.getEffects(), c.getBackgrounds(), c.getDecorations(), c.getBadges(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public void when(AvatarCommands.Update c) {

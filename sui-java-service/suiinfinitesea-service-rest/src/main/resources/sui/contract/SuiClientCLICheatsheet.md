@@ -8,7 +8,7 @@
 
 ```shell
 sui client call --package _PACKAGE_ID_ --module avatar_aggregate --function mint \
---args \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" address_owner '"string_name"' '"string_image_url"' '"string_description"' u32_background_color u8_race u8_eyes u8_mouth u8_haircut u32_hair_color u8_skin u8_outfit \"vector_u8_accessories\" u8_aura \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \
+--args \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" address_owner '"string_name"' '"string_image_url"' '"string_description"' u32_background_color u8_race u8_eyes u8_mouth u8_haircut u8_skin u8_outfit \"vector_u8_accessories\" u8_aura \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \
 --gas-budget 100000
 ```
 

@@ -165,7 +165,6 @@ public class M {
             "eyes",
             "mouth",
             "haircut",
-            "hairColor",
             "skin",
             "outfit",
             "accessories",
@@ -196,7 +195,6 @@ public class M {
             "Integer",
             "Integer",
             "Integer",
-            "Long",
             "Integer",
             "Integer",
             "int[]",
@@ -248,8 +246,6 @@ public class M {
         aliasMap.put("Mouth", "mouth");
         aliasMap.put("haircut", "haircut");
         aliasMap.put("Haircut", "haircut");
-        aliasMap.put("hairColor", "hairColor");
-        aliasMap.put("HairColor", "hairColor");
         aliasMap.put("skin", "skin");
         aliasMap.put("Skin", "skin");
         aliasMap.put("outfit", "outfit");

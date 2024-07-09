@@ -49,8 +49,6 @@ aggregates:
         type: u8
       Haircut:
         type: u8
-      HairColor:
-        type: u32
       Skin:
         type: u8
         #Variation of coats/skins
@@ -136,8 +134,6 @@ aggregates:
       Haircut:
         type: u8
         optional: true
-      #HairColor:
-      #  type: u32
       #Skin:
       #  type: u8
       Outfit:

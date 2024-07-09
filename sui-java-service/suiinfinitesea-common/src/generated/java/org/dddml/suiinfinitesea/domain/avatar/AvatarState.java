@@ -38,8 +38,6 @@ public interface AvatarState extends VersionedSuiMoveObject
 
     Integer getHaircut();
 
-    Long getHairColor();
-
     Integer getSkin();
 
     Integer getOutfit();
@@ -92,8 +90,6 @@ public interface AvatarState extends VersionedSuiMoveObject
         void setMouth(Integer mouth);
 
         void setHaircut(Integer haircut);
-
-        void setHairColor(Long hairColor);
 
         void setSkin(Integer skin);
 
