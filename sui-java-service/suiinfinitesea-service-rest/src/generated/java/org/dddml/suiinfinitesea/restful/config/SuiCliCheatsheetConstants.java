@@ -16,6 +16,7 @@ public class SuiCliCheatsheetConstants {
 
     static {
         Map<String, String> map = new HashMap<>();
+        map.put(ContractConstants.AVATAR_CHANGE_MODULE_AVATAR_CHANGE_TABLE, "_AVATAR_CHANGE_AVATAR_CHANGE_TABLE_OBJECT_ID_");
         map.put(ContractConstants.SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE, "_SKILL_PROCESS_SKILL_PROCESS_TABLE_OBJECT_ID_");
         map.put(ContractConstants.ROSTER_MODULE_ROSTER_TABLE, "_ROSTER_ROSTER_TABLE_OBJECT_ID_");
         map.put(ContractConstants.ITEM_MODULE_ITEM_TABLE, "_ITEM_ITEM_TABLE_OBJECT_ID_");

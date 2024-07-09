@@ -5,9 +5,11 @@ configuration:
 
   defaultModule:
     name: "Sui.InfiniteSea"
-    requiredModules: [ "Common" ]
+    requiredModules: [ "Common", "Nft" ]
   submodules:
     Common:
+      requiredModules: [ ]
+    Nft:
       requiredModules: [ ]
   java:
     eventProcessingInterfaceName: HasEventStatus

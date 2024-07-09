@@ -2,3 +2,4 @@ sui-contracts/*/build
 sui-contracts/*/testnet_*.json
 sui-contracts/testnet_*.json
 sui-java-service/scripts
+sui-contracts/*/Move.lock

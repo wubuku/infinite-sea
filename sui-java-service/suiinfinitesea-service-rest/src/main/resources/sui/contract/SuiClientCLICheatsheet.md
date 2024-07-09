@@ -2,75 +2,55 @@
 
 [ToC]
 
-## Item aggregate
+## Avatar aggregate
 
-### Create method
+### Mint method
 
 ```shell
-sui client call --package _PACKAGE_ID_ --module item_aggregate --function create \
---args u32_item_id \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" std__module__ascii__module__string_name bool_required_for_completion u32_sells_for \"_ITEM_ITEM_TABLE_OBJECT_ID_\" \
+sui client call --package _PACKAGE_ID_ --module avatar_aggregate --function mint \
+--args \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" address_owner '"string_name"' '"string_image_url"' '"string_description"' u32_background_color u8_race u8_eyes u8_mouth u8_haircut u32_hair_color u8_skin u8_outfit \"vector_u8_accessories\" u8_aura \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \
 --gas-budget 100000
 ```
 
 ### Update method
 
 ```shell
-sui client call --package _PACKAGE_ID_ --module item_aggregate --function update \
---args item_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" std__module__ascii__module__string_name bool_required_for_completion u32_sells_for \
+sui client call --package _PACKAGE_ID_ --module avatar_aggregate --function update \
+--args avatar_Object_ID \"_AVATAR_CHANGE_OBJECT_ID_\" \
 --gas-budget 100000
 ```
 
-## ItemCreation aggregate
+### Burn method
+
+```shell
+sui client call --package _PACKAGE_ID_ --module avatar_aggregate --function burn \
+--args avatar_Object_ID \
+--gas-budget 100000
+```
+
+## AvatarChange aggregate
 
 ### Create method
 
 ```shell
-sui client call --package _PACKAGE_ID_ --module item_creation_aggregate --function create \
---args u8_item_creation_id_skill_type u32_item_creation_id_item_id \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" u32_resource_cost u16_requirements_level u32_base_quantity u32_base_experience \"u64_base_creation_time\" \"u64_energy_cost\" u16_success_rate \"_ITEM_CREATION_ITEM_CREATION_TABLE_OBJECT_ID_\" \
+sui client call --package _PACKAGE_ID_ --module avatar_change_aggregate --function create \
+--args id_avatar_id \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" '"string_image_url"' '[u32_optional_background_color]' '[u8_optional_haircut]' '[u8_optional_outfit]' \"vector_u8_accessories\" '[u8_optional_aura]' \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \"_AVATAR_CHANGE_AVATAR_CHANGE_TABLE_OBJECT_ID_\" \
 --gas-budget 100000
 ```
 
 ### Update method
 
 ```shell
-sui client call --package _PACKAGE_ID_ --module item_creation_aggregate --function update \
---args item_creation_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" u32_resource_cost u16_requirements_level u32_base_quantity u32_base_experience \"u64_base_creation_time\" \"u64_energy_cost\" u16_success_rate \
+sui client call --package _PACKAGE_ID_ --module avatar_change_aggregate --function update \
+--args avatar_change_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" '"string_image_url"' '[u32_optional_background_color]' '[u8_optional_haircut]' '[u8_optional_outfit]' \"vector_u8_accessories\" '[u8_optional_aura]' \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \
 --gas-budget 100000
 ```
 
-## ItemProduction aggregate
-
-### Create method
+### Delete method
 
 ```shell
-sui client call --package _PACKAGE_ID_ --module item_production_aggregate --function create \
---args u8_item_production_id_skill_type u32_item_production_id_item_id \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" '[u32_production_materials_item_id_list_item_1,u32_production_materials_item_id_list_item_2]' '[u32_production_materials_item_quantity_list_item_1,u32_production_materials_item_quantity_list_item_2]' u16_requirements_level u32_base_quantity u32_base_experience \"u64_base_creation_time\" \"u64_energy_cost\" u16_success_rate \"_ITEM_PRODUCTION_ITEM_PRODUCTION_TABLE_OBJECT_ID_\" \
---gas-budget 100000
-```
-
-### Update method
-
-```shell
-sui client call --package _PACKAGE_ID_ --module item_production_aggregate --function update \
---args item_production_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" '[u32_production_materials_item_id_list_item_1,u32_production_materials_item_id_list_item_2]' '[u32_production_materials_item_quantity_list_item_1,u32_production_materials_item_quantity_list_item_2]' u16_requirements_level u32_base_quantity u32_base_experience \"u64_base_creation_time\" \"u64_energy_cost\" u16_success_rate \
---gas-budget 100000
-```
-
-## ExperienceTable singleton object
-
-### AddLevel method
-
-```shell
-sui client call --package _PACKAGE_ID_ --module experience_table_aggregate --function add_level \
---args experience_table_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" u16_level u32_experience u32_difference \
---gas-budget 100000
-```
-
-### UpdateLevel method
-
-```shell
-sui client call --package _PACKAGE_ID_ --module experience_table_aggregate --function update_level \
---args experience_table_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" u16_level u32_experience u32_difference \
+sui client call --package _PACKAGE_ID_ --module avatar_change_aggregate --function delete \
+--args avatar_change_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" \
 --gas-budget 100000
 ```
 

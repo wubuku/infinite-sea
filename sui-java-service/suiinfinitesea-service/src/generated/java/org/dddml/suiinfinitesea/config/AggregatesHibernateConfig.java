@@ -5,6 +5,12 @@
 
 package org.dddml.suiinfinitesea.config;
 
+import org.dddml.suiinfinitesea.domain.avatar.*;
+import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.avatar.hibernate.*;
+import org.dddml.suiinfinitesea.domain.avatarchange.*;
+import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.avatarchange.hibernate.*;
 import org.dddml.suiinfinitesea.domain.skillprocess.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.skillprocess.hibernate.*;
@@ -49,6 +55,96 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AggregatesHibernateConfig {
+
+
+    @Bean
+    public AvatarStateRepository avatarStateRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateAvatarStateRepository repository = new HibernateAvatarStateRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public AvatarStateQueryRepository avatarStateQueryRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateAvatarStateQueryRepository repository = new HibernateAvatarStateQueryRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public HibernateAvatarEventStore avatarEventStore(SessionFactory hibernateSessionFactory) {
+        HibernateAvatarEventStore eventStore = new HibernateAvatarEventStore();
+        eventStore.setSessionFactory(hibernateSessionFactory);
+        return eventStore;
+    }
+
+    @Bean
+    public AbstractAvatarApplicationService.SimpleAvatarApplicationService avatarApplicationService(
+            @Qualifier("avatarEventStore") EventStore avatarEventStore,
+            AvatarStateRepository avatarStateRepository,
+            AvatarStateQueryRepository avatarStateQueryRepository
+    ) {
+        AbstractAvatarApplicationService.SimpleAvatarApplicationService applicationService = new AbstractAvatarApplicationService.SimpleAvatarApplicationService(
+                avatarEventStore,
+                avatarStateRepository,
+                avatarStateQueryRepository
+        );
+        return applicationService;
+    }
+
+
+
+    @Bean
+    public AvatarChangeStateRepository avatarChangeStateRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateAvatarChangeStateRepository repository = new HibernateAvatarChangeStateRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public AvatarChangeStateQueryRepository avatarChangeStateQueryRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateAvatarChangeStateQueryRepository repository = new HibernateAvatarChangeStateQueryRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public HibernateAvatarChangeEventStore avatarChangeEventStore(SessionFactory hibernateSessionFactory) {
+        HibernateAvatarChangeEventStore eventStore = new HibernateAvatarChangeEventStore();
+        eventStore.setSessionFactory(hibernateSessionFactory);
+        return eventStore;
+    }
+
+    @Bean
+    public AbstractAvatarChangeApplicationService.SimpleAvatarChangeApplicationService avatarChangeApplicationService(
+            @Qualifier("avatarChangeEventStore") EventStore avatarChangeEventStore,
+            AvatarChangeStateRepository avatarChangeStateRepository,
+            AvatarChangeStateQueryRepository avatarChangeStateQueryRepository
+    ) {
+        AbstractAvatarChangeApplicationService.SimpleAvatarChangeApplicationService applicationService = new AbstractAvatarChangeApplicationService.SimpleAvatarChangeApplicationService(
+                avatarChangeEventStore,
+                avatarChangeStateRepository,
+                avatarChangeStateQueryRepository
+        );
+        return applicationService;
+    }
+
 
 
     @Bean

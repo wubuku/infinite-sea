@@ -6,8 +6,11 @@
 package org.dddml.suiinfinitesea.sui.contract;
 
 public class ContractConstants {
+    public static final String NFT_SUI_PACKAGE_NAME = "NFT_SUI_PACKAGE";
     public static final String COMMON_SUI_PACKAGE_NAME = "COMMON_SUI_PACKAGE";
     public static final String DEFAULT_SUI_PACKAGE_NAME = "DEFAULT_SUI_PACKAGE";
+
+    public static final String AVATAR_CHANGE_MODULE_AVATAR_CHANGE_TABLE = "avatar_change::AvatarChangeTable";
 
     public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE = "skill_process::SkillProcessTable";
 
@@ -18,6 +21,18 @@ public class ContractConstants {
     public static final String ITEM_CREATION_MODULE_ITEM_CREATION_TABLE = "item_creation::ItemCreationTable";
 
     public static final String ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_TABLE = "item_production::ItemProductionTable";
+
+    public static final String AVATAR_MODULE_AVATAR_MINTED = "avatar::AvatarMinted";
+
+    public static final String AVATAR_MODULE_AVATAR_UPDATED = "avatar::AvatarUpdated";
+
+    public static final String AVATAR_MODULE_AVATAR_BURNED = "avatar::AvatarBurned";
+
+    public static final String AVATAR_CHANGE_MODULE_AVATAR_CHANGE_CREATED = "avatar_change::AvatarChangeCreated";
+
+    public static final String AVATAR_CHANGE_MODULE_AVATAR_CHANGE_UPDATED = "avatar_change::AvatarChangeUpdated";
+
+    public static final String AVATAR_CHANGE_MODULE_AVATAR_CHANGE_DELETED = "avatar_change::AvatarChangeDeleted";
 
     public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_CREATED = "skill_process::SkillProcessCreated";
 
@@ -93,6 +108,12 @@ public class ContractConstants {
 
     public static final String EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_UPDATED = "experience_table::ExperienceLevelUpdated";
 
+
+    public static String[] getNftPackageIdGeneratorObjectTypes(String packageId) {
+        return new String[]{
+                packageId + "::" + AVATAR_CHANGE_MODULE_AVATAR_CHANGE_TABLE,
+        };
+    }
 
     public static String[] getCommonPackageIdGeneratorObjectTypes(String packageId) {
         return new String[]{

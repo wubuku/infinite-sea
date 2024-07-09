@@ -12,6 +12,14 @@ import com.github.wubuku.sui.bean.MoveEvent;
 import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
 import com.github.wubuku.sui.bean.Table;
 import com.github.wubuku.sui.bean.ObjectTable;
+import org.dddml.suiinfinitesea.domain.avatar.AbstractAvatarEvent;
+import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarMinted;
+import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarUpdated;
+import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarBurned;
+import org.dddml.suiinfinitesea.domain.avatarchange.AbstractAvatarChangeEvent;
+import org.dddml.suiinfinitesea.sui.contract.avatarchange.AvatarChangeCreated;
+import org.dddml.suiinfinitesea.sui.contract.avatarchange.AvatarChangeUpdated;
+import org.dddml.suiinfinitesea.sui.contract.avatarchange.AvatarChangeDeleted;
 import org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessEvent;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.SkillProcessCreated;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessStarted;
@@ -249,6 +257,158 @@ public class DomainBeanUtils {
         return table;
     }
 
+
+    public static AbstractAvatarEvent.AvatarMinted toAvatarMinted(SuiMoveEventEnvelope<AvatarMinted> eventEnvelope) {
+        AvatarMinted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractAvatarEvent.AvatarMinted avatarMinted = new AbstractAvatarEvent.AvatarMinted();
+        avatarMinted.setId(contractEvent.getId());
+        avatarMinted.setOwner(contractEvent.getOwner());
+        avatarMinted.setName(contractEvent.getName());
+        avatarMinted.setImageUrl(contractEvent.getImageUrl());
+        avatarMinted.setDescription(contractEvent.getDescription());
+        avatarMinted.setBackgroundColor(contractEvent.getBackgroundColor());
+        avatarMinted.setRace(contractEvent.getRace());
+        avatarMinted.setEyes(contractEvent.getEyes());
+        avatarMinted.setMouth(contractEvent.getMouth());
+        avatarMinted.setHaircut(contractEvent.getHaircut());
+        avatarMinted.setHairColor(contractEvent.getHairColor());
+        avatarMinted.setSkin(contractEvent.getSkin());
+        avatarMinted.setOutfit(contractEvent.getOutfit());
+        avatarMinted.setAccessories(contractEvent.getAccessories());
+        avatarMinted.setAura(contractEvent.getAura());
+        avatarMinted.setSymbols(contractEvent.getSymbols());
+        avatarMinted.setEffects(contractEvent.getEffects());
+        avatarMinted.setBackgrounds(contractEvent.getBackgrounds());
+        avatarMinted.setDecorations(contractEvent.getDecorations());
+        avatarMinted.setBadges(contractEvent.getBadges());
+        avatarMinted.setVersion(BigInteger.valueOf(-1));
+
+        avatarMinted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        avatarMinted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        avatarMinted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        avatarMinted.setSuiPackageId(eventEnvelope.getPackageId());
+        avatarMinted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        avatarMinted.setSuiSender(eventEnvelope.getSender());
+
+        return avatarMinted;
+    }
+
+    public static AbstractAvatarEvent.AvatarUpdated toAvatarUpdated(SuiMoveEventEnvelope<AvatarUpdated> eventEnvelope) {
+        AvatarUpdated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractAvatarEvent.AvatarUpdated avatarUpdated = new AbstractAvatarEvent.AvatarUpdated();
+        avatarUpdated.setId(contractEvent.getId());
+        avatarUpdated.setVersion(contractEvent.getVersion());
+
+        avatarUpdated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        avatarUpdated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        avatarUpdated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        avatarUpdated.setSuiPackageId(eventEnvelope.getPackageId());
+        avatarUpdated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        avatarUpdated.setSuiSender(eventEnvelope.getSender());
+
+        return avatarUpdated;
+    }
+
+    public static AbstractAvatarEvent.AvatarBurned toAvatarBurned(SuiMoveEventEnvelope<AvatarBurned> eventEnvelope) {
+        AvatarBurned contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractAvatarEvent.AvatarBurned avatarBurned = new AbstractAvatarEvent.AvatarBurned();
+        avatarBurned.setId(contractEvent.getId());
+        avatarBurned.setVersion(contractEvent.getVersion());
+
+        avatarBurned.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        avatarBurned.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        avatarBurned.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        avatarBurned.setSuiPackageId(eventEnvelope.getPackageId());
+        avatarBurned.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        avatarBurned.setSuiSender(eventEnvelope.getSender());
+
+        return avatarBurned;
+    }
+
+    public static AbstractAvatarChangeEvent.AvatarChangeCreated toAvatarChangeCreated(SuiMoveEventEnvelope<AvatarChangeCreated> eventEnvelope) {
+        AvatarChangeCreated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractAvatarChangeEvent.AvatarChangeCreated avatarChangeCreated = new AbstractAvatarChangeEvent.AvatarChangeCreated();
+        avatarChangeCreated.setId_(contractEvent.getId());
+        avatarChangeCreated.setAvatarId(contractEvent.getAvatarId());
+        avatarChangeCreated.setImageUrl(contractEvent.getImageUrl());
+        avatarChangeCreated.setBackgroundColor(contractEvent.getBackgroundColor());
+        avatarChangeCreated.setHaircut(contractEvent.getHaircut());
+        avatarChangeCreated.setOutfit(contractEvent.getOutfit());
+        avatarChangeCreated.setAccessories(contractEvent.getAccessories());
+        avatarChangeCreated.setAura(contractEvent.getAura());
+        avatarChangeCreated.setSymbols(contractEvent.getSymbols());
+        avatarChangeCreated.setEffects(contractEvent.getEffects());
+        avatarChangeCreated.setBackgrounds(contractEvent.getBackgrounds());
+        avatarChangeCreated.setDecorations(contractEvent.getDecorations());
+        avatarChangeCreated.setBadges(contractEvent.getBadges());
+        avatarChangeCreated.setVersion(BigInteger.valueOf(-1));
+
+        avatarChangeCreated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        avatarChangeCreated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        avatarChangeCreated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        avatarChangeCreated.setSuiPackageId(eventEnvelope.getPackageId());
+        avatarChangeCreated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        avatarChangeCreated.setSuiSender(eventEnvelope.getSender());
+
+        return avatarChangeCreated;
+    }
+
+    public static AbstractAvatarChangeEvent.AvatarChangeUpdated toAvatarChangeUpdated(SuiMoveEventEnvelope<AvatarChangeUpdated> eventEnvelope) {
+        AvatarChangeUpdated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractAvatarChangeEvent.AvatarChangeUpdated avatarChangeUpdated = new AbstractAvatarChangeEvent.AvatarChangeUpdated();
+        avatarChangeUpdated.setId_(contractEvent.getId());
+        avatarChangeUpdated.setAvatarId(contractEvent.getAvatarId());
+        avatarChangeUpdated.setImageUrl(contractEvent.getImageUrl());
+        avatarChangeUpdated.setBackgroundColor(contractEvent.getBackgroundColor());
+        avatarChangeUpdated.setHaircut(contractEvent.getHaircut());
+        avatarChangeUpdated.setOutfit(contractEvent.getOutfit());
+        avatarChangeUpdated.setAccessories(contractEvent.getAccessories());
+        avatarChangeUpdated.setAura(contractEvent.getAura());
+        avatarChangeUpdated.setSymbols(contractEvent.getSymbols());
+        avatarChangeUpdated.setEffects(contractEvent.getEffects());
+        avatarChangeUpdated.setBackgrounds(contractEvent.getBackgrounds());
+        avatarChangeUpdated.setDecorations(contractEvent.getDecorations());
+        avatarChangeUpdated.setBadges(contractEvent.getBadges());
+        avatarChangeUpdated.setVersion(contractEvent.getVersion());
+
+        avatarChangeUpdated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        avatarChangeUpdated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        avatarChangeUpdated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        avatarChangeUpdated.setSuiPackageId(eventEnvelope.getPackageId());
+        avatarChangeUpdated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        avatarChangeUpdated.setSuiSender(eventEnvelope.getSender());
+
+        return avatarChangeUpdated;
+    }
+
+    public static AbstractAvatarChangeEvent.AvatarChangeDeleted toAvatarChangeDeleted(SuiMoveEventEnvelope<AvatarChangeDeleted> eventEnvelope) {
+        AvatarChangeDeleted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractAvatarChangeEvent.AvatarChangeDeleted avatarChangeDeleted = new AbstractAvatarChangeEvent.AvatarChangeDeleted();
+        avatarChangeDeleted.setId_(contractEvent.getId());
+        avatarChangeDeleted.setAvatarId(contractEvent.getAvatarId());
+        avatarChangeDeleted.setVersion(contractEvent.getVersion());
+
+        avatarChangeDeleted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        avatarChangeDeleted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        avatarChangeDeleted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        avatarChangeDeleted.setSuiPackageId(eventEnvelope.getPackageId());
+        avatarChangeDeleted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        avatarChangeDeleted.setSuiSender(eventEnvelope.getSender());
+
+        return avatarChangeDeleted;
+    }
 
     public static AbstractSkillProcessEvent.SkillProcessCreated toSkillProcessCreated(SuiMoveEventEnvelope<SkillProcessCreated> eventEnvelope) {
         SkillProcessCreated contractEvent = eventEnvelope.getParsedJson();

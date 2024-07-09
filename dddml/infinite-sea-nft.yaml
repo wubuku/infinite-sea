@@ -1,0 +1,175 @@
+aggregates:
+  Avatar:
+    module: "Nft"
+    metadata:
+      Preprocessors: [ "MOVE_CRUD_IT" ]
+      CRUD_IT_NO_UPDATE: true
+      #CRUD_IT_NO_DELETE: true
+      CRUD_IT_CREATE_METHOD_NAME: "Mint"
+      CRUD_IT_DELETE_METHOD_NAME: "Burn"
+      ShouldIssuePublisherObject: true
+      SUI_DISPLAY_KEYS:
+        - name
+        #- link
+        - image_url
+        - description
+        #- project_url
+        - creator
+      SUI_DISPLAY_VALUES:
+        - "{name}"
+        #- "https://infinite-seas.io/avatars/{id}"
+        - "{image_url}"
+        - "{description}"
+        #- "https://infinite-seas.io"
+        - "Infinite Seas Team"
+    id:
+      name: Id
+      type: UID
+    properties:
+      Owner:
+        type: address
+      Name:
+        type: String
+        length: 100
+      ImageUrl:
+        type: String
+        length: 200
+      Description:
+        type: String
+        length: 500
+      # ------------------------
+      BackgroundColor:
+        type: u32
+      Race:
+        type: u8
+        #Races: Wood, Ore, Seed
+      Eyes:
+        type: u8
+      Mouth:
+        type: u8
+      Haircut:
+        type: u8
+      HairColor:
+        type: u32
+      Skin:
+        type: u8
+        #Variation of coats/skins
+      Outfit:
+        type: u8
+        #Variation of outfits
+      Accessories:
+        type: vector<u8>
+        #Extra accessories - hat, glasses, eye patch, mask, etc.
+      # ------------------------
+      #Glow/Aura:
+      #  Increased intensity with daily play streaks.
+      #  Colors could change to represent streak milestones
+      Aura:
+        type: u8
+      #Symbols/Elements:
+      #  Stars, crowns, or other icons to represent high achievements in points or tasks.
+      Symbols:
+        type: vector<u8>
+      #Unique Effects:
+      #  Effects that make the NFT stand out on social media, such as sparkles, waves or more exotic ideas.
+      Effects:
+        type: vector<u8>
+      #Backgrounds:
+      #  Backgrounds could depict different scenes or environments based on quest types.
+      Backgrounds:
+        type: vector<u8>
+      #Decorations:
+      #  Unique decorations or items added to the NFT for successful referrals.
+      #  These could be thematic elements like flags, banners, or trophies.
+      Decorations:
+        type: vector<u8>
+      Badges:
+        type: vector<u8>
+        #Race Badges
+
+    methods:
+      Mint:
+        requiredPermission: "__Publisher__"
+        event:
+          name: "AvatarMinted"
+          properties:
+            Owner:
+              isOwner: true
+      Update:
+        parameters:
+          AvatarChange:
+            referenceType: AvatarChange
+            #isMutableReference: true
+            isIgnoredInEvent: true
+        event:
+          name: "AvatarUpdated"
+      Burn:
+        event:
+          name: "AvatarBurned"
+
+  AvatarChange:
+    module: "Nft"
+    metadata:
+      Preprocessors: [ "MOVE_CRUD_IT" ]
+      #CRUD_IT_NO_UPDATE: true
+      #CRUD_IT_NO_DELETE: true
+    id:
+      name: AvatarId
+      type: ID
+      generator:
+        class: assigned
+        tableName: AvatarChangeTable
+    properties:
+      ImageUrl:
+        type: String
+        length: 200
+      # ------------------------
+      BackgroundColor:
+        type: u32
+        optional: true
+      #Eyes:
+      #  type: u8
+      #Mouth:
+      #  type: u8
+      Haircut:
+        type: u8
+        optional: true
+      #HairColor:
+      #  type: u32
+      #Skin:
+      #  type: u8
+      Outfit:
+        type: u8
+        optional: true
+      Accessories:
+        type: vector<u8>
+      # ------------------------
+      Aura:
+        type: u8
+        optional: true
+      Symbols:
+        type: vector<u8>
+      Effects:
+        type: vector<u8>
+      Backgrounds:
+        type: vector<u8>
+      Decorations:
+        type: vector<u8>
+      Badges:
+        type: vector<u8>
+
+    methods:
+      Create:
+        requiredPermission: "__Publisher__"
+        event:
+          name: "AvatarChangeCreated"
+          isObjectShared: true
+      Update:
+        requiredPermission: "__Publisher__"
+        event:
+          name: "AvatarChangeUpdated"
+      Delete:
+        requiredPermission: "__Publisher__"
+        event:
+          name: "AvatarChangeDeleted"
+

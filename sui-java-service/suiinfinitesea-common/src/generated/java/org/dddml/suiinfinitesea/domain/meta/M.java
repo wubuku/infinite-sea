@@ -33,6 +33,8 @@ public class M {
     static {
         Map<String, String> typeToAggMap = new HashMap<>();
 
+        typeToAggMap.put("Avatar", "Avatar");
+        typeToAggMap.put("AvatarChange", "AvatarChange");
         typeToAggMap.put("SkillProcess", "SkillProcess");
         typeToAggMap.put("Ship", "Ship");
         typeToAggMap.put("Roster", "Roster");
@@ -133,6 +135,288 @@ public class M {
 
     private BoundedContextMetadata() {
     }
+  }
+
+
+  // /////////////////////////////////////////////////////////  
+  public static class AvatarMetadata {
+
+    private AvatarMetadata() {
+    }
+
+    public static final String PROPERTY_NAME_VERSION      = "offChainVersion";
+    public static final String PROPERTY_NAME_ACTIVE       = "active";
+    public static final String PROPERTY_NAME_DELETED      = "deleted";
+    public static final String PROPERTY_NAME_CREATED_BY   = "createdBy";
+    public static final String PROPERTY_NAME_CREATED_AT   = "createdAt";
+    public static final String PROPERTY_NAME_UPDATED_BY   = "updatedBy";
+    public static final String PROPERTY_NAME_UPDATED_AT   = "updatedAt";
+
+    public static final Class ID_CLASS = String.class;
+
+    public static final String[] propertyNames = new String[] {
+            "id",
+            "owner",
+            "name",
+            "imageUrl",
+            "description",
+            "backgroundColor",
+            "race",
+            "eyes",
+            "mouth",
+            "haircut",
+            "hairColor",
+            "skin",
+            "outfit",
+            "accessories",
+            "aura",
+            "symbols",
+            "effects",
+            "backgrounds",
+            "decorations",
+            "badges",
+            "version",
+            "offChainVersion",
+            "createdBy",
+            "createdAt",
+            "updatedBy",
+            "updatedAt",
+            "active",
+            "deleted",
+    };
+
+    public static final String[] propertyTypes = new String[] {
+            "String",
+            "String",
+            "String",
+            "String",
+            "String",
+            "Long",
+            "Integer",
+            "Integer",
+            "Integer",
+            "Integer",
+            "Long",
+            "Integer",
+            "Integer",
+            "int[]",
+            "Integer",
+            "int[]",
+            "int[]",
+            "int[]",
+            "int[]",
+            "int[]",
+            "BigInteger",
+            "Long",
+            "String",
+            "Date",
+            "String",
+            "Date",
+            "Boolean",
+            "Boolean",
+    };
+
+    public static final Map<String, String> propertyTypeMap;
+
+    public static final Map<String, String> aliasMap;
+
+    static {
+        propertyTypeMap = new HashMap<String, String>();
+        initPropertyTypeMap();
+        aliasMap = new HashMap<String, String>();
+        initAliasMap();
+    }
+
+    private static  void initAliasMap() {
+        aliasMap.put("id", "id");
+        aliasMap.put("Id", "id");
+        aliasMap.put("owner", "owner");
+        aliasMap.put("Owner", "owner");
+        aliasMap.put("name", "name");
+        aliasMap.put("Name", "name");
+        aliasMap.put("imageUrl", "imageUrl");
+        aliasMap.put("ImageUrl", "imageUrl");
+        aliasMap.put("description", "description");
+        aliasMap.put("Description", "description");
+        aliasMap.put("backgroundColor", "backgroundColor");
+        aliasMap.put("BackgroundColor", "backgroundColor");
+        aliasMap.put("race", "race");
+        aliasMap.put("Race", "race");
+        aliasMap.put("eyes", "eyes");
+        aliasMap.put("Eyes", "eyes");
+        aliasMap.put("mouth", "mouth");
+        aliasMap.put("Mouth", "mouth");
+        aliasMap.put("haircut", "haircut");
+        aliasMap.put("Haircut", "haircut");
+        aliasMap.put("hairColor", "hairColor");
+        aliasMap.put("HairColor", "hairColor");
+        aliasMap.put("skin", "skin");
+        aliasMap.put("Skin", "skin");
+        aliasMap.put("outfit", "outfit");
+        aliasMap.put("Outfit", "outfit");
+        aliasMap.put("accessories", "accessories");
+        aliasMap.put("Accessories", "accessories");
+        aliasMap.put("aura", "aura");
+        aliasMap.put("Aura", "aura");
+        aliasMap.put("symbols", "symbols");
+        aliasMap.put("Symbols", "symbols");
+        aliasMap.put("effects", "effects");
+        aliasMap.put("Effects", "effects");
+        aliasMap.put("backgrounds", "backgrounds");
+        aliasMap.put("Backgrounds", "backgrounds");
+        aliasMap.put("decorations", "decorations");
+        aliasMap.put("Decorations", "decorations");
+        aliasMap.put("badges", "badges");
+        aliasMap.put("Badges", "badges");
+        aliasMap.put("version", "version");
+        aliasMap.put("Version", "version");
+        aliasMap.put("offChainVersion", "offChainVersion");
+        aliasMap.put("OffChainVersion", "offChainVersion");
+        aliasMap.put("createdBy", "createdBy");
+        aliasMap.put("CreatedBy", "createdBy");
+        aliasMap.put("createdAt", "createdAt");
+        aliasMap.put("CreatedAt", "createdAt");
+        aliasMap.put("updatedBy", "updatedBy");
+        aliasMap.put("UpdatedBy", "updatedBy");
+        aliasMap.put("updatedAt", "updatedAt");
+        aliasMap.put("UpdatedAt", "updatedAt");
+        aliasMap.put("active", "active");
+        aliasMap.put("Active", "active");
+        aliasMap.put("deleted", "deleted");
+        aliasMap.put("Deleted", "deleted");
+    }
+
+    private static void initPropertyTypeMap() {
+        for (int i = 0; i < propertyNames.length; i++ ) {
+            propertyTypeMap.put(propertyNames[i], propertyTypes[i]);
+        }
+    }
+
+  }
+
+
+  // /////////////////////////////////////////////////////////  
+  public static class AvatarChangeMetadata {
+
+    private AvatarChangeMetadata() {
+    }
+
+    public static final String PROPERTY_NAME_VERSION      = "offChainVersion";
+    public static final String PROPERTY_NAME_ACTIVE       = "active";
+    public static final String PROPERTY_NAME_DELETED      = "deleted";
+    public static final String PROPERTY_NAME_CREATED_BY   = "createdBy";
+    public static final String PROPERTY_NAME_CREATED_AT   = "createdAt";
+    public static final String PROPERTY_NAME_UPDATED_BY   = "updatedBy";
+    public static final String PROPERTY_NAME_UPDATED_AT   = "updatedAt";
+
+    public static final Class ID_CLASS = String.class;
+
+    public static final String[] propertyNames = new String[] {
+            "avatarId",
+            "imageUrl",
+            "backgroundColor",
+            "haircut",
+            "outfit",
+            "accessories",
+            "aura",
+            "symbols",
+            "effects",
+            "backgrounds",
+            "decorations",
+            "badges",
+            "version",
+            "offChainVersion",
+            "createdBy",
+            "createdAt",
+            "updatedBy",
+            "updatedAt",
+            "active",
+            "deleted",
+    };
+
+    public static final String[] propertyTypes = new String[] {
+            "String",
+            "String",
+            "Long",
+            "Integer",
+            "Integer",
+            "int[]",
+            "Integer",
+            "int[]",
+            "int[]",
+            "int[]",
+            "int[]",
+            "int[]",
+            "BigInteger",
+            "Long",
+            "String",
+            "Date",
+            "String",
+            "Date",
+            "Boolean",
+            "Boolean",
+    };
+
+    public static final Map<String, String> propertyTypeMap;
+
+    public static final Map<String, String> aliasMap;
+
+    static {
+        propertyTypeMap = new HashMap<String, String>();
+        initPropertyTypeMap();
+        aliasMap = new HashMap<String, String>();
+        initAliasMap();
+    }
+
+    private static  void initAliasMap() {
+        aliasMap.put("avatarId", "avatarId");
+        aliasMap.put("AvatarId", "avatarId");
+        aliasMap.put("imageUrl", "imageUrl");
+        aliasMap.put("ImageUrl", "imageUrl");
+        aliasMap.put("backgroundColor", "backgroundColor");
+        aliasMap.put("BackgroundColor", "backgroundColor");
+        aliasMap.put("haircut", "haircut");
+        aliasMap.put("Haircut", "haircut");
+        aliasMap.put("outfit", "outfit");
+        aliasMap.put("Outfit", "outfit");
+        aliasMap.put("accessories", "accessories");
+        aliasMap.put("Accessories", "accessories");
+        aliasMap.put("aura", "aura");
+        aliasMap.put("Aura", "aura");
+        aliasMap.put("symbols", "symbols");
+        aliasMap.put("Symbols", "symbols");
+        aliasMap.put("effects", "effects");
+        aliasMap.put("Effects", "effects");
+        aliasMap.put("backgrounds", "backgrounds");
+        aliasMap.put("Backgrounds", "backgrounds");
+        aliasMap.put("decorations", "decorations");
+        aliasMap.put("Decorations", "decorations");
+        aliasMap.put("badges", "badges");
+        aliasMap.put("Badges", "badges");
+        aliasMap.put("version", "version");
+        aliasMap.put("Version", "version");
+        aliasMap.put("offChainVersion", "offChainVersion");
+        aliasMap.put("OffChainVersion", "offChainVersion");
+        aliasMap.put("createdBy", "createdBy");
+        aliasMap.put("CreatedBy", "createdBy");
+        aliasMap.put("createdAt", "createdAt");
+        aliasMap.put("CreatedAt", "createdAt");
+        aliasMap.put("updatedBy", "updatedBy");
+        aliasMap.put("UpdatedBy", "updatedBy");
+        aliasMap.put("updatedAt", "updatedAt");
+        aliasMap.put("UpdatedAt", "updatedAt");
+        aliasMap.put("active", "active");
+        aliasMap.put("Active", "active");
+        aliasMap.put("deleted", "deleted");
+        aliasMap.put("Deleted", "deleted");
+    }
+
+    private static void initPropertyTypeMap() {
+        for (int i = 0; i < propertyNames.length; i++ ) {
+            propertyTypeMap.put(propertyNames[i], propertyTypes[i]);
+        }
+    }
+
   }
 
 

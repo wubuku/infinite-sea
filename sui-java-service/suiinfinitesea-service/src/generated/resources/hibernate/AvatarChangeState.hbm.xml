@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.avatarchange">
+  <class name="org.dddml.suiinfinitesea.domain.avatarchange.AbstractAvatarChangeState$SimpleAvatarChangeState" table="avatar_change">
+    <id name="avatarId" length="66">
+      <column name="avatar_id" sql-type="VARCHAR(66)" />
+      <generator class="assigned" />
+    </id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <property name="id_">
+      <column name="id" unique-key="unique_avatarchange_sid" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="imageUrl">
+      <column name="image_url" length="200" />
+    </property>
+    <property name="backgroundColor">
+      <column name="background_color" />
+    </property>
+    <property name="haircut">
+      <column name="haircut" />
+    </property>
+    <property name="outfit">
+      <column name="outfit" />
+    </property>
+    <property name="accessories">
+      <column name="accessories" />
+    </property>
+    <property name="aura">
+      <column name="aura" />
+    </property>
+    <property name="symbols">
+      <column name="symbols" />
+    </property>
+    <property name="effects">
+      <column name="effects" />
+    </property>
+    <property name="backgrounds">
+      <column name="backgrounds" />
+    </property>
+    <property name="decorations">
+      <column name="decorations" />
+    </property>
+    <property name="badges">
+      <column name="badges" />
+    </property>
+    <property name="version">
+      <column name="version" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+  </class>
+</hibernate-mapping>
