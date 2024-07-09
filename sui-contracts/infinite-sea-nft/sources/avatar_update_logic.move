@@ -2,20 +2,28 @@
 module infinite_sea_nft::avatar_update_logic {
     use std::option;
     use std::string;
+
+    use sui::tx_context;
     use sui::tx_context::TxContext;
-    use infinite_sea_nft::sorted_u8_vector_util;
-    use infinite_sea_nft::avatar_change;
 
     use infinite_sea_nft::avatar;
+    use infinite_sea_nft::avatar_change;
     use infinite_sea_nft::avatar_change::AvatarChange;
+    use infinite_sea_nft::sorted_u8_vector_util;
 
     friend infinite_sea_nft::avatar_aggregate;
+
+    const EInvalidSender: u64 = 101;
+    const EAvatarIdMismatch: u64 = 102;
 
     public(friend) fun verify(
         avatar_change: &AvatarChange,
         avatar: &mut avatar::Avatar,
         ctx: &TxContext,
     ): avatar::AvatarUpdated {
+        assert!(avatar::owner(avatar) == tx_context::sender(ctx), EInvalidSender); // Is this necessary?
+        assert!(avatar::id(avatar) == avatar_change::avatar_id(avatar_change), EAvatarIdMismatch);
+
         // ImageUrl:
         //   type: String
         let image_url = avatar_change::image_url(avatar_change);
