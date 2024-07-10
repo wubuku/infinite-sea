@@ -2379,9 +2379,9 @@ sui client call --package {main.packageId} \
 
 ### Mint NFT(PFP)
 
-持有 `NTF` 包发布对象 `Publisher` 的管理者，给入围用户 `Mint` NFT(PFP)。
+持有 `NTF` 包发布对象 `Publisher` 的管理者，可以给入围用户打造 NFT(PFP)。
 
-执行以下 Sui CLI 命令进行 `Mint`：
+执行以下 Sui CLI 命令进行 Mint：
 
 ```shell
 sui client call --package {nft.packageId} \
@@ -2418,20 +2418,20 @@ sui client call --package {nft.packageId} \
 * `{description}`： 类型为 `String`。头像描述信息。
 * `{background_color}`： 类型为 `u32`。背景颜色。
 * `{race}`：类型为 `u8`。种族类别。
-* `{eyes}`：类型为 `u8`。
-* `{mouth}`：类型为 `u8`。
-* `{haircut}`：类型为 `u8`。
-* `{skin}`：类型为 `u8`。
-* `{outfit}`：类型为 `u8`。
-* `{accessories}`：类型为 `vector<u8>`。
-* `{aura}`：类型为 `u8`。
-* `{symbols}`：类型为 `vector<u8>`。
-* `{backgrounds}`：类型为 `vector<u8>`。
-* `{decorations}`：类型为 `vector<u8>`。
-* `{badges}`：类型为 `vector<u8>`。
+* `{eyes}`：类型为 `u8`。眼睛。
+* `{mouth}`：类型为 `u8`。嘴巴。
+* `{haircut}`：类型为 `u8`。发型。
+* `{skin}`：类型为 `u8`。皮肤。
+* `{outfit}`：类型为 `u8`。搭配。
+* `{accessories}`：类型为 `vector<u8>`。配饰数组。
+* `{aura}`：类型为 `u8`。光晕。
+* `{symbols}`：类型为 `vector<u8>`。符号数组。
+* `{backgrounds}`：类型为 `vector<u8>`。背景数组。
+* `{decorations}`：类型为 `vector<u8>`。装饰数组。
+* `{badges}`：类型为 `vector<u8>`。徽章数组。
 
 
-如果成功，将得到类似如下的 JSON 格式的输出结果：
+执行成功，将得到如下相似的 JSON 格式输出结果（部分）：
 
 ```json
 {
@@ -2450,7 +2450,7 @@ sui client call --package {nft.packageId} \
   ]
 }
 ```
-其中 `objectId` 即为为用户创建的 NFT 对象 ID。后面的测试中需要使用 NFT 对象 ID 的地方，可用占位符 `{avatarId}` 来引用它。
+其中 `objectId` 即为给用户打造的 NFT 对象之 ID。后面的测试中需要使用 NFT 对象 ID 的地方，将使用占位符 `{avatarId}` 来引用它。
 
 [TBD]
 
