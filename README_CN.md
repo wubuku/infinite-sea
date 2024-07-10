@@ -2381,7 +2381,11 @@ sui client call --package {main.packageId} \
 
 持有 `NTF` 包发布对象 `Publisher` 的管理者，可以给入围用户打造 NFT(PFP)。
 
+The manager who holds the `NTF` package publishing object `Publisher` gives the user Mint NFT (PFP).
+
 执行以下 Sui CLI 命令进行 Mint：
+
+Execute the Sui CLI command for Mint:
 
 ```shell
 sui client call --package {nft.packageId} \
@@ -2411,27 +2415,31 @@ sui client call --package {nft.packageId} \
 
 参数解释：
 
-* `{nft.PackageId}`：NFT 合约包 ID。
-* `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID。
-* `{owner}`： 类型为 `address`。入围用户账号地址。
-* `{image_url}`： 类型为 `String`。NFT 头像图片 URL。
-* `{description}`： 类型为 `String`。头像描述信息。
-* `{background_color}`： 类型为 `u32`。背景颜色。
-* `{race}`：类型为 `u8`。种族类别。
-* `{eyes}`：类型为 `u8`。眼睛。
-* `{mouth}`：类型为 `u8`。嘴巴。
-* `{haircut}`：类型为 `u8`。发型。
-* `{skin}`：类型为 `u8`。皮肤。
-* `{outfit}`：类型为 `u8`。搭配。
-* `{accessories}`：类型为 `vector<u8>`。配饰数组。
-* `{aura}`：类型为 `u8`。光晕。
-* `{symbols}`：类型为 `vector<u8>`。符号数组。
-* `{backgrounds}`：类型为 `vector<u8>`。背景数组。
-* `{decorations}`：类型为 `vector<u8>`。装饰数组。
-* `{badges}`：类型为 `vector<u8>`。徽章数组。
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID（Contract package publisher object ID）。
+* `{owner}`： 类型为 `address`。入围用户账号地址（Address of user）。
+* `{image_url}`： 类型为 `String`。NFT 头像图片 URL（NFT image URL）。
+* `{description}`： 类型为 `String`。头像描述信息（NFT description）。
+* `{background_color}`： 类型为 `u32`。背景颜色(Background color)。
+* `{race}`：类型为 `u8`。种族类别(Race)。
+* `{eyes}`：类型为 `u8`。眼睛(Eyes)。
+* `{mouth}`：类型为 `u8`。嘴巴(Mouth)。
+* `{haircut}`：类型为 `u8`。发型(Haircut)。
+* `{skin}`：类型为 `u8`。皮肤(Skin)。
+* `{outfit}`：类型为 `u8`。搭配(Outfit)。
+* `{accessories}`：类型为 `vector<u8>`。配饰数组(Accessory vector)。
+* `{aura}`：类型为 `u8`。光晕(Aura)。
+* `{symbols}`：类型为 `vector<u8>`。符号数组(Symbol vector)。
+* `{backgrounds}`：类型为 `vector<u8>`。背景数组(Background vector)。
+* `{decorations}`：类型为 `vector<u8>`。装饰数组(Decoration vector)。
+* `{badges}`：类型为 `vector<u8>`。徽章数组(Badge vector)。
 
 
 执行成功，将得到如下相似的 JSON 格式输出结果（部分）：
+
+After successful command execution, you will receive an output with a JSON structure similar to the following:
 
 ```json
 {
@@ -2450,7 +2458,9 @@ sui client call --package {nft.packageId} \
   ]
 }
 ```
-其中 `objectId` 即为给用户打造的 NFT 对象之 ID。后面的测试中需要使用 NFT 对象 ID 的地方，将使用占位符 `{avatarId}` 来引用它。
+其中 `objectId` 即为给用户打造的 NFT 对象之 ID。后面测试中需要使用 NFT 对象 ID 的地方，将使用占位符 `{avatarId}` 来引用它。
+
+Among them, 'objectId' is the ID of the NFT object created for the user. In future tests, where NFT object IDs are required, placeholders ` {avatarId} ` will be used to reference it.
 
 [TBD]
 
