@@ -246,7 +246,7 @@ wubuku/dddappp-sui:master \
     "Publisher": "0x72125115394e65be1dc2d14de9c95b82902802833ed0e6b92d617c6bcbd5756a",
     "SkillProcessTable": "0x897fee0c359ee90de31943bac058d1be1fea2810d1b119d0984b06bd4029d515",
     "Map": "0xd903392c9ef9633bec1338414341e558369726bbbc17aa4d64b2c61547b9a9bd",
-    "UpgradeCap": "0xfdd03f8be325c10ecf302d11cde88a4ee220077be1a7eefc3dd1ca0436d354eb",
+    "UpgradeCap": "0xfdd03f8be325c10ecf302d11cde88a4ee220077be1a7eefc3dd1ca0436d354eb"
   }
 }
 ```
@@ -2367,6 +2367,62 @@ sui client call --package {main.packageId} \
 * `{common.ExperienceTable}`：类型为 `&ExperienceTable`。CLI 中可传入玩家积分（经验）等级表格对象 ID。
 * `{clock}`：类型为 `&Clock`。CLI 中可传入固定值：0x6。
 * `{choice}`： 类型为 `u8`。获胜方对战利品的行动选择，1: 接受, 0: 放弃。
+
+
+### Mint NFT(PFP)
+
+持有 `NTF` 包发布对象 `Publisher` 的管理者，给入围用户 `Mint` NFT(PFP)。
+
+执行以下 Sui CLI 命令进行 `Mint`：
+
+```shell
+sui client call --package {nft.packageId} \
+--module avatar_aggregate \
+--function mint \
+--args {publisherId}\
+{owner} \
+{name} \
+{initiator} \
+{image_url} \
+{description} \
+{background_color} \
+{race} \
+{eyes} \
+{mouth} \
+{haircut} \
+{skin} \
+{outfit} \
+{accessories} \
+{aura} \
+{symbols} \
+{effects} \
+{backgrounds} \
+{race} \
+{decorations} \
+{badges} \
+--json
+```
+
+参数解释：
+
+* `{nft.PackageId}`：NFT 合约包 ID。
+* `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID。
+* `{owner}`： 类型为 `address`。入围用户账号地址。
+* `{image_url}`： 类型为 `String`。NFT 头像图片 URL。
+* `{description}`： 类型为 `String`。头像描述信息。
+* `{background_color}`： 类型为 `u32`。背景颜色。
+* `{race}`：类型为 `u8`。种族类别。
+* `{eyes}`：类型为 `u8`。
+* `{mouth}`：类型为 `u8`。
+* `{haircut}`：类型为 `u8`。
+* `{skin}`：类型为 `u8`。
+* `{outfit}`：类型为 `u8`。
+* `{accessories}`：类型为 `vector<u8>`。
+* `{aura}`：类型为 `u8`。
+* `{symbols}`：类型为 `vector<u8>`。
+* `{backgrounds}`：类型为 `vector<u8>`。
+* `{decorations}`：类型为 `vector<u8>`。
+* `{badges}`：类型为 `vector<u8>`。
 
 [TBD]
 
