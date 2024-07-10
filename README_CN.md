@@ -212,8 +212,9 @@ wubuku/dddappp-sui:master \
 链上合约包括三个项目（包）：
 
 1. Coin 合约项目
-2. Common 合约项目
-3. Main 合约项目
+2. NFT 合约项目
+3. Common 合约项目
+4. Main 合约项目
 
 #### Testnet 发布信息
 
@@ -239,6 +240,12 @@ wubuku/dddappp-sui:master \
     "ItemCreationWooding": "0xfef7bb0b8bf9f028b734e48657250679e2af20b4047f0c89ce099eb9c47636cd",
     "ItemProductionCrafting": "0xd97f7bf2bd3315265c5d37ae6774f0b331263c08e4b7c2b084cd8a863dd787cf"
   },
+  "nft": {
+    "Digest": "BFPLfJfrv1BZjFDaCQXdRcSgeCZDaHSkwEoiUNHHY14D",
+    "PackageId": "0xfb136fbf0c9bf27cf71938835155928092240f537c5e84f67084fefb268e253d",
+    "Publisher": "0x74f9944d58bdee37a8cbcc996780f4703800148656f4e2c149d20d8130144f23",
+    "AvatarChangeTable": "0xb0521ecccba5da35099aa1154f0fced56a39e0305a2d3aeec32ce770cd677d77"
+  },
   "main": {
     "Digest": "28VVTXTpwCwqdJNCcwUPyEMRwp9bjNDHVjSJ9XdNzNfR",
     "RosterTable": "0x61fb2d0e985fa2acd257f4495bf0bc13f083c248bb604317415f08a645138e5c",
@@ -256,6 +263,7 @@ wubuku/dddappp-sui:master \
 * `coin.packageid`：Coin 合约包的 Id。
 * `coin.FaucetId`：玩家用来请求 `ENERGY` 的水龙头的 Object ID。
 * `common.PackageId`：Common 合约包的 Id。
+* `nft.PackageId`：NFT 合约包的 Id。
 * `main.Digest`：发布 Main 包交易的摘要。
 * `main.Map`：地图（map）的 Object ID。
 * `common.ExperienceTable` 玩家积分（经验）等级表的 Object ID。
@@ -2382,7 +2390,6 @@ sui client call --package {nft.packageId} \
 --args {publisherId}\
 {owner} \
 {name} \
-{initiator} \
 {image_url} \
 {description} \
 {background_color} \
@@ -2397,7 +2404,6 @@ sui client call --package {nft.packageId} \
 {symbols} \
 {effects} \
 {backgrounds} \
-{race} \
 {decorations} \
 {badges} \
 --json
@@ -2423,6 +2429,28 @@ sui client call --package {nft.packageId} \
 * `{backgrounds}`：类型为 `vector<u8>`。
 * `{decorations}`：类型为 `vector<u8>`。
 * `{badges}`：类型为 `vector<u8>`。
+
+
+如果成功，将得到类似如下的 JSON 格式的输出结果：
+
+```json
+{
+  "objectChanges": [    
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "AddressOwner": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450"
+      },
+      "objectType": "0xfb136fbf0c9bf27cf71938835155928092240f537c5e84f67084fefb268e253d::avatar::Avatar",
+      "objectId": "0xc9998bf99612c61be7c23620a969049047f93a7d2ef3ef69aa37cfe7c3139f95",
+      "version": "51055253",
+      "digest": "7VBF57Tvr4AMFvYGCQxZCsCnAjxhX77WfD8Jrp4MfezZ"
+    }
+  ]
+}
+```
+其中 `objectId` 即为为用户创建的 NFT 对象 ID。后面的测试中需要使用 NFT 对象 ID 的地方，可用占位符 `{avatarId}` 来引用它。
 
 [TBD]
 
