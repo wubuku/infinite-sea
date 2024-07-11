@@ -1684,9 +1684,9 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
   “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
 
-### ~~【Old】申请 ENERGY（on testnet）
+### ~~【Old】申请 ENERGY（on testnet）~~
 
-玩家在生产制造以及航行时都需要花费 `ENERGY` 代币。
+~~玩家在生产制造以及航行时都需要花费 `ENERGY` 代币。
 在测试网上，玩家可以使用以下 Sui CLI 命令申请 `ENERGY` 代币：~~
 
 ```shell
