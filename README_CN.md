@@ -215,10 +215,13 @@ wubuku/dddappp-sui:master \
 2. NFT 合约项目
 3. Common 合约项目
 4. Main 合约项目
+5. Faucet 合约项目
 
 #### Testnet 发布信息
 
-我们在 Sui testnet 上发布以上 3 个合约包，相关信息记录如下：
+#### ~~Old（Before 2024-07-11)~~
+
+~~我们在 Sui testnet 上发布以上 3 个合约包，相关信息记录如下：~~
 
 ```json
 {
@@ -257,6 +260,60 @@ wubuku/dddappp-sui:master \
   }
 }
 ```
+
+#### New 【from 2024-07-11】
+```json
+{
+  "coin": {
+    "TreasuryCap": "0x73e4b21c1a6b3d034538ab3ebc44554225ba4d1a0dacf76c5775cb644c107989",
+    "PackageId": "0xcbf5a847697e587a3b51552f292bd840a1b188cd4709a871246a187fb3ea25b7",
+    "Digest": "5wBWJU1fTXXBxbXdSHboXC6CH3RgxsnzXRLGR7h6TVC1",
+    "EnergyId": "0x862834cc4c97137b5fdb5dfa24558d4abc0db478807e56970ebc3f50368f0912"
+  },
+  "common": {
+    "Digest": "3PyV6YC2oVwwEHhxo2c1XAgi2F9SwkBmz4A4bJvqgNKL",
+    "Publisher": "0x3845adf9807a71da74d197fb51b9d63bd9dc214dba563e15605578a8bbaf1cbf",
+    "ExperienceTable": "0x5472d5bea6652f6b11eebf58b49ef2e7c17a35327d4780af44455e039eed07e2",
+    "ItemProductionTable": "0xba172b2db84a2aefc64ff8dc561553de9169f426906d8d2a2cae550c72e617af",
+    "PackageId": "0xc51fc1abfc3b539ab249ae46121a26e04bbf63adab15b5aed1faf1eb099002b2",
+    "ItemCreationTable": "0xf863870044e621b2f9e7e313d849b608c06784f2dc213d7f2df268ff3c4101a9",
+    "ItemTable": "0xfac48638fecfad8ec4531dc75cdb0cd2950c5df1f9e3f8f7a037581ba43e421e",
+    "ItemCreationMining": "0x972c03f5eae62eb583c7ef686b2e3400d70241bb82f9986f8a9d049a42201550",
+    "ItemProductionFarming": "0x4241e1731aad50ca62a1b810c024e389ce1005085c3542de5e42979399a4fe75",
+    "ItemCreationWooding": "0xab4eac22c9ad4f2da0bcf1d49c0fe8630a8fb2f434c9477760ef275510e86a04",
+    "ItemProductionCrafting": "0xc3a059de421d201ec06dadc35bc2337ecb8534ba170c04bfa7d792b6e405acae"
+  },
+  "main": {
+    "Digest": "8pADmFeAwbkSDopvRhyvP7wQTCCnAF5MUb5LhsZ8UdeV",
+    "Publisher": "0x05368db0e481eaaddaa1fb055be47f4e8bea48c34cdc5da16230d2d80c1fae44",
+    "Map": "0x5a6fd39921de3f245e670f6c8383138b3ab4bab361e4bcafd0bb6285b77c75c3",
+    "SkillProcessTable": "0x66ed4ea3e74568e31ffdf4e8b01b96b0b3ca90ef5e7ab14dcdf34cc27c245c30",
+    "RosterTable": "0xa68c344f21dcca3bd5e44423d4ffc1ceccd379d9f4bed07b3858c4cd1135a061",
+    "AdminCap": "0xc96f0236a239a9cb0c04e0073198ec7acdfb12b6da2ff9ee6ea693b0a2f5e94d",
+    "PackageId": "0xf32fc64aca3986e7406fcf1e2656b8ac512ffbd5953c8d894cbd9364806a6aad",
+    "UpgradeCap": "0xf95eb7c1ba2b8e4b99101fa5d425eb4ab74174a4b898270b00815029ebe80c8f",
+    "Player": "0x4bada39916e0ff2cd8bd32c79787d2294a6851364049078c6637640a95f9b776",
+    "SkillProcessFarming1": "0x300850bcb426be2293ad100944e0e5328bdd883f7622c9db1a632a462912f450",
+    "SkillProcessMining": "0x4386ee35dcbc9e4270502ba4dd0e8f3117a693d3791278d440bcda733e3ff076",
+    "SkillProcessFarming2": "0x5219b8e897aa02553c8740da8fc476fbdae6a192f20dc96a0d137e877a4b7506",
+    "SkillProcessCrafting": "0xbd9a5da2ab95371832d87b5d4e4d828ebc3c6e0b50c497c1bc7d0e6091e7d4e7",
+    "SkillProcessWooding": "0xda45efc3427810ac03b019e261b4e9a47d0dd9bf311dc19707beb930d705001b"
+  },
+  "faucet": {
+    "EnergyFaucet": "0x2c489c2e11104927f59d257adabe8591de90352efc596c90c6c78ff1cf88f685",
+    "PackageId": "0x96f047134c384bb6d0a6d38c42ef1e73a6b9383677ef6b656d6c503e147cd58e",
+    "Digest": "FqtbaoSLcL9Q6Es4hsTEnoRgfD7D5gQPNo4D7EgQMuvT"
+  },
+  "nft": {
+    "Publisher": "0x1cba3a9b86898a44b21e40432008884e9205d4cbc63bb869394184cfc4408237",
+    "AvatarChangeTable": "0x7c37e2f3080390f6d9d1097fb0f9f2b8352b24a05b8069d0f0cbfac5b45bca7c",
+    "PackageId": "0xd03934bda3e2bdb3129535eb654028b07cc17a019a6e9cc0a05f0ab4583b5b45",
+    "Digest": "FAE6a6tD2wj1Z54ASg5Lcb4zszjeVmrx2WrR4cmGVttf"
+  }
+}
+
+```
+
 
 解释如下：
 
@@ -1627,10 +1684,10 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
   “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
 
-### 申请 ENERGY（on testnet）
+### ~~【Old】申请 ENERGY（on testnet）
 
 玩家在生产制造以及航行时都需要花费 `ENERGY` 代币。
-在测试网上，玩家可以使用以下 Sui CLI 命令申请 `ENERGY` 代币：
+在测试网上，玩家可以使用以下 Sui CLI 命令申请 `ENERGY` 代币：~~
 
 ```shell
 sui client call --package  {coin.PackageId} --module energy_faucet --function request_a_drop --args {coin.FaucetId} --json
@@ -1678,7 +1735,64 @@ sui client call --package  {coin.PackageId} --module energy_faucet --function re
 ```
 
 在属性 `objectChanges` 中可以看到对象类型 `objectType` 为 `0x2::coin::Coin<{coin.PackageId}::energy::ENERGY>` 的对象，   
-在属性 `balanceChanges` 中可以看到货币类型 `coinType` 为 `{coin.PackageId}::energy::ENERGY` 和数量 `amount` 为 `100000000000` 的对象。 
+在属性 `balanceChanges` 中可以看到货币类型 `coinType` 为 `{coin.PackageId}::energy::ENERGY` 和数量 `amount` 为 `100000000000` 的对象。
+
+
+
+### 【New】申请 ENERGY（on testnet）
+
+玩家在生产制造以及航行时都需要花费 `ENERGY` 代币。
+在测试网上，玩家可以使用以下 Sui CLI 命令申请 `ENERGY` 代币：
+
+```shell
+sui client call --package  {faucet.PackageId} --module energy_faucet --function request_a_drop --args {faucet.EnergyFaucet} {clock} --json
+```
+
+参数解释：
+
+* {main.PackageId}：`faucet 合约包的 ID。
+* {faucet.EnergyFaucet}：类型为 `&mut EnergyFaucet`。CLI 中可传入 `ENERGY` 的水龙头对象 ID。
+* {clock}: 类型为 `&Clock`。时钟对象的 ID，固定值：`0x6`。
+
+该命令成功执行后，可获得以下类似输出：
+```json
+{
+  "digest": "kn1XpHHKX6xLHbTVA1FHgWktqfQZuy5i5G6UrJdAPAr",
+  "effects": {
+    "messageVersion": "v1",
+    "status": {
+      "status": "success"
+    }
+  },
+  "objectChanges": [
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "AddressOwner": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450"
+      },
+      "objectType": "0x2::coin::Coin<0xcbf5a847697e587a3b51552f292bd840a1b188cd4709a871246a187fb3ea25b7::energy::ENERGY>",
+      "objectId": "0xe5738b1d69e3b24675336ff23f45b8ef059e49037e9c463b4335d54a19422379",
+      "version": "76860353",
+      "digest": "3NaLfuTyszT86H19LS4hD8m2gfj6vdCzx44m4K2KN7sx"
+    }
+  ],
+  "balanceChanges": [
+    {
+      "owner": {
+        "AddressOwner": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450"
+      },
+      "coinType": "0xcbf5a847697e587a3b51552f292bd840a1b188cd4709a871246a187fb3ea25b7::energy::ENERGY",
+      "amount": "50000000000"
+    }
+  ],
+  "confirmedLocalExecution": true
+}
+```
+
+在属性 `objectChanges` 中可以看到对象类型 `objectType` 为 `0x2::coin::Coin<{faucet.PackageId}::energy::ENERGY>` 的对象，   
+在属性 `balanceChanges` 中可以看到货币类型 `coinType` 为 `{faucet.PackageId}::energy::ENERGY` 和数量 `amount` 为 `50000000000` 的对象。
+
 
 ### 查询 `ENERGY`余额
 
