@@ -74,7 +74,18 @@ public class RosterUtil {
                         .multiply(ENERGY_AMOUNT_PER_SECOND_PER_SHIP);
     }
 
-    public static BigInteger[] calculateTotalTimeAndEnergyCost(Long[] origin, Long[] destination, long speed_property, long ship_count) {
+
+    /**
+     *
+     * @param origin Source coordinates
+     * @param destination Destination coordinates
+     * @param speed_property The speed of the fleet
+     * @param ship_count The number of ships in the fleet
+     * @return The return value is an array, with the first value being the required time in seconds and the second
+     * value being the ENERGY consumed
+     */
+    public static BigInteger[] calculateTotalTimeAndEnergyCost(Long[] origin, Long[] destination, long speed_property,
+                                                               long ship_count) {
         long total_time = calculateTotalTime(origin, destination, speed_property);
         return new BigInteger[]{
                 BigInteger.valueOf(total_time),

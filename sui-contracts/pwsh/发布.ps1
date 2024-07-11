@@ -44,6 +44,122 @@ $playerName = 'John'
 $mintAmout = 600000 * 1000 * 1000 * 1000
 
 
+"------------------------------------- 发布 infinite-sea-nft -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+# 重新发布 infinite-sea-nft
+$nftPath = Join-Path $startLocation "..\infinite-sea-nft"
+#加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-ntf
+$nftPath = Get-Item -Path $nftPath
+#$coinPath 其实是个对象
+"切换目录到 $nftPath" | Tee-Object -FilePath $logFile -Append | Write-Host
+if (-not (Test-Path -Path $nftPath)) {
+    "目录 $nftPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    return
+}
+Set-Location $nftPath
+
+"发布之前将 Move.toml 文件恢复到初始状态" | Tee-Object -FilePath $logFile -Append | Write-Host
+$file = "$nftPath\Move.toml"
+if (-not (Test-Path -Path $file -PathType Leaf)) {
+    "文件 $file 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    return
+}
+$fileContent = Get-Content -Path $file 
+for ($i = 0; $i -lt $fileContent.Count; $i++) {
+    #Write-Host $fileContent[$i]
+    if ($fileContent[$i].Contains('published-at')) {
+        if ($fileContent[$i] -like "#*") {            
+        }
+        else {
+            $fileContent[$i] = "#" + $fileContent[$i]
+        }
+    }
+    if ($fileContent[$i].Contains('infinite-sea-nft =')) {
+        $fileContent[$i] = 'infinite-sea-nft = "0x0"'
+    }
+}
+$fileContent | Set-Content $file
+"Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+"开始发布合约 infinite-sea-nft..." | Tee-Object -FilePath $logFile -Append | Write-Host
+
+$publishNftJson = ""
+$nftPackingId = ""
+$nftPublisherId = ""
+$avatarChangeTableId = ""
+$avatarDisplayId = ""
+
+try {
+    $publishNftJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --json
+    if (-not ('System.Object[]' -eq $publishNftJson.GetType())) {
+        "发布 infinite-sea-nft 合约失败: $publishNftJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    $publishFaucetJsonObj = $publishNftJson | ConvertFrom-Json
+    try {
+        foreach ($object in $publishFaucetJsonObj.objectChanges) {
+            if ($null -ne $object.packageId -and $object.packageId -ne "") {
+                $nftPackingId = $object.packageId;
+                $dataNft | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $nftPackingId
+                "NFT PackageID: $nftPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+            if ($object.objectType -eq '0x2::package::Publisher') {
+                $nftPublisherId = $object.objectId;
+                $dataNft | Add-Member -MemberType NoteProperty -Name "Publisher" -Value $nftPublisherId
+                "Publisher ID: $nftPublisherId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+            if ($object.objectType -like '*avatar_change::AvatarChangeTable') {
+                $avatarChangeTableId = $object.objectId;
+                $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarChangeTable" -Value $avatarChangeTableId
+                "AvatarChangeTable ID: $avatarChangeTableId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+            if ($object.objectType -like 'display*avatar::Avatar') {
+                $avatarDisplayId = $object.objectId;
+                $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarDisplay" -Value $avatarDisplayId
+                "Display<Avatar> ID: $avatarDisplayId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+        }
+        $nftDigest = $publishCoinJsonObj.digest
+        $dataNft | Add-Member -MemberType NoteProperty -Name "Digest" -Value $nftDigest
+        "Faucet digest: $nftDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+    }
+    catch {
+        "解析 NFT 返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    if ($nftPackingId -eq "") {
+        "Cant find NFT package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+}
+catch {
+    "发布 infinite-sea-nft 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    "返回的结果为:$publishNftJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    Set-Location $startLocation
+    return
+}
+"更新 Move.toml 文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
+$fileContent = Get-Content -Path $file 
+for ($i = 0; $i -lt $fileContent.Count; $i++) {
+    #Write-Host $fileContent[$i]
+    if ($fileContent[$i].Contains('published-at')) {
+        $fileContent[$i] = 'published-at = "' + $coinPackingId + '"'
+    }
+    if ($fileContent[$i].Contains('infinite-sea-nft =')) {
+        $fileContent[$i] = 'infinite-sea-nft = "' + $coinPackingId + '"'
+    }
+}
+$fileContent | Set-Content $file
+"NFT Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+"`n休息一下,以免不能及时同步..." | Write-Host
+Start-Sleep -Seconds 3
+"休息完成，继续干活..." | Write-Host
+
+Set-Location $startLocation
 
 
 "------------------------------------- 发布 infinite-sea-coin -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
@@ -217,8 +333,6 @@ Start-Sleep -Seconds 3
 
 Set-Location $startLocation
 
-
-
 "------------------------------------- 发布 infinite-sea-faucet -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
 # 重新发布 infinite-sea-faucet
@@ -284,6 +398,9 @@ try {
                 "EnergyFaucet ID: $energyFaucetId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
         }
+        $faucetDigest = $publishFaucetJsonObj.digest
+        $dataFaucet | Add-Member -MemberType NoteProperty -Name "Digest" -Value $faucetDigest
+        "Faucet digest: $faucetDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
     }
     catch {
         "解析 Faucet 返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
@@ -295,10 +412,6 @@ try {
         Set-Location $startLocation
         return
     }
-
-    $faucetDigest = $publishCoinJsonObj.digest
-    $dataFaucet | Add-Member -MemberType NoteProperty -Name "Digest" -Value $faucetDigest
-    "Faucet digest: $faucetDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
 }
 catch {
     "发布 infinite-sea-faucet 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
@@ -307,7 +420,7 @@ catch {
     return
 }
 
-"更新Move.toml文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
+"更新 Move.toml 文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
 $fileContent = Get-Content -Path $file 
 for ($i = 0; $i -lt $fileContent.Count; $i++) {
     #Write-Host $fileContent[$i]
@@ -341,7 +454,7 @@ try {
         if ($object.coinType -like '*energy::ENERGY') {
             $replenishedAmount = - $object.amount; #这是个负值
             if ($replenishedAmount -eq $replenishAmount) {                
-                "给水龙头补充 Coin<ENERGY> 成功，数量: $replenishedAmount `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                "给水龙头补充 Coin<ENERGY> 成功，数量: $replenishedAmount `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
             break
         }
@@ -357,6 +470,7 @@ if ($replenishedAmount -le 0) {
     "给水龙头补充 Coin<ENERGY> 的数量为 $replenishedAmount ,请检查: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
 }
 Set-Location $startLocation
+
 
 
 "------------------------------------- 重新发布 infinite-sea-common -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
@@ -400,7 +514,7 @@ $fileContent | Set-Content $file
 $publishCommonJson = ""
 $publishCommonObj = $null
 try {
-    $publishCommonJson = sui client publish --gas-budget 900000000 --skip-fetch-latest-git-deps --skip-dependency-verification --json
+    $publishCommonJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --json
     #发布成功之后返回的类型是 System.Object[]
     #Write-Host $publishCommonJson.GetType()
     #if ('System.String' -eq $publishCommonJson.GetType()-and $publishCommonJson | Test-Json) {}
