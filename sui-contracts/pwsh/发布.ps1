@@ -19,12 +19,16 @@ $dataFile = "$startLocation\data.json"
 
 $dataJson = New-Object -TypeName PSObject
 $dataCoin = New-Object -TypeName PSObject
+$dataFaucet = New-Object -TypeName PSObject
+$dataNft = New-Object -TypeName PSObject
 $dataCommon = New-Object -TypeName PSObject
 $dataMain = New-Object -TypeName PSObject
 
 $dataJson | Add-Member -MemberType NoteProperty -Name "coin" -Value $dataCoin
 $dataJson | Add-Member -MemberType NoteProperty -Name "common" -Value $dataCommon
 $dataJson | Add-Member -MemberType NoteProperty -Name "main" -Value $dataMain
+$dataJson | Add-Member -MemberType NoteProperty -Name "faucet" -Value $dataFaucet
+$dataJson | Add-Member -MemberType NoteProperty -Name "nft" -Value $dataNft
 
 #要不要测试挖矿
 $testSkillProcessMining = $true
@@ -36,13 +40,13 @@ $testSkillProcessWooding = $true
 
 $playerName = 'John'
 
-# Mint Energy Amount
-$mintAmout = '999444440000000'
+# Mint Energy Amount 60万
+$mintAmout = 600000 * 1000 * 1000 * 1000
 
 
 
 
-"------------------------------------- 重新发布 infinite-sea-coin -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
+"------------------------------------- 发布 infinite-sea-coin -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
 # 重新发布infinite-sea-coin
 $coinPath = Join-Path $startLocation "..\infinite-sea-coin"
@@ -85,7 +89,7 @@ $fileContent | Set-Content $file
 $publishCoinJson = ""
 $publishCoinJsonObj = $null
 try {
-    $publishCoinJson = sui client publish --gas-budget 900000000 --skip-fetch-latest-git-deps --skip-dependency-verification --json
+    $publishCoinJson = sui client publish --gas-budget 100000000 --skip-fetch-latest-git-deps --skip-dependency-verification --json
     #发布成功之后返回的类型是 System.Object[]
     #Write-Host $publishCoinJson.GetType()
     #if ('System.String' -eq $publishCommonJson.GetType()-and $publishCommonJson | Test-Json) {}
@@ -165,7 +169,7 @@ $fileContent | Set-Content $file
 $mintJson = ""
 $energyId = ""
 try {
-    $mintJson = sui client call --package $coinPackingId --module energy --function mint --args $treasuryCap $mintAmout --gas-budget 19000000 --json
+    $mintJson = sui client call --package $coinPackingId --module energy --function mint --args $treasuryCap $mintAmout --json
     if (-not ('System.Object[]' -eq $mintJson.GetType())) {
         "分配 Mint 失败: $mintJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
@@ -204,41 +208,154 @@ catch {
 }
 
 if ($energyId -eq "") {
-    "未能获取Coin<ENERGY> Id，请停下来检查一下什么情况。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    "未能获取Coin<ENERGY> Id, 请停下来检查一下什么情况。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
 }
 
-"`n休息一下，以免不能及时同步..." | Write-Host
+"`n休息一下,以免不能及时同步..." | Write-Host
 Start-Sleep -Seconds 3
 "休息完成，继续干活..." | Write-Host
 
-"`n创建一个水龙头..." | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-$createFaucetResult = ""
-$faucetAmount = $mintAmout / 2
+Set-Location $startLocation
+
+
+
+"------------------------------------- 发布 infinite-sea-faucet -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+# 重新发布 infinite-sea-faucet
+$faucetPath = Join-Path $startLocation "..\infinite-sea-faucet"
+#加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-faucet
+$faucetPath = Get-Item -Path $faucetPath
+#$coinPath 其实是个对象
+"切换目录到 $faucetPath" | Tee-Object -FilePath $logFile -Append | Write-Host
+if (-not (Test-Path -Path $faucetPath)) {
+    "目录 $faucetPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    return
+}
+Set-Location $faucetPath
+
+"发布之前将 Move.toml 文件恢复到初始状态" | Tee-Object -FilePath $logFile -Append | Write-Host
+$file = "$faucetPath\Move.toml"
+if (-not (Test-Path -Path $file -PathType Leaf)) {
+    "文件 $file 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    return
+}
+$fileContent = Get-Content -Path $file 
+for ($i = 0; $i -lt $fileContent.Count; $i++) {
+    #Write-Host $fileContent[$i]
+    if ($fileContent[$i].Contains('published-at')) {
+        if ($fileContent[$i] -like "#*") {            
+        }
+        else {
+            $fileContent[$i] = "#" + $fileContent[$i]
+        }
+    }
+    if ($fileContent[$i].Contains('infinite_sea_faucet =')) {
+        $fileContent[$i] = 'infinite_sea_faucet = "0x0"'
+    }
+}
+$fileContent | Set-Content $file
+"Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+
+"开始发布合约 infinite-sea-faucet..." | Tee-Object -FilePath $logFile -Append | Write-Host
+
+$publishFaucetJson = ""
+$faucetPackingId = ""
+$energyFaucetId = ""
+
 try {
-    $createFaucetResult = sui client call --package $coinPackingId --module energy_faucet --function create_faucet --args $energyId $faucetAmount --json
-    if (-not ('System.Object[]' -eq $createFaucetResult.GetType())) {
-        "创建水龙头时返回: $createFaucetResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    $publishFaucetJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --json
+    if (-not ('System.Object[]' -eq $publishFaucetJson.GetType())) {
+        "发布 infinite_sea_coin 合约失败: $publishFaucetJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
         return
     }
-    $FaucetResultObj = $createFaucetResult | ConvertFrom-Json
-    foreach ($object in $FaucetResultObj.objectChanges) {
-        if ($object.ObjectType -like '*energy_faucet::EnergyFaucet') {
-            $FaucetId = $object.objectId
-            "水龙头 Id: $FaucetId ，预存 Energy 数量： $faucetAmount" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            $dataCoin | Add-Member -MemberType NoteProperty -Name "FaucetId" -Value $FaucetId
+    $publishFaucetJsonObj = $publishFaucetJson | ConvertFrom-Json
+    try {
+        foreach ($object in $publishFaucetJsonObj.objectChanges) {
+            if ($null -ne $object.packageId -and $object.packageId -ne "") {
+                $faucetPackingId = $object.packageId;
+                $dataFaucet | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $faucetPackingId
+                "Faucet PackageID: $faucetPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+            if ($object.objectType -like "*energy_faucet::EnergyFaucet") {
+                $energyFaucetId = $object.objectId;
+                $dataFaucet | Add-Member -MemberType NoteProperty -Name "EnergyFaucet" -Value $faucetPackingId
+                "EnergyFaucet ID: $energyFaucetId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+        }
+    }
+    catch {
+        "解析 Faucet 返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    if ($faucetPackingId -eq "") {
+        "Cant find Faucet package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+
+    $faucetDigest = $publishCoinJsonObj.digest
+    $dataFaucet | Add-Member -MemberType NoteProperty -Name "Digest" -Value $faucetDigest
+    "Faucet digest: $faucetDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+}
+catch {
+    "发布 infinite-sea-faucet 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    "返回的结果为:$publishFaucetJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    Set-Location $startLocation
+    return
+}
+
+"更新Move.toml文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
+$fileContent = Get-Content -Path $file 
+for ($i = 0; $i -lt $fileContent.Count; $i++) {
+    #Write-Host $fileContent[$i]
+    if ($fileContent[$i].Contains('published-at')) {
+        $fileContent[$i] = 'published-at = "' + $coinPackingId + '"'
+    }
+    if ($fileContent[$i].Contains('infinite_sea_faucet =')) {
+        $fileContent[$i] = 'infinite_sea_faucet = "' + $coinPackingId + '"'
+    }
+}
+$fileContent | Set-Content $file
+"Faucet Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+"`n休息一下,以免不能及时同步..." | Write-Host
+Start-Sleep -Seconds 3
+"休息完成，继续干活..." | Write-Host
+
+$replenishAmount = $mintAmout / 2;
+$replenishedAmount = 0;
+"用自己的 Coin<ENERGY> 给水龙头补水..." | Tee-Object -FilePath $logFile -Append | Write-Host
+$replenishJson = ""
+try {
+    $replenishJson = sui client call --package $faucetPackingId --module energy_faucet --function replenish_faucet --args $energyFaucetId $energyId $replenishAmount --json
+    if (-not ('System.Object[]' -eq $replenishJson.GetType())) {
+        "给水龙头补充 Coin<ENERGY> 失败: $replenishJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    $replenishObj = $replenishJson | ConvertFrom-Json
+    foreach ($object in $replenishObj.balanceChanges) {
+        if ($object.coinType -like '*energy::ENERGY') {
+            $replenishedAmount = - $object.amount; #这是个负值
+            if ($replenishedAmount -eq $replenishAmount) {                
+                "给水龙头补充 Coin<ENERGY> 成功，数量: $replenishedAmount `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            }
             break
         }
     }
 }
 catch {
-    "创建水龙头失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
-    "返回的结果为:$createFaucetResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    "给水龙头补充 Coin<ENERGY> 失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+    "返回的结果为:$replenishJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
     Set-Location $startLocation
     return    
 }
-"水龙头创建成功。よくできました❣" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-
+if ($replenishedAmount -le 0) {    
+    "给水龙头补充 Coin<ENERGY> 的数量为 $replenishedAmount ,请检查: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+}
 Set-Location $startLocation
 
 
