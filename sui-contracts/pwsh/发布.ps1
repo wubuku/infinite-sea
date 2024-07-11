@@ -394,7 +394,7 @@ try {
             }
             if ($object.objectType -like "*energy_faucet::EnergyFaucet") {
                 $energyFaucetId = $object.objectId;
-                $dataFaucet | Add-Member -MemberType NoteProperty -Name "EnergyFaucet" -Value $faucetPackingId
+                $dataFaucet | Add-Member -MemberType NoteProperty -Name "EnergyFaucet" -Value $energyFaucetId
                 "EnergyFaucet ID: $energyFaucetId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
         }

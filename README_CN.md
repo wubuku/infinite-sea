@@ -1801,13 +1801,13 @@ sui client call --package  {faucet.PackageId} --module energy_faucet --function 
 ```shell
 curl -X POST \
 -H "Content-Type: application/json" \
--d '{"jsonrpc":"2.0","id":1,"method":"suix_getCoins","params":["{accountAddress}","{coin.PackageId}::energy::ENERGY"]' https://fullnode.testnet.sui.io/
+-d '{"jsonrpc":"2.0","id":1,"method":"suix_getCoins","params":["{accountAddress}","{faucet.PackageId}::energy::ENERGY"]' https://fullnode.testnet.sui.io/
 ```
 
 参数解释：
 
 * `{accountAddress}`：类型为 `address`。玩家的 `Sui` 账户地址。
-* `{coin.PackageId}`: Coin 合约包 ID。
+* `{faucet.PackageId}`: Faucet 合约包 ID。
 
 可以获取以下格式的输出：
 
@@ -1837,7 +1837,7 @@ curl -X POST \
 }
 ```
 
-属性 `result.data` 是包含货币类型（`coinType`） 为 `{coin.PackageId}::energy::ENERGY` 的对象数组。  
+属性 `result.data` 是包含货币类型（`coinType`） 为 `{faucet.PackageId}::energy::ENERGY` 的对象数组。  
 数组中 `coinObjectId` 为账户中的货币对象 ID，可以作为开始“生产制造”的输入参数。  
 `balance` 之和即为账户 `{accountAddress}` 的 `ENERGY` 余额。
 
