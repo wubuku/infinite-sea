@@ -2124,8 +2124,8 @@ sui client call --package {main.PackageId} \
 * `{main.PackageId}`：Main 合约包的 ID。
 * `{rosteId}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
 * `{playerId}`： 类型为 `&Player`。CLI 中可传入玩家对象 ID。
-* `{shipIds}`： 类型为 `vector<ID>`。变更顺序的船只的 ID 的数组。
 * `{positions}`：类型为 `vector<u64>`。船只的位置数组。注意 `shipIds` 和 `positions` 数组的长度必须相等。
+* `{shipIds}`： 类型为 `vector<ID>`。变更顺序的船只的 ID 的数组。
 
 该合约函数的执行逻辑是依次执行由参数 `shipIds` 和 `positions` 组成的“船只位置调整指令”。
 为了确保调整的正确性，最简单的做法是，将船队所有位置的船只按照顺序传入 `shipIds` 和 `positions` 数组。
