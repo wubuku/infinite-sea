@@ -2577,14 +2577,16 @@ After successful command execution, you will receive an output with a JSON struc
 
 Among them, 'objectId' is the ID of the NFT object created for the user. In future tests, where NFT object IDs are required, placeholders ` {avatarId} ` will be used to reference it.
 
-### 创建NFT(PFP)变更信息
+### 创建 NFT(PFP) 变更信息
 
-NFT(PFP) 会因为很多因素而变化，比如每天登录并玩游戏，推广游戏等等，每当玩家的动作对 NFT 中的属性值造成影响时，前端要么创建 AvatarChange 对象（如果不存在），
-要么修改 NFT(PFP) 对应的已经存在的 AvatarChange 的对象。
+`NFT(PFP)` 会因为很多因素而变化，比如每天登录并玩游戏，推广游戏等等。
+
+每当玩家的动作对 `NFT(PFP)` 中的属性值造成影响时，如果与玩家 `NFT(PFP)` 对应的 `AvatarChange` 不存在，前端为其创建一个 `AvatarChange` 对象，
+如果已经存在那么修改 `AvatarChange` 的对象然后更新 `NFT(PFP)` 对象。
 
 前端通过检查玩家是否存在 `{nft.packageId}.avatar_change.AvatarChange` 结构类型的对象来决定是创建还是更新对应的 AvatarChange 对象。
 
-如果玩家不存在对应的 AvatarChange 对象，那么前端应该调用 `create` 接口，下面通过 `Sui Client call` 进行示例：
+如果玩家不存在对应的 `AvatarChange` 对象，那么前端应该调用 `create` 接口，下面通过 `Sui Client call` 进行示例：
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function create --args \
@@ -2650,6 +2652,51 @@ After successful command execution, you will receive an output with a JSON struc
 ```
 从上述结果中，可以看到类型为 `{nft.packageId}::avatar_change::AvatarChange` 的元素，我们将其 `objectId` 记录为 `{avatarChangeId}`。
 我们将在 `更新 AvatarChange` 以及 `更新 NFT(PFP)`接口函数中使用它。
+
+
+### 更新 NFT(PFP) 变更信息
+
+正如 `创建 NFT(PFP) 变更信息` 中所言，当需要玩家的活动造成其 `NFT(PFP)` 中的相关属性值变化时，如果与 `NFT(PFP)` 对应的 `AvatarChange` 对象已经存在，
+前端应该更新它，然后再使用它更新 `NFT(PFP)`。
+
+可以通过执行以下 `Sui Client call` 命令来更新 `AvatarChange` 对象：
+
+```shell
+sui client call --package {nft.packageId} --module avatar_change_aggregate --function update --args \
+{avatarChangeId} \
+{nft.Publisher} \
+{image_url} \
+{background_color} \
+{haircut} \
+{outfit} \
+{accessories} \
+{aura} \
+{symbols} \
+{effects} \
+{backgrounds} \
+{decorations} \
+{badges} \
+--json 
+
+```
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{AvatarChangeId}`： 类型为 `ID`。玩家的 NFT(PFP) 的 ID。
+* `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID（Contract package publisher object ID）。
+* `{image_url}`： 类型为 `String`。NFT 头像图片 URL（NFT image URL）。
+* `{background_color}`： 类型为 `Option<u32>`。背景颜色(Background color)。
+* `{haircut}`：类型为 `Option<u8>`。发型(Haircut)。
+* `{outfit}`：类型为 `Option<u8>`。搭配(Outfit)。
+* `{accessories}`：类型为 `vector<u8>`。配饰数组(Accessory vector)。
+* `{aura}`：类型为 `Option<u8>`。光晕(Aura)。
+* `{symbols}`：类型为 `vector<u8>`。符号数组(Symbol vector)。
+* `{effects}`：类型为 `vector<u8>`。作用影响效果数组(effect vector)。
+* `{backgrounds}`：类型为 `vector<u8>`。背景数组(Background vector)。
+* `{decorations}`：类型为 `vector<u8>`。装饰数组(Decoration vector)。
+* `{badges}`：类型为 `vector<u8>`。徽章数组(Badge vector)。
 
 
 [TBD]
