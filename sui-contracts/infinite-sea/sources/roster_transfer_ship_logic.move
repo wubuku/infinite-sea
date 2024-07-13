@@ -33,7 +33,7 @@ module infinite_sea::roster_transfer_ship_logic {
         permission_util::assert_player_is_roster_owner(player, to_roster);
         assert!(roster_util::are_rosters_close_enough_to_transfer(roster, to_roster), ERostersTooFarAway);
         roster_util::assert_roster_ships_not_full(to_roster);
-        //todo more checks?
+        //todo more checks?  应该检查一下在目标船队里面有这个位置：to_position
         roster::new_roster_ship_transferred(roster, ship_id, to_roster_id, to_position)
     }
 
@@ -56,11 +56,12 @@ module infinite_sea::roster_transfer_ship_logic {
         let from_ships = roster::borrow_mut_ships(from_roster);
         assert!(object_table::contains(from_ships, ship_id), EShipNotFoundInSourceRoster);
         let ship = object_table::remove(from_ships, ship_id);
-
+        //将船从原来的船队移除后重新计算原来船队的速度
         let speed = roster_util::calculate_roster_speed(roster);
         roster::set_speed(roster, speed);
 
         let to_ship_ids = roster::ship_ids(to_roster);
+        //指定了位置那么就插入指定的位置
         if (option::is_some(&to_position)) {
             vector::insert(&mut to_ship_ids, ship_id, option::extract(&mut to_position));
         } else {

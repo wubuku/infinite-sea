@@ -163,11 +163,15 @@ module infinite_sea::roster_util {
     public fun calculate_current_location(roster: &Roster, clock: &Clock): (Coordinates, u64, u8) {
         let old_status = roster::status(roster);
         let target_coordinates_o = roster::target_coordinates(roster);
+        //只有船队在行进中才可以计算当前位置
         assert!(roster_status::underway() == old_status, EInvalidRosterStatus);
+        //是否有一个目的地
         assert!(option::is_some(&target_coordinates_o), ETargetCoordinatesNotSet);
 
         let target_coordinates = option::extract(&mut target_coordinates_o);
+        //上次更新的位置
         let updated_coordinates = roster::updated_coordinates(roster);
+        //上次更新时间
         let coordinates_updated_at = roster::coordinates_updated_at(roster);
         let new_status = old_status;
         let (speed_numerator, speed_denominator) = speed_util::speed_property_to_coordinate_units_per_second(
@@ -175,6 +179,7 @@ module infinite_sea::roster_util {
         );
         let now_time = clock::timestamp_ms(clock) / 1000;
         assert!(now_time >= coordinates_updated_at, EInvalidRoasterUpdateTime);
+        //距离上次更新已经过去的时间
         let elapsed_time = now_time - coordinates_updated_at;
         updated_coordinates = direct_route_util::calculate_current_location(
             updated_coordinates, target_coordinates,

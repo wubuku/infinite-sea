@@ -2546,6 +2546,7 @@ Input parameter description:
 * `{accessories}`：类型为 `vector<u8>`。配饰数组(Accessory vector)。
 * `{aura}`：类型为 `u8`。光晕(Aura)。
 * `{symbols}`：类型为 `vector<u8>`。符号数组(Symbol vector)。
+* `{effects}`：类型为 `vector<u8>`。作用影响效果数组(effect vector)。
 * `{backgrounds}`：类型为 `vector<u8>`。背景数组(Background vector)。
 * `{decorations}`：类型为 `vector<u8>`。装饰数组(Decoration vector)。
 * `{badges}`：类型为 `vector<u8>`。徽章数组(Badge vector)。
@@ -2575,6 +2576,81 @@ After successful command execution, you will receive an output with a JSON struc
 其中 `objectId` 即为给用户打造的 NFT 对象之 ID。后面测试中需要使用 NFT 对象 ID 的地方，将使用占位符 `{avatarId}` 来引用它。
 
 Among them, 'objectId' is the ID of the NFT object created for the user. In future tests, where NFT object IDs are required, placeholders ` {avatarId} ` will be used to reference it.
+
+### 创建NFT(PFP)变更信息
+
+NFT(PFP) 会因为很多因素而变化，比如每天登录并玩游戏，推广游戏等等，每当玩家的动作对 NFT 中的属性值造成影响时，前端要么创建 AvatarChange 对象（如果不存在），
+要么修改 NFT(PFP) 对应的已经存在的 AvatarChange 的对象。
+
+前端通过检查玩家是否存在 `{nft.packageId}.avatar_change.AvatarChange` 结构类型的对象来决定是创建还是更新对应的 AvatarChange 对象。
+
+如果玩家不存在对应的 AvatarChange 对象，那么前端应该调用 `create` 接口，下面通过 `Sui Client call` 进行示例：
+
+```shell
+sui client call --package {nft.packageId} --module avatar_change_aggregate --function create --args \
+{avatarId} \
+{nft.Publisher} \
+{image_url} \
+{background_color} \
+{haircut} \
+{outfit} \
+{accessories} \
+{aura} \
+{symbols} \
+{effects} \
+{backgrounds} \
+{decorations} \
+{badges} \
+{nft.AvatarChangeTable} \
+--json 
+
+```
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{avatarId}`： 类型为 `ID`。玩家的 NFT(PFP) 的 ID。
+* `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID（Contract package publisher object ID）。
+* `{image_url}`： 类型为 `String`。NFT 头像图片 URL（NFT image URL）。
+* `{background_color}`： 类型为 `Option<u32>`。背景颜色(Background color)。
+* `{haircut}`：类型为 `Option<u8>`。发型(Haircut)。
+* `{outfit}`：类型为 `Option<u8>`。搭配(Outfit)。
+* `{accessories}`：类型为 `vector<u8>`。配饰数组(Accessory vector)。
+* `{aura}`：类型为 `Option<u8>`。光晕(Aura)。
+* `{symbols}`：类型为 `vector<u8>`。符号数组(Symbol vector)。
+* `{effects}`：类型为 `vector<u8>`。作用影响效果数组(effect vector)。
+* `{backgrounds}`：类型为 `vector<u8>`。背景数组(Background vector)。
+* `{decorations}`：类型为 `vector<u8>`。装饰数组(Decoration vector)。
+* `{badges}`：类型为 `vector<u8>`。徽章数组(Badge vector)。
+* `{nft.AvatarChangeTable}` 类型为 `&mut AvatarChangeTable`。保存玩家 NTF(PFP) 动态属性变化的表对象 ID。
+
+
+执行成功，将得到如下相似的 JSON 格式输出结果（部分）：
+
+After successful command execution, you will receive an output with a JSON structure similar to the following:
+
+```json
+
+  "objectChanges": [
+    {
+      "type": "created",
+      "sender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "owner": {
+        "Shared": {
+          "initial_shared_version": 77043847
+        }
+      },
+      "objectType": "0xd03934bda3e2bdb3129535eb654028b07cc17a019a6e9cc0a05f0ab4583b5b45::avatar_change::AvatarChange",
+      "objectId": "0x1201683df2dac331d0a34620df3ce017b35c812e824bf95812ce8a3121618160",
+      "version": "77043847",
+      "digest": "3JpwaEb9yNGZzmqLjjbgL5F9aZFiMK9VsvqU96rPG61D"
+    }
+  ]
+```
+从上述结果中，可以看到类型为 `{nft.packageId}::avatar_change::AvatarChange` 的元素，我们将其 `objectId` 记录为 `{avatarChangeId}`。
+我们将在 `更新 AvatarChange` 以及 `更新 NFT(PFP)`接口函数中使用它。
+
 
 [TBD]
 
