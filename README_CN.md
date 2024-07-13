@@ -243,12 +243,6 @@ wubuku/dddappp-sui:master \
     "ItemCreationWooding": "0xfef7bb0b8bf9f028b734e48657250679e2af20b4047f0c89ce099eb9c47636cd",
     "ItemProductionCrafting": "0xd97f7bf2bd3315265c5d37ae6774f0b331263c08e4b7c2b084cd8a863dd787cf"
   },
-  "nft": {
-    "Digest": "BFPLfJfrv1BZjFDaCQXdRcSgeCZDaHSkwEoiUNHHY14D",
-    "PackageId": "0xfb136fbf0c9bf27cf71938835155928092240f537c5e84f67084fefb268e253d",
-    "Publisher": "0x74f9944d58bdee37a8cbcc996780f4703800148656f4e2c149d20d8130144f23",
-    "AvatarChangeTable": "0xb0521ecccba5da35099aa1154f0fced56a39e0305a2d3aeec32ce770cd677d77"
-  },
   "main": {
     "Digest": "28VVTXTpwCwqdJNCcwUPyEMRwp9bjNDHVjSJ9XdNzNfR",
     "RosterTable": "0x61fb2d0e985fa2acd257f4495bf0bc13f083c248bb604317415f08a645138e5c",
@@ -291,13 +285,7 @@ wubuku/dddappp-sui:master \
     "RosterTable": "0xa68c344f21dcca3bd5e44423d4ffc1ceccd379d9f4bed07b3858c4cd1135a061",
     "AdminCap": "0xc96f0236a239a9cb0c04e0073198ec7acdfb12b6da2ff9ee6ea693b0a2f5e94d",
     "PackageId": "0xf32fc64aca3986e7406fcf1e2656b8ac512ffbd5953c8d894cbd9364806a6aad",
-    "UpgradeCap": "0xf95eb7c1ba2b8e4b99101fa5d425eb4ab74174a4b898270b00815029ebe80c8f",
-    "Player": "0x4bada39916e0ff2cd8bd32c79787d2294a6851364049078c6637640a95f9b776",
-    "SkillProcessFarming1": "0x300850bcb426be2293ad100944e0e5328bdd883f7622c9db1a632a462912f450",
-    "SkillProcessMining": "0x4386ee35dcbc9e4270502ba4dd0e8f3117a693d3791278d440bcda733e3ff076",
-    "SkillProcessFarming2": "0x5219b8e897aa02553c8740da8fc476fbdae6a192f20dc96a0d137e877a4b7506",
-    "SkillProcessCrafting": "0xbd9a5da2ab95371832d87b5d4e4d828ebc3c6e0b50c497c1bc7d0e6091e7d4e7",
-    "SkillProcessWooding": "0xda45efc3427810ac03b019e261b4e9a47d0dd9bf311dc19707beb930d705001b"
+    "UpgradeCap": "0xf95eb7c1ba2b8e4b99101fa5d425eb4ab74174a4b898270b00815029ebe80c8f"
   },
   "faucet": {
     "EnergyFaucet": "0x2c489c2e11104927f59d257adabe8591de90352efc596c90c6c78ff1cf88f685",
@@ -1750,7 +1738,7 @@ sui client call --package  {faucet.PackageId} --module energy_faucet --function 
 
 参数解释：
 
-* {main.PackageId}：`faucet 合约包的 ID。
+* {faucet.PackageId}：`faucet 合约包的 ID。
 * {faucet.EnergyFaucet}：类型为 `&mut EnergyFaucet`。CLI 中可传入 `ENERGY` 的水龙头对象 ID。
 * {clock}: 类型为 `&Clock`。时钟对象的 ID，固定值：`0x6`。
 
