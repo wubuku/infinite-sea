@@ -2388,7 +2388,7 @@ sui client call --package {main.packageId} \
 
 ### 查看战斗信息
 
-执行以下 Sui CLI 可以查看某次战斗的详细信息：
+执行以下 Sui CLI 命令可以查看某次战斗的详细信息：
 
 ```shell
 sui client object {shipBattleId} --json
@@ -2586,7 +2586,7 @@ Among them, 'objectId' is the ID of the NFT object created for the user. In futu
 
 前端通过检查玩家是否存在 `{nft.packageId}.avatar_change.AvatarChange` 结构类型的对象来决定是创建还是更新对应的 AvatarChange 对象。
 
-如果玩家不存在对应的 `AvatarChange` 对象，那么前端应该调用 `create` 接口，下面通过 `Sui Client call` 进行示例：
+如果玩家不存在对应的 `AvatarChange` 对象，那么前端应该调用 `create` 接口，下面通过 `Sui CLI` 进行示例：
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function create --args \
@@ -2659,7 +2659,7 @@ After successful command execution, you will receive an output with a JSON struc
 正如 `创建 NFT(PFP) 变更信息` 中所言，当需要玩家的活动造成其 `NFT(PFP)` 中的相关属性值变化时，如果与 `NFT(PFP)` 对应的 `AvatarChange` 对象已经存在，
 前端应该更新它，然后再使用它更新 `NFT(PFP)`。
 
-可以通过执行以下 `Sui Client call` 命令来更新 `AvatarChange` 对象：
+可以通过执行以下 `Sui CLI` 命令来更新 `AvatarChange` 对象：
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function update --args \
@@ -2684,7 +2684,7 @@ sui client call --package {nft.packageId} --module avatar_change_aggregate --fun
 Input parameter description:
 
 * `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
-* `{AvatarChangeId}`： 类型为 `ID`。玩家的 NFT(PFP) 的 ID。
+* `{AvatarChangeId}`： 类型为 `ID`。玩家的 NFT(PFP) 对应的 `AvatarChangeId` 的 ID。
 * `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID（Contract package publisher object ID）。
 * `{image_url}`： 类型为 `String`。NFT 头像图片 URL（NFT image URL）。
 * `{background_color}`： 类型为 `Option<u32>`。背景颜色(Background color)。
@@ -2697,6 +2697,45 @@ Input parameter description:
 * `{backgrounds}`：类型为 `vector<u8>`。背景数组(Background vector)。
 * `{decorations}`：类型为 `vector<u8>`。装饰数组(Decoration vector)。
 * `{badges}`：类型为 `vector<u8>`。徽章数组(Badge vector)。
+
+
+
+### 更新 NFT(PFP) 
+
+当需要玩家的活动造成其 `NFT(PFP)` 中的相关属性值变化时，在创建或更新与 `NFT(PFP)` 对应的 `AvatarChange` 对象后，还应继续更新 `NFT(PFP)`。
+
+可以通过执行以下 `Sui CLI` 命令来更新 `NFT(PFP)` 对象：
+
+```shell
+sui client call --package {nft.packageId} --module avatar_aggregate --function update --args \
+{avatarId} \
+{avatarChangeId} \
+--json 
+
+```
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{avatarId}`： 类型为 `ID`。玩家的 `NFT(PFP)` 的 ID。
+* `{AvatarChangeId}`： 类型为 `ID`。玩家的 `NFT(PFP)` 对象对应的 `AvatarChange` 对象 ID。
+
+
+### 销毁 NFT(PFP)
+
+可以通过执行以下 `Sui CLI` 命令来销毁 `NFT(PFP)` 对象：
+
+```shell
+sui client call --package {nft.packageId} --module avatar_aggregate --function burn --args {avatarId} --json 
+
+```
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{avatarId}`： 类型为 `ID`。玩家的 `NFT(PFP)` 的 ID。
 
 
 [TBD]
