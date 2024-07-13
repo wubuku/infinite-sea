@@ -1801,7 +1801,7 @@ sui client call --package  {faucet.PackageId} --module energy_faucet --function 
 ```shell
 curl -X POST \
 -H "Content-Type: application/json" \
--d '{"jsonrpc":"2.0","id":1,"method":"suix_getCoins","params":["{accountAddress}","{faucet.PackageId}::energy::ENERGY"]' https://fullnode.testnet.sui.io/
+-d '{"jsonrpc":"2.0","id":1,"method":"suix_getCoins","params":["{accountAddress}","{coin.PackageId}::energy::ENERGY"]' https://fullnode.testnet.sui.io/
 ```
 
 参数解释：
@@ -2581,12 +2581,12 @@ Among them, 'objectId' is the ID of the NFT object created for the user. In futu
 
 `NFT(PFP)` 会因为很多因素而变化，比如每天登录并玩游戏，推广游戏等等。
 
-每当玩家的动作对 `NFT(PFP)` 中的属性值造成影响时，如果与玩家 `NFT(PFP)` 对应的 `AvatarChange` 不存在，前端为其创建一个 `AvatarChange` 对象，
-如果已经存在那么修改 `AvatarChange` 的对象然后更新 `NFT(PFP)` 对象。
+每当玩家的动作对 `NFT(PFP)` 中的属性值造成变化时，如果与玩家 `NFT(PFP)` 对象对应的 `AvatarChange` 对象不存在，前端应为其创建一个 `AvatarChange` 对象，
+如果已经存在那么修改 `AvatarChange` 对象，然后使用它更新 `NFT(PFP)` 对象。
 
-前端通过检查玩家是否存在 `{nft.packageId}.avatar_change.AvatarChange` 结构类型的对象来决定是创建还是更新对应的 AvatarChange 对象。
+前端通过检查玩家是否拥有 `{nft.packageId}.avatar_change.AvatarChange` 结构类型的对象来判断是创建还是更新对应的 AvatarChange 对象。
 
-如果玩家不存在对应的 `AvatarChange` 对象，那么前端应该调用 `create` 接口，下面通过 `Sui CLI` 进行示例：
+如果玩家的 `NFT(PFP)` 对象不存在对应的 `AvatarChange` 对象，那么可以通过执行如下 `Sui CLI` 命令来创建：
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function create --args \
@@ -2656,8 +2656,8 @@ After successful command execution, you will receive an output with a JSON struc
 
 ### 更新 NFT(PFP) 变更信息
 
-正如 `创建 NFT(PFP) 变更信息` 中所言，当需要玩家的活动造成其 `NFT(PFP)` 中的相关属性值变化时，如果与 `NFT(PFP)` 对应的 `AvatarChange` 对象已经存在，
-前端应该更新它，然后再使用它更新 `NFT(PFP)`。
+正如 `创建 NFT(PFP) 变更信息` 中所言，当需要玩家的活动造成其 `NFT(PFP)` 对象中的动态属性的值变化时，如果与 `NFT(PFP)` 对应的 `AvatarChange` 对象已经存在，
+应该先更新该对象，然后再使用它更新 `NFT(PFP)` 对象。
 
 可以通过执行以下 `Sui CLI` 命令来更新 `AvatarChange` 对象：
 
