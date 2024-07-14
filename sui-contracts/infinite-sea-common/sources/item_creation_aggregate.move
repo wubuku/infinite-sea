@@ -10,7 +10,7 @@ module infinite_sea_common::item_creation_aggregate {
     use infinite_sea_common::skill_type_item_id_pair::{Self, SkillTypeItemIdPair};
     use sui::tx_context;
 
-    const EInvalidPublisher: u64 = 50;
+    const ENotPublisher: u64 = 50;
 
     public entry fun create(
         item_creation_id_skill_type: u8,
@@ -26,7 +26,7 @@ module infinite_sea_common::item_creation_aggregate {
         item_creation_table: &mut item_creation::ItemCreationTable,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<item_creation::ItemCreation>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<item_creation::ItemCreation>(publisher), ENotPublisher);
         let item_creation_id: SkillTypeItemIdPair = skill_type_item_id_pair::new(
             item_creation_id_skill_type,
             item_creation_id_item_id,
@@ -66,7 +66,7 @@ module infinite_sea_common::item_creation_aggregate {
         success_rate: u16,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<item_creation::ItemCreation>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<item_creation::ItemCreation>(publisher), ENotPublisher);
         let item_creation_updated = item_creation_update_logic::verify(
             resource_cost,
             requirements_level,

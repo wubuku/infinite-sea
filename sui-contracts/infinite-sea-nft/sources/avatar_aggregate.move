@@ -12,7 +12,7 @@ module infinite_sea_nft::avatar_aggregate {
     use std::string::String;
     use sui::tx_context;
 
-    const EInvalidPublisher: u64 = 50;
+    const ENotPublisher: u64 = 50;
 
     public entry fun mint(
         publisher: &sui::package::Publisher,
@@ -36,7 +36,7 @@ module infinite_sea_nft::avatar_aggregate {
         badges: vector<u8>,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<avatar::Avatar>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<avatar::Avatar>(publisher), ENotPublisher);
         let avatar_minted = avatar_mint_logic::verify(
             owner,
             name,

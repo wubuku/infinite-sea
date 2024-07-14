@@ -13,7 +13,7 @@ module infinite_sea_nft::avatar_change_aggregate {
     use sui::object::ID;
     use sui::tx_context;
 
-    const EInvalidPublisher: u64 = 50;
+    const ENotPublisher: u64 = 50;
 
     #[allow(unused_mut_ref)]
     public entry fun create(
@@ -33,7 +33,7 @@ module infinite_sea_nft::avatar_change_aggregate {
         avatar_change_table: &mut avatar_change::AvatarChangeTable,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<avatar_change::AvatarChange>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<avatar_change::AvatarChange>(publisher), ENotPublisher);
         let avatar_change_created = avatar_change_create_logic::verify(
             avatar_id,
             image_url,
@@ -77,7 +77,7 @@ module infinite_sea_nft::avatar_change_aggregate {
         badges: vector<u8>,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<avatar_change::AvatarChange>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<avatar_change::AvatarChange>(publisher), ENotPublisher);
         let avatar_change_updated = avatar_change_update_logic::verify(
             image_url,
             background_color,
@@ -107,7 +107,7 @@ module infinite_sea_nft::avatar_change_aggregate {
         publisher: &sui::package::Publisher,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<avatar_change::AvatarChange>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<avatar_change::AvatarChange>(publisher), ENotPublisher);
         let avatar_change_deleted = avatar_change_delete_logic::verify(
             &avatar_change,
             ctx,

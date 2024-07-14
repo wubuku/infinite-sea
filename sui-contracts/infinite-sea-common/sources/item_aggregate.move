@@ -9,7 +9,7 @@ module infinite_sea_common::item_aggregate {
     use infinite_sea_common::item_update_logic;
     use sui::tx_context;
 
-    const EInvalidPublisher: u64 = 50;
+    const ENotPublisher: u64 = 50;
 
     public entry fun create(
         item_id: u32,
@@ -20,7 +20,7 @@ module infinite_sea_common::item_aggregate {
         item_table: &mut item::ItemTable,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<item::Item>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<item::Item>(publisher), ENotPublisher);
         let item_created = item_create_logic::verify(
             item_id,
             name,
@@ -47,7 +47,7 @@ module infinite_sea_common::item_aggregate {
         sells_for: u32,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<item::Item>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<item::Item>(publisher), ENotPublisher);
         let item_updated = item_update_logic::verify(
             name,
             required_for_completion,

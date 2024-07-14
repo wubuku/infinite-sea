@@ -21,7 +21,7 @@ module infinite_sea::player_aggregate {
     friend infinite_sea::roster_service;
     friend infinite_sea::ship_battle_service;
 
-    const EInvalidPublisher: u64 = 50;
+    const ENotPublisher: u64 = 50;
 
     public entry fun create(
         name: String,
@@ -82,7 +82,7 @@ module infinite_sea::player_aggregate {
         quantity: u32,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<player::Player>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<player::Player>(publisher), ENotPublisher);
         let player_airdropped = player_airdrop_logic::verify(
             item_id,
             quantity,

@@ -35,7 +35,7 @@ module infinite_sea::roster_aggregate {
     friend infinite_sea::roster_service;
     friend infinite_sea::ship_battle_service;
 
-    const EInvalidPublisher: u64 = 50;
+    const ENotPublisher: u64 = 50;
 
     #[allow(unused_mut_ref)]
     public(friend) fun create(
@@ -89,7 +89,7 @@ module infinite_sea::roster_aggregate {
         roster_table: &mut roster::RosterTable,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<roster::Roster>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<roster::Roster>(publisher), ENotPublisher);
         let roster_id: RosterId = roster_id::new(
             roster_id_player_id,
             roster_id_sequence_number,

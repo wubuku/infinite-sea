@@ -11,7 +11,7 @@ module infinite_sea_common::item_production_aggregate {
     use infinite_sea_common::skill_type_item_id_pair::{Self, SkillTypeItemIdPair};
     use sui::tx_context;
 
-    const EInvalidPublisher: u64 = 50;
+    const ENotPublisher: u64 = 50;
 
     public entry fun create(
         item_production_id_skill_type: u8,
@@ -28,7 +28,7 @@ module infinite_sea_common::item_production_aggregate {
         item_production_table: &mut item_production::ItemProductionTable,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<item_production::ItemProduction>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<item_production::ItemProduction>(publisher), ENotPublisher);
         let item_production_id: SkillTypeItemIdPair = skill_type_item_id_pair::new(
             item_production_id_skill_type,
             item_production_id_item_id,
@@ -73,7 +73,7 @@ module infinite_sea_common::item_production_aggregate {
         success_rate: u16,
         ctx: &mut tx_context::TxContext,
     ) {
-        assert!(sui::package::from_package<item_production::ItemProduction>(publisher), EInvalidPublisher);
+        assert!(sui::package::from_package<item_production::ItemProduction>(publisher), ENotPublisher);
         let production_materials: ItemIdQuantityPairs = item_id_quantity_pairs::new(
             production_materials_item_id_list,
             production_materials_item_quantity_list,
