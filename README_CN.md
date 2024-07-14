@@ -1826,9 +1826,135 @@ curl -X POST \
 }
 ```
 
-属性 `result.data` 是包含货币类型（`coinType`） 为 `{faucet.PackageId}::energy::ENERGY` 的对象数组。  
+属性 `result.data` 是包含货币类型（`coinType`） 为 `{coin.PackageId}::energy::ENERGY` 的对象数组。  
 数组中 `coinObjectId` 为账户中的货币对象 ID，可以作为开始“生产制造”的输入参数。  
 `balance` 之和即为账户 `{accountAddress}` 的 `ENERGY` 余额。
+
+### 查询玩家上一次申请 ENERGY 的时间
+
+#### 1、查询水龙头对象
+执行以下 Sui CLI 命令查询水龙头对象：
+```shell
+sui client object {faucet.EnergyFaucet} --json
+```
+以上命令的输出结果类似如下：
+```json
+{
+  "objectId": "0x8e07d6bc0f4cc87c346324d8f76d8bc5318e646bc37395819587480544198157",
+  "version": "79108175",
+  "digest": "2eoLkj5M87vNKfwEbpRfAhN7ySMH21uaGi5UNYJvZhH1",
+  "type": "0x42e44326b9815f5b3833912d3124e8e006ce8110798bd159c04a1ed6bee4a326::energy_faucet::EnergyFaucet",
+  "owner": {
+    "Shared": {
+      "initial_shared_version": 77043852
+    }
+  },
+  "previousTransaction": "C8865K9aHctdYJSY4f299YbmYgTQuhKCcfQJo4P9pmoa",
+  "storageRebate": "1748000",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x42e44326b9815f5b3833912d3124e8e006ce8110798bd159c04a1ed6bee4a326::energy_faucet::EnergyFaucet",
+    "hasPublicTransfer": true,
+    "fields": {
+      "balance": "299950000000000",
+      "grant_records": {
+        "type": "0x2::table::Table<address, 0x42e44326b9815f5b3833912d3124e8e006ce8110798bd159c04a1ed6bee4a326::energy_faucet::GrantRecord>",
+        "fields": {
+          "id": {
+            "id": "0xce07ede120db7c87544f6c825acdc7050566cade1ea827c684c2846b136b8a45"
+          },
+          "size": "1"
+        }
+      },
+      "id": {
+        "id": "0x8e07d6bc0f4cc87c346324d8f76d8bc5318e646bc37395819587480544198157"
+      }
+    }
+  }
+}
+```
+注意元素 `grant_records`， 可以看到 `type` 属性的值为 `0x2::table::Table<address, {faucet.PackageId}::energy_faucet::GrantRecord>`，
+我们将其 `fields.id.id` 属性的值记录为 `{filedId}`；
+#### 2、查询动态字段
+执行以下 Sui CLI 命令：
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":["{fieldId}}"]}' https://fullnode.testnet.sui.io/
+```
+将得到以下输出信息：
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "data": [{
+      "name": {
+        "type": "address",
+        "value": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450"
+      },
+      "bcsName": "AeSDpp9vwabkg8UaSLAykn7F9HbvHWhSzmB5DuNRjtgX",
+      "type": "DynamicField",
+      "objectType": "0x42e44326b9815f5b3833912d3124e8e006ce8110798bd159c04a1ed6bee4a326::energy_faucet::GrantRecord",
+      "objectId": "0x9e65d7cebceb90870b397e3bfa6a3c71ec4c903032077af5109ca64c2d2164be",
+      "version": 79108175,
+      "digest": "J8c5WngFFJN7RuWcpmARrbrE3ZF8K5aQ8WS7XvkQAdfr"
+    }],
+    "nextCursor": "0x9e65d7cebceb90870b397e3bfa6a3c71ec4c903032077af5109ca64c2d2164be",
+    "hasNextPage": false
+  },
+  "id": 1
+}
+```
+可以看到 `result.data` 元素是个数组：
+* 其 `objectType` 属性的值为 `{faucet}.::energy_faucet::GrantRecord`; 
+* 其 `name`元素的`type` 为 `address`，`value` 属性表示从水龙头申请 `ENERGY` 的玩家地址;
+* 其 `objectId` 的值就是上述玩家地址上次申请 `ENERGY` 时保存的相关信息。
+ 
+选择与查询的玩家地址匹配的记录，保存为 `{GrantRecordId}`。
+当然如果玩家没有从水龙头申请过`ENERGY`，不会在此发现记录。
+
+#### 查询 `GrantRecord`
+```shell
+sui client object {GrantRecordId} --json
+```
+以上命令的输出结果类似如下：
+```json
+{
+  "objectId": "0x9e65d7cebceb90870b397e3bfa6a3c71ec4c903032077af5109ca64c2d2164be",
+  "version": "79108175",
+  "digest": "J8c5WngFFJN7RuWcpmARrbrE3ZF8K5aQ8WS7XvkQAdfr",
+  "type": "0x2::dynamic_field::Field<address, 0x42e44326b9815f5b3833912d3124e8e006ce8110798bd159c04a1ed6bee4a326::energy_faucet::GrantRecord>",
+  "owner": {
+    "ObjectOwner": "0xce07ede120db7c87544f6c825acdc7050566cade1ea827c684c2846b136b8a45"
+  },
+  "previousTransaction": "C8865K9aHctdYJSY4f299YbmYgTQuhKCcfQJo4P9pmoa",
+  "storageRebate": "2158400",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x2::dynamic_field::Field<address, 0x42e44326b9815f5b3833912d3124e8e006ce8110798bd159c04a1ed6bee4a326::energy_faucet::GrantRecord>",
+    "hasPublicTransfer": false,
+    "fields": {
+      "id": {
+        "id": "0x9e65d7cebceb90870b397e3bfa6a3c71ec4c903032077af5109ca64c2d2164be"
+      },
+      "name": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+      "value": {
+        "type": "0x42e44326b9815f5b3833912d3124e8e006ce8110798bd159c04a1ed6bee4a326::energy_faucet::GrantRecord",
+        "fields": {
+          "amount": "50000000000",
+          "grantedAt": "1720872579239"
+        }
+      }
+    }
+  }
+}
+```
+我们将目光聚焦在 `conent.value` 元素，我们将发现其 `type`属性为 `{faucet.PackageId}::energy_faucet::GrantRecord`。
+对于而其 `fields`属性的值：
+
+* `amount` 的值为上一次从水龙头申请得到的 `ENERGY` 的数量；
+* `grantedAt` 的值为上一次申请的时间。
+
+
+
 
 ### 开始挖矿流程
 
