@@ -2,6 +2,7 @@ aggregates:
   Avatar:
     module: "Nft"
     metadata:
+      HasStoreAbility: true
       Preprocessors: [ "MOVE_CRUD_IT" ]
       CRUD_IT_NO_UPDATE: true
       #CRUD_IT_NO_DELETE: true

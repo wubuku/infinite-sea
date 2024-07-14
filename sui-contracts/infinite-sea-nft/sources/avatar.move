@@ -46,7 +46,7 @@ module infinite_sea_nft::avatar {
         sui::transfer::public_transfer(display, sui::tx_context::sender(ctx));
     }
 
-    struct Avatar has key {
+    struct Avatar has key, store {
         id: UID,
         version: u64,
         owner: address,
@@ -454,11 +454,13 @@ module infinite_sea_nft::avatar {
     }
 
 
+    #[lint_allow(custom_state_change)]
     public(friend) fun transfer_object(avatar: Avatar, recipient: address) {
         assert!(avatar.version == 0, EInappropriateVersion);
         transfer::transfer(avatar, recipient);
     }
 
+    #[lint_allow(custom_state_change)]
     public(friend) fun update_version_and_transfer_object(avatar: Avatar, recipient: address) {
         update_object_version(&mut avatar);
         transfer::transfer(avatar, recipient);
