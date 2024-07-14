@@ -1903,13 +1903,13 @@ curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"me
   "id": 1
 }
 ```
-可以看到 `result.data` 元素是个数组：
-* 其 `objectType` 属性的值为 `{faucet}.::energy_faucet::GrantRecord`; 
-* 其 `name`元素的`type` 为 `address`，`value` 属性表示从水龙头申请 `ENERGY` 的玩家地址;
-* 其 `objectId` 的值就是上述玩家地址上次申请 `ENERGY` 时保存的相关信息。
+可以看到 `result.data` 元素是个数组，对于其中的每一个元素来说：
+* 其 `objectType` 属性的值为 `{faucet.PackageId}.::energy_faucet::GrantRecord`; 
+* 其 `name`元素的`type` 为 `address`，`value` 为从水龙头申请 `ENERGY` 的玩家地址;
+* 其 `objectId` 属性的值就是上述玩家地址上次申请 `ENERGY` 时保存的相关信息。
  
-选择与查询的玩家地址匹配的记录，保存为 `{GrantRecordId}`。
-当然如果玩家没有从水龙头申请过`ENERGY`，不会在此发现记录。
+选择与查询的玩家地址匹配的记录中的 `objectId`，保存为 `{GrantRecordId}`。
+当然如果玩家没有从水龙头申请过`ENERGY`，不会在此保存记录。
 
 #### 查询 `GrantRecord`
 ```shell
@@ -1948,7 +1948,7 @@ sui client object {GrantRecordId} --json
 }
 ```
 我们将目光聚焦在 `conent.value` 元素，我们将发现其 `type`属性为 `{faucet.PackageId}::energy_faucet::GrantRecord`。
-对于而其 `fields`属性的值：
+对于其 `fields`属性：
 
 * `amount` 的值为上一次从水龙头申请得到的 `ENERGY` 的数量；
 * `grantedAt` 的值为上一次申请的时间。
