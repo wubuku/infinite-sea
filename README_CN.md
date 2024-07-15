@@ -293,12 +293,12 @@ wubuku/dddappp-sui:master \
     "Digest": "AKXP8xrx7EZSjy9eK7rfg8ct8HkBkoXX2t8UhFCiwvni"
   },
   "nft": {
-    "AvatarChangeTable": "0x42eac469240e66538786cd867babe7e5be4320794b482eb2be064b49b6144561",
-    "Publisher": "0x92b4c6f6509aa0de8ecccec180c7169550064189f28b6ef2bb2fa5aec6888046",
-    "PackageId": "0x51a964fe172c008d3b6793c094c48bac3ed2d16dca80357c408549cf0f42766e",
-    "Whitelist": "0x785d98f61c0c8820c1961ac7c27f2dd095000449d7348087ff6c97b4bbccb5f5",
-    "Digest": "BYjbHGiZpJC4XKEJxQGmuQpjZ31G3uhvwPBmk959cqJg",
-    "Display": "0x08c2125e31bfc4d3ac5d1070aeaf766687a62a1237262f3673fa9a073d7f8bc9"
+    "AvatarChangeTable": "0x4ae64b8b458600d9405032acf27861f4bb135b8a07a72ffcdc6e4e5bea4784d7",
+    "Publisher": "0x3bf48d8d73e3cf04caabcac960026f9776b89cddb5b6865bc88a654b1b934c5c",
+    "PackageId": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191",
+    "Whitelist": "0x785c5465137ae06615f64d19901124490f8fc926a99e0c4ead6b4e6c49af3604",
+    "Digest": "5jVUWco1kHZnmjSkjhgaHJpyMWDpge1cA1e3xydnR4SF",
+    "Display": "0xf3e2c6babca0eecc56702ae8bf6dc71698090c59b86232ac1c79576fba827b29"
   }
 }
 
@@ -2853,6 +2853,32 @@ Input parameter description:
 
 * `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
 * `{avatarId}`： 类型为 `ID`。玩家的 `NFT(PFP)` 的 ID。
+
+
+### 白名单添加记录
+
+管理员可以通过以下 Sui CLI 命令向白名单中添加一条记录：
+
+```shell
+sui client call --package {nft.packageId} --module whitelist_aggregate --function add_whitelist_entry --args \
+{nft.whitelist} \
+{nft.Publisher} \
+{account_address} \
+{name} \
+{image_url} \
+{description} \ 
+{background_color} \
+{race} \ 
+{eyes} \ 
+{mouth} \ 
+{haircut} \ 
+{skin} \ 
+{outfit} \ 
+{accessories} \ 
+--json
+```
+
+
 
 
 [TBD]
