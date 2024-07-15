@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost/test7?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
+    url: jdbc:mysql://localhost/test8?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
     username: root
     password: qingdao
 #    url: jdbc:mysql://localhost/test2?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
@@ -23,8 +23,9 @@ sui:
       #url: "https://fullnode.devnet.sui.io/"
       url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "3jgvvWtKiVYQY4MADu9MZXx1sG9iaoKzS5Fij4ZPD2er"
-      default: "28VVTXTpwCwqdJNCcwUPyEMRwp9bjNDHVjSJ9XdNzNfR"
+      common: "CA6j2THkYBsKPRHuX3Lq4QmRUXeYG6voxAghVKox8XYk"
+      default: "6jMenm7Q93M4C4TLiipcgUEvFNr9aMiLfSFHiQKpx1tp"
+      nft: "8X4ZfXiigQf7rYdUHWHBYN3DJTUMcSAD53fUrBZU7Yjx"
 #    pull-day-summary-events:
 #      day-summary-created:
 #        fixed-delay: 6000

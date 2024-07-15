@@ -2658,8 +2658,8 @@ Input parameter description:
 * `{haircut}`：类型为 `u8`。发型(Haircut)。
 * `{skin}`：类型为 `u8`。皮肤(Skin)。
 * `{outfit}`：类型为 `u8`。搭配(Outfit)。
-* `{accessories}`：类型为 `vector<u8>`。配饰数组(Accessory vector)。
-* `{aura}`：类型为 `u8`。光晕(Aura)。
+* `{accessories}`：类型为 `u8`。配饰(Accessory)。
+* `{aura}`：类型为 `vector<u8>`。光晕数组(Aura vector)。
 * `{symbols}`：类型为 `vector<u8>`。符号数组(Symbol vector)。
 * `{effects}`：类型为 `vector<u8>`。作用影响效果数组(effect vector)。
 * `{backgrounds}`：类型为 `vector<u8>`。背景数组(Background vector)。
@@ -2733,8 +2733,8 @@ Input parameter description:
 * `{background_color}`： 类型为 `Option<u32>`。背景颜色(Background color)。
 * `{haircut}`：类型为 `Option<u8>`。发型(Haircut)。
 * `{outfit}`：类型为 `Option<u8>`。搭配(Outfit)。
-* `{accessories}`：类型为 `vector<u8>`。配饰数组(Accessory vector)。
-* `{aura}`：类型为 `Option<u8>`。光晕(Aura)。
+* `{accessories}`：类型为 `Option<u8>`。配饰(Accessory)。
+* `{aura}`：类型为 `vector<u8>`。光晕数组(Aura vector)。
 * `{symbols}`：类型为 `vector<u8>`。符号数组(Symbol vector)。
 * `{effects}`：类型为 `vector<u8>`。作用影响效果数组(effect vector)。
 * `{backgrounds}`：类型为 `vector<u8>`。背景数组(Background vector)。
@@ -2805,8 +2805,8 @@ Input parameter description:
 * `{background_color}`： 类型为 `Option<u32>`。背景颜色(Background color)。
 * `{haircut}`：类型为 `Option<u8>`。发型(Haircut)。
 * `{outfit}`：类型为 `Option<u8>`。搭配(Outfit)。
-* `{accessories}`：类型为 `vector<u8>`。配饰数组(Accessory vector)。
-* `{aura}`：类型为 `Option<u8>`。光晕(Aura)。
+* `{accessories}`：类型为 `Option<u8>`。配饰(Accessory)。
+* `{aura}`：类型为 `vector<u8>`。光晕数组(Aura vector)。
 * `{symbols}`：类型为 `vector<u8>`。符号数组(Symbol vector)。
 * `{effects}`：类型为 `vector<u8>`。作用影响效果数组(effect vector)。
 * `{backgrounds}`：类型为 `vector<u8>`。背景数组(Background vector)。
