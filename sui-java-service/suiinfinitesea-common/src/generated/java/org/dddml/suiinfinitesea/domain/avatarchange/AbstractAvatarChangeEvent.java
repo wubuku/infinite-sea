@@ -277,27 +277,27 @@ public abstract class AbstractAvatarChangeEvent extends AbstractEvent implements
             getDynamicProperties().put("outfit", value);
         }
 
-        public int[] getAccessories() {
+        public Integer getAccessories() {
             Object val = getDynamicProperties().get("accessories");
-            if (val instanceof int[]) {
-                return (int[]) val;
-            }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, int[].class);
-        }
-
-        public void setAccessories(int[] value) {
-            getDynamicProperties().put("accessories", value);
-        }
-
-        public Integer getAura() {
-            Object val = getDynamicProperties().get("aura");
             if (val instanceof Integer) {
                 return (Integer) val;
             }
             return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
         }
 
-        public void setAura(Integer value) {
+        public void setAccessories(Integer value) {
+            getDynamicProperties().put("accessories", value);
+        }
+
+        public int[] getAura() {
+            Object val = getDynamicProperties().get("aura");
+            if (val instanceof int[]) {
+                return (int[]) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, int[].class);
+        }
+
+        public void setAura(int[] value) {
             getDynamicProperties().put("aura", value);
         }
 
@@ -418,27 +418,27 @@ public abstract class AbstractAvatarChangeEvent extends AbstractEvent implements
             getDynamicProperties().put("outfit", value);
         }
 
-        public int[] getAccessories() {
+        public Integer getAccessories() {
             Object val = getDynamicProperties().get("accessories");
-            if (val instanceof int[]) {
-                return (int[]) val;
-            }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, int[].class);
-        }
-
-        public void setAccessories(int[] value) {
-            getDynamicProperties().put("accessories", value);
-        }
-
-        public Integer getAura() {
-            Object val = getDynamicProperties().get("aura");
             if (val instanceof Integer) {
                 return (Integer) val;
             }
             return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
         }
 
-        public void setAura(Integer value) {
+        public void setAccessories(Integer value) {
+            getDynamicProperties().put("accessories", value);
+        }
+
+        public int[] getAura() {
+            Object val = getDynamicProperties().get("aura");
+            if (val instanceof int[]) {
+                return (int[]) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, int[].class);
+        }
+
+        public void setAura(int[] value) {
             getDynamicProperties().put("aura", value);
         }
 

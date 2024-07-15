@@ -41,9 +41,9 @@ public class Avatar {
 
     private Integer outfit;
 
-    private int[] accessories;
+    private Integer accessories;
 
-    private Integer aura;
+    private int[] aura;
 
     private int[] symbols;
 
@@ -161,19 +161,19 @@ public class Avatar {
         this.outfit = outfit;
     }
 
-    public int[] getAccessories() {
+    public Integer getAccessories() {
         return accessories;
     }
 
-    public void setAccessories(int[] accessories) {
+    public void setAccessories(Integer accessories) {
         this.accessories = accessories;
     }
 
-    public Integer getAura() {
+    public int[] getAura() {
         return aura;
     }
 
-    public void setAura(Integer aura) {
+    public void setAura(int[] aura) {
         this.aura = aura;
     }
 
@@ -241,8 +241,8 @@ public class Avatar {
                 ", haircut=" + haircut +
                 ", skin=" + skin +
                 ", outfit=" + outfit +
-                ", accessories=" + Arrays.toString(accessories) +
-                ", aura=" + aura +
+                ", accessories=" + accessories +
+                ", aura=" + Arrays.toString(aura) +
                 ", symbols=" + Arrays.toString(symbols) +
                 ", effects=" + Arrays.toString(effects) +
                 ", backgrounds=" + Arrays.toString(backgrounds) +

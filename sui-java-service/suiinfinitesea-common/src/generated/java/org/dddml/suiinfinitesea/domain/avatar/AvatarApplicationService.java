@@ -21,6 +21,8 @@ public interface AvatarApplicationService {
 
     void when(AvatarCommands.Burn c);
 
+    void when(AvatarCommands.WhitelistMint c);
+
     AvatarState get(String id);
 
     Iterable<AvatarState> getAll(Integer firstResult, Integer maxResults);

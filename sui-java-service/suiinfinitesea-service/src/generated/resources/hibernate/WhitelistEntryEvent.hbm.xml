@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.whitelist">
+  <class name="AbstractWhitelistEntryEvent" table="whitelist_entry_event" abstract="true">
+    <composite-id name="whitelistEntryEventId" class="org.dddml.suiinfinitesea.domain.whitelist.WhitelistEntryEventId">
+      <key-property name="whitelistId">
+        <column name="whitelist_entry_id_whitelist_id" sql-type="VARCHAR(66)" />
+      </key-property>
+      <key-property name="accountAddress">
+        <column name="whitelist_entry_id_account_address" sql-type="VARCHAR(66)" />
+      </key-property>
+      <key-property name="version">
+        <column name="version" sql-type="DECIMAL(20,0)" />
+      </key-property>
+    </composite-id>
+    <discriminator column="event_type" type="string" />
+    <property name="createdBy" column="created_by" />
+    <property name="createdAt" column="created_at" />
+    <property name="commandId" column="command_id" />
+  </class>
+</hibernate-mapping>

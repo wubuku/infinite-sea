@@ -6,9 +6,8 @@
 package org.dddml.suiinfinitesea.sui.contract.taskservice;
 
 import org.dddml.suiinfinitesea.domain.map.AbstractMapEvent;
-import org.dddml.suiinfinitesea.sui.contract.repository.MapEventRepository;
-import org.dddml.suiinfinitesea.sui.contract.service.MapEventService;
-import org.dddml.suiinfinitesea.sui.contract.service.SuiMapService;
+import org.dddml.suiinfinitesea.sui.contract.repository.*;
+import org.dddml.suiinfinitesea.sui.contract.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -35,10 +34,5 @@ public class UpdateMapStateTaskService {
             suiMapService.updateMapState(objectId);
             mapEventService.updateStatusToProcessed(e);
         }
-//        mapEventRepository.findByEventStatusIsNull().forEach(e -> {
-//            String objectId = e.getId();
-//            suiMapService.updateMapState(objectId);
-//            mapEventService.updateStatusToProcessed(e);
-//        });
     }
 }

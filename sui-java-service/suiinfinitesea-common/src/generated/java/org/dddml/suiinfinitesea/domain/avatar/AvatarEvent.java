@@ -66,13 +66,13 @@ public interface AvatarEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
         void setOutfit(Integer value);
 
-        int[] getAccessories();
+        Integer getAccessories();
 
-        void setAccessories(int[] value);
+        void setAccessories(Integer value);
 
-        Integer getAura();
+        int[] getAura();
 
-        void setAura(Integer value);
+        void setAura(int[] value);
 
         int[] getSymbols();
 
@@ -100,6 +100,57 @@ public interface AvatarEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
     }
 
     interface AvatarBurned extends AvatarEvent {
+    }
+
+    interface AvatarWhitelistMinted extends AvatarEvent {
+        String getOwner();
+
+        void setOwner(String value);
+
+        String getName();
+
+        void setName(String value);
+
+        String getImageUrl();
+
+        void setImageUrl(String value);
+
+        String getDescription();
+
+        void setDescription(String value);
+
+        Long getBackgroundColor();
+
+        void setBackgroundColor(Long value);
+
+        Integer getRace();
+
+        void setRace(Integer value);
+
+        Integer getEyes();
+
+        void setEyes(Integer value);
+
+        Integer getMouth();
+
+        void setMouth(Integer value);
+
+        Integer getHaircut();
+
+        void setHaircut(Integer value);
+
+        Integer getSkin();
+
+        void setSkin(Integer value);
+
+        Integer getOutfit();
+
+        void setOutfit(Integer value);
+
+        Integer getAccessories();
+
+        void setAccessories(Integer value);
+
     }
 
     String getId();

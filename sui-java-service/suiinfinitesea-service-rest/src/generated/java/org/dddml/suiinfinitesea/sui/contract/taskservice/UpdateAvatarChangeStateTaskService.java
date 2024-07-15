@@ -5,6 +5,7 @@
 
 package org.dddml.suiinfinitesea.sui.contract.taskservice;
 
+import org.dddml.suiinfinitesea.domain.avatarchange.AbstractAvatarChangeEvent;
 import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class UpdateAvatarChangeStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-avatar-change-states.fixed-delay:5000}")
     @Transactional
     public void updateAvatarChangeStates() {
-        avatarChangeEventRepository.findByEventStatusIsNull().forEach(e -> {
+        AbstractAvatarChangeEvent e = avatarChangeEventRepository.findFirstByEventStatusIsNull();
+        if (e != null) {
             String objectId = e.getId_();
             if (AvatarChangeEventService.isDeletionCommand(e)) {
                 suiAvatarChangeService.deleteAvatarChange(e.getAvatarId());
@@ -35,6 +37,6 @@ public class UpdateAvatarChangeStateTaskService {
                 suiAvatarChangeService.updateAvatarChangeState(objectId);
             }
             avatarChangeEventService.updateStatusToProcessed(e);
-        });
+        }
     }
 }

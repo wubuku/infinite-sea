@@ -11,6 +11,8 @@ import java.util.*;
 
 public interface RosterEventRepository extends JpaRepository<AbstractRosterEvent, RosterEventId> {
 
+    AbstractRosterEvent findFirstByEventStatusIsNull();
+
     List<AbstractRosterEvent> findByEventStatusIsNull();
 
     AbstractRosterEvent.RosterCreated findFirstRosterCreatedByOrderBySuiTimestampDesc();

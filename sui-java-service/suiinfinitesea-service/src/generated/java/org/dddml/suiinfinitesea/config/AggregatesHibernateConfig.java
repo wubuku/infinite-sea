@@ -38,6 +38,9 @@ import org.dddml.suiinfinitesea.domain.itemproduction.hibernate.*;
 import org.dddml.suiinfinitesea.domain.player.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.player.hibernate.*;
+import org.dddml.suiinfinitesea.domain.whitelist.*;
+import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.whitelist.hibernate.*;
 import org.dddml.suiinfinitesea.domain.map.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.map.hibernate.*;
@@ -553,6 +556,58 @@ public class AggregatesHibernateConfig {
                 playerEventStore,
                 playerStateRepository,
                 playerStateQueryRepository
+        );
+        return applicationService;
+    }
+
+
+
+    @Bean
+    public WhitelistEntryEventDao whitelistEntryEventDao(SessionFactory hibernateSessionFactory) {
+        HibernateWhitelistEntryEventDao dao = new HibernateWhitelistEntryEventDao();
+        dao.setSessionFactory(hibernateSessionFactory);
+        return dao;
+    }
+
+    @Bean
+    public WhitelistStateRepository whitelistStateRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateWhitelistStateRepository repository = new HibernateWhitelistStateRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public WhitelistStateQueryRepository whitelistStateQueryRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateWhitelistStateQueryRepository repository = new HibernateWhitelistStateQueryRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public HibernateWhitelistEventStore whitelistEventStore(SessionFactory hibernateSessionFactory) {
+        HibernateWhitelistEventStore eventStore = new HibernateWhitelistEventStore();
+        eventStore.setSessionFactory(hibernateSessionFactory);
+        return eventStore;
+    }
+
+    @Bean
+    public AbstractWhitelistApplicationService.SimpleWhitelistApplicationService whitelistApplicationService(
+            @Qualifier("whitelistEventStore") EventStore whitelistEventStore,
+            WhitelistStateRepository whitelistStateRepository,
+            WhitelistStateQueryRepository whitelistStateQueryRepository
+    ) {
+        AbstractWhitelistApplicationService.SimpleWhitelistApplicationService applicationService = new AbstractWhitelistApplicationService.SimpleWhitelistApplicationService(
+                whitelistEventStore,
+                whitelistStateRepository,
+                whitelistStateQueryRepository
         );
         return applicationService;
     }

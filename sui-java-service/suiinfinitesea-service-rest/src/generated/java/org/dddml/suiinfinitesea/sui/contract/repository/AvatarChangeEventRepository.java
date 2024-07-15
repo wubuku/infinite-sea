@@ -11,6 +11,8 @@ import java.util.*;
 
 public interface AvatarChangeEventRepository extends JpaRepository<AbstractAvatarChangeEvent, AvatarChangeEventId> {
 
+    AbstractAvatarChangeEvent findFirstByEventStatusIsNull();
+
     List<AbstractAvatarChangeEvent> findByEventStatusIsNull();
 
     AbstractAvatarChangeEvent.AvatarChangeCreated findFirstAvatarChangeCreatedByOrderBySuiTimestampDesc();

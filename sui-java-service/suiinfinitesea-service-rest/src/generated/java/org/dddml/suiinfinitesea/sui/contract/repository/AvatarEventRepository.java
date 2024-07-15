@@ -11,6 +11,8 @@ import java.util.*;
 
 public interface AvatarEventRepository extends JpaRepository<AbstractAvatarEvent, AvatarEventId> {
 
+    AbstractAvatarEvent findFirstByEventStatusIsNull();
+
     List<AbstractAvatarEvent> findByEventStatusIsNull();
 
     AbstractAvatarEvent.AvatarMinted findFirstAvatarMintedByOrderBySuiTimestampDesc();
@@ -18,5 +20,7 @@ public interface AvatarEventRepository extends JpaRepository<AbstractAvatarEvent
     AbstractAvatarEvent.AvatarUpdated findFirstAvatarUpdatedByOrderBySuiTimestampDesc();
 
     AbstractAvatarEvent.AvatarBurned findFirstAvatarBurnedByOrderBySuiTimestampDesc();
+
+    AbstractAvatarEvent.AvatarWhitelistMinted findFirstAvatarWhitelistMintedByOrderBySuiTimestampDesc();
 
 }

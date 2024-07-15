@@ -28,6 +28,8 @@ public class ContractConstants {
 
     public static final String AVATAR_MODULE_AVATAR_BURNED = "avatar::AvatarBurned";
 
+    public static final String AVATAR_MODULE_AVATAR_WHITELIST_MINTED = "avatar::AvatarWhitelistMinted";
+
     public static final String AVATAR_CHANGE_MODULE_AVATAR_CHANGE_CREATED = "avatar_change::AvatarChangeCreated";
 
     public static final String AVATAR_CHANGE_MODULE_AVATAR_CHANGE_UPDATED = "avatar_change::AvatarChangeUpdated";
@@ -93,6 +95,18 @@ public class ContractConstants {
     public static final String PLAYER_MODULE_ISLAND_CLAIMED = "player::IslandClaimed";
 
     public static final String PLAYER_MODULE_PLAYER_AIRDROPPED = "player::PlayerAirdropped";
+
+    public static final String WHITELIST_MODULE_INIT_WHITELIST_EVENT = "whitelist::InitWhitelistEvent";
+
+    public static final String WHITELIST_MODULE_WHITELIST_UPDATED = "whitelist::WhitelistUpdated";
+
+    public static final String WHITELIST_MODULE_WHITELIST_ENTRY_ADDED = "whitelist::WhitelistEntryAdded";
+
+    public static final String WHITELIST_MODULE_WHITELIST_ENTRY_UPDATED = "whitelist::WhitelistEntryUpdated";
+
+    public static final String WHITELIST_MODULE_WHITELIST_CLAIMED = "whitelist::WhitelistClaimed";
+
+    public static final String WHITELIST_MODULE_WHITELIST_CREATED = "whitelist::WhitelistCreated";
 
     public static final String MAP_MODULE_INIT_MAP_EVENT = "map::InitMapEvent";
 

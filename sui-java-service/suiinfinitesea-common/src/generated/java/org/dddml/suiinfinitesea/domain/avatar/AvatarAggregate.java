@@ -17,11 +17,13 @@ public interface AvatarAggregate {
 
     List<Event> getChanges();
 
-    void mint(String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarCommands.Mint c);
+    void mint(String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarCommands.Mint c);
 
     void update(String avatarChange, Long offChainVersion, String commandId, String requesterId, AvatarCommands.Update c);
 
     void burn(Long offChainVersion, String commandId, String requesterId, AvatarCommands.Burn c);
+
+    void whitelistMint(String whitelist, Long offChainVersion, String commandId, String requesterId, AvatarCommands.WhitelistMint c);
 
     void throwOnInvalidStateTransition(Command c);
 }

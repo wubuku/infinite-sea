@@ -135,23 +135,23 @@ public abstract class AbstractAvatarState implements AvatarState.SqlAvatarState 
         this.outfit = outfit;
     }
 
-    private int[] accessories;
+    private Integer accessories;
 
-    public int[] getAccessories() {
+    public Integer getAccessories() {
         return this.accessories;
     }
 
-    public void setAccessories(int[] accessories) {
+    public void setAccessories(Integer accessories) {
         this.accessories = accessories;
     }
 
-    private Integer aura;
+    private int[] aura;
 
-    public Integer getAura() {
+    public int[] getAura() {
         return this.aura;
     }
 
-    public void setAura(Integer aura) {
+    public void setAura(int[] aura) {
         this.aura = aura;
     }
 
@@ -355,6 +355,8 @@ public abstract class AbstractAvatarState implements AvatarState.SqlAvatarState 
             when((AbstractAvatarEvent.AvatarUpdated)e);
         } else if (e instanceof AbstractAvatarEvent.AvatarBurned) {
             when((AbstractAvatarEvent.AvatarBurned)e);
+        } else if (e instanceof AbstractAvatarEvent.AvatarWhitelistMinted) {
+            when((AbstractAvatarEvent.AvatarWhitelistMinted)e);
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported event type: %1$s", e.getClass().getName()));
         }
@@ -411,10 +413,10 @@ public abstract class AbstractAvatarState implements AvatarState.SqlAvatarState 
         Integer Skin = skin;
         Integer outfit = e.getOutfit();
         Integer Outfit = outfit;
-        int[] accessories = e.getAccessories();
-        int[] Accessories = accessories;
-        Integer aura = e.getAura();
-        Integer Aura = aura;
+        Integer accessories = e.getAccessories();
+        Integer Accessories = accessories;
+        int[] aura = e.getAura();
+        int[] Aura = aura;
         int[] symbols = e.getSymbols();
         int[] Symbols = symbols;
         int[] effects = e.getEffects();
@@ -454,14 +456,14 @@ public abstract class AbstractAvatarState implements AvatarState.SqlAvatarState 
         AvatarState updatedAvatarState = (AvatarState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.avatar.MintLogic",
                     "mutate",
-                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new Object[]{this, owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, skin, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.avatar;
 //
 //public class MintLogic {
-//    public static AvatarState mutate(AvatarState avatarState, String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarState, AvatarState.MutableAvatarState> mutationContext) {
+//    public static AvatarState mutate(AvatarState avatarState, String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarState, AvatarState.MutableAvatarState> mutationContext) {
 //    }
 //}
 
@@ -556,6 +558,77 @@ public abstract class AbstractAvatarState implements AvatarState.SqlAvatarState 
 //
 //public class BurnLogic {
 //    public static AvatarState mutate(AvatarState avatarState, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarState, AvatarState.MutableAvatarState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedAvatarState) { merge(updatedAvatarState); } //else do nothing
+
+    }
+
+    public void when(AbstractAvatarEvent.AvatarWhitelistMinted e) {
+        throwOnWrongEvent(e);
+
+        String owner = e.getOwner();
+        String Owner = owner;
+        String name = e.getName();
+        String Name = name;
+        String imageUrl = e.getImageUrl();
+        String ImageUrl = imageUrl;
+        String description = e.getDescription();
+        String Description = description;
+        Long backgroundColor = e.getBackgroundColor();
+        Long BackgroundColor = backgroundColor;
+        Integer race = e.getRace();
+        Integer Race = race;
+        Integer eyes = e.getEyes();
+        Integer Eyes = eyes;
+        Integer mouth = e.getMouth();
+        Integer Mouth = mouth;
+        Integer haircut = e.getHaircut();
+        Integer Haircut = haircut;
+        Integer skin = e.getSkin();
+        Integer Skin = skin;
+        Integer outfit = e.getOutfit();
+        Integer Outfit = outfit;
+        Integer accessories = e.getAccessories();
+        Integer Accessories = accessories;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        AvatarState updatedAvatarState = (AvatarState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.avatar.WhitelistMintLogic",
+                    "mutate",
+                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, owner, name, imageUrl, description, backgroundColor, race, eyes, mouth, haircut, skin, outfit, accessories, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.avatar;
+//
+//public class WhitelistMintLogic {
+//    public static AvatarState mutate(AvatarState avatarState, String owner, String name, String imageUrl, String description, Long backgroundColor, Integer race, Integer eyes, Integer mouth, Integer haircut, Integer skin, Integer outfit, Integer accessories, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarState, AvatarState.MutableAvatarState> mutationContext) {
 //    }
 //}
 

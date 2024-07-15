@@ -5,6 +5,7 @@
 
 package org.dddml.suiinfinitesea.sui.contract.taskservice;
 
+import org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,11 @@ public class UpdateExperienceTableStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-experience-table-states.fixed-delay:5000}")
     @Transactional
     public void updateExperienceTableStates() {
-        experienceTableEventRepository.findByEventStatusIsNull().forEach(e -> {
+        AbstractExperienceTableEvent e = experienceTableEventRepository.findFirstByEventStatusIsNull();
+        if (e != null) {
             String objectId = e.getId();
             suiExperienceTableService.updateExperienceTableState(objectId);
             experienceTableEventService.updateStatusToProcessed(e);
-        });
+        }
     }
 }

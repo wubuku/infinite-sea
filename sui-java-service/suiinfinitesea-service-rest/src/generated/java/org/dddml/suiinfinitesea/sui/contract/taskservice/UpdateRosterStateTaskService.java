@@ -5,6 +5,7 @@
 
 package org.dddml.suiinfinitesea.sui.contract.taskservice;
 
+import org.dddml.suiinfinitesea.domain.roster.AbstractRosterEvent;
 import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,11 @@ public class UpdateRosterStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-roster-states.fixed-delay:5000}")
     @Transactional
     public void updateRosterStates() {
-        rosterEventRepository.findByEventStatusIsNull().forEach(e -> {
+        AbstractRosterEvent e = rosterEventRepository.findFirstByEventStatusIsNull();
+        if (e != null) {
             String objectId = e.getId_();
             suiRosterService.updateRosterState(objectId);
             rosterEventService.updateStatusToProcessed(e);
-        });
+        }
     }
 }

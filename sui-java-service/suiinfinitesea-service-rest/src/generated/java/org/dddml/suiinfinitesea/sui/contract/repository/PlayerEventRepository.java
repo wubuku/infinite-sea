@@ -11,6 +11,8 @@ import java.util.*;
 
 public interface PlayerEventRepository extends JpaRepository<AbstractPlayerEvent, PlayerEventId> {
 
+    AbstractPlayerEvent findFirstByEventStatusIsNull();
+
     List<AbstractPlayerEvent> findByEventStatusIsNull();
 
     AbstractPlayerEvent.PlayerCreated findFirstPlayerCreatedByOrderBySuiTimestampDesc();

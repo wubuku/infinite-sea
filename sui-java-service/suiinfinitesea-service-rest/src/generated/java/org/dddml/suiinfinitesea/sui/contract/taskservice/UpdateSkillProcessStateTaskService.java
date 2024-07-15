@@ -5,6 +5,7 @@
 
 package org.dddml.suiinfinitesea.sui.contract.taskservice;
 
+import org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessEvent;
 import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,11 @@ public class UpdateSkillProcessStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-skill-process-states.fixed-delay:5000}")
     @Transactional
     public void updateSkillProcessStates() {
-        skillProcessEventRepository.findByEventStatusIsNull().forEach(e -> {
+        AbstractSkillProcessEvent e = skillProcessEventRepository.findFirstByEventStatusIsNull();
+        if (e != null) {
             String objectId = e.getId_();
             suiSkillProcessService.updateSkillProcessState(objectId);
             skillProcessEventService.updateStatusToProcessed(e);
-        });
+        }
     }
 }

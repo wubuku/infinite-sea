@@ -351,27 +351,27 @@ public abstract class AbstractAvatarEvent extends AbstractEvent implements Avata
             getDynamicProperties().put("outfit", value);
         }
 
-        public int[] getAccessories() {
+        public Integer getAccessories() {
             Object val = getDynamicProperties().get("accessories");
-            if (val instanceof int[]) {
-                return (int[]) val;
-            }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, int[].class);
-        }
-
-        public void setAccessories(int[] value) {
-            getDynamicProperties().put("accessories", value);
-        }
-
-        public Integer getAura() {
-            Object val = getDynamicProperties().get("aura");
             if (val instanceof Integer) {
                 return (Integer) val;
             }
             return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
         }
 
-        public void setAura(Integer value) {
+        public void setAccessories(Integer value) {
+            getDynamicProperties().put("accessories", value);
+        }
+
+        public int[] getAura() {
+            Object val = getDynamicProperties().get("aura");
+            if (val instanceof int[]) {
+                return (int[]) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, int[].class);
+        }
+
+        public void setAura(int[] value) {
             getDynamicProperties().put("aura", value);
         }
 
@@ -451,6 +451,159 @@ public abstract class AbstractAvatarEvent extends AbstractEvent implements Avata
         @Override
         public String getEventType() {
             return "AvatarBurned";
+        }
+
+    }
+
+    public static class AvatarWhitelistMinted extends AvatarClobEvent implements AvatarEvent.AvatarWhitelistMinted {
+
+        @Override
+        public String getEventType() {
+            return "AvatarWhitelistMinted";
+        }
+
+        public String getOwner() {
+            Object val = getDynamicProperties().get("owner");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setOwner(String value) {
+            getDynamicProperties().put("owner", value);
+        }
+
+        public String getName() {
+            Object val = getDynamicProperties().get("name");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setName(String value) {
+            getDynamicProperties().put("name", value);
+        }
+
+        public String getImageUrl() {
+            Object val = getDynamicProperties().get("imageUrl");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setImageUrl(String value) {
+            getDynamicProperties().put("imageUrl", value);
+        }
+
+        public String getDescription() {
+            Object val = getDynamicProperties().get("description");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setDescription(String value) {
+            getDynamicProperties().put("description", value);
+        }
+
+        public Long getBackgroundColor() {
+            Object val = getDynamicProperties().get("backgroundColor");
+            if (val instanceof Long) {
+                return (Long) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Long.class);
+        }
+
+        public void setBackgroundColor(Long value) {
+            getDynamicProperties().put("backgroundColor", value);
+        }
+
+        public Integer getRace() {
+            Object val = getDynamicProperties().get("race");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setRace(Integer value) {
+            getDynamicProperties().put("race", value);
+        }
+
+        public Integer getEyes() {
+            Object val = getDynamicProperties().get("eyes");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setEyes(Integer value) {
+            getDynamicProperties().put("eyes", value);
+        }
+
+        public Integer getMouth() {
+            Object val = getDynamicProperties().get("mouth");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setMouth(Integer value) {
+            getDynamicProperties().put("mouth", value);
+        }
+
+        public Integer getHaircut() {
+            Object val = getDynamicProperties().get("haircut");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setHaircut(Integer value) {
+            getDynamicProperties().put("haircut", value);
+        }
+
+        public Integer getSkin() {
+            Object val = getDynamicProperties().get("skin");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setSkin(Integer value) {
+            getDynamicProperties().put("skin", value);
+        }
+
+        public Integer getOutfit() {
+            Object val = getDynamicProperties().get("outfit");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setOutfit(Integer value) {
+            getDynamicProperties().put("outfit", value);
+        }
+
+        public Integer getAccessories() {
+            Object val = getDynamicProperties().get("accessories");
+            if (val instanceof Integer) {
+                return (Integer) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
+        }
+
+        public void setAccessories(Integer value) {
+            getDynamicProperties().put("accessories", value);
         }
 
     }

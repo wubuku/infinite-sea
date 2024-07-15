@@ -183,26 +183,26 @@ public class AvatarCommands {
         /**
          * Accessories
          */
-        private int[] accessories;
+        private Integer accessories;
 
-        public int[] getAccessories() {
+        public Integer getAccessories() {
             return this.accessories;
         }
 
-        public void setAccessories(int[] accessories) {
+        public void setAccessories(Integer accessories) {
             this.accessories = accessories;
         }
 
         /**
          * Aura
          */
-        private Integer aura;
+        private int[] aura;
 
-        public Integer getAura() {
+        public int[] getAura() {
             return this.aura;
         }
 
-        public void setAura(Integer aura) {
+        public void setAura(int[] aura) {
             this.aura = aura;
         }
 
@@ -358,6 +358,57 @@ public class AvatarCommands {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class WhitelistMint extends AbstractAvatarCommand implements AvatarCommand {
+
+        public String getCommandType() {
+            return "WhitelistMint";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Id
+         */
+        private String id;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        /**
+         * Whitelist
+         */
+        private String whitelist;
+
+        public String getWhitelist() {
+            return this.whitelist;
+        }
+
+        public void setWhitelist(String whitelist) {
+            this.whitelist = whitelist;
         }
 
         /**

@@ -159,26 +159,26 @@ public class AvatarStateDto {
         this.outfit = outfit;
     }
 
-    private int[] accessories;
+    private Integer accessories;
 
-    public int[] getAccessories()
+    public Integer getAccessories()
     {
         return this.accessories;
     }
 
-    public void setAccessories(int[] accessories)
+    public void setAccessories(Integer accessories)
     {
         this.accessories = accessories;
     }
 
-    private Integer aura;
+    private int[] aura;
 
-    public Integer getAura()
+    public int[] getAura()
     {
         return this.aura;
     }
 
-    public void setAura(Integer aura)
+    public void setAura(int[] aura)
     {
         this.aura = aura;
     }

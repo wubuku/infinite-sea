@@ -5,6 +5,7 @@
 
 package org.dddml.suiinfinitesea.sui.contract.taskservice;
 
+import org.dddml.suiinfinitesea.domain.item.AbstractItemEvent;
 import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,11 @@ public class UpdateItemStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-item-states.fixed-delay:5000}")
     @Transactional
     public void updateItemStates() {
-        itemEventRepository.findByEventStatusIsNull().forEach(e -> {
+        AbstractItemEvent e = itemEventRepository.findFirstByEventStatusIsNull();
+        if (e != null) {
             String objectId = e.getId_();
             suiItemService.updateItemState(objectId);
             itemEventService.updateStatusToProcessed(e);
-        });
+        }
     }
 }

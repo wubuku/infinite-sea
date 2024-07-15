@@ -38,13 +38,13 @@ public interface AvatarChangeEvent extends Event, SuiEventEnvelope, SuiMoveEvent
 
         void setOutfit(Integer value);
 
-        int[] getAccessories();
+        Integer getAccessories();
 
-        void setAccessories(int[] value);
+        void setAccessories(Integer value);
 
-        Integer getAura();
+        int[] getAura();
 
-        void setAura(Integer value);
+        void setAura(int[] value);
 
         int[] getSymbols();
 
@@ -85,13 +85,13 @@ public interface AvatarChangeEvent extends Event, SuiEventEnvelope, SuiMoveEvent
 
         void setOutfit(Integer value);
 
-        int[] getAccessories();
+        Integer getAccessories();
 
-        void setAccessories(int[] value);
+        void setAccessories(Integer value);
 
-        Integer getAura();
+        int[] getAura();
 
-        void setAura(Integer value);
+        void setAura(int[] value);
 
         int[] getSymbols();
 

@@ -46,6 +46,7 @@
       <subclass name="AbstractAvatarEvent$AvatarMinted" discriminator-value="AvatarMinted" />
       <subclass name="AbstractAvatarEvent$AvatarUpdated" discriminator-value="AvatarUpdated" />
       <subclass name="AbstractAvatarEvent$AvatarBurned" discriminator-value="AvatarBurned" />
+      <subclass name="AbstractAvatarEvent$AvatarWhitelistMinted" discriminator-value="AvatarWhitelistMinted" />
     </subclass>
   </class>
 </hibernate-mapping>

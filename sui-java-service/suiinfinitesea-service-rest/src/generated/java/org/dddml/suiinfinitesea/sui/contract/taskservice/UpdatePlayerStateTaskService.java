@@ -5,6 +5,7 @@
 
 package org.dddml.suiinfinitesea.sui.contract.taskservice;
 
+import org.dddml.suiinfinitesea.domain.player.AbstractPlayerEvent;
 import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.service.*;
 import org.dddml.suiinfinitesea.domain.player.PlayerStateQueryRepository;
@@ -31,11 +32,12 @@ public class UpdatePlayerStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-player-states.fixed-delay:5000}")
     @Transactional
     public void updatePlayerStates() {
-        playerEventRepository.findByEventStatusIsNull().forEach(e -> {
+        AbstractPlayerEvent e = playerEventRepository.findFirstByEventStatusIsNull();
+        if (e != null) {
             String objectId = e.getId();
             suiPlayerService.updatePlayerState(objectId);
             playerEventService.updateStatusToProcessed(e);
-        });
+        }
     }
 
     @Scheduled(fixedDelayString = "${sui.contract.update-all-player-states.fixed-delay:50000}")

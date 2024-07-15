@@ -22,6 +22,7 @@ import org.dddml.suiinfinitesea.domain.item.*;
 import org.dddml.suiinfinitesea.domain.itemcreation.*;
 import org.dddml.suiinfinitesea.domain.itemproduction.*;
 import org.dddml.suiinfinitesea.domain.player.*;
+import org.dddml.suiinfinitesea.domain.whitelist.*;
 import org.dddml.suiinfinitesea.domain.map.*;
 import org.dddml.suiinfinitesea.domain.experiencetable.*;
 
@@ -32,7 +33,7 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.avatar.MintLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
                     new String[]{"_", "_", "owner", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "skin", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges"}
             );
 
@@ -54,9 +55,17 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.avatar.WhitelistMintLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, AvatarState.class, VerificationContext.class},
+                    new String[]{"_", "_", "whitelist"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.avatarchange.CreateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
                     new String[]{"_", "_", "imageUrl", "backgroundColor", "haircut", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges"}
             );
 
@@ -64,7 +73,7 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.avatarchange.UpdateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
                     new String[]{"_", "_", "imageUrl", "backgroundColor", "haircut", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges"}
             );
 
@@ -318,6 +327,54 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.__Init__Logic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, WhitelistState.class, VerificationContext.class},
+                    new String[]{"_", "_"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.UpdateLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, WhitelistState.class, Boolean.class, VerificationContext.class},
+                    new String[]{"_", "_", "paused"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.AddWhitelistEntryLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, WhitelistState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, VerificationContext.class},
+                    new String[]{"_", "_", "accountAddress", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "skin", "outfit", "accessories"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.UpdateWhitelistEntryLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, WhitelistState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Boolean.class, Boolean.class, VerificationContext.class},
+                    new String[]{"_", "_", "accountAddress", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "skin", "outfit", "accessories", "claimed", "paused"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.ClaimLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, WhitelistState.class, VerificationContext.class},
+                    new String[]{"_", "_"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.CreateLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, WhitelistState.class, VerificationContext.class},
+                    new String[]{"_", "_"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.map.__Init__Logic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, MapState.class, VerificationContext.class},
@@ -376,7 +433,7 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.avatar.MintLogic",
                     "mutate",
-                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "owner", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "skin", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
@@ -398,9 +455,17 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.avatar.WhitelistMintLogic",
+                    "mutate",
+                    new Class[]{AvatarState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "owner", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "skin", "outfit", "accessories", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.avatarchange.CreateLogic",
                     "mutate",
-                    new Class[]{AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "imageUrl", "backgroundColor", "haircut", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
@@ -408,7 +473,7 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.avatarchange.UpdateLogic",
                     "mutate",
-                    new Class[]{AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "imageUrl", "backgroundColor", "haircut", "outfit", "accessories", "aura", "symbols", "effects", "backgrounds", "decorations", "badges", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
@@ -626,6 +691,54 @@ public class StaticMethodConstraints {
                     "mutate",
                     new Class[]{PlayerState.class, Long.class, Long.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "itemId", "quantity", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.__Init__Logic",
+                    "mutate",
+                    new Class[]{WhitelistState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.UpdateLogic",
+                    "mutate",
+                    new Class[]{WhitelistState.class, Boolean.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "paused", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.AddWhitelistEntryLogic",
+                    "mutate",
+                    new Class[]{WhitelistState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "accountAddress", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "skin", "outfit", "accessories", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.UpdateWhitelistEntryLogic",
+                    "mutate",
+                    new Class[]{WhitelistState.class, String.class, String.class, String.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Boolean.class, Boolean.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "accountAddress", "name", "imageUrl", "description", "backgroundColor", "race", "eyes", "mouth", "haircut", "skin", "outfit", "accessories", "claimed", "paused", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.ClaimLogic",
+                    "mutate",
+                    new Class[]{WhitelistState.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "accountAddress", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.whitelist.CreateLogic",
+                    "mutate",
+                    new Class[]{WhitelistState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 

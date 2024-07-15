@@ -31,4 +31,9 @@ public class PullAvatarEventsTaskService {
         avatarEventService.pullAvatarBurnedEvents();
     }
 
+    @Scheduled(fixedDelayString = "${sui.contract.pull-avatar-events.avatar-whitelist-minted.fixed-delay:5000}")
+    public void pullAvatarWhitelistMintedEvents() {
+        avatarEventService.pullAvatarWhitelistMintedEvents();
+    }
+
 }

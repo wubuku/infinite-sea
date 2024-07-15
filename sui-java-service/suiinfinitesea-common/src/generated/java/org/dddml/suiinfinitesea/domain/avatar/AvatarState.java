@@ -42,9 +42,9 @@ public interface AvatarState extends VersionedSuiMoveObject
 
     Integer getOutfit();
 
-    int[] getAccessories();
+    Integer getAccessories();
 
-    Integer getAura();
+    int[] getAura();
 
     int[] getSymbols();
 
@@ -95,9 +95,9 @@ public interface AvatarState extends VersionedSuiMoveObject
 
         void setOutfit(Integer outfit);
 
-        void setAccessories(int[] accessories);
+        void setAccessories(Integer accessories);
 
-        void setAura(Integer aura);
+        void setAura(int[] aura);
 
         void setSymbols(int[] symbols);
 

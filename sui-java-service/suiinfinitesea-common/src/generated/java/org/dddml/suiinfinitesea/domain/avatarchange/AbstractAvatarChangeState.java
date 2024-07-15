@@ -75,23 +75,23 @@ public abstract class AbstractAvatarChangeState implements AvatarChangeState.Sql
         this.outfit = outfit;
     }
 
-    private int[] accessories;
+    private Integer accessories;
 
-    public int[] getAccessories() {
+    public Integer getAccessories() {
         return this.accessories;
     }
 
-    public void setAccessories(int[] accessories) {
+    public void setAccessories(Integer accessories) {
         this.accessories = accessories;
     }
 
-    private Integer aura;
+    private int[] aura;
 
-    public Integer getAura() {
+    public int[] getAura() {
         return this.aura;
     }
 
-    public void setAura(Integer aura) {
+    public void setAura(int[] aura) {
         this.aura = aura;
     }
 
@@ -330,10 +330,10 @@ public abstract class AbstractAvatarChangeState implements AvatarChangeState.Sql
         Integer Haircut = haircut;
         Integer outfit = e.getOutfit();
         Integer Outfit = outfit;
-        int[] accessories = e.getAccessories();
-        int[] Accessories = accessories;
-        Integer aura = e.getAura();
-        Integer Aura = aura;
+        Integer accessories = e.getAccessories();
+        Integer Accessories = accessories;
+        int[] aura = e.getAura();
+        int[] Aura = aura;
         int[] symbols = e.getSymbols();
         int[] Symbols = symbols;
         int[] effects = e.getEffects();
@@ -373,14 +373,14 @@ public abstract class AbstractAvatarChangeState implements AvatarChangeState.Sql
         AvatarChangeState updatedAvatarChangeState = (AvatarChangeState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.avatarchange.CreateLogic",
                     "mutate",
-                    new Class[]{AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new Object[]{this, imageUrl, backgroundColor, haircut, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.avatarchange;
 //
 //public class CreateLogic {
-//    public static AvatarChangeState mutate(AvatarChangeState avatarChangeState, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarChangeState, AvatarChangeState.MutableAvatarChangeState> mutationContext) {
+//    public static AvatarChangeState mutate(AvatarChangeState avatarChangeState, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarChangeState, AvatarChangeState.MutableAvatarChangeState> mutationContext) {
 //    }
 //}
 
@@ -399,10 +399,10 @@ public abstract class AbstractAvatarChangeState implements AvatarChangeState.Sql
         Integer Haircut = haircut;
         Integer outfit = e.getOutfit();
         Integer Outfit = outfit;
-        int[] accessories = e.getAccessories();
-        int[] Accessories = accessories;
-        Integer aura = e.getAura();
-        Integer Aura = aura;
+        Integer accessories = e.getAccessories();
+        Integer Accessories = accessories;
+        int[] aura = e.getAura();
+        int[] Aura = aura;
         int[] symbols = e.getSymbols();
         int[] Symbols = symbols;
         int[] effects = e.getEffects();
@@ -442,14 +442,14 @@ public abstract class AbstractAvatarChangeState implements AvatarChangeState.Sql
         AvatarChangeState updatedAvatarChangeState = (AvatarChangeState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.avatarchange.UpdateLogic",
                     "mutate",
-                    new Class[]{AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Class[]{AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new Object[]{this, imageUrl, backgroundColor, haircut, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.avatarchange;
 //
 //public class UpdateLogic {
-//    public static AvatarChangeState mutate(AvatarChangeState avatarChangeState, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarChangeState, AvatarChangeState.MutableAvatarChangeState> mutationContext) {
+//    public static AvatarChangeState mutate(AvatarChangeState avatarChangeState, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<AvatarChangeState, AvatarChangeState.MutableAvatarChangeState> mutationContext) {
 //    }
 //}
 

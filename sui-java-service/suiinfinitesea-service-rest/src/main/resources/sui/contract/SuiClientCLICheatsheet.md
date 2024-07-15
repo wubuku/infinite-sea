@@ -8,7 +8,7 @@
 
 ```shell
 sui client call --package _PACKAGE_ID_ --module avatar_aggregate --function mint \
---args \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" address_owner '"string_name"' '"string_image_url"' '"string_description"' u32_background_color u8_race u8_eyes u8_mouth u8_haircut u8_skin u8_outfit \"vector_u8_accessories\" u8_aura \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \
+--args \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" address_owner '"string_name"' '"string_image_url"' '"string_description"' u32_background_color u8_race u8_eyes u8_mouth u8_haircut u8_skin u8_outfit u8_accessories \"vector_u8_aura\" \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \
 --gas-budget 100000
 ```
 
@@ -28,13 +28,21 @@ sui client call --package _PACKAGE_ID_ --module avatar_aggregate --function burn
 --gas-budget 100000
 ```
 
+### WhitelistMint method
+
+```shell
+sui client call --package _PACKAGE_ID_ --module avatar_aggregate --function whitelist_mint \
+--args \"_WHITELIST_OBJECT_ID_\" \
+--gas-budget 100000
+```
+
 ## AvatarChange aggregate
 
 ### Create method
 
 ```shell
 sui client call --package _PACKAGE_ID_ --module avatar_change_aggregate --function create \
---args id_avatar_id \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" '"string_image_url"' '[u32_optional_background_color]' '[u8_optional_haircut]' '[u8_optional_outfit]' \"vector_u8_accessories\" '[u8_optional_aura]' \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \"_AVATAR_CHANGE_AVATAR_CHANGE_TABLE_OBJECT_ID_\" \
+--args id_avatar_id \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" '"string_image_url"' '[u32_optional_background_color]' '[u8_optional_haircut]' '[u8_optional_outfit]' '[u8_optional_accessories]' \"vector_u8_aura\" \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \"_AVATAR_CHANGE_AVATAR_CHANGE_TABLE_OBJECT_ID_\" \
 --gas-budget 100000
 ```
 
@@ -42,7 +50,7 @@ sui client call --package _PACKAGE_ID_ --module avatar_change_aggregate --functi
 
 ```shell
 sui client call --package _PACKAGE_ID_ --module avatar_change_aggregate --function update \
---args avatar_change_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" '"string_image_url"' '[u32_optional_background_color]' '[u8_optional_haircut]' '[u8_optional_outfit]' \"vector_u8_accessories\" '[u8_optional_aura]' \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \
+--args avatar_change_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" '"string_image_url"' '[u32_optional_background_color]' '[u8_optional_haircut]' '[u8_optional_outfit]' '[u8_optional_accessories]' \"vector_u8_aura\" \"vector_u8_symbols\" \"vector_u8_effects\" \"vector_u8_backgrounds\" \"vector_u8_decorations\" \"vector_u8_badges\" \
 --gas-budget 100000
 ```
 
@@ -51,6 +59,32 @@ sui client call --package _PACKAGE_ID_ --module avatar_change_aggregate --functi
 ```shell
 sui client call --package _PACKAGE_ID_ --module avatar_change_aggregate --function delete \
 --args avatar_change_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" \
+--gas-budget 100000
+```
+
+## Whitelist singleton object
+
+### Update method
+
+```shell
+sui client call --package _PACKAGE_ID_ --module whitelist_aggregate --function update \
+--args whitelist_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" bool_paused \
+--gas-budget 100000
+```
+
+### AddWhitelistEntry method
+
+```shell
+sui client call --package _PACKAGE_ID_ --module whitelist_aggregate --function add_whitelist_entry \
+--args whitelist_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" address_account_address '"string_name"' '"string_image_url"' '"string_description"' u32_background_color u8_race u8_eyes u8_mouth u8_haircut u8_skin u8_outfit u8_accessories \
+--gas-budget 100000
+```
+
+### UpdateWhitelistEntry method
+
+```shell
+sui client call --package _PACKAGE_ID_ --module whitelist_aggregate --function update_whitelist_entry \
+--args whitelist_Object_ID \"_SUI_PACKAGE_PUBLISHER_OBJECT_ID_\" address_account_address '"string_name"' '"string_image_url"' '"string_description"' u32_background_color u8_race u8_eyes u8_mouth u8_haircut u8_skin u8_outfit u8_accessories bool_claimed bool_paused \
 --gas-budget 100000
 ```
 

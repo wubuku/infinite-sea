@@ -16,6 +16,7 @@ import org.dddml.suiinfinitesea.domain.avatar.AbstractAvatarEvent;
 import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarMinted;
 import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarUpdated;
 import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarBurned;
+import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarWhitelistMinted;
 import org.dddml.suiinfinitesea.domain.avatarchange.AbstractAvatarChangeEvent;
 import org.dddml.suiinfinitesea.sui.contract.avatarchange.AvatarChangeCreated;
 import org.dddml.suiinfinitesea.sui.contract.avatarchange.AvatarChangeUpdated;
@@ -58,6 +59,13 @@ import org.dddml.suiinfinitesea.domain.player.AbstractPlayerEvent;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
 import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
+import org.dddml.suiinfinitesea.domain.whitelist.AbstractWhitelistEvent;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.InitWhitelistEvent;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistUpdated;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistEntryAdded;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistEntryUpdated;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistClaimed;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistCreated;
 import org.dddml.suiinfinitesea.domain.map.AbstractMapEvent;
 import org.dddml.suiinfinitesea.sui.contract.map.InitMapEvent;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
@@ -328,6 +336,36 @@ public class DomainBeanUtils {
         avatarBurned.setSuiSender(eventEnvelope.getSender());
 
         return avatarBurned;
+    }
+
+    public static AbstractAvatarEvent.AvatarWhitelistMinted toAvatarWhitelistMinted(SuiMoveEventEnvelope<AvatarWhitelistMinted> eventEnvelope) {
+        AvatarWhitelistMinted contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractAvatarEvent.AvatarWhitelistMinted avatarWhitelistMinted = new AbstractAvatarEvent.AvatarWhitelistMinted();
+        avatarWhitelistMinted.setId(contractEvent.getId());
+        avatarWhitelistMinted.setOwner(contractEvent.getOwner());
+        avatarWhitelistMinted.setName(contractEvent.getName());
+        avatarWhitelistMinted.setImageUrl(contractEvent.getImageUrl());
+        avatarWhitelistMinted.setDescription(contractEvent.getDescription());
+        avatarWhitelistMinted.setBackgroundColor(contractEvent.getBackgroundColor());
+        avatarWhitelistMinted.setRace(contractEvent.getRace());
+        avatarWhitelistMinted.setEyes(contractEvent.getEyes());
+        avatarWhitelistMinted.setMouth(contractEvent.getMouth());
+        avatarWhitelistMinted.setHaircut(contractEvent.getHaircut());
+        avatarWhitelistMinted.setSkin(contractEvent.getSkin());
+        avatarWhitelistMinted.setOutfit(contractEvent.getOutfit());
+        avatarWhitelistMinted.setAccessories(contractEvent.getAccessories());
+        avatarWhitelistMinted.setVersion(BigInteger.valueOf(-1));
+
+        avatarWhitelistMinted.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        avatarWhitelistMinted.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        avatarWhitelistMinted.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        avatarWhitelistMinted.setSuiPackageId(eventEnvelope.getPackageId());
+        avatarWhitelistMinted.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        avatarWhitelistMinted.setSuiSender(eventEnvelope.getSender());
+
+        return avatarWhitelistMinted;
     }
 
     public static AbstractAvatarChangeEvent.AvatarChangeCreated toAvatarChangeCreated(SuiMoveEventEnvelope<AvatarChangeCreated> eventEnvelope) {
@@ -1112,6 +1150,142 @@ public class DomainBeanUtils {
         playerAirdropped.setSuiSender(eventEnvelope.getSender());
 
         return playerAirdropped;
+    }
+
+    public static AbstractWhitelistEvent.InitWhitelistEvent toInitWhitelistEvent(SuiMoveEventEnvelope<InitWhitelistEvent> eventEnvelope) {
+        InitWhitelistEvent contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractWhitelistEvent.InitWhitelistEvent initWhitelistEvent = new AbstractWhitelistEvent.InitWhitelistEvent();
+        initWhitelistEvent.setId(contractEvent.getId());
+        initWhitelistEvent.setVersion(BigInteger.valueOf(-1));
+
+        initWhitelistEvent.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        initWhitelistEvent.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        initWhitelistEvent.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        initWhitelistEvent.setSuiPackageId(eventEnvelope.getPackageId());
+        initWhitelistEvent.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        initWhitelistEvent.setSuiSender(eventEnvelope.getSender());
+
+        return initWhitelistEvent;
+    }
+
+    public static AbstractWhitelistEvent.WhitelistUpdated toWhitelistUpdated(SuiMoveEventEnvelope<WhitelistUpdated> eventEnvelope) {
+        WhitelistUpdated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractWhitelistEvent.WhitelistUpdated whitelistUpdated = new AbstractWhitelistEvent.WhitelistUpdated();
+        whitelistUpdated.setId(contractEvent.getId());
+        whitelistUpdated.setPaused(contractEvent.getPaused());
+        whitelistUpdated.setVersion(contractEvent.getVersion());
+
+        whitelistUpdated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        whitelistUpdated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        whitelistUpdated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        whitelistUpdated.setSuiPackageId(eventEnvelope.getPackageId());
+        whitelistUpdated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        whitelistUpdated.setSuiSender(eventEnvelope.getSender());
+
+        return whitelistUpdated;
+    }
+
+    public static AbstractWhitelistEvent.WhitelistEntryAdded toWhitelistEntryAdded(SuiMoveEventEnvelope<WhitelistEntryAdded> eventEnvelope) {
+        WhitelistEntryAdded contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractWhitelistEvent.WhitelistEntryAdded whitelistEntryAdded = new AbstractWhitelistEvent.WhitelistEntryAdded();
+        whitelistEntryAdded.setId(contractEvent.getId());
+        whitelistEntryAdded.setAccountAddress(contractEvent.getAccountAddress());
+        whitelistEntryAdded.setName(contractEvent.getName());
+        whitelistEntryAdded.setImageUrl(contractEvent.getImageUrl());
+        whitelistEntryAdded.setDescription(contractEvent.getDescription());
+        whitelistEntryAdded.setBackgroundColor(contractEvent.getBackgroundColor());
+        whitelistEntryAdded.setRace(contractEvent.getRace());
+        whitelistEntryAdded.setEyes(contractEvent.getEyes());
+        whitelistEntryAdded.setMouth(contractEvent.getMouth());
+        whitelistEntryAdded.setHaircut(contractEvent.getHaircut());
+        whitelistEntryAdded.setSkin(contractEvent.getSkin());
+        whitelistEntryAdded.setOutfit(contractEvent.getOutfit());
+        whitelistEntryAdded.setAccessories(contractEvent.getAccessories());
+        whitelistEntryAdded.setVersion(contractEvent.getVersion());
+
+        whitelistEntryAdded.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        whitelistEntryAdded.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        whitelistEntryAdded.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        whitelistEntryAdded.setSuiPackageId(eventEnvelope.getPackageId());
+        whitelistEntryAdded.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        whitelistEntryAdded.setSuiSender(eventEnvelope.getSender());
+
+        return whitelistEntryAdded;
+    }
+
+    public static AbstractWhitelistEvent.WhitelistEntryUpdated toWhitelistEntryUpdated(SuiMoveEventEnvelope<WhitelistEntryUpdated> eventEnvelope) {
+        WhitelistEntryUpdated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractWhitelistEvent.WhitelistEntryUpdated whitelistEntryUpdated = new AbstractWhitelistEvent.WhitelistEntryUpdated();
+        whitelistEntryUpdated.setId(contractEvent.getId());
+        whitelistEntryUpdated.setAccountAddress(contractEvent.getAccountAddress());
+        whitelistEntryUpdated.setName(contractEvent.getName());
+        whitelistEntryUpdated.setImageUrl(contractEvent.getImageUrl());
+        whitelistEntryUpdated.setDescription(contractEvent.getDescription());
+        whitelistEntryUpdated.setBackgroundColor(contractEvent.getBackgroundColor());
+        whitelistEntryUpdated.setRace(contractEvent.getRace());
+        whitelistEntryUpdated.setEyes(contractEvent.getEyes());
+        whitelistEntryUpdated.setMouth(contractEvent.getMouth());
+        whitelistEntryUpdated.setHaircut(contractEvent.getHaircut());
+        whitelistEntryUpdated.setSkin(contractEvent.getSkin());
+        whitelistEntryUpdated.setOutfit(contractEvent.getOutfit());
+        whitelistEntryUpdated.setAccessories(contractEvent.getAccessories());
+        whitelistEntryUpdated.setClaimed(contractEvent.getClaimed());
+        whitelistEntryUpdated.setPaused(contractEvent.getPaused());
+        whitelistEntryUpdated.setVersion(contractEvent.getVersion());
+
+        whitelistEntryUpdated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        whitelistEntryUpdated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        whitelistEntryUpdated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        whitelistEntryUpdated.setSuiPackageId(eventEnvelope.getPackageId());
+        whitelistEntryUpdated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        whitelistEntryUpdated.setSuiSender(eventEnvelope.getSender());
+
+        return whitelistEntryUpdated;
+    }
+
+    public static AbstractWhitelistEvent.WhitelistClaimed toWhitelistClaimed(SuiMoveEventEnvelope<WhitelistClaimed> eventEnvelope) {
+        WhitelistClaimed contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractWhitelistEvent.WhitelistClaimed whitelistClaimed = new AbstractWhitelistEvent.WhitelistClaimed();
+        whitelistClaimed.setId(contractEvent.getId());
+        whitelistClaimed.setAccountAddress(contractEvent.getAccountAddress());
+        whitelistClaimed.setVersion(contractEvent.getVersion());
+
+        whitelistClaimed.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        whitelistClaimed.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        whitelistClaimed.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        whitelistClaimed.setSuiPackageId(eventEnvelope.getPackageId());
+        whitelistClaimed.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        whitelistClaimed.setSuiSender(eventEnvelope.getSender());
+
+        return whitelistClaimed;
+    }
+
+    public static AbstractWhitelistEvent.WhitelistCreated toWhitelistCreated(SuiMoveEventEnvelope<WhitelistCreated> eventEnvelope) {
+        WhitelistCreated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractWhitelistEvent.WhitelistCreated whitelistCreated = new AbstractWhitelistEvent.WhitelistCreated();
+        whitelistCreated.setId(contractEvent.getId());
+        whitelistCreated.setVersion(BigInteger.valueOf(-1));
+
+        whitelistCreated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        whitelistCreated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        whitelistCreated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        whitelistCreated.setSuiPackageId(eventEnvelope.getPackageId());
+        whitelistCreated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        whitelistCreated.setSuiSender(eventEnvelope.getSender());
+
+        return whitelistCreated;
     }
 
     public static AbstractMapEvent.InitMapEvent toInitMapEvent(SuiMoveEventEnvelope<InitMapEvent> eventEnvelope) {

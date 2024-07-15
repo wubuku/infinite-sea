@@ -17,6 +17,7 @@ import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarMinted;
 import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarUpdated;
 import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarBurned;
+import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarWhitelistMinted;
 import org.dddml.suiinfinitesea.sui.contract.repository.AvatarEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,6 +173,46 @@ public class AvatarEventService {
             return;
         }
         avatarEventRepository.save(avatarBurned);
+    }
+
+    @Transactional
+    public void pullAvatarWhitelistMintedEvents() {
+        String packageId = getNftSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getAvatarWhitelistMintedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<AvatarWhitelistMinted> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.AVATAR_MODULE_AVATAR_WHITELIST_MINTED,
+                    cursor, limit, false, AvatarWhitelistMinted.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<AvatarWhitelistMinted> eventEnvelope : eventPage.getData()) {
+                    saveAvatarWhitelistMinted(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getAvatarWhitelistMintedEventNextCursor() {
+        AbstractAvatarEvent lastEvent = avatarEventRepository.findFirstAvatarWhitelistMintedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveAvatarWhitelistMinted(SuiMoveEventEnvelope<AvatarWhitelistMinted> eventEnvelope) {
+        AbstractAvatarEvent.AvatarWhitelistMinted avatarWhitelistMinted = DomainBeanUtils.toAvatarWhitelistMinted(eventEnvelope);
+        if (avatarEventRepository.findById(avatarWhitelistMinted.getAvatarEventId()).isPresent()) {
+            return;
+        }
+        avatarEventRepository.save(avatarWhitelistMinted);
     }
 
 

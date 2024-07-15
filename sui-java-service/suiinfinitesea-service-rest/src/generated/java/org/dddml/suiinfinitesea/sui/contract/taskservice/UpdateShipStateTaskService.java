@@ -5,6 +5,7 @@
 
 package org.dddml.suiinfinitesea.sui.contract.taskservice;
 
+import org.dddml.suiinfinitesea.domain.ship.AbstractShipEvent;
 import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,11 @@ public class UpdateShipStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-ship-states.fixed-delay:5000}")
     @Transactional
     public void updateShipStates() {
-        shipEventRepository.findByEventStatusIsNull().forEach(e -> {
+        AbstractShipEvent e = shipEventRepository.findFirstByEventStatusIsNull();
+        if (e != null) {
             String objectId = e.getId();
             suiShipService.updateShipState(objectId);
             shipEventService.updateStatusToProcessed(e);
-        });
+        }
     }
 }

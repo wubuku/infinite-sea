@@ -17,9 +17,9 @@ public interface AvatarChangeAggregate {
 
     List<Event> getChanges();
 
-    void create(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarChangeCommands.Create c);
+    void create(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarChangeCommands.Create c);
 
-    void update(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarChangeCommands.Update c);
+    void update(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarChangeCommands.Update c);
 
     void delete(Long offChainVersion, String commandId, String requesterId, AvatarChangeCommands.Delete c);
 

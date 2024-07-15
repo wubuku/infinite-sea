@@ -47,7 +47,7 @@ public abstract class AbstractAvatarChangeAggregate extends AbstractAggregate im
         }
 
         @Override
-        public void create(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarChangeCommands.Create c) {
+        public void create(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarChangeCommands.Create c) {
             java.util.function.Supplier<AvatarChangeEvent.AvatarChangeCreated> eventFactory = () -> newAvatarChangeCreated(imageUrl, backgroundColor, haircut, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, offChainVersion, commandId, requesterId);
             AvatarChangeEvent.AvatarChangeCreated e;
             try {
@@ -60,7 +60,7 @@ public abstract class AbstractAvatarChangeAggregate extends AbstractAggregate im
         }
 
         @Override
-        public void update(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarChangeCommands.Update c) {
+        public void update(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId, AvatarChangeCommands.Update c) {
             java.util.function.Supplier<AvatarChangeEvent.AvatarChangeUpdated> eventFactory = () -> newAvatarChangeUpdated(imageUrl, backgroundColor, haircut, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, offChainVersion, commandId, requesterId);
             AvatarChangeEvent.AvatarChangeUpdated e;
             try {
@@ -85,13 +85,13 @@ public abstract class AbstractAvatarChangeAggregate extends AbstractAggregate im
             apply(e);
         }
 
-        protected AvatarChangeEvent.AvatarChangeCreated verifyCreate(java.util.function.Supplier<AvatarChangeEvent.AvatarChangeCreated> eventFactory, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, AvatarChangeCommands.Create c) {
+        protected AvatarChangeEvent.AvatarChangeCreated verifyCreate(java.util.function.Supplier<AvatarChangeEvent.AvatarChangeCreated> eventFactory, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, AvatarChangeCommands.Create c) {
             String ImageUrl = imageUrl;
             Long BackgroundColor = backgroundColor;
             Integer Haircut = haircut;
             Integer Outfit = outfit;
-            int[] Accessories = accessories;
-            Integer Aura = aura;
+            Integer Accessories = accessories;
+            int[] Aura = aura;
             int[] Symbols = symbols;
             int[] Effects = effects;
             int[] Backgrounds = backgrounds;
@@ -101,14 +101,14 @@ public abstract class AbstractAvatarChangeAggregate extends AbstractAggregate im
             AvatarChangeEvent.AvatarChangeCreated e = (AvatarChangeEvent.AvatarChangeCreated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.avatarchange.CreateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
                     new Object[]{eventFactory, getState(), imageUrl, backgroundColor, haircut, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.avatarchange;
 //
 //public class CreateLogic {
-//    public static AvatarChangeEvent.AvatarChangeCreated verify(java.util.function.Supplier<AvatarChangeEvent.AvatarChangeCreated> eventFactory, AvatarChangeState avatarChangeState, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, VerificationContext verificationContext) {
+//    public static AvatarChangeEvent.AvatarChangeCreated verify(java.util.function.Supplier<AvatarChangeEvent.AvatarChangeCreated> eventFactory, AvatarChangeState avatarChangeState, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -116,13 +116,13 @@ public abstract class AbstractAvatarChangeAggregate extends AbstractAggregate im
         }
            
 
-        protected AvatarChangeEvent.AvatarChangeUpdated verifyUpdate(java.util.function.Supplier<AvatarChangeEvent.AvatarChangeUpdated> eventFactory, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, AvatarChangeCommands.Update c) {
+        protected AvatarChangeEvent.AvatarChangeUpdated verifyUpdate(java.util.function.Supplier<AvatarChangeEvent.AvatarChangeUpdated> eventFactory, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, AvatarChangeCommands.Update c) {
             String ImageUrl = imageUrl;
             Long BackgroundColor = backgroundColor;
             Integer Haircut = haircut;
             Integer Outfit = outfit;
-            int[] Accessories = accessories;
-            Integer Aura = aura;
+            Integer Accessories = accessories;
+            int[] Aura = aura;
             int[] Symbols = symbols;
             int[] Effects = effects;
             int[] Backgrounds = backgrounds;
@@ -132,14 +132,14 @@ public abstract class AbstractAvatarChangeAggregate extends AbstractAggregate im
             AvatarChangeEvent.AvatarChangeUpdated e = (AvatarChangeEvent.AvatarChangeUpdated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.avatarchange.UpdateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, int[].class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
+                    new Class[]{java.util.function.Supplier.class, AvatarChangeState.class, String.class, Long.class, Integer.class, Integer.class, Integer.class, int[].class, int[].class, int[].class, int[].class, int[].class, int[].class, VerificationContext.class},
                     new Object[]{eventFactory, getState(), imageUrl, backgroundColor, haircut, outfit, accessories, aura, symbols, effects, backgrounds, decorations, badges, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.avatarchange;
 //
 //public class UpdateLogic {
-//    public static AvatarChangeEvent.AvatarChangeUpdated verify(java.util.function.Supplier<AvatarChangeEvent.AvatarChangeUpdated> eventFactory, AvatarChangeState avatarChangeState, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, VerificationContext verificationContext) {
+//    public static AvatarChangeEvent.AvatarChangeUpdated verify(java.util.function.Supplier<AvatarChangeEvent.AvatarChangeUpdated> eventFactory, AvatarChangeState avatarChangeState, String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -167,7 +167,7 @@ public abstract class AbstractAvatarChangeAggregate extends AbstractAggregate im
         }
            
 
-        protected AbstractAvatarChangeEvent.AvatarChangeCreated newAvatarChangeCreated(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractAvatarChangeEvent.AvatarChangeCreated newAvatarChangeCreated(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId) {
             AvatarChangeEventId eventId = new AvatarChangeEventId(getState().getAvatarId(), null);
             AbstractAvatarChangeEvent.AvatarChangeCreated e = new AbstractAvatarChangeEvent.AvatarChangeCreated();
 
@@ -199,7 +199,7 @@ public abstract class AbstractAvatarChangeAggregate extends AbstractAggregate im
             return e;
         }
 
-        protected AbstractAvatarChangeEvent.AvatarChangeUpdated newAvatarChangeUpdated(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, int[] accessories, Integer aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractAvatarChangeEvent.AvatarChangeUpdated newAvatarChangeUpdated(String imageUrl, Long backgroundColor, Integer haircut, Integer outfit, Integer accessories, int[] aura, int[] symbols, int[] effects, int[] backgrounds, int[] decorations, int[] badges, Long offChainVersion, String commandId, String requesterId) {
             AvatarChangeEventId eventId = new AvatarChangeEventId(getState().getAvatarId(), null);
             AbstractAvatarChangeEvent.AvatarChangeUpdated e = new AbstractAvatarChangeEvent.AvatarChangeUpdated();
 

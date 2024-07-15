@@ -62,6 +62,10 @@ public abstract class AbstractAvatarApplicationService implements AvatarApplicat
         update(c, ar -> ar.burn(c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
+    public void when(AvatarCommands.WhitelistMint c) {
+        update(c, ar -> ar.whitelistMint(c.getWhitelist(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
     public AvatarState get(String id) {
         AvatarState state = getStateRepository().get(id, true);
         return state;
