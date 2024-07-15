@@ -220,6 +220,11 @@ singletonObjects:
     friends:
       - Avatar.WhitelistMint
     properties:
+      Paused:
+        type: bool
+        description: "Is global pause for claiming"
+        defaultLogic:
+          Move: "false"
       Entries:
         itemType: WhitelistEntry
     methods:

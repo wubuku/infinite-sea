@@ -19,10 +19,12 @@ module infinite_sea_nft::whitelist_aggregate {
     public entry fun update(
         whitelist: &mut whitelist::Whitelist,
         publisher: &sui::package::Publisher,
+        paused: bool,
         ctx: &mut tx_context::TxContext,
     ) {
         assert!(sui::package::from_package<whitelist::Whitelist>(publisher), ENotPublisher);
         let whitelist_updated = whitelist_update_logic::verify(
+            paused,
             whitelist,
             ctx,
         );

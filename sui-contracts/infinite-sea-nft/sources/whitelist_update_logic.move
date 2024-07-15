@@ -5,21 +5,25 @@ module infinite_sea_nft::whitelist_update_logic {
     friend infinite_sea_nft::whitelist_aggregate;
 
     public(friend) fun verify(
+        paused: bool,
         whitelist: &whitelist::Whitelist,
         ctx: &TxContext,
     ): whitelist::WhitelistUpdated {
         let _ = ctx;
         whitelist::new_whitelist_updated(
             whitelist,
+            paused,
         )
     }
 
     public(friend) fun mutate(
-        _whitelist_updated: &whitelist::WhitelistUpdated,
-        _whitelist: &mut whitelist::Whitelist,
+        whitelist_updated: &whitelist::WhitelistUpdated,
+        whitelist: &mut whitelist::Whitelist,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {
+        let paused = whitelist::whitelist_updated_paused(whitelist_updated);
         let _ = ctx;
+        whitelist::set_paused(whitelist, paused);
     }
 
 }

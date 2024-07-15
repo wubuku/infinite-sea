@@ -6,9 +6,10 @@ module infinite_sea_nft::whitelist_claim_logic {
 
     friend infinite_sea_nft::whitelist_aggregate;
 
-    const ENotInWhitelist: u64 = 1;
-    const EAlreadyClaimed: u64 = 2;
-    const EPaused: u64 = 3;
+    const EGloballyPaused: u64 = 50;
+    const ENotInWhitelist: u64 = 51;
+    const EAlreadyClaimed: u64 = 52;
+    const EPaused: u64 = 53;
 
     public(friend) fun verify(
         whitelist: &whitelist::Whitelist,
@@ -16,6 +17,7 @@ module infinite_sea_nft::whitelist_claim_logic {
     ): whitelist::WhitelistClaimed {
         let account_address = tx_context::sender(ctx);
         assert!(whitelist::entries_contains(whitelist, account_address), ENotInWhitelist);
+        assert!(!whitelist::paused(whitelist), EGloballyPaused);
         let entry = whitelist::borrow_entry(whitelist, account_address);
         assert!(!whitelist_entry::claimed(entry), EAlreadyClaimed);
         assert!(!whitelist_entry::paused(entry), EPaused);

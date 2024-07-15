@@ -7,7 +7,7 @@ module infinite_sea_nft::whitelist_update_whitelist_entry_logic {
     friend infinite_sea_nft::whitelist_aggregate;
 
     public(friend) fun verify(
-        address: address,
+        account_address: address,
         name: String,
         image_url: String,
         description: String,
@@ -25,11 +25,11 @@ module infinite_sea_nft::whitelist_update_whitelist_entry_logic {
         ctx: &TxContext,
     ): whitelist::WhitelistEntryUpdated {
         let _ = ctx;
-        let whitelist_entry = whitelist::borrow_entry(whitelist, address);
+        let whitelist_entry = whitelist::borrow_entry(whitelist, account_address);
         let _ = whitelist_entry;
         whitelist::new_whitelist_entry_updated(
             whitelist,
-            address,
+            account_address,
             name,
             image_url,
             description,
@@ -51,7 +51,7 @@ module infinite_sea_nft::whitelist_update_whitelist_entry_logic {
         whitelist: &mut whitelist::Whitelist,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {
-        let address = whitelist::whitelist_entry_updated_account_address(whitelist_entry_updated);
+        let account_address = whitelist::whitelist_entry_updated_account_address(whitelist_entry_updated);
         let name = whitelist::whitelist_entry_updated_name(whitelist_entry_updated);
         let image_url = whitelist::whitelist_entry_updated_image_url(whitelist_entry_updated);
         let description = whitelist::whitelist_entry_updated_description(whitelist_entry_updated);
@@ -66,7 +66,7 @@ module infinite_sea_nft::whitelist_update_whitelist_entry_logic {
         let claimed = whitelist::whitelist_entry_updated_claimed(whitelist_entry_updated);
         let paused = whitelist::whitelist_entry_updated_paused(whitelist_entry_updated);
         let _ = ctx;
-        let whitelist_entry = whitelist::borrow_mut_entry(whitelist, address);
+        let whitelist_entry = whitelist::borrow_mut_entry(whitelist, account_address);
         whitelist_entry::set_name(whitelist_entry, name);
         whitelist_entry::set_image_url(whitelist_entry, image_url);
         whitelist_entry::set_description(whitelist_entry, description);

@@ -39,6 +39,7 @@ module infinite_sea_nft::whitelist {
     struct Whitelist has key {
         id: UID,
         version: u64,
+        paused: bool,
         entries: table::Table<address, WhitelistEntry>,
     }
 
@@ -48,6 +49,14 @@ module infinite_sea_nft::whitelist {
 
     public fun version(whitelist: &Whitelist): u64 {
         whitelist.version
+    }
+
+    public fun paused(whitelist: &Whitelist): bool {
+        whitelist.paused
+    }
+
+    public(friend) fun set_paused(whitelist: &mut Whitelist, paused: bool) {
+        whitelist.paused = paused;
     }
 
     public(friend) fun add_entry(whitelist: &mut Whitelist, entry: WhitelistEntry) {
@@ -85,6 +94,7 @@ module infinite_sea_nft::whitelist {
         Whitelist {
             id: object::new(ctx),
             version: 0,
+            paused: false,
             entries: table::new<address, WhitelistEntry>(ctx),
         }
     }
@@ -108,18 +118,25 @@ module infinite_sea_nft::whitelist {
     struct WhitelistUpdated has copy, drop {
         id: object::ID,
         version: u64,
+        paused: bool,
     }
 
     public fun whitelist_updated_id(whitelist_updated: &WhitelistUpdated): object::ID {
         whitelist_updated.id
     }
 
+    public fun whitelist_updated_paused(whitelist_updated: &WhitelistUpdated): bool {
+        whitelist_updated.paused
+    }
+
     public(friend) fun new_whitelist_updated(
         whitelist: &Whitelist,
+        paused: bool,
     ): WhitelistUpdated {
         WhitelistUpdated {
             id: id(whitelist),
             version: version(whitelist),
+            paused,
         }
     }
 
@@ -396,6 +413,7 @@ module infinite_sea_nft::whitelist {
         let Whitelist {
             id,
             version: _version,
+            paused: _paused,
             entries,
         } = whitelist;
         object::delete(id);

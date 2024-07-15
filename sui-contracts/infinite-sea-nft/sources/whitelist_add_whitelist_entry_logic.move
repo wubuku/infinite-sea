@@ -7,7 +7,7 @@ module infinite_sea_nft::whitelist_add_whitelist_entry_logic {
     friend infinite_sea_nft::whitelist_aggregate;
 
     public(friend) fun verify(
-        address: address,
+        account_address: address,
         name: String,
         image_url: String,
         description: String,
@@ -27,7 +27,7 @@ module infinite_sea_nft::whitelist_add_whitelist_entry_logic {
         let _ = ctx;
         whitelist::new_whitelist_entry_added(
             whitelist,
-            address,
+            account_address,
             name,
             image_url,
             description,
@@ -49,7 +49,7 @@ module infinite_sea_nft::whitelist_add_whitelist_entry_logic {
         whitelist: &mut whitelist::Whitelist,
         ctx: &TxContext, // modify the reference to mutable if needed
     ) {
-        let address = whitelist::whitelist_entry_added_account_address(whitelist_entry_added);
+        let account_address = whitelist::whitelist_entry_added_account_address(whitelist_entry_added);
         let name = whitelist::whitelist_entry_added_name(whitelist_entry_added);
         let image_url = whitelist::whitelist_entry_added_image_url(whitelist_entry_added);
         let description = whitelist::whitelist_entry_added_description(whitelist_entry_added);
@@ -63,7 +63,7 @@ module infinite_sea_nft::whitelist_add_whitelist_entry_logic {
         let accessories = whitelist::whitelist_entry_added_accessories(whitelist_entry_added);
         let _ = ctx;
         let whitelist_entry = whitelist_entry::new_whitelist_entry(
-            address,
+            account_address,
             name,
             image_url,
             description,
