@@ -3003,7 +3003,7 @@ Using the `whitelist` object ID as a parameter, execute the following `Sui CLI` 
 ```shell
 sui client object {nft.Whitelist} --json
 ```
-We will obtain response in the following format:
+We will get response in the following format:
 ```json
 {
   "objectId": "0x785c5465137ae06615f64d19901124490f8fc926a99e0c4ead6b4e6c49af3604",
@@ -3045,7 +3045,7 @@ Call the following command with `{content.fields.entries.id.id}` as a parameter 
 ```shell
 curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":["{content.fields.entries.id.id}"]}' https://fullnode.testnet.sui.io/
 ```
-We will obtain response in the following format:
+We will get response in the following format:
 ```json
 {
 	"jsonrpc": "2.0",
@@ -3076,7 +3076,7 @@ Using `{WhitelistEntryId}` as a parameter to execute the following `Sui CLI` com
 ```shell
 sui client object {WhitelistEntryId} --json
 ```
-We will obtain response in the following format:
+We will get response in the following format:
 ```json
 {
   "objectId": "0xa38e2dd227664297bf968c8ab5b86bd86b5a386d5dc93fcbc9c4bf0120289873",
