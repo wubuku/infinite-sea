@@ -2612,11 +2612,9 @@ sui client call --package {main.packageId} \
 
 持有 `NTF` 包发布对象 `Publisher` 的管理者，可以给入围用户打造 NFT(PFP)。
 
-The manager who holds the `NTF` package publishing object `Publisher` gives the user Mint NFT (PFP).
-
 执行以下 Sui CLI 命令进行 Mint：
 
-Execute the Sui CLI command for Mint:
+Execute the `Sui CLI` command for Mint:
 
 ```shell
 sui client call --package {nft.packageId} \
@@ -2706,7 +2704,7 @@ Among them, 'objectId' is the ID of the NFT object created for the user. In futu
 如果玩家的 `NFT(PFP)` 对象不存在对应的 `AvatarChange` 对象，那么可以通过执行如下 `Sui CLI` 命令来创建：
 
 
-Create an `AvatarChange` object by executing the following 'Sui CLI' command:
+Create an `AvatarChange` object by executing the following `Sui CLI` command:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function create --args \
@@ -2781,7 +2779,7 @@ After successful command execution, you will receive an output with a JSON struc
 
 可以通过执行以下 `Sui CLI` 命令来更新 `AvatarChange` 对象：
 
-Update the AvatarChange object by executing the following Sui CLI command:
+Update the `AvatarChange` object by executing the following `Sui CLI` command:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function update --args \
@@ -2828,7 +2826,7 @@ Input parameter description:
 
 可以通过执行以下 `Sui CLI` 命令来更新 `NFT(PFP)` 对象：
 
-Update NFT (PFP) object by executing the following 'Sui CLI' command:
+Update `NFT(PFP)` object by executing the following `Sui CLI` command:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_aggregate --function update --args \
@@ -2850,7 +2848,7 @@ Input parameter description:
 
 可以通过执行以下 `Sui CLI` 命令来销毁 `NFT(PFP)` 对象：
 
-Execute the following 'Sui CLI' command to destroy NFT (PFP) object:
+Execute the following `Sui CLI` command to destroy `NFT(PFP)` object:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_aggregate --function burn --args {avatarId} --json 
@@ -2866,9 +2864,9 @@ Input parameter description:
 
 ### 白名单添加记录(Add Entry to the whitelist)
 
-管理员可以通过以下 Sui CLI 命令向白名单中添加一条记录：
+管理员可以通过以下 `Sui CLI` 命令向白名单中添加一条记录：
 
-Admin can add an entry to the whitelist using the following Sui CLI command:
+Admin can add an entry to the whitelist using the following `Sui CLI` command:
 
 ```shell
 sui client call --package {nft.packageId} --module whitelist_aggregate --function add_whitelist_entry --args \
@@ -2912,9 +2910,9 @@ Input parameter description:
 
 ### 更新白名单记录(Update whitelist entry)
 
-通过以下 Sui CLI 命令更改白名单中的指定地址对应的记录信息：
+通过以下 `Sui CLI` 命令更改白名单中的指定地址对应的记录信息：
 
-Update the entry information corresponding to the specified address in the whitelist using the following Sui CLI command:
+Update the entry information corresponding to the specified address in the whitelist using the following `Sui CLI` command:
 
 ```shell
 sui client call --package {nft.packageId} --module whitelist_aggregate --function update_whitelist_entry --args \
@@ -2963,7 +2961,7 @@ Input parameter description:
 
 在白名单内的用户可以利用以下 Sui CLI 命令自我铸造一个 NFT(PFP)：
 
-Users in the whitelist can use the following Sui CLI command to self claims an NFT (PFP):
+Users in the whitelist can use the following `Sui CLI` command to self claims an NFT (PFP):
 ```shell
 sui client call --package {nft.packageId} --module avatar_aggregate --function whitelist_mint --args {nft.Whitelist} --json
 ```
@@ -2973,7 +2971,7 @@ sui client call --package {nft.packageId} --module avatar_aggregate --function w
 Input parameter description:
 
 * `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
-* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID。
+* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID（Whitelist object ID）。
 
 执行成功，可以得到如下类似的输出信息：
 ```json
@@ -2992,7 +2990,7 @@ Input parameter description:
   ]
 ```
 可以看到 `objectType` 为 `{nft.packageId}.avatar::Avatar` 的元素，其 `objectId` 即为铸造并分配给用户的 NFT(PFP) 对象的 ID。
-我们可以将其记录为 {AvatarId}，以供在其他地方使用。
+我们可以将其记录为 `{AvatarId}`，以供在其他地方使用。
 
 
 
