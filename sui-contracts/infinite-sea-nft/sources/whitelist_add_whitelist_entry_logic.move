@@ -19,8 +19,6 @@ module infinite_sea_nft::whitelist_add_whitelist_entry_logic {
         skin: u8,
         outfit: u8,
         accessories: u8,
-        claimed: bool,
-        paused: bool,
         whitelist: &whitelist::Whitelist,
         ctx: &TxContext,
     ): whitelist::WhitelistEntryAdded {
@@ -39,8 +37,6 @@ module infinite_sea_nft::whitelist_add_whitelist_entry_logic {
             skin,
             outfit,
             accessories,
-            claimed,
-            paused,
         )
     }
 

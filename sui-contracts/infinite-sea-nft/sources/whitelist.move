@@ -155,8 +155,6 @@ module infinite_sea_nft::whitelist {
         skin: u8,
         outfit: u8,
         accessories: u8,
-        claimed: bool,
-        paused: bool,
     }
 
     public fun whitelist_entry_added_id(whitelist_entry_added: &WhitelistEntryAdded): object::ID {
@@ -211,14 +209,6 @@ module infinite_sea_nft::whitelist {
         whitelist_entry_added.accessories
     }
 
-    public fun whitelist_entry_added_claimed(whitelist_entry_added: &WhitelistEntryAdded): bool {
-        whitelist_entry_added.claimed
-    }
-
-    public fun whitelist_entry_added_paused(whitelist_entry_added: &WhitelistEntryAdded): bool {
-        whitelist_entry_added.paused
-    }
-
     public(friend) fun new_whitelist_entry_added(
         whitelist: &Whitelist,
         account_address: address,
@@ -233,8 +223,6 @@ module infinite_sea_nft::whitelist {
         skin: u8,
         outfit: u8,
         accessories: u8,
-        claimed: bool,
-        paused: bool,
     ): WhitelistEntryAdded {
         WhitelistEntryAdded {
             id: id(whitelist),
@@ -251,8 +239,6 @@ module infinite_sea_nft::whitelist {
             skin,
             outfit,
             accessories,
-            claimed,
-            paused,
         }
     }
 

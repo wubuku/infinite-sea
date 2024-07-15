@@ -52,8 +52,6 @@ module infinite_sea_nft::whitelist_aggregate {
         skin: u8,
         outfit: u8,
         accessories: u8,
-        claimed: bool,
-        paused: bool,
         ctx: &mut tx_context::TxContext,
     ) {
         assert!(sui::package::from_package<whitelist::Whitelist>(publisher), ENotPublisher);
@@ -70,8 +68,6 @@ module infinite_sea_nft::whitelist_aggregate {
             skin,
             outfit,
             accessories,
-            claimed,
-            paused,
             whitelist,
             ctx,
         );
