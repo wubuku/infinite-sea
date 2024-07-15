@@ -2878,6 +2878,25 @@ sui client call --package {nft.packageId} --module whitelist_aggregate --functio
 --json
 ```
 
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID。
+* `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID（Contract package publisher object ID）。
+* `{account_address}`： 类型为 `address`。加入白名单的账号地址。
+* `{name}`： 类型为 `String`。NFT 的名称。
+* `{image_url}`： 类型为 `String`。NFT 头像图片 URL（NFT image URL）。
+* `{description}`： 类型为 `String`。NFT 的描述信息。
+* `{background_color}`： 类型为 `u32`。背景颜色(Background color)。
+* `{race}`：类型为 `u8`。种族(Race)。
+* `{eyes}`：类型为 `u8`。眼睛(eyes)。
+* `{mouth}`：类型为 `u8`。嘴巴(mouth)。
+* `{haircut}`：类型为 `u8`。发型(Haircut)。
+* `{skin}`：类型为 `u8`。皮肤(Skin)。
+* `{outfit}`：类型为 `u8`。搭配(Outfit)。
+* `{accessories}`：类型为 `u8`。配件(Accessory)。
 
 
 
