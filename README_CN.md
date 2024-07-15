@@ -2954,12 +2954,12 @@ Input parameter description:
 * `{skin}`：类型为 `u8`。皮肤(Skin)。
 * `{outfit}`：类型为 `u8`。搭配(Outfit)。
 * `{accessories}`：类型为 `u8`。配件(Accessory)。
-* `{claimed}`：类型为 `bool`。地址对应的用户是否已经拥有了 NFT。true:已经拥有，false:还未拥有（Does the user corresponding to the address already have an NFT. True: already owned, false: not yet owned.）。
-* `{paused}`：类型为 `bool`。是否允许地址对应的用户自己铸造一个 NFT。true:允许，false:不允许。（Whether to allow the user corresponding to the address to mint an NFT. true: allow, false: disallow.）
+* `{claimed}`：类型为 `bool`。地址对应的用户是否已经认领了一个 NFT。true:已经认领，false:还未认领（Has the user corresponding to the address already claimed an NFT. True: already claimed, false: not yet claimed）。
+* `{paused}`：类型为 `bool`。是否允许地址对应的用户自己铸造一个 NFT。true:允许，false:不允许。（Whether to allow the user corresponding to the address to mint an NFT. true: allow, false: disallow）。
 
-### 用户自行铸造NFT（The user claims an NFT themselves） 
+### 用户自行认领 NFT（The user claims an NFT themselves） 
 
-在白名单内的用户可以利用以下 Sui CLI 命令自我铸造一个 NFT(PFP)：
+在白名单内的用户可以利用以下 `Sui CLI` 命令自我认领一个 NFT(PFP)：
 
 Users in the whitelist can use the following `Sui CLI` command to self claims an NFT (PFP):
 ```shell
@@ -2989,7 +2989,7 @@ Input parameter description:
     }
   ]
 ```
-可以看到 `objectType` 为 `{nft.packageId}.avatar::Avatar` 的元素，其 `objectId` 即为铸造并分配给用户的 NFT(PFP) 对象的 ID。
+可以看到 `objectType` 为 `{nft.packageId}.avatar::Avatar` 的元素，其 `objectId` 即为用户认领到的 NFT(PFP) 对象的 ID。
 我们可以将其记录为 `{AvatarId}`，以供在其他地方使用。
 
 
