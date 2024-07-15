@@ -2997,8 +2997,123 @@ If executed successfully, similar output information can be obtained as follows:
 We can see that 'objectType' is an element of '{nft. packageId}:: avatar:: Avatar', and its' objectId 'is the ID of the NFT (PFP) object claimed by the user.
 We can record it as' AvatarId 'for use elsewhere.
 
+### How to determine if an address in the whitelist has claimed an NFT
+
+Using the `whitelist` object ID as a parameter, execute the following `Sui CLI` command:
+```shell
+sui client object {nft.Whitelist} --json
+```
+We will obtain response in the following format:
+```json
+{
+  "objectId": "0x785c5465137ae06615f64d19901124490f8fc926a99e0c4ead6b4e6c49af3604",
+  "version": "80116790",
+  "digest": "13GNNxJMfFdhYUC8JvFoxfeUNQpWTG4D17yxgQwr2AJ5",
+  "type": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist::Whitelist",
+  "owner": {
+    "Shared": {
+      "initial_shared_version": 80116786
+    }
+  },
+  "previousTransaction": "BeKqtCLdRpFaLX5BC4tFYYYz1t5AaVT4q1qqFsEA1jAN",
+  "storageRebate": "1702400",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist::Whitelist",
+    "hasPublicTransfer": false,
+    "fields": {
+      "entries": {
+        "type": "0x2::table::Table<address, 0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist_entry::WhitelistEntry>",
+        "fields": {
+          "id": {
+            "id": "0xebe9a79a94b366edecd97e3e7ec3f1714042e98a26562b9075d144a152a777ca"
+          },
+          "size": "1"
+        }
+      },
+      "id": {
+        "id": "0x785c5465137ae06615f64d19901124490f8fc926a99e0c4ead6b4e6c49af3604"
+      },
+      "paused": false,
+      "version": "2"
+    }
+  }
+}
+```
+
+Call the following command with `{content.fields.entries.id.id}` as a parameter in the returned result:
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":["{content.fields.entries.id.id}"]}' https://fullnode.testnet.sui.io/
+```
+We will obtain response in the following format:
+```json
+{
+	"jsonrpc": "2.0",
+	"result": {
+		"data": [{
+			"name": {
+				"type": "address",
+				"value": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b"
+			},
+			"bcsName": "2fmNxP6CKYJuBb7VmEgsSW6daaPbfXPznF98Hqp6Bbmk",
+			"type": "DynamicField",
+			"objectType": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist_entry::WhitelistEntry",
+			"objectId": "0xa38e2dd227664297bf968c8ab5b86bd86b5a386d5dc93fcbc9c4bf0120289873",
+			"version": 80116789,
+			"digest": "GmojBHr7t9uinrubmp5VbQpbGUFRt6cPF8zifb1KDejH"
+		}],
+		"nextCursor": "0xa38e2dd227664297bf968c8ab5b86bd86b5a386d5dc93fcbc9c4bf0120289873",
+		"hasNextPage": false
+	},
+	"id": 1
+}
+```
+The `data` element is an array. The value of the `name.value` attribute of each element in the array is the address in the whitelist. 
+We can see that the value of `objectType` is `{nft.packageId}::whitelist_entry::WhitelistEntry`, and we record the value of `objectId` as `{WhitelistEntryId}`.
 
 
+Using `{WhitelistEntryId}` as a parameter to execute the following `Sui CLI` command:
+```shell
+sui client object {WhitelistEntryId} --json
+```
+We will obtain response in the following format:
+```json
+{
+  "objectId": "0xa38e2dd227664297bf968c8ab5b86bd86b5a386d5dc93fcbc9c4bf0120289873",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x2::dynamic_field::Field<address, 0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist_entry::WhitelistEntry>",
+    "hasPublicTransfer": false,
+    "fields": {
+      "id": {
+        "id": "0xa38e2dd227664297bf968c8ab5b86bd86b5a386d5dc93fcbc9c4bf0120289873"
+      },
+      "name": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b",
+      "value": {
+        "type": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist_entry::WhitelistEntry",
+        "fields": {
+          "accessories": 8,
+          "account_address": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b",
+          "background_color": 1,
+          "claimed": true,
+          "description": "description",
+          "eyes": 3,
+          "haircut": 5,
+          "image_url": "http://www.baidu.com/logo.png",
+          "mouth": 4,
+          "name": "Enlai",
+          "outfit": 7,
+          "paused": false,
+          "race": 2,
+          "skin": 6
+        }
+      }
+    }
+  }
+}
+```
+Let's find the element:`content.fields.value.fields.claimed`, which has a Boolean value.
+If the value is true, it means that the user has already claimed an NFT, otherwise it is not claimed.
 
 
 [TBD]
