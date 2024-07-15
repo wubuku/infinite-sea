@@ -2694,7 +2694,7 @@ After successful command execution, you will receive an output with a JSON struc
 
 Among them, 'objectId' is the ID of the NFT object created for the user. In future tests, where NFT object IDs are required, placeholders ` {avatarId} ` will be used to reference it.
 
-### 创建 NFT(PFP) 变更信息
+### 创建 NFT 变更信息（Create AvatarChange Object）
 
 `NFT(PFP)` 会因为很多因素而变化，比如每天登录并玩游戏，推广游戏等等。
 
@@ -2704,6 +2704,9 @@ Among them, 'objectId' is the ID of the NFT object created for the user. In futu
 前端通过检查玩家是否拥有 `{nft.packageId}.avatar_change.AvatarChange` 结构类型的对象来判断是创建还是更新对应的 AvatarChange 对象。
 
 如果玩家的 `NFT(PFP)` 对象不存在对应的 `AvatarChange` 对象，那么可以通过执行如下 `Sui CLI` 命令来创建：
+
+
+Create an `AvatarChange` object by executing the following 'Sui CLI' command:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function create --args \
@@ -2771,12 +2774,14 @@ After successful command execution, you will receive an output with a JSON struc
 我们将在 `更新 AvatarChange` 以及 `更新 NFT(PFP)`接口函数中使用它。
 
 
-### 更新 NFT(PFP) 变更信息
+### 更新 NFT 变更信息（Update AvatarChange Object）
 
 正如 `创建 NFT(PFP) 变更信息` 中所言，当需要玩家的活动造成其 `NFT(PFP)` 对象中的动态属性的值变化时，如果与 `NFT(PFP)` 对应的 `AvatarChange` 对象已经存在，
 应该先更新该对象，然后再使用它更新 `NFT(PFP)` 对象。
 
 可以通过执行以下 `Sui CLI` 命令来更新 `AvatarChange` 对象：
+
+Update the AvatarChange object by executing the following Sui CLI command:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function update --args \
@@ -2817,11 +2822,13 @@ Input parameter description:
 
 
 
-### 更新 NFT(PFP) 
+### 更新 NFT（Update NFT） 
 
-当需要玩家的活动造成其 `NFT(PFP)` 中的相关属性值变化时，在创建或更新与 `NFT(PFP)` 对应的 `AvatarChange` 对象后，还应继续更新 `NFT(PFP)`。
+当玩家的活动造成其 `NFT(PFP)` 中的相关属性值变化时，在创建或更新与 `NFT(PFP)` 对应的 `AvatarChange` 对象后，还应继续更新 `NFT(PFP)`。
 
 可以通过执行以下 `Sui CLI` 命令来更新 `NFT(PFP)` 对象：
+
+Update NFT (PFP) object by executing the following 'Sui CLI' command:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_aggregate --function update --args \
@@ -2839,9 +2846,11 @@ Input parameter description:
 * `{AvatarChangeId}`： 类型为 `ID`。玩家的 `NFT(PFP)` 对象对应的 `AvatarChange` 对象 ID。
 
 
-### 销毁 NFT(PFP)
+### 销毁 NFT(Destroy NFT)
 
 可以通过执行以下 `Sui CLI` 命令来销毁 `NFT(PFP)` 对象：
+
+Execute the following 'Sui CLI' command to destroy NFT (PFP) object:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_aggregate --function burn --args {avatarId} --json 
@@ -2885,12 +2894,12 @@ sui client call --package {nft.packageId} --module whitelist_aggregate --functio
 Input parameter description:
 
 * `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
-* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID。
+* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID（Whitelist object ID）。
 * `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID（Contract package publisher object ID）。
-* `{account_address}`： 类型为 `address`。加入白名单的账号地址。
-* `{name}`： 类型为 `String`。NFT 的名称。
+* `{account_address}`： 类型为 `address`。加入白名单的账号地址（The account address to be added to the white order）。
+* `{name}`： 类型为 `String`。NFT 的名称（Name of NFT）。
 * `{image_url}`： 类型为 `String`。NFT 头像图片 URL（NFT image URL）。
-* `{description}`： 类型为 `String`。NFT 的描述信息。
+* `{description}`： 类型为 `String`。NFT 的描述信息（Description of NFT）。
 * `{background_color}`： 类型为 `u32`。背景颜色(Background color)。
 * `{race}`：类型为 `u8`。种族(Race)。
 * `{eyes}`：类型为 `u8`。眼睛(eyes)。
@@ -2899,6 +2908,93 @@ Input parameter description:
 * `{skin}`：类型为 `u8`。皮肤(Skin)。
 * `{outfit}`：类型为 `u8`。搭配(Outfit)。
 * `{accessories}`：类型为 `u8`。配件(Accessory)。
+
+
+### 更新白名单记录(Update whitelist entry)
+
+通过以下 Sui CLI 命令更改白名单中的指定地址对应的记录信息：
+
+Update the entry information corresponding to the specified address in the whitelist using the following Sui CLI command:
+
+```shell
+sui client call --package {nft.packageId} --module whitelist_aggregate --function update_whitelist_entry --args \
+{nft.whitelist} \
+{nft.Publisher} \
+{account_address} \
+{name} \
+{image_url} \
+{description} \ 
+{background_color} \
+{race} \ 
+{eyes} \ 
+{mouth} \ 
+{haircut} \ 
+{skin} \ 
+{outfit} \ 
+{accessories} \
+{claimed} \
+{paused} \
+--json
+```
+
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID（Whitelist object ID）。
+* `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID（Contract package publisher object ID）。
+* `{account_address}`： 类型为 `address`。加入白名单的账号地址（Account addresses that have been added to the whitelist）。
+* `{name}`： 类型为 `String`。NFT 的名称（Name of NFT）。
+* `{image_url}`： 类型为 `String`。NFT 头像图片 URL（NFT image URL）。
+* `{description}`： 类型为 `String`。NFT 的描述信息（Description of NFT）。
+* `{background_color}`： 类型为 `u32`。背景颜色(Background color)。
+* `{race}`：类型为 `u8`。种族(Race)。
+* `{eyes}`：类型为 `u8`。眼睛(eyes)。
+* `{mouth}`：类型为 `u8`。嘴巴(mouth)。
+* `{haircut}`：类型为 `u8`。发型(Haircut)。
+* `{skin}`：类型为 `u8`。皮肤(Skin)。
+* `{outfit}`：类型为 `u8`。搭配(Outfit)。
+* `{accessories}`：类型为 `u8`。配件(Accessory)。
+* `{claimed}`：类型为 `bool`。地址对应的用户是否已经拥有了 NFT。true:已经拥有，false:还未拥有（Does the user corresponding to the address already have an NFT. True: already owned, false: not yet owned.）。
+* `{paused}`：类型为 `bool`。是否允许地址对应的用户自己铸造一个 NFT。true:允许，false:不允许。（Whether to allow the user corresponding to the address to mint an NFT. true: allow, false: disallow.）
+
+### 用户自行铸造NFT（The user claims an NFT themselves） 
+
+在白名单内的用户可以利用以下 Sui CLI 命令自我铸造一个 NFT(PFP)：
+
+Users in the whitelist can use the following Sui CLI command to self claims an NFT (PFP):
+```shell
+sui client call --package {nft.packageId} --module avatar_aggregate --function whitelist_mint --args {nft.Whitelist} --json
+```
+
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID。
+
+执行成功，可以得到如下类似的输出信息：
+```json
+"objectChanges": [
+    {
+      "type": "created",
+      "sender": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b",
+      "owner": {
+        "AddressOwner": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b"
+      },
+      "objectType": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::avatar::Avatar",
+      "objectId": "0x148074dcd41b3c55544a76de77d8b21515ec447bf3e055a9535e2a28c249eefe",
+      "version": "80116789",
+      "digest": "8eZMiHUnCqzRgQqn6Cso2anvscNQ357CjAr3Gx3vkjkS"
+    }
+  ]
+```
+可以看到 `objectType` 为 `{nft.packageId}.avatar::Avatar` 的元素，其 `objectId` 即为铸造并分配给用户的 NFT(PFP) 对象的 ID。
+我们可以将其记录为 {AvatarId}，以供在其他地方使用。
+
+
 
 
 
