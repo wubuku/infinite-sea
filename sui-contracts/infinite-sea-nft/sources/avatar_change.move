@@ -52,8 +52,8 @@ module infinite_sea_nft::avatar_change {
         background_color: Option<u32>,
         haircut: Option<u8>,
         outfit: Option<u8>,
-        accessories: vector<u8>,
-        aura: Option<u8>,
+        accessories: Option<u8>,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -106,19 +106,19 @@ module infinite_sea_nft::avatar_change {
         avatar_change.outfit = outfit;
     }
 
-    public fun accessories(avatar_change: &AvatarChange): vector<u8> {
+    public fun accessories(avatar_change: &AvatarChange): Option<u8> {
         avatar_change.accessories
     }
 
-    public(friend) fun set_accessories(avatar_change: &mut AvatarChange, accessories: vector<u8>) {
+    public(friend) fun set_accessories(avatar_change: &mut AvatarChange, accessories: Option<u8>) {
         avatar_change.accessories = accessories;
     }
 
-    public fun aura(avatar_change: &AvatarChange): Option<u8> {
+    public fun aura(avatar_change: &AvatarChange): vector<u8> {
         avatar_change.aura
     }
 
-    public(friend) fun set_aura(avatar_change: &mut AvatarChange, aura: Option<u8>) {
+    public(friend) fun set_aura(avatar_change: &mut AvatarChange, aura: vector<u8>) {
         avatar_change.aura = aura;
     }
 
@@ -168,8 +168,8 @@ module infinite_sea_nft::avatar_change {
         background_color: Option<u32>,
         haircut: Option<u8>,
         outfit: Option<u8>,
-        accessories: vector<u8>,
-        aura: Option<u8>,
+        accessories: Option<u8>,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -203,8 +203,8 @@ module infinite_sea_nft::avatar_change {
         background_color: Option<u32>,
         haircut: Option<u8>,
         outfit: Option<u8>,
-        accessories: vector<u8>,
-        aura: Option<u8>,
+        accessories: Option<u8>,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -252,16 +252,16 @@ module infinite_sea_nft::avatar_change {
         avatar_change_created.outfit = outfit;
     }
 
-    public fun avatar_change_created_accessories(avatar_change_created: &AvatarChangeCreated): vector<u8> {
+    public fun avatar_change_created_accessories(avatar_change_created: &AvatarChangeCreated): Option<u8> {
         avatar_change_created.accessories
     }
 
-    public fun avatar_change_created_aura(avatar_change_created: &AvatarChangeCreated): Option<u8> {
-        avatar_change_created.aura
+    public(friend) fun set_avatar_change_created_accessories(avatar_change_created: &mut AvatarChangeCreated, accessories: Option<u8>) {
+        avatar_change_created.accessories = accessories;
     }
 
-    public(friend) fun set_avatar_change_created_aura(avatar_change_created: &mut AvatarChangeCreated, aura: Option<u8>) {
-        avatar_change_created.aura = aura;
+    public fun avatar_change_created_aura(avatar_change_created: &AvatarChangeCreated): vector<u8> {
+        avatar_change_created.aura
     }
 
     public fun avatar_change_created_symbols(avatar_change_created: &AvatarChangeCreated): vector<u8> {
@@ -290,8 +290,8 @@ module infinite_sea_nft::avatar_change {
         background_color: Option<u32>,
         haircut: Option<u8>,
         outfit: Option<u8>,
-        accessories: vector<u8>,
-        aura: Option<u8>,
+        accessories: Option<u8>,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -323,8 +323,8 @@ module infinite_sea_nft::avatar_change {
         background_color: Option<u32>,
         haircut: Option<u8>,
         outfit: Option<u8>,
-        accessories: vector<u8>,
-        aura: Option<u8>,
+        accessories: Option<u8>,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -368,16 +368,16 @@ module infinite_sea_nft::avatar_change {
         avatar_change_updated.outfit = outfit;
     }
 
-    public fun avatar_change_updated_accessories(avatar_change_updated: &AvatarChangeUpdated): vector<u8> {
+    public fun avatar_change_updated_accessories(avatar_change_updated: &AvatarChangeUpdated): Option<u8> {
         avatar_change_updated.accessories
     }
 
-    public fun avatar_change_updated_aura(avatar_change_updated: &AvatarChangeUpdated): Option<u8> {
-        avatar_change_updated.aura
+    public(friend) fun set_avatar_change_updated_accessories(avatar_change_updated: &mut AvatarChangeUpdated, accessories: Option<u8>) {
+        avatar_change_updated.accessories = accessories;
     }
 
-    public(friend) fun set_avatar_change_updated_aura(avatar_change_updated: &mut AvatarChangeUpdated, aura: Option<u8>) {
-        avatar_change_updated.aura = aura;
+    public fun avatar_change_updated_aura(avatar_change_updated: &AvatarChangeUpdated): vector<u8> {
+        avatar_change_updated.aura
     }
 
     public fun avatar_change_updated_symbols(avatar_change_updated: &AvatarChangeUpdated): vector<u8> {
@@ -406,8 +406,8 @@ module infinite_sea_nft::avatar_change {
         background_color: Option<u32>,
         haircut: Option<u8>,
         outfit: Option<u8>,
-        accessories: vector<u8>,
-        aura: Option<u8>,
+        accessories: Option<u8>,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -463,8 +463,8 @@ module infinite_sea_nft::avatar_change {
         background_color: Option<u32>,
         haircut: Option<u8>,
         outfit: Option<u8>,
-        accessories: vector<u8>,
-        aura: Option<u8>,
+        accessories: Option<u8>,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,

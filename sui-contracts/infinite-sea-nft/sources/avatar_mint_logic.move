@@ -1,17 +1,10 @@
 #[allow(unused_mut_parameter)]
 module infinite_sea_nft::avatar_mint_logic {
-    use std::string;
+    use infinite_sea_nft::avatar;
     use std::string::String;
-
     use sui::tx_context::TxContext;
 
-    use infinite_sea_nft::avatar;
-
     friend infinite_sea_nft::avatar_aggregate;
-
-    /// 入参的长度判断
-    #[allow(unused_const)]
-    const EDataTooLong: u64 = 102;
 
     public(friend) fun verify(
         owner: address,
@@ -25,8 +18,8 @@ module infinite_sea_nft::avatar_mint_logic {
         haircut: u8,
         skin: u8,
         outfit: u8,
-        accessories: vector<u8>,
-        aura: u8,
+        accessories: u8,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -35,7 +28,6 @@ module infinite_sea_nft::avatar_mint_logic {
         ctx: &mut TxContext,
     ): avatar::AvatarMinted {
         let _ = ctx;
-        assert!(string::length(&image_url) <= 200, EDataTooLong);
         avatar::new_avatar_minted(
             owner,
             name,
@@ -102,4 +94,5 @@ module infinite_sea_nft::avatar_mint_logic {
             ctx,
         )
     }
+
 }

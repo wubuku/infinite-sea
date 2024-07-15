@@ -60,8 +60,8 @@ module infinite_sea_nft::avatar {
         haircut: u8,
         skin: u8,
         outfit: u8,
-        accessories: vector<u8>,
-        aura: u8,
+        accessories: u8,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -168,19 +168,19 @@ module infinite_sea_nft::avatar {
         avatar.outfit = outfit;
     }
 
-    public fun accessories(avatar: &Avatar): vector<u8> {
+    public fun accessories(avatar: &Avatar): u8 {
         avatar.accessories
     }
 
-    public(friend) fun set_accessories(avatar: &mut Avatar, accessories: vector<u8>) {
+    public(friend) fun set_accessories(avatar: &mut Avatar, accessories: u8) {
         avatar.accessories = accessories;
     }
 
-    public fun aura(avatar: &Avatar): u8 {
+    public fun aura(avatar: &Avatar): vector<u8> {
         avatar.aura
     }
 
-    public(friend) fun set_aura(avatar: &mut Avatar, aura: u8) {
+    public(friend) fun set_aura(avatar: &mut Avatar, aura: vector<u8>) {
         avatar.aura = aura;
     }
 
@@ -236,8 +236,8 @@ module infinite_sea_nft::avatar {
         haircut: u8,
         skin: u8,
         outfit: u8,
-        accessories: vector<u8>,
-        aura: u8,
+        accessories: u8,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -285,8 +285,8 @@ module infinite_sea_nft::avatar {
         haircut: u8,
         skin: u8,
         outfit: u8,
-        accessories: vector<u8>,
-        aura: u8,
+        accessories: u8,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,
@@ -346,11 +346,11 @@ module infinite_sea_nft::avatar {
         avatar_minted.outfit
     }
 
-    public fun avatar_minted_accessories(avatar_minted: &AvatarMinted): vector<u8> {
+    public fun avatar_minted_accessories(avatar_minted: &AvatarMinted): u8 {
         avatar_minted.accessories
     }
 
-    public fun avatar_minted_aura(avatar_minted: &AvatarMinted): u8 {
+    public fun avatar_minted_aura(avatar_minted: &AvatarMinted): vector<u8> {
         avatar_minted.aura
     }
 
@@ -386,8 +386,8 @@ module infinite_sea_nft::avatar {
         haircut: u8,
         skin: u8,
         outfit: u8,
-        accessories: vector<u8>,
-        aura: u8,
+        accessories: u8,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,

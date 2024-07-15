@@ -1,7 +1,7 @@
-#[allow(unused_mut_parameter)]
+#[allow(unused_mut_parameter, unused_use)]
 module infinite_sea_nft::avatar_change_create_logic {
     use infinite_sea_nft::avatar_change;
-    use std::option::{Option};
+    use std::option::{Self, Option};
     use std::string::String;
     use sui::object::ID;
     use sui::tx_context::TxContext;
@@ -14,8 +14,8 @@ module infinite_sea_nft::avatar_change_create_logic {
         background_color: Option<u32>,
         haircut: Option<u8>,
         outfit: Option<u8>,
-        accessories: vector<u8>,
-        aura: Option<u8>,
+        accessories: Option<u8>,
+        aura: vector<u8>,
         symbols: vector<u8>,
         effects: vector<u8>,
         backgrounds: vector<u8>,

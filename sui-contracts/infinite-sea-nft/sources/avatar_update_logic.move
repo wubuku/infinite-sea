@@ -53,20 +53,17 @@ module infinite_sea_nft::avatar_update_logic {
             avatar::set_outfit(avatar, *option::borrow(&outfit));
         };
         // Accessories:
-        //   type: vector<u8>
-        let accessories = sorted_u8_vector_util::sort_and_merge_u8_vectors(
-            &avatar::accessories(avatar),
-            &avatar_change::accessories(avatar_change),
-        );
-        avatar::set_accessories(avatar, accessories);
+        let accessories = avatar_change::accessories(avatar_change);
+        if (option::is_some(&accessories)) {
+            avatar::set_accessories(avatar, *option::borrow(&accessories));
+        };
         //# ------------------------
         // Aura:
-        //   type: u8
-        //   optional: true
-        let aura = avatar_change::aura(avatar_change);
-        if (option::is_some(&aura)) {
-            avatar::set_aura(avatar, *option::borrow(&aura));
-        };
+        let aura = sorted_u8_vector_util::sort_and_merge_u8_vectors(
+            &avatar::aura(avatar),
+            &avatar_change::aura(avatar_change),
+        );
+        avatar::set_aura(avatar, aura);
         // Symbols:
         //   type: vector<u8>
         let symbols = sorted_u8_vector_util::sort_and_merge_u8_vectors(
@@ -114,4 +111,5 @@ module infinite_sea_nft::avatar_update_logic {
         let id = avatar::id(&avatar);
         avatar
     }
+
 }
