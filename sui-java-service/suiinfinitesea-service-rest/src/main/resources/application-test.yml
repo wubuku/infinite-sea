@@ -25,7 +25,7 @@ sui:
     package-publish-transactions:
       common: "CA6j2THkYBsKPRHuX3Lq4QmRUXeYG6voxAghVKox8XYk"
       default: "6jMenm7Q93M4C4TLiipcgUEvFNr9aMiLfSFHiQKpx1tp"
-      nft: "8X4ZfXiigQf7rYdUHWHBYN3DJTUMcSAD53fUrBZU7Yjx"
+      nft: "BYjbHGiZpJC4XKEJxQGmuQpjZ31G3uhvwPBmk959cqJg"
 #    pull-day-summary-events:
 #      day-summary-created:
 #        fixed-delay: 6000

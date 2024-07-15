@@ -293,10 +293,12 @@ wubuku/dddappp-sui:master \
     "Digest": "AKXP8xrx7EZSjy9eK7rfg8ct8HkBkoXX2t8UhFCiwvni"
   },
   "nft": {
-    "AvatarChangeTable": "0xbd84038c051ba1fdb3388d51693fb500617090c72c1f848c5f631d4e485cbbbb",
-    "Publisher": "0xf29dbdf4c5d58025c177f544ee7da1dee7f35d9e7fa14e22514a613f74853c6d",
-    "PackageId": "0xfc1f7cd26c58b73c6b290a6f122fddc0b4e0ca54096c518170102c6cb0bcb395",
-    "Digest": "8X4ZfXiigQf7rYdUHWHBYN3DJTUMcSAD53fUrBZU7Yjx"
+    "AvatarChangeTable": "0x42eac469240e66538786cd867babe7e5be4320794b482eb2be064b49b6144561",
+    "Publisher": "0x92b4c6f6509aa0de8ecccec180c7169550064189f28b6ef2bb2fa5aec6888046",
+    "PackageId": "0x51a964fe172c008d3b6793c094c48bac3ed2d16dca80357c408549cf0f42766e",
+    "Whitelist": "0x785d98f61c0c8820c1961ac7c27f2dd095000449d7348087ff6c97b4bbccb5f5",
+    "Digest": "BYjbHGiZpJC4XKEJxQGmuQpjZ31G3uhvwPBmk959cqJg",
+    "Display": "0x08c2125e31bfc4d3ac5d1070aeaf766687a62a1237262f3673fa9a073d7f8bc9"
   }
 }
 
@@ -2929,7 +2931,7 @@ This is the only place where off-chain service need to be configured, and it's t
 
 #### Creating a database for off-chain service
 
-Use a MySQL client to connect to the local MySQL server and execute the following script to create an empty database (assuming the name is `test5`):
+Use a MySQL client to connect to the local MySQL server and execute the following script to create an empty database (assuming the name is `test7`):
 
 ```sql
 CREATE SCHEMA `test7` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;

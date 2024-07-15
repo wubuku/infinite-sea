@@ -96,9 +96,9 @@ try {
         Set-Location $startLocation
         return
     }
-    $publishFaucetJsonObj = $publishNftJson | ConvertFrom-Json
+    $publishNftJsonObj = $publishNftJson | ConvertFrom-Json
     try {
-        foreach ($object in $publishFaucetJsonObj.objectChanges) {
+        foreach ($object in $publishNftJsonObj.objectChanges) {
             if ($null -ne $object.packageId -and $object.packageId -ne "") {
                 $nftPackingId = $object.packageId;
                 $dataNft | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $nftPackingId
@@ -114,13 +114,18 @@ try {
                 $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarChangeTable" -Value $avatarChangeTableId
                 "AvatarChangeTable ID: $avatarChangeTableId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
-            if ($object.objectType -like 'display*avatar::Avatar') {
+            if ($object.ObjectType -like '*Display*avatar::Avatar*') {                
                 $avatarDisplayId = $object.objectId;
                 $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarDisplay" -Value $avatarDisplayId
                 "Display<Avatar> ID: $avatarDisplayId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
+            if ($object.objectType -like '*whitelist::Whitelist') {
+                $whitelistId = $object.objectId;
+                $dataNft | Add-Member -MemberType NoteProperty -Name "Whitelist" -Value $whitelistId
+                "Whitelist ID: $whitelistId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
         }
-        $nftDigest = $publishCoinJsonObj.digest
+        $nftDigest = $publishNftJsonObj.digest
         $dataNft | Add-Member -MemberType NoteProperty -Name "Digest" -Value $nftDigest
         "Faucet digest: $nftDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
     }
@@ -863,8 +868,8 @@ catch {
 Start-Sleep -Seconds 2
 "休息完成，继续干活...· `n" | Write-Host
 
-$coordinates_x = 50
-$coordinates_y = 50
+$coordinates_x = 2147483647
+$coordinates_y = 2147483647
 
 $islandResources = $itemData.ItemCottonSeeds, $itemData.ResourceTypeWoodcutting, $itemData.ResourceTypeMining #, $itemData.ItemCottons, $itemData.ItemNormalLogs, $itemData.ItemCopperOre
 $islandResourceIds = @()
@@ -1046,7 +1051,7 @@ if ($testSkillProcessMining) {
     $success_rate = 100
     "`n生成挖矿配方 Item Creation..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     try {
-        $result = sui client call --package $commonPackageId --module item_creation_aggregate --function create --args $mining $($itemData.ItemCopperOre.ItemId) $commonPublisherId $resource_cost $requirements_level $base_quantity $base_experience $miningTime $energy_cost $success_rate  $itemCreationTableId --gas-budget 44000000 --json
+        $result = sui client call --package $commonPackageId --module item_creation_aggregate --function create --args $mining $($itemData.ItemCopperOre.ItemId) $commonPublisherId $resource_cost $requirements_level $base_quantity $base_experience $miningTime $energy_cost $success_rate  $itemCreationTableId --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "制作挖矿配方返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             Set-Location $startLocation
