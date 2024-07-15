@@ -127,7 +127,7 @@ try {
         }
         $nftDigest = $publishNftJsonObj.digest
         $dataNft | Add-Member -MemberType NoteProperty -Name "Digest" -Value $nftDigest
-        "Faucet digest: $nftDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+        "NFT digest: $nftDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
     }
     catch {
         "解析 NFT 返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
