@@ -2855,9 +2855,11 @@ Input parameter description:
 * `{avatarId}`： 类型为 `ID`。玩家的 `NFT(PFP)` 的 ID。
 
 
-### 白名单添加记录
+### 白名单添加记录(Add Entry to the whitelist)
 
 管理员可以通过以下 Sui CLI 命令向白名单中添加一条记录：
+
+Admin can add an entry to the whitelist using the following Sui CLI command:
 
 ```shell
 sui client call --package {nft.packageId} --module whitelist_aggregate --function add_whitelist_entry --args \
