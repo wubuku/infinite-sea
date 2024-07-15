@@ -6,10 +6,13 @@
 module infinite_sea_nft::whitelist_aggregate {
     use infinite_sea_nft::whitelist;
     use infinite_sea_nft::whitelist_add_whitelist_entry_logic;
+    use infinite_sea_nft::whitelist_claim_logic;
     use infinite_sea_nft::whitelist_update_logic;
     use infinite_sea_nft::whitelist_update_whitelist_entry_logic;
     use std::string::String;
     use sui::tx_context;
+
+    friend infinite_sea_nft::avatar_whitelist_mint_logic;
 
     const ENotPublisher: u64 = 50;
 
@@ -124,6 +127,23 @@ module infinite_sea_nft::whitelist_aggregate {
         );
         whitelist::update_object_version(whitelist);
         whitelist::emit_whitelist_entry_updated(whitelist_entry_updated);
+    }
+
+    public(friend) fun claim(
+        whitelist: &mut whitelist::Whitelist,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let whitelist_claimed = whitelist_claim_logic::verify(
+            whitelist,
+            ctx,
+        );
+        whitelist_claim_logic::mutate(
+            &whitelist_claimed,
+            whitelist,
+            ctx,
+        );
+        whitelist::update_object_version(whitelist);
+        whitelist::emit_whitelist_claimed(whitelist_claimed);
     }
 
 }

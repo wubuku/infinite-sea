@@ -9,6 +9,8 @@ module infinite_sea_nft::avatar_aggregate {
     use infinite_sea_nft::avatar_change::AvatarChange;
     use infinite_sea_nft::avatar_mint_logic;
     use infinite_sea_nft::avatar_update_logic;
+    use infinite_sea_nft::avatar_whitelist_mint_logic;
+    use infinite_sea_nft::whitelist::Whitelist;
     use std::string::String;
     use sui::tx_context;
 
@@ -101,6 +103,24 @@ module infinite_sea_nft::avatar_aggregate {
         );
         avatar::drop_avatar(updated_avatar);
         avatar::emit_avatar_burned(avatar_burned);
+    }
+
+    public entry fun whitelist_mint(
+        whitelist: &mut Whitelist,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let avatar_whitelist_minted = avatar_whitelist_mint_logic::verify(
+            whitelist,
+            ctx,
+        );
+        let avatar = avatar_whitelist_mint_logic::mutate(
+            &avatar_whitelist_minted,
+            whitelist,
+            ctx,
+        );
+        avatar::set_avatar_whitelist_minted_id(&mut avatar_whitelist_minted, avatar::id(&avatar));
+        avatar::transfer_object(avatar, avatar::avatar_whitelist_minted_owner(&avatar_whitelist_minted));
+        avatar::emit_avatar_whitelist_minted(avatar_whitelist_minted);
     }
 
 }

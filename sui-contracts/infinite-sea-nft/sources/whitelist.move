@@ -17,6 +17,7 @@ module infinite_sea_nft::whitelist {
     friend infinite_sea_nft::whitelist_update_logic;
     friend infinite_sea_nft::whitelist_add_whitelist_entry_logic;
     friend infinite_sea_nft::whitelist_update_whitelist_entry_logic;
+    friend infinite_sea_nft::whitelist_claim_logic;
     friend infinite_sea_nft::whitelist_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -354,6 +355,31 @@ module infinite_sea_nft::whitelist {
         }
     }
 
+    struct WhitelistClaimed has copy, drop {
+        id: object::ID,
+        version: u64,
+        account_address: address,
+    }
+
+    public fun whitelist_claimed_id(whitelist_claimed: &WhitelistClaimed): object::ID {
+        whitelist_claimed.id
+    }
+
+    public fun whitelist_claimed_account_address(whitelist_claimed: &WhitelistClaimed): address {
+        whitelist_claimed.account_address
+    }
+
+    public(friend) fun new_whitelist_claimed(
+        whitelist: &Whitelist,
+        account_address: address,
+    ): WhitelistClaimed {
+        WhitelistClaimed {
+            id: id(whitelist),
+            version: version(whitelist),
+            account_address,
+        }
+    }
+
 
     #[lint_allow(share_owned)]
     public(friend) fun share_object(whitelist: Whitelist) {
@@ -386,6 +412,10 @@ module infinite_sea_nft::whitelist {
 
     public(friend) fun emit_whitelist_entry_updated(whitelist_entry_updated: WhitelistEntryUpdated) {
         event::emit(whitelist_entry_updated);
+    }
+
+    public(friend) fun emit_whitelist_claimed(whitelist_claimed: WhitelistClaimed) {
+        event::emit(whitelist_claimed);
     }
 
 }

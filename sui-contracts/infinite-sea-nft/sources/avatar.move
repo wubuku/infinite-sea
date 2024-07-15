@@ -16,6 +16,7 @@ module infinite_sea_nft::avatar {
     friend infinite_sea_nft::avatar_mint_logic;
     friend infinite_sea_nft::avatar_update_logic;
     friend infinite_sea_nft::avatar_burn_logic;
+    friend infinite_sea_nft::avatar_whitelist_mint_logic;
     friend infinite_sea_nft::avatar_aggregate;
 
     #[allow(unused_const)]
@@ -453,6 +454,109 @@ module infinite_sea_nft::avatar {
         }
     }
 
+    struct AvatarWhitelistMinted has copy, drop {
+        id: option::Option<object::ID>,
+        owner: address,
+        name: String,
+        image_url: String,
+        description: String,
+        background_color: u32,
+        race: u8,
+        eyes: u8,
+        mouth: u8,
+        haircut: u8,
+        skin: u8,
+        outfit: u8,
+        accessories: u8,
+    }
+
+    public fun avatar_whitelist_minted_id(avatar_whitelist_minted: &AvatarWhitelistMinted): option::Option<object::ID> {
+        avatar_whitelist_minted.id
+    }
+
+    public(friend) fun set_avatar_whitelist_minted_id(avatar_whitelist_minted: &mut AvatarWhitelistMinted, id: object::ID) {
+        avatar_whitelist_minted.id = option::some(id);
+    }
+
+    public fun avatar_whitelist_minted_owner(avatar_whitelist_minted: &AvatarWhitelistMinted): address {
+        avatar_whitelist_minted.owner
+    }
+
+    public fun avatar_whitelist_minted_name(avatar_whitelist_minted: &AvatarWhitelistMinted): String {
+        avatar_whitelist_minted.name
+    }
+
+    public fun avatar_whitelist_minted_image_url(avatar_whitelist_minted: &AvatarWhitelistMinted): String {
+        avatar_whitelist_minted.image_url
+    }
+
+    public fun avatar_whitelist_minted_description(avatar_whitelist_minted: &AvatarWhitelistMinted): String {
+        avatar_whitelist_minted.description
+    }
+
+    public fun avatar_whitelist_minted_background_color(avatar_whitelist_minted: &AvatarWhitelistMinted): u32 {
+        avatar_whitelist_minted.background_color
+    }
+
+    public fun avatar_whitelist_minted_race(avatar_whitelist_minted: &AvatarWhitelistMinted): u8 {
+        avatar_whitelist_minted.race
+    }
+
+    public fun avatar_whitelist_minted_eyes(avatar_whitelist_minted: &AvatarWhitelistMinted): u8 {
+        avatar_whitelist_minted.eyes
+    }
+
+    public fun avatar_whitelist_minted_mouth(avatar_whitelist_minted: &AvatarWhitelistMinted): u8 {
+        avatar_whitelist_minted.mouth
+    }
+
+    public fun avatar_whitelist_minted_haircut(avatar_whitelist_minted: &AvatarWhitelistMinted): u8 {
+        avatar_whitelist_minted.haircut
+    }
+
+    public fun avatar_whitelist_minted_skin(avatar_whitelist_minted: &AvatarWhitelistMinted): u8 {
+        avatar_whitelist_minted.skin
+    }
+
+    public fun avatar_whitelist_minted_outfit(avatar_whitelist_minted: &AvatarWhitelistMinted): u8 {
+        avatar_whitelist_minted.outfit
+    }
+
+    public fun avatar_whitelist_minted_accessories(avatar_whitelist_minted: &AvatarWhitelistMinted): u8 {
+        avatar_whitelist_minted.accessories
+    }
+
+    public(friend) fun new_avatar_whitelist_minted(
+        owner: address,
+        name: String,
+        image_url: String,
+        description: String,
+        background_color: u32,
+        race: u8,
+        eyes: u8,
+        mouth: u8,
+        haircut: u8,
+        skin: u8,
+        outfit: u8,
+        accessories: u8,
+    ): AvatarWhitelistMinted {
+        AvatarWhitelistMinted {
+            id: option::none(),
+            owner,
+            name,
+            image_url,
+            description,
+            background_color,
+            race,
+            eyes,
+            mouth,
+            haircut,
+            skin,
+            outfit,
+            accessories,
+        }
+    }
+
 
     #[lint_allow(custom_state_change)]
     public(friend) fun transfer_object(avatar: Avatar, recipient: address) {
@@ -508,6 +612,11 @@ module infinite_sea_nft::avatar {
 
     public(friend) fun emit_avatar_burned(avatar_burned: AvatarBurned) {
         event::emit(avatar_burned);
+    }
+
+    public(friend) fun emit_avatar_whitelist_minted(avatar_whitelist_minted: AvatarWhitelistMinted) {
+        assert!(std::option::is_some(&avatar_whitelist_minted.id), EEmptyObjectID);
+        event::emit(avatar_whitelist_minted);
     }
 
 }

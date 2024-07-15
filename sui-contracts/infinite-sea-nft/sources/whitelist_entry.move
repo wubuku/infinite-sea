@@ -8,6 +8,7 @@ module infinite_sea_nft::whitelist_entry {
     friend infinite_sea_nft::whitelist_update_logic;
     friend infinite_sea_nft::whitelist_add_whitelist_entry_logic;
     friend infinite_sea_nft::whitelist_update_whitelist_entry_logic;
+    friend infinite_sea_nft::whitelist_claim_logic;
     friend infinite_sea_nft::whitelist;
 
     #[allow(unused_const)]
