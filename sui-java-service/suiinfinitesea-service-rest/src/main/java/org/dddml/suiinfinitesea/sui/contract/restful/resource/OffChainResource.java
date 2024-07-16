@@ -15,16 +15,29 @@ public class OffChainResource {
 
     @GetMapping(path = "calculateTotalTimeAndEnergyCost")
     public static BigInteger[] calculateTotalTimeAndEnergyCost(
-            @RequestParam long originX,
-            @RequestParam long originY,
-            @RequestParam long destinationX,
-            @RequestParam long destinationY,
-            @RequestParam long speedProperty,
-            @RequestParam long shipCount
+            @RequestParam(value = "originX") long originX,
+            @RequestParam(value = "originY") long originY,
+            @RequestParam(value = "destinationX") long destinationX,
+            @RequestParam(value = "destinationY") long destinationY,
+            @RequestParam(value = "speedProperty") long speedProperty,
+            @RequestParam(value = "shipCount") long shipCount
     ) {
         return RosterUtil.calculateTotalTimeAndEnergyCost(
                 new Long[]{originX, originY}, new Long[]{destinationX, destinationY},
                 speedProperty, shipCount
         );
+    }
+
+
+    /**
+     * Calculate the time and energy required for the roster to reach its destination based on distance, speed, and number of ships
+     */
+    @GetMapping(path = "calculateTotalTimeAndEnergyCostByDistance")
+    public static BigInteger[] calculateTotalTimeAndEnergyCostByDistance(
+            @RequestParam(value = "distance") BigInteger distance,
+            @RequestParam(value = "speedProperty") long speedProperty,
+            @RequestParam(value = "shipCount") long shipCount
+    ) {
+        return RosterUtil.calculateTotalTimeAndEnergyCostByDistance(distance, speedProperty, shipCount);
     }
 }

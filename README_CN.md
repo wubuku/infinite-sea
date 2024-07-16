@@ -293,10 +293,12 @@ wubuku/dddappp-sui:master \
     "Digest": "AKXP8xrx7EZSjy9eK7rfg8ct8HkBkoXX2t8UhFCiwvni"
   },
   "nft": {
-    "AvatarChangeTable": "0xbd84038c051ba1fdb3388d51693fb500617090c72c1f848c5f631d4e485cbbbb",
-    "Publisher": "0xf29dbdf4c5d58025c177f544ee7da1dee7f35d9e7fa14e22514a613f74853c6d",
-    "PackageId": "0xfc1f7cd26c58b73c6b290a6f122fddc0b4e0ca54096c518170102c6cb0bcb395",
-    "Digest": "8X4ZfXiigQf7rYdUHWHBYN3DJTUMcSAD53fUrBZU7Yjx"
+    "AvatarChangeTable": "0x4ae64b8b458600d9405032acf27861f4bb135b8a07a72ffcdc6e4e5bea4784d7",
+    "Publisher": "0x3bf48d8d73e3cf04caabcac960026f9776b89cddb5b6865bc88a654b1b934c5c",
+    "PackageId": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191",
+    "Whitelist": "0x785c5465137ae06615f64d19901124490f8fc926a99e0c4ead6b4e6c49af3604",
+    "Digest": "5jVUWco1kHZnmjSkjhgaHJpyMWDpge1cA1e3xydnR4SF",
+    "Display": "0xf3e2c6babca0eecc56702ae8bf6dc71698090c59b86232ac1c79576fba827b29"
   }
 }
 
@@ -1673,62 +1675,7 @@ curl -X GET "http://localhost:1023/api/SkillProcesses?skillProcessId.playerId=0x
 * `batchSize` 本批次的数量，即按照“生产配方”投产的“份数”。
   “生产配方”定义的原材料和产出成品的数量都是“一份”的数量。
 
-### ~~【Old】申请 ENERGY（on testnet）~~
-
-~~玩家在生产制造以及航行时都需要花费 `ENERGY` 代币。
-在测试网上，玩家可以使用以下 Sui CLI 命令申请 `ENERGY` 代币：~~
-
-```shell
-sui client call --package  {coin.PackageId} --module energy_faucet --function request_a_drop --args {coin.FaucetId} --json
-```
-
-参数解释：
-
-* {main.PackageId}：Coin 合约包的 ID。
-* {coin.FaucetId}：类型为 `&mut EnergyFaucet`。CLI 中可传入 `ENERGY` 的水龙头对象 ID。
-
-该命令成功执行后，可获得以下类似输出：
-```json
-{
-  "digest": "23QgAnoCRm5eFxBc3eHGURW6My6VsUD2gGTUB7d9p8UQ",
-  "effects": {
-    "messageVersion": "v1",
-    "status": {
-      "status": "success"
-    }
-  },
-  "objectChanges": [   
-    {
-      "type": "created",
-      "sender": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b",
-      "owner": {
-        "AddressOwner": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b"
-      },
-      "objectType": "0x2::coin::Coin<0x9582e95e1507ae556aa3f708d19c48a5d65446d8c5cbf15b3ebed26eae6a8c87::energy::ENERGY>",
-      "objectId": "0x4acc392e33950370418c9c0aed0a3a2bc346f667e41fe3b227433a934b7777c9",
-      "version": "43412199",
-      "digest": "3Dee2vt3V1HKfkf2KMBG5uzSSnhj2agcPz8U9u1Y8Wgm"
-    }
-  ],
-  "balanceChanges": [
-    {
-      "owner": {
-        "AddressOwner": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b"
-      },
-      "coinType": "0x9582e95e1507ae556aa3f708d19c48a5d65446d8c5cbf15b3ebed26eae6a8c87::energy::ENERGY",
-      "amount": "100000000000"
-    }
-  ],
-  "confirmedLocalExecution": true
-}
-```
-
-在属性 `objectChanges` 中可以看到对象类型 `objectType` 为 `0x2::coin::Coin<{coin.PackageId}::energy::ENERGY>` 的对象，   
-在属性 `balanceChanges` 中可以看到货币类型 `coinType` 为 `{coin.PackageId}::energy::ENERGY` 和数量 `amount` 为 `100000000000` 的对象。
-
-
-
-### 【New】申请 ENERGY（on testnet）
+### 申请 ENERGY（on testnet）
 
 玩家在生产制造以及航行时都需要花费 `ENERGY` 代币。
 在测试网上，玩家可以使用以下 Sui CLI 命令申请 `ENERGY` 代币：
@@ -2610,11 +2557,9 @@ sui client call --package {main.packageId} \
 
 持有 `NTF` 包发布对象 `Publisher` 的管理者，可以给入围用户打造 NFT(PFP)。
 
-The manager who holds the `NTF` package publishing object `Publisher` gives the user Mint NFT (PFP).
-
 执行以下 Sui CLI 命令进行 Mint：
 
-Execute the Sui CLI command for Mint:
+Execute the `Sui CLI` command for Mint:
 
 ```shell
 sui client call --package {nft.packageId} \
@@ -2692,7 +2637,7 @@ After successful command execution, you will receive an output with a JSON struc
 
 Among them, 'objectId' is the ID of the NFT object created for the user. In future tests, where NFT object IDs are required, placeholders ` {avatarId} ` will be used to reference it.
 
-### 创建 NFT(PFP) 变更信息
+### 创建 NFT 变更信息（Create AvatarChange Object）
 
 `NFT(PFP)` 会因为很多因素而变化，比如每天登录并玩游戏，推广游戏等等。
 
@@ -2702,6 +2647,9 @@ Among them, 'objectId' is the ID of the NFT object created for the user. In futu
 前端通过检查玩家是否拥有 `{nft.packageId}.avatar_change.AvatarChange` 结构类型的对象来判断是创建还是更新对应的 AvatarChange 对象。
 
 如果玩家的 `NFT(PFP)` 对象不存在对应的 `AvatarChange` 对象，那么可以通过执行如下 `Sui CLI` 命令来创建：
+
+
+Create an `AvatarChange` object by executing the following `Sui CLI` command:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function create --args \
@@ -2769,12 +2717,14 @@ After successful command execution, you will receive an output with a JSON struc
 我们将在 `更新 AvatarChange` 以及 `更新 NFT(PFP)`接口函数中使用它。
 
 
-### 更新 NFT(PFP) 变更信息
+### 更新 NFT 变更信息（Update AvatarChange Object）
 
 正如 `创建 NFT(PFP) 变更信息` 中所言，当需要玩家的活动造成其 `NFT(PFP)` 对象中的动态属性的值变化时，如果与 `NFT(PFP)` 对应的 `AvatarChange` 对象已经存在，
 应该先更新该对象，然后再使用它更新 `NFT(PFP)` 对象。
 
 可以通过执行以下 `Sui CLI` 命令来更新 `AvatarChange` 对象：
+
+Update the `AvatarChange` object by executing the following `Sui CLI` command:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_change_aggregate --function update --args \
@@ -2815,11 +2765,13 @@ Input parameter description:
 
 
 
-### 更新 NFT(PFP) 
+### 更新 NFT（Update NFT） 
 
-当需要玩家的活动造成其 `NFT(PFP)` 中的相关属性值变化时，在创建或更新与 `NFT(PFP)` 对应的 `AvatarChange` 对象后，还应继续更新 `NFT(PFP)`。
+当玩家的活动造成其 `NFT(PFP)` 中的相关属性值变化时，在创建或更新与 `NFT(PFP)` 对应的 `AvatarChange` 对象后，还应继续更新 `NFT(PFP)`。
 
 可以通过执行以下 `Sui CLI` 命令来更新 `NFT(PFP)` 对象：
+
+Update `NFT(PFP)` object by executing the following `Sui CLI` command:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_aggregate --function update --args \
@@ -2837,9 +2789,11 @@ Input parameter description:
 * `{AvatarChangeId}`： 类型为 `ID`。玩家的 `NFT(PFP)` 对象对应的 `AvatarChange` 对象 ID。
 
 
-### 销毁 NFT(PFP)
+### 销毁 NFT(Destroy NFT)
 
 可以通过执行以下 `Sui CLI` 命令来销毁 `NFT(PFP)` 对象：
+
+Execute the following `Sui CLI` command to destroy `NFT(PFP)` object:
 
 ```shell
 sui client call --package {nft.packageId} --module avatar_aggregate --function burn --args {avatarId} --json 
@@ -2851,6 +2805,260 @@ Input parameter description:
 
 * `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
 * `{avatarId}`： 类型为 `ID`。玩家的 `NFT(PFP)` 的 ID。
+
+
+### Add Entry to the whitelist
+
+管理员可以通过以下 `Sui CLI` 命令向白名单中添加一条记录：
+
+Admin can add an entry to the whitelist using the following `Sui CLI` command:
+
+```shell
+sui client call --package {nft.packageId} --module whitelist_aggregate --function add_whitelist_entry --args \
+{nft.whitelist} \
+{nft.Publisher} \
+{account_address} \
+{name} \
+{image_url} \
+{description} \ 
+{background_color} \
+{race} \ 
+{eyes} \ 
+{mouth} \ 
+{haircut} \ 
+{skin} \ 
+{outfit} \ 
+{accessories} \ 
+--json
+```
+
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID（Whitelist object ID）。
+* `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID（Contract package publisher object ID）。
+* `{account_address}`： 类型为 `address`。加入白名单的账号地址（The account address to be added to the white order）。
+* `{name}`： 类型为 `String`。NFT 的名称（Name of NFT）。
+* `{image_url}`： 类型为 `String`。NFT 头像图片 URL（NFT image URL）。
+* `{description}`： 类型为 `String`。NFT 的描述信息（Description of NFT）。
+* `{background_color}`： 类型为 `u32`。背景颜色(Background color)。
+* `{race}`：类型为 `u8`。种族(Race)。
+* `{eyes}`：类型为 `u8`。眼睛(eyes)。
+* `{mouth}`：类型为 `u8`。嘴巴(mouth)。
+* `{haircut}`：类型为 `u8`。发型(Haircut)。
+* `{skin}`：类型为 `u8`。皮肤(Skin)。
+* `{outfit}`：类型为 `u8`。搭配(Outfit)。
+* `{accessories}`：类型为 `u8`。配件(Accessory)。
+
+
+### 更新白名单记录(Update whitelist entry)
+
+通过以下 `Sui CLI` 命令更改白名单中的指定地址对应的记录信息：
+
+Update the entry information corresponding to the specified address in the whitelist using the following `Sui CLI` command:
+
+```shell
+sui client call --package {nft.packageId} --module whitelist_aggregate --function update_whitelist_entry --args \
+{nft.whitelist} \
+{nft.Publisher} \
+{account_address} \
+{name} \
+{image_url} \
+{description} \ 
+{background_color} \
+{race} \ 
+{eyes} \ 
+{mouth} \ 
+{haircut} \ 
+{skin} \ 
+{outfit} \ 
+{accessories} \
+{claimed} \
+{paused} \
+--json
+```
+
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID（Whitelist object ID）。
+* `{publisherId}`： 类型为 `&sui::package::Publisher`。合约包发布者对象 ID（Contract package publisher object ID）。
+* `{account_address}`： 类型为 `address`。加入白名单的账号地址（Account addresses that have been added to the whitelist）。
+* `{name}`： 类型为 `String`。NFT 的名称（Name of NFT）。
+* `{image_url}`： 类型为 `String`。NFT 头像图片 URL（NFT image URL）。
+* `{description}`： 类型为 `String`。NFT 的描述信息（Description of NFT）。
+* `{background_color}`： 类型为 `u32`。背景颜色(Background color)。
+* `{race}`：类型为 `u8`。种族(Race)。
+* `{eyes}`：类型为 `u8`。眼睛(eyes)。
+* `{mouth}`：类型为 `u8`。嘴巴(mouth)。
+* `{haircut}`：类型为 `u8`。发型(Haircut)。
+* `{skin}`：类型为 `u8`。皮肤(Skin)。
+* `{outfit}`：类型为 `u8`。搭配(Outfit)。
+* `{accessories}`：类型为 `u8`。配件(Accessory)。
+* `{claimed}`：类型为 `bool`。地址对应的用户是否已经认领了一个 NFT。true:已经认领，false:还未认领（Has the user corresponding to the address already claimed an NFT. True: already claimed, false: not yet claimed）。
+* `{paused}`：类型为 `bool`。是否允许地址对应的用户自己铸造一个 NFT。true:允许，false:不允许。（Whether to allow the user corresponding to the address to mint an NFT. true: allow, false: disallow）。
+
+### User claims an NFT themselves 
+
+在白名单内的用户可以利用以下 `Sui CLI` 命令自我认领一个 NFT(PFP)：
+
+Users in the whitelist can use the following `Sui CLI` command to self claims an NFT (PFP):
+```shell
+sui client call --package {nft.packageId} --module avatar_aggregate --function whitelist_mint --args {nft.Whitelist} --json
+```
+
+参数解释：
+
+Input parameter description:
+
+* `{nft.PackageId}`：NFT 合约包 ID（NFT Contract Package ID）。
+* `{nft.whitelist}`： 类型为 `&mut Whitelist`。白名单对象 ID（Whitelist object ID）。
+
+执行成功，可以得到如下类似的输出信息：
+
+If executed successfully, similar output information can be obtained as follows:
+```json
+"objectChanges": [
+    {
+      "type": "created",
+      "sender": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b",
+      "owner": {
+        "AddressOwner": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b"
+      },
+      "objectType": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::avatar::Avatar",
+      "objectId": "0x148074dcd41b3c55544a76de77d8b21515ec447bf3e055a9535e2a28c249eefe",
+      "version": "80116789",
+      "digest": "8eZMiHUnCqzRgQqn6Cso2anvscNQ357CjAr3Gx3vkjkS"
+    }
+  ]
+```
+可以看到 `objectType` 为 `{nft.packageId}::avatar::Avatar` 的元素，其 `objectId` 即为用户认领到的 NFT(PFP) 对象的 ID。
+我们可以将其记录为 `{AvatarId}`，以供在其他地方使用。
+
+We can see that 'objectType' is an element of '{nft. packageId}:: avatar:: Avatar', and its' objectId 'is the ID of the NFT (PFP) object claimed by the user.
+We can record it as' AvatarId 'for use elsewhere.
+
+### How to determine if an address in the whitelist has claimed an NFT
+
+Using the `whitelist` object ID as a parameter, execute the following `Sui CLI` command:
+```shell
+sui client object {nft.Whitelist} --json
+```
+We will get response in the following format:
+```json
+{
+  "objectId": "0x785c5465137ae06615f64d19901124490f8fc926a99e0c4ead6b4e6c49af3604",
+  "version": "80116790",
+  "digest": "13GNNxJMfFdhYUC8JvFoxfeUNQpWTG4D17yxgQwr2AJ5",
+  "type": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist::Whitelist",
+  "owner": {
+    "Shared": {
+      "initial_shared_version": 80116786
+    }
+  },
+  "previousTransaction": "BeKqtCLdRpFaLX5BC4tFYYYz1t5AaVT4q1qqFsEA1jAN",
+  "storageRebate": "1702400",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist::Whitelist",
+    "hasPublicTransfer": false,
+    "fields": {
+      "entries": {
+        "type": "0x2::table::Table<address, 0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist_entry::WhitelistEntry>",
+        "fields": {
+          "id": {
+            "id": "0xebe9a79a94b366edecd97e3e7ec3f1714042e98a26562b9075d144a152a777ca"
+          },
+          "size": "1"
+        }
+      },
+      "id": {
+        "id": "0x785c5465137ae06615f64d19901124490f8fc926a99e0c4ead6b4e6c49af3604"
+      },
+      "paused": false,
+      "version": "2"
+    }
+  }
+}
+```
+
+Call the following command with `{content.fields.entries.id.id}` as a parameter in the returned result:
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":["{content.fields.entries.id.id}"]}' https://fullnode.testnet.sui.io/
+```
+We will get response in the following format:
+```json
+{
+	"jsonrpc": "2.0",
+	"result": {
+		"data": [{
+			"name": {
+				"type": "address",
+				"value": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b"
+			},
+			"bcsName": "2fmNxP6CKYJuBb7VmEgsSW6daaPbfXPznF98Hqp6Bbmk",
+			"type": "DynamicField",
+			"objectType": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist_entry::WhitelistEntry",
+			"objectId": "0xa38e2dd227664297bf968c8ab5b86bd86b5a386d5dc93fcbc9c4bf0120289873",
+			"version": 80116789,
+			"digest": "GmojBHr7t9uinrubmp5VbQpbGUFRt6cPF8zifb1KDejH"
+		}],
+		"nextCursor": "0xa38e2dd227664297bf968c8ab5b86bd86b5a386d5dc93fcbc9c4bf0120289873",
+		"hasNextPage": false
+	},
+	"id": 1
+}
+```
+The `data` element is an array. The value of the `name.value` attribute of each element in the array is the address in the whitelist. 
+We can see that the value of `objectType` is `{nft.packageId}::whitelist_entry::WhitelistEntry`, and we record the value of `objectId` as `{WhitelistEntryId}`.
+
+
+Using `{WhitelistEntryId}` as a parameter to execute the following `Sui CLI` command:
+```shell
+sui client object {WhitelistEntryId} --json
+```
+We will get response in the following format:
+```json
+{
+  "objectId": "0xa38e2dd227664297bf968c8ab5b86bd86b5a386d5dc93fcbc9c4bf0120289873",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x2::dynamic_field::Field<address, 0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist_entry::WhitelistEntry>",
+    "hasPublicTransfer": false,
+    "fields": {
+      "id": {
+        "id": "0xa38e2dd227664297bf968c8ab5b86bd86b5a386d5dc93fcbc9c4bf0120289873"
+      },
+      "name": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b",
+      "value": {
+        "type": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist_entry::WhitelistEntry",
+        "fields": {
+          "accessories": 8,
+          "account_address": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b",
+          "background_color": 1,
+          "claimed": true,
+          "description": "description",
+          "eyes": 3,
+          "haircut": 5,
+          "image_url": "http://www.baidu.com/logo.png",
+          "mouth": 4,
+          "name": "Enlai",
+          "outfit": 7,
+          "paused": false,
+          "race": 2,
+          "skin": 6
+        }
+      }
+    }
+  }
+}
+```
+Let's find the element:`content.fields.value.fields.claimed`, which has a Boolean value.
+If the value is true, it means that the user has already claimed an NFT, otherwise it is not claimed.
 
 
 [TBD]
@@ -2929,7 +3137,7 @@ This is the only place where off-chain service need to be configured, and it's t
 
 #### Creating a database for off-chain service
 
-Use a MySQL client to connect to the local MySQL server and execute the following script to create an empty database (assuming the name is `test5`):
+Use a MySQL client to connect to the local MySQL server and execute the following script to create an empty database (assuming the name is `test7`):
 
 ```sql
 CREATE SCHEMA `test7` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
