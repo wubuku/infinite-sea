@@ -15,15 +15,15 @@ aggregates:
         - "infinite_sea::player_properties"
       # Generate scheduled method that pulls on-chain states of all instances
       GENERATE_PULLING_ALL_ON_CHAIN_INSTANCE_STATES: true
-#    friends:
-#      - SkillProcess.StartProduction
-#      - SkillProcess.CompleteProduction
-#      - SkillProcess.StartShipProduction
-#      - SkillProcess.CompleteShipProduction
-#      - SkillProcess.StartCreation
-#      - SkillProcess.CompleteCreation
-#      #- SkillProcess.StartMutexCreation
-#      #- SkillProcess.CompleteMutexCreation
+    #    friends:
+    #      - SkillProcess.StartProduction
+    #      - SkillProcess.CompleteProduction
+    #      - SkillProcess.StartShipProduction
+    #      - SkillProcess.CompleteShipProduction
+    #      - SkillProcess.StartCreation
+    #      - SkillProcess.CompleteCreation
+    #      #- SkillProcess.StartMutexCreation
+    #      #- SkillProcess.CompleteMutexCreation
     id:
       name: Id
       type: UID
@@ -57,15 +57,25 @@ aggregates:
       #Intro:
       #  type: String
       #  length: 350
+      NewbieInitialQuests:
+        type: NewbieInitialQuests
+        optional: true
+        defaultLogic:
+          Move: "std::option::none()"
+      DailyQuests:
+        type: DailyQuests
+        optional: true
+        defaultLogic:
+          Move: "std::option::none()"
 
-#    entities:
-#      PlayerItem:
-#        id:
-#          name: ItemId
-#          type: u32
-#        properties:
-#          Quantity:
-#            type: u32
+    #    entities:
+    #      PlayerItem:
+    #        id:
+    #          name: ItemId
+    #          type: u32
+    #        properties:
+    #          Quantity:
+    #            type: u32
 
     methods:
       Create:

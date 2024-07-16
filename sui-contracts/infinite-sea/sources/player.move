@@ -5,7 +5,9 @@
 
 module infinite_sea::player {
     use infinite_sea_common::coordinates::Coordinates;
+    use infinite_sea_common::daily_quests::DailyQuests;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
+    use infinite_sea_common::newbie_initial_quests::NewbieInitialQuests;
     use std::option::{Self, Option};
     use std::string::String;
     use sui::event;
@@ -44,6 +46,8 @@ module infinite_sea::player {
         name: String,
         claimed_island: Option<Coordinates>,
         inventory: vector<ItemIdQuantityPair>,
+        newbie_initial_quests: Option<NewbieInitialQuests>,
+        daily_quests: Option<DailyQuests>,
     }
 
     public fun id(player: &Player): object::ID {
@@ -111,6 +115,22 @@ module infinite_sea::player {
         player.inventory = inventory;
     }
 
+    public fun newbie_initial_quests(player: &Player): Option<NewbieInitialQuests> {
+        player.newbie_initial_quests
+    }
+
+    public(friend) fun set_newbie_initial_quests(player: &mut Player, newbie_initial_quests: Option<NewbieInitialQuests>) {
+        player.newbie_initial_quests = newbie_initial_quests;
+    }
+
+    public fun daily_quests(player: &Player): Option<DailyQuests> {
+        player.daily_quests
+    }
+
+    public(friend) fun set_daily_quests(player: &mut Player, daily_quests: Option<DailyQuests>) {
+        player.daily_quests = daily_quests;
+    }
+
     public(friend) fun new_player(
         owner: address,
         name: String,
@@ -127,6 +147,8 @@ module infinite_sea::player {
             name,
             claimed_island: std::option::none(),
             inventory,
+            newbie_initial_quests: std::option::none(),
+            daily_quests: std::option::none(),
         }
     }
 
@@ -249,6 +271,8 @@ module infinite_sea::player {
             name: _name,
             claimed_island: _claimed_island,
             inventory: _inventory,
+            newbie_initial_quests: _newbie_initial_quests,
+            daily_quests: _daily_quests,
         } = player;
         object::delete(id);
     }
