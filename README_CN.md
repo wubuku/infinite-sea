@@ -2545,7 +2545,7 @@ sui client call --package {main.packageId} \
 * `{main.PackageId}`：Main 合约包 ID。
 * `{ShipBattleId}`： 类型为 `&mut ShipBattle`。CLI 中可传入战斗对象 ID。
 * `{playerId}`： 类型为 `&mut Player`。CLI 中可传入战斗发起方玩家对象 ID。
-* `{loser_player}`： 类型为 `&mut Player`。CLI 中可传入战斗应战方玩家对象 ID。
+* `{loser_player}`： 类型为 `&mut Player`。CLI 中可传入战斗失败方玩家对象 ID。
 * `{initiator}`： 类型为 `&mut Roster`。CLI 中可传入发起战斗作为挑战船队的对象 ID。
 * `{responder}`： 类型为 `&mut Roster`。CLI 中可传入遭到攻击作为应战船队的对象 ID。
 * `{common.ExperienceTable}`：类型为 `&ExperienceTable`。CLI 中可传入玩家积分（经验）等级表格对象 ID。
