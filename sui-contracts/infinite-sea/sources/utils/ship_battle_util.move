@@ -102,6 +102,7 @@ module infinite_sea::ship_battle_util {
 
     /// Returns the ID of the attacker ship that should go first in the battle round, the ID of the defender ship,
     /// and the indicator (1 or 2) of the roster that the attacker belongs to.
+    /// 返回进攻船只的 ID 和防守船只的 ID，还有进攻的船只属于哪个船队的指示（1或2）2：表示进攻船属于应战方，1：表示进攻船输入挑战方
     public(friend) fun determine_attacker_and_defender(
         roster_1: &Roster,
         roster_2: &Roster,
