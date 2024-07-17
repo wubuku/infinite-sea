@@ -21,4 +21,5 @@ public interface ExperienceTableEventRepository extends JpaRepository<AbstractEx
 
     AbstractExperienceTableEvent.ExperienceLevelUpdated findFirstExperienceLevelUpdatedByOrderBySuiTimestampDesc();
 
+    List<AbstractExperienceTableEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }

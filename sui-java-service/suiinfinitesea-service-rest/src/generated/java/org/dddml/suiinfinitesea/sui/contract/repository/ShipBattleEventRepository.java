@@ -21,4 +21,5 @@ public interface ShipBattleEventRepository extends JpaRepository<AbstractShipBat
 
     AbstractShipBattleEvent.ShipBattleLootTaken findFirstShipBattleLootTakenByOrderBySuiTimestampDesc();
 
+    List<AbstractShipBattleEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }

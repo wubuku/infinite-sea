@@ -17,4 +17,5 @@ public interface ShipEventRepository extends JpaRepository<AbstractShipEvent, Sh
 
     AbstractShipEvent.ShipCreated findFirstShipCreatedByOrderBySuiTimestampDesc();
 
+    List<AbstractShipEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }

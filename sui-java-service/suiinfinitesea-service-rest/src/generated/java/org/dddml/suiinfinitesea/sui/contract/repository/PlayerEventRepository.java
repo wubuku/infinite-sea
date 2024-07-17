@@ -21,4 +21,5 @@ public interface PlayerEventRepository extends JpaRepository<AbstractPlayerEvent
 
     AbstractPlayerEvent.PlayerAirdropped findFirstPlayerAirdroppedByOrderBySuiTimestampDesc();
 
+    List<AbstractPlayerEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }

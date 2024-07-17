@@ -19,4 +19,5 @@ public interface ItemCreationEventRepository extends JpaRepository<AbstractItemC
 
     AbstractItemCreationEvent.ItemCreationUpdated findFirstItemCreationUpdatedByOrderBySuiTimestampDesc();
 
+    List<AbstractItemCreationEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }
