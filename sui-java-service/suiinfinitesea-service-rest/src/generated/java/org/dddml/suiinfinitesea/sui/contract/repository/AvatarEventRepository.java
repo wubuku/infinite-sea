@@ -23,4 +23,5 @@ public interface AvatarEventRepository extends JpaRepository<AbstractAvatarEvent
 
     AbstractAvatarEvent.AvatarWhitelistMinted findFirstAvatarWhitelistMintedByOrderBySuiTimestampDesc();
 
+    List<AbstractAvatarEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }

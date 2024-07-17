@@ -27,4 +27,5 @@ public interface WhitelistEventRepository extends JpaRepository<AbstractWhitelis
 
     AbstractWhitelistEvent.WhitelistCreated findFirstWhitelistCreatedByOrderBySuiTimestampDesc();
 
+    List<AbstractWhitelistEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }
