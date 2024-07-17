@@ -39,8 +39,8 @@ module infinite_sea::ship_battle_make_move_logic {
 
     public(friend) fun verify(
         player: &Player,
-        initiator: &Roster,
-        responder: &Roster,
+        initiator: &mut Roster,
+        responder: &mut Roster,
         clock: &Clock,
         attacker_command: u8,
         ship_battle: &ship_battle::ShipBattle,
@@ -61,8 +61,8 @@ module infinite_sea::ship_battle_make_move_logic {
 
         let round_mover = ship_battle::round_mover(ship_battle);
         assert!(option::is_some(&round_mover), ERoundMoverNotSet);
-        let attacker_roster: &Roster;
-        let defender_roster: &Roster;
+        let attacker_roster: &mut Roster;
+        let defender_roster: &mut Roster;
         if (*option::borrow(&round_mover) == ship_battle_util::initiator()) {
             attacker_roster = initiator;
             defender_roster = responder;
@@ -131,6 +131,16 @@ module infinite_sea::ship_battle_make_move_logic {
         let next_round_defender_ship = option::none<ID>();
         let next_round_started_at = now_time;
 
+        //
+        // NOTE: Update the ships' health_points first!
+        // That way you won't pick a ship that has already been destroyed.
+        //
+        let (_attacker_ship_hp, _defender_ship_hp) = update_ship_health_points(
+            attacker_roster, defender_roster,
+            *option::borrow(&attacker_ship_id), *option::borrow(&defender_ship_id),
+            attacker_damage_taken, defender_damage_taken
+        );
+
         if (!is_batlle_ended) {
             let next_round_number = current_round_number + 1;
             let (attacker_ship_id, defender_ship_id, roster_indicator) = ship_battle_util::determine_attacker_and_defender(
@@ -144,6 +154,7 @@ module infinite_sea::ship_battle_make_move_logic {
                 ship_battle_util::responder()
             });
         };
+
 
         ship_battle::new_ship_battle_move_made(ship_battle, attacker_command, defender_command,
             current_round_number,
@@ -178,14 +189,11 @@ module infinite_sea::ship_battle_make_move_logic {
         let is_attacker_env_owned = roster::environment_owned(attacker_roster);
         let is_defender_env_owned = roster::environment_owned(defender_roster);
 
-        let attacker_ships = roster::borrow_mut_ships(attacker_roster);
-        let defender_ships = roster::borrow_mut_ships(defender_roster);
-        let attacker_ship = object_table::borrow_mut(attacker_ships, *option::borrow(&attacker_ship_id));
-        let defender_ship = object_table::borrow_mut(defender_ships, *option::borrow(&defender_ship_id));
-        let attacker_ship_hp = ship::health_points(attacker_ship) - attacker_damage_taken;
-        let defender_ship_hp = ship::health_points(defender_ship) - defender_damage_taken;
-        ship::set_health_points(defender_ship, defender_ship_hp);
-        ship::set_health_points(attacker_ship, attacker_ship_hp);
+        // let (attacker_ship_hp, defender_ship_hp) = update_ship_health_points(
+        //     attacker_roster, defender_roster,
+        //     *option::borrow(&attacker_ship_id), *option::borrow(&defender_ship_id),
+        //     attacker_damage_taken, defender_damage_taken
+        // );
 
         let is_batlle_ended = ship_battle::ship_battle_move_made_is_battle_ended(ship_battle_move_made);
         let winner = ship_battle::ship_battle_move_made_winner(ship_battle_move_made);
@@ -215,6 +223,13 @@ module infinite_sea::ship_battle_make_move_logic {
         ship_battle::set_round_attacker_ship(ship_battle, next_round_attacker_ship);
         ship_battle::set_round_defender_ship(ship_battle, next_round_defender_ship);
         ship_battle::set_round_started_at(ship_battle, next_round_started_at);
+
+        let attacker_ships = roster::borrow_ships(attacker_roster);
+        let defender_ships = roster::borrow_ships(defender_roster);
+        let attacker_ship = object_table::borrow(attacker_ships, *option::borrow(&attacker_ship_id));
+        let defender_ship = object_table::borrow(defender_ships, *option::borrow(&defender_ship_id));
+        let attacker_ship_hp = ship::health_points(attacker_ship);
+        let defender_ship_hp = ship::health_points(defender_ship);
 
         // Update experience points
         let defender_xp_gained = if (attacker_ship_hp == 0 && attacker_damage_taken > 0) {
@@ -264,6 +279,25 @@ module infinite_sea::ship_battle_make_move_logic {
             };
             roster::set_status(loser_roster, roster_status::destroyed());
         }
+    }
+
+    fun update_ship_health_points(
+        attacker_roster: &mut Roster,
+        defender_roster: &mut Roster,
+        attacker_ship_id: ID,
+        defender_ship_id: ID,
+        attacker_damage_taken: u32,
+        defender_damage_taken: u32
+    ): (u32, u32) {
+        let attacker_ships = roster::borrow_mut_ships(attacker_roster);
+        let defender_ships = roster::borrow_mut_ships(defender_roster);
+        let attacker_ship = object_table::borrow_mut(attacker_ships, attacker_ship_id);
+        let defender_ship = object_table::borrow_mut(defender_ships, defender_ship_id);
+        let attacker_ship_hp = ship::health_points(attacker_ship) - attacker_damage_taken;
+        let defender_ship_hp = ship::health_points(defender_ship) - defender_damage_taken;
+        ship::set_health_points(defender_ship, defender_ship_hp);
+        ship::set_health_points(attacker_ship, attacker_ship_hp);
+        (attacker_ship_hp, defender_ship_hp)
     }
 
     fun calculate_ship_experience(ship: &Ship, is_environment_owned: bool): u32 {
