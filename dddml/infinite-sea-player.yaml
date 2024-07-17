@@ -57,16 +57,17 @@ aggregates:
       #Intro:
       #  type: String
       #  length: 350
-      NewbieInitialQuests:
-        type: NewbieInitialQuests
-        optional: true
-        defaultLogic:
-          Move: "std::option::none()"
-      DailyQuests:
-        type: DailyQuests
-        optional: true
-        defaultLogic:
-          Move: "std::option::none()"
+
+#      NewbieInitialQuests:
+#        type: NewbieInitialQuests
+#        optional: true
+#        defaultLogic:
+#          Move: "std::option::none()"
+#      DailyQuests:
+#        type: DailyQuests
+#        optional: true
+#        defaultLogic:
+#          Move: "std::option::none()"
 
     #    entities:
     #      PlayerItem:

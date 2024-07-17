@@ -238,52 +238,52 @@ valueObjects:
         type: u32
 
   # -------------------------------------
-  NewbieInitialQuests:
-    module: "Common"
-    properties:
-      CreateWallet:
-        type: bool
-      ClaimIsland:
-        type: bool
-      CutWoods:
-        type: u8
-        # Cut 5 woods
-      MineOres:
-        type: u8
-        # Mine 5 ores
-      PlantCottons:
-        type: u8
-        # Plant 5 cottons
-      CraftShips:
-        type: u8
-        # Craft 1 ship
-        # Craft 4 ships
-      BeatE_Roster:
-        type: u8
-        # Battle and beat 1 PvE ship roster
-
-  DailyQuests:
-    module: "Common"
-    properties:
-      StartTime:
-        type: u64
-        # Start time of the day (in seconds)
-      CraftShips:
-        type: u8
-        # Craft 4 ships
-        # Quest reward: 50 points
-      SailDistance:
-        type: u64
-        # Sail for a certain distance
-        # Quest reward: 100 points
-      BeatE_Roster:
-        type: u8
-        # Battle and win over 3 PvE ship rosters
-        # Quest reward: 150 points
-      BeatP_Roster:
-        type: u8
-        # Battle and win over 1 PvP ship roster
-        # Quest reward: 200 points
+#  NewbieInitialQuests:
+#    module: "Common"
+#    properties:
+#      CreateWallet:
+#        type: bool
+#      ClaimIsland:
+#        type: bool
+#      CutWoods:
+#        type: u8
+#        # Cut 5 woods
+#      MineOres:
+#        type: u8
+#        # Mine 5 ores
+#      PlantCottons:
+#        type: u8
+#        # Plant 5 cottons
+#      CraftShips:
+#        type: u8
+#        # Craft 1 ship
+#        # Craft 4 ships
+#      BeatE_Roster:
+#        type: u8
+#        # Battle and beat 1 PvE ship roster
+#
+#  DailyQuests:
+#    module: "Common"
+#    properties:
+#      StartTime:
+#        type: u64
+#        # Start time of the day (in seconds)
+#      CraftShips:
+#        type: u8
+#        # Craft 4 ships
+#        # Quest reward: 50 points
+#      SailDistance:
+#        type: u64
+#        # Sail for a certain distance
+#        # Quest reward: 100 points
+#      BeatE_Roster:
+#        type: u8
+#        # Battle and win over 3 PvE ship rosters
+#        # Quest reward: 150 points
+#      BeatP_Roster:
+#        type: u8
+#        # Battle and win over 1 PvP ship roster
+#        # Quest reward: 200 points
 
   # -------------------------------------
 

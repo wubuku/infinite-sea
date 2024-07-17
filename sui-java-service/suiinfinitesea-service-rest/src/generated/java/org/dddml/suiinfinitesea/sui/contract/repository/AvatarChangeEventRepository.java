@@ -21,4 +21,5 @@ public interface AvatarChangeEventRepository extends JpaRepository<AbstractAvata
 
     AbstractAvatarChangeEvent.AvatarChangeDeleted findFirstAvatarChangeDeletedByOrderBySuiTimestampDesc();
 
+    List<AbstractAvatarChangeEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }
