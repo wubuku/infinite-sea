@@ -1,43 +1,35 @@
 package org.dddml.suiinfinitesea.sui.contract.restful.resource;
 
-import org.dddml.suiinfinitesea.sui.contract.utils.RosterUtil;
+import org.dddml.suiinfinitesea.domain.shipbattle.AbstractShipBattleState;
+import org.dddml.suiinfinitesea.sui.contract.repository.ShipBattleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigInteger;
+import java.util.List;
 
-@RequestMapping(path = "offChain", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "ShipBattleHistories", produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class OffChainResource {
+public class ShipBattleHistoryResource {
 
-    @GetMapping(path = "calculateTotalTimeAndEnergyCost")
-    public BigInteger[] calculateTotalTimeAndEnergyCost(
-            @RequestParam(value = "originX") long originX,
-            @RequestParam(value = "originY") long originY,
-            @RequestParam(value = "destinationX") long destinationX,
-            @RequestParam(value = "destinationY") long destinationY,
-            @RequestParam(value = "speedProperty") long speedProperty,
-            @RequestParam(value = "shipCount") long shipCount
+    @Autowired
+    private ShipBattleRepository shipBattleRepository;
+
+    @GetMapping()
+    @Transactional(readOnly = true)
+    public List<AbstractShipBattleState.SimpleShipBattleState> getShipBattlesByPlayerId(
+            @RequestParam(value = "playerId") String playerId
     ) {
-        return RosterUtil.calculateTotalTimeAndEnergyCost(
-                new Long[]{originX, originY}, new Long[]{destinationX, destinationY},
-                speedProperty, shipCount
-        );
-    }
 
-
-    /**
-     * Calculate the time and energy required for the roster to reach its destination based on distance, speed, and number of ships
-     */
-    @GetMapping(path = "calculateTotalTimeAndEnergyCostByDistance")
-    public BigInteger[] calculateTotalTimeAndEnergyCostByDistance(
-            @RequestParam(value = "distance") BigInteger distance,
-            @RequestParam(value = "speedProperty") long speedProperty,
-            @RequestParam(value = "shipCount") long shipCount
-    ) {
-        return RosterUtil.calculateTotalTimeAndEnergyCostByDistance(distance, speedProperty, shipCount);
+        return shipBattleRepository.getShipBattlesByPlayerId(playerId);
+//        ShipBattleStateDto.DtoConverter dtoConverter = new ShipBattleStateDto.DtoConverter();
+//
+//        List<AbstractShipBattleState> shipBattleStates= shipBattleRepository.getShipBattlesByPlayerId(playerId);
+//
+//        return dtoConverter.toShipBattleStateDtoList(shipBattleStates);
     }
 }
