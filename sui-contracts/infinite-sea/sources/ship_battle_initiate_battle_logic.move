@@ -30,11 +30,17 @@ module infinite_sea::ship_battle_initiate_battle_logic {
         clock: &Clock,
         ctx: &mut TxContext,
     ): ship_battle::ShipBattleInitiated {
+        //挑战方是否准备好开始战斗状态
         assert!(roster_util::is_status_battle_ready(initiator), EInitiatorNotBattleReady);
+        //应战方是否准备好开始战斗状态
         assert!(roster_util::is_status_battle_ready(responder), EResponderNotBattleReady);
+        //执行操作的人是否是参数中的玩家
         permission_util::assert_sender_is_player_owner(player, ctx);
+        //参数中的玩家是否是挑战船队的拥有者
         permission_util::assert_player_is_roster_owner(player, initiator);
+        //挑战者的船队编号不能为 unassigned 的
         roster_util::assert_roster_is_not_unassigned_ships(initiator);
+        //应战者者的船队编号不能为 unassigned 的
         roster_util::assert_roster_is_not_unassigned_ships(responder);
         // todo more checks???
 
@@ -52,12 +58,14 @@ module infinite_sea::ship_battle_initiate_battle_logic {
             roster::set_coordinates_updated_at(responder, t);
         };
 
-        // and then assert if they are close enough to each other
+        // and then assert if they are close enough to each other 两个船队是否足够的近
         assert!(ship_battle_util::are_rosters_close_enough(initiator, responder), ENotCloseEnoughToBattle);
-
+        // 经过计算（包含随机因素，得到第一轮中担任进攻的船只Id以及担任防守的船只的ID，
+        // 另外 roster_indicator =2 表示进攻船只来自应战船队，=1 表示进攻船只来自进攻船队。
         let (attacker_ship_id, defender_ship_id, roster_indicator) = ship_battle_util::determine_attacker_and_defender(
             initiator, responder, clock, FIRST_ROUND_NUMBER
         );
+        //第一轮的先进攻者？
         let first_round_mover = if (roster_indicator == 1) {
             ship_battle_util::initiator()
         } else {
