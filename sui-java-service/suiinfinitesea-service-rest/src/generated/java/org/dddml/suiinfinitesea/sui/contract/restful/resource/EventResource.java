@@ -3,9 +3,7 @@ package org.dddml.suiinfinitesea.sui.contract.restful.resource;
 import org.dddml.suiinfinitesea.domain.faucetrequested.AbstractFaucetRequestedState;
 import org.dddml.suiinfinitesea.domain.item.AbstractItemEvent;
 import org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessEvent;
-import org.dddml.suiinfinitesea.sui.contract.repository.FaucetRequestedEventRepository;
-import org.dddml.suiinfinitesea.sui.contract.repository.ItemEventRepository;
-import org.dddml.suiinfinitesea.sui.contract.repository.ShipProductionEventRepository;
+import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +23,9 @@ public class EventResource {
     private ShipProductionEventRepository shipProductionEventRepository;
     @Autowired
     private FaucetRequestedEventRepository faucetRequestedEventRepository;
+
+    @Autowired
+    private ShipBattleRelatedRepository shipBattleRelatedRepository;
 
     @GetMapping(path = "getItemEvents")
     @Transactional(readOnly = true)
@@ -54,24 +55,23 @@ public class EventResource {
     }
 
 
-    @GetMapping(path = "getBeatEnvironmentRosterEvents")
+    @GetMapping(path = "getPlayerVsEnvironmentEvents")
     @Transactional(readOnly = true)
-    public java.util.List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> getBeatEnvironmentRosterEvents(
-            @RequestParam(value = "startSuiTimestamp") Long startSuiTimestamp,
-            @RequestParam(value = "endSuiTimestamp") Long endSuiTimestamp
+    public java.util.List<PlayerVsEnvironment> getPlayerVsEnvironmentEvents(
+            @RequestParam(value = "startAt") Long startAt,
+            @RequestParam(value = "endedAt") Long endedAt
     ) {
-        return shipProductionEventRepository.getShipCompletedEvents(startSuiTimestamp, endSuiTimestamp);//, suiSenderAddress);
+        return shipBattleRelatedRepository.getPlayerVsEnvironmentEvents(startAt, endedAt);//, suiSenderAddress);
     }
 
 
-//    @GetMapping(path = "getBeatPlayerRosterEvents")
-//    @Transactional(readOnly = true)
-//    public java.util.List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> getShipCompletedEvents(
-//            @RequestParam(value = "startSuiTimestamp") Long startSuiTimestamp,
-//            @RequestParam(value = "endSuiTimestamp") Long endSuiTimestamp,
-//            @RequestParam(value = "suiSenderAddress") String suiSenderAddress
-//    ) {
-//        return shipProductionEventRepository.getShipCompletedEvents(startSuiTimestamp, endSuiTimestamp, suiSenderAddress);
-//    }
+    @GetMapping(path = "getPlayerVsPlayerEvents")
+    @Transactional(readOnly = true)
+    public java.util.List<PlayerVsPlayer> getPlayerVsPlayerEvents(
+            @RequestParam(value = "startAt") Long startAt,
+            @RequestParam(value = "endedAt") Long endedAt
+    ) {
+        return shipBattleRelatedRepository.getPlayerVsPlayerEvents(startAt, endedAt);
+    }
 
 }

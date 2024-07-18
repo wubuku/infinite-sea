@@ -3077,6 +3077,60 @@ Let's find the element:`content.fields.value.fields.claimed`, which has a Boolea
 If the value is true, it means that the user has already claimed an NFT, otherwise it is not claimed.
 
 
+### Daily quests API
+
+#### Ship construction completion event 
+```shell
+curl -X GET "http://47.96.81.197:8809/api/contractEvents/getFaucetRequestedEvents?startSuiTimestamp={startSuiTimestamp}&endSuiTimestamp={endSuiTimestamp}}" -H "accept: application/json"
+```
+Query Parameters:
+
+* startSuiTimestamp 查询起始时间，单位毫秒（从1970年1月1日0时起）。
+* endSuiTimestamp 查询截止时间，单位毫秒（同上）。
+
+Response:
+
+```json
+[
+  {
+    "eventId": "5PiNok3tyCjFVeoVTJWMKNX7a4hn8fq8KxHMzFTtPPRX#0",
+    "requesterAccount": "0xf94d322ddf060d4dc9a9bee56d61ed119f39e17b5a1098d62254a10e37a86cf9",
+    "requestedAmount": 50000000000,
+    "suiPackageId": "0x0597f363495b0be4f33a09573d9cd6ad958326208aa71d5baa0a809376cbab1f",
+    "suiTransactionModule": "energy_faucet",
+    "suiSender": "0xf94d322ddf060d4dc9a9bee56d61ed119f39e17b5a1098d62254a10e37a86cf9",
+    "suiTimestamp": 1721305893124,
+    "suiTxDigest": "5PiNok3tyCjFVeoVTJWMKNX7a4hn8fq8KxHMzFTtPPRX",
+    "suiEventSeq": 0,
+    "version": -1,
+    "offChainVersion": 0,
+    "active": true,
+    "forReapplying": false,
+    "stateUnsaved": false
+  },
+  {
+    "eventId": "Ccfur8fWJ1FeK9qxyizZtuuSErx6738ZxY2hQnDsiYea#0",
+    "requesterAccount": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+    "requestedAmount": 50000000000,
+    "suiPackageId": "0x0597f363495b0be4f33a09573d9cd6ad958326208aa71d5baa0a809376cbab1f",
+    "suiTransactionModule": "energy_faucet",
+    "suiSender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+    "suiTimestamp": 1721310483232,
+    "suiTxDigest": "Ccfur8fWJ1FeK9qxyizZtuuSErx6738ZxY2hQnDsiYea",
+    "suiEventSeq": 0,
+    "version": -1,
+    "offChainVersion": 0,
+    "active": true,
+    "forReapplying": false,
+    "stateUnsaved": false
+  }
+]
+```
+* suiSender 请求水龙头玩家地址。
+* suiTimestamp 请求水龙头时间。
+* requesterAccount 请求`ENERGY`数量。
+* eventId 唯一ID。
+
 [TBD]
 
 ### 关于 Move Table 或者 ObjectTable 内容的查询
