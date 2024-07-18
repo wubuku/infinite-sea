@@ -2233,7 +2233,8 @@ sui client call --package {main.PackageId} \
 {clock} \
 {energyId} \
 {energy_amount} \
---gas-budget 11000000 --json
+{sail_duration} \
+--json
 ```
 
 参数解释：
@@ -2246,6 +2247,7 @@ sui client call --package {main.PackageId} \
 * `{clock}`：类型为 `&Clock`。时钟对象 ID，固定值 `0x6`。
 * `{energyId}`：类型为 `Coin<ENERGY>`。CLI 中可传入能量币（`ENERGY`）的 Object ID。
 * `{energy_amount}`：类型为 `u64`。本次航行需要花费能量币（`ENERGY`）数量。
+* `{sail_duration}`：类型为 `u64`。前端传递的一个距离值。
 
 ### 更新船队位置
 
