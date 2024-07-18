@@ -18,6 +18,7 @@ import org.dddml.suiinfinitesea.domain.ship.*;
 import org.dddml.suiinfinitesea.domain.roster.*;
 import org.dddml.suiinfinitesea.domain.shipbattle.*;
 import org.dddml.suiinfinitesea.domain.rosterlocation.*;
+import org.dddml.suiinfinitesea.domain.faucetrequested.*;
 import org.dddml.suiinfinitesea.domain.item.*;
 import org.dddml.suiinfinitesea.domain.itemcreation.*;
 import org.dddml.suiinfinitesea.domain.itemproduction.*;

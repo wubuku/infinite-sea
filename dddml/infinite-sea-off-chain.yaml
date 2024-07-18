@@ -11,3 +11,24 @@ aggregates:
       Status:
         type: u8
         description: "The quasi-real-time status of the roster."
+
+  FaucetRequested:
+    metadata:
+      AbsolutelyNoEventSourcing: true
+    implements:
+      - SuiMoveEvent
+      - SuiEventEnvelope
+      - HasSuiEventNextCursor
+    id:
+      name: EventId
+      type: string
+      length: 100
+    properties:
+      RequesterAccount:
+        type: address
+      RequestedAmount:
+        type: u64
+      Description:
+        type: string
+        length: 500
+

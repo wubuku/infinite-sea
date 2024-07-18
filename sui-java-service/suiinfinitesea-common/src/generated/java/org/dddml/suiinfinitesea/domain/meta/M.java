@@ -40,6 +40,7 @@ public class M {
         typeToAggMap.put("Roster", "Roster");
         typeToAggMap.put("ShipBattle", "ShipBattle");
         typeToAggMap.put("RosterLocation", "RosterLocation");
+        typeToAggMap.put("FaucetRequested", "FaucetRequested");
         typeToAggMap.put("Item", "Item");
         typeToAggMap.put("ItemCreation", "ItemCreation");
         typeToAggMap.put("ItemProduction", "ItemProduction");
@@ -1103,6 +1104,135 @@ public class M {
         aliasMap.put("Coordinates.X", "coordinates.x");
         aliasMap.put("coordinates.y", "coordinates.y");
         aliasMap.put("Coordinates.Y", "coordinates.y");
+    }
+
+    private static void initPropertyTypeMap() {
+        for (int i = 0; i < propertyNames.length; i++ ) {
+            propertyTypeMap.put(propertyNames[i], propertyTypes[i]);
+        }
+    }
+
+  }
+
+
+  // /////////////////////////////////////////////////////////  
+  public static class FaucetRequestedMetadata {
+
+    private FaucetRequestedMetadata() {
+    }
+
+    public static final String PROPERTY_NAME_VERSION      = "offChainVersion";
+    public static final String PROPERTY_NAME_ACTIVE       = "active";
+    public static final String PROPERTY_NAME_DELETED      = "deleted";
+    public static final String PROPERTY_NAME_CREATED_BY   = "createdBy";
+    public static final String PROPERTY_NAME_CREATED_AT   = "createdAt";
+    public static final String PROPERTY_NAME_UPDATED_BY   = "updatedBy";
+    public static final String PROPERTY_NAME_UPDATED_AT   = "updatedAt";
+
+    public static final Class ID_CLASS = String.class;
+
+    public static final String[] propertyNames = new String[] {
+            "eventId",
+            "requesterAccount",
+            "requestedAmount",
+            "description",
+            "suiPackageId",
+            "suiTransactionModule",
+            "suiSender",
+            "suiType",
+            "suiTimestamp",
+            "suiTxDigest",
+            "suiEventSeq",
+            "version",
+            "offChainVersion",
+            "createdBy",
+            "createdAt",
+            "updatedBy",
+            "updatedAt",
+            "active",
+            "deleted",
+            "nextCursor.txDigest",
+            "nextCursor.eventSeq",
+    };
+
+    public static final String[] propertyTypes = new String[] {
+            "String",
+            "String",
+            "BigInteger",
+            "String",
+            "String",
+            "String",
+            "String",
+            "String",
+            "Long",
+            "String",
+            "BigInteger",
+            "BigInteger",
+            "Long",
+            "String",
+            "Date",
+            "String",
+            "Date",
+            "Boolean",
+            "Boolean",
+            "String",
+            "BigInteger",
+    };
+
+    public static final Map<String, String> propertyTypeMap;
+
+    public static final Map<String, String> aliasMap;
+
+    static {
+        propertyTypeMap = new HashMap<String, String>();
+        initPropertyTypeMap();
+        aliasMap = new HashMap<String, String>();
+        initAliasMap();
+    }
+
+    private static  void initAliasMap() {
+        aliasMap.put("eventId", "eventId");
+        aliasMap.put("EventId", "eventId");
+        aliasMap.put("requesterAccount", "requesterAccount");
+        aliasMap.put("RequesterAccount", "requesterAccount");
+        aliasMap.put("requestedAmount", "requestedAmount");
+        aliasMap.put("RequestedAmount", "requestedAmount");
+        aliasMap.put("description", "description");
+        aliasMap.put("Description", "description");
+        aliasMap.put("suiPackageId", "suiPackageId");
+        aliasMap.put("SuiPackageId", "suiPackageId");
+        aliasMap.put("suiTransactionModule", "suiTransactionModule");
+        aliasMap.put("SuiTransactionModule", "suiTransactionModule");
+        aliasMap.put("suiSender", "suiSender");
+        aliasMap.put("SuiSender", "suiSender");
+        aliasMap.put("suiType", "suiType");
+        aliasMap.put("SuiType", "suiType");
+        aliasMap.put("suiTimestamp", "suiTimestamp");
+        aliasMap.put("SuiTimestamp", "suiTimestamp");
+        aliasMap.put("suiTxDigest", "suiTxDigest");
+        aliasMap.put("SuiTxDigest", "suiTxDigest");
+        aliasMap.put("suiEventSeq", "suiEventSeq");
+        aliasMap.put("SuiEventSeq", "suiEventSeq");
+        aliasMap.put("version", "version");
+        aliasMap.put("Version", "version");
+        aliasMap.put("offChainVersion", "offChainVersion");
+        aliasMap.put("OffChainVersion", "offChainVersion");
+        aliasMap.put("createdBy", "createdBy");
+        aliasMap.put("CreatedBy", "createdBy");
+        aliasMap.put("createdAt", "createdAt");
+        aliasMap.put("CreatedAt", "createdAt");
+        aliasMap.put("updatedBy", "updatedBy");
+        aliasMap.put("UpdatedBy", "updatedBy");
+        aliasMap.put("updatedAt", "updatedAt");
+        aliasMap.put("UpdatedAt", "updatedAt");
+        aliasMap.put("active", "active");
+        aliasMap.put("Active", "active");
+        aliasMap.put("deleted", "deleted");
+        aliasMap.put("Deleted", "deleted");
+        aliasMap.put("nextCursor.txDigest", "nextCursor.txDigest");
+        aliasMap.put("NextCursor.TxDigest", "nextCursor.txDigest");
+        aliasMap.put("nextCursor.eventSeq", "nextCursor.eventSeq");
+        aliasMap.put("NextCursor.EventSeq", "nextCursor.eventSeq");
     }
 
     private static void initPropertyTypeMap() {

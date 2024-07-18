@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"[]>
+<hibernate-mapping package="org.dddml.suiinfinitesea.domain.faucetrequested">
+  <class name="org.dddml.suiinfinitesea.domain.faucetrequested.AbstractFaucetRequestedState$SimpleFaucetRequestedState" table="faucet_requested">
+    <id name="eventId" length="100" column="event_id">
+      <generator class="assigned" />
+    </id>
+    <version name="offChainVersion" column="off_chain_version" type="long" />
+    <property name="id_">
+      <column name="id" unique-key="unique_faucetrequested_sid" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="requesterAccount">
+      <column name="requester_account" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="requestedAmount">
+      <column name="requested_amount" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="description">
+      <column name="description" length="500" />
+    </property>
+    <property name="suiPackageId">
+      <column name="sui_package_id" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="suiTransactionModule">
+      <column name="sui_transaction_module" length="100" />
+    </property>
+    <property name="suiSender">
+      <column name="sui_sender" sql-type="VARCHAR(66)" />
+    </property>
+    <property name="suiType">
+      <column name="sui_type" length="200" />
+    </property>
+    <property name="suiTimestamp">
+      <column name="sui_timestamp" />
+    </property>
+    <property name="suiTxDigest">
+      <column name="sui_tx_digest" length="50" />
+    </property>
+    <property name="suiEventSeq">
+      <column name="sui_event_seq" sql-type="DECIMAL(20,0)" />
+    </property>
+    <component name="nextCursor" class="org.dddml.suiinfinitesea.domain.SuiEventId">
+      <property name="txDigest">
+        <column name="next_cursor_tx_digest" length="50" />
+      </property>
+      <property name="eventSeq">
+        <column name="next_cursor_event_seq" sql-type="DECIMAL(20,0)" />
+      </property>
+    </component>
+    <property name="version">
+      <column name="version" sql-type="DECIMAL(20,0)" />
+    </property>
+    <property name="createdBy">
+      <column name="created_by" />
+    </property>
+    <property name="updatedBy">
+      <column name="updated_by" />
+    </property>
+    <property name="active">
+      <column name="active" />
+    </property>
+    <property name="deleted">
+      <column name="deleted" />
+    </property>
+    <property name="createdAt" column="created_at" />
+    <property name="updatedAt" column="updated_at" />
+    <property name="commandId" column="command_id" />
+  </class>
+</hibernate-mapping>

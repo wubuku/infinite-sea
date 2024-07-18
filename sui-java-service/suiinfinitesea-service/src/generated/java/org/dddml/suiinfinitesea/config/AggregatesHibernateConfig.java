@@ -26,6 +26,9 @@ import org.dddml.suiinfinitesea.domain.shipbattle.hibernate.*;
 import org.dddml.suiinfinitesea.domain.rosterlocation.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.rosterlocation.hibernate.*;
+import org.dddml.suiinfinitesea.domain.faucetrequested.*;
+import org.dddml.suiinfinitesea.domain.*;
+import org.dddml.suiinfinitesea.domain.faucetrequested.hibernate.*;
 import org.dddml.suiinfinitesea.domain.item.*;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.domain.item.hibernate.*;
@@ -376,6 +379,42 @@ public class AggregatesHibernateConfig {
                 rosterLocationEventStore,
                 rosterLocationStateRepository,
                 rosterLocationStateQueryRepository
+        );
+        return applicationService;
+    }
+
+
+
+    @Bean
+    public FaucetRequestedStateRepository faucetRequestedStateRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateFaucetRequestedStateRepository repository = new HibernateFaucetRequestedStateRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public FaucetRequestedStateQueryRepository faucetRequestedStateQueryRepository(
+            SessionFactory hibernateSessionFactory,
+            ReadOnlyProxyGenerator stateReadOnlyProxyGenerator
+    ) {
+        HibernateFaucetRequestedStateQueryRepository repository = new HibernateFaucetRequestedStateQueryRepository();
+        repository.setSessionFactory(hibernateSessionFactory);
+        repository.setReadOnlyProxyGenerator(stateReadOnlyProxyGenerator);
+        return repository;
+    }
+
+    @Bean
+    public AbstractFaucetRequestedApplicationService.SimpleFaucetRequestedApplicationService faucetRequestedApplicationService(
+            FaucetRequestedStateRepository faucetRequestedStateRepository,
+            FaucetRequestedStateQueryRepository faucetRequestedStateQueryRepository
+    ) {
+        AbstractFaucetRequestedApplicationService.SimpleFaucetRequestedApplicationService applicationService = new AbstractFaucetRequestedApplicationService.SimpleFaucetRequestedApplicationService(
+                faucetRequestedStateRepository,
+                faucetRequestedStateQueryRepository
         );
         return applicationService;
     }

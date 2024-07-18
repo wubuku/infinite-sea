@@ -32,7 +32,7 @@ configuration:
           "org.hibernate.type.ParameterType": "{type}"
 
   sui:
-    offChainObjectNames: [ "RosterLocation" ]
+    offChainObjectNames: [ "RosterLocation", "FaucetRequested" ]
 
 typeDefinitions:
   ENERGY:
