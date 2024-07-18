@@ -360,6 +360,19 @@ public class RosterCommands {
         }
 
         /**
+         * Sail Duration
+         */
+        private BigInteger sailDuration;
+
+        public BigInteger getSailDuration() {
+            return this.sailDuration;
+        }
+
+        public void setSailDuration(BigInteger sailDuration) {
+            this.sailDuration = sailDuration;
+        }
+
+        /**
          * Off Chain Version
          */
         private Long offChainVersion;

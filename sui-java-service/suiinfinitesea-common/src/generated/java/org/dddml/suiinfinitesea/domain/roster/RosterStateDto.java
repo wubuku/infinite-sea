@@ -111,6 +111,18 @@ public class RosterStateDto {
         this.targetCoordinates = targetCoordinates;
     }
 
+    private BigInteger sailDuration;
+
+    public BigInteger getSailDuration()
+    {
+        return this.sailDuration;
+    }
+
+    public void setSailDuration(BigInteger sailDuration)
+    {
+        this.sailDuration = sailDuration;
+    }
+
     private String shipBattleId;
 
     public String getShipBattleId()
@@ -317,6 +329,9 @@ public class RosterStateDto {
             }
             if (returnedFieldsContains("TargetCoordinates")) {
                 dto.setTargetCoordinates(state.getTargetCoordinates());
+            }
+            if (returnedFieldsContains("SailDuration")) {
+                dto.setSailDuration(state.getSailDuration());
             }
             if (returnedFieldsContains("ShipBattleId")) {
                 dto.setShipBattleId(state.getShipBattleId());

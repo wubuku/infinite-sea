@@ -96,6 +96,7 @@ module infinite_sea::roster {
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
+        sail_duration: u64,
         ship_battle_id: Option<ID>,
         environment_owned: bool,
         base_experience: Option<u32>,
@@ -178,6 +179,14 @@ module infinite_sea::roster {
         roster.target_coordinates = target_coordinates;
     }
 
+    public fun sail_duration(roster: &Roster): u64 {
+        roster.sail_duration
+    }
+
+    public(friend) fun set_sail_duration(roster: &mut Roster, sail_duration: u64) {
+        roster.sail_duration = sail_duration;
+    }
+
     public fun ship_battle_id(roster: &Roster): Option<ID> {
         roster.ship_battle_id
     }
@@ -243,6 +252,7 @@ module infinite_sea::roster {
             updated_coordinates,
             coordinates_updated_at,
             target_coordinates,
+            sail_duration: 0,
             ship_battle_id,
             environment_owned: false,
             base_experience: std::option::none(),
@@ -426,6 +436,7 @@ module infinite_sea::roster {
         roster_id: RosterId,
         version: u64,
         target_coordinates: Coordinates,
+        sail_duration: u64,
         set_sail_at: u64,
         updated_coordinates: Coordinates,
         energy_cost: u64,
@@ -443,6 +454,10 @@ module infinite_sea::roster {
         roster_set_sail.target_coordinates
     }
 
+    public fun roster_set_sail_sail_duration(roster_set_sail: &RosterSetSail): u64 {
+        roster_set_sail.sail_duration
+    }
+
     public fun roster_set_sail_set_sail_at(roster_set_sail: &RosterSetSail): u64 {
         roster_set_sail.set_sail_at
     }
@@ -458,6 +473,7 @@ module infinite_sea::roster {
     public(friend) fun new_roster_set_sail(
         roster: &Roster,
         target_coordinates: Coordinates,
+        sail_duration: u64,
         set_sail_at: u64,
         updated_coordinates: Coordinates,
         energy_cost: u64,
@@ -467,6 +483,7 @@ module infinite_sea::roster {
             roster_id: roster_id(roster),
             version: version(roster),
             target_coordinates,
+            sail_duration,
             set_sail_at,
             updated_coordinates,
             energy_cost,
@@ -794,6 +811,7 @@ module infinite_sea::roster {
             updated_coordinates: _updated_coordinates,
             coordinates_updated_at: _coordinates_updated_at,
             target_coordinates: _target_coordinates,
+            sail_duration: _sail_duration,
             ship_battle_id: _ship_battle_id,
             environment_owned: _environment_owned,
             base_experience: _base_experience,

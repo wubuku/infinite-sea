@@ -34,6 +34,8 @@ public interface RosterState extends VersionedSuiMoveObject
 
     Coordinates getTargetCoordinates();
 
+    BigInteger getSailDuration();
+
     String getShipBattleId();
 
     Boolean getEnvironmentOwned();
@@ -76,6 +78,8 @@ public interface RosterState extends VersionedSuiMoveObject
         void setCoordinatesUpdatedAt(BigInteger coordinatesUpdatedAt);
 
         void setTargetCoordinates(Coordinates targetCoordinates);
+
+        void setSailDuration(BigInteger sailDuration);
 
         void setShipBattleId(String shipBattleId);
 

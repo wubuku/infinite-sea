@@ -151,6 +151,7 @@ module infinite_sea::roster_aggregate {
         target_coordinates_y: u32,
         clock: &Clock,
         energy: Balance<ENERGY>,
+        sail_duration: u64,
         ctx: &mut tx_context::TxContext,
     ) {
         roster::assert_schema_version(roster);
@@ -163,6 +164,7 @@ module infinite_sea::roster_aggregate {
             target_coordinates,
             clock,
             &energy,
+            sail_duration,
             roster,
             ctx,
         );

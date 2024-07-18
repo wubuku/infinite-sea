@@ -243,6 +243,10 @@ aggregates:
       TargetCoordinates:
         type: Coordinates
         optional: true
+      SailDuration:
+        type: u64
+        defaultLogic:
+          Move: "0"
       ShipBattleId:
         type: ID
         optional: true
@@ -318,6 +322,8 @@ aggregates:
           Energy:
             type: "Balance<ENERGY>"
             eventPropertyName: EnergyCost
+          SailDuration:
+            type: u64
         event:
           name: RosterSetSail
           properties:

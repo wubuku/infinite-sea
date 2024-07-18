@@ -83,6 +83,10 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
         void setTargetCoordinates(Coordinates value);
 
+        BigInteger getSailDuration();
+
+        void setSailDuration(BigInteger value);
+
         BigInteger getSetSailAt();
 
         void setSetSailAt(BigInteger value);

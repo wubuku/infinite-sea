@@ -95,6 +95,16 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         this.targetCoordinates = targetCoordinates;
     }
 
+    private BigInteger sailDuration;
+
+    public BigInteger getSailDuration() {
+        return this.sailDuration;
+    }
+
+    public void setSailDuration(BigInteger sailDuration) {
+        this.sailDuration = sailDuration;
+    }
+
     private String shipBattleId;
 
     public String getShipBattleId() {
@@ -344,6 +354,7 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         this.setUpdatedCoordinates(s.getUpdatedCoordinates());
         this.setCoordinatesUpdatedAt(s.getCoordinatesUpdatedAt());
         this.setTargetCoordinates(s.getTargetCoordinates());
+        this.setSailDuration(s.getSailDuration());
         this.setShipBattleId(s.getShipBattleId());
         this.setEnvironmentOwned(s.getEnvironmentOwned());
         this.setBaseExperience(s.getBaseExperience());
@@ -558,6 +569,8 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
 
         Coordinates targetCoordinates = e.getTargetCoordinates();
         Coordinates TargetCoordinates = targetCoordinates;
+        BigInteger sailDuration = e.getSailDuration();
+        BigInteger SailDuration = sailDuration;
         BigInteger setSailAt = e.getSetSailAt();
         BigInteger SetSailAt = setSailAt;
         Coordinates updatedCoordinates = e.getUpdatedCoordinates();
@@ -593,14 +606,14 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         RosterState updatedRosterState = (RosterState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.SetSailLogic",
                     "mutate",
-                    new Class[]{RosterState.class, Coordinates.class, BigInteger.class, Coordinates.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, targetCoordinates, setSailAt, updatedCoordinates, energyCost, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{RosterState.class, Coordinates.class, BigInteger.class, BigInteger.class, Coordinates.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, targetCoordinates, sailDuration, setSailAt, updatedCoordinates, energyCost, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class SetSailLogic {
-//    public static RosterState mutate(RosterState rosterState, Coordinates targetCoordinates, BigInteger setSailAt, Coordinates updatedCoordinates, BigInteger energyCost, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
+//    public static RosterState mutate(RosterState rosterState, Coordinates targetCoordinates, BigInteger sailDuration, BigInteger setSailAt, Coordinates updatedCoordinates, BigInteger energyCost, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
 //    }
 //}
 

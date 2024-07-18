@@ -70,6 +70,8 @@ services:
             type: "Coin<ENERGY>"
           EnergyAmount:
             type: u64
+          SailDuration:
+            type: u64
 
 #      StartMutexCreation:
 #        parameters:

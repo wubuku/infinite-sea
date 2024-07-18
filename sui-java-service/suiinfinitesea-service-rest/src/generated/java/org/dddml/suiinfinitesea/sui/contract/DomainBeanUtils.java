@@ -721,6 +721,7 @@ public class DomainBeanUtils {
         rosterSetSail.setId_(contractEvent.getId());
         rosterSetSail.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
         rosterSetSail.setTargetCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getTargetCoordinates()));
+        rosterSetSail.setSailDuration(contractEvent.getSailDuration());
         rosterSetSail.setSetSailAt(contractEvent.getSetSailAt());
         rosterSetSail.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
         rosterSetSail.setEnergyCost(contractEvent.getEnergyCost());

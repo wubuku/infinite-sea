@@ -23,6 +23,8 @@ public class RosterSetSail {
 
     private CoordinatesForEvent targetCoordinates;
 
+    private BigInteger sailDuration;
+
     private BigInteger setSailAt;
 
     private CoordinatesForEvent updatedCoordinates;
@@ -61,6 +63,14 @@ public class RosterSetSail {
         this.targetCoordinates = targetCoordinates;
     }
 
+    public BigInteger getSailDuration() {
+        return sailDuration;
+    }
+
+    public void setSailDuration(BigInteger sailDuration) {
+        this.sailDuration = sailDuration;
+    }
+
     public BigInteger getSetSailAt() {
         return setSailAt;
     }
@@ -92,6 +102,7 @@ public class RosterSetSail {
                 ", rosterId=" + rosterId +
                 ", version=" + version +
                 ", targetCoordinates=" + targetCoordinates +
+                ", sailDuration=" + sailDuration +
                 ", setSailAt=" + setSailAt +
                 ", updatedCoordinates=" + updatedCoordinates +
                 ", energyCost=" + energyCost +

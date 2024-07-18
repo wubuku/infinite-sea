@@ -235,21 +235,22 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
            
 
-        protected RosterEvent.RosterSetSail verifySetSail(java.util.function.Supplier<RosterEvent.RosterSetSail> eventFactory, String player, Coordinates targetCoordinates, RosterCommands.SetSail c) {
+        protected RosterEvent.RosterSetSail verifySetSail(java.util.function.Supplier<RosterEvent.RosterSetSail> eventFactory, String player, Coordinates targetCoordinates, BigInteger sailDuration, RosterCommands.SetSail c) {
             String Player = player;
             Coordinates TargetCoordinates = targetCoordinates;
+            BigInteger SailDuration = sailDuration;
 
             RosterEvent.RosterSetSail e = (RosterEvent.RosterSetSail) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.SetSailLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), player, targetCoordinates, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, BigInteger.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), player, targetCoordinates, sailDuration, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class SetSailLogic {
-//    public static RosterEvent.RosterSetSail verify(java.util.function.Supplier<RosterEvent.RosterSetSail> eventFactory, RosterState rosterState, String player, Coordinates targetCoordinates, VerificationContext verificationContext) {
+//    public static RosterEvent.RosterSetSail verify(java.util.function.Supplier<RosterEvent.RosterSetSail> eventFactory, RosterState rosterState, String player, Coordinates targetCoordinates, BigInteger sailDuration, VerificationContext verificationContext) {
 //    }
 //}
 

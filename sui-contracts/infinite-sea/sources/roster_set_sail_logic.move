@@ -21,6 +21,7 @@ module infinite_sea::roster_set_sail_logic {
 
     const ERosterUnfitToSail: u64 = 10;
     const ENotEnoughEnergy: u64 = 11;
+    const EIllegalSailDuration: u64 = 12;
 
     const ENERGY_AMOUNT_PER_SECOND_PER_SHIP: u64 = 1388889;
     //const MIN_SAIL_ENERGY: u64 = 500;
@@ -30,6 +31,7 @@ module infinite_sea::roster_set_sail_logic {
         target_coordinates: Coordinates,
         clock: &Clock,
         energy: &Balance<ENERGY>,
+        sail_duration: u64,
         roster: &roster::Roster,
         ctx: &TxContext,
     ): roster::RosterSetSail {
@@ -54,11 +56,12 @@ module infinite_sea::roster_set_sail_logic {
         let energy_cost = balance::value(energy);
         let total_time = roster_util::calculate_total_time(updated_coordinates, target_coordinates,
             roster::speed(roster));
+        assert!(sail_duration >= total_time, EIllegalSailDuration);
         let ship_count = vector::length(roster::borrow_ship_ids(roster));
         //assert!(energy_cost >= MIN_SAIL_ENERGY, ENotEnoughEnergy);
         assert!(energy_cost >= total_time * ship_count * ENERGY_AMOUNT_PER_SECOND_PER_SHIP, ENotEnoughEnergy);
         let set_sail_at = clock::timestamp_ms(clock) / 1000;
-        roster::new_roster_set_sail(roster, target_coordinates, set_sail_at, updated_coordinates, energy_cost)
+        roster::new_roster_set_sail(roster, target_coordinates, sail_duration, set_sail_at, updated_coordinates, energy_cost)
     }
 
     public(friend) fun mutate(
@@ -71,7 +74,7 @@ module infinite_sea::roster_set_sail_logic {
         let set_sail_at = roster::roster_set_sail_set_sail_at(roster_set_sail);
         let updated_coordinates = roster::roster_set_sail_updated_coordinates(roster_set_sail);
         //let roster_id = roster::roster_id(roster);
-
+        let sail_duration = roster::roster_set_sail_sail_duration(roster_set_sail);
         roster::set_updated_coordinates(roster, updated_coordinates); // update current location first
         roster::set_target_coordinates(roster, option::some(target_coordinates));
         roster::set_coordinates_updated_at(roster, set_sail_at);
@@ -80,7 +83,7 @@ module infinite_sea::roster_set_sail_logic {
         } else {
             roster::set_status(roster, roster_status::at_anchor());
         };
-
+        roster::set_sail_duration(roster, sail_duration);
         let energy_vault = roster::borrow_mut_energy_vault(roster);
         balance::join(energy_vault, energy);
     }

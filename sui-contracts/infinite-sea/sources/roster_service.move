@@ -17,9 +17,10 @@ module infinite_sea::roster_service {
         clock: &Clock,
         energy: Coin<ENERGY>,
         energy_amount: u64,
+        sail_duration: u64,
         ctx: &mut tx_context::TxContext,
     ) {
         let energy_b = coin_util::split_up_and_into_balance(energy, energy_amount, ctx);
-        roster_aggregate::set_sail(roster, player, target_coordinates_x, target_coordinates_y, clock, energy_b, ctx);
+        roster_aggregate::set_sail(roster, player, target_coordinates_x, target_coordinates_y, clock, energy_b, sail_duration, ctx);
     }
 }

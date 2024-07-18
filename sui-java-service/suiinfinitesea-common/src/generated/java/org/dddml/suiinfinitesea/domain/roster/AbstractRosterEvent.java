@@ -438,6 +438,18 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
             getDynamicProperties().put("targetCoordinates", value);
         }
 
+        public BigInteger getSailDuration() {
+            Object val = getDynamicProperties().get("sailDuration");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setSailDuration(BigInteger value) {
+            getDynamicProperties().put("sailDuration", value);
+        }
+
         public BigInteger getSetSailAt() {
             Object val = getDynamicProperties().get("setSailAt");
             if (val instanceof BigInteger) {

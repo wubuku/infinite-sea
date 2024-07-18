@@ -177,8 +177,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.roster.SetSailLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, VerificationContext.class},
-                    new String[]{"_", "_", "player", "targetCoordinates"}
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, BigInteger.class, VerificationContext.class},
+                    new String[]{"_", "_", "player", "targetCoordinates", "sailDuration"}
             );
 
 
