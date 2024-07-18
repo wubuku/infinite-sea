@@ -18,10 +18,6 @@ public interface FaucetRequestedCommand extends Command {
 
     void setEventId(String eventId);
 
-    String getId_();
-
-    void setId_(String id);
-
     Long getOffChainVersion();
 
     void setOffChainVersion(Long offChainVersion);

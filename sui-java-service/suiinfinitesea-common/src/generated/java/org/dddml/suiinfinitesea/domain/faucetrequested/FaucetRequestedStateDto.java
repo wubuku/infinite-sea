@@ -27,18 +27,6 @@ public class FaucetRequestedStateDto {
         this.eventId = eventId;
     }
 
-    private String id_;
-
-    public String getId_()
-    {
-        return this.id_;
-    }
-
-    public void setId_(String id)
-    {
-        this.id_ = id;
-    }
-
     private String requesterAccount;
 
     public String getRequesterAccount()
@@ -286,9 +274,6 @@ public class FaucetRequestedStateDto {
             FaucetRequestedStateDto dto = new FaucetRequestedStateDto();
             if (returnedFieldsContains("EventId")) {
                 dto.setEventId(state.getEventId());
-            }
-            if (returnedFieldsContains("Id_")) {
-                dto.setId_(state.getId_());
             }
             if (returnedFieldsContains("RequesterAccount")) {
                 dto.setRequesterAccount(state.getRequesterAccount());

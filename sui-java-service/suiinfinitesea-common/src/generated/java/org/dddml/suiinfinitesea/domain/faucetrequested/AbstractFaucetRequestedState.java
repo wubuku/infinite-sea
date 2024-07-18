@@ -24,16 +24,6 @@ public abstract class AbstractFaucetRequestedState implements FaucetRequestedSta
         this.eventId = eventId;
     }
 
-    private String id_;
-
-    public String getId_() {
-        return this.id_;
-    }
-
-    public void setId_(String id) {
-        this.id_ = id;
-    }
-
     private String requesterAccount;
 
     public String getRequesterAccount() {

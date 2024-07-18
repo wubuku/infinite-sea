@@ -28,6 +28,7 @@ aggregates:
       name: EventId
       type: string
       length: 100
+    noSurrogateId: true
     properties:
       RequesterAccount:
         type: address

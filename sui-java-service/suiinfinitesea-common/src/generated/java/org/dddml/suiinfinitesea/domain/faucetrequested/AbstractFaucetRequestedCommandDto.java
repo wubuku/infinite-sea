@@ -28,21 +28,6 @@ public abstract class AbstractFaucetRequestedCommandDto extends AbstractCommand 
     }
 
     /**
-     * Id
-     */
-    private String id_;
-
-    public String getId_()
-    {
-        return this.id_;
-    }
-
-    public void setId_(String id)
-    {
-        this.id_ = id;
-    }
-
-    /**
      * Off Chain Version
      */
     private Long offChainVersion;

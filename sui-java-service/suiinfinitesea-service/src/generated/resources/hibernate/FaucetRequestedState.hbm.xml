@@ -6,9 +6,6 @@
       <generator class="assigned" />
     </id>
     <version name="offChainVersion" column="off_chain_version" type="long" />
-    <property name="id_">
-      <column name="id" unique-key="unique_faucetrequested_sid" sql-type="VARCHAR(66)" />
-    </property>
     <property name="requesterAccount">
       <column name="requester_account" sql-type="VARCHAR(66)" />
     </property>

@@ -20,8 +20,6 @@ public interface FaucetRequestedState extends SuiMoveEvent, SuiEventEnvelope, Ha
 
     String getEventId();
 
-    String getId_();
-
     String getRequesterAccount();
 
     BigInteger getRequestedAmount();
@@ -46,8 +44,6 @@ public interface FaucetRequestedState extends SuiMoveEvent, SuiEventEnvelope, Ha
 
     interface MutableFaucetRequestedState extends FaucetRequestedState, SuiMoveEvent.MutableSuiMoveEvent, SuiEventEnvelope.MutableSuiEventEnvelope, HasSuiEventNextCursor.MutableHasSuiEventNextCursor, VersionedSuiMoveObject.MutableVersionedSuiMoveObject {
         void setEventId(String eventId);
-
-        void setId_(String id);
 
         void setRequesterAccount(String requesterAccount);
 
