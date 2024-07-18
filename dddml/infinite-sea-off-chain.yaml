@@ -1,4 +1,7 @@
 aggregates:
+  #
+  # These entities are only used in the off-chain service (indexer).
+  #
   RosterLocation:
     id:
       name: RosterObjectId
@@ -15,10 +18,12 @@ aggregates:
   FaucetRequested:
     metadata:
       AbsolutelyNoEventSourcing: true
+      # This option disables the generation of event-sourcing related code.
     implements:
       - SuiMoveEvent
       - SuiEventEnvelope
       - HasSuiEventNextCursor
+      # These "built-in" interfaces are introduced to add properties to the entity that are needed to save on-chain events.
     id:
       name: EventId
       type: string
@@ -31,4 +36,3 @@ aggregates:
       Description:
         type: string
         length: 500
-
