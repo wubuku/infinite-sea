@@ -224,48 +224,49 @@ wubuku/dddappp-sui:master \
 ```json
 {
   "coin": {
-    "PackageId": "0x157943c5f64cb924a40e1cfba8437e5e6d85249fa77262ed65a856f708df4d80",
-    "TreasuryCap": "0x354eddc06ca3f0f61ade641d5edafa2ec679b9cc5db6280a000bc3dcdc5d4766",
-    "Digest": "CDBdK67Y3UvNG8x2hN6QdLkDBiXvD2rrFBD4M1F2b1x5",
-    "EnergyId": "0x35c4d827137baaca7be6fabf1f45f9fd9ee489d06ff9b6cc7599c0085fb31b3c"
+    "TreasuryCap": "0x1dcd99f59ca470582f70936385f697e148b363bb6684b6ae0c6183be86097b26",
+    "PackageId": "0x4746eaeb43dbeb387e18cb7cc8563036683116c0964366b1062c836aef246854",
+    "Digest": "8hX7wrfTUUJmrvzeWbFmxiF1PAJAuMGsYstVeFAQ8H2d",
+    "EnergyId": "0xec81725b38800aa78ff0b8a841bed615ce98f310cc29f61c12650c4561c32b6c"
   },
   "common": {
-    "Digest": "6tRYd94PLXGqrvrtgD2NBnX7qksPe12XprYW7CbDWuFv",
-    "PackageId": "0x41fdf0dbe81664e71579973d1de6fe6f266a538f29918eef8d14a8fb8cf90d0d",
-    "ExperienceTable": "0x47711cdc34e04a5a41de08f3b65b023c9ab8627be638c68304892c496316f99e",
-    "ItemTable": "0x8ad22bbde2f48662d0de579bfb0e56a2c6d186ecfe41b9b44e90cb55fbc5b50c",
-    "ItemProductionTable": "0xaade66a31bed2dc7b910399d925eeff295fab38d8624609272f2d5247f8223ac",
-    "Publisher": "0xd27ddbe8c23f0d2f38ce5a428168aa6d867c8463e61ed9f229f957d400568a9e",
-    "ItemCreationTable": "0xd57b2d6af07aae165acfd5819cf8b4527571d5f8ce730ca8c39443ab6e3e6497",
-    "ItemCreationMining": "0x78af2659415f12569c2e534e68a0991387aac10ffd48f2cc3817525ec570f21e",
-    "ItemProductionFarming": "0x560bdf9526aab054f037029aa52c73a23af6a962ca53d472b4954050b5cb320e",
-    "ItemCreationWooding": "0xa2e47227ea07fca4004c88955373eaef66923268f4a3183de5049e6df5c94e57",
-    "ItemProductionCrafting": "0x151ac891f095f139a4e7aa2fe5837db3907bd17fe79b71de63c31854ffcbdcca"
+    "Digest": "rLF7HBUf4eSpx7exrdE5iFx7AB4UcJqJ8BvVwcuB93v",
+    "Publisher": "0x27b1d98dd724378bcccc439a3c7097812a74771a74a09cd031b72a9f5bebe15f",
+    "ItemCreationTable": "0x6af5db77fce14a346d4fd617470d9a3bcc4ca336a607f1a2dbfda95542130834",
+    "ItemProductionTable": "0x761bdd9ea7c9ba6481271a118026026207e95159e1424689ea7ea8e387438b64",
+    "ExperienceTable": "0x7a6ded7ce1524b65adaad83e441cdcf632012f462ce4d7379af70d129bbdbe4a",
+    "PackageId": "0x8f4583fe5eac25cc0b9a6ae874f3899036d077d87a09961faa521fcdde1b74c2",
+    "ItemTable": "0xbd64e5f6f82ba3dd3dc626a30e8f936132be45772eafb7668e454174edd6c124",
+    "ItemCreationMining": "0x65d75ae0e7294001486f43122b4063bced5b4b1aed43ac63caca255b09970989",
+    "ItemProductionFarming": "0xa06f87828317f9348be7687d0b5c85b128ba17d7708d8937f1214af017c6952a",
+    "ItemCreationWooding": "0xd6a95bae2999cc5ff13516650093df94bd27e60d4ed31b578f9eccc7b218d274",
+    "ItemProductionCrafting": "0x5135e0936a260b14d54a0c5107aee5b3845551ac0b1e1874e7b83fc05bd35738"
   },
   "main": {
-    "Digest": "HraALNfMYEpciCvCFYQvTtU8ENYo7jbPrUWTNZm7TCGx",
-    "Publisher": "0x127358c1c5b111b6a58efbeb585386597072d4767ccb9580c124e6771662c66f",
-    "AdminCap": "0x1f7531a8f9fc88a04eba2216761bb03036224118bf4984bdfa29ae3d63ed1cda",
-    "Map": "0x27ef041f823083360bdf7c8de900977b49859970373bb2d453b6deaad0604b96",
-    "UpgradeCap": "0x4aadf4ffc8fef7abb4c674ad4806ce291916a91594fd90b5ef3df5e09f15ddd7",
-    "RosterTable": "0x54ef7d7e46e38464555df08e86674709a3d89b69cdf1c6b2fc54747174b9e2c3",
-    "SkillProcessTable": "0xaab072ef5700498dbdf48fe14fc10f490bfdf0ad7c3f39fdb3f1f14409920156",
-    "PackageId": "0xf77a599ca55624030e3fc68074284a0abffe82c0dc42fa659758c4b65f5cb25f"
+    "Digest": "79H63am7QGzCoFWvu8eaoEGRjA5sQ6AQAJTeuYYD8ZrS",
+    "UpgradeCap": "0x194ede61d17d69ba7edd4529e8a55344d22a6502bf8b86e2e5372d67b29ba118",
+    "RosterTable": "0x27b285bb0293f1996bb252be192d63d359662b501b470279013bbeb9a41769a0",
+    "Map": "0x3f8981264066b2b49c5c97b85b5fd468b786e54dd73e2e76ace9220c625288d7",
+    "PackageId": "0x572c6186f229825cd2a9ba97ebb98705b3c188fa7277779b89fe99627b72ee66",
+    "Publisher": "0x624e401146cec6e965f0ef16930b7eae498edf3cccfd02567146ea935ed02ad0",
+    "AdminCap": "0x9cb476ce137268fa0d7dc596b9f73a9450e242cbb467b9ceae6224cf7e90e98c",
+    "SkillProcessTable": "0xfa544ef39d3c1deaddb1b3f2df552680ff425c310fe82eddee6a63b768520394"
   },
   "faucet": {
-    "PackageId": "0x28ace34b9b9dd0f662999608a433fc69a33baa7282a48e7cef00b3a53153a258",
-    "EnergyFaucet": "0x6bfb627b038026384e25b5c33a37f79f32edf83169972ad48bea6536e2e8baac",
-    "Digest": "8nGniWSXEJnSWKNfbUZ8GyEE23s7WFwU2kEUaRuDrsrg"
+    "PackageId": "0x0597f363495b0be4f33a09573d9cd6ad958326208aa71d5baa0a809376cbab1f",
+    "EnergyFaucet": "0x5d4674a2aca02888dbec72f759201ceac9d46d959b97892087ed05ba7c8bc108",
+    "Digest": "HmWca3xrx6G2nrxkPdbDSJ5KYvCEkiwvux1JKppS8duC"
   },
   "nft": {
-    "Publisher": "0x20867ff6b64ce33dff55a1ed7db18735db1bbc044ea4a8a6347139161690bf1f",
-    "Whitelist": "0x2fca1fc82e9207e24707efccec320c27e818e503fabcc44aa7fe7a7b9e3596d1",
-    "AvatarChangeTable": "0x635983337b3b586c582bc8ac996594b2651a64b9412ee5dae4f1f5d53ac2e81b",
-    "AvatarDisplay": "0xab174edaca2cbb790a3b1680b5f9c94416f75c4bff443c623f4ac42c3435f6fc",
-    "PackageId": "0xe9f59747a72516dfddd50b4d0a5bf451bae1ea1a000c50edd9dbf6b13697e32c",
-    "Digest": "DbNEuznBqRk8MCRV1ojfinH8ipak6b5FP5vdfPgbAhDD"
+    "PackageId": "0x1c529798e92453082b597cee7a1e3ad48136ce41cd37a96c58d380e5f0f9db39",
+    "Publisher": "0x27f17ea8f73a587c4c4f3590ff367c2d8474bb6f8a6c9fcf0b92e25d6d312180",
+    "Whitelist": "0x407b3078422a48a0791e2165417ab1c104a8e2edfe4c6cdceca30c523f97349d",
+    "AvatarChangeTable": "0x6223cce95aec2b5b274721b359f9b0dd6bbde7776bfdd79835284c25a62c2620",
+    "AvatarDisplay": "0xa0730de22dc1e7d3c3d8ba68d02de9f833e85eed6220db2f8a1fa65d39a0e69f",
+    "Digest": "DMpZa54vGygHebDbmiMMqaEFE9Qb772kDYDwD2s2iMWu"
   }
 }
+
 
 
 ```
@@ -2232,7 +2233,8 @@ sui client call --package {main.PackageId} \
 {clock} \
 {energyId} \
 {energy_amount} \
---gas-budget 11000000 --json
+{sail_duration} \
+--json
 ```
 
 参数解释：
@@ -2245,6 +2247,7 @@ sui client call --package {main.PackageId} \
 * `{clock}`：类型为 `&Clock`。时钟对象 ID，固定值 `0x6`。
 * `{energyId}`：类型为 `Coin<ENERGY>`。CLI 中可传入能量币（`ENERGY`）的 Object ID。
 * `{energy_amount}`：类型为 `u64`。本次航行需要花费能量币（`ENERGY`）数量。
+* `{sail_duration}`：类型为 `u64`。前端传递的一个距离值。
 
 ### 更新船队位置
 

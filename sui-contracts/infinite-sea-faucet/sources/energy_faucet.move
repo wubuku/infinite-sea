@@ -1,10 +1,13 @@
 module infinite_sea_faucet::energy_faucet {
+    use std::string::{String, utf8};
+
     use sui::balance;
     use sui::balance::Balance;
     use sui::clock;
     use sui::clock::Clock;
     use sui::coin;
     use sui::coin::Coin;
+    use sui::event;
     use sui::object;
     use sui::object::UID;
     use sui::package;
@@ -13,9 +16,14 @@ module infinite_sea_faucet::energy_faucet {
     use sui::transfer;
     use sui::tx_context;
     use sui::tx_context::TxContext;
-
     use infinite_sea_coin::energy::ENERGY;
 
+    #[test_only]
+    use std::debug;
+    #[test_only]
+    use sui::test_scenario;
+    #[test_only]
+    use sui::test_utils;
 
     #[allow(unused_const)]
     const EInvalidPublisher: u64 = 50;
@@ -36,6 +44,13 @@ module infinite_sea_faucet::energy_faucet {
     struct GrantRecord has store {
         amount: u64,
         grantedAt: u64
+    }
+
+    //Request event
+    struct FaucetRequested has copy, drop {
+        account: address,
+        amount: u64,
+        description: String
     }
 
     /// a "hot-potato"
@@ -71,6 +86,7 @@ module infinite_sea_faucet::energy_faucet {
         };
         let grant = balance::split(&mut faucet.balance, A_DROP_AMOUNT);
         transfer::public_transfer(coin::from_balance(grant, ctx), account_address);
+        event::emit(FaucetRequested { account: account_address, amount: A_DROP_AMOUNT, description: utf8(b"") });
     }
 
     /// Replenish
@@ -112,13 +128,6 @@ module infinite_sea_faucet::energy_faucet {
     }
 
     // ------------ tests ------------
-
-    #[test_only]
-    use std::debug;
-    #[test_only]
-    use sui::test_scenario;
-    #[test_only]
-    use sui::test_utils;
 
     #[allow(unused_const)]
     #[test_only]
