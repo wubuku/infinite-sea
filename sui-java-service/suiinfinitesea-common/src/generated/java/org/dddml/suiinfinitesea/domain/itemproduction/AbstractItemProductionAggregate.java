@@ -130,13 +130,13 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
             ItemProductionEventId eventId = new ItemProductionEventId(getState().getItemProductionId(), null);
             AbstractItemProductionEvent.ItemProductionCreated e = new AbstractItemProductionEvent.ItemProductionCreated();
 
-            e.setProductionMaterials(productionMaterials);
-            e.setRequirementsLevel(requirementsLevel);
-            e.setBaseQuantity(baseQuantity);
-            e.setBaseExperience(baseExperience);
-            e.setBaseCreationTime(baseCreationTime);
-            e.setEnergyCost(energyCost);
-            e.setSuccessRate(successRate);
+            e.getDynamicProperties().put("productionMaterials", productionMaterials);
+            e.getDynamicProperties().put("requirementsLevel", requirementsLevel);
+            e.getDynamicProperties().put("baseQuantity", baseQuantity);
+            e.getDynamicProperties().put("baseExperience", baseExperience);
+            e.getDynamicProperties().put("baseCreationTime", baseCreationTime);
+            e.getDynamicProperties().put("energyCost", energyCost);
+            e.getDynamicProperties().put("successRate", successRate);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -158,13 +158,13 @@ public abstract class AbstractItemProductionAggregate extends AbstractAggregate 
             ItemProductionEventId eventId = new ItemProductionEventId(getState().getItemProductionId(), null);
             AbstractItemProductionEvent.ItemProductionUpdated e = new AbstractItemProductionEvent.ItemProductionUpdated();
 
-            e.setProductionMaterials(productionMaterials);
-            e.setRequirementsLevel(requirementsLevel);
-            e.setBaseQuantity(baseQuantity);
-            e.setBaseExperience(baseExperience);
-            e.setBaseCreationTime(baseCreationTime);
-            e.setEnergyCost(energyCost);
-            e.setSuccessRate(successRate);
+            e.getDynamicProperties().put("productionMaterials", productionMaterials);
+            e.getDynamicProperties().put("requirementsLevel", requirementsLevel);
+            e.getDynamicProperties().put("baseQuantity", baseQuantity);
+            e.getDynamicProperties().put("baseExperience", baseExperience);
+            e.getDynamicProperties().put("baseCreationTime", baseCreationTime);
+            e.getDynamicProperties().put("energyCost", energyCost);
+            e.getDynamicProperties().put("successRate", successRate);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

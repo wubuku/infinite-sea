@@ -2,6 +2,8 @@ configuration:
   sequenceNumber: 1000
   metadata:
     NO_MOVE_EVENT_MODULE: true
+    AlwaysGeneratingEventClobProperties: false
+    AlwaysGeneratingClobEventProperties: false
 
   defaultModule:
     name: "Sui.InfiniteSea"
@@ -15,6 +17,9 @@ configuration:
     eventProcessingInterfaceName: HasEventStatus
     eventProcessingStatusPropertyName: EventStatus
     eventProcessingStatusPropertyType: indicator
+    eventLobPropertiesEnabled: true
+    eventLobPropertiesSqlType: json
+    #stateLobPropertiesEnabled: true
 
   sqlTypes:
     #ProductionMaterials: "json"

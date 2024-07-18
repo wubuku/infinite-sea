@@ -196,8 +196,8 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
             MapEventId eventId = new MapEventId(getState().getId(), null);
             AbstractMapEvent.IslandAdded e = new AbstractMapEvent.IslandAdded();
 
-            e.setCoordinates(coordinates);
-            e.setResources(resources);
+            e.getDynamicProperties().put("coordinates", coordinates);
+            e.getDynamicProperties().put("resources", resources);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -219,9 +219,9 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
             MapEventId eventId = new MapEventId(getState().getId(), null);
             AbstractMapEvent.MapIslandClaimed e = new AbstractMapEvent.MapIslandClaimed();
 
-            e.setCoordinates(coordinates);
-            e.setClaimedBy(claimedBy);
-            e.setClaimedAt(claimedAt);
+            e.getDynamicProperties().put("coordinates", coordinates);
+            e.getDynamicProperties().put("claimedBy", claimedBy);
+            e.getDynamicProperties().put("claimedAt", claimedAt);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

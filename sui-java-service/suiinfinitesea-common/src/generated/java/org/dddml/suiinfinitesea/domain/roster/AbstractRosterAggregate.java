@@ -399,12 +399,12 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterCreated e = new AbstractRosterEvent.RosterCreated();
 
-            e.setStatus(status);
-            e.setSpeed(speed);
-            e.setUpdatedCoordinates(updatedCoordinates);
-            e.setCoordinatesUpdatedAt(coordinatesUpdatedAt);
-            e.setTargetCoordinates(targetCoordinates);
-            e.setShipBattleId(shipBattleId);
+            e.getDynamicProperties().put("status", status);
+            e.getDynamicProperties().put("speed", speed);
+            e.getDynamicProperties().put("updatedCoordinates", updatedCoordinates);
+            e.getDynamicProperties().put("coordinatesUpdatedAt", coordinatesUpdatedAt);
+            e.getDynamicProperties().put("targetCoordinates", targetCoordinates);
+            e.getDynamicProperties().put("shipBattleId", shipBattleId);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -426,10 +426,10 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.EnvironmentRosterCreated e = new AbstractRosterEvent.EnvironmentRosterCreated();
 
-            e.setCoordinates(coordinates);
-            e.setShipResourceQuantity(shipResourceQuantity);
-            e.setShipBaseResourceQuantity(shipBaseResourceQuantity);
-            e.setBaseExperience(baseExperience);
+            e.getDynamicProperties().put("coordinates", coordinates);
+            e.getDynamicProperties().put("shipResourceQuantity", shipResourceQuantity);
+            e.getDynamicProperties().put("shipBaseResourceQuantity", shipBaseResourceQuantity);
+            e.getDynamicProperties().put("baseExperience", baseExperience);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -451,8 +451,8 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterShipAdded e = new AbstractRosterEvent.RosterShipAdded();
 
-            e.setShip(ship);
-            e.setPosition(position);
+            e.getDynamicProperties().put("ship", ship);
+            e.getDynamicProperties().put("position", position);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -498,8 +498,8 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterShipsPositionAdjusted e = new AbstractRosterEvent.RosterShipsPositionAdjusted();
 
-            e.setPositions(positions);
-            e.setShipIds(shipIds);
+            e.getDynamicProperties().put("positions", positions);
+            e.getDynamicProperties().put("shipIds", shipIds);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -521,9 +521,9 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterShipTransferred e = new AbstractRosterEvent.RosterShipTransferred();
 
-            e.setShipId(shipId);
+            e.getDynamicProperties().put("shipId", shipId);
             e.setToRosterId(null);
-            e.setToPosition(toPosition);
+            e.getDynamicProperties().put("toPosition", toPosition);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -545,9 +545,9 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterShipInventoryTransferred e = new AbstractRosterEvent.RosterShipInventoryTransferred();
 
-            e.setFromShipId(fromShipId);
-            e.setToShipId(toShipId);
-            e.setItemIdQuantityPairs(itemIdQuantityPairs);
+            e.getDynamicProperties().put("fromShipId", fromShipId);
+            e.getDynamicProperties().put("toShipId", toShipId);
+            e.getDynamicProperties().put("itemIdQuantityPairs", itemIdQuantityPairs);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -569,8 +569,8 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterShipInventoryTakenOut e = new AbstractRosterEvent.RosterShipInventoryTakenOut();
 
-            e.setShipId(shipId);
-            e.setItemIdQuantityPairs(itemIdQuantityPairs);
+            e.getDynamicProperties().put("shipId", shipId);
+            e.getDynamicProperties().put("itemIdQuantityPairs", itemIdQuantityPairs);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -592,8 +592,8 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterShipInventoryPutIn e = new AbstractRosterEvent.RosterShipInventoryPutIn();
 
-            e.setShipId(shipId);
-            e.setItemIdQuantityPairs(itemIdQuantityPairs);
+            e.getDynamicProperties().put("shipId", shipId);
+            e.getDynamicProperties().put("itemIdQuantityPairs", itemIdQuantityPairs);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

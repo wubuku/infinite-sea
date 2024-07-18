@@ -186,13 +186,13 @@ public abstract class AbstractItemCreationEvent extends AbstractEvent implements
 
     public abstract String getEventType();
 
-    public static class ItemCreationClobEvent extends AbstractItemCreationEvent {
+    public static class ItemCreationLobEvent extends AbstractItemCreationEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -201,28 +201,14 @@ public abstract class AbstractItemCreationEvent extends AbstractEvent implements
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "ItemCreationClobEvent";
+            return "ItemCreationLobEvent";
         }
 
     }
 
-    public static class ItemCreationCreated extends ItemCreationClobEvent implements ItemCreationEvent.ItemCreationCreated {
+    public static class ItemCreationCreated extends ItemCreationLobEvent implements ItemCreationEvent.ItemCreationCreated {
 
         @Override
         public String getEventType() {
@@ -315,7 +301,7 @@ public abstract class AbstractItemCreationEvent extends AbstractEvent implements
 
     }
 
-    public static class ItemCreationUpdated extends ItemCreationClobEvent implements ItemCreationEvent.ItemCreationUpdated {
+    public static class ItemCreationUpdated extends ItemCreationLobEvent implements ItemCreationEvent.ItemCreationUpdated {
 
         @Override
         public String getEventType() {

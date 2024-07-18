@@ -39,9 +39,12 @@
       <column name="event_status" sql-type="CHAR(1)" />
     </property>
     <property name="commandType" column="command_type" length="50" />
-    <subclass name="AbstractPlayerEvent$PlayerClobEvent" discriminator-value="PlayerClobEvent">
-      <property name="dynamicPropertiesLob">
-        <column name="dynamic_properties_lob" sql-type="VARCHAR(2000)" />
+    <subclass name="AbstractPlayerEvent$PlayerLobEvent" discriminator-value="PlayerLobEvent">
+      <property name="dynamicProperties">
+        <column name="dynamic_properties" sql-type="json" />
+        <type name="io.hypersistence.utils.hibernate.type.json.JsonType">
+          <param name="org.hibernate.type.ParameterType">java.util.HashMap</param>
+        </type>
       </property>
       <subclass name="AbstractPlayerEvent$PlayerCreated" discriminator-value="PlayerCreated" />
       <subclass name="AbstractPlayerEvent$IslandClaimed" discriminator-value="IslandClaimed" />

@@ -176,13 +176,13 @@ public abstract class AbstractShipEvent extends AbstractEvent implements ShipEve
 
     public abstract String getEventType();
 
-    public static class ShipClobEvent extends AbstractShipEvent {
+    public static class ShipLobEvent extends AbstractShipEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -191,28 +191,14 @@ public abstract class AbstractShipEvent extends AbstractEvent implements ShipEve
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "ShipClobEvent";
+            return "ShipLobEvent";
         }
 
     }
 
-    public static class ShipCreated extends ShipClobEvent implements ShipEvent.ShipCreated {
+    public static class ShipCreated extends ShipLobEvent implements ShipEvent.ShipCreated {
 
         @Override
         public String getEventType() {

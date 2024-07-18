@@ -176,13 +176,13 @@ public abstract class AbstractAvatarEvent extends AbstractEvent implements Avata
 
     public abstract String getEventType();
 
-    public static class AvatarClobEvent extends AbstractAvatarEvent {
+    public static class AvatarLobEvent extends AbstractAvatarEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -191,28 +191,14 @@ public abstract class AbstractAvatarEvent extends AbstractEvent implements Avata
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "AvatarClobEvent";
+            return "AvatarLobEvent";
         }
 
     }
 
-    public static class AvatarMinted extends AvatarClobEvent implements AvatarEvent.AvatarMinted {
+    public static class AvatarMinted extends AvatarLobEvent implements AvatarEvent.AvatarMinted {
 
         @Override
         public String getEventType() {
@@ -437,7 +423,7 @@ public abstract class AbstractAvatarEvent extends AbstractEvent implements Avata
 
     }
 
-    public static class AvatarUpdated extends AvatarClobEvent implements AvatarEvent.AvatarUpdated {
+    public static class AvatarUpdated extends AvatarLobEvent implements AvatarEvent.AvatarUpdated {
 
         @Override
         public String getEventType() {
@@ -446,7 +432,7 @@ public abstract class AbstractAvatarEvent extends AbstractEvent implements Avata
 
     }
 
-    public static class AvatarBurned extends AvatarClobEvent implements AvatarEvent.AvatarBurned {
+    public static class AvatarBurned extends AvatarLobEvent implements AvatarEvent.AvatarBurned {
 
         @Override
         public String getEventType() {
@@ -455,7 +441,7 @@ public abstract class AbstractAvatarEvent extends AbstractEvent implements Avata
 
     }
 
-    public static class AvatarWhitelistMinted extends AvatarClobEvent implements AvatarEvent.AvatarWhitelistMinted {
+    public static class AvatarWhitelistMinted extends AvatarLobEvent implements AvatarEvent.AvatarWhitelistMinted {
 
         @Override
         public String getEventType() {

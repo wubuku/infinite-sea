@@ -122,9 +122,9 @@ public abstract class AbstractItemAggregate extends AbstractAggregate implements
             ItemEventId eventId = new ItemEventId(getState().getItemId(), null);
             AbstractItemEvent.ItemCreated e = new AbstractItemEvent.ItemCreated();
 
-            e.setName(name);
-            e.setRequiredForCompletion(requiredForCompletion);
-            e.setSellsFor(sellsFor);
+            e.getDynamicProperties().put("name", name);
+            e.getDynamicProperties().put("requiredForCompletion", requiredForCompletion);
+            e.getDynamicProperties().put("sellsFor", sellsFor);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -146,9 +146,9 @@ public abstract class AbstractItemAggregate extends AbstractAggregate implements
             ItemEventId eventId = new ItemEventId(getState().getItemId(), null);
             AbstractItemEvent.ItemUpdated e = new AbstractItemEvent.ItemUpdated();
 
-            e.setName(name);
-            e.setRequiredForCompletion(requiredForCompletion);
-            e.setSellsFor(sellsFor);
+            e.getDynamicProperties().put("name", name);
+            e.getDynamicProperties().put("requiredForCompletion", requiredForCompletion);
+            e.getDynamicProperties().put("sellsFor", sellsFor);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

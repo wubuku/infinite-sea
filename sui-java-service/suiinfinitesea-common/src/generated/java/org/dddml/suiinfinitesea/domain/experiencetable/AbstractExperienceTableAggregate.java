@@ -163,9 +163,9 @@ public abstract class AbstractExperienceTableAggregate extends AbstractAggregate
             ExperienceTableEventId eventId = new ExperienceTableEventId(getState().getId(), null);
             AbstractExperienceTableEvent.ExperienceLevelAdded e = new AbstractExperienceTableEvent.ExperienceLevelAdded();
 
-            e.setLevel(level);
-            e.setExperience(experience);
-            e.setDifference(difference);
+            e.getDynamicProperties().put("level", level);
+            e.getDynamicProperties().put("experience", experience);
+            e.getDynamicProperties().put("difference", difference);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -187,9 +187,9 @@ public abstract class AbstractExperienceTableAggregate extends AbstractAggregate
             ExperienceTableEventId eventId = new ExperienceTableEventId(getState().getId(), null);
             AbstractExperienceTableEvent.ExperienceLevelUpdated e = new AbstractExperienceTableEvent.ExperienceLevelUpdated();
 
-            e.setLevel(level);
-            e.setExperience(experience);
-            e.setDifference(difference);
+            e.getDynamicProperties().put("level", level);
+            e.getDynamicProperties().put("experience", experience);
+            e.getDynamicProperties().put("difference", difference);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

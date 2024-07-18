@@ -186,13 +186,13 @@ public abstract class AbstractAvatarChangeEvent extends AbstractEvent implements
 
     public abstract String getEventType();
 
-    public static class AvatarChangeClobEvent extends AbstractAvatarChangeEvent {
+    public static class AvatarChangeLobEvent extends AbstractAvatarChangeEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -201,28 +201,14 @@ public abstract class AbstractAvatarChangeEvent extends AbstractEvent implements
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "AvatarChangeClobEvent";
+            return "AvatarChangeLobEvent";
         }
 
     }
 
-    public static class AvatarChangeCreated extends AvatarChangeClobEvent implements AvatarChangeEvent.AvatarChangeCreated {
+    public static class AvatarChangeCreated extends AvatarChangeLobEvent implements AvatarChangeEvent.AvatarChangeCreated {
 
         @Override
         public String getEventType() {
@@ -363,7 +349,7 @@ public abstract class AbstractAvatarChangeEvent extends AbstractEvent implements
 
     }
 
-    public static class AvatarChangeUpdated extends AvatarChangeClobEvent implements AvatarChangeEvent.AvatarChangeUpdated {
+    public static class AvatarChangeUpdated extends AvatarChangeLobEvent implements AvatarChangeEvent.AvatarChangeUpdated {
 
         @Override
         public String getEventType() {
@@ -504,7 +490,7 @@ public abstract class AbstractAvatarChangeEvent extends AbstractEvent implements
 
     }
 
-    public static class AvatarChangeDeleted extends AvatarChangeClobEvent implements AvatarChangeEvent.AvatarChangeDeleted {
+    public static class AvatarChangeDeleted extends AvatarChangeLobEvent implements AvatarChangeEvent.AvatarChangeDeleted {
 
         @Override
         public String getEventType() {

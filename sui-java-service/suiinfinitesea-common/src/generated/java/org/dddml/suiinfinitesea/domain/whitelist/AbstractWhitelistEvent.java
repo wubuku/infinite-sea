@@ -202,13 +202,13 @@ public abstract class AbstractWhitelistEvent extends AbstractEvent implements Wh
 
     public abstract String getEventType();
 
-    public static class WhitelistClobEvent extends AbstractWhitelistEvent {
+    public static class WhitelistLobEvent extends AbstractWhitelistEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -217,28 +217,14 @@ public abstract class AbstractWhitelistEvent extends AbstractEvent implements Wh
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "WhitelistClobEvent";
+            return "WhitelistLobEvent";
         }
 
     }
 
-    public static class InitWhitelistEvent extends WhitelistClobEvent implements WhitelistEvent.InitWhitelistEvent {
+    public static class InitWhitelistEvent extends WhitelistLobEvent implements WhitelistEvent.InitWhitelistEvent {
 
         @Override
         public String getEventType() {
@@ -247,7 +233,7 @@ public abstract class AbstractWhitelistEvent extends AbstractEvent implements Wh
 
     }
 
-    public static class WhitelistUpdated extends WhitelistClobEvent implements WhitelistEvent.WhitelistUpdated {
+    public static class WhitelistUpdated extends WhitelistLobEvent implements WhitelistEvent.WhitelistUpdated {
 
         @Override
         public String getEventType() {
@@ -268,7 +254,7 @@ public abstract class AbstractWhitelistEvent extends AbstractEvent implements Wh
 
     }
 
-    public static class WhitelistEntryAdded extends WhitelistClobEvent implements WhitelistEvent.WhitelistEntryAdded {
+    public static class WhitelistEntryAdded extends WhitelistLobEvent implements WhitelistEvent.WhitelistEntryAdded {
 
         @Override
         public String getEventType() {
@@ -421,7 +407,7 @@ public abstract class AbstractWhitelistEvent extends AbstractEvent implements Wh
 
     }
 
-    public static class WhitelistEntryUpdated extends WhitelistClobEvent implements WhitelistEvent.WhitelistEntryUpdated {
+    public static class WhitelistEntryUpdated extends WhitelistLobEvent implements WhitelistEvent.WhitelistEntryUpdated {
 
         @Override
         public String getEventType() {
@@ -598,7 +584,7 @@ public abstract class AbstractWhitelistEvent extends AbstractEvent implements Wh
 
     }
 
-    public static class WhitelistClaimed extends WhitelistClobEvent implements WhitelistEvent.WhitelistClaimed {
+    public static class WhitelistClaimed extends WhitelistLobEvent implements WhitelistEvent.WhitelistClaimed {
 
         @Override
         public String getEventType() {
@@ -619,7 +605,7 @@ public abstract class AbstractWhitelistEvent extends AbstractEvent implements Wh
 
     }
 
-    public static class WhitelistCreated extends WhitelistClobEvent implements WhitelistEvent.WhitelistCreated {
+    public static class WhitelistCreated extends WhitelistLobEvent implements WhitelistEvent.WhitelistCreated {
 
         @Override
         public String getEventType() {

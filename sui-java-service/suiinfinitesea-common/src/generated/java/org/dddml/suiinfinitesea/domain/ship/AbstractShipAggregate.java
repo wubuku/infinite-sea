@@ -89,12 +89,12 @@ public abstract class AbstractShipAggregate extends AbstractAggregate implements
             ShipEventId eventId = new ShipEventId(getState().getId(), null);
             AbstractShipEvent.ShipCreated e = new AbstractShipEvent.ShipCreated();
 
-            e.setOwner(owner);
-            e.setHealthPoints(healthPoints);
-            e.setAttack(attack);
-            e.setProtection(protection);
-            e.setSpeed(speed);
-            e.setBuildingExpenses(buildingExpenses);
+            e.getDynamicProperties().put("owner", owner);
+            e.getDynamicProperties().put("healthPoints", healthPoints);
+            e.getDynamicProperties().put("attack", attack);
+            e.getDynamicProperties().put("protection", protection);
+            e.getDynamicProperties().put("speed", speed);
+            e.getDynamicProperties().put("buildingExpenses", buildingExpenses);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
