@@ -32,7 +32,7 @@ public class EventResource {
     }
 
 
-    @GetMapping(path = "getShipCompletedEventEvents")
+    @GetMapping(path = "getShipCompletedEvents")
     @Transactional(readOnly = true)
     public java.util.List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> getShipCompletedEvents(
             @RequestParam(value = "startSuiTimestamp") Long startSuiTimestamp,
