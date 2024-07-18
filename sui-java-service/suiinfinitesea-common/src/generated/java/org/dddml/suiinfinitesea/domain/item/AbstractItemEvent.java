@@ -186,13 +186,13 @@ public abstract class AbstractItemEvent extends AbstractEvent implements ItemEve
 
     public abstract String getEventType();
 
-    public static class ItemClobEvent extends AbstractItemEvent {
+    public static class ItemLobEvent extends AbstractItemEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -201,28 +201,14 @@ public abstract class AbstractItemEvent extends AbstractEvent implements ItemEve
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "ItemClobEvent";
+            return "ItemLobEvent";
         }
 
     }
 
-    public static class ItemCreated extends ItemClobEvent implements ItemEvent.ItemCreated {
+    public static class ItemCreated extends ItemLobEvent implements ItemEvent.ItemCreated {
 
         @Override
         public String getEventType() {
@@ -267,7 +253,7 @@ public abstract class AbstractItemEvent extends AbstractEvent implements ItemEve
 
     }
 
-    public static class ItemUpdated extends ItemClobEvent implements ItemEvent.ItemUpdated {
+    public static class ItemUpdated extends ItemLobEvent implements ItemEvent.ItemUpdated {
 
         @Override
         public String getEventType() {

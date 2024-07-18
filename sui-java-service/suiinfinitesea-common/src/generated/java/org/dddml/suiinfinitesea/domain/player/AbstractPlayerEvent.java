@@ -176,13 +176,13 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
 
     public abstract String getEventType();
 
-    public static class PlayerClobEvent extends AbstractPlayerEvent {
+    public static class PlayerLobEvent extends AbstractPlayerEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -191,28 +191,14 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "PlayerClobEvent";
+            return "PlayerLobEvent";
         }
 
     }
 
-    public static class PlayerCreated extends PlayerClobEvent implements PlayerEvent.PlayerCreated {
+    public static class PlayerCreated extends PlayerLobEvent implements PlayerEvent.PlayerCreated {
 
         @Override
         public String getEventType() {
@@ -245,7 +231,7 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
 
     }
 
-    public static class IslandClaimed extends PlayerClobEvent implements PlayerEvent.IslandClaimed {
+    public static class IslandClaimed extends PlayerLobEvent implements PlayerEvent.IslandClaimed {
 
         @Override
         public String getEventType() {
@@ -278,7 +264,7 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
 
     }
 
-    public static class PlayerAirdropped extends PlayerClobEvent implements PlayerEvent.PlayerAirdropped {
+    public static class PlayerAirdropped extends PlayerLobEvent implements PlayerEvent.PlayerAirdropped {
 
         @Override
         public String getEventType() {

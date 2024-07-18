@@ -212,13 +212,13 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     public abstract String getEventType();
 
-    public static class RosterClobEvent extends AbstractRosterEvent {
+    public static class RosterLobEvent extends AbstractRosterEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -227,28 +227,14 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "RosterClobEvent";
+            return "RosterLobEvent";
         }
 
     }
 
-    public static class RosterCreated extends RosterClobEvent implements RosterEvent.RosterCreated {
+    public static class RosterCreated extends RosterLobEvent implements RosterEvent.RosterCreated {
 
         @Override
         public String getEventType() {
@@ -329,7 +315,7 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class EnvironmentRosterCreated extends RosterClobEvent implements RosterEvent.EnvironmentRosterCreated {
+    public static class EnvironmentRosterCreated extends RosterLobEvent implements RosterEvent.EnvironmentRosterCreated {
 
         @Override
         public String getEventType() {
@@ -386,7 +372,7 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class RosterShipAdded extends RosterClobEvent implements RosterEvent.RosterShipAdded {
+    public static class RosterShipAdded extends RosterLobEvent implements RosterEvent.RosterShipAdded {
 
         @Override
         public String getEventType() {
@@ -419,7 +405,7 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class RosterSetSail extends RosterClobEvent implements RosterEvent.RosterSetSail {
+    public static class RosterSetSail extends RosterLobEvent implements RosterEvent.RosterSetSail {
 
         @Override
         public String getEventType() {
@@ -488,7 +474,7 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class RosterLocationUpdated extends RosterClobEvent implements RosterEvent.RosterLocationUpdated {
+    public static class RosterLocationUpdated extends RosterLobEvent implements RosterEvent.RosterLocationUpdated {
 
         @Override
         public String getEventType() {
@@ -533,7 +519,7 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class RosterShipsPositionAdjusted extends RosterClobEvent implements RosterEvent.RosterShipsPositionAdjusted {
+    public static class RosterShipsPositionAdjusted extends RosterLobEvent implements RosterEvent.RosterShipsPositionAdjusted {
 
         @Override
         public String getEventType() {
@@ -566,7 +552,7 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class RosterShipTransferred extends RosterClobEvent implements RosterEvent.RosterShipTransferred {
+    public static class RosterShipTransferred extends RosterLobEvent implements RosterEvent.RosterShipTransferred {
 
         @Override
         public String getEventType() {
@@ -611,7 +597,7 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class RosterShipInventoryTransferred extends RosterClobEvent implements RosterEvent.RosterShipInventoryTransferred {
+    public static class RosterShipInventoryTransferred extends RosterLobEvent implements RosterEvent.RosterShipInventoryTransferred {
 
         @Override
         public String getEventType() {
@@ -656,7 +642,7 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class RosterShipInventoryTakenOut extends RosterClobEvent implements RosterEvent.RosterShipInventoryTakenOut {
+    public static class RosterShipInventoryTakenOut extends RosterLobEvent implements RosterEvent.RosterShipInventoryTakenOut {
 
         @Override
         public String getEventType() {
@@ -689,7 +675,7 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class RosterShipInventoryPutIn extends RosterClobEvent implements RosterEvent.RosterShipInventoryPutIn {
+    public static class RosterShipInventoryPutIn extends RosterLobEvent implements RosterEvent.RosterShipInventoryPutIn {
 
         @Override
         public String getEventType() {

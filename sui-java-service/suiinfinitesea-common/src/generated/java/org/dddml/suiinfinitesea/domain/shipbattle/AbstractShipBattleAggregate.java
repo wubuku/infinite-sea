@@ -189,7 +189,7 @@ public abstract class AbstractShipBattleAggregate extends AbstractAggregate impl
             ShipBattleEventId eventId = new ShipBattleEventId(getState().getId(), null);
             AbstractShipBattleEvent.ShipBattleMoveMade e = new AbstractShipBattleEvent.ShipBattleMoveMade();
 
-            e.setAttackerCommand(attackerCommand);
+            e.getDynamicProperties().put("attackerCommand", attackerCommand);
             e.setDefenderCommand(null);
             e.setRoundNumber(null);
             e.setDefenderDamageTaken(null);
@@ -221,7 +221,7 @@ public abstract class AbstractShipBattleAggregate extends AbstractAggregate impl
             ShipBattleEventId eventId = new ShipBattleEventId(getState().getId(), null);
             AbstractShipBattleEvent.ShipBattleLootTaken e = new AbstractShipBattleEvent.ShipBattleLootTaken();
 
-            e.setChoice(choice);
+            e.getDynamicProperties().put("choice", choice);
             e.setLoot(null);
             e.setLootedAt(null);
             e.setIncreasedExperience(null);

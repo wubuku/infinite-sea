@@ -176,13 +176,13 @@ public abstract class AbstractExperienceTableEvent extends AbstractEvent impleme
 
     public abstract String getEventType();
 
-    public static class ExperienceTableClobEvent extends AbstractExperienceTableEvent {
+    public static class ExperienceTableLobEvent extends AbstractExperienceTableEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -191,28 +191,14 @@ public abstract class AbstractExperienceTableEvent extends AbstractEvent impleme
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "ExperienceTableClobEvent";
+            return "ExperienceTableLobEvent";
         }
 
     }
 
-    public static class InitExperienceTableEvent extends ExperienceTableClobEvent implements ExperienceTableEvent.InitExperienceTableEvent {
+    public static class InitExperienceTableEvent extends ExperienceTableLobEvent implements ExperienceTableEvent.InitExperienceTableEvent {
 
         @Override
         public String getEventType() {
@@ -221,7 +207,7 @@ public abstract class AbstractExperienceTableEvent extends AbstractEvent impleme
 
     }
 
-    public static class ExperienceLevelAdded extends ExperienceTableClobEvent implements ExperienceTableEvent.ExperienceLevelAdded {
+    public static class ExperienceLevelAdded extends ExperienceTableLobEvent implements ExperienceTableEvent.ExperienceLevelAdded {
 
         @Override
         public String getEventType() {
@@ -266,7 +252,7 @@ public abstract class AbstractExperienceTableEvent extends AbstractEvent impleme
 
     }
 
-    public static class ExperienceLevelUpdated extends ExperienceTableClobEvent implements ExperienceTableEvent.ExperienceLevelUpdated {
+    public static class ExperienceLevelUpdated extends ExperienceTableLobEvent implements ExperienceTableEvent.ExperienceLevelUpdated {
 
         @Override
         public String getEventType() {

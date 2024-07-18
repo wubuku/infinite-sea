@@ -186,13 +186,13 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
     public abstract String getEventType();
 
-    public static class SkillProcessClobEvent extends AbstractSkillProcessEvent {
+    public static class SkillProcessLobEvent extends AbstractSkillProcessEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -201,28 +201,14 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "SkillProcessClobEvent";
+            return "SkillProcessLobEvent";
         }
 
     }
 
-    public static class SkillProcessCreated extends SkillProcessClobEvent implements SkillProcessEvent.SkillProcessCreated {
+    public static class SkillProcessCreated extends SkillProcessLobEvent implements SkillProcessEvent.SkillProcessCreated {
 
         @Override
         public String getEventType() {
@@ -231,7 +217,7 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
     }
 
-    public static class ProductionProcessStarted extends SkillProcessClobEvent implements SkillProcessEvent.ProductionProcessStarted {
+    public static class ProductionProcessStarted extends SkillProcessLobEvent implements SkillProcessEvent.ProductionProcessStarted {
 
         @Override
         public String getEventType() {
@@ -312,7 +298,7 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
     }
 
-    public static class ProductionProcessCompleted extends SkillProcessClobEvent implements SkillProcessEvent.ProductionProcessCompleted {
+    public static class ProductionProcessCompleted extends SkillProcessLobEvent implements SkillProcessEvent.ProductionProcessCompleted {
 
         @Override
         public String getEventType() {
@@ -417,7 +403,7 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
     }
 
-    public static class ShipProductionProcessStarted extends SkillProcessClobEvent implements SkillProcessEvent.ShipProductionProcessStarted {
+    public static class ShipProductionProcessStarted extends SkillProcessLobEvent implements SkillProcessEvent.ShipProductionProcessStarted {
 
         @Override
         public String getEventType() {
@@ -486,7 +472,7 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
     }
 
-    public static class ShipProductionProcessCompleted extends SkillProcessClobEvent implements SkillProcessEvent.ShipProductionProcessCompleted {
+    public static class ShipProductionProcessCompleted extends SkillProcessLobEvent implements SkillProcessEvent.ShipProductionProcessCompleted {
 
         @Override
         public String getEventType() {
@@ -591,7 +577,7 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
     }
 
-    public static class CreationProcessStarted extends SkillProcessClobEvent implements SkillProcessEvent.CreationProcessStarted {
+    public static class CreationProcessStarted extends SkillProcessLobEvent implements SkillProcessEvent.CreationProcessStarted {
 
         @Override
         public String getEventType() {
@@ -672,7 +658,7 @@ public abstract class AbstractSkillProcessEvent extends AbstractEvent implements
 
     }
 
-    public static class CreationProcessCompleted extends SkillProcessClobEvent implements SkillProcessEvent.CreationProcessCompleted {
+    public static class CreationProcessCompleted extends SkillProcessLobEvent implements SkillProcessEvent.CreationProcessCompleted {
 
         @Override
         public String getEventType() {

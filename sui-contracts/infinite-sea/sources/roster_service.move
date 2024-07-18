@@ -24,3 +24,4 @@ module infinite_sea::roster_service {
         roster_aggregate::set_sail(roster, player, target_coordinates_x, target_coordinates_y, clock, energy_b, sail_duration, ctx);
     }
 }
+http://47.96.81.197:8809/api/FaucetRequesteds?suiTimestamp=ge(1721305893124)

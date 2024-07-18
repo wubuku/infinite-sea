@@ -154,7 +154,7 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.PlayerCreated e = new AbstractPlayerEvent.PlayerCreated();
 
-            e.setName(name);
+            e.getDynamicProperties().put("name", name);
             e.setOwner(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
@@ -177,7 +177,7 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.IslandClaimed e = new AbstractPlayerEvent.IslandClaimed();
 
-            e.setCoordinates(coordinates);
+            e.getDynamicProperties().put("coordinates", coordinates);
             e.setClaimedAt(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
@@ -200,8 +200,8 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.PlayerAirdropped e = new AbstractPlayerEvent.PlayerAirdropped();
 
-            e.setItemId(itemId);
-            e.setQuantity(quantity);
+            e.getDynamicProperties().put("itemId", itemId);
+            e.getDynamicProperties().put("quantity", quantity);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

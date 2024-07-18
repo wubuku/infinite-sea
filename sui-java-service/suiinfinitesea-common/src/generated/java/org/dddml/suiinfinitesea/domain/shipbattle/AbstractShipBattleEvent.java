@@ -176,13 +176,13 @@ public abstract class AbstractShipBattleEvent extends AbstractEvent implements S
 
     public abstract String getEventType();
 
-    public static class ShipBattleClobEvent extends AbstractShipBattleEvent {
+    public static class ShipBattleLobEvent extends AbstractShipBattleEvent {
 
-        protected Map<String, Object> getDynamicProperties() {
+        public Map<String, Object> getDynamicProperties() {
             return dynamicProperties;
         }
 
-        protected void setDynamicProperties(Map<String, Object> dynamicProperties) {
+        public void setDynamicProperties(Map<String, Object> dynamicProperties) {
             if (dynamicProperties == null) {
                 throw new IllegalArgumentException("dynamicProperties is null.");
             }
@@ -191,28 +191,14 @@ public abstract class AbstractShipBattleEvent extends AbstractEvent implements S
 
         private Map<String, Object> dynamicProperties = new HashMap<>();
 
-        protected String getDynamicPropertiesLob() {
-            return ApplicationContext.current.getClobConverter().toString(getDynamicProperties());
-        }
-
-        protected void setDynamicPropertiesLob(String text) {
-            getDynamicProperties().clear();
-            Map<String, Object> ps = ApplicationContext.current.getClobConverter().parseLobProperties(text);
-            if (ps != null) {
-                for (Map.Entry<String, Object> kv : ps.entrySet()) {
-                    getDynamicProperties().put(kv.getKey(), kv.getValue());
-                }
-            }
-        }
-
         @Override
         public String getEventType() {
-            return "ShipBattleClobEvent";
+            return "ShipBattleLobEvent";
         }
 
     }
 
-    public static class ShipBattleInitiated extends ShipBattleClobEvent implements ShipBattleEvent.ShipBattleInitiated {
+    public static class ShipBattleInitiated extends ShipBattleLobEvent implements ShipBattleEvent.ShipBattleInitiated {
 
         @Override
         public String getEventType() {
@@ -293,7 +279,7 @@ public abstract class AbstractShipBattleEvent extends AbstractEvent implements S
 
     }
 
-    public static class ShipBattleMoveMade extends ShipBattleClobEvent implements ShipBattleEvent.ShipBattleMoveMade {
+    public static class ShipBattleMoveMade extends ShipBattleLobEvent implements ShipBattleEvent.ShipBattleMoveMade {
 
         @Override
         public String getEventType() {
@@ -434,7 +420,7 @@ public abstract class AbstractShipBattleEvent extends AbstractEvent implements S
 
     }
 
-    public static class ShipBattleLootTaken extends ShipBattleClobEvent implements ShipBattleEvent.ShipBattleLootTaken {
+    public static class ShipBattleLootTaken extends ShipBattleLobEvent implements ShipBattleEvent.ShipBattleLootTaken {
 
         @Override
         public String getEventType() {
