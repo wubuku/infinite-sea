@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost/test7?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
+    url: jdbc:mysql://localhost/test8?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
     username: root
     password: qingdao
 #    url: jdbc:mysql://localhost/test2?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
@@ -19,13 +19,13 @@ server:
 sui:
   contract:
     jsonrpc:
-      #url: "http://localhost:9000"
+      url: "https://sui.devnet.m2.movementlabs.xyz"
       #url: "https://fullnode.devnet.sui.io/"
-      url: "https://fullnode.testnet.sui.io/"
+      #url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "G95hdiXzzef5dr4YRWePk96D8t8YvGV7vkKokbvtErYq"
-      default: "11RU88KEfjwPZussagbKvM1bRAN37t8eztUcbT1CVU1"
-      nft: "8PVEs1ZEuCFKx7vVWCkHeGSodsR8afjZ9uxyA5F74VFV"
+      common: "4hbsF6GcWELBXAkS1QJnXqrcjnXv6EcdKoAUDufTV9qS"
+      default: "6fVJWXx4WXJd5U7GYS3jfUFugbE8HwfTC6cKCj8NVc2h"
+      nft: "9bbebvrYj58MfQwoZ7Cn9vMWp2gkTzz1ThHavw3DYz6k"
 #    pull-day-summary-events:
 #      day-summary-created:
 #        fixed-delay: 6000

@@ -10,9 +10,11 @@ import java.util.List;
 public interface ShipBattleRepository extends JpaRepository<AbstractShipBattleState.SimpleShipBattleState, String> {
 
 
-    @Query(value = "SELECT * FROM ship_battle sb WHERE " +
-            "sb.initiator IN (SELECT r.id FROM roster r WHERE r.roster_id_player_id=:playerId) " +
-            "OR sb.responder in (SELECT r2.id FROM roster r2 WHERE r2.roster_id_player_id=:playerId) " +
-            "order by sb.ended_at desc", nativeQuery = true)
+    @Query(value = "SELECT sb.* FROM ship_battle sb " +
+            "JOIN roster r1 ON sb.initiator = r1.id " +
+            "JOIN roster r2 ON sb.responder = r2.id " +
+            "WHERE r1.roster_id_player_id = :playerId " +
+            "OR r2.roster_id_player_id = :playerId " +
+            "ORDER BY sb.ended_at DESC", nativeQuery = true)
     List<AbstractShipBattleState.SimpleShipBattleState> getShipBattlesByPlayerId(@Param("playerId") String playerId);
 }
