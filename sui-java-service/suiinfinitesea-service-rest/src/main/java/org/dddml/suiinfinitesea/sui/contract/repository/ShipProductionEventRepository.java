@@ -13,8 +13,9 @@ public interface ShipProductionEventRepository extends JpaRepository<AbstractSki
 
     @Query(value = "select * from skill_process_event spv where " +
             "spv.event_type='ShipProductionProcessCompleted' " +
-            "and sui_timestamp>=:startAt and sui_timestamp<=:endAt and sui_sender=:suiSender", nativeQuery = true)
+            "and sui_timestamp between :startAt and :endAt", nativeQuery = true)
+        //and sui_sender=:suiSender
     List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> getShipCompletedEvents(@Param("startAt") Long startAt,
-                                                                                          @Param("endAt") Long endAt,
-                                                                                          @Param("suiSender") String suiSender);
+                                                                                          @Param("endAt") Long endAt/*,
+                                                                                          @Param("suiSender") String suiSender*/);
 }

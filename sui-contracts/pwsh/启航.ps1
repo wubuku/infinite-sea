@@ -23,15 +23,15 @@ $rosters = $playerRostersJson | ConvertFrom-Json
 
 
 #用那个船队去挑战？3表示船队编号
-$roster = $rosters.4
-$energy_amount = 500
-
+$roster = $rosters.2
+$energy_amount = 50000000
+$sail_duration = 200
 #先查看一下目标船队的坐标
-#$targetCoordinates = $null
-$targetCoordinates = [PSCustomObject]@{
-    x = 500
-    y = 500
-}
+$targetCoordinates = $null
+# $targetCoordinates = [PSCustomObject]@{
+#     x = 2147483662
+#     y = 2147483662
+# }
 $environmentRosterResult = ""
 if ($null -eq $targetCoordinates) {
     $environmentRosterJsonFile = "$startLocation\environment_roster.json"
@@ -65,7 +65,7 @@ if ($null -eq $targetCoordinates) {
 
 try {
     "`n准备出发，目标坐标：($($targetCoordinates.x),$($targetCoordinates.y))。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-    $command = "sui client call --package $($dataInfo.main.PackageId)  --module roster_service --function set_sail --args $roster $($dataInfo.main.Player) $($targetCoordinates.x) $($targetCoordinates.y) '0x6' $($dataInfo.coin.EnergyId) $energy_amount --gas-budget 11000000 --json" 
+    $command = "sui client call --package $($dataInfo.main.PackageId)  --module roster_service --function set_sail --args $roster $($dataInfo.main.Player) $($targetCoordinates.x) $($targetCoordinates.y) '0x6' $($dataInfo.coin.EnergyId) $energy_amount $sail_duration --gas-budget 11000000 --json" 
     $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
     $setSailResult = Invoke-Expression -Command $command
     if (-not ('System.Object[]' -eq $setSailResult.GetType())) {
