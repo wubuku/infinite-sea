@@ -101,6 +101,7 @@ public class SuiPackageInitializer {
             defaultPackageInitializationService.init();
         }
         if (faucetPackageInitializationService != null) {
+            //FIXME 这里没有正确保存 packageId 看看怎么回事儿
             faucetPackageInitializationService.init();
         }
     }

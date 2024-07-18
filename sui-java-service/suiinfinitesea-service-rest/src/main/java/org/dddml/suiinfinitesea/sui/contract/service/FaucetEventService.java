@@ -86,7 +86,7 @@ public class FaucetEventService {
         Map map = eventEnvelope.getParsedJson();
         AbstractFaucetRequestedState.SimpleFaucetRequestedState simpleFaucetRequestedState = new AbstractFaucetRequestedState.SimpleFaucetRequestedState();
 //        simpleFaucetRequestedState.setEventId(faucetRequestedState.getEventId());
-        simpleFaucetRequestedState.setEventId(eventEnvelope.getId().getTxDigest() + eventEnvelope.getId().getEventSeq());
+        simpleFaucetRequestedState.setEventId(eventEnvelope.getId().getTxDigest() + "#" + eventEnvelope.getId().getEventSeq());
         simpleFaucetRequestedState.setActive(true);
         simpleFaucetRequestedState.setRequesterAccount(map.get("account").toString());
         simpleFaucetRequestedState.setRequestedAmount(new BigInteger(map.get("amount").toString()));
