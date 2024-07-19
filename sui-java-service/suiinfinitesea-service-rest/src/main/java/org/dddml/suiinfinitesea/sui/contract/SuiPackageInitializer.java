@@ -79,7 +79,7 @@ public class SuiPackageInitializer {
                     moveObjectIdGeneratorObjectRepository,
                     suiPackageRepository,
                     suiJsonRpcClient,
-                    defaultPackagePublishTransactionDigest,
+                    faucetPackagePublishTransactionDigest,
                     "FAUCET_SUI_PACKAGE",
                     ContractConstants::getDefaultPackageIdGeneratorObjectTypes
             );
@@ -101,7 +101,7 @@ public class SuiPackageInitializer {
             defaultPackageInitializationService.init();
         }
         if (faucetPackageInitializationService != null) {
-            //FIXME 这里没有正确保存 packageId 看看怎么回事儿
+            //这里没有正确保存 packageId 因为 Faucet 包中既没有 objectChanges 又没有 events
             faucetPackageInitializationService.init();
         }
     }
