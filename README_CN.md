@@ -3081,12 +3081,14 @@ If the value is true, it means that the user has already claimed an NFT, otherwi
 
 #### Ship construction completion event 
 ```shell
-curl -X GET "http://47.96.81.197:8809/api/contractEvents/getFaucetRequestedEvents?startSuiTimestamp={startSuiTimestamp}&endSuiTimestamp={endSuiTimestamp}}" -H "accept: application/json"
+curl -X GET "http://localhost:1023/api/contractEvents/getFaucetRequestedEvents?startAt={startAt}&endedAt={endedAt}&senderAddress={senderAddress}" -H "accept: application/json"
 ```
 Query Parameters:
 
-* startSuiTimestamp 查询起始时间，单位毫秒（从1970年1月1日0时起）。
-* endSuiTimestamp 查询截止时间，单位毫秒（同上）。
+* startAt 查询起始时间，单位毫秒（从1970年1月1日0时起）。
+* endedAt 查询截止时间，单位毫秒（同上）。
+* senderAddress 用户钱包地址。Player wallet Address.
+
 
 Response:
 
@@ -3128,7 +3130,7 @@ Response:
 ```
 * suiSender 请求水龙头玩家地址。
 * suiTimestamp 请求水龙头时间。
-* requesterAccount 请求`ENERGY`数量。
+* requesterAccount 获得`ENERGY`数量。
 * eventId 唯一ID。
 
 [TBD]
