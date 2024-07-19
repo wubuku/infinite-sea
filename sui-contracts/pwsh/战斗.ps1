@@ -32,18 +32,18 @@ $environmentRosterJson = Get-Content -Raw -Path $environmentRosterJsonFile
 $environmentRoster = $environmentRosterJson | ConvertFrom-Json
 
 #发起战斗的船队？3表示编号
-$roster = $rosters.4
+$roster = $rosters.2
 
 #是不是只查看战斗的结果，如果是那么不需要交战，只需要给到一个$shipBattleId
 $onlyCheckShipBattleResult = $false
-
-#$shipBattleId = "0xec1a7513d4091f8ce5696347cd6d3b292edd7324c7607d9b1a5854b8c3795af8"
+$shipBattleId = $null
+#$shipBattleId = "0x81bbcfd91d256076af4e633ec704eb009fc0524187368682fc936f80cbb6f050"
 $result = ""
 if (-not $onlyCheckShipBattleResult) {
     try {
         "`n开始交战..." | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
         $command = "sui client call --package $($dataInfo.main.PackageId)  --module ship_battle_service --function initiate_battle_and_auto_play_till_end --args $($dataInfo.main.Player) $roster  $($environmentRoster.RosterId) '0x6' --gas-budget 4999000000 --json"
-        #$command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+        $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
         $result = Invoke-Expression -Command $command
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "交战时返回信息： $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
@@ -153,7 +153,7 @@ if ($status -eq 1) {
     try {
         "`n开始收拾战利品..." | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
         $command = "sui client call --package $($dataInfo.main.PackageId)  --module ship_battle_aggregate --function take_loot --args $shipBattleId $player $loser_player $initiator $responder  $($dataInfo.common.ExperienceTable)  '0x6'  0  --gas-budget 4999000000 --json"
-        #$command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+        $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
         $takeLootResult = Invoke-Expression -Command $command
         if (-not ('System.Object[]' -eq $takeLootResult.GetType())) {
             "交战时返回信息： $takeLootResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red

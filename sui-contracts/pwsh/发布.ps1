@@ -38,7 +38,7 @@ $testSkillProcessFarming = $true
 $testSkillProcessWooding = $true
 
 
-$playerName = 'John'
+$playerName = 'Li Dahai'
 
 # Mint Energy Amount 60万
 $mintAmout = 600000 * 1000 * 1000 * 1000

@@ -40,11 +40,11 @@ $rosters = $playerRostersJson | ConvertFrom-Json
 $craft = $true
 #造船数量
 #$cratingCount = 1
-$cratingCount = 1
+$cratingCount = 4
 #造船完成后加入的默认船队（目前只能为$rosters.0）
 $rosterId0 = $rosters.0
 #造船所消耗的时间 这个时间应该大于等于Item Production中的时间
-$craftingTime = 3
+$craftingTime = 15
 
 $shipIds = @()
 
@@ -126,7 +126,7 @@ $transferShip = $true
 #源头船队，默认为0
 $sourceRoster = $rosters.0
 #目标船队(可设置的目标1,2,3,4)
-$targetRoster = $rosters.4
+$targetRoster = $rosters.2
 # 如果是指定船只的话，请录入 $shipIds 数组
 #$shipIds += "0xc9600a59425ff3cfae1464d87d32e750a6c2d572492bc18eb4094c65e5ac9d74"
 #每个船队最多船只数量

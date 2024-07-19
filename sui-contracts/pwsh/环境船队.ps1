@@ -14,10 +14,14 @@ if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
 $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
+$u32MaxHalf = 2147483647
+$coordinates_x = $u32MaxHalf + 7
+$coordinates_y = $u32MaxHalf + 7
+
 #环境Player，如果没有值需要新造一个Player
-$newPlayId = "0x2217461e58168224e934178ca8e61edd70c3b0465aa980842211883a3a78bd21"
-#newPlayId = ""
-$playName = '葵 つかさ'
+#$newPlayId = "0x10b96031518b27cb238f610dd67523d90015c0c29e612730b24fb54893cf2282"
+$newPlayId = ""
+$playName = 'ABC'
 if ($null -eq $newPlayId -or $newPlayId -eq "") {
     "`n创建一个PLAYER..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     $result = ""
@@ -56,9 +60,9 @@ Start-Sleep -Seconds 2
 "休息完成，开始创建环境船队...· `n" | Write-Host
 
 $roster_id_sequence_number = 1
+
+
 $createEnvironmentRosterResult = ""
-$coordinates_x = 53
-$coordinates_y = 53
 $ship_resource_quantity = 15
 $ship_base_resource_quantity = 3
 $base_experience = 10

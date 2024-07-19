@@ -41,13 +41,11 @@ catch {
 }
 "当前 Energy 余额，总计：$requestBeforeAmount" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
 
-return
-
 $requestResult = ""
-$requestAmount = 100000000000
+$requestAmount = 50000000000
 try {
     "`n申请 $($requestAmount/$itioku) Energy ......" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-    $commandRequest = "sui client call --package  $($dataInfo.coin.PackageId) --module energy_faucet --function request_a_drop --args $($dataInfo.coin.FaucetId) --json" 
+    $commandRequest = "sui client call --package  $($dataInfo.faucet.PackageId) --module energy_faucet --function request_a_drop --args $($dataInfo.faucet.EnergyFaucet) 0x6 --json" 
     $commandRequest | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
     $requestResult = Invoke-Expression -Command $commandRequest
     if (-not ('System.Object[]' -eq $requestResult.GetType())) {
