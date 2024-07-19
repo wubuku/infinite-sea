@@ -69,6 +69,7 @@ module infinite_sea::roster_create_environment_roster_logic {
             coordinates,
             0, //coordinates_updated_at,
             option::none(), //target_coordinates,
+            option::none(),
             option::none(), //ship_battle_id,
             roster_table, ctx,
         );

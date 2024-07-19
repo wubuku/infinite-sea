@@ -103,6 +103,19 @@ public class RosterCommands {
         }
 
         /**
+         * Origin Coordinates
+         */
+        private Coordinates originCoordinates;
+
+        public Coordinates getOriginCoordinates() {
+            return this.originCoordinates;
+        }
+
+        public void setOriginCoordinates(Coordinates originCoordinates) {
+            this.originCoordinates = originCoordinates;
+        }
+
+        /**
          * Ship Battle Id
          */
         private String shipBattleId;
@@ -373,6 +386,19 @@ public class RosterCommands {
         }
 
         /**
+         * Updated Coordinates
+         */
+        private Coordinates updatedCoordinates;
+
+        public Coordinates getUpdatedCoordinates() {
+            return this.updatedCoordinates;
+        }
+
+        public void setUpdatedCoordinates(Coordinates updatedCoordinates) {
+            this.updatedCoordinates = updatedCoordinates;
+        }
+
+        /**
          * Off Chain Version
          */
         private Long offChainVersion;
@@ -421,6 +447,19 @@ public class RosterCommands {
 
         public void setClock(String clock) {
             this.clock = clock;
+        }
+
+        /**
+         * Updated Coordinates
+         */
+        private Coordinates updatedCoordinates;
+
+        public Coordinates getUpdatedCoordinates() {
+            return this.updatedCoordinates;
+        }
+
+        public void setUpdatedCoordinates(Coordinates updatedCoordinates) {
+            this.updatedCoordinates = updatedCoordinates;
         }
 
         /**
@@ -771,6 +810,19 @@ public class RosterCommands {
         }
 
         /**
+         * Updated Coordinates
+         */
+        private Coordinates updatedCoordinates;
+
+        public Coordinates getUpdatedCoordinates() {
+            return this.updatedCoordinates;
+        }
+
+        public void setUpdatedCoordinates(Coordinates updatedCoordinates) {
+            this.updatedCoordinates = updatedCoordinates;
+        }
+
+        /**
          * Off Chain Version
          */
         private Long offChainVersion;
@@ -858,6 +910,19 @@ public class RosterCommands {
 
         public void setItemIdQuantityPairs(ItemIdQuantityPairs itemIdQuantityPairs) {
             this.itemIdQuantityPairs = itemIdQuantityPairs;
+        }
+
+        /**
+         * Updated Coordinates
+         */
+        private Coordinates updatedCoordinates;
+
+        public Coordinates getUpdatedCoordinates() {
+            return this.updatedCoordinates;
+        }
+
+        public void setUpdatedCoordinates(Coordinates updatedCoordinates) {
+            this.updatedCoordinates = updatedCoordinates;
         }
 
         /**

@@ -323,6 +323,10 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
     public void when(AbstractShipBattleEvent.ShipBattleInitiated e) {
         throwOnWrongEvent(e);
 
+        Coordinates initiatorCoordinates = e.getInitiatorCoordinates();
+        Coordinates InitiatorCoordinates = initiatorCoordinates;
+        Coordinates responderCoordinates = e.getResponderCoordinates();
+        Coordinates ResponderCoordinates = responderCoordinates;
         String initiatorId = e.getInitiatorId();
         String InitiatorId = initiatorId;
         String responderId = e.getResponderId();
@@ -364,14 +368,14 @@ public abstract class AbstractShipBattleState implements ShipBattleState.SqlShip
         ShipBattleState updatedShipBattleState = (ShipBattleState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.shipbattle.InitiateBattleLogic",
                     "mutate",
-                    new Class[]{ShipBattleState.class, String.class, String.class, BigInteger.class, Integer.class, String.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, initiatorId, responderId, startedAt, firstRoundMover, firstRoundAttackerShip, firstRoundDefenderShip, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{ShipBattleState.class, Coordinates.class, Coordinates.class, String.class, String.class, BigInteger.class, Integer.class, String.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, initiatorCoordinates, responderCoordinates, initiatorId, responderId, startedAt, firstRoundMover, firstRoundAttackerShip, firstRoundDefenderShip, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.shipbattle;
 //
 //public class InitiateBattleLogic {
-//    public static ShipBattleState mutate(ShipBattleState shipBattleState, String initiatorId, String responderId, BigInteger startedAt, Integer firstRoundMover, String firstRoundAttackerShip, String firstRoundDefenderShip, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ShipBattleState, ShipBattleState.MutableShipBattleState> mutationContext) {
+//    public static ShipBattleState mutate(ShipBattleState shipBattleState, Coordinates initiatorCoordinates, Coordinates responderCoordinates, String initiatorId, String responderId, BigInteger startedAt, Integer firstRoundMover, String firstRoundAttackerShip, String firstRoundDefenderShip, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<ShipBattleState, ShipBattleState.MutableShipBattleState> mutationContext) {
 //    }
 //}
 

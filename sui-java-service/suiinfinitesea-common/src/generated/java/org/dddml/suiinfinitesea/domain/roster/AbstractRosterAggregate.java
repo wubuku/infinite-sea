@@ -47,11 +47,11 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void create(Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, String shipBattleId, Long offChainVersion, String commandId, String requesterId, RosterCommands.Create c) {
-            java.util.function.Supplier<RosterEvent.RosterCreated> eventFactory = () -> newRosterCreated(status, speed, updatedCoordinates, coordinatesUpdatedAt, targetCoordinates, shipBattleId, offChainVersion, commandId, requesterId);
+        public void create(Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, Coordinates originCoordinates, String shipBattleId, Long offChainVersion, String commandId, String requesterId, RosterCommands.Create c) {
+            java.util.function.Supplier<RosterEvent.RosterCreated> eventFactory = () -> newRosterCreated(status, speed, updatedCoordinates, coordinatesUpdatedAt, targetCoordinates, originCoordinates, shipBattleId, offChainVersion, commandId, requesterId);
             RosterEvent.RosterCreated e;
             try {
-                e = verifyCreate(eventFactory, status, speed, updatedCoordinates, coordinatesUpdatedAt, targetCoordinates, shipBattleId, c);
+                e = verifyCreate(eventFactory, status, speed, updatedCoordinates, coordinatesUpdatedAt, targetCoordinates, originCoordinates, shipBattleId, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -86,11 +86,11 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void updateLocation(String clock, Long offChainVersion, String commandId, String requesterId, RosterCommands.UpdateLocation c) {
-            java.util.function.Supplier<RosterEvent.RosterLocationUpdated> eventFactory = () -> newRosterLocationUpdated(clock, offChainVersion, commandId, requesterId);
+        public void updateLocation(String clock, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId, RosterCommands.UpdateLocation c) {
+            java.util.function.Supplier<RosterEvent.RosterLocationUpdated> eventFactory = () -> newRosterLocationUpdated(clock, updatedCoordinates, offChainVersion, commandId, requesterId);
             RosterEvent.RosterLocationUpdated e;
             try {
-                e = verifyUpdateLocation(eventFactory, c);
+                e = verifyUpdateLocation(eventFactory, updatedCoordinates, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -138,11 +138,11 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void takeOutShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId, RosterCommands.TakeOutShipInventory c) {
-            java.util.function.Supplier<RosterEvent.RosterShipInventoryTakenOut> eventFactory = () -> newRosterShipInventoryTakenOut(player, clock, shipId, itemIdQuantityPairs, offChainVersion, commandId, requesterId);
+        public void takeOutShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId, RosterCommands.TakeOutShipInventory c) {
+            java.util.function.Supplier<RosterEvent.RosterShipInventoryTakenOut> eventFactory = () -> newRosterShipInventoryTakenOut(player, clock, shipId, itemIdQuantityPairs, updatedCoordinates, offChainVersion, commandId, requesterId);
             RosterEvent.RosterShipInventoryTakenOut e;
             try {
-                e = verifyTakeOutShipInventory(eventFactory, player, shipId, itemIdQuantityPairs, c);
+                e = verifyTakeOutShipInventory(eventFactory, player, shipId, itemIdQuantityPairs, updatedCoordinates, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -151,11 +151,11 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void putInShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId, RosterCommands.PutInShipInventory c) {
-            java.util.function.Supplier<RosterEvent.RosterShipInventoryPutIn> eventFactory = () -> newRosterShipInventoryPutIn(player, clock, shipId, itemIdQuantityPairs, offChainVersion, commandId, requesterId);
+        public void putInShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId, RosterCommands.PutInShipInventory c) {
+            java.util.function.Supplier<RosterEvent.RosterShipInventoryPutIn> eventFactory = () -> newRosterShipInventoryPutIn(player, clock, shipId, itemIdQuantityPairs, updatedCoordinates, offChainVersion, commandId, requesterId);
             RosterEvent.RosterShipInventoryPutIn e;
             try {
-                e = verifyPutInShipInventory(eventFactory, player, shipId, itemIdQuantityPairs, c);
+                e = verifyPutInShipInventory(eventFactory, player, shipId, itemIdQuantityPairs, updatedCoordinates, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -163,25 +163,26 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             apply(e);
         }
 
-        protected RosterEvent.RosterCreated verifyCreate(java.util.function.Supplier<RosterEvent.RosterCreated> eventFactory, Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, String shipBattleId, RosterCommands.Create c) {
+        protected RosterEvent.RosterCreated verifyCreate(java.util.function.Supplier<RosterEvent.RosterCreated> eventFactory, Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, Coordinates originCoordinates, String shipBattleId, RosterCommands.Create c) {
             Integer Status = status;
             Long Speed = speed;
             Coordinates UpdatedCoordinates = updatedCoordinates;
             BigInteger CoordinatesUpdatedAt = coordinatesUpdatedAt;
             Coordinates TargetCoordinates = targetCoordinates;
+            Coordinates OriginCoordinates = originCoordinates;
             String ShipBattleId = shipBattleId;
 
             RosterEvent.RosterCreated e = (RosterEvent.RosterCreated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.CreateLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, RosterState.class, Integer.class, Long.class, Coordinates.class, BigInteger.class, Coordinates.class, String.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), status, speed, updatedCoordinates, coordinatesUpdatedAt, targetCoordinates, shipBattleId, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, Integer.class, Long.class, Coordinates.class, BigInteger.class, Coordinates.class, Coordinates.class, String.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), status, speed, updatedCoordinates, coordinatesUpdatedAt, targetCoordinates, originCoordinates, shipBattleId, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class CreateLogic {
-//    public static RosterEvent.RosterCreated verify(java.util.function.Supplier<RosterEvent.RosterCreated> eventFactory, RosterState rosterState, Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, String shipBattleId, VerificationContext verificationContext) {
+//    public static RosterEvent.RosterCreated verify(java.util.function.Supplier<RosterEvent.RosterCreated> eventFactory, RosterState rosterState, Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, Coordinates originCoordinates, String shipBattleId, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -235,22 +236,23 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
            
 
-        protected RosterEvent.RosterSetSail verifySetSail(java.util.function.Supplier<RosterEvent.RosterSetSail> eventFactory, String player, Coordinates targetCoordinates, BigInteger sailDuration, RosterCommands.SetSail c) {
+        protected RosterEvent.RosterSetSail verifySetSail(java.util.function.Supplier<RosterEvent.RosterSetSail> eventFactory, String player, Coordinates targetCoordinates, BigInteger sailDuration, Coordinates updatedCoordinates, RosterCommands.SetSail c) {
             String Player = player;
             Coordinates TargetCoordinates = targetCoordinates;
             BigInteger SailDuration = sailDuration;
+            Coordinates UpdatedCoordinates = updatedCoordinates;
 
             RosterEvent.RosterSetSail e = (RosterEvent.RosterSetSail) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.SetSailLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, BigInteger.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), player, targetCoordinates, sailDuration, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, BigInteger.class, Coordinates.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), player, targetCoordinates, sailDuration, updatedCoordinates, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class SetSailLogic {
-//    public static RosterEvent.RosterSetSail verify(java.util.function.Supplier<RosterEvent.RosterSetSail> eventFactory, RosterState rosterState, String player, Coordinates targetCoordinates, BigInteger sailDuration, VerificationContext verificationContext) {
+//    public static RosterEvent.RosterSetSail verify(java.util.function.Supplier<RosterEvent.RosterSetSail> eventFactory, RosterState rosterState, String player, Coordinates targetCoordinates, BigInteger sailDuration, Coordinates updatedCoordinates, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -258,19 +260,20 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
            
 
-        protected RosterEvent.RosterLocationUpdated verifyUpdateLocation(java.util.function.Supplier<RosterEvent.RosterLocationUpdated> eventFactory, RosterCommands.UpdateLocation c) {
+        protected RosterEvent.RosterLocationUpdated verifyUpdateLocation(java.util.function.Supplier<RosterEvent.RosterLocationUpdated> eventFactory, Coordinates updatedCoordinates, RosterCommands.UpdateLocation c) {
+            Coordinates UpdatedCoordinates = updatedCoordinates;
 
             RosterEvent.RosterLocationUpdated e = (RosterEvent.RosterLocationUpdated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.UpdateLocationLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, RosterState.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), updatedCoordinates, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class UpdateLocationLogic {
-//    public static RosterEvent.RosterLocationUpdated verify(java.util.function.Supplier<RosterEvent.RosterLocationUpdated> eventFactory, RosterState rosterState, VerificationContext verificationContext) {
+//    public static RosterEvent.RosterLocationUpdated verify(java.util.function.Supplier<RosterEvent.RosterLocationUpdated> eventFactory, RosterState rosterState, Coordinates updatedCoordinates, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -349,22 +352,23 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
            
 
-        protected RosterEvent.RosterShipInventoryTakenOut verifyTakeOutShipInventory(java.util.function.Supplier<RosterEvent.RosterShipInventoryTakenOut> eventFactory, String player, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, RosterCommands.TakeOutShipInventory c) {
+        protected RosterEvent.RosterShipInventoryTakenOut verifyTakeOutShipInventory(java.util.function.Supplier<RosterEvent.RosterShipInventoryTakenOut> eventFactory, String player, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, RosterCommands.TakeOutShipInventory c) {
             String Player = player;
             String ShipId = shipId;
             ItemIdQuantityPairs ItemIdQuantityPairs = itemIdQuantityPairs;
+            Coordinates UpdatedCoordinates = updatedCoordinates;
 
             RosterEvent.RosterShipInventoryTakenOut e = (RosterEvent.RosterShipInventoryTakenOut) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.TakeOutShipInventoryLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, RosterState.class, String.class, ItemIdQuantityPairs.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), player, shipId, itemIdQuantityPairs, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, String.class, ItemIdQuantityPairs.class, Coordinates.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), player, shipId, itemIdQuantityPairs, updatedCoordinates, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class TakeOutShipInventoryLogic {
-//    public static RosterEvent.RosterShipInventoryTakenOut verify(java.util.function.Supplier<RosterEvent.RosterShipInventoryTakenOut> eventFactory, RosterState rosterState, String player, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, VerificationContext verificationContext) {
+//    public static RosterEvent.RosterShipInventoryTakenOut verify(java.util.function.Supplier<RosterEvent.RosterShipInventoryTakenOut> eventFactory, RosterState rosterState, String player, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -372,22 +376,23 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
            
 
-        protected RosterEvent.RosterShipInventoryPutIn verifyPutInShipInventory(java.util.function.Supplier<RosterEvent.RosterShipInventoryPutIn> eventFactory, String player, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, RosterCommands.PutInShipInventory c) {
+        protected RosterEvent.RosterShipInventoryPutIn verifyPutInShipInventory(java.util.function.Supplier<RosterEvent.RosterShipInventoryPutIn> eventFactory, String player, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, RosterCommands.PutInShipInventory c) {
             String Player = player;
             String ShipId = shipId;
             ItemIdQuantityPairs ItemIdQuantityPairs = itemIdQuantityPairs;
+            Coordinates UpdatedCoordinates = updatedCoordinates;
 
             RosterEvent.RosterShipInventoryPutIn e = (RosterEvent.RosterShipInventoryPutIn) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.PutInShipInventoryLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, RosterState.class, String.class, ItemIdQuantityPairs.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), player, shipId, itemIdQuantityPairs, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, String.class, ItemIdQuantityPairs.class, Coordinates.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), player, shipId, itemIdQuantityPairs, updatedCoordinates, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class PutInShipInventoryLogic {
-//    public static RosterEvent.RosterShipInventoryPutIn verify(java.util.function.Supplier<RosterEvent.RosterShipInventoryPutIn> eventFactory, RosterState rosterState, String player, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, VerificationContext verificationContext) {
+//    public static RosterEvent.RosterShipInventoryPutIn verify(java.util.function.Supplier<RosterEvent.RosterShipInventoryPutIn> eventFactory, RosterState rosterState, String player, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -395,7 +400,7 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
            
 
-        protected AbstractRosterEvent.RosterCreated newRosterCreated(Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, String shipBattleId, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractRosterEvent.RosterCreated newRosterCreated(Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, Coordinates originCoordinates, String shipBattleId, Long offChainVersion, String commandId, String requesterId) {
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterCreated e = new AbstractRosterEvent.RosterCreated();
 
@@ -404,6 +409,7 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             e.getDynamicProperties().put("updatedCoordinates", updatedCoordinates);
             e.getDynamicProperties().put("coordinatesUpdatedAt", coordinatesUpdatedAt);
             e.getDynamicProperties().put("targetCoordinates", targetCoordinates);
+            e.getDynamicProperties().put("originCoordinates", originCoordinates);
             e.getDynamicProperties().put("shipBattleId", shipBattleId);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
@@ -470,11 +476,11 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             return e;
         }
 
-        protected AbstractRosterEvent.RosterLocationUpdated newRosterLocationUpdated(String clock, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractRosterEvent.RosterLocationUpdated newRosterLocationUpdated(String clock, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId) {
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterLocationUpdated e = new AbstractRosterEvent.RosterLocationUpdated();
 
-            e.setUpdatedCoordinates(null);
+            e.getDynamicProperties().put("updatedCoordinates", updatedCoordinates);
             e.setCoordinatesUpdatedAt(null);
             e.setNewStatus(null);
             e.setSuiTimestamp(null);
@@ -565,12 +571,13 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             return e;
         }
 
-        protected AbstractRosterEvent.RosterShipInventoryTakenOut newRosterShipInventoryTakenOut(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractRosterEvent.RosterShipInventoryTakenOut newRosterShipInventoryTakenOut(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId) {
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterShipInventoryTakenOut e = new AbstractRosterEvent.RosterShipInventoryTakenOut();
 
             e.getDynamicProperties().put("shipId", shipId);
             e.getDynamicProperties().put("itemIdQuantityPairs", itemIdQuantityPairs);
+            e.getDynamicProperties().put("updatedCoordinates", updatedCoordinates);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);
@@ -588,12 +595,13 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             return e;
         }
 
-        protected AbstractRosterEvent.RosterShipInventoryPutIn newRosterShipInventoryPutIn(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractRosterEvent.RosterShipInventoryPutIn newRosterShipInventoryPutIn(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId) {
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterShipInventoryPutIn e = new AbstractRosterEvent.RosterShipInventoryPutIn();
 
             e.getDynamicProperties().put("shipId", shipId);
             e.getDynamicProperties().put("itemIdQuantityPairs", itemIdQuantityPairs);
+            e.getDynamicProperties().put("updatedCoordinates", updatedCoordinates);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

@@ -2,22 +2,33 @@
 module infinite_sea::roster_update_location_logic {
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
+    use infinite_sea_common::coordinates::Coordinates;
 
     use infinite_sea::roster;
     use infinite_sea::roster_util;
 
     friend infinite_sea::roster_aggregate;
 
+    const EInvalidUpdatedCoordinates: u64 = 10;
 
     public(friend) fun verify(
         clock: &Clock,
+        updated_coordinates: Coordinates,
         roster: &roster::Roster,
         ctx: &TxContext,
     ): roster::RosterLocationUpdated {
-        let (updated_coordinates, coordinates_updated_at, new_status) = roster_util::calculate_current_location(
-            roster, clock
-        );
-        roster::new_roster_location_updated(roster, updated_coordinates, coordinates_updated_at, new_status)
+        //let (new_updated_coordinates, coordinates_updated_at, new_status) = roster_util::calculate_current_location(
+        //    roster, clock
+        //);
+        let (updatable, coordinates_updated_at, new_status)
+            = roster_util::is_current_location_updatable(roster, clock, updated_coordinates);
+        let new_updated_coordinates: Coordinates;
+        if (updatable) {
+            new_updated_coordinates = updated_coordinates;
+        } else {
+            abort EInvalidUpdatedCoordinates
+        };
+        roster::new_roster_location_updated(roster, new_updated_coordinates, coordinates_updated_at, new_status)
     }
 
     public(friend) fun mutate(

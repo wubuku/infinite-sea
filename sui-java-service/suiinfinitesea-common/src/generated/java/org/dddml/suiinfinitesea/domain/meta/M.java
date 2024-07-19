@@ -697,6 +697,8 @@ public class M {
             "updatedCoordinates.y",
             "targetCoordinates.x",
             "targetCoordinates.y",
+            "originCoordinates.x",
+            "originCoordinates.y",
     };
 
     public static final String[] propertyTypes = new String[] {
@@ -719,6 +721,8 @@ public class M {
             "Boolean",
             "String",
             "Integer",
+            "Long",
+            "Long",
             "Long",
             "Long",
             "Long",
@@ -783,6 +787,10 @@ public class M {
         aliasMap.put("TargetCoordinates.X", "targetCoordinates.x");
         aliasMap.put("targetCoordinates.y", "targetCoordinates.y");
         aliasMap.put("TargetCoordinates.Y", "targetCoordinates.y");
+        aliasMap.put("originCoordinates.x", "originCoordinates.x");
+        aliasMap.put("OriginCoordinates.X", "originCoordinates.x");
+        aliasMap.put("originCoordinates.y", "originCoordinates.y");
+        aliasMap.put("OriginCoordinates.Y", "originCoordinates.y");
     }
 
     private static void initPropertyTypeMap() {

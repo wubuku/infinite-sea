@@ -72,6 +72,8 @@ services:
             type: u64
           SailDuration:
             type: u64
+          UpdatedCoordinates:
+            type: Coordinates
 
 #      StartMutexCreation:
 #        parameters:
@@ -106,6 +108,10 @@ services:
             isMutableReference: true
           Clock:
             referenceType: Clock
+          InitiatorCoordinates:
+            type: Coordinates
+          ResponderCoordinates:
+            type: Coordinates
 
       AutoPlayTillEnd:
         parameters:

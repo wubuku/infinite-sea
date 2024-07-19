@@ -17,7 +17,7 @@ public interface ShipBattleAggregate {
 
     List<Event> getChanges();
 
-    void initiateBattle(String player, RosterId initiator, RosterId responder, String clock, Long offChainVersion, String commandId, String requesterId, ShipBattleCommands.InitiateBattle c);
+    void initiateBattle(String player, RosterId initiator, RosterId responder, String clock, Coordinates initiatorCoordinates, Coordinates responderCoordinates, Long offChainVersion, String commandId, String requesterId, ShipBattleCommands.InitiateBattle c);
 
     void makeMove(String player, RosterId initiator, RosterId responder, String clock, Integer attackerCommand, Long offChainVersion, String commandId, String requesterId, ShipBattleCommands.MakeMove c);
 

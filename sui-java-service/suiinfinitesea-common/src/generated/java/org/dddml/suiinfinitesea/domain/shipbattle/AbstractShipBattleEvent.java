@@ -205,6 +205,30 @@ public abstract class AbstractShipBattleEvent extends AbstractEvent implements S
             return "ShipBattleInitiated";
         }
 
+        public Coordinates getInitiatorCoordinates() {
+            Object val = getDynamicProperties().get("initiatorCoordinates");
+            if (val instanceof Coordinates) {
+                return (Coordinates) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
+        }
+
+        public void setInitiatorCoordinates(Coordinates value) {
+            getDynamicProperties().put("initiatorCoordinates", value);
+        }
+
+        public Coordinates getResponderCoordinates() {
+            Object val = getDynamicProperties().get("responderCoordinates");
+            if (val instanceof Coordinates) {
+                return (Coordinates) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
+        }
+
+        public void setResponderCoordinates(Coordinates value) {
+            getDynamicProperties().put("responderCoordinates", value);
+        }
+
         public String getInitiatorId() {
             Object val = getDynamicProperties().get("initiatorId");
             if (val instanceof String) {

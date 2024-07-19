@@ -51,7 +51,7 @@ public abstract class AbstractShipBattleApplicationService implements ShipBattle
     }
 
     public void when(ShipBattleCommands.InitiateBattle c) {
-        update(c, ar -> ar.initiateBattle(c.getPlayer(), c.getInitiator(), c.getResponder(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+        update(c, ar -> ar.initiateBattle(c.getPlayer(), c.getInitiator(), c.getResponder(), c.getClock(), c.getInitiatorCoordinates(), c.getResponderCoordinates(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public void when(ShipBattleCommands.MakeMove c) {

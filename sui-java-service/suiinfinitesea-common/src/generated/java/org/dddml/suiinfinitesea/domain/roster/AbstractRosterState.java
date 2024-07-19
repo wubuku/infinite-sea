@@ -95,6 +95,16 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         this.targetCoordinates = targetCoordinates;
     }
 
+    private Coordinates originCoordinates;
+
+    public Coordinates getOriginCoordinates() {
+        return this.originCoordinates;
+    }
+
+    public void setOriginCoordinates(Coordinates originCoordinates) {
+        this.originCoordinates = originCoordinates;
+    }
+
     private BigInteger sailDuration;
 
     public BigInteger getSailDuration() {
@@ -354,6 +364,7 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         this.setUpdatedCoordinates(s.getUpdatedCoordinates());
         this.setCoordinatesUpdatedAt(s.getCoordinatesUpdatedAt());
         this.setTargetCoordinates(s.getTargetCoordinates());
+        this.setOriginCoordinates(s.getOriginCoordinates());
         this.setSailDuration(s.getSailDuration());
         this.setShipBattleId(s.getShipBattleId());
         this.setEnvironmentOwned(s.getEnvironmentOwned());
@@ -412,6 +423,8 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         BigInteger CoordinatesUpdatedAt = coordinatesUpdatedAt;
         Coordinates targetCoordinates = e.getTargetCoordinates();
         Coordinates TargetCoordinates = targetCoordinates;
+        Coordinates originCoordinates = e.getOriginCoordinates();
+        Coordinates OriginCoordinates = originCoordinates;
         String shipBattleId = e.getShipBattleId();
         String ShipBattleId = shipBattleId;
         Long suiTimestamp = e.getSuiTimestamp();
@@ -443,14 +456,14 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         RosterState updatedRosterState = (RosterState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.CreateLogic",
                     "mutate",
-                    new Class[]{RosterState.class, Integer.class, Long.class, Coordinates.class, BigInteger.class, Coordinates.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, status, speed, updatedCoordinates, coordinatesUpdatedAt, targetCoordinates, shipBattleId, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{RosterState.class, Integer.class, Long.class, Coordinates.class, BigInteger.class, Coordinates.class, Coordinates.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, status, speed, updatedCoordinates, coordinatesUpdatedAt, targetCoordinates, originCoordinates, shipBattleId, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class CreateLogic {
-//    public static RosterState mutate(RosterState rosterState, Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, String shipBattleId, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
+//    public static RosterState mutate(RosterState rosterState, Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, Coordinates originCoordinates, String shipBattleId, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
 //    }
 //}
 
@@ -838,6 +851,8 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         String ShipId = shipId;
         ItemIdQuantityPairs itemIdQuantityPairs = e.getItemIdQuantityPairs();
         ItemIdQuantityPairs ItemIdQuantityPairs = itemIdQuantityPairs;
+        Coordinates updatedCoordinates = e.getUpdatedCoordinates();
+        Coordinates UpdatedCoordinates = updatedCoordinates;
         Long suiTimestamp = e.getSuiTimestamp();
         Long SuiTimestamp = suiTimestamp;
         String suiTxDigest = e.getSuiTxDigest();
@@ -867,14 +882,14 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         RosterState updatedRosterState = (RosterState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.TakeOutShipInventoryLogic",
                     "mutate",
-                    new Class[]{RosterState.class, String.class, ItemIdQuantityPairs.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, shipId, itemIdQuantityPairs, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{RosterState.class, String.class, ItemIdQuantityPairs.class, Coordinates.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, shipId, itemIdQuantityPairs, updatedCoordinates, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class TakeOutShipInventoryLogic {
-//    public static RosterState mutate(RosterState rosterState, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
+//    public static RosterState mutate(RosterState rosterState, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
 //    }
 //}
 
@@ -889,6 +904,8 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         String ShipId = shipId;
         ItemIdQuantityPairs itemIdQuantityPairs = e.getItemIdQuantityPairs();
         ItemIdQuantityPairs ItemIdQuantityPairs = itemIdQuantityPairs;
+        Coordinates updatedCoordinates = e.getUpdatedCoordinates();
+        Coordinates UpdatedCoordinates = updatedCoordinates;
         Long suiTimestamp = e.getSuiTimestamp();
         Long SuiTimestamp = suiTimestamp;
         String suiTxDigest = e.getSuiTxDigest();
@@ -918,14 +935,14 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         RosterState updatedRosterState = (RosterState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.PutInShipInventoryLogic",
                     "mutate",
-                    new Class[]{RosterState.class, String.class, ItemIdQuantityPairs.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, shipId, itemIdQuantityPairs, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{RosterState.class, String.class, ItemIdQuantityPairs.class, Coordinates.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, shipId, itemIdQuantityPairs, updatedCoordinates, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class PutInShipInventoryLogic {
-//    public static RosterState mutate(RosterState rosterState, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
+//    public static RosterState mutate(RosterState rosterState, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
 //    }
 //}
 

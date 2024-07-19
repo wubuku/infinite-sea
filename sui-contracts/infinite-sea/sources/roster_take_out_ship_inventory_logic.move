@@ -6,6 +6,7 @@ module infinite_sea::roster_take_out_ship_inventory_logic {
     use sui::object::ID;
     use sui::object_table;
     use sui::tx_context::TxContext;
+    use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea::roster_util;
     use infinite_sea::permission_util;
     use infinite_sea_common::item_id_quantity_pairs;
@@ -24,6 +25,7 @@ module infinite_sea::roster_take_out_ship_inventory_logic {
         clock: &Clock,
         ship_id: ID,
         item_id_quantity_pairs: ItemIdQuantityPairs,
+        updated_coordinates: Coordinates,
         roster: &mut roster::Roster,
         ctx: &TxContext,
     ): roster::RosterShipInventoryTakenOut {
@@ -33,15 +35,19 @@ module infinite_sea::roster_take_out_ship_inventory_logic {
 
         // Check if the ship has anchored at the island
         if (roster::status(roster) == roster_status::underway()) {
-            let (updated_coordinates, coordinates_updated_at, new_status)
-                = roster_util::calculate_current_location(roster, clock);
-            roster::set_updated_coordinates(roster, updated_coordinates);
-            roster::set_coordinates_updated_at(roster, coordinates_updated_at);
-            roster::set_status(roster, new_status);
+            // let (updated_coordinates, coordinates_updated_at, new_status)
+            //     = roster_util::calculate_current_location(roster, clock);
+            let (updatable, coordinates_updated_at, new_status)
+                = roster_util::is_current_location_updatable(roster, clock, updated_coordinates);
+            if (updatable) {
+                roster::set_updated_coordinates(roster, updated_coordinates);
+                roster::set_coordinates_updated_at(roster, coordinates_updated_at);
+                roster::set_status(roster, new_status);
+            }
         };
         roster_util::assert_roster_is_anchored_at_claimed_island(roster, player);
 
-        roster::new_roster_ship_inventory_taken_out(roster, ship_id, item_id_quantity_pairs)
+        roster::new_roster_ship_inventory_taken_out(roster, ship_id, item_id_quantity_pairs, updated_coordinates)
     }
 
     public(friend) fun mutate(

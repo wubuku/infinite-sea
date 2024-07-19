@@ -47,11 +47,11 @@ public abstract class AbstractShipBattleAggregate extends AbstractAggregate impl
         }
 
         @Override
-        public void initiateBattle(String player, RosterId initiator, RosterId responder, String clock, Long offChainVersion, String commandId, String requesterId, ShipBattleCommands.InitiateBattle c) {
-            java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory = () -> newShipBattleInitiated(player, initiator, responder, clock, offChainVersion, commandId, requesterId);
+        public void initiateBattle(String player, RosterId initiator, RosterId responder, String clock, Coordinates initiatorCoordinates, Coordinates responderCoordinates, Long offChainVersion, String commandId, String requesterId, ShipBattleCommands.InitiateBattle c) {
+            java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory = () -> newShipBattleInitiated(player, initiator, responder, clock, initiatorCoordinates, responderCoordinates, offChainVersion, commandId, requesterId);
             ShipBattleEvent.ShipBattleInitiated e;
             try {
-                e = verifyInitiateBattle(eventFactory, player, initiator, responder, c);
+                e = verifyInitiateBattle(eventFactory, player, initiator, responder, initiatorCoordinates, responderCoordinates, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -85,22 +85,24 @@ public abstract class AbstractShipBattleAggregate extends AbstractAggregate impl
             apply(e);
         }
 
-        protected ShipBattleEvent.ShipBattleInitiated verifyInitiateBattle(java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory, String player, RosterId initiator, RosterId responder, ShipBattleCommands.InitiateBattle c) {
+        protected ShipBattleEvent.ShipBattleInitiated verifyInitiateBattle(java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory, String player, RosterId initiator, RosterId responder, Coordinates initiatorCoordinates, Coordinates responderCoordinates, ShipBattleCommands.InitiateBattle c) {
             String Player = player;
             RosterId Initiator = initiator;
             RosterId Responder = responder;
+            Coordinates InitiatorCoordinates = initiatorCoordinates;
+            Coordinates ResponderCoordinates = responderCoordinates;
 
             ShipBattleEvent.ShipBattleInitiated e = (ShipBattleEvent.ShipBattleInitiated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.shipbattle.InitiateBattleLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, ShipBattleState.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), player, initiator, responder, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, ShipBattleState.class, Coordinates.class, Coordinates.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), player, initiator, responder, initiatorCoordinates, responderCoordinates, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.shipbattle;
 //
 //public class InitiateBattleLogic {
-//    public static ShipBattleEvent.ShipBattleInitiated verify(java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory, ShipBattleState shipBattleState, String player, RosterId initiator, RosterId responder, VerificationContext verificationContext) {
+//    public static ShipBattleEvent.ShipBattleInitiated verify(java.util.function.Supplier<ShipBattleEvent.ShipBattleInitiated> eventFactory, ShipBattleState shipBattleState, String player, RosterId initiator, RosterId responder, Coordinates initiatorCoordinates, Coordinates responderCoordinates, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -158,10 +160,12 @@ public abstract class AbstractShipBattleAggregate extends AbstractAggregate impl
         }
            
 
-        protected AbstractShipBattleEvent.ShipBattleInitiated newShipBattleInitiated(String player, RosterId initiator, RosterId responder, String clock, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractShipBattleEvent.ShipBattleInitiated newShipBattleInitiated(String player, RosterId initiator, RosterId responder, String clock, Coordinates initiatorCoordinates, Coordinates responderCoordinates, Long offChainVersion, String commandId, String requesterId) {
             ShipBattleEventId eventId = new ShipBattleEventId(getState().getId(), null);
             AbstractShipBattleEvent.ShipBattleInitiated e = new AbstractShipBattleEvent.ShipBattleInitiated();
 
+            e.getDynamicProperties().put("initiatorCoordinates", initiatorCoordinates);
+            e.getDynamicProperties().put("responderCoordinates", responderCoordinates);
             e.setInitiatorId(null);
             e.setResponderId(null);
             e.setStartedAt(null);

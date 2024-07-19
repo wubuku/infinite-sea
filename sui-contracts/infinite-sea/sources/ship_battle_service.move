@@ -17,6 +17,10 @@ module infinite_sea::ship_battle_service {
         initiator: &mut Roster,
         responder: &mut Roster,
         clock: &Clock,
+        initiator_coordinates_x: u32,
+        initiator_coordinates_y: u32,
+        responder_coordinates_x: u32,
+        responder_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
         let ship_battle = ship_battle_aggregate::initiate_battle(
@@ -24,6 +28,10 @@ module infinite_sea::ship_battle_service {
             initiator,
             responder,
             clock,
+            initiator_coordinates_x,
+            initiator_coordinates_y,
+            responder_coordinates_x,
+            responder_coordinates_y,
             ctx,
         );
         auto_play_till_end(&mut ship_battle, player, initiator, responder, clock, ctx);
@@ -35,6 +43,10 @@ module infinite_sea::ship_battle_service {
         initiator: &mut Roster,
         responder: &mut Roster,
         clock: &Clock,
+        initiator_coordinates_x: u32,
+        initiator_coordinates_y: u32,
+        responder_coordinates_x: u32,
+        responder_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
         let ship_battle = ship_battle_aggregate::initiate_battle(
@@ -42,6 +54,10 @@ module infinite_sea::ship_battle_service {
             initiator,
             responder,
             clock,
+            initiator_coordinates_x,
+            initiator_coordinates_y,
+            responder_coordinates_x,
+            responder_coordinates_y,
             ctx,
         );
         ship_battle::share_object(ship_battle);

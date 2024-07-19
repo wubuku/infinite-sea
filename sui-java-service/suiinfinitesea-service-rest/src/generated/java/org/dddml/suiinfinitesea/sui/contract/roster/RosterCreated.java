@@ -29,6 +29,8 @@ public class RosterCreated {
 
     private CoordinatesForEvent targetCoordinates;
 
+    private CoordinatesForEvent originCoordinates;
+
     private String shipBattleId;
 
     public String getId() {
@@ -87,6 +89,14 @@ public class RosterCreated {
         this.targetCoordinates = targetCoordinates;
     }
 
+    public CoordinatesForEvent getOriginCoordinates() {
+        return originCoordinates;
+    }
+
+    public void setOriginCoordinates(CoordinatesForEvent originCoordinates) {
+        this.originCoordinates = originCoordinates;
+    }
+
     public String getShipBattleId() {
         return shipBattleId;
     }
@@ -105,6 +115,7 @@ public class RosterCreated {
                 ", updatedCoordinates=" + updatedCoordinates +
                 ", coordinatesUpdatedAt=" + coordinatesUpdatedAt +
                 ", targetCoordinates=" + targetCoordinates +
+                ", originCoordinates=" + originCoordinates +
                 ", shipBattleId=" + '\'' + shipBattleId + '\'' +
                 '}';
     }

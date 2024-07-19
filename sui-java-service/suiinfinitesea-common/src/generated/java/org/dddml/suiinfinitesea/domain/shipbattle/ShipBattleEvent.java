@@ -22,6 +22,14 @@ public interface ShipBattleEvent extends Event, SuiEventEnvelope, SuiMoveEvent, 
     }
 
     interface ShipBattleInitiated extends ShipBattleEvent {
+        Coordinates getInitiatorCoordinates();
+
+        void setInitiatorCoordinates(Coordinates value);
+
+        Coordinates getResponderCoordinates();
+
+        void setResponderCoordinates(Coordinates value);
+
         String getInitiatorId();
 
         void setInitiatorId(String value);

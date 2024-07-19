@@ -301,6 +301,18 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
             getDynamicProperties().put("targetCoordinates", value);
         }
 
+        public Coordinates getOriginCoordinates() {
+            Object val = getDynamicProperties().get("originCoordinates");
+            if (val instanceof Coordinates) {
+                return (Coordinates) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
+        }
+
+        public void setOriginCoordinates(Coordinates value) {
+            getDynamicProperties().put("originCoordinates", value);
+        }
+
         public String getShipBattleId() {
             Object val = getDynamicProperties().get("shipBattleId");
             if (val instanceof String) {
@@ -673,6 +685,18 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
             getDynamicProperties().put("itemIdQuantityPairs", value);
         }
 
+        public Coordinates getUpdatedCoordinates() {
+            Object val = getDynamicProperties().get("updatedCoordinates");
+            if (val instanceof Coordinates) {
+                return (Coordinates) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
+        }
+
+        public void setUpdatedCoordinates(Coordinates value) {
+            getDynamicProperties().put("updatedCoordinates", value);
+        }
+
     }
 
     public static class RosterShipInventoryPutIn extends RosterLobEvent implements RosterEvent.RosterShipInventoryPutIn {
@@ -704,6 +728,18 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
         public void setItemIdQuantityPairs(ItemIdQuantityPairs value) {
             getDynamicProperties().put("itemIdQuantityPairs", value);
+        }
+
+        public Coordinates getUpdatedCoordinates() {
+            Object val = getDynamicProperties().get("updatedCoordinates");
+            if (val instanceof Coordinates) {
+                return (Coordinates) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
+        }
+
+        public void setUpdatedCoordinates(Coordinates value) {
+            getDynamicProperties().put("updatedCoordinates", value);
         }
 
     }

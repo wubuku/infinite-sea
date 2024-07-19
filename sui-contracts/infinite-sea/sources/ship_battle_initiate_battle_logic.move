@@ -6,6 +6,7 @@ module infinite_sea::ship_battle_initiate_battle_logic {
     use sui::clock::Clock;
     use sui::tx_context::TxContext;
     use infinite_sea_common::battle_status;
+    use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::roster_status;
 
     use infinite_sea::permission_util;
@@ -28,34 +29,36 @@ module infinite_sea::ship_battle_initiate_battle_logic {
         initiator: &mut Roster,
         responder: &mut Roster,
         clock: &Clock,
+        initiator_coordinates: Coordinates,
+        responder_coordinates: Coordinates,
         ctx: &mut TxContext,
     ): ship_battle::ShipBattleInitiated {
-        //挑战方是否准备好开始战斗状态
         assert!(roster_util::is_status_battle_ready(initiator), EInitiatorNotBattleReady);
-        //应战方是否准备好开始战斗状态
         assert!(roster_util::is_status_battle_ready(responder), EResponderNotBattleReady);
-        //执行操作的人是否是参数中的玩家
         permission_util::assert_sender_is_player_owner(player, ctx);
-        //参数中的玩家是否是挑战船队的拥有者
         permission_util::assert_player_is_roster_owner(player, initiator);
-        //挑战者的船队编号不能为 unassigned 的
         roster_util::assert_roster_is_not_unassigned_ships(initiator);
-        //应战者者的船队编号不能为 unassigned 的
         roster_util::assert_roster_is_not_unassigned_ships(responder);
         // todo more checks???
 
         // Update the locations of the two rosters,
         if (roster_status::underway() == roster::status(initiator)) {
             //roster_aggregate::update_location(initiator, clock, ctx);
-            let (c, t, _new_status) = roster_util::calculate_current_location(initiator, clock);
-            roster::set_updated_coordinates(initiator, c);
-            roster::set_coordinates_updated_at(initiator, t);
+            //let (initiator_coordinates, t, _new_status) = roster_util::calculate_current_location(initiator, clock);
+            let (updatable, t, _new_status) = roster_util::is_current_location_updatable(initiator, clock, initiator_coordinates);
+            if (updatable) {
+                roster::set_updated_coordinates(initiator, initiator_coordinates);
+                roster::set_coordinates_updated_at(initiator, t);
+            };
         };
         if (roster_status::underway() == roster::status(responder)) {
             //roster_aggregate::update_location(responder, clock, ctx);
-            let (c, t, _new_status) = roster_util::calculate_current_location(responder, clock);
-            roster::set_updated_coordinates(responder, c);
-            roster::set_coordinates_updated_at(responder, t);
+            //let (responder_coordinates, t, _new_status) = roster_util::calculate_current_location(responder, clock);
+            let (updatable, t, _new_status) = roster_util::is_current_location_updatable(responder, clock, responder_coordinates);
+            if (updatable) {
+                roster::set_updated_coordinates(responder, responder_coordinates);
+                roster::set_coordinates_updated_at(responder, t);
+            };
         };
 
         // and then assert if they are close enough to each other 两个船队是否足够的近
@@ -72,6 +75,8 @@ module infinite_sea::ship_battle_initiate_battle_logic {
             ship_battle_util::responder()
         };
         ship_battle::new_ship_battle_initiated(
+            initiator_coordinates,
+            responder_coordinates,
             roster::id(initiator),
             roster::id(responder),
             clock::timestamp_ms(clock) / 1000,

@@ -96,6 +96,7 @@ module infinite_sea::roster {
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
+        origin_coordinates: Option<Coordinates>,
         sail_duration: u64,
         ship_battle_id: Option<ID>,
         environment_owned: bool,
@@ -179,6 +180,14 @@ module infinite_sea::roster {
         roster.target_coordinates = target_coordinates;
     }
 
+    public fun origin_coordinates(roster: &Roster): Option<Coordinates> {
+        roster.origin_coordinates
+    }
+
+    public(friend) fun set_origin_coordinates(roster: &mut Roster, origin_coordinates: Option<Coordinates>) {
+        roster.origin_coordinates = origin_coordinates;
+    }
+
     public fun sail_duration(roster: &Roster): u64 {
         roster.sail_duration
     }
@@ -231,6 +240,7 @@ module infinite_sea::roster {
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
+        origin_coordinates: Option<Coordinates>,
         ship_battle_id: Option<ID>,
         ctx: &mut TxContext,
     ): Roster {
@@ -252,6 +262,7 @@ module infinite_sea::roster {
             updated_coordinates,
             coordinates_updated_at,
             target_coordinates,
+            origin_coordinates,
             sail_duration: 0,
             ship_battle_id,
             environment_owned: false,
@@ -274,6 +285,7 @@ module infinite_sea::roster {
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
+        origin_coordinates: Option<Coordinates>,
         ship_battle_id: Option<ID>,
     }
 
@@ -313,6 +325,14 @@ module infinite_sea::roster {
         roster_created.target_coordinates = target_coordinates;
     }
 
+    public fun roster_created_origin_coordinates(roster_created: &RosterCreated): Option<Coordinates> {
+        roster_created.origin_coordinates
+    }
+
+    public(friend) fun set_roster_created_origin_coordinates(roster_created: &mut RosterCreated, origin_coordinates: Option<Coordinates>) {
+        roster_created.origin_coordinates = origin_coordinates;
+    }
+
     public fun roster_created_ship_battle_id(roster_created: &RosterCreated): Option<ID> {
         roster_created.ship_battle_id
     }
@@ -328,6 +348,7 @@ module infinite_sea::roster {
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
+        origin_coordinates: Option<Coordinates>,
         ship_battle_id: Option<ID>,
     ): RosterCreated {
         RosterCreated {
@@ -338,6 +359,7 @@ module infinite_sea::roster {
             updated_coordinates,
             coordinates_updated_at,
             target_coordinates,
+            origin_coordinates,
             ship_battle_id,
         }
     }
@@ -673,6 +695,7 @@ module infinite_sea::roster {
         version: u64,
         ship_id: ID,
         item_id_quantity_pairs: ItemIdQuantityPairs,
+        updated_coordinates: Coordinates,
     }
 
     public fun roster_ship_inventory_taken_out_id(roster_ship_inventory_taken_out: &RosterShipInventoryTakenOut): object::ID {
@@ -691,10 +714,15 @@ module infinite_sea::roster {
         roster_ship_inventory_taken_out.item_id_quantity_pairs
     }
 
+    public fun roster_ship_inventory_taken_out_updated_coordinates(roster_ship_inventory_taken_out: &RosterShipInventoryTakenOut): Coordinates {
+        roster_ship_inventory_taken_out.updated_coordinates
+    }
+
     public(friend) fun new_roster_ship_inventory_taken_out(
         roster: &Roster,
         ship_id: ID,
         item_id_quantity_pairs: ItemIdQuantityPairs,
+        updated_coordinates: Coordinates,
     ): RosterShipInventoryTakenOut {
         RosterShipInventoryTakenOut {
             id: id(roster),
@@ -702,6 +730,7 @@ module infinite_sea::roster {
             version: version(roster),
             ship_id,
             item_id_quantity_pairs,
+            updated_coordinates,
         }
     }
 
@@ -711,6 +740,7 @@ module infinite_sea::roster {
         version: u64,
         ship_id: ID,
         item_id_quantity_pairs: ItemIdQuantityPairs,
+        updated_coordinates: Coordinates,
     }
 
     public fun roster_ship_inventory_put_in_id(roster_ship_inventory_put_in: &RosterShipInventoryPutIn): object::ID {
@@ -729,10 +759,15 @@ module infinite_sea::roster {
         roster_ship_inventory_put_in.item_id_quantity_pairs
     }
 
+    public fun roster_ship_inventory_put_in_updated_coordinates(roster_ship_inventory_put_in: &RosterShipInventoryPutIn): Coordinates {
+        roster_ship_inventory_put_in.updated_coordinates
+    }
+
     public(friend) fun new_roster_ship_inventory_put_in(
         roster: &Roster,
         ship_id: ID,
         item_id_quantity_pairs: ItemIdQuantityPairs,
+        updated_coordinates: Coordinates,
     ): RosterShipInventoryPutIn {
         RosterShipInventoryPutIn {
             id: id(roster),
@@ -740,6 +775,7 @@ module infinite_sea::roster {
             version: version(roster),
             ship_id,
             item_id_quantity_pairs,
+            updated_coordinates,
         }
     }
 
@@ -752,6 +788,7 @@ module infinite_sea::roster {
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
+        origin_coordinates: Option<Coordinates>,
         ship_battle_id: Option<ID>,
         roster_table: &mut RosterTable,
         ctx: &mut TxContext,
@@ -764,6 +801,7 @@ module infinite_sea::roster {
             updated_coordinates,
             coordinates_updated_at,
             target_coordinates,
+            origin_coordinates,
             ship_battle_id,
             ctx,
         );
@@ -811,6 +849,7 @@ module infinite_sea::roster {
             updated_coordinates: _updated_coordinates,
             coordinates_updated_at: _coordinates_updated_at,
             target_coordinates: _target_coordinates,
+            origin_coordinates: _origin_coordinates,
             sail_duration: _sail_duration,
             ship_battle_id: _ship_battle_id,
             environment_owned: _environment_owned,

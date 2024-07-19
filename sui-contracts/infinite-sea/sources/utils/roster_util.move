@@ -7,6 +7,7 @@ module infinite_sea::roster_util {
     use sui::clock::Clock;
     use sui::object::ID;
     use sui::object_table;
+    use infinite_sea_common::coordinates;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::direct_route_util;
     use infinite_sea_common::roster_id;
@@ -25,13 +26,15 @@ module infinite_sea::roster_util {
     const EInvalidRosterStatus: u64 = 10;
     const ETargetCoordinatesNotSet: u64 = 11;
     const EInvalidRoasterUpdateTime: u64 = 12;
+    const EOriginCoordinatesNotSet: u64 = 13;
+
     const EPayerHasNoClaimedIsland: u64 = 21;
     const ERosterNotAnchoredAtIsland: u64 = 22;
     const ERosterIsUnassignedShips: u64 = 23;
     const EInconsistentRosterShipId: u64 = 24;
     const ERosterIsFull: u64 = 25;
 
-    const MIN_DISTANCE_TO_TRANSFER: u64 = 3;
+    const MIN_DISTANCE_TO_TRANSFER: u64 = 250;
 
     public fun are_rosters_close_enough_to_transfer(roster_1: &Roster, roster_2: &Roster): bool {
         let c_1 = roster::updated_coordinates(roster_1);
@@ -159,38 +162,70 @@ module infinite_sea::roster_util {
         s == roster_status::at_anchor() || s == roster_status::underway()
     }
 
-    /// Return current location of the roster, the now time and the new status of the roster.
-    public fun calculate_current_location(roster: &Roster, clock: &Clock): (Coordinates, u64, u8) {
+    /// Check if s the roster's current location updatable.
+    public fun is_current_location_updatable(roster: &Roster, clock: &Clock, updated_coordinates: Coordinates): (bool, u64, u8) {
         let old_status = roster::status(roster);
+        let coordinates_updated_at = roster::coordinates_updated_at(roster);
+        if (coordinates::x(&updated_coordinates) == 0 || coordinates::y(&updated_coordinates) == 0) {
+            return (false, coordinates_updated_at, old_status)
+        };
         let target_coordinates_o = roster::target_coordinates(roster);
-        //只有船队在行进中才可以计算当前位置
+        let origin_coordinates_o = roster::origin_coordinates(roster);
         assert!(roster_status::underway() == old_status, EInvalidRosterStatus);
-        //是否有一个目的地
         assert!(option::is_some(&target_coordinates_o), ETargetCoordinatesNotSet);
+        assert!(option::is_some(&origin_coordinates_o), EOriginCoordinatesNotSet);
 
         let target_coordinates = option::extract(&mut target_coordinates_o);
-        //上次更新的位置
-        let updated_coordinates = roster::updated_coordinates(roster);
-        //上次更新时间
-        let coordinates_updated_at = roster::coordinates_updated_at(roster);
+        let origin_coordinates = option::extract(&mut origin_coordinates_o);
         let new_status = old_status;
         let (speed_numerator, speed_denominator) = speed_util::speed_property_to_coordinate_units_per_second(
             roster::speed(roster)
         );
         let now_time = clock::timestamp_ms(clock) / 1000;
         assert!(now_time >= coordinates_updated_at, EInvalidRoasterUpdateTime);
-        //距离上次更新已经过去的时间
         let elapsed_time = now_time - coordinates_updated_at;
-        updated_coordinates = direct_route_util::calculate_current_location(
-            updated_coordinates, target_coordinates,
-            speed_numerator, speed_denominator, elapsed_time
-        );
+
+        // TODO: Implement the rest of the function
+        let updatable = true;
+        let _ = speed_numerator;
+        let _ = speed_denominator;
+        let _ = elapsed_time;
+        let _ = origin_coordinates;
+
         if (target_coordinates == updated_coordinates) {
             new_status = roster_status::at_anchor();
         };
         coordinates_updated_at = now_time;
-        (updated_coordinates, coordinates_updated_at, new_status)
+        (updatable, coordinates_updated_at, new_status)
     }
+
+    // /// Return current location of the roster, the now time and the new status of the roster.
+    // public fun calculate_current_location(roster: &Roster, clock: &Clock): (Coordinates, u64, u8) {
+    //     let old_status = roster::status(roster);
+    //     let target_coordinates_o = roster::target_coordinates(roster);
+    //     assert!(roster_status::underway() == old_status, EInvalidRosterStatus);
+    //     assert!(option::is_some(&target_coordinates_o), ETargetCoordinatesNotSet);
+    //
+    //     let target_coordinates = option::extract(&mut target_coordinates_o);
+    //     let updated_coordinates = roster::updated_coordinates(roster);
+    //     let coordinates_updated_at = roster::coordinates_updated_at(roster);
+    //     let new_status = old_status;
+    //     let (speed_numerator, speed_denominator) = speed_util::speed_property_to_coordinate_units_per_second(
+    //         roster::speed(roster)
+    //     );
+    //     let now_time = clock::timestamp_ms(clock) / 1000;
+    //     assert!(now_time >= coordinates_updated_at, EInvalidRoasterUpdateTime);
+    //     let elapsed_time = now_time - coordinates_updated_at;
+    //     updated_coordinates = direct_route_util::calculate_current_location(
+    //         updated_coordinates, target_coordinates,
+    //         speed_numerator, speed_denominator, elapsed_time
+    //     );
+    //     if (target_coordinates == updated_coordinates) {
+    //         new_status = roster_status::at_anchor();
+    //     };
+    //     coordinates_updated_at = now_time;
+    //     (updated_coordinates, coordinates_updated_at, new_status)
+    // }
 
     public fun calculate_total_time(origin: Coordinates, destination: Coordinates, speed_property: u32): u64 {
         let distance = direct_route_util::get_distance(origin, destination);

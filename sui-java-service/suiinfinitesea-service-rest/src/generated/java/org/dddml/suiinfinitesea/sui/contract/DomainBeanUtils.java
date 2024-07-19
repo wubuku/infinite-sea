@@ -656,6 +656,7 @@ public class DomainBeanUtils {
         rosterCreated.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
         rosterCreated.setCoordinatesUpdatedAt(contractEvent.getCoordinatesUpdatedAt());
         rosterCreated.setTargetCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getTargetCoordinates()));
+        rosterCreated.setOriginCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getOriginCoordinates()));
         rosterCreated.setShipBattleId(contractEvent.getShipBattleId());
         rosterCreated.setVersion(BigInteger.valueOf(-1));
 
@@ -833,6 +834,7 @@ public class DomainBeanUtils {
         rosterShipInventoryTakenOut.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
         rosterShipInventoryTakenOut.setShipId(contractEvent.getShipId());
         rosterShipInventoryTakenOut.setItemIdQuantityPairs(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getItemIdQuantityPairs()));
+        rosterShipInventoryTakenOut.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
         rosterShipInventoryTakenOut.setVersion(contractEvent.getVersion());
 
         rosterShipInventoryTakenOut.setSuiTimestamp(eventEnvelope.getTimestampMs());
@@ -854,6 +856,7 @@ public class DomainBeanUtils {
         rosterShipInventoryPutIn.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
         rosterShipInventoryPutIn.setShipId(contractEvent.getShipId());
         rosterShipInventoryPutIn.setItemIdQuantityPairs(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getItemIdQuantityPairs()));
+        rosterShipInventoryPutIn.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
         rosterShipInventoryPutIn.setVersion(contractEvent.getVersion());
 
         rosterShipInventoryPutIn.setSuiTimestamp(eventEnvelope.getTimestampMs());
@@ -872,6 +875,8 @@ public class DomainBeanUtils {
 
         AbstractShipBattleEvent.ShipBattleInitiated shipBattleInitiated = new AbstractShipBattleEvent.ShipBattleInitiated();
         shipBattleInitiated.setId(contractEvent.getId());
+        shipBattleInitiated.setInitiatorCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getInitiatorCoordinates()));
+        shipBattleInitiated.setResponderCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getResponderCoordinates()));
         shipBattleInitiated.setInitiatorId(contractEvent.getInitiatorId());
         shipBattleInitiated.setResponderId(contractEvent.getResponderId());
         shipBattleInitiated.setStartedAt(contractEvent.getStartedAt());

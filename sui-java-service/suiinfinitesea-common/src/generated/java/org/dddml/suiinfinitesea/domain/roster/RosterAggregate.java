@@ -17,13 +17,13 @@ public interface RosterAggregate {
 
     List<Event> getChanges();
 
-    void create(Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, String shipBattleId, Long offChainVersion, String commandId, String requesterId, RosterCommands.Create c);
+    void create(Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, Coordinates originCoordinates, String shipBattleId, Long offChainVersion, String commandId, String requesterId, RosterCommands.Create c);
 
     void createEnvironmentRoster(Coordinates coordinates, Long shipResourceQuantity, Long shipBaseResourceQuantity, Long baseExperience, String clock, Long offChainVersion, String commandId, String requesterId, RosterCommands.CreateEnvironmentRoster c);
 
     void addShip(String ship, BigInteger position, Long offChainVersion, String commandId, String requesterId, RosterCommands.AddShip c);
 
-    void updateLocation(String clock, Long offChainVersion, String commandId, String requesterId, RosterCommands.UpdateLocation c);
+    void updateLocation(String clock, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId, RosterCommands.UpdateLocation c);
 
     void adjustShipsPosition(String player, BigInteger[] positions, String[] shipIds, Long offChainVersion, String commandId, String requesterId, RosterCommands.AdjustShipsPosition c);
 
@@ -31,9 +31,9 @@ public interface RosterAggregate {
 
     void transferShipInventory(String player, String fromShipId, String toShipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId, RosterCommands.TransferShipInventory c);
 
-    void takeOutShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId, RosterCommands.TakeOutShipInventory c);
+    void takeOutShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId, RosterCommands.TakeOutShipInventory c);
 
-    void putInShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId, RosterCommands.PutInShipInventory c);
+    void putInShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId, RosterCommands.PutInShipInventory c);
 
     void throwOnInvalidStateTransition(Command c);
 }

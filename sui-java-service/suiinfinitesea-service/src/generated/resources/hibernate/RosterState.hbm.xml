@@ -54,6 +54,14 @@
         <column name="target_coordinates_y" />
       </property>
     </component>
+    <component name="originCoordinates" class="org.dddml.suiinfinitesea.domain.Coordinates">
+      <property name="x">
+        <column name="origin_coordinates_x" />
+      </property>
+      <property name="y">
+        <column name="origin_coordinates_y" />
+      </property>
+    </component>
     <property name="sailDuration">
       <column name="sail_duration" sql-type="DECIMAL(20,0)" />
     </property>

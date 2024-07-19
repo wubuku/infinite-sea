@@ -17,6 +17,10 @@ import java.util.*;
 public class ShipBattleInitiated {
     private String id;
 
+    private CoordinatesForEvent initiatorCoordinates;
+
+    private CoordinatesForEvent responderCoordinates;
+
     private String initiatorId;
 
     private String responderId;
@@ -35,6 +39,22 @@ public class ShipBattleInitiated {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public CoordinatesForEvent getInitiatorCoordinates() {
+        return initiatorCoordinates;
+    }
+
+    public void setInitiatorCoordinates(CoordinatesForEvent initiatorCoordinates) {
+        this.initiatorCoordinates = initiatorCoordinates;
+    }
+
+    public CoordinatesForEvent getResponderCoordinates() {
+        return responderCoordinates;
+    }
+
+    public void setResponderCoordinates(CoordinatesForEvent responderCoordinates) {
+        this.responderCoordinates = responderCoordinates;
     }
 
     public String getInitiatorId() {
@@ -89,6 +109,8 @@ public class ShipBattleInitiated {
     public String toString() {
         return "ShipBattleInitiated{" +
                 "id=" + '\'' + id + '\'' +
+                ", initiatorCoordinates=" + initiatorCoordinates +
+                ", responderCoordinates=" + responderCoordinates +
                 ", initiatorId=" + '\'' + initiatorId + '\'' +
                 ", responderId=" + '\'' + responderId + '\'' +
                 ", startedAt=" + startedAt +

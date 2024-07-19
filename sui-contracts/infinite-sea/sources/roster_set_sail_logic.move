@@ -22,6 +22,7 @@ module infinite_sea::roster_set_sail_logic {
     const ERosterUnfitToSail: u64 = 10;
     const ENotEnoughEnergy: u64 = 11;
     const EIllegalSailDuration: u64 = 12;
+    const EInvalidUpdatedCoordinates: u64 = 101;
 
     const ENERGY_AMOUNT_PER_SECOND_PER_SHIP: u64 = 1388889;
     //const MIN_SAIL_ENERGY: u64 = 500;
@@ -32,6 +33,7 @@ module infinite_sea::roster_set_sail_logic {
         clock: &Clock,
         energy: &Balance<ENERGY>,
         sail_duration: u64,
+        updated_coordinates: Coordinates,
         roster: &roster::Roster,
         ctx: &TxContext,
     ): roster::RosterSetSail {
@@ -41,27 +43,36 @@ module infinite_sea::roster_set_sail_logic {
         roster_util::assert_roster_is_not_unassigned_ships(roster);
         roster_util::assert_roster_ships_not_empty(roster);
 
-        let updated_coordinates: Coordinates; // current location of the roster
+        let new_updated_coordinates: Coordinates; // current location of the roster
         let status = roster::status(roster);
         if (status == roster_status::at_anchor()) {
-            updated_coordinates = roster::updated_coordinates(roster);
+            new_updated_coordinates = roster::updated_coordinates(roster);
         } else if (status == roster_status::underway()) {
-            let (_updated_coordinates, _coordinates_updated_at, _new_status) = roster_util::calculate_current_location(
-                roster, clock
-            );
-            updated_coordinates = _updated_coordinates;
+            //let (_updated_coordinates, _coordinates_updated_at, _new_status) = roster_util::calculate_current_location(
+            //    roster, clock
+            //);
+            // new_updated_coordinates = _updated_coordinates;
+            let (updatable, _coordinates_updated_at, _new_status)
+                = roster_util::is_current_location_updatable(roster, clock, updated_coordinates);
+            if (updatable) {
+                new_updated_coordinates = updated_coordinates;
+            } else {
+                // new_updated_coordinates = roster::updated_coordinates(roster);
+                abort EInvalidUpdatedCoordinates
+            };
         } else {
             abort ERosterUnfitToSail
         };
         let energy_cost = balance::value(energy);
-        let total_time = roster_util::calculate_total_time(updated_coordinates, target_coordinates,
+        let total_time = roster_util::calculate_total_time(new_updated_coordinates, target_coordinates,
             roster::speed(roster));
         assert!(sail_duration >= total_time, EIllegalSailDuration);
         let ship_count = vector::length(roster::borrow_ship_ids(roster));
         //assert!(energy_cost >= MIN_SAIL_ENERGY, ENotEnoughEnergy);
         assert!(energy_cost >= total_time * ship_count * ENERGY_AMOUNT_PER_SECOND_PER_SHIP, ENotEnoughEnergy);
         let set_sail_at = clock::timestamp_ms(clock) / 1000;
-        roster::new_roster_set_sail(roster, target_coordinates, sail_duration, set_sail_at, updated_coordinates, energy_cost)
+        roster::new_roster_set_sail(roster, target_coordinates, sail_duration, set_sail_at,
+            new_updated_coordinates, energy_cost)
     }
 
     public(friend) fun mutate(

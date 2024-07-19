@@ -18,10 +18,13 @@ module infinite_sea::roster_service {
         energy: Coin<ENERGY>,
         energy_amount: u64,
         sail_duration: u64,
+        updated_coordinates_x: u32,
+        updated_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
         let energy_b = coin_util::split_up_and_into_balance(energy, energy_amount, ctx);
-        roster_aggregate::set_sail(roster, player, target_coordinates_x, target_coordinates_y, clock, energy_b, sail_duration, ctx);
+        roster_aggregate::set_sail(roster, player, target_coordinates_x, target_coordinates_y, clock, energy_b,
+            sail_duration, updated_coordinates_x, updated_coordinates_y, ctx);
     }
 }
-http://47.96.81.197:8809/api/FaucetRequesteds?suiTimestamp=ge(1721305893124)
+

@@ -243,6 +243,9 @@ aggregates:
       TargetCoordinates:
         type: Coordinates
         optional: true
+      OriginCoordinates:
+        type: Coordinates
+        optional: true
       SailDuration:
         type: u64
         defaultLogic:
@@ -324,6 +327,8 @@ aggregates:
             eventPropertyName: EnergyCost
           SailDuration:
             type: u64
+          UpdatedCoordinates:
+            type: Coordinates
         event:
           name: RosterSetSail
           properties:
@@ -339,6 +344,8 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          UpdatedCoordinates:
+            type: Coordinates
         event:
           name: RosterLocationUpdated
           properties:
@@ -475,6 +482,10 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          InitiatorCoordinates:
+            type: Coordinates
+          ResponderCoordinates:
+            type: Coordinates
         result:
           isObjectReturned: true
         event:
@@ -805,6 +816,8 @@ superObjects:
             type: ID
           ItemIdQuantityPairs:
             type: ItemIdQuantityPairs
+          UpdatedCoordinates:
+            type: Coordinates
 
 
 singletonObjects:

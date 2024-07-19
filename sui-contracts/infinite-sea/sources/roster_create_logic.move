@@ -20,6 +20,7 @@ module infinite_sea::roster_create_logic {
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
+        origin_coordinates: Option<Coordinates>,
         ship_battle_id: Option<ID>,
         roster_id_table: &roster::RosterTable,
         ctx: &mut TxContext,
@@ -34,6 +35,7 @@ module infinite_sea::roster_create_logic {
             updated_coordinates,
             coordinates_updated_at,
             target_coordinates,
+            origin_coordinates,
             ship_battle_id,
         )
     }
@@ -49,6 +51,7 @@ module infinite_sea::roster_create_logic {
         let updated_coordinates = roster::roster_created_updated_coordinates(roster_created);
         let coordinates_updated_at = roster::roster_created_coordinates_updated_at(roster_created);
         let target_coordinates = roster::roster_created_target_coordinates(roster_created);
+        let origin_coordinates = roster::roster_created_origin_coordinates(roster_created);
         let ship_battle_id = roster::roster_created_ship_battle_id(roster_created);
         roster::create_roster(
             roster_id,
@@ -58,6 +61,7 @@ module infinite_sea::roster_create_logic {
             updated_coordinates,
             coordinates_updated_at,
             target_coordinates,
+            origin_coordinates,
             ship_battle_id,
             roster_id_table,
             ctx,

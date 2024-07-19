@@ -10,6 +10,7 @@ module infinite_sea::ship_battle_aggregate {
     use infinite_sea::ship_battle_initiate_battle_logic;
     use infinite_sea::ship_battle_make_move_logic;
     use infinite_sea::ship_battle_take_loot_logic;
+    use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_common::experience_table::ExperienceTable;
     use sui::clock::Clock;
     use sui::tx_context;
@@ -24,13 +25,27 @@ module infinite_sea::ship_battle_aggregate {
         initiator: &mut Roster,
         responder: &mut Roster,
         clock: &Clock,
+        initiator_coordinates_x: u32,
+        initiator_coordinates_y: u32,
+        responder_coordinates_x: u32,
+        responder_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ): ship_battle::ShipBattle {
+        let initiator_coordinates: Coordinates = coordinates::new(
+            initiator_coordinates_x,
+            initiator_coordinates_y,
+        );
+        let responder_coordinates: Coordinates = coordinates::new(
+            responder_coordinates_x,
+            responder_coordinates_y,
+        );
         let ship_battle_initiated = ship_battle_initiate_battle_logic::verify(
             player,
             initiator,
             responder,
             clock,
+            initiator_coordinates,
+            responder_coordinates,
             ctx,
         );
         let ship_battle = ship_battle_initiate_battle_logic::mutate(

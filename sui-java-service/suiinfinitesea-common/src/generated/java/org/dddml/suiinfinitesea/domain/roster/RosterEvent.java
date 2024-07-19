@@ -42,6 +42,10 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
         void setTargetCoordinates(Coordinates value);
 
+        Coordinates getOriginCoordinates();
+
+        void setOriginCoordinates(Coordinates value);
+
         String getShipBattleId();
 
         void setShipBattleId(String value);
@@ -166,6 +170,10 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
         void setItemIdQuantityPairs(ItemIdQuantityPairs value);
 
+        Coordinates getUpdatedCoordinates();
+
+        void setUpdatedCoordinates(Coordinates value);
+
     }
 
     interface RosterShipInventoryPutIn extends RosterEvent {
@@ -176,6 +184,10 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
         ItemIdQuantityPairs getItemIdQuantityPairs();
 
         void setItemIdQuantityPairs(ItemIdQuantityPairs value);
+
+        Coordinates getUpdatedCoordinates();
+
+        void setUpdatedCoordinates(Coordinates value);
 
     }
 

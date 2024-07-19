@@ -46,6 +46,7 @@ module infinite_sea::roster_aggregate {
         updated_coordinates: Coordinates,
         coordinates_updated_at: u64,
         target_coordinates: Option<Coordinates>,
+        origin_coordinates: Option<Coordinates>,
         ship_battle_id: Option<ID>,
         roster_table: &mut roster::RosterTable,
         ctx: &mut tx_context::TxContext,
@@ -62,6 +63,7 @@ module infinite_sea::roster_aggregate {
             updated_coordinates,
             coordinates_updated_at,
             target_coordinates,
+            origin_coordinates,
             ship_battle_id,
             roster_table,
             ctx,
@@ -152,6 +154,8 @@ module infinite_sea::roster_aggregate {
         clock: &Clock,
         energy: Balance<ENERGY>,
         sail_duration: u64,
+        updated_coordinates_x: u32,
+        updated_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
         roster::assert_schema_version(roster);
@@ -159,12 +163,17 @@ module infinite_sea::roster_aggregate {
             target_coordinates_x,
             target_coordinates_y,
         );
+        let updated_coordinates: Coordinates = coordinates::new(
+            updated_coordinates_x,
+            updated_coordinates_y,
+        );
         let roster_set_sail = roster_set_sail_logic::verify(
             player,
             target_coordinates,
             clock,
             &energy,
             sail_duration,
+            updated_coordinates,
             roster,
             ctx,
         );
@@ -181,11 +190,18 @@ module infinite_sea::roster_aggregate {
     public entry fun update_location(
         roster: &mut roster::Roster,
         clock: &Clock,
+        updated_coordinates_x: u32,
+        updated_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
         roster::assert_schema_version(roster);
+        let updated_coordinates: Coordinates = coordinates::new(
+            updated_coordinates_x,
+            updated_coordinates_y,
+        );
         let roster_location_updated = roster_update_location_logic::verify(
             clock,
+            updated_coordinates,
             roster,
             ctx,
         );
@@ -288,6 +304,8 @@ module infinite_sea::roster_aggregate {
         ship_id: ID,
         item_id_quantity_pairs_item_id_list: vector<u32>,
         item_id_quantity_pairs_item_quantity_list: vector<u32>,
+        updated_coordinates_x: u32,
+        updated_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
         roster::assert_schema_version(roster);
@@ -295,11 +313,16 @@ module infinite_sea::roster_aggregate {
             item_id_quantity_pairs_item_id_list,
             item_id_quantity_pairs_item_quantity_list,
         );
+        let updated_coordinates: Coordinates = coordinates::new(
+            updated_coordinates_x,
+            updated_coordinates_y,
+        );
         let roster_ship_inventory_taken_out = roster_take_out_ship_inventory_logic::verify(
             player,
             clock,
             ship_id,
             item_id_quantity_pairs,
+            updated_coordinates,
             roster,
             ctx,
         );
@@ -320,6 +343,8 @@ module infinite_sea::roster_aggregate {
         ship_id: ID,
         item_id_quantity_pairs_item_id_list: vector<u32>,
         item_id_quantity_pairs_item_quantity_list: vector<u32>,
+        updated_coordinates_x: u32,
+        updated_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
         roster::assert_schema_version(roster);
@@ -327,11 +352,16 @@ module infinite_sea::roster_aggregate {
             item_id_quantity_pairs_item_id_list,
             item_id_quantity_pairs_item_quantity_list,
         );
+        let updated_coordinates: Coordinates = coordinates::new(
+            updated_coordinates_x,
+            updated_coordinates_y,
+        );
         let roster_ship_inventory_put_in = roster_put_in_ship_inventory_logic::verify(
             player,
             clock,
             ship_id,
             item_id_quantity_pairs,
+            updated_coordinates,
             roster,
             ctx,
         );

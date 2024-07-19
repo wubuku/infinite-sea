@@ -19,8 +19,6 @@ public class SuiPackageInitializer {
 
     private final SuiPackageInitializationService defaultPackageInitializationService;
 
-    private final SuiPackageInitializationService faucetPackageInitializationService;
-
     @Autowired
     public SuiPackageInitializer(
             MoveObjectIdGeneratorObjectRepository moveObjectIdGeneratorObjectRepository,
@@ -31,9 +29,7 @@ public class SuiPackageInitializer {
             @Value("${sui.contract.package-publish-transactions.common:}")
             String commonPackagePublishTransactionDigest,
             @Value("${sui.contract.package-publish-transactions.default:}")
-            String defaultPackagePublishTransactionDigest,
-            @Value("${sui.contract.package-publish-transactions.faucet:}")
-            String faucetPackagePublishTransactionDigest
+            String defaultPackagePublishTransactionDigest
     ) {
         if (nftPackagePublishTransactionDigest != null && !nftPackagePublishTransactionDigest.trim().isEmpty()) {
             nftPackageInitializationService = new SuiPackageInitializationService(
@@ -74,19 +70,6 @@ public class SuiPackageInitializer {
             //throw new IllegalArgumentException("defaultPackagePublishTransactionDigest is null");
             defaultPackageInitializationService = null;
         }
-        if (faucetPackagePublishTransactionDigest != null && !faucetPackagePublishTransactionDigest.trim().isEmpty()) {
-            faucetPackageInitializationService = new SuiPackageInitializationService(
-                    moveObjectIdGeneratorObjectRepository,
-                    suiPackageRepository,
-                    suiJsonRpcClient,
-                    faucetPackagePublishTransactionDigest,
-                    "FAUCET_SUI_PACKAGE",
-                    ContractConstants::getDefaultPackageIdGeneratorObjectTypes
-            );
-        } else {
-            //throw new IllegalArgumentException("defaultPackagePublishTransactionDigest is null");
-            faucetPackageInitializationService = null;
-        }
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -99,10 +82,6 @@ public class SuiPackageInitializer {
         }
         if (defaultPackageInitializationService != null) {
             defaultPackageInitializationService.init();
-        }
-        if (faucetPackageInitializationService != null) {
-            //这里没有正确保存 packageId 因为 Faucet 包中既没有 objectChanges 又没有 events
-            faucetPackageInitializationService.init();
         }
     }
 }

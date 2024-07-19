@@ -25,6 +25,8 @@ public class RosterShipInventoryTakenOut {
 
     private ItemIdQuantityPairsForEvent itemIdQuantityPairs;
 
+    private CoordinatesForEvent updatedCoordinates;
+
     public String getId() {
         return id;
     }
@@ -65,6 +67,14 @@ public class RosterShipInventoryTakenOut {
         this.itemIdQuantityPairs = itemIdQuantityPairs;
     }
 
+    public CoordinatesForEvent getUpdatedCoordinates() {
+        return updatedCoordinates;
+    }
+
+    public void setUpdatedCoordinates(CoordinatesForEvent updatedCoordinates) {
+        this.updatedCoordinates = updatedCoordinates;
+    }
+
     @Override
     public String toString() {
         return "RosterShipInventoryTakenOut{" +
@@ -73,6 +83,7 @@ public class RosterShipInventoryTakenOut {
                 ", version=" + version +
                 ", shipId=" + '\'' + shipId + '\'' +
                 ", itemIdQuantityPairs=" + itemIdQuantityPairs +
+                ", updatedCoordinates=" + updatedCoordinates +
                 '}';
     }
 

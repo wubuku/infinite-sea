@@ -90,6 +90,32 @@ public class ShipBattleCommands {
         }
 
         /**
+         * Initiator Coordinates
+         */
+        private Coordinates initiatorCoordinates;
+
+        public Coordinates getInitiatorCoordinates() {
+            return this.initiatorCoordinates;
+        }
+
+        public void setInitiatorCoordinates(Coordinates initiatorCoordinates) {
+            this.initiatorCoordinates = initiatorCoordinates;
+        }
+
+        /**
+         * Responder Coordinates
+         */
+        private Coordinates responderCoordinates;
+
+        public Coordinates getResponderCoordinates() {
+            return this.responderCoordinates;
+        }
+
+        public void setResponderCoordinates(Coordinates responderCoordinates) {
+            this.responderCoordinates = responderCoordinates;
+        }
+
+        /**
          * Off Chain Version
          */
         private Long offChainVersion;

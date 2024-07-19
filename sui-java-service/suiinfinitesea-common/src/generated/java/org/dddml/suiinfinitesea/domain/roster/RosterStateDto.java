@@ -111,6 +111,18 @@ public class RosterStateDto {
         this.targetCoordinates = targetCoordinates;
     }
 
+    private Coordinates originCoordinates;
+
+    public Coordinates getOriginCoordinates()
+    {
+        return this.originCoordinates;
+    }
+
+    public void setOriginCoordinates(Coordinates originCoordinates)
+    {
+        this.originCoordinates = originCoordinates;
+    }
+
     private BigInteger sailDuration;
 
     public BigInteger getSailDuration()
@@ -329,6 +341,9 @@ public class RosterStateDto {
             }
             if (returnedFieldsContains("TargetCoordinates")) {
                 dto.setTargetCoordinates(state.getTargetCoordinates());
+            }
+            if (returnedFieldsContains("OriginCoordinates")) {
+                dto.setOriginCoordinates(state.getOriginCoordinates());
             }
             if (returnedFieldsContains("SailDuration")) {
                 dto.setSailDuration(state.getSailDuration());
