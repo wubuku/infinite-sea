@@ -39,19 +39,20 @@ public class EventResource {
     @GetMapping(path = "getFaucetRequestedEvents")
     @Transactional(readOnly = true)
     public java.util.List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> getFaucetRequestedEvents(
-            @RequestParam(value = "startSuiTimestamp") Long startSuiTimestamp,
-            @RequestParam(value = "endSuiTimestamp") Long endSuiTimestamp) {
-        return faucetRequestedEventRepository.findBySuiTimestampBetween(startSuiTimestamp, endSuiTimestamp);
+            @RequestParam(value = "startAt") Long startAt,
+            @RequestParam(value = "endedAt") Long endedAt,
+            @RequestParam(value = "senderAddress") String senderAddress) {
+        return faucetRequestedEventRepository.getFaucetRequestedEvents(startAt, endedAt, senderAddress);
     }
 
     @GetMapping(path = "getShipProductionCompletedEvents")
     @Transactional(readOnly = true)
     public java.util.List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> getShipProductionCompletedEvents(
-            @RequestParam(value = "startSuiTimestamp") Long startSuiTimestamp,
-            @RequestParam(value = "endSuiTimestamp") Long endSuiTimestamp/*,
-            @RequestParam(value = "suiSenderAddress") String suiSenderAddress*/
+            @RequestParam(value = "startAt") Long startAt,
+            @RequestParam(value = "endedAt") Long endedAt,
+            @RequestParam(value = "senderAddress") String senderAddress
     ) {
-        return shipProductionEventRepository.getShipCompletedEvents(startSuiTimestamp, endSuiTimestamp/*, suiSenderAddress*/);
+        return shipProductionEventRepository.getShipCompletedEvents(startAt, endedAt, senderAddress);
     }
 
 
@@ -59,9 +60,10 @@ public class EventResource {
     @Transactional(readOnly = true)
     public java.util.List<PlayerVsEnvironment> getPlayerVsEnvironmentEvents(
             @RequestParam(value = "startAt") Long startAt,
-            @RequestParam(value = "endedAt") Long endedAt
+            @RequestParam(value = "endedAt") Long endedAt,
+            @RequestParam(value = "senderAddress") String senderAddress
     ) {
-        return shipBattleRelatedRepository.getPlayerVsEnvironmentEvents(startAt, endedAt);//, suiSenderAddress);
+        return shipBattleRelatedRepository.getPlayerVsEnvironmentEvents(startAt, endedAt, senderAddress);
     }
 
 
@@ -69,9 +71,10 @@ public class EventResource {
     @Transactional(readOnly = true)
     public java.util.List<PlayerVsPlayer> getPlayerVsPlayerEvents(
             @RequestParam(value = "startAt") Long startAt,
-            @RequestParam(value = "endedAt") Long endedAt
+            @RequestParam(value = "endedAt") Long endedAt,
+            @RequestParam(value = "senderAddress") String senderAddress
     ) {
-        return shipBattleRelatedRepository.getPlayerVsPlayerEvents(startAt, endedAt);
+        return shipBattleRelatedRepository.getPlayerVsPlayerEvents(startAt, endedAt, senderAddress);
     }
 
 }

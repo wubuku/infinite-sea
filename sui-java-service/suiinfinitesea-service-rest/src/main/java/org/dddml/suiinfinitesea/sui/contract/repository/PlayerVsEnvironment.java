@@ -12,6 +12,8 @@ public interface PlayerVsEnvironment {
 
     Integer getWinner();
 
+    String getPlayerAddress();
+
     Long getBattleEndedAt();
 
 }

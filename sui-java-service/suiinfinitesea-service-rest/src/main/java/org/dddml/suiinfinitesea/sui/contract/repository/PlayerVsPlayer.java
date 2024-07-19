@@ -8,9 +8,13 @@ public interface PlayerVsPlayer {
 
     String getInitiatorPlayerId();
 
+    String getInitiatorSenderAddress();
+
     String getResponder();
 
-    String getResponderPlayer();
+    String getResponderPlayerId();
+
+    String getResponderSenderAddress();
 
     Integer getWinner();
 
