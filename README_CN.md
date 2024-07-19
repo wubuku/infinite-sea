@@ -3087,7 +3087,7 @@ curl -X GET "http://localhost:1023/api/contractEvents/getShipProductionCompleted
 
 Query Parameters:
 
-* startAt 查询起始时间，单位毫秒（从1970年1月1日0时起）。
+* startAt 查询起始时间，单位毫秒(unit:millisecond)（从1970年1月1日0时起）。
 * endedAt 查询截止时间，单位毫秒（同上）。
 * senderAddress 用户钱包地址。Player wallet Address.
 
@@ -3140,8 +3140,8 @@ Response:
   }
 ]
 ```
-* skillProcessEventId 组合 ID,唯一Id。
-* suiTimestamp 造船完成时间，单位毫秒。
+* skillProcessEventId 组合 ID,唯一Id。Composite ID,Unique ID.
+* suiTimestamp 造船完成时间，单位毫秒。Completion time of shipbuilding(unit:millisecond).
 * suiSender 用户钱包地址。Player wallet Address.
 
 #### Faucet Request event 
@@ -3193,10 +3193,10 @@ Response:
   }
 ]
 ```
-* suiSender 请求水龙头玩家地址。
-* suiTimestamp 请求水龙头时间。
-* requesterAccount 获得`ENERGY`数量。
-* eventId 唯一ID。
+* suiSender 请求水龙头玩家地址。Player wallet address.
+* suiTimestamp 请求水龙头时间。Request time(unit:millisecond).
+* requesterAccount 获得`ENERGY`数量。The amount of `ENERGY` obtained.
+* eventId 唯一ID。Unique ID.
 
 [TBD]
 
