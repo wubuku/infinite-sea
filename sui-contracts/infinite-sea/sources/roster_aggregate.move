@@ -40,7 +40,7 @@ module infinite_sea::roster_aggregate {
     #[allow(unused_mut_ref)]
     public(friend) fun create(
         roster_id_player_id: ID,
-        roster_id_sequence_number: u8,
+        roster_id_sequence_number: u32,
         status: u8,
         speed: u32,
         updated_coordinates: Coordinates,
@@ -80,7 +80,7 @@ module infinite_sea::roster_aggregate {
 
     public entry fun create_environment_roster(
         roster_id_player_id: ID,
-        roster_id_sequence_number: u8,
+        roster_id_sequence_number: u32,
         publisher: &sui::package::Publisher,
         coordinates_x: u32,
         coordinates_y: u32,

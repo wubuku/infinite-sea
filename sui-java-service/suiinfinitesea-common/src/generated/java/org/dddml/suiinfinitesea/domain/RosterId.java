@@ -21,14 +21,14 @@ public class RosterId implements Serializable {
         this.playerId = playerId;
     }
 
-    private Integer sequenceNumber;
+    private Long sequenceNumber;
 
-    public Integer getSequenceNumber()
+    public Long getSequenceNumber()
     {
         return this.sequenceNumber;
     }
 
-    public void setSequenceNumber(Integer sequenceNumber)
+    public void setSequenceNumber(Long sequenceNumber)
     {
         this.sequenceNumber = sequenceNumber;
     }
@@ -37,7 +37,7 @@ public class RosterId implements Serializable {
     {
     }
 
-    public RosterId(String playerId, Integer sequenceNumber)
+    public RosterId(String playerId, Long sequenceNumber)
     {
         this.playerId = playerId;
         this.sequenceNumber = sequenceNumber;
@@ -88,7 +88,7 @@ public class RosterId implements Serializable {
 
     protected static final String[] FLATTENED_PROPERTY_TYPES = new String[]{
             "String",
-            "Integer",
+            "Long",
     };
 
     protected static final java.util.Map<String, String> FLATTENED_PROPERTY_TYPE_MAP;

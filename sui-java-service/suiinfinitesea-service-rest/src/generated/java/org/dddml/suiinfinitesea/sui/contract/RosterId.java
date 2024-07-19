@@ -18,7 +18,7 @@ public class RosterId extends MoveStruct<RosterId.RosterIdFields> {
     public static class RosterIdFields {
         private String playerId;
 
-        private Integer sequenceNumber;
+        private Long sequenceNumber;
 
 
         public String getPlayerId() {
@@ -29,11 +29,11 @@ public class RosterId extends MoveStruct<RosterId.RosterIdFields> {
             this.playerId = playerId;
         }
 
-        public Integer getSequenceNumber() {
+        public Long getSequenceNumber() {
             return sequenceNumber;
         }
 
-        public void setSequenceNumber(Integer sequenceNumber) {
+        public void setSequenceNumber(Long sequenceNumber) {
             this.sequenceNumber = sequenceNumber;
         }
 

@@ -720,7 +720,7 @@ public class M {
             "Boolean",
             "Boolean",
             "String",
-            "Integer",
+            "Long",
             "Long",
             "Long",
             "Long",
@@ -844,10 +844,10 @@ public class M {
             "Boolean",
             "Boolean",
             "String",
-            "Integer",
+            "Long",
             "String",
             "String",
-            "Integer",
+            "Long",
     };
 
     public static final Map<String, String> propertyTypeMap;

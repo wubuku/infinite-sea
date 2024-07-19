@@ -62,7 +62,7 @@ module infinite_sea::player_claim_island_logic {
         map_aggregate::claim_island(map, coordinates, player_id, claimed_at, ctx);
 
         // create rosters after claiming the island
-        let roster_sequence_number: u8 = 0;
+        let roster_sequence_number: u32 = 0;
         while (roster_sequence_number < 5) {
             // 0-4
             let r = roster_aggregate::create(player_id, roster_sequence_number, roster_status::at_anchor(), 0,

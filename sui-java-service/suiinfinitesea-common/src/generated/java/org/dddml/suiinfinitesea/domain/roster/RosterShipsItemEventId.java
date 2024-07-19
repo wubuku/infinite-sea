@@ -57,12 +57,12 @@ public class RosterShipsItemEventId implements Serializable {
         getRosterId().setPlayerId(rosterIdPlayerId);
     }
 
-    protected Integer getRosterIdSequenceNumber()
+    protected Long getRosterIdSequenceNumber()
     {
         return getRosterId().getSequenceNumber();
     }
 
-    protected void setRosterIdSequenceNumber(Integer rosterIdSequenceNumber)
+    protected void setRosterIdSequenceNumber(Long rosterIdSequenceNumber)
     {
         getRosterId().setSequenceNumber(rosterIdSequenceNumber);
     }
@@ -130,7 +130,7 @@ public class RosterShipsItemEventId implements Serializable {
 
     protected static final String[] FLATTENED_PROPERTY_TYPES = new String[]{
             "String",
-            "Integer",
+            "Long",
             "String",
             "BigInteger",
     };

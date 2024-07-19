@@ -6,31 +6,31 @@
 module infinite_sea_common::roster_sequence_number {
     use std::vector;
 
-    public fun unassigned_ships(): u8 {
+    public fun unassigned_ships(): u32 {
         0
     }
 
-    public fun first(): u8 {
+    public fun first(): u32 {
         1
     }
 
-    public fun second(): u8 {
+    public fun second(): u32 {
         2
     }
 
-    public fun third(): u8 {
+    public fun third(): u32 {
         3
     }
 
-    public fun fourth(): u8 {
+    public fun fourth(): u32 {
         4
     }
 
-    public fun is_valid(v: u8): bool {
+    public fun is_valid(v: u32): bool {
         v == unassigned_ships() || v == first() || v == second() || v == third() || v == fourth()
     }
 
-    public fun are_all_valid(vs: &vector<u8>): bool {
+    public fun are_all_valid(vs: &vector<u32>): bool {
         let i = 0;
         let l = vector::length(vs);
         while (i < l) {

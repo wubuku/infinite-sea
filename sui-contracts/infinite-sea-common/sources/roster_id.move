@@ -11,12 +11,12 @@ module infinite_sea_common::roster_id {
 
     struct RosterId has store, drop, copy {
         player_id: ID,
-        sequence_number: u8,
+        sequence_number: u32,
     }
 
     public fun new(
         player_id: ID,
-        sequence_number: u8,
+        sequence_number: u32,
     ): RosterId {
         let roster_id = RosterId {
             player_id,
@@ -34,7 +34,7 @@ module infinite_sea_common::roster_id {
         roster_id.player_id
     }
 
-    public fun sequence_number(roster_id: &RosterId): u8 {
+    public fun sequence_number(roster_id: &RosterId): u32 {
         roster_id.sequence_number
     }
 

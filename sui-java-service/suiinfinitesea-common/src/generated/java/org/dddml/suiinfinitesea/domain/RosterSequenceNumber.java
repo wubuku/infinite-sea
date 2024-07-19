@@ -7,14 +7,14 @@
 package org.dddml.suiinfinitesea.domain;
 
 public class RosterSequenceNumber {
-    public static final Integer UNASSIGNED_SHIPS = 0;
+    public static final Long UNASSIGNED_SHIPS = 0L;
 
-    public static final Integer FIRST = 1;
+    public static final Long FIRST = 1L;
 
-    public static final Integer SECOND = 2;
+    public static final Long SECOND = 2L;
 
-    public static final Integer THIRD = 3;
+    public static final Long THIRD = 3L;
 
-    public static final Integer FOURTH = 4;
+    public static final Long FOURTH = 4L;
 
 }
