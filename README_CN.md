@@ -3087,8 +3087,8 @@ curl -X GET "http://localhost:1023/api/contractEvents/getShipProductionCompleted
 
 Query Parameters:
 
-* startAt 查询起始时间，单位毫秒(unit:millisecond)（从1970年1月1日0时起）。
-* endedAt 查询截止时间，单位毫秒（同上）。
+* startAt 查询起始时间，单位 **毫秒**(unit:**millisecond**)（从1970年1月1日0时起）。
+* endedAt 查询截止时间，单位 **毫秒**。
 * senderAddress 用户钱包地址。Player wallet Address.
 
 Response:
@@ -3150,8 +3150,8 @@ curl -X GET "http://ip:port/api/contractEvents/getFaucetRequestedEvents?startAt=
 ```
 Query Parameters:
 
-* startAt 查询起始时间，单位毫秒（从1970年1月1日0时起）。
-* endedAt 查询截止时间，单位毫秒（同上）。
+* startAt 查询起始时间，单位 **毫秒**(unit:millisecond)
+* endedAt 查询截止时间，单位 **毫秒**。
 * senderAddress 用户钱包地址。Player wallet Address.
 
 
@@ -3194,9 +3194,75 @@ Response:
 ]
 ```
 * suiSender 请求水龙头玩家地址。Player wallet address.
-* suiTimestamp 请求水龙头时间。Request time(unit:millisecond).
+* suiTimestamp 请求水龙头时间。Request time(unit:**millisecond**).
 * requesterAccount 获得`ENERGY`数量。The amount of `ENERGY` obtained.
 * eventId 唯一ID。Unique ID.
+
+#### Player Vs Environment event 
+```shell
+curl -X GET "http://ip:port/api/contractEvents/getPlayerVsEnvironmentEvents?startAt={startAt}&endedAt={endedAt}&senderAddress={senderAddress}" -H "accept: application/json"
+```
+* startAt 查询起始时间，单位 **秒**(unit:**second**)
+* endedAt 查询截止时间，单位 **秒**。
+* senderAddress 用户钱包地址。Player wallet Address.
+
+Response:
+```json
+[
+  {
+    "shipBattleId": "0xb3c64c63ca14cf71efb9f62d6ac28c27990ca4c21abd8c4f27e205468f7f81fc",
+    "initiator": "0x12d440cae5c543e9c88c2f629990c08209d388302dc7627bddcce44e880d1051",
+    "responder": "0x05b4044856fb23df5b689dc8482ff071d170407e4bbfe819d66abdee44efd5db",
+    "playerId": "0x2dc6df4bbf6bc44c962f8e819e91a528a07a8cb66e0e6257bd4902de82f8f00a",
+    "playerAddress": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+    "battleEndedAt": 1721315997,
+    "winner": 1
+  }
+]
+```
+* shipBattleId: Battle ID.Unique ID.
+* initiator:Player Roster ID.
+* responder:Environment Roster ID.
+* playerId:Player ID.
+* playerAddress:Player wallet address.
+* battleEndedAt:End time of battle(Unit **second**).
+* winner:Indicate who has won the victory.(1:Player,0:Environment).
+
+
+#### Player Vs Player event
+```shell
+curl -X GET "http://ip:port/api/contractEvents/getPlayerVsPlayerEvents?startAt={startAt}&endedAt={endedAt}&senderAddress={senderAddress}" -H "accept: application/json"
+```
+* startAt 查询起始时间，单位 **秒**(unit:**second**)
+* endedAt 查询截止时间，单位 **秒**。
+* senderAddress 用户钱包地址。Player wallet Address.
+
+Response:
+```json
+[
+  {
+    "battleEndedAt": 1721315997,
+    "initiator": "0x12d440cae5c543e9c88c2f629990c08209d388302dc7627bddcce44e880d1051",
+    "initiatorPlayerId": "0x05b4044856fb23df5b689dc8482ff071d170407e4bbfe819d66abdee44efd5db",
+    "initiatorSenderAddress": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+    "responder": "0x7634886a12806eaeed4698f7a5034bfc5adb56b7055853e06d9c80130b2cc8cb",
+    "responderPlayerId": "0x2c9ee17e9639f28c7d3f7091c5a7a020bda50a5aa32a4614d129e0c36b2c2e66",
+    "responderSenderAddress": "0xf94d322ddf060d4dc9a9bee56d61ed119f39e17b5a1098d62254a10e37a86cf9",
+    "shipBattleId": "0xb3c64c63ca14cf71efb9f62d6ac28c27990ca4c21abd8c4f27e205468f7f81fc",
+    "winner": 1
+  }
+]
+```
+* shipBattleId: Battle ID.Unique ID.
+* initiator:Player1's Roster ID.
+* responder:Player2's Roster ID.
+* initiatorPlayerId:Player1's Player ID.
+* responderPlayerId:Player2's Player ID.
+* initiatorSenderAddress:Player1's wallet address.
+* responderSenderAddress:Player2's wallet address.
+* battleEndedAt:End time of battle(Unit **second**).
+* winner:Indicate who has won the victory.(1:Player1,0:Player2).
+
 
 [TBD]
 
