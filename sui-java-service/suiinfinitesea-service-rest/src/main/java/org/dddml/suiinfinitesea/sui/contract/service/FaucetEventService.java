@@ -15,6 +15,7 @@ import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.repository.ItemEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +41,9 @@ public class FaucetEventService {
 
     @Autowired
     private ItemEventRepository itemEventRepository;
+
+    @Value("${sui.contract.package-id.faucet:}")
+    private String faucetPackageId;
 
     @Transactional
     public void updateStatusToProcessed(AbstractItemEvent event) {
@@ -111,7 +115,6 @@ public class FaucetEventService {
     }
 
     private String getFaucetSuiPackageId() {
-        return suiPackageRepository.findById("FAUCET_SUI_PACKAGE")
-                .map(SuiPackage::getObjectId).orElse(null);
+        return faucetPackageId;
     }
 }
