@@ -3079,9 +3079,74 @@ If the value is true, it means that the user has already claimed an NFT, otherwi
 
 ### Daily quests API
 
-#### Ship construction completion event 
+#### Ship Production Completed Event
+
 ```shell
-curl -X GET "http://localhost:1023/api/contractEvents/getFaucetRequestedEvents?startAt={startAt}&endedAt={endedAt}&senderAddress={senderAddress}" -H "accept: application/json"
+curl -X GET "http://localhost:1023/api/contractEvents/getShipProductionCompletedEvents?startAt={startAt}&endedAt={endedAt}&senderAddress={senderAddress}" -H "accept: application/json"
+```
+
+Query Parameters:
+
+* startAt 查询起始时间，单位毫秒（从1970年1月1日0时起）。
+* endedAt 查询截止时间，单位毫秒（同上）。
+* senderAddress 用户钱包地址。Player wallet Address.
+
+Response:
+```json
+[
+  {
+    "eventType": "ShipProductionProcessCompleted",
+    "skillProcessEventId": {
+      "skillProcessId": {
+        "skillType": 6,
+        "playerId": "0x2dc6df4bbf6bc44c962f8e819e91a528a07a8cb66e0e6257bd4902de82f8f00a",
+        "sequenceNumber": 0
+      },
+      "version": 7
+    },
+    "eventReadOnly": false,
+    "id_": "0x0adfe9d0f31b80b3fe26fa8e962e47bac0eca383bde6f736a36b9f496c0b8beb",
+    "suiTimestamp": 1721313072537,
+    "suiTxDigest": "8sCF4nb5Zm9ooPZRqbQAtDkhHRs5fsYqXSxp2PZysEFu",
+    "suiEventSeq": 2,
+    "suiPackageId": "0x572c6186f229825cd2a9ba97ebb98705b3c188fa7277779b89fe99627b72ee66",
+    "suiTransactionModule": "skill_process_aggregate",
+    "suiSender": "0x8f50309b7d779c29e1eab23889b9553e8874d2b9e106b944ec06f925c0ca4450",
+    "eventStatus": "D",
+    "dynamicProperties": {
+      "itemId": 1000000001,
+      "newLevel": 1,
+      "quantity": 1,
+      "creationTime": 15,
+      "endedAt": 1721313071,
+      "startedAt": 1721313043,
+      "experience": 0,
+      "successful": true
+    },
+    "creationTime": 15,
+    "experience": 0,
+    "quantity": 1,
+    "endedAt": 1721313071,
+    "newLevel": 1,
+    "startedAt": 1721313043,
+    "successful": true,
+    "itemId": 1000000001,
+    "version": 7,
+    "skillProcessId": {
+      "skillType": 6,
+      "playerId": "0x2dc6df4bbf6bc44c962f8e819e91a528a07a8cb66e0e6257bd4902de82f8f00a",
+      "sequenceNumber": 0
+    }
+  }
+]
+```
+* skillProcessEventId 组合 ID,唯一Id。
+* suiTimestamp 造船完成时间，单位毫秒。
+* suiSender 用户钱包地址。Player wallet Address.
+
+#### Faucet Request event 
+```shell
+curl -X GET "http://ip:port/api/contractEvents/getFaucetRequestedEvents?startAt={startAt}&endedAt={endedAt}&senderAddress={senderAddress}" -H "accept: application/json"
 ```
 Query Parameters:
 
