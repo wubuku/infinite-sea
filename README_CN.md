@@ -2234,6 +2234,8 @@ sui client call --package {main.PackageId} \
 {energyId} \
 {energy_amount} \
 {sail_duration} \
+{updated_coordinates_x} \
+{updated_coordinates_y} \
 --json
 ```
 
@@ -2247,7 +2249,10 @@ sui client call --package {main.PackageId} \
 * `{clock}`：类型为 `&Clock`。时钟对象 ID，固定值 `0x6`。
 * `{energyId}`：类型为 `Coin<ENERGY>`。CLI 中可传入能量币（`ENERGY`）的 Object ID。
 * `{energy_amount}`：类型为 `u64`。本次航行需要花费能量币（`ENERGY`）数量。
-* `{sail_duration}`：类型为 `u64`。前端传递的一个距离值。
+* `{sail_duration}`：类型为 `u64`。客户端传递的一个距离值。
+* `{updated_coordinates_x}`：类型为:`u32`。与 `{updated_coordinates_y}`
+  一起表示客户端所为船队指定的当前位置，如果两者同时为 `0`，即 `(0,0)` 时表示不会更改船队位置。
+* `{updated_coordinates_y}`: 类型为:`u32`。见 `{updated_coordinates_x}`。
 
 ### 更新船队位置
 
@@ -2259,12 +2264,17 @@ sui client call --package {main.PackageId} \
 --function update_location \
 --args {rosteId} \
 {clock} \
+{updated_coordinates_x} \
+{updated_coordinates_y} \
 --gas-budget 1000000 --json
 ```
 
 * `{main.PackageId}`：Main 合约包 ID。
 * `{roste}`：类型为 `&mut Roster`。CLI 中可传入船队对象 ID。
 * `{clock}`：类型为 `&Clock`。 时钟对象 ID，固定值 `0x6`。
+* `{updated_coordinates_x}`：类型为:`u32`。与 `{updated_coordinates_y}`
+  一起表示客户端所为船队指定的当前位置，如果两者同时为 `0`，即 `(0,0)` 时表示不会更改船队位置。
+* `{updated_coordinates_y}`: 类型为:`u32`。见 `{updated_coordinates_x}`。
 
 执行以上命令之后，可以通过以下 Sui CLI 命令来查看船队信息：
 
@@ -2372,6 +2382,8 @@ sui client call --package {main.packageId} \
 {shipId} \
 {itemIds} \
 {quantities} \
+{updated_coordinates_x} \
+{updated_coordinates_y} \
  --gas-budget 11000000 --json
 ```
 
@@ -2386,6 +2398,9 @@ sui client call --package {main.packageId} \
   如：`[102,200,301]`，表示要转移 Item ID 为 102、200、301 的三种资源。
 * `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
+* `{updated_coordinates_x}`：类型为:`u32`。与 `{updated_coordinates_y}` 
+一起表示客户端所为船队指定的当前位置，如果两者同时为 `0`，即 `(0,0)` 时表示不会更改船队位置。
+* `{updated_coordinates_y}`: 类型为:`u32`。见 `{updated_coordinates_x}`。
 
 #### 从岛屿转移资源到船
 
@@ -2401,6 +2416,8 @@ sui client call --package {main.packageId} \
 {shipId} \
 {itemIds} \
 {quantities} \
+{updated_coordinates_x} \
+{updated_coordinates_y} \
  --gas-budget 11000000 --json
 ```
 
@@ -2415,7 +2432,9 @@ sui client call --package {main.packageId} \
   如：`[2,200,301]`，表示要转移 Item ID 为 2、200、301 的三种资源。
 * `{quantities}`：类型为 `vector<u32>`。转移资源（Item）的数量数组。
   如：`[38,11,23]`，结合上面的 `itemIds`，用以表示以上三种资源各自转移数量。
-
+* `{updated_coordinates_x}`：类型为:`u32`。与 `{updated_coordinates_y}`
+  一起表示客户端所为船队指定的当前位置，如果两者同时为 `0`，即 `(0,0)` 时表示不会更改船队位置。
+* `{updated_coordinates_y}`: 类型为:`u32`。见 `{updated_coordinates_x}`。
 ### 战斗
 
 玩家可以控制己方一只船队对其他玩家的船队或者环境船队发动进攻，进而发生战斗。
@@ -2430,6 +2449,10 @@ sui client call --package {main.packageId} \
 {initiator} \
 {responder} \
 {clock} \
+{initiator_coordinates_x} \
+{initiator_coordinates_y} \
+{responder_coordinates_x} \
+{responder_coordinates_y} \
 --gas-budget 4999000000 --json
 ```
 
@@ -2440,6 +2463,12 @@ sui client call --package {main.packageId} \
 * `{initiator}`： 类型为 `&mut Roster`。CLI 中可传入发起战斗作为挑战船队的对象 ID。
 * `{responder}`： 类型为 `&mut Roster`。CLI 中可传入遭到攻击作为应战船队的对象 ID。
 * `{clock}`：类型为 `&Clock`。CLI 中可传入固定值：0x6。
+* `{initiator_coordinates_x}`：类型为:`u32`。与 `{initiator_coordinates_y}`
+  一起表示客户端所为**挑战船队**指定的当前位置，如果两者同时为 `0`，即 `(0,0)` 时表示不会更改**挑战船队**位置。
+* `{initiator_coordinates_y}`: 类型为:`u32`。见 `{initiator_coordinates_x}`。
+* `{responder_coordinates_x}`：类型为:`u32`。与 `{responder_coordinates_y}`
+  一起表示客户端所为**应战船队**指定的当前位置，如果两者同时为 `0`，即 `(0,0)` 时表示不会更改**应战船队**位置。
+* `{responder_coordinates_y}`: 类型为:`u32`。见 `{responder_coordinates_x}`。
 
 战斗结束后，在返回的输出中，包含类似的内容：
 
