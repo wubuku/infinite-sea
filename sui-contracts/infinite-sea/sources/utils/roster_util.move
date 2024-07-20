@@ -1,4 +1,5 @@
 module infinite_sea::roster_util {
+    use std::debug;
     use std::option;
     use std::option::Option;
     use std::vector;
@@ -163,7 +164,11 @@ module infinite_sea::roster_util {
     }
 
     /// Check if s the roster's current location updatable.
-    public fun is_current_location_updatable(roster: &Roster, clock: &Clock, updated_coordinates: Coordinates): (bool, u64, u8) {
+    public fun is_current_location_updatable(
+        roster: &Roster,
+        clock: &Clock,
+        updated_coordinates: Coordinates
+    ): (bool, u64, u8) {
         let old_status = roster::status(roster);
         let coordinates_updated_at = roster::coordinates_updated_at(roster);
         if (coordinates::x(&updated_coordinates) == 0 || coordinates::y(&updated_coordinates) == 0) {
@@ -229,10 +234,23 @@ module infinite_sea::roster_util {
 
     public fun calculate_total_time(origin: Coordinates, destination: Coordinates, speed_property: u32): u64 {
         let distance = direct_route_util::get_distance(origin, destination);
+        debug::print(&distance);
         let (speed_numerator, speed_denominator) = speed_util::speed_property_to_coordinate_units_per_second(
             speed_property
         );
+        debug::print(&speed_numerator);
+        debug::print(&speed_denominator);
         let total_time = distance * (speed_denominator as u64) / (speed_numerator as u64);
         total_time
+    }
+
+    #[test]
+    public fun test_calculate_total_time()
+    {
+        let original = coordinates::new(2147501897, 2147489647);
+        let destination = coordinates::new(214741763, 214741653);
+        let speed = 9;
+        let total_time = calculate_total_time(original, destination, speed);
+        debug::print(&total_time);
     }
 }
