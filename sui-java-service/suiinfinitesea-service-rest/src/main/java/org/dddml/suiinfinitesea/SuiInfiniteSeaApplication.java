@@ -16,7 +16,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 @EntityScan(basePackages = {
         "org.dddml.suiinfinitesea.sui.contract"
 })
-@EnableScheduling
+//@EnableScheduling 用一个专门的配置文件来实现
 //@EnableAutoConfiguration
 public class SuiInfiniteSeaApplication {
 
