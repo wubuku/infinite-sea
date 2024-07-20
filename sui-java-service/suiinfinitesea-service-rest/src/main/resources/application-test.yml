@@ -19,15 +19,15 @@ server:
 sui:
   contract:
     package-id:
-      faucet: "0x0597f363495b0be4f33a09573d9cd6ad958326208aa71d5baa0a809376cbab1f"
+      faucet: "0xfc7ba2a57809577e7ab9b7b4b2f0a53a4621fbbd6ced73e38fc4bc359c1967f1"
     jsonrpc:
       #url: "https://sui.devnet.m2.movementlabs.xyz"
       #url: "https://fullnode.devnet.sui.io/"
       url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "rLF7HBUf4eSpx7exrdE5iFx7AB4UcJqJ8BvVwcuB93v"
-      default: "79H63am7QGzCoFWvu8eaoEGRjA5sQ6AQAJTeuYYD8ZrS"
-      nft: "DMpZa54vGygHebDbmiMMqaEFE9Qb772kDYDwD2s2iMWu"
+      common: "GXDt2NdceKikEbHVjATHFW2Pv4FrhXFN7ATKnKt3hZFb"
+      default: "R3r2bEqQejog9ce4PUdHnd95qe2dLghQf9ZUaVAFsNw"
+      nft: "5fXFSrmAtESmSSziF7uvg3ixsuY3K4VXEm5KBP6YD16B"
 #    pull-day-summary-events:
 #      day-summary-created:
 #        fixed-delay: 6000

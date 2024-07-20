@@ -1,5 +1,15 @@
 $startLocation = Get-Location; 
 
+$environmentRosterJsonFile = "$startLocation\island_environment_roster.json"
+$islandEnvironmentRosterInfo = $null
+if (Test-Path -Path $environmentRosterJsonFile -PathType Leaf) {    
+    $islandEnvironmentRosterInfoFileContent = Get-Content -Raw -Path $environmentRosterJsonFile
+    $islandEnvironmentRosterInfo = $islandEnvironmentRosterInfoFileContent | ConvertFrom-Json
+}
+else {    
+    $islandEnvironmentRosterInfo = New-Object -TypeName PSObject
+    $islandEnvironmentRosterInfo | Add-Member -MemberType NoteProperty -Name "LastRosterIdSequenceNumber" -Value 0
+}
 
 $dataFile = ".\data.json"
 if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
@@ -141,39 +151,39 @@ foreach ($islandCoordinate in $islandCoordinates) {
     }
 }
 if ($needAddTotal -lt 1) {
-    "不需要创建环境船队" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+    "不需要补充环境船队" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
     return;
 }
-"需要创建 $needAddTotal 个环境船队..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+"需要补充 $needAddTotal 个环境船队..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
 
-$uuid = New-Guid
-$playName = $uuid.Guid.ToString()
-$newPlayId = ""
-"`n创建一个PLAYER..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-$result = ""
-try {
-    $result = sui client call --package $dataInfo.main.PackageId --module player_aggregate --function create --args $playName --gas-budget 11000000 --json
-    if (-not ('System.Object[]' -eq $result.GetType())) {
-        "创建Player时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    $resultObj = $result | ConvertFrom-Json
-    foreach ($object in $resultObj.objectChanges) {
-        if ($object.objectType -like "*player::Player") {
-            $newPlayId = $object.objectId
-            #$dataMain | Add-Member -MemberType NoteProperty -Name "Player" -Value $newPlayId 
-            "创建成功,Player Id: $newPlayId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-            break;   
-        }
-    }
-}
-catch {
-    "创建Player失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLocation
-    return    
-}
+# $uuid = New-Guid
+# $playName = $uuid.Guid.ToString()
+# $newPlayId = ""
+# "`n创建一个PLAYER..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+# $result = ""
+# try {
+#     $result = sui client call --package $dataInfo.main.PackageId --module player_aggregate --function create --args $playName --gas-budget 11000000 --json
+#     if (-not ('System.Object[]' -eq $result.GetType())) {
+#         "创建Player时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     $resultObj = $result | ConvertFrom-Json
+#     foreach ($object in $resultObj.objectChanges) {
+#         if ($object.objectType -like "*player::Player") {
+#             $newPlayId = $object.objectId
+#             #$dataMain | Add-Member -MemberType NoteProperty -Name "Player" -Value $newPlayId 
+#             "创建成功,Player Id: $newPlayId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+#             break;   
+#         }
+#     }
+# }
+# catch {
+#     "创建Player失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+#     Set-Location $startLocation
+#     return    
+# }
 
 $random = New-Object System.Random  
 $errorTimes = 0
@@ -182,8 +192,12 @@ $ship_resource_quantity = 15
 $ship_base_resource_quantity = 3
 $base_experience = 0
 $clock = '0x6'
-$roster_id_sequence_number = 0
-$roster_id_sequence_number_max = 255
+$roster_id_sequence_number = 1
+
+#因为船队的序列号是唯一的，为了防止出错，先给加个1
+$islandEnvironmentRosterInfo.LastRosterIdSequenceNumber++
+
+"本次造船队将从序列号 $($islandEnvironmentRosterInfo.LastRosterIdSequenceNumber) 开始" | Write-Host -ForegroundColor Green
 foreach ($requirement in $requirements) {
     "岛屿: $($requirement.X),$($requirement.Y) 周围需要补充 $($requirement.NeedToAdd) 个环境船队...." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Blue
     for ($i = 0; $i -lt $requirement.NeedToAdd; $i++) {
@@ -198,7 +212,7 @@ foreach ($requirement in $requirements) {
         $rosterId = ""
         $createEnvironmentRosterResult = ""
         try {
-            $command = "sui client call --package $($dataInfo.main.PackageId) --module roster_aggregate --function create_environment_roster --args  $newPlayId $roster_id_sequence_number $($dataInfo.main.Publisher) $rosterX $rosterY $ship_resource_quantity $ship_base_resource_quantity $base_experience $clock $($dataInfo.main.RosterTable) --gas-budget 42000000 --json"
+            $command = "sui client call --package $($dataInfo.main.PackageId) --module roster_aggregate --function create_environment_roster --args  $($dataInfo.main.EnvironmentPlayId) $($islandEnvironmentRosterInfo.LastRosterIdSequenceNumber) $($dataInfo.main.Publisher) $rosterX $rosterY $ship_resource_quantity $ship_base_resource_quantity $base_experience $clock $($dataInfo.main.RosterTable) --gas-budget 42000000 --json"
             $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
             $createEnvironmentRosterResult = Invoke-Expression -Command $command
             if (-not ('System.Object[]' -eq $createEnvironmentRosterResult.GetType())) {
@@ -206,6 +220,7 @@ foreach ($requirement in $requirements) {
                 $errorTimes++
                 if ($errorTimes -ge $maxErrorTimes) {
                     "创建环境船队出错次数:$errorTimes,已经达到上限:$maxErrorTimes,退出..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                    $islandEnvironmentRosterInfo | ConvertTo-Json | Tee-Object -FilePath $environmentRosterJsonFile | Write-Host -ForegroundColor White
                     return
                 }
                 continue
@@ -218,13 +233,10 @@ foreach ($requirement in $requirements) {
                     break
                 }
             }
-            #"船队RosterId={$newPlayId,$roster_id_sequence_number}" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Blue
-            "已经打造 $($roster_id_sequence_number + 1) 只环境船队" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-            if ($roster_id_sequence_number + 1 -ge $roster_id_sequence_number_max) {                
-                "建造船队数量已经达到上限: $roster_id_sequence_number_max " | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-                break
-            }
+            "船队RosterId={$($dataInfo.main.EnvironmentPlayId),$($islandEnvironmentRosterInfo.LastRosterIdSequenceNumber)}" | Write-Host -ForegroundColor Blue
+            "已经补充 $($roster_id_sequence_number) 只环境船队" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
             $roster_id_sequence_number++;
+            $islandEnvironmentRosterInfo.LastRosterIdSequenceNumber++
         }
         catch {
             "创建环境船队失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
@@ -232,16 +244,15 @@ foreach ($requirement in $requirements) {
             $errorTimes++
             if ($errorTimes -ge $maxErrorTimes) {
                 "创建环境船队出错次数:$errorTimes,已经达到上限:$maxErrorTimes,退出..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                $islandEnvironmentRosterInfo | ConvertTo-Json | Tee-Object -FilePath $environmentRosterJsonFile | Write-Host -ForegroundColor White
                 return
             }
             continue    
         }
     }
-    if ($roster_id_sequence_number + 1 -ge $roster_id_sequence_number_max) {                
-        "达到上限退出。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-        break
-    }
 }
+"全部补充完毕!" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Blue
+$islandEnvironmentRosterInfo | ConvertTo-Json | Tee-Object -FilePath $environmentRosterJsonFile | Write-Host -ForegroundColor White
 "该脚本执行后相关的日志请参考: $logFile" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Blue
 
 

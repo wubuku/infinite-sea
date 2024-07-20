@@ -40,6 +40,9 @@ $testSkillProcessWooding = $true
 
 $playerName = 'Li Dahai'
 
+#用于生成环境用户的用户名
+$environmentPlayName = "@Environment Player@"
+
 # Mint Energy Amount 60万
 $mintAmout = 600000 * 1000 * 1000 * 1000
 
@@ -835,7 +838,7 @@ for ($i = 0; $i -lt $fileContent.Count; $i++) {
 $fileContent | Set-Content $file
 "Move.toml文件更新完成。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-"`n休息一下，以免不能及时同步..." | Write-Host
+"`n休息一下,以免不能及时同步..." | Write-Host
 Start-Sleep -Seconds 5
 "休息完成，继续干活...· `n" | Write-Host
 
@@ -860,6 +863,34 @@ try {
 }
 catch {
     "创建Player失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    Set-Location $startLocation
+    return    
+}
+
+"`n创建一个 Environment Player,以用于生成环境船队..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+$environmentPlayId = ""
+$createEnvironmentPlayerResult = ""
+try {
+    $createEnvironmentPlayerResult = sui client call --package $mainPackageId --module player_aggregate --function create --args $environmentPlayName --gas-budget 11000000 --json
+    if (-not ('System.Object[]' -eq $createEnvironmentPlayerResult.GetType())) {
+        "创建 Environment Player 时返回信息 $createEnvironmentPlayerResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    $createEnvironmentPlayerResultObj = $createEnvironmentPlayerResult | ConvertFrom-Json
+    foreach ($object in $createEnvironmentPlayerResultObj.objectChanges) {
+        if ($object.objectType -like "*player::Player") {
+            $environmentPlayId = $object.objectId
+            $dataMain | Add-Member -MemberType NoteProperty -Name "EnvironmentPlayId" -Value $environmentPlayId 
+            "创建 Environment Player 成功,EnvironmentPlayId: $environmentPlayId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+            break;   
+        }
+    }
+}
+catch {
+    "创建 Environment Player 失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    "返回的结果为:$createEnvironmentPlayerResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
     Set-Location $startLocation
     return    
 }

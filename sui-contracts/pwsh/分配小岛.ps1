@@ -22,7 +22,7 @@ $itemDataJson = Get-Content -Raw -Path $itemDataFile
 $itemData = $itemDataJson | ConvertFrom-Json
 
 #释放的块序号
-$seqNo = 1
+$seqNo = 2
 
 
 $u32Max = 4294967295
@@ -41,8 +41,8 @@ $island_width = 5000
 $island_height = 5000
 
 
-$block_width = 50000
-$block_height = 50000
+$block_width = 20000
+$block_height = 20000
 
 if ($block_width -lt $island_width -or $block_height -lt $island_height) {
     "分配区域的尺寸不能小于岛屿的尺寸" | Write-Host -ForegroundColor Red
@@ -280,7 +280,6 @@ public class Coordinate{
     public long RandomY { get; set; }
 }
 "@
-
 
 $coordinates = @()     
 $random = New-Object System.Random  
