@@ -22,8 +22,8 @@ public class RosterExtendResource {
 
     @GetMapping("allRosterIds")
     @Transactional(readOnly = true)
-    public List<RosterId> getAllRosterIds() {
+    public List<String> getAllRosterIds() {
         List<AbstractRosterState.SimpleRosterState> rosters = rosterRepository.findAll();
-        return rosters.stream().map(AbstractRosterState::getRosterId).collect(Collectors.toList());
+        return rosters.stream().map(AbstractRosterState::getId_).collect(Collectors.toList());
     }
 }
