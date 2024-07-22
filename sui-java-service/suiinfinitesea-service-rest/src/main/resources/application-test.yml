@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost/test7?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
+    url: jdbc:mysql://localhost/infinite-sea-testnet?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
     username: root
     password: qingdao
 #    url: jdbc:mysql://localhost/test2?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
@@ -19,15 +19,15 @@ server:
 sui:
   contract:
     package-id:
-      faucet: "0xfc7ba2a57809577e7ab9b7b4b2f0a53a4621fbbd6ced73e38fc4bc359c1967f1"
+      faucet: "0x2e9d42d137591bcf52c2413bb38b65a469d93a560dbfd61e77a9ba72ab8b9aa1"
     jsonrpc:
       #url: "https://sui.devnet.m2.movementlabs.xyz"
       #url: "https://fullnode.devnet.sui.io/"
       url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "GXDt2NdceKikEbHVjATHFW2Pv4FrhXFN7ATKnKt3hZFb"
-      default: "R3r2bEqQejog9ce4PUdHnd95qe2dLghQf9ZUaVAFsNw"
-      nft: "5fXFSrmAtESmSSziF7uvg3ixsuY3K4VXEm5KBP6YD16B"
+      common: "6anWn1eYWMWkozzTvZBznpGrobTR1LRAMoRrAb56ZRFQ"
+      default: "ARR99CURLxjZxuUgdJReTpvAc6YoBts671Kim7z9dTC"
+      nft: "9rAEtMYZE1XZdjbGT8p5XCv8V4Q6QTqQEbethBLNu6rV"
 #    pull-day-summary-events:
 #      day-summary-created:
 #        fixed-delay: 6000

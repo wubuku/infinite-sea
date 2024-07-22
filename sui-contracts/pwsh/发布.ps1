@@ -43,8 +43,8 @@ $playerName = 'Li Dahai'
 #用于生成环境用户的用户名
 $environmentPlayName = "@Environment Player@"
 
-# Mint Energy Amount 60万
-$mintAmout = 600000 * 1000 * 1000 * 1000
+# Mint Energy Amount 600万
+$mintAmout = 6000000 * 1000 * 1000 * 1000
 
 
 "------------------------------------- 发布 infinite-sea-nft -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host

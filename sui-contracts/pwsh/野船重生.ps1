@@ -25,9 +25,7 @@ $formattedNow = $now.ToString('yyyyMMddHHmmss')
 $logFile = "$startLocation\environment_roster_rebirth_$formattedNow.log"
 
 #链下服务相关配置
-$server = "http://47.96.81.197"
-$port = 8809
-$serverUrl = $server + ":" + $port;
+$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090"
 
 # 目前岛屿所占海域大小
 $islandWidth = 5000
