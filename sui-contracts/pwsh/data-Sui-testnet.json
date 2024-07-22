@@ -1,0 +1,50 @@
+{
+  "coin": {
+    "PackageId": "0x157943c5f64cb924a40e1cfba8437e5e6d85249fa77262ed65a856f708df4d80",
+    "TreasuryCap": "0x354eddc06ca3f0f61ade641d5edafa2ec679b9cc5db6280a000bc3dcdc5d4766",
+    "Digest": "CDBdK67Y3UvNG8x2hN6QdLkDBiXvD2rrFBD4M1F2b1x5",
+    "EnergyId": "0x35c4d827137baaca7be6fabf1f45f9fd9ee489d06ff9b6cc7599c0085fb31b3c"
+  },
+  "common": {
+    "Digest": "6tRYd94PLXGqrvrtgD2NBnX7qksPe12XprYW7CbDWuFv",
+    "PackageId": "0x41fdf0dbe81664e71579973d1de6fe6f266a538f29918eef8d14a8fb8cf90d0d",
+    "ExperienceTable": "0x47711cdc34e04a5a41de08f3b65b023c9ab8627be638c68304892c496316f99e",
+    "ItemTable": "0x8ad22bbde2f48662d0de579bfb0e56a2c6d186ecfe41b9b44e90cb55fbc5b50c",
+    "ItemProductionTable": "0xaade66a31bed2dc7b910399d925eeff295fab38d8624609272f2d5247f8223ac",
+    "Publisher": "0xd27ddbe8c23f0d2f38ce5a428168aa6d867c8463e61ed9f229f957d400568a9e",
+    "ItemCreationTable": "0xd57b2d6af07aae165acfd5819cf8b4527571d5f8ce730ca8c39443ab6e3e6497",
+    "ItemCreationMining": "0x78af2659415f12569c2e534e68a0991387aac10ffd48f2cc3817525ec570f21e",
+    "ItemProductionFarming": "0x560bdf9526aab054f037029aa52c73a23af6a962ca53d472b4954050b5cb320e",
+    "ItemCreationWooding": "0xa2e47227ea07fca4004c88955373eaef66923268f4a3183de5049e6df5c94e57",
+    "ItemProductionCrafting": "0x151ac891f095f139a4e7aa2fe5837db3907bd17fe79b71de63c31854ffcbdcca"
+  },
+  "main": {
+    "Digest": "HraALNfMYEpciCvCFYQvTtU8ENYo7jbPrUWTNZm7TCGx",
+    "Publisher": "0x127358c1c5b111b6a58efbeb585386597072d4767ccb9580c124e6771662c66f",
+    "AdminCap": "0x1f7531a8f9fc88a04eba2216761bb03036224118bf4984bdfa29ae3d63ed1cda",
+    "Map": "0x27ef041f823083360bdf7c8de900977b49859970373bb2d453b6deaad0604b96",
+    "UpgradeCap": "0x4aadf4ffc8fef7abb4c674ad4806ce291916a91594fd90b5ef3df5e09f15ddd7",
+    "RosterTable": "0x54ef7d7e46e38464555df08e86674709a3d89b69cdf1c6b2fc54747174b9e2c3",
+    "SkillProcessTable": "0xaab072ef5700498dbdf48fe14fc10f490bfdf0ad7c3f39fdb3f1f14409920156",
+    "PackageId": "0xf77a599ca55624030e3fc68074284a0abffe82c0dc42fa659758c4b65f5cb25f",
+    "Player": "0x6185a64c9a5df0e28eea10c002c4d74b114d20625922158f784653d62e89531a",
+    "SkillProcessWooding": "0x3a53e174445a9d91a70bc244e94af7fdd132f990de0fa2dc998304292d25c85e",
+    "SkillProcessFarming2": "0x525e4162a71f4c17af0c85e2649e954ac659eae190fd2e91877fb17887f6b0a8",
+    "SkillProcessFarming1": "0xd5c2db15395a3450d2e7e3a122ada40b342d22823d2e54179b10be40939f79b6",
+    "SkillProcessCrafting": "0xdf0549d03b147c2530032d779acedc3507213e995dd094e01bcfcd2b13e1c38d",
+    "SkillProcessMining": "0xf2b99f95cc590e8a3feec6088c9baadde6b101217e95d1ae01c0c634c28e3d67"
+  },
+  "faucet": {
+    "PackageId": "0x28ace34b9b9dd0f662999608a433fc69a33baa7282a48e7cef00b3a53153a258",
+    "EnergyFaucet": "0x6bfb627b038026384e25b5c33a37f79f32edf83169972ad48bea6536e2e8baac",
+    "Digest": "8nGniWSXEJnSWKNfbUZ8GyEE23s7WFwU2kEUaRuDrsrg"
+  },
+  "nft": {
+    "Publisher": "0x20867ff6b64ce33dff55a1ed7db18735db1bbc044ea4a8a6347139161690bf1f",
+    "Whitelist": "0x2fca1fc82e9207e24707efccec320c27e818e503fabcc44aa7fe7a7b9e3596d1",
+    "AvatarChangeTable": "0x635983337b3b586c582bc8ac996594b2651a64b9412ee5dae4f1f5d53ac2e81b",
+    "AvatarDisplay": "0xab174edaca2cbb790a3b1680b5f9c94416f75c4bff443c623f4ac42c3435f6fc",
+    "PackageId": "0xe9f59747a72516dfddd50b4d0a5bf451bae1ea1a000c50edd9dbf6b13697e32c",
+    "Digest": "DbNEuznBqRk8MCRV1ojfinH8ipak6b5FP5vdfPgbAhDD"
+  }
+}
