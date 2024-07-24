@@ -49,17 +49,17 @@ module infinite_sea_map::map_friend_config {
         sui::transfer::share_object(config);
     }
 
-    public entry fun add_allowed_impl<WT>(config: &mut MapFriendConfig, publisher: &Publisher, _ctx: &mut TxContext) {
+    public entry fun add_allowed_caller<FWT>(config: &mut MapFriendConfig, publisher: &Publisher, _ctx: &mut TxContext) {
         //cap: &MapFriendConfigCap) {
         //assert!(has_access(config, cap), ENotAdmin);
         assert!(package::from_package<MAP_FRIEND_CONFIG>(publisher), EInvalidPublisher);
-        let type_name = type_name::get<WT>();
+        let type_name = type_name::get<FWT>();
         if (!vec_set::contains(&config.caller_allowlist, &type_name)) {
             vec_set::insert(&mut config.caller_allowlist, type_name);
         };
     }
 
-    public entry fun remove_allowed_impl<WT>(
+    public entry fun remove_allowed_caller<FWT>(
         config: &mut MapFriendConfig,
         publisher: &Publisher,
         _ctx: &mut TxContext
@@ -67,14 +67,14 @@ module infinite_sea_map::map_friend_config {
         //cap: &MapFriendConfigCap) {
         //assert!(has_access(config, cap), ENotAdmin);
         assert!(package::from_package<MAP_FRIEND_CONFIG>(publisher), EInvalidPublisher);
-        let type_name = type_name::get<WT>();
+        let type_name = type_name::get<FWT>();
         if (vec_set::contains(&config.caller_allowlist, &type_name)) {
             vec_set::remove(&mut config.caller_allowlist, &type_name);
         };
     }
 
-    public fun assert_allowlisted<WT: drop>(config: &MapFriendConfig, _impl_witness: WT) {
-        assert!(vec_set::contains(&config.caller_allowlist, &type_name::get<WT>()), ENotAllowedCaller);
+    public fun assert_allowlisted<FWT: drop>(config: &MapFriendConfig, _friend_witness: FWT) {
+        assert!(vec_set::contains(&config.caller_allowlist, &type_name::get<FWT>()), ENotAllowedCaller);
     }
 
     // /// Check whether the config-cap matches the config.
