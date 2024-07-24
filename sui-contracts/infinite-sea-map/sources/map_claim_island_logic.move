@@ -1,5 +1,5 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
-module infinite_sea::map_claim_island_logic {
+module infinite_sea_map::map_claim_island_logic {
     use std::option;
 
     use sui::object::ID;
@@ -7,11 +7,12 @@ module infinite_sea::map_claim_island_logic {
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::map_location_type;
     use infinite_sea_common::sorted_vector_util;
+    use infinite_sea_map::map_friend_config;
 
-    use infinite_sea::map;
-    use infinite_sea::map_location;
+    use infinite_sea_map::map;
+    use infinite_sea_map::map_location;
 
-    friend infinite_sea::map_aggregate;
+    friend infinite_sea_map::map_aggregate;
 
     const ELocationTypeMismatch: u64 = 1;
     const EIslandAlreadyClaimed: u64 = 2;

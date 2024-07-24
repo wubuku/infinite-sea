@@ -1,14 +1,11 @@
 [package]
-published-at = "0xd95a23bf63c51250c136ac6f2443c37644834977303dfe985ac73442324e925b"
-name = "infinite_sea"
+name = "infinite_sea_map"
 version = "0.0.1"
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "mainnet" }
 #Sui = { local = "../../../../MystenLabs/sui/crates/sui-framework/packages/sui-framework" }
 infinite_sea_common = { local = "../infinite-sea-common" }
-infinite_sea_map = { local = "../infinite-sea-map" }
-infinite_sea_coin = { local = "../infinite-sea-coin" }
 
 [addresses]
-infinite_sea = "0xd95a23bf63c51250c136ac6f2443c37644834977303dfe985ac73442324e925b"
+infinite_sea_map = "0x0"

@@ -5,17 +5,19 @@
 
 #[allow(unused_mut_parameter, unused_use)]
 module infinite_sea::player_aggregate {
-    use infinite_sea::map::Map;
-    use infinite_sea::player;
+    use infinite_sea::player::{Self, Player};
     use infinite_sea::player_airdrop_logic;
     use infinite_sea::player_claim_island_logic;
     use infinite_sea::player_create_logic;
+    use infinite_sea::player_gather_island_resources_logic;
     use infinite_sea::roster::RosterTable;
     use infinite_sea::skill_process::SkillProcessTable;
     use infinite_sea_common::coordinates::{Self, Coordinates};
+    use infinite_sea_map::map::Map;
     use std::string::String;
     use sui::clock::Clock;
     use sui::tx_context;
+    use infinite_sea_map::map_friend_config;
 
     friend infinite_sea::skill_process_service;
     friend infinite_sea::roster_service;
@@ -41,6 +43,7 @@ module infinite_sea::player_aggregate {
     }
 
     public entry fun claim_island(
+        freind_config: &map_friend_config::MapFriendConfig,
         player: &mut player::Player,
         map: &mut Map,
         coordinates_x: u32,
@@ -64,6 +67,7 @@ module infinite_sea::player_aggregate {
             ctx,
         );
         player_claim_island_logic::mutate(
+            freind_config,
             &island_claimed,
             map,
             roster_table,
@@ -96,6 +100,31 @@ module infinite_sea::player_aggregate {
         );
         player::update_object_version(player);
         player::emit_player_airdropped(player_airdropped);
+    }
+
+    public entry fun gather_island_resources(
+        freind_config: &map_friend_config::MapFriendConfig,
+        player: &mut player::Player,
+        map: &mut Map,
+        clock: &Clock,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let player_island_resources_gathered = player_gather_island_resources_logic::verify(
+            player,
+            map,
+            clock,
+            ctx,
+        );
+        player_gather_island_resources_logic::mutate(
+            freind_config,
+            &player_island_resources_gathered,
+            player,
+            clock,
+            map,
+            ctx,
+        );
+        player::update_object_version(player);
+        player::emit_player_island_resources_gathered(player_island_resources_gathered);
     }
 
 }

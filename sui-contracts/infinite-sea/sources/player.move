@@ -18,6 +18,7 @@ module infinite_sea::player {
     friend infinite_sea::player_create_logic;
     friend infinite_sea::player_claim_island_logic;
     friend infinite_sea::player_airdrop_logic;
+    friend infinite_sea::player_gather_island_resources_logic;
     friend infinite_sea::player_aggregate;
 
     friend infinite_sea::roster_put_in_ship_inventory_logic;
@@ -30,6 +31,12 @@ module infinite_sea::player {
     #[allow(unused_const)]
     const EInappropriateVersion: u64 = 103;
     const EEmptyObjectID: u64 = 107;
+
+    struct FriendWitness has drop {}
+
+    public(friend) fun friend_witness(): FriendWitness {
+        FriendWitness {}
+    }
 
     fun init(otw: PLAYER, ctx: &mut TxContext) {
         sui::package::claim_and_keep(otw, ctx);
@@ -227,6 +234,24 @@ module infinite_sea::player {
         }
     }
 
+    struct PlayerIslandResourcesGathered has copy, drop {
+        id: object::ID,
+        version: u64,
+    }
+
+    public fun player_island_resources_gathered_id(player_island_resources_gathered: &PlayerIslandResourcesGathered): object::ID {
+        player_island_resources_gathered.id
+    }
+
+    public(friend) fun new_player_island_resources_gathered(
+        player: &Player,
+    ): PlayerIslandResourcesGathered {
+        PlayerIslandResourcesGathered {
+            id: id(player),
+            version: version(player),
+        }
+    }
+
 
     #[lint_allow(share_owned)]
     public(friend) fun share_object(player: Player) {
@@ -264,6 +289,10 @@ module infinite_sea::player {
 
     public(friend) fun emit_player_airdropped(player_airdropped: PlayerAirdropped) {
         event::emit(player_airdropped);
+    }
+
+    public(friend) fun emit_player_island_resources_gathered(player_island_resources_gathered: PlayerIslandResourcesGathered) {
+        event::emit(player_island_resources_gathered);
     }
 
 }

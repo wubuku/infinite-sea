@@ -135,6 +135,20 @@ aggregates:
         event:
           name: PlayerAirdropped
 
+      GatherIslandResources:
+        metadata:
+          ParametersIncludedInMutationFunction: [ "Clock" ]
+        parameters:
+          Player:
+            referenceType: Player
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+        event:
+          name: PlayerIslandResourcesGathered
+
 #      DeductItems:
 #        isInternal: true
 #        parameters:

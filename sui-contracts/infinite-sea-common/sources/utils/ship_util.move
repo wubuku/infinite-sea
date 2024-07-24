@@ -5,7 +5,6 @@ module infinite_sea_common::ship_util {
     use std::vector;
 
     use sui::object::ID;
-    use infinite_sea_common::roster_sequence_number::second;
 
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_id_quantity_pair;
@@ -18,9 +17,9 @@ module infinite_sea_common::ship_util {
     const EShipIdNotFound: u64 = 4;
 
     const DEFAULT_SHIP_HEALTH_POINTS: u32 = 20;
-    const NORMAL_SHIP_MAX_ATTACK: u32 = 5;
-    const NORMAL_SHIP_MAX_PROTECTION: u32 = 5;
-    const NORMAL_SHIP_MAX_SPEED: u32 = 5;
+    //const NORMAL_SHIP_MAX_ATTACK: u32 = 5;
+    //const NORMAL_SHIP_MAX_PROTECTION: u32 = 5;
+    //const NORMAL_SHIP_MAX_SPEED: u32 = 5;
 
     public fun calculate_ship_attributes(building_expenses: &vector<ItemIdQuantityPair>): (u32, u32, u32, u32) {
         let copper_ore = sorted_vector_util::get_item_id_quantity_pair_or_else_abort(

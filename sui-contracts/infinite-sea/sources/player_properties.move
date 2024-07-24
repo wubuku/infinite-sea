@@ -14,7 +14,7 @@ module infinite_sea::player_properties {
     friend infinite_sea::skill_process_complete_creation_logic;
     friend infinite_sea::skill_process_complete_production_logic;
     friend infinite_sea::skill_process_complete_ship_production_logic;
-    friend infinite_sea::map_gather_island_resources_logic;
+    friend infinite_sea::player_gather_island_resources_logic;
 
     public(friend) fun deduct_inventory(player: &mut Player, items: vector<ItemIdQuantityPair>) {
         let inv = player::borrow_mut_inventory(player);

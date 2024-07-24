@@ -7,10 +7,12 @@ configuration:
 
   defaultModule:
     name: "Sui.InfiniteSea"
-    requiredModules: [ "Common", "Nft" ]
+    requiredModules: [ "Common", "Map", "Nft" ]
   submodules:
     Common:
       requiredModules: [ ]
+    Map:
+      requiredModules: [ "Common" ]
     Nft:
       requiredModules: [ ]
   java:

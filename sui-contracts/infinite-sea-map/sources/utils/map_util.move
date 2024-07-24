@@ -1,10 +1,10 @@
-module infinite_sea::map_util {
+module infinite_sea_map::map_util {
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::map_location_type;
 
-    use infinite_sea::map;
-    use infinite_sea::map::Map;
-    use infinite_sea::map_location;
+    use infinite_sea_map::map;
+    use infinite_sea_map::map::Map;
+    use infinite_sea_map::map_location;
 
     const ELocationNotFound: u64 = 10;
     const ELocationNotAnIsland: u64 = 11;

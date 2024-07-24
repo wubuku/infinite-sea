@@ -11,6 +11,7 @@ module infinite_sea::roster_set_sail_logic {
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::roster_status;
+    use infinite_sea_common::speed_util;
 
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
@@ -64,7 +65,7 @@ module infinite_sea::roster_set_sail_logic {
             abort ERosterUnfitToSail
         };
         let energy_cost = balance::value(energy);
-        let total_time = roster_util::calculate_total_time(new_updated_coordinates, target_coordinates,
+        let total_time = speed_util::calculate_total_time(new_updated_coordinates, target_coordinates,
             roster::speed(roster));
         assert!(sail_duration >= total_time, EIllegalSailDuration);
         let ship_count = vector::length(roster::borrow_ship_ids(roster));
