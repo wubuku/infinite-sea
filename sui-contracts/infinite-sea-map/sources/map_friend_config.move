@@ -49,7 +49,7 @@ module infinite_sea_map::map_friend_config {
         sui::transfer::share_object(config);
     }
 
-    public entry fun add_allowed_caller<FWT>(config: &mut MapFriendConfig, publisher: &Publisher, _ctx: &mut TxContext) {
+    public entry fun add_allowed_caller<FWT: drop>(config: &mut MapFriendConfig, publisher: &Publisher, _ctx: &mut TxContext) {
         //cap: &MapFriendConfigCap) {
         //assert!(has_access(config, cap), ENotAdmin);
         assert!(package::from_package<MAP_FRIEND_CONFIG>(publisher), EInvalidPublisher);
@@ -59,7 +59,7 @@ module infinite_sea_map::map_friend_config {
         };
     }
 
-    public entry fun remove_allowed_caller<FWT>(
+    public entry fun remove_allowed_caller<FWT: drop>(
         config: &mut MapFriendConfig,
         publisher: &Publisher,
         _ctx: &mut TxContext

@@ -5,7 +5,7 @@
 
 #[allow(unused_mut_parameter, unused_use)]
 module infinite_sea::player_aggregate {
-    use infinite_sea::player::{Self, Player};
+    use infinite_sea::player;
     use infinite_sea::player_airdrop_logic;
     use infinite_sea::player_claim_island_logic;
     use infinite_sea::player_create_logic;
