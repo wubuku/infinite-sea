@@ -3,6 +3,7 @@ singletonObjects:
     module: "Map"
     metadata:
       IS_MOVE_SCHEMA_VERSIONED: true
+      #MoveExternalFriendConfiguration: "MapFriendConfig" # This is default.
     friends:
       - Player.ClaimIsland
       - Player.GatherIslandResources

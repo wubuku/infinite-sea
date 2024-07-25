@@ -14,10 +14,10 @@ module infinite_sea::player_aggregate {
     use infinite_sea::skill_process::SkillProcessTable;
     use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_map::map::Map;
+    use infinite_sea_map::map_friend_config;
     use std::string::String;
     use sui::clock::Clock;
     use sui::tx_context;
-    use infinite_sea_map::map_friend_config;
 
     friend infinite_sea::skill_process_service;
     friend infinite_sea::roster_service;
@@ -43,7 +43,7 @@ module infinite_sea::player_aggregate {
     }
 
     public entry fun claim_island(
-        freind_config: &map_friend_config::MapFriendConfig,
+        map_friend_config: &map_friend_config::MapFriendConfig,
         player: &mut player::Player,
         map: &mut Map,
         coordinates_x: u32,
@@ -67,7 +67,7 @@ module infinite_sea::player_aggregate {
             ctx,
         );
         player_claim_island_logic::mutate(
-            freind_config,
+            map_friend_config,
             &island_claimed,
             map,
             roster_table,
@@ -103,7 +103,7 @@ module infinite_sea::player_aggregate {
     }
 
     public entry fun gather_island_resources(
-        freind_config: &map_friend_config::MapFriendConfig,
+        map_friend_config: &map_friend_config::MapFriendConfig,
         player: &mut player::Player,
         map: &mut Map,
         clock: &Clock,
@@ -116,7 +116,7 @@ module infinite_sea::player_aggregate {
             ctx,
         );
         player_gather_island_resources_logic::mutate(
-            freind_config,
+            map_friend_config,
             &player_island_resources_gathered,
             map,
             clock,
