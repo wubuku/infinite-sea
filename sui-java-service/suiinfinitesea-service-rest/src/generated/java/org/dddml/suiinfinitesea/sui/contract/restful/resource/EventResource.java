@@ -29,51 +29,37 @@ public class EventResource {
 
     @GetMapping(path = "getItemEvents")
     @Transactional(readOnly = true)
-    public java.util.List<AbstractItemEvent> getItemEvents(
-            @RequestParam(value = "startSuiTimestamp") Long startSuiTimestamp,
-            @RequestParam(value = "endSuiTimestamp") Long endSuiTimestamp
-    ) {
+    public java.util.List<AbstractItemEvent> getItemEvents(@RequestParam(value = "startSuiTimestamp") Long startSuiTimestamp, @RequestParam(value = "endSuiTimestamp") Long endSuiTimestamp) {
         return itemEventRepository.findBySuiTimestampBetween(startSuiTimestamp, endSuiTimestamp);
     }
 
     @GetMapping(path = "getFaucetRequestedEvents")
     @Transactional(readOnly = true)
-    public java.util.List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> getFaucetRequestedEvents(
-            @RequestParam(value = "startAt") Long startAt,
-            @RequestParam(value = "endedAt") Long endedAt,
-            @RequestParam(value = "senderAddress") String senderAddress) {
+    public java.util.List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> getFaucetRequestedEvents(@RequestParam(value = "startAt") Long startAt, @RequestParam(value = "endedAt") Long endedAt, @RequestParam(value = "senderAddress") String senderAddress) {
         return faucetRequestedEventRepository.getFaucetRequestedEvents(startAt, endedAt, senderAddress);
     }
 
     @GetMapping(path = "getShipProductionCompletedEvents")
     @Transactional(readOnly = true)
-    public java.util.List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> getShipProductionCompletedEvents(
-            @RequestParam(value = "startAt") Long startAt,
-            @RequestParam(value = "endedAt") Long endedAt,
-            @RequestParam(value = "senderAddress") String senderAddress
-    ) {
+    public java.util.List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> getShipProductionCompletedEvents(@RequestParam(value = "startAt") Long startAt, @RequestParam(value = "endedAt") Long endedAt, @RequestParam(value = "senderAddress") String senderAddress) {
         return shipProductionEventRepository.getShipCompletedEvents(startAt, endedAt, senderAddress);
     }
 
 
     @GetMapping(path = "getPlayerVsEnvironmentEvents")
     @Transactional(readOnly = true)
-    public java.util.List<PlayerVsEnvironment> getPlayerVsEnvironmentEvents(
-            @RequestParam(value = "startAt") Long startAt,
-            @RequestParam(value = "endedAt") Long endedAt,
-            @RequestParam(value = "senderAddress") String senderAddress
-    ) {
+    public java.util.List<PlayerVsEnvironment> getPlayerVsEnvironmentEvents(@RequestParam(value = "startAt") Long startAt, @RequestParam(value = "endedAt") Long endedAt, @RequestParam(value = "senderAddress") String senderAddress) {
+        startAt = startAt / 1000;
+        endedAt = endedAt / 1000;
         return shipBattleRelatedRepository.getPlayerVsEnvironmentEvents(startAt, endedAt, senderAddress);
     }
 
 
     @GetMapping(path = "getPlayerVsPlayerEvents")
     @Transactional(readOnly = true)
-    public java.util.List<PlayerVsPlayer> getPlayerVsPlayerEvents(
-            @RequestParam(value = "startAt") Long startAt,
-            @RequestParam(value = "endedAt") Long endedAt,
-            @RequestParam(value = "senderAddress") String senderAddress
-    ) {
+    public java.util.List<PlayerVsPlayer> getPlayerVsPlayerEvents(@RequestParam(value = "startAt") Long startAt, @RequestParam(value = "endedAt") Long endedAt, @RequestParam(value = "senderAddress") String senderAddress) {
+        startAt = startAt / 1000;
+        endedAt = endedAt / 1000;
         return shipBattleRelatedRepository.getPlayerVsPlayerEvents(startAt, endedAt, senderAddress);
     }
 
