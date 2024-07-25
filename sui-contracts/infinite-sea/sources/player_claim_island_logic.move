@@ -43,7 +43,7 @@ module infinite_sea::player_claim_island_logic {
     }
 
     public(friend) fun mutate(
-        freind_config: &map_friend_config::MapFriendConfig,
+        map_freind_config: &map_friend_config::MapFriendConfig,
         island_claimed: &player::IslandClaimed,
         map: &mut Map,
         roster_table: &mut RosterTable,
@@ -61,7 +61,8 @@ module infinite_sea::player_claim_island_logic {
         let inv = player::borrow_mut_inventory(player);
         sorted_vector_util::merge_item_id_quantity_pairs(inv, map_location::borrow_resources(island));
         // call map_aggregate::claim_island
-        map_aggregate::claim_island(freind_config, player::friend_witness(), map, coordinates, player_id, claimed_at, ctx);
+        map_aggregate::claim_island(
+            map_freind_config, player::friend_witness(), map, coordinates, player_id, claimed_at, ctx);
 
         // create rosters after claiming the island
         let roster_sequence_number: u32 = 0;
