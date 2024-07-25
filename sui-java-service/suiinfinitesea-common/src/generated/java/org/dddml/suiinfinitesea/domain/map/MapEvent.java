@@ -51,6 +51,10 @@ public interface MapEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEven
     }
 
     interface IslandResourcesGathered extends MapEvent {
+        String getPlayerId();
+
+        void setPlayerId(String value);
+
         Coordinates getCoordinates();
 
         void setCoordinates(Coordinates value);

@@ -19,6 +19,8 @@ public class IslandResourcesGathered {
 
     private BigInteger version;
 
+    private String playerId;
+
     private CoordinatesForEvent coordinates;
 
     private ItemIdQuantityPairForEvent[] resources;
@@ -39,6 +41,14 @@ public class IslandResourcesGathered {
 
     public void setVersion(BigInteger version) {
         this.version = version;
+    }
+
+    public String getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(String playerId) {
+        this.playerId = playerId;
     }
 
     public CoordinatesForEvent getCoordinates() {
@@ -70,6 +80,7 @@ public class IslandResourcesGathered {
         return "IslandResourcesGathered{" +
                 "id=" + '\'' + id + '\'' +
                 ", version=" + version +
+                ", playerId=" + '\'' + playerId + '\'' +
                 ", coordinates=" + coordinates +
                 ", resources=" + Arrays.toString(resources) +
                 ", gatheredAt=" + gatheredAt +

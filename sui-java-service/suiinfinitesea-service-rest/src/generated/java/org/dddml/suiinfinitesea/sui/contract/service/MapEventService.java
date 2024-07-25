@@ -44,7 +44,7 @@ public class MapEventService {
 
     @Transactional
     public void pullInitMapEvents() {
-        String packageId = getDefaultSuiPackageId();
+        String packageId = getMapSuiPackageId();
         if (packageId == null) {
             return;
         }
@@ -84,7 +84,7 @@ public class MapEventService {
 
     @Transactional
     public void pullIslandAddedEvents() {
-        String packageId = getDefaultSuiPackageId();
+        String packageId = getMapSuiPackageId();
         if (packageId == null) {
             return;
         }
@@ -124,7 +124,7 @@ public class MapEventService {
 
     @Transactional
     public void pullMapIslandClaimedEvents() {
-        String packageId = getDefaultSuiPackageId();
+        String packageId = getMapSuiPackageId();
         if (packageId == null) {
             return;
         }
@@ -164,7 +164,7 @@ public class MapEventService {
 
     @Transactional
     public void pullIslandResourcesGatheredEvents() {
-        String packageId = getDefaultSuiPackageId();
+        String packageId = getMapSuiPackageId();
         if (packageId == null) {
             return;
         }
@@ -203,8 +203,8 @@ public class MapEventService {
     }
 
 
-    private String getDefaultSuiPackageId() {
-        return suiPackageRepository.findById(ContractConstants.DEFAULT_SUI_PACKAGE_NAME)
+    private String getMapSuiPackageId() {
+        return suiPackageRepository.findById(ContractConstants.MAP_SUI_PACKAGE_NAME)
                 .map(SuiPackage::getObjectId).orElse(null);
     }
 }

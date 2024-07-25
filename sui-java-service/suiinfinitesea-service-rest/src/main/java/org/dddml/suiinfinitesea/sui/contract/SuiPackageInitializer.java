@@ -15,6 +15,8 @@ public class SuiPackageInitializer {
 
     private final SuiPackageInitializationService nftPackageInitializationService;
 
+    private final SuiPackageInitializationService mapPackageInitializationService;
+
     private final SuiPackageInitializationService commonPackageInitializationService;
 
     private final SuiPackageInitializationService defaultPackageInitializationService;
@@ -26,6 +28,8 @@ public class SuiPackageInitializer {
             SuiJsonRpcClient suiJsonRpcClient,
             @Value("${sui.contract.package-publish-transactions.nft:}")
             String nftPackagePublishTransactionDigest,
+            @Value("${sui.contract.package-publish-transactions.map:}")
+            String mapPackagePublishTransactionDigest,
             @Value("${sui.contract.package-publish-transactions.common:}")
             String commonPackagePublishTransactionDigest,
             @Value("${sui.contract.package-publish-transactions.default:}")
@@ -43,6 +47,19 @@ public class SuiPackageInitializer {
         } else {
             //throw new IllegalArgumentException("nftPackagePublishTransactionDigest is null");
             nftPackageInitializationService = null;
+        }
+        if (mapPackagePublishTransactionDigest != null && !mapPackagePublishTransactionDigest.trim().isEmpty()) {
+            mapPackageInitializationService = new SuiPackageInitializationService(
+                    moveObjectIdGeneratorObjectRepository,
+                    suiPackageRepository,
+                    suiJsonRpcClient,
+                    mapPackagePublishTransactionDigest,
+                    ContractConstants.MAP_SUI_PACKAGE_NAME,
+                    ContractConstants::getMapPackageIdGeneratorObjectTypes
+            );
+        } else {
+            //throw new IllegalArgumentException("mapPackagePublishTransactionDigest is null");
+            mapPackageInitializationService = null;
         }
         if (commonPackagePublishTransactionDigest != null && !commonPackagePublishTransactionDigest.trim().isEmpty()) {
             commonPackageInitializationService = new SuiPackageInitializationService(
@@ -76,6 +93,9 @@ public class SuiPackageInitializer {
     public void init() {
         if (nftPackageInitializationService != null) {
             nftPackageInitializationService.init();
+        }
+        if (mapPackageInitializationService != null) {
+            mapPackageInitializationService.init();
         }
         if (commonPackageInitializationService != null) {
             commonPackageInitializationService.init();

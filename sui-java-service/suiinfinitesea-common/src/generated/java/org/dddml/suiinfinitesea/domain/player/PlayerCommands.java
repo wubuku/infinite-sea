@@ -232,5 +232,69 @@ public class PlayerCommands {
 
     }
 
+    public static class GatherIslandResources extends AbstractPlayerCommand implements PlayerCommand {
+
+        public String getCommandType() {
+            return "GatherIslandResources";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Id
+         */
+        private String id;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        /**
+         * Map
+         */
+        private String map;
+
+        public String getMap() {
+            return this.map;
+        }
+
+        public void setMap(String map) {
+            this.map = map;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
 }
 

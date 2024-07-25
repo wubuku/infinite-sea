@@ -328,6 +328,14 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.player.GatherIslandResourcesLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, VerificationContext.class},
+                    new String[]{"_", "_", "map"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.whitelist.__Init__Logic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, WhitelistState.class, VerificationContext.class},
@@ -402,8 +410,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.map.GatherIslandResourcesLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, MapState.class, VerificationContext.class},
-                    new String[]{"_", "_", "player"}
+                    new Class[]{java.util.function.Supplier.class, MapState.class, String.class, Coordinates.class, VerificationContext.class},
+                    new String[]{"_", "_", "playerId", "coordinates"}
             );
 
 
@@ -696,6 +704,14 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.player.GatherIslandResourcesLogic",
+                    "mutate",
+                    new Class[]{PlayerState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.whitelist.__Init__Logic",
                     "mutate",
                     new Class[]{WhitelistState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
@@ -770,8 +786,8 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.map.GatherIslandResourcesLogic",
                     "mutate",
-                    new Class[]{MapState.class, Coordinates.class, ItemIdQuantityPair[].class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "coordinates", "resources", "gatheredAt", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+                    new Class[]{MapState.class, String.class, Coordinates.class, ItemIdQuantityPair[].class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "playerId", "coordinates", "resources", "gatheredAt", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 

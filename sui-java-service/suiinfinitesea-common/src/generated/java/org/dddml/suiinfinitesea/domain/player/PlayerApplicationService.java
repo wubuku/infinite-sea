@@ -21,6 +21,8 @@ public interface PlayerApplicationService {
 
     void when(PlayerCommands.Airdrop c);
 
+    void when(PlayerCommands.GatherIslandResources c);
+
     PlayerState get(String id);
 
     Iterable<PlayerState> getAll(Integer firstResult, Integer maxResults);

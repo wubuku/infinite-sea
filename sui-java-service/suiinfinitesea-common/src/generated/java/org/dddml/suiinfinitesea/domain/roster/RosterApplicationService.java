@@ -15,11 +15,7 @@ import org.dddml.suiinfinitesea.specialization.Event;
 import org.dddml.suiinfinitesea.domain.Command;
 
 public interface RosterApplicationService {
-    void when(RosterCommands.Create c);
-
     void when(RosterCommands.CreateEnvironmentRoster c);
-
-    void when(RosterCommands.AddShip c);
 
     void when(RosterCommands.UpdateLocation c);
 

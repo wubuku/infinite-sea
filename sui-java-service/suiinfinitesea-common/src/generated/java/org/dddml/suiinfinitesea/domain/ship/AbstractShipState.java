@@ -239,8 +239,6 @@ public abstract class AbstractShipState implements ShipState.SqlShipState {
         setStateReadOnly(false);
         if (false) { 
             ;
-        } else if (e instanceof AbstractShipEvent.ShipCreated) {
-            when((AbstractShipEvent.ShipCreated)e);
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported event type: %1$s", e.getClass().getName()));
         }

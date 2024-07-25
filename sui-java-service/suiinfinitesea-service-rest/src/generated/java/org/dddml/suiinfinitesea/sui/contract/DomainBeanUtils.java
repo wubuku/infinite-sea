@@ -59,6 +59,7 @@ import org.dddml.suiinfinitesea.domain.player.AbstractPlayerEvent;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
 import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
+import org.dddml.suiinfinitesea.sui.contract.player.PlayerIslandResourcesGathered;
 import org.dddml.suiinfinitesea.domain.whitelist.AbstractWhitelistEvent;
 import org.dddml.suiinfinitesea.sui.contract.whitelist.InitWhitelistEvent;
 import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistUpdated;
@@ -1158,6 +1159,24 @@ public class DomainBeanUtils {
         return playerAirdropped;
     }
 
+    public static AbstractPlayerEvent.PlayerIslandResourcesGathered toPlayerIslandResourcesGathered(SuiMoveEventEnvelope<PlayerIslandResourcesGathered> eventEnvelope) {
+        PlayerIslandResourcesGathered contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractPlayerEvent.PlayerIslandResourcesGathered playerIslandResourcesGathered = new AbstractPlayerEvent.PlayerIslandResourcesGathered();
+        playerIslandResourcesGathered.setId(contractEvent.getId());
+        playerIslandResourcesGathered.setVersion(contractEvent.getVersion());
+
+        playerIslandResourcesGathered.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        playerIslandResourcesGathered.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        playerIslandResourcesGathered.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        playerIslandResourcesGathered.setSuiPackageId(eventEnvelope.getPackageId());
+        playerIslandResourcesGathered.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        playerIslandResourcesGathered.setSuiSender(eventEnvelope.getSender());
+
+        return playerIslandResourcesGathered;
+    }
+
     public static AbstractWhitelistEvent.InitWhitelistEvent toInitWhitelistEvent(SuiMoveEventEnvelope<InitWhitelistEvent> eventEnvelope) {
         InitWhitelistEvent contractEvent = eventEnvelope.getParsedJson();
 
@@ -1358,6 +1377,7 @@ public class DomainBeanUtils {
 
         AbstractMapEvent.IslandResourcesGathered islandResourcesGathered = new AbstractMapEvent.IslandResourcesGathered();
         islandResourcesGathered.setId(contractEvent.getId());
+        islandResourcesGathered.setPlayerId(contractEvent.getPlayerId());
         islandResourcesGathered.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
         islandResourcesGathered.setResources(java.util.Arrays.stream(contractEvent.getResources()).map(DomainBeanUtils::toItemIdQuantityPair).toArray(org.dddml.suiinfinitesea.domain.ItemIdQuantityPair[]::new));
         islandResourcesGathered.setGatheredAt(contractEvent.getGatheredAt());

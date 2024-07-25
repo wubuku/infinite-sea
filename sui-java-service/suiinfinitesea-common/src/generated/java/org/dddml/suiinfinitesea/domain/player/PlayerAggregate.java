@@ -23,6 +23,8 @@ public interface PlayerAggregate {
 
     void airdrop(Long itemId, Long quantity, Long offChainVersion, String commandId, String requesterId, PlayerCommands.Airdrop c);
 
+    void gatherIslandResources(String map, String clock, Long offChainVersion, String commandId, String requesterId, PlayerCommands.GatherIslandResources c);
+
     void throwOnInvalidStateTransition(Command c);
 }
 

@@ -62,10 +62,6 @@ public abstract class AbstractWhitelistApplicationService implements WhitelistAp
         update(c, ar -> ar.updateWhitelistEntry(c.getAccountAddress(), c.getName(), c.getImageUrl(), c.getDescription(), c.getBackgroundColor(), c.getRace(), c.getEyes(), c.getMouth(), c.getHaircut(), c.getSkin(), c.getOutfit(), c.getAccessories(), c.getClaimed(), c.getPaused(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
-    public void when(WhitelistCommands.Claim c) {
-        update(c, ar -> ar.claim(c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
-    }
-
     public void when(WhitelistCommands.Create c) {
         update(c, ar -> ar.create(c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }

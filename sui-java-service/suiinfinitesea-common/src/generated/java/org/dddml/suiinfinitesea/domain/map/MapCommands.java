@@ -217,16 +217,29 @@ public class MapCommands {
         }
 
         /**
-         * Player
+         * Player Id
          */
-        private String player;
+        private String playerId;
 
-        public String getPlayer() {
-            return this.player;
+        public String getPlayerId() {
+            return this.playerId;
         }
 
-        public void setPlayer(String player) {
-            this.player = player;
+        public void setPlayerId(String playerId) {
+            this.playerId = playerId;
+        }
+
+        /**
+         * Coordinates
+         */
+        private Coordinates coordinates;
+
+        public Coordinates getCoordinates() {
+            return this.coordinates;
+        }
+
+        public void setCoordinates(Coordinates coordinates) {
+            this.coordinates = coordinates;
         }
 
         /**

@@ -318,6 +318,18 @@ public abstract class AbstractMapEvent extends AbstractEvent implements MapEvent
             return "IslandResourcesGathered";
         }
 
+        public String getPlayerId() {
+            Object val = getDynamicProperties().get("playerId");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setPlayerId(String value) {
+            getDynamicProperties().put("playerId", value);
+        }
+
         public Coordinates getCoordinates() {
             Object val = getDynamicProperties().get("coordinates");
             if (val instanceof Coordinates) {

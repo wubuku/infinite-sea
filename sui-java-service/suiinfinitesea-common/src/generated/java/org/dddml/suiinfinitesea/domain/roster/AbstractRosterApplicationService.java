@@ -50,16 +50,8 @@ public abstract class AbstractRosterApplicationService implements RosterApplicat
         this.stateQueryRepository = stateQueryRepository;
     }
 
-    public void when(RosterCommands.Create c) {
-        update(c, ar -> ar.create(c.getStatus(), c.getSpeed(), c.getUpdatedCoordinates(), c.getCoordinatesUpdatedAt(), c.getTargetCoordinates(), c.getOriginCoordinates(), c.getShipBattleId(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
-    }
-
     public void when(RosterCommands.CreateEnvironmentRoster c) {
         update(c, ar -> ar.createEnvironmentRoster(c.getCoordinates(), c.getShipResourceQuantity(), c.getShipBaseResourceQuantity(), c.getBaseExperience(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
-    }
-
-    public void when(RosterCommands.AddShip c) {
-        update(c, ar -> ar.addShip(c.getShip(), c.getPosition(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public void when(RosterCommands.UpdateLocation c) {

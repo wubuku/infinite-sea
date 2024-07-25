@@ -85,6 +85,19 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
             apply(e);
         }
 
+        @Override
+        public void gatherIslandResources(String map, String clock, Long offChainVersion, String commandId, String requesterId, PlayerCommands.GatherIslandResources c) {
+            java.util.function.Supplier<PlayerEvent.PlayerIslandResourcesGathered> eventFactory = () -> newPlayerIslandResourcesGathered(map, clock, offChainVersion, commandId, requesterId);
+            PlayerEvent.PlayerIslandResourcesGathered e;
+            try {
+                e = verifyGatherIslandResources(eventFactory, map, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
         protected PlayerEvent.PlayerCreated verifyCreate(java.util.function.Supplier<PlayerEvent.PlayerCreated> eventFactory, String name, PlayerCommands.Create c) {
             String Name = name;
 
@@ -150,6 +163,27 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
            
 
+        protected PlayerEvent.PlayerIslandResourcesGathered verifyGatherIslandResources(java.util.function.Supplier<PlayerEvent.PlayerIslandResourcesGathered> eventFactory, String map, PlayerCommands.GatherIslandResources c) {
+            String Map = map;
+
+            PlayerEvent.PlayerIslandResourcesGathered e = (PlayerEvent.PlayerIslandResourcesGathered) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.player.GatherIslandResourcesLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), map, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.player;
+//
+//public class GatherIslandResourcesLogic {
+//    public static PlayerEvent.PlayerIslandResourcesGathered verify(java.util.function.Supplier<PlayerEvent.PlayerIslandResourcesGathered> eventFactory, PlayerState playerState, String map, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
         protected AbstractPlayerEvent.PlayerCreated newPlayerCreated(String name, Long offChainVersion, String commandId, String requesterId) {
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.PlayerCreated e = new AbstractPlayerEvent.PlayerCreated();
@@ -202,6 +236,27 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
 
             e.getDynamicProperties().put("itemId", itemId);
             e.getDynamicProperties().put("quantity", quantity);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setPlayerEventId(eventId);
+            return e;
+        }
+
+        protected AbstractPlayerEvent.PlayerIslandResourcesGathered newPlayerIslandResourcesGathered(String map, String clock, Long offChainVersion, String commandId, String requesterId) {
+            PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
+            AbstractPlayerEvent.PlayerIslandResourcesGathered e = new AbstractPlayerEvent.PlayerIslandResourcesGathered();
+
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

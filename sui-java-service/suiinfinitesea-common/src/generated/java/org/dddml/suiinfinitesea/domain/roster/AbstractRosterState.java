@@ -330,12 +330,8 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         setStateReadOnly(false);
         if (false) { 
             ;
-        } else if (e instanceof AbstractRosterEvent.RosterCreated) {
-            when((AbstractRosterEvent.RosterCreated)e);
         } else if (e instanceof AbstractRosterEvent.EnvironmentRosterCreated) {
             when((AbstractRosterEvent.EnvironmentRosterCreated)e);
-        } else if (e instanceof AbstractRosterEvent.RosterShipAdded) {
-            when((AbstractRosterEvent.RosterShipAdded)e);
         } else if (e instanceof AbstractRosterEvent.RosterLocationUpdated) {
             when((AbstractRosterEvent.RosterLocationUpdated)e);
         } else if (e instanceof AbstractRosterEvent.RosterShipsPositionAdjusted) {

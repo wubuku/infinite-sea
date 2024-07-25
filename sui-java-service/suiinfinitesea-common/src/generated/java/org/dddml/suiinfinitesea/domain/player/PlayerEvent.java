@@ -54,6 +54,9 @@ public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
     }
 
+    interface PlayerIslandResourcesGathered extends PlayerEvent {
+    }
+
     String getId();
 
     //void setId(String id);

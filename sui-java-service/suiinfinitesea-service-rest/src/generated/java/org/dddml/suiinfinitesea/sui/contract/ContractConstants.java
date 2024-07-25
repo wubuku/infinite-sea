@@ -7,6 +7,7 @@ package org.dddml.suiinfinitesea.sui.contract;
 
 public class ContractConstants {
     public static final String NFT_SUI_PACKAGE_NAME = "NFT_SUI_PACKAGE";
+    public static final String MAP_SUI_PACKAGE_NAME = "MAP_SUI_PACKAGE";
     public static final String COMMON_SUI_PACKAGE_NAME = "COMMON_SUI_PACKAGE";
     public static final String DEFAULT_SUI_PACKAGE_NAME = "DEFAULT_SUI_PACKAGE";
 
@@ -96,6 +97,8 @@ public class ContractConstants {
 
     public static final String PLAYER_MODULE_PLAYER_AIRDROPPED = "player::PlayerAirdropped";
 
+    public static final String PLAYER_MODULE_PLAYER_ISLAND_RESOURCES_GATHERED = "player::PlayerIslandResourcesGathered";
+
     public static final String WHITELIST_MODULE_INIT_WHITELIST_EVENT = "whitelist::InitWhitelistEvent";
 
     public static final String WHITELIST_MODULE_WHITELIST_UPDATED = "whitelist::WhitelistUpdated";
@@ -126,6 +129,11 @@ public class ContractConstants {
     public static String[] getNftPackageIdGeneratorObjectTypes(String packageId) {
         return new String[]{
                 packageId + "::" + AVATAR_CHANGE_MODULE_AVATAR_CHANGE_TABLE,
+        };
+    }
+
+    public static String[] getMapPackageIdGeneratorObjectTypes(String packageId) {
+        return new String[]{
         };
     }
 

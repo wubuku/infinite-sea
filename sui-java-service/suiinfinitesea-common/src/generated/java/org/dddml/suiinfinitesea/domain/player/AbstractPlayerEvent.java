@@ -297,6 +297,15 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
 
     }
 
+    public static class PlayerIslandResourcesGathered extends PlayerLobEvent implements PlayerEvent.PlayerIslandResourcesGathered {
+
+        @Override
+        public String getEventType() {
+            return "PlayerIslandResourcesGathered";
+        }
+
+    }
+
 
 }
 

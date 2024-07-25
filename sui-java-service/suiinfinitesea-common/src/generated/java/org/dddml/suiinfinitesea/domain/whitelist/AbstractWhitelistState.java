@@ -208,8 +208,6 @@ public abstract class AbstractWhitelistState implements WhitelistState.SqlWhitel
             when((AbstractWhitelistEvent.WhitelistEntryAdded)e);
         } else if (e instanceof AbstractWhitelistEvent.WhitelistEntryUpdated) {
             when((AbstractWhitelistEvent.WhitelistEntryUpdated)e);
-        } else if (e instanceof AbstractWhitelistEvent.WhitelistClaimed) {
-            when((AbstractWhitelistEvent.WhitelistClaimed)e);
         } else if (e instanceof AbstractWhitelistEvent.WhitelistCreated) {
             when((AbstractWhitelistEvent.WhitelistCreated)e);
         } else {

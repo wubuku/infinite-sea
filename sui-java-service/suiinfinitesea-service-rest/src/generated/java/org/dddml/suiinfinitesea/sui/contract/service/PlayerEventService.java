@@ -17,6 +17,7 @@ import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
 import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
+import org.dddml.suiinfinitesea.sui.contract.player.PlayerIslandResourcesGathered;
 import org.dddml.suiinfinitesea.sui.contract.repository.PlayerEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +160,46 @@ public class PlayerEventService {
             return;
         }
         playerEventRepository.save(playerAirdropped);
+    }
+
+    @Transactional
+    public void pullPlayerIslandResourcesGatheredEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getPlayerIslandResourcesGatheredEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<PlayerIslandResourcesGathered> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.PLAYER_MODULE_PLAYER_ISLAND_RESOURCES_GATHERED,
+                    cursor, limit, false, PlayerIslandResourcesGathered.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<PlayerIslandResourcesGathered> eventEnvelope : eventPage.getData()) {
+                    savePlayerIslandResourcesGathered(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getPlayerIslandResourcesGatheredEventNextCursor() {
+        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstPlayerIslandResourcesGatheredByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void savePlayerIslandResourcesGathered(SuiMoveEventEnvelope<PlayerIslandResourcesGathered> eventEnvelope) {
+        AbstractPlayerEvent.PlayerIslandResourcesGathered playerIslandResourcesGathered = DomainBeanUtils.toPlayerIslandResourcesGathered(eventEnvelope);
+        if (playerEventRepository.findById(playerIslandResourcesGathered.getPlayerEventId()).isPresent()) {
+            return;
+        }
+        playerEventRepository.save(playerIslandResourcesGathered);
     }
 
 

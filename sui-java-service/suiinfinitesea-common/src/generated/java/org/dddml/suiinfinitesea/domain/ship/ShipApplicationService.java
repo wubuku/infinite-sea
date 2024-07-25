@@ -15,8 +15,6 @@ import org.dddml.suiinfinitesea.specialization.Event;
 import org.dddml.suiinfinitesea.domain.Command;
 
 public interface ShipApplicationService {
-    void when(ShipCommands.Create c);
-
     ShipState get(String id);
 
     Iterable<ShipState> getAll(Integer firstResult, Integer maxResults);

@@ -62,6 +62,10 @@ public abstract class AbstractPlayerApplicationService implements PlayerApplicat
         update(c, ar -> ar.airdrop(c.getItemId(), c.getQuantity(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
+    public void when(PlayerCommands.GatherIslandResources c) {
+        update(c, ar -> ar.gatherIslandResources(c.getMap(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
     public PlayerState get(String id) {
         PlayerState state = getStateRepository().get(id, true);
         return state;

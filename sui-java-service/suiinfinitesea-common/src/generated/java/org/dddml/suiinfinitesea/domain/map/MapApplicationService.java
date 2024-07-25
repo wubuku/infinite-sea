@@ -17,10 +17,6 @@ import org.dddml.suiinfinitesea.domain.Command;
 public interface MapApplicationService {
     void when(MapCommands.AddIsland c);
 
-    void when(MapCommands.ClaimIsland c);
-
-    void when(MapCommands.GatherIslandResources c);
-
     MapState get(String id);
 
     Iterable<MapState> getAll(Integer firstResult, Integer maxResults);

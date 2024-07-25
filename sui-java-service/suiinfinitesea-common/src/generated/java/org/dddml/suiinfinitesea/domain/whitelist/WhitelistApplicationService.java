@@ -21,8 +21,6 @@ public interface WhitelistApplicationService {
 
     void when(WhitelistCommands.UpdateWhitelistEntry c);
 
-    void when(WhitelistCommands.Claim c);
-
     void when(WhitelistCommands.Create c);
 
     WhitelistState get(String id);

@@ -31,4 +31,9 @@ public class PullPlayerEventsTaskService {
         playerEventService.pullPlayerAirdroppedEvents();
     }
 
+    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.player-island-resources-gathered.fixed-delay:5000}")
+    public void pullPlayerIslandResourcesGatheredEvents() {
+        playerEventService.pullPlayerIslandResourcesGatheredEvents();
+    }
+
 }

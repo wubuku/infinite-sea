@@ -50,10 +50,6 @@ public abstract class AbstractShipApplicationService implements ShipApplicationS
         this.stateQueryRepository = stateQueryRepository;
     }
 
-    public void when(ShipCommands.Create c) {
-        update(c, ar -> ar.create(c.getOwner(), c.getHealthPoints(), c.getAttack(), c.getProtection(), c.getSpeed(), c.getBuildingExpenses(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
-    }
-
     public ShipState get(String id) {
         ShipState state = getStateRepository().get(id, true);
         return state;
