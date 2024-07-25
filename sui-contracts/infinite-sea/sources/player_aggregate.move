@@ -110,17 +110,17 @@ module infinite_sea::player_aggregate {
         ctx: &mut tx_context::TxContext,
     ) {
         let player_island_resources_gathered = player_gather_island_resources_logic::verify(
-            player,
             map,
             clock,
+            player,
             ctx,
         );
         player_gather_island_resources_logic::mutate(
             freind_config,
             &player_island_resources_gathered,
-            player,
-            clock,
             map,
+            clock,
+            player,
             ctx,
         );
         player::update_object_version(player);

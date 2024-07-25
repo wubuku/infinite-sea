@@ -16,9 +16,9 @@ module infinite_sea::player_gather_island_resources_logic {
     friend infinite_sea::player_aggregate;
 
     public(friend) fun verify(
-        player: &mut Player,
         map: &Map,
         clock: &Clock,
+        player: &mut Player,
         ctx: &TxContext,
     ): player::PlayerIslandResourcesGathered {
         permission_util::assert_sender_is_player_owner(player, ctx);
@@ -31,9 +31,9 @@ module infinite_sea::player_gather_island_resources_logic {
     public(friend) fun mutate(
         freind_config: &map_friend_config::MapFriendConfig,
         player_island_resources_gathered: &player::PlayerIslandResourcesGathered,
-        player: &mut Player,
-        clock: &Clock,
         map: &mut Map,
+        clock: &Clock,
+        player: &mut Player,
         ctx: &mut TxContext, // modify the reference to mutable if needed
     ) {
         let id = player::id(player);
