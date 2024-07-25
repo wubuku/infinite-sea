@@ -139,8 +139,8 @@ aggregates:
         metadata:
           ParametersIncludedInMutationFunction: [ "Clock" ]
         parameters:
-          Player:
-            referenceType: Player
+          Map:
+            referenceType: Map
             isMutableReference: true
             isIgnoredInEvent: true
           Clock:
