@@ -77,11 +77,16 @@ module infinite_sea_map::map {
         table::add(&mut map.locations, key, location);
     }
 
-    public(friend) fun remove_location(map: &mut Map, coordinates: Coordinates) {
+    public(friend) fun remove_location(map: &mut Map, coordinates: Coordinates): MapLocation {
         assert!(table::contains(&map.locations, coordinates), EIdNotFound);
-        let location = table::remove(&mut map.locations, coordinates);
+        table::remove(&mut map.locations, coordinates)
+    }
+
+    public(friend) fun remove_and_drop_location(map: &mut Map, coordinates: Coordinates) {
+        let location = remove_location(map, coordinates);
         map_location::drop_map_location(location);
     }
+
 
     public(friend) fun borrow_mut_location(map: &mut Map, coordinates: Coordinates): &mut MapLocation {
         table::borrow_mut(&mut map.locations, coordinates)

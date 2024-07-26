@@ -65,11 +65,16 @@ module infinite_sea_nft::whitelist {
         table::add(&mut whitelist.entries, key, entry);
     }
 
-    public(friend) fun remove_entry(whitelist: &mut Whitelist, account_address: address) {
+    public(friend) fun remove_entry(whitelist: &mut Whitelist, account_address: address): WhitelistEntry {
         assert!(table::contains(&whitelist.entries, account_address), EIdNotFound);
-        let entry = table::remove(&mut whitelist.entries, account_address);
+        table::remove(&mut whitelist.entries, account_address)
+    }
+
+    public(friend) fun remove_and_drop_entry(whitelist: &mut Whitelist, account_address: address) {
+        let entry = remove_entry(whitelist, account_address);
         whitelist_entry::drop_whitelist_entry(entry);
     }
+
 
     public(friend) fun borrow_mut_entry(whitelist: &mut Whitelist, account_address: address): &mut WhitelistEntry {
         table::borrow_mut(&mut whitelist.entries, account_address)
