@@ -5,14 +5,12 @@
 
 module infinite_sea_map::map_friend_config {
     use std::type_name::{Self, TypeName};
-
     use sui::object::{Self, UID};
     use sui::package::{Self, Publisher};
     use sui::transfer;
     use sui::tx_context::{sender, TxContext};
     use sui::vec_set::{Self, VecSet};
 
-    //const ENotAdmin: u64 = 100;
     const ENotAllowedCaller: u64 = 101;
     const EInvalidPublisher: u64 = 102;
 
@@ -23,35 +21,17 @@ module infinite_sea_map::map_friend_config {
         caller_allowlist: VecSet<TypeName>,
     }
 
-    // struct MapFriendConfigCap has key, store {
-    //     id: UID,
-    //     for: ID
-    // }
-
     fun init(otw: MAP_FRIEND_CONFIG, ctx: &mut TxContext) {
         let publisher = package::claim(otw, ctx);
-        create_config(&publisher, ctx);
         transfer::public_transfer(publisher, sender(ctx));
-    }
-
-    #[lint_allow(self_transfer)]
-    entry fun create_config(publisher: &Publisher, ctx: &mut TxContext) {
-        assert!(package::from_package<MAP_FRIEND_CONFIG>(publisher), EInvalidPublisher);
         let config = MapFriendConfig {
             id: object::new(ctx),
             caller_allowlist: vec_set::empty(),
         };
-        // let cap = MapFriendConfigCap {
-        //     id: object::new(ctx),
-        //     for: object::id(&config),
-        // };
-        //sui::transfer::transfer(cap, tx_context::sender(ctx));
         sui::transfer::share_object(config);
     }
 
     public entry fun add_allowed_caller<FWT: drop>(config: &mut MapFriendConfig, publisher: &Publisher, _ctx: &mut TxContext) {
-        //cap: &MapFriendConfigCap) {
-        //assert!(has_access(config, cap), ENotAdmin);
         assert!(package::from_package<MAP_FRIEND_CONFIG>(publisher), EInvalidPublisher);
         let type_name = type_name::get<FWT>();
         if (!vec_set::contains(&config.caller_allowlist, &type_name)) {
@@ -64,8 +44,6 @@ module infinite_sea_map::map_friend_config {
         publisher: &Publisher,
         _ctx: &mut TxContext
     ) {
-        //cap: &MapFriendConfigCap) {
-        //assert!(has_access(config, cap), ENotAdmin);
         assert!(package::from_package<MAP_FRIEND_CONFIG>(publisher), EInvalidPublisher);
         let type_name = type_name::get<FWT>();
         if (vec_set::contains(&config.caller_allowlist, &type_name)) {
@@ -77,8 +55,4 @@ module infinite_sea_map::map_friend_config {
         assert!(vec_set::contains(&config.caller_allowlist, &type_name::get<FWT>()), ENotAllowedCaller);
     }
 
-    // /// Check whether the config-cap matches the config.
-    // public fun has_access(config: &mut MapFriendConfig, cap: &MapFriendConfigCap): bool {
-    //     object::id(config) == cap.for
-    // }
 }
