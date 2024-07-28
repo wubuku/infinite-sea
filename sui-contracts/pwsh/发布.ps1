@@ -97,7 +97,7 @@ $avatarChangeTableId = ""
 $avatarDisplayId = ""
 
 try {
-    $publishNftJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --json
+    $publishNftJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --gas-budget 491000000  --json
     if (-not ('System.Object[]' -eq $publishNftJson.GetType())) {
         "发布 infinite-sea-nft 合约失败: $publishNftJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
@@ -747,6 +747,9 @@ $fileContent | Set-Content $file
 $publishMapJson = ""
 $mapPackingId = ""
 $mapPublisherId = ""
+$mapFriendConfigId=""
+$mapId = ""
+$mapAdminCap = ""
 
 try {
     $publishMapJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --json
@@ -769,9 +772,19 @@ try {
                 "Publisher ID: $mapPublisherId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
             if ($object.objectType -like '*map_friend_config::MapFriendConfig') {
-                $MapFriendConfigId = $object.objectId;
-                $dataMap | Add-Member -MemberType NoteProperty -Name "MapFriendConfig" -Value $MapFriendConfigId
-                "MapFriendConfig ID: $MapFriendConfigId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+                $mapFriendConfigId = $object.objectId;
+                $dataMap | Add-Member -MemberType NoteProperty -Name "MapFriendConfig" -Value $mapFriendConfigId
+                "MapFriendConfig ID: $mapFriendConfigId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+            elseif ($object.objectType -like '*map::Map') {
+                $mapId = $object.objectId
+                $dataMap | Add-Member -MemberType NoteProperty -Name "Map" -Value $mapId 
+                "infinite-sea contract map::Map id:    $mapId" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+            }
+            elseif ($object.objectType -like '*map::AdminCap') {
+                $mapAdminCap = $object.objectId
+                $dataMap | Add-Member -MemberType NoteProperty -Name "AdminCap" -Value $mapAdminCap 
+                "infinite-sea contract map::AdminCap id:  $mapAdminCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
             }
         }
         $mapDigest = $publishMapJsonObj.digest
@@ -814,11 +827,6 @@ Start-Sleep -Seconds 3
 "休息完成，继续干活..." | Write-Host
 
 Set-Location $startLocation
-
-return
-
-
-
 
 "------------------------------------- 重新发布 infinite-sea -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
@@ -893,13 +901,11 @@ $MainDigest = $publishMainObj.digest
 "摘要 digest: $MainDigest"  |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
 $dataMain | Add-Member -MemberType NoteProperty -Name "Digest" -Value $MainDigest 
 
-$mapAdminCap = ""
 $upgradeCap = ""
 $skillProcessTableId = ""
 $mainPublisherId = ""
 $mainPackageId = ""
 $rosterTableId = ""
-$mapId = ""
 
 foreach ($object in $publishMainObj.objectChanges) {
     if ($null -ne $object.objectType) {
@@ -924,16 +930,6 @@ foreach ($object in $publishMainObj.objectChanges) {
             $rosterTableId = $object.objectId
             $dataMain | Add-Member -MemberType NoteProperty -Name "RosterTable" -Value $rosterTableId 
             "infinite-sea contract roster::RosterTable id:  $rosterTableId" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-        }
-        elseif ($object.objectType -like '*map::Map') {
-            $mapId = $object.objectId
-            $dataMain | Add-Member -MemberType NoteProperty -Name "Map" -Value $mapId 
-            "infinite-sea contract map::Map id:    $mapId" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-        }
-        elseif ($object.objectType -like '*map::AdminCap') {
-            $mapAdminCap = $object.objectId
-            $dataMain | Add-Member -MemberType NoteProperty -Name "AdminCap" -Value $mapAdminCap 
-            "infinite-sea contract map::AdminCap id:  $mapAdminCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
         }
     }
     if ($null -ne $object.packageId) {
@@ -963,6 +959,30 @@ $fileContent | Set-Content $file
 "`n休息一下,以免不能及时同步..." | Write-Host
 Start-Sleep -Seconds 5
 "休息完成，继续干活...· `n" | Write-Host
+
+
+$addAllowedCallerResult=$null
+$addAllowedCallerResultObj=$null
+
+"`n Add allowed caller ..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+try {
+    $commandRequest= "sui client call --package $mapPackingId --module map_friend_config --function add_allowed_caller --type-args  $mainPackageId::player::FriendWitness --args $mapFriendConfigId $mapPublisherId --json"
+    $commandRequest | Write-Host  -ForegroundColor Blue
+    $addAllowedCallerResult = Invoke-Expression -Command $commandRequest
+    if (-not ('System.Object[]' -eq $addAllowedCallerResult.GetType())) {
+        "Add allowed caller 时返回信息 $addAllowedCallerResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    $addAllowedCallerResultObj = $addAllowedCallerResult | ConvertFrom-Json
+}
+catch {
+    "Add allowed caller 失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    "返回的结果为:$addAllowedCallerResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    Set-Location $startLocation
+    return    
+}
+"Add allowed caller Success!!" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
 
 "`n创建一个PLAYER..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
 $playId = ""
@@ -1038,7 +1058,7 @@ foreach ($resouce in $islandResources) {
 $islandResources_ = "[" + ($islandResourceIds -join ",") + "]"
 $islandResourceQuantities_ = "[" + ($islandResourceQuantities -join ",") + "]"
 try {
-    $command = "sui client call --package $mainPackageId --module map_aggregate --function add_island --args $mapId $mapAdminCap $coordinates_x $coordinates_y $islandResources_ $islandResourceQuantities_  --gas-budget 11000000 --json"
+    $command = "sui client call --package $mapPackingId --module map_aggregate --function add_island --args $mapId $mapAdminCap $coordinates_x $coordinates_y $islandResources_ $islandResourceQuantities_  --gas-budget 11000000 --json"
     $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
     $result = Invoke-Expression -Command $command
     if (-not ('System.Object[]' -eq $result.GetType())) {
@@ -1063,7 +1083,9 @@ $rosterIds = @()
 $skillProcessIds = @()
 "`n用户宣称Claim这个小岛($coordinates_x,$coordinates_y)..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
 try {
-    $result = sui client call --package $mainPackageId --module player_aggregate --function claim_island --args $playId $mapId $coordinates_x $coordinates_y $clock $rosterTableId $skillProcessTableId --gas-budget 4999000000 --json
+    $claimIslandCommand = "sui client call --package $mainPackageId --module player_aggregate --function claim_island --args $mapFriendConfigId $playId $mapId $coordinates_x $coordinates_y $clock $rosterTableId $skillProcessTableId --json"
+    $commclaimIslandCommandand | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+    $result = Invoke-Expression -Command $claimIslandCommand
     if (-not ('System.Object[]' -eq $result.GetType())) {
         "调用接口返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation

@@ -22,7 +22,7 @@ $itemDataJson = Get-Content -Raw -Path $itemDataFile
 $itemData = $itemDataJson | ConvertFrom-Json
 
 #释放的块序号
-$seqNo = 2
+$seqNo = 4
 
 
 $u32Max = 4294967295
@@ -284,7 +284,7 @@ public class Coordinate{
 $coordinates = @()     
 $random = New-Object System.Random  
 for ($i = 0; $i -lt $column; $i++) {
-    "第 $($i+1) 列中心坐标" | Write-Host -ForegroundColor Red 
+    "第 $($i+1) 列中心坐标" | Write-Host -ForegroundColor Yellow 
     for ($j = 0; $j -lt $line; $j++) {
         $x = $left + ($i) * ($per_horizontal_gap + $island_width) + $island_width / 2
         $y = $bottom + ($j) * ($per_horizontal_gap + $island_height) + $island_height / 2
@@ -330,7 +330,7 @@ foreach ($coordinate in $coordinates) {
     $islandResources_ = "[" + ($islandResourceIds -join ",") + "]"
     $islandResourceQuantities_ = "[" + ($islandResourceQuantities -join ",") + "]"    
     try {
-        $command = "sui client call --package $($dataInfo.main.PackageId) --module map_aggregate --function add_island --args $($dataInfo.main.Map) $($dataInfo.main.AdminCap) $($coordinate.RandomX) $($coordinate.RandomY) $islandResources_ $islandResourceQuantities_  --json"
+        $command = "sui client call --package $($dataInfo.map.PackageId) --module map_aggregate --function add_island --args $($dataInfo.map.Map) $($dataInfo.map.AdminCap) $($coordinate.RandomX) $($coordinate.RandomY) $islandResources_ $islandResourceQuantities_  --json"
         $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
         $result = Invoke-Expression -Command $command
         if (-not ('System.Object[]' -eq $result.GetType())) {

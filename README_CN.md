@@ -215,55 +215,62 @@ wubuku/dddappp-sui:master \
 2. NFT 合约项目
 3. Common 合约项目
 4. Main 合约项目
-5. Faucet 合约项目
+5. Faucet 合约项目 
+6. Map 合约项目
 
-#### Sui Testnet (From 2024/7/20)
+#### Sui Testnet (From 2024/7/28)
 
-我们在 Sui testnet 上发布以上 5 个合约包，相关信息记录如下：
+我们在 Sui testnet 上发布以上 6 个合约包，相关信息记录如下：
 
 ```json
 {
   "coin": {
-    "TreasuryCap": "0x9d588a8c5401fefa5444b07d63ac96783232f4c399c9c7e48440fbd60d762533",
-    "PackageId": "0xff3e37cae38a011e2bef24ce3c023865096b6e61cc3e6756f30af3f394a88eb4",
-    "Digest": "GGuTD9q4dhNkgEhMyT7J5BzQM4JAzf7EULesck5NcUs6",
-    "EnergyId": "0x16d04cab1d73e4b23845d735207b989c3ed90c69b8cf31c77c16f31449bf6b7f"
+    "TreasuryCap": "0x5f7b496474d1d6f811a8427fb42d9f6deeca63dda7e166d774cb1efc3499b89f",
+    "PackageId": "0xb0cc1ce62612a8dd3536f6cd0ce3512a394b462d415d9c08bf18f07585f10fdb",
+    "Digest": "Bja3yoWDQCw8pXuEVkQXbHGNMzzEdrTWHGqogA9wnERN",
+    "EnergyId": "0x7b5f962702f64c6f9a3ae929540ac39f81671ce20a4f717dcc6ec16f867c53d6"
   },
   "common": {
-    "Digest": "GXDt2NdceKikEbHVjATHFW2Pv4FrhXFN7ATKnKt3hZFb",
-    "Publisher": "0x65bf5a54ddd0056382fcc7b2bbb07f59cab739384d666e2880c11a32132c3c3a",
-    "ExperienceTable": "0x7df55aeef306b1d257d453f882b348ef6cd78ca9906680d3907e0a6f0a84924d",
-    "ItemProductionTable": "0x80ad894d5095730b7a9ab49fa4e7c44e0f8e52fe016270f86867b258967b5be8",
-    "ItemCreationTable": "0xbb3e27c444009cdaa189f21db169456692332eab2797b6a64836bd5a51e3f379",
-    "ItemTable": "0xc40660c1406c79fd8999f5c491c757169a7b6616eaf01b24b10b0d3dd85aa4fe",
-    "PackageId": "0xdcd85e6b35e32e398e5e0813a148c6090b37e0469d418b911070464bc71d00cd",
-    "ItemCreationMining": "0x29ec0660d258127d4753c989f5b09661d2e82c34974fe47771f589b5fd393136",
-    "ItemProductionFarming": "0x8b97552063cd8fa30872e68a4f8fb60f78e2ffc8911601ad6aa4321069ed3454",
-    "ItemCreationWooding": "0x4dcd9bad83fb5a23a057fa3f929bcb225b585849e774ac0840d4349cd30a6af4",
-    "ItemProductionCrafting": "0x7cb67adcde207c7d8dcab78f9ef18b577b28a6fb50139875371c878c089a00bf"
+    "Digest": "G1cVF8LTVeF2pzWFXMVcXnX9KoBfYxcgL4dbYQBQaZCC",
+    "ItemCreationTable": "0x92962a33d86ec7cacf6e8673eb1c94a13b5831ccf4bfea7f520f26164dda898e",
+    "ExperienceTable": "0xa6c52b8b101808f5a22a1bced69e6db5defd9191f2ed36e82c8c1fa0ded52c16",
+    "Publisher": "0xb8b7a31a7a2bc265e6c41772eeecff33c65a7210b8f55db7e9057713eedd289e",
+    "ItemTable": "0xbabe0ea9ce820ad69307257a0aeb6db8953879bdc4f02b639e69b125ccf6107f",
+    "PackageId": "0xc8747489819fba4a45a252c042f7243364d8c04cb561999374399e1f466152d5",
+    "ItemProductionTable": "0xe8d20084f52829b8f8283bd83fe5df2e26e0736e6e798e8651ccabd62e3e8796",
+    "ItemCreationMining": "0xba420ac39c4413dba55d542d8f992f3a333ce8a457b6dd9f079010887064078d",
+    "ItemProductionFarming": "0x2b1757b863434fb0336b75ce73e1ffb4e17b0d4cd1ab5074063469aeaedb79d2",
+    "ItemCreationWooding": "0x80ac7865f74f6787c6f79e7edcb683dac6873d2962f1bc0f11b1d68bbfc25f8e",
+    "ItemProductionCrafting": "0xa1f792980b75cb01e828d34094b95d4bf054e10914d9d59317728a4800cfd0ec"
   },
   "main": {
-    "Digest": "R3r2bEqQejog9ce4PUdHnd95qe2dLghQf9ZUaVAFsNw",
-    "Publisher": "0x013d69575b17f9bcccb788444e2986279b732b8a5b1a74f310cb31a443c96f5b",
-    "RosterTable": "0x64cfa05880e869f0bed0c06348242b72a9712062c3421f2be464bce2d3aeac6b",
-    "SkillProcessTable": "0x6c3478dc2c5aa211880dba3bdc795a371cf6909c09f3089e941cdca468c80fc6",
-    "AdminCap": "0x7aaa539bbe9b6cb2e525fc08fd55591e5d2ab3c101d249ec3b3c82f79e30f55f",
-    "Map": "0xa3c886b9221a96e4abec7b381bf8621cd5c8150a87f103ed2aa355571b0b7cde",
-    "PackageId": "0xc9f413f735d30a56dfa06277c379cc7c8f946267e53053159743344cee1819e3",
-    "UpgradeCap": "0xf8fac85202fa55adc473cdda522b34cd558d473df8482014b563961b7732fec1"
-  },
+    "Digest": "cMcBak6h8Kx7eyd3DXr49XEtvTnZ9qQvVqy9wfKtwdX",
+    "Publisher": "0x0e7512ddafa61b82f5dca5ad2d6b33090152fa3e16f1f18e2557ef8a2fa5f3e9",
+    "PackageId": "0x44418a1f8d851b0e8874a8e276dd8b465f93fe9f1faf996f706689aacfe0423b",
+    "UpgradeCap": "0x6057b6af76658ddf86c6e82519fbe03f44defc2afb5edd21f502c3e8d5ddfb03",
+    "RosterTable": "0x76ef059681445cf6b88d68af80d26f88da3800d4f977ad9ea0ddccce94a8551d",
+    "SkillProcessTable": "0xe286e70ed9edb445a5506c87bb1b27e2271270a4f6c7850ce0e4e8cc5f7a7235",
+    },
   "faucet": {
-    "EnergyFaucet": "0x90a46d220a1756a097e72010a012b4d9004da9c2e9ee393b2ac079bf0d4a22dd",
-    "PackageId": "0xfc7ba2a57809577e7ab9b7b4b2f0a53a4621fbbd6ced73e38fc4bc359c1967f1",
-    "Digest": "EG15xwzZ86YGmCaPb5wnUAGe3wmVh3SmfShyzR9ZxvVT"
+    "EnergyFaucet": "0x29e61938f0ae4c3dcd12d685217cf9a601320c807f34c34f43ab59a5dba516d8",
+    "PackageId": "0x7e5bef3aa6f245388b2db061eb701173ac26467510e84786de82bdd7cf3db8f2",
+    "Digest": "8fpBTLLx9MgnBWa2uZZD4rKTMMesCYKW3qtDmQCfvGfu"
   },
   "nft": {
-    "Publisher": "0x2d4deb6e2e2462e6dccae98392d8a9b108fde928e8679db652d9ec877dd86ec7",
-    "PackageId": "0x405c7493478be7b1debb5f22a05b3a37240d68fb7a05e61087b14e990150cd6c",
-    "Whitelist": "0x5756f42a618f05876737457c570bc753aef3c065f679da50bdd437ad988fbad5",
-    "AvatarChangeTable": "0xb2235f3e7e7a3ae3fb6466530a1ce99cd05fd63c1dd7dd26ff3bbe12035c1ba2",
-    "AvatarDisplay": "0xf503f4aaa000f7e9cb1842ba090d7c3a877063b20d0a6a0b5435e1e43e03c95e",
-    "Digest": "5fXFSrmAtESmSSziF7uvg3ixsuY3K4VXEm5KBP6YD16B"
+    "AvatarDisplay": "0x4ab9e6787b902cbfaa78e15617bfcafcba07e2dac9e653711db98d0c7b805572",
+    "PackageId": "0x74b3bcc59df0c47feb53c2055137471be76e4b9dd0c05cf197c72a5e6055fe87",
+    "AvatarChangeTable": "0xa326e90e181f3727c1ad388637a3ca9bdbee47733d83004a22a44f27ee999c9f",
+    "Whitelist": "0xc8853bb01fc2d391a02c4015fe642bb12979cb6ca444a2b3518239a01e0aae8f",
+    "Publisher": "0xddd3ac98aecfb8904bdeaf8b9112d9746e1df3ac25574f655cac840915d7e338",
+    "Digest": "4fvoBtVBqjkZBuXan7TYnviBBbPcPx2MSLzjGvDwUEAT"
+  },
+  "map": {
+    "Publisher": "0x23213b69042384ff2a3d89e7c262e38b74aa3ef4e5642f1441e7d5b665b180cd",
+    "AdminCap": "0x46a1a5c8139e9fe021d9781b1283ae71296cfbb151980db6e9ab8739fcefa2cc",
+    "MapFriendConfig": "0x470645bbddc82e431261534baca6a533953696f08a3a971b566f64c15b66fbb5",
+    "PackageId": "0x977f56f794e2f869a2486974fd8905e5a7a9c72d998bef6897910f08816171eb",
+    "Map": "0xe2d65215e1eae87e98ffedafb73a21860f0ada5bd84036b9bdfd7ac1fa6215f0",
+    "Digest": "DpkHEB9FVvo7BtDVvHXqbiQMkzMLndWvmtNFuwFF8yfR"
   }
 }
 
@@ -321,7 +328,7 @@ wubuku/dddappp-sui:master \
 
 解释如下：
 
-* `coin.packageid`：Coin 合约包的 Id。
+* `coin.packageId`：Coin 合约包的 Id。
 * `coin.FaucetId`：玩家用来请求 `ENERGY` 的水龙头的 Object ID。
 * `common.PackageId`：Common 合约包的 Id。
 * `nft.PackageId`：NFT 合约包的 Id。
@@ -362,7 +369,7 @@ curl -X GET "{indexer_api_base_url}/ItemProductions" -H "accept: application/jso
 使用以下 Sui CLI 命令可以取得地图对象的信息：
 
 ```shell
-sui client object {main.Map} --json
+sui client object {map.Map} --json
 ```
 
 输出信息类似下面这样：
@@ -459,7 +466,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"me
 ```
 
 在上面的输出的例子中，地图上中存在两个岛屿，它们的坐标分别是 `(51, 51)` 和 `(50, 50)`。
-对象类型为：`{main.packageId}::map_location::MapLocation`，对象 ID 分别为
+对象类型为：`{map.packageId}::map_location::MapLocation`，对象 ID 分别为
 `0x5dfb8153dfd0aeea1e1558e0b3f991cac1d8ab5e797627ad4445ce4ce099a692` 和 `0x78573cac493248eaea380c6658b839ad44c7a4e0bd0728d91b51a878edd3b16b`。
 
 可以在控制台执行 Sui CLI 命令：
@@ -558,7 +565,7 @@ sui client object {mapLocationId} --json
 可使用 curl 命令发动测试请求，如下：
 
 ```curl
-curl -X GET "http://{domain.port}/api/Maps/{main.map}" -H "accept: application/json"
+curl -X GET "http://{domain.port}/api/Maps/{map.map}" -H "accept: application/json"
 ```
 
 返回的地图信息类似：
@@ -735,7 +742,9 @@ curl -X GET "http://{domin:port}/api/Players?owner={owner}" -H "accept: applicat
 sui client call --package {main.PackageId} \
 --module player_aggregate \
 --function claim_island \
---args {playerId} \
+--args 
+{map.MapFriendConfig} \
+{playerId} \
 {main.Map} \
 {coordinates_x} \
 {coordinates_y} \
@@ -746,8 +755,8 @@ sui client call --package {main.PackageId} \
 ```
 
 解释：
-
-* `{main.PackageId}`：Main 合约包的 ID。
+* `{map.MapFriendConfig}`: Map 合约包发布时生成的一个配置对象的 ID。
+* `{map.PackageId}`：Map 合约包的 ID。
 * `{playerId}`：类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
 * `{main.map}`：类型为 `&mut Map`。CLI 中可传入地图对象的 ID。在 Main 合约包发布的时候，自动执行的初始化函数会创建地图对象。
 * `{coordinates_x}`：类型为 `u32`。Claim 的岛屿的 X 坐标值。
@@ -1017,6 +1026,47 @@ sui client call --package {main.PackageId} \
 * 类型为 `0x2::dynamic_field::Field<{common.PackageId}::skill_process_id::SkillProcessId, 0x2::object::ID>` 的对象，是一个“保存技能进程信息的 Table”的“动态字段”子对象。
   这个对象的 ID 我们使用占位符 `{SkillProcess_dynamic_field_ObjectId}` 表示。
   通过这个对象，可以查询到技能进程的 ID 信息（参考下文关于如何查询 Move Table 的内容的介绍）。
+
+
+
+### NFT 持有玩家占领（Claim）岛屿
+
+用户在创建玩家（Player）对象，并持有 NFT 之后，可以对无人占领的岛屿进行占领（Claim）。
+
+使用 Sui CLI 执行占领：
+
+```shell
+sui client call --package {main.PackageId} \
+--module player_aggregate \
+--function claim_island \
+--args 
+{map.MapFriendConfig} \
+{playerId} \
+{avatarId} \
+{main.Map} \
+{coordinates_x} \
+{coordinates_y} \
+{clock} \
+{main.RosterTable} \
+{main.SkillProcessTable} 
+--gas-budget 4999000000 --json
+```
+
+解释：
+* `{map.MapFriendConfig}`: Map 合约包发布时生成的一个配置对象的 ID。
+* `{map.PackageId}`：Map 合约包的 ID。
+* `{playerId}`：类型为 `&mut Player`。CLI 中可传入玩家对象 ID。
+* `{avatarId}`：类型为 `&mut Avatar`。CLI 中可传入玩家 NFT 对象 ID。
+* `{main.map}`：类型为 `&mut Map`。CLI 中可传入地图对象的 ID。在 Main 合约包发布的时候，自动执行的初始化函数会创建地图对象。
+* `{coordinates_x}`：类型为 `u32`。Claim 的岛屿的 X 坐标值。
+* `{coordinates_y}`：类型为 `u32`。Claim 的岛屿的 Y 坐标值。
+* `{clock}`：类型为 `&Clockr`。时钟对象的 ID。Sui 的时间对象 ID 是个固定值：`0x6`。
+* `{main.RosterTable}`: 类型为 `&mut RosterTable`。Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 中包含了包含所有的船队的“索引信息”。包含“玩家”以及“环境”船队。该 Table 的 Key 是“玩家 ID + 船队序号 `[0-4]`”的组合。
+* `{main.SkillProcessTable}`： 类型为 ` &mut SkillProcessTable`。Main 合约发布时初始化的一个 Table 对象的 ID。该 Table 包含所有技能流程（可以理解使用技能的“生产线”）的“索引信息”。
+  这里的技能包括 Farming、WoodCutting、Mining、 Crafting。该 Table 的 Key 为“玩家 ID + SkillTypeId”的组合。
+
+执行成功后返回内容参考 `占领（Claim）岛屿`。
+
 
 #### 查询玩家的船队
 
