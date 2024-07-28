@@ -6,10 +6,17 @@ singletonObjects:
       #MoveExternalFriendConfiguration: "MapFriendConfig" # This is default.
     friends:
       - Player.ClaimIsland
+      - Player.NftHolderClaimIsland
       - Player.GatherIslandResources
     properties:
       Locations:
         itemType: MapLocation
+      ForNftHoldersOnly:
+        type: bool
+        optional: true
+        description: "Is island only for NFT holders to claim"
+        defaultLogic:
+          Move: "std::option::none()"
     entities:
       MapLocation:
         id:
@@ -82,3 +89,11 @@ singletonObjects:
               itemType: ItemIdQuantityPair
             GatheredAt:
               type: u64
+
+      UpdateSettings:
+        requiredPermission: AdminCap
+        parameters:
+          ForNftHoldersOnly:
+            type: bool
+        event:
+          name: MapSettingsUpdated

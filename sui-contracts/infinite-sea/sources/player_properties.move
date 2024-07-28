@@ -1,9 +1,17 @@
 module infinite_sea::player_properties {
+    use std::option;
     use std::vector;
+    use sui::tx_context::TxContext;
 
+    use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::item_id_quantity_pair;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
     use infinite_sea_common::sorted_vector_util;
+    use infinite_sea_map::map;
+    use infinite_sea_map::map::Map;
+    use infinite_sea_map::map_aggregate;
+    use infinite_sea_map::map_friend_config;
+    use infinite_sea_map::map_location;
 
     use infinite_sea::player;
     use infinite_sea::player::Player;
@@ -15,6 +23,8 @@ module infinite_sea::player_properties {
     friend infinite_sea::skill_process_complete_production_logic;
     friend infinite_sea::skill_process_complete_ship_production_logic;
     friend infinite_sea::player_gather_island_resources_logic;
+    friend infinite_sea::player_claim_island_logic;
+    friend infinite_sea::player_nft_holder_claim_island_logic;
 
     public(friend) fun deduct_inventory(player: &mut Player, items: vector<ItemIdQuantityPair>) {
         let inv = player::borrow_mut_inventory(player);
@@ -64,5 +74,25 @@ module infinite_sea::player_properties {
 
     public(friend) fun set_level(player: &mut Player, level: u16) {
         player::set_level(player, level);
+    }
+
+    public(friend) fun claim_island_mutate(
+        map_friend_config: &map_friend_config::MapFriendConfig,
+        player: &mut Player,
+        map: &mut Map,
+        coordinates: Coordinates,
+        claimed_at: u64,
+        ctx: &mut TxContext,
+    ) {
+        let player_id = player::id(player);
+
+        player::set_claimed_island(player, option::some(coordinates));
+        // move resources from island to player inventory
+        let island = map::borrow_location(map, coordinates);
+        let inv = player::borrow_mut_inventory(player);
+        sorted_vector_util::merge_item_id_quantity_pairs(inv, map_location::borrow_resources(island));
+        // call map_aggregate::claim_island
+        map_aggregate::claim_island(
+            map_friend_config, player::friend_witness(), map, coordinates, player_id, claimed_at, ctx);
     }
 }

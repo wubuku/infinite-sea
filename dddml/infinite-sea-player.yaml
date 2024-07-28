@@ -92,37 +92,19 @@ aggregates:
               type: address
 
       ClaimIsland:
-        parameters:
-          Map:
-            referenceType: Map
-            isMutableReference: true
-            isIgnoredInEvent: true
-          Coordinates:
-            type: Coordinates
-          Clock:
-            referenceType: Clock
-            isIgnoredInEvent: true
-          RosterTable:
-            referenceType: RosterTable
-            isMutableReference: true
-            isIgnoredInEvent: true
-          SkillProcessTable:
-            referenceType: SkillProcessTable
-            isMutableReference: true
-            isIgnoredInEvent: true
+        inheritsFrom: PlayerTemplate.ClaimIsland
         event:
           name: IslandClaimed
-          properties:
-            ClaimedAt:
-              type: u64
-        constants:
-          ESenderHasNoPermission:
-            constantExpression:
-              Move: 22
-            type: u64
-        verificationLogic:
-          Move: >
-            assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
+
+      NftHolderClaimIsland:
+        inheritsFrom: PlayerTemplate.ClaimIsland
+        parameters:
+          Avatar:
+            referenceType: Avatar
+            #isMutableReference: true
+            isIgnoredInEvent: true
+        event:
+          name: NftHolderIslandClaimed
 
       Airdrop:
         requiredPermission: "__Publisher__"
@@ -171,3 +153,40 @@ aggregates:
 #          #  itemType: ID # Ship ID
 #        event:
 #          name: PlayerExperienceAndItemsIncreased
+
+
+superObjects:
+  PlayerTemplate:
+    isTemplate: true
+    methods:
+      ClaimIsland:
+        parameters:
+          Map:
+            referenceType: Map
+            isMutableReference: true
+            isIgnoredInEvent: true
+          Coordinates:
+            type: Coordinates
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
+          RosterTable:
+            referenceType: RosterTable
+            isMutableReference: true
+            isIgnoredInEvent: true
+          SkillProcessTable:
+            referenceType: SkillProcessTable
+            isMutableReference: true
+            isIgnoredInEvent: true
+        event:
+          properties:
+            ClaimedAt:
+              type: u64
+        constants:
+          ESenderHasNoPermission:
+            constantExpression:
+              Move: 22
+            type: u64
+        verificationLogic:
+          Move: >
+            assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);

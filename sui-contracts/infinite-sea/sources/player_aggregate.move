@@ -10,11 +10,13 @@ module infinite_sea::player_aggregate {
     use infinite_sea::player_claim_island_logic;
     use infinite_sea::player_create_logic;
     use infinite_sea::player_gather_island_resources_logic;
+    use infinite_sea::player_nft_holder_claim_island_logic;
     use infinite_sea::roster::RosterTable;
     use infinite_sea::skill_process::SkillProcessTable;
     use infinite_sea_common::coordinates::{Self, Coordinates};
     use infinite_sea_map::map::Map;
     use infinite_sea_map::map_friend_config;
+    use infinite_sea_nft::avatar::Avatar;
     use std::string::String;
     use sui::clock::Clock;
     use sui::tx_context;
@@ -77,6 +79,45 @@ module infinite_sea::player_aggregate {
         );
         player::update_object_version(player);
         player::emit_island_claimed(island_claimed);
+    }
+
+    public entry fun nft_holder_claim_island(
+        map_friend_config: &map_friend_config::MapFriendConfig,
+        player: &mut player::Player,
+        avatar: &Avatar,
+        map: &mut Map,
+        coordinates_x: u32,
+        coordinates_y: u32,
+        clock: &Clock,
+        roster_table: &mut RosterTable,
+        skill_process_table: &mut SkillProcessTable,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        let coordinates: Coordinates = coordinates::new(
+            coordinates_x,
+            coordinates_y,
+        );
+        let nft_holder_island_claimed = player_nft_holder_claim_island_logic::verify(
+            avatar,
+            map,
+            coordinates,
+            clock,
+            roster_table,
+            skill_process_table,
+            player,
+            ctx,
+        );
+        player_nft_holder_claim_island_logic::mutate(
+            map_friend_config,
+            &nft_holder_island_claimed,
+            map,
+            roster_table,
+            skill_process_table,
+            player,
+            ctx,
+        );
+        player::update_object_version(player);
+        player::emit_nft_holder_island_claimed(nft_holder_island_claimed);
     }
 
     public entry fun airdrop(

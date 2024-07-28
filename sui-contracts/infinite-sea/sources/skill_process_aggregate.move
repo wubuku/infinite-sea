@@ -26,6 +26,7 @@ module infinite_sea::skill_process_aggregate {
     use sui::tx_context;
 
     friend infinite_sea::player_claim_island_logic;
+    friend infinite_sea::player_nft_holder_claim_island_logic;
     friend infinite_sea::skill_process_service;
     friend infinite_sea::roster_service;
     friend infinite_sea::ship_battle_service;

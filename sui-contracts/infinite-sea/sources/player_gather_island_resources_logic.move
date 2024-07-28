@@ -29,7 +29,7 @@ module infinite_sea::player_gather_island_resources_logic {
     }
 
     public(friend) fun mutate(
-        map_freind_config: &map_friend_config::MapFriendConfig,
+        map_friend_config: &map_friend_config::MapFriendConfig,
         player_island_resources_gathered: &player::PlayerIslandResourcesGathered,
         map: &mut Map,
         clock: &Clock,
@@ -38,7 +38,7 @@ module infinite_sea::player_gather_island_resources_logic {
     ) {
         let id = player::id(player);
         let resources = map_aggregate::gather_island_resources(
-            map_freind_config,
+            map_friend_config,
             player::friend_witness(),
             map,
             id,

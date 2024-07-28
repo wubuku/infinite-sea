@@ -9,6 +9,7 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 infinite_sea_common = { local = "../infinite-sea-common" }
 infinite_sea_map = { local = "../infinite-sea-map" }
 infinite_sea_coin = { local = "../infinite-sea-coin" }
+infinite_sea_nft = { local = "../infinite-sea-nft" }
 
 [addresses]
 infinite_sea = "0xd95a23bf63c51250c136ac6f2443c37644834977303dfe985ac73442324e925b"

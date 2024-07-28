@@ -8,6 +8,7 @@ aggregates:
       ShouldIssuePublisherObject: true
     friends:
       - Player.ClaimIsland
+      - Player.NftHolderClaimIsland
     id:
       name: SkillProcessId
       type: SkillProcessId
@@ -219,6 +220,7 @@ aggregates:
     friends:
       - Player.Create
       - Player.ClaimIsland
+      - Player.NftHolderClaimIsland
       - SkillProcess.CompleteShipProduction
       - ShipBattle.InitiateBattle
     properties:

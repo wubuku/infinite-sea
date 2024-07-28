@@ -1,5 +1,5 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
-module infinite_sea::player_claim_island_logic {
+module infinite_sea::player_nft_holder_claim_island_logic {
     use std::option;
     use std::vector;
 
@@ -11,6 +11,8 @@ module infinite_sea::player_claim_island_logic {
     use infinite_sea_common::skill_type;
     use infinite_sea_map::map::Map;
     use infinite_sea_map::map_friend_config;
+    use infinite_sea_nft::avatar;
+    use infinite_sea_nft::avatar::Avatar;
 
     use infinite_sea::player;
     use infinite_sea::player_properties;
@@ -24,8 +26,10 @@ module infinite_sea::player_claim_island_logic {
 
     const ESenderHasNoPermission: u64 = 22;
     const EPlayerAlreadyClaimedIsland: u64 = 23;
+    const EMismatchAvatarOwner: u64 = 24;
 
     public(friend) fun verify(
+        avatar: &Avatar,
         map: &mut Map,
         coordinates: Coordinates,
         clock: &Clock,
@@ -33,25 +37,27 @@ module infinite_sea::player_claim_island_logic {
         skill_process_table: &mut SkillProcessTable,
         player: &player::Player,
         ctx: &TxContext,
-    ): player::IslandClaimed {
+    ): player::NftHolderIslandClaimed {
         assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
         assert!(option::is_none(&player::claimed_island(player)), EPlayerAlreadyClaimedIsland);
+        assert!(avatar::owner(avatar) == player::owner(player), EMismatchAvatarOwner);
         let claimed_at = clock::timestamp_ms(clock) / 1000;
-        player::new_island_claimed(player, coordinates, claimed_at)
+        player::new_nft_holder_island_claimed(player, coordinates, claimed_at)
     }
 
     public(friend) fun mutate(
         map_friend_config: &map_friend_config::MapFriendConfig,
-        island_claimed: &player::IslandClaimed,
+        nft_holder_island_claimed: &player::NftHolderIslandClaimed,
         map: &mut Map,
         roster_table: &mut RosterTable,
         skill_process_table: &mut SkillProcessTable,
         player: &mut player::Player,
         ctx: &mut TxContext, // modify the reference to mutable if needed
     ) {
-        let coordinates = player::island_claimed_coordinates(island_claimed);
-        let claimed_at = player::island_claimed_claimed_at(island_claimed);
+        let coordinates = player::nft_holder_island_claimed_coordinates(nft_holder_island_claimed);
+        let claimed_at = player::nft_holder_island_claimed_claimed_at(nft_holder_island_claimed);
         let player_id = player::id(player);
+
 
         player_properties::claim_island_mutate(map_friend_config, player, map, coordinates, claimed_at, ctx);
 

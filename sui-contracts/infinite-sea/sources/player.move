@@ -17,6 +17,7 @@ module infinite_sea::player {
 
     friend infinite_sea::player_create_logic;
     friend infinite_sea::player_claim_island_logic;
+    friend infinite_sea::player_nft_holder_claim_island_logic;
     friend infinite_sea::player_airdrop_logic;
     friend infinite_sea::player_gather_island_resources_logic;
     friend infinite_sea::player_aggregate;
@@ -202,6 +203,38 @@ module infinite_sea::player {
         }
     }
 
+    struct NftHolderIslandClaimed has copy, drop {
+        id: object::ID,
+        version: u64,
+        coordinates: Coordinates,
+        claimed_at: u64,
+    }
+
+    public fun nft_holder_island_claimed_id(nft_holder_island_claimed: &NftHolderIslandClaimed): object::ID {
+        nft_holder_island_claimed.id
+    }
+
+    public fun nft_holder_island_claimed_coordinates(nft_holder_island_claimed: &NftHolderIslandClaimed): Coordinates {
+        nft_holder_island_claimed.coordinates
+    }
+
+    public fun nft_holder_island_claimed_claimed_at(nft_holder_island_claimed: &NftHolderIslandClaimed): u64 {
+        nft_holder_island_claimed.claimed_at
+    }
+
+    public(friend) fun new_nft_holder_island_claimed(
+        player: &Player,
+        coordinates: Coordinates,
+        claimed_at: u64,
+    ): NftHolderIslandClaimed {
+        NftHolderIslandClaimed {
+            id: id(player),
+            version: version(player),
+            coordinates,
+            claimed_at,
+        }
+    }
+
     struct PlayerAirdropped has copy, drop {
         id: object::ID,
         version: u64,
@@ -285,6 +318,10 @@ module infinite_sea::player {
 
     public(friend) fun emit_island_claimed(island_claimed: IslandClaimed) {
         event::emit(island_claimed);
+    }
+
+    public(friend) fun emit_nft_holder_island_claimed(nft_holder_island_claimed: NftHolderIslandClaimed) {
+        event::emit(nft_holder_island_claimed);
     }
 
     public(friend) fun emit_player_airdropped(player_airdropped: PlayerAirdropped) {

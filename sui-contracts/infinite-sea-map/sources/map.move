@@ -8,6 +8,7 @@ module infinite_sea_map::map {
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
     use infinite_sea_common::item_id_quantity_pairs::ItemIdQuantityPairs;
     use infinite_sea_map::map_location::{Self, MapLocation};
+    use std::option::Option;
     use sui::event;
     use sui::object::{Self, ID, UID};
     use sui::table;
@@ -19,6 +20,7 @@ module infinite_sea_map::map {
     friend infinite_sea_map::map_add_island_logic;
     friend infinite_sea_map::map_claim_island_logic;
     friend infinite_sea_map::map_gather_island_resources_logic;
+    friend infinite_sea_map::map_update_settings_logic;
     friend infinite_sea_map::map_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -60,6 +62,7 @@ module infinite_sea_map::map {
         version: u64,
         schema_version: u64,
         admin_cap: ID,
+        for_nft_holders_only: Option<bool>,
         locations: table::Table<Coordinates, MapLocation>,
     }
 
@@ -69,6 +72,14 @@ module infinite_sea_map::map {
 
     public fun version(map: &Map): u64 {
         map.version
+    }
+
+    public fun for_nft_holders_only(map: &Map): Option<bool> {
+        map.for_nft_holders_only
+    }
+
+    public(friend) fun set_for_nft_holders_only(map: &mut Map, for_nft_holders_only: Option<bool>) {
+        map.for_nft_holders_only = for_nft_holders_only;
     }
 
     public(friend) fun add_location(map: &mut Map, location: MapLocation) {
@@ -122,6 +133,7 @@ module infinite_sea_map::map {
             version: 0,
             schema_version: SCHEMA_VERSION,
             admin_cap: admin_cap_id,
+            for_nft_holders_only: std::option::none(),
             locations: table::new<Coordinates, MapLocation>(ctx),
         }
     }
@@ -265,6 +277,31 @@ module infinite_sea_map::map {
         }
     }
 
+    struct MapSettingsUpdated has copy, drop {
+        id: object::ID,
+        version: u64,
+        for_nft_holders_only: bool,
+    }
+
+    public fun map_settings_updated_id(map_settings_updated: &MapSettingsUpdated): object::ID {
+        map_settings_updated.id
+    }
+
+    public fun map_settings_updated_for_nft_holders_only(map_settings_updated: &MapSettingsUpdated): bool {
+        map_settings_updated.for_nft_holders_only
+    }
+
+    public(friend) fun new_map_settings_updated(
+        map: &Map,
+        for_nft_holders_only: bool,
+    ): MapSettingsUpdated {
+        MapSettingsUpdated {
+            id: id(map),
+            version: version(map),
+            for_nft_holders_only,
+        }
+    }
+
 
     #[lint_allow(share_owned)]
     public(friend) fun share_object(map: Map) {
@@ -283,6 +320,7 @@ module infinite_sea_map::map {
             version: _version,
             schema_version: _,
             admin_cap: _,
+            for_nft_holders_only: _for_nft_holders_only,
             locations,
         } = map;
         object::delete(id);
@@ -299,6 +337,10 @@ module infinite_sea_map::map {
 
     public(friend) fun emit_island_resources_gathered(island_resources_gathered: IslandResourcesGathered) {
         event::emit(island_resources_gathered);
+    }
+
+    public(friend) fun emit_map_settings_updated(map_settings_updated: MapSettingsUpdated) {
+        event::emit(map_settings_updated);
     }
 
 }

@@ -11,6 +11,7 @@ module infinite_sea_map::map_aggregate {
     use infinite_sea_map::map_claim_island_logic;
     use infinite_sea_map::map_friend_config;
     use infinite_sea_map::map_gather_island_resources_logic;
+    use infinite_sea_map::map_update_settings_logic;
     use sui::clock::Clock;
     use sui::object::ID;
     use sui::tx_context;
@@ -52,7 +53,7 @@ module infinite_sea_map::map_aggregate {
     }
 
     public fun claim_island<FWT: drop>(
-        freind_config: &map_friend_config::MapFriendConfig,
+        friend_config: &map_friend_config::MapFriendConfig,
         _friend_witness: FWT,
         map: &mut map::Map,
         coordinates: Coordinates,
@@ -60,7 +61,7 @@ module infinite_sea_map::map_aggregate {
         claimed_at: u64,
         ctx: &mut tx_context::TxContext,
     ) {
-        map_friend_config::assert_allowlisted(freind_config, _friend_witness);
+        map_friend_config::assert_allowlisted(friend_config, _friend_witness);
         map::assert_schema_version(map);
         let map_island_claimed = map_claim_island_logic::verify(
             coordinates,
@@ -79,7 +80,7 @@ module infinite_sea_map::map_aggregate {
     }
 
     public fun gather_island_resources<FWT: drop>(
-        freind_config: &map_friend_config::MapFriendConfig,
+        friend_config: &map_friend_config::MapFriendConfig,
         _friend_witness: FWT,
         map: &mut map::Map,
         player_id: ID,
@@ -87,7 +88,7 @@ module infinite_sea_map::map_aggregate {
         clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ): ItemIdQuantityPairs {
-        map_friend_config::assert_allowlisted(freind_config, _friend_witness);
+        map_friend_config::assert_allowlisted(friend_config, _friend_witness);
         map::assert_schema_version(map);
         let island_resources_gathered = map_gather_island_resources_logic::verify(
             player_id,
@@ -105,6 +106,28 @@ module infinite_sea_map::map_aggregate {
         map::update_object_version(map);
         map::emit_island_resources_gathered(island_resources_gathered);
         gather_island_resources_return
+    }
+
+    public entry fun update_settings(
+        map: &mut map::Map,
+        admin_cap: &map::AdminCap,
+        for_nft_holders_only: bool,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        assert!(map::admin_cap(map) == sui::object::id(admin_cap), EInvalidAdminCap);
+        map::assert_schema_version(map);
+        let map_settings_updated = map_update_settings_logic::verify(
+            for_nft_holders_only,
+            map,
+            ctx,
+        );
+        map_update_settings_logic::mutate(
+            &map_settings_updated,
+            map,
+            ctx,
+        );
+        map::update_object_version(map);
+        map::emit_map_settings_updated(map_settings_updated);
     }
 
 }
