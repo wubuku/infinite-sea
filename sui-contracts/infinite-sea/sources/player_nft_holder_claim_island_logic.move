@@ -40,7 +40,9 @@ module infinite_sea::player_nft_holder_claim_island_logic {
     ): player::NftHolderIslandClaimed {
         assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
         assert!(option::is_none(&player::claimed_island(player)), EPlayerAlreadyClaimedIsland);
+
         assert!(avatar::owner(avatar) == player::owner(player), EMismatchAvatarOwner);
+
         let claimed_at = clock::timestamp_ms(clock) / 1000;
         player::new_nft_holder_island_claimed(player, coordinates, claimed_at)
     }
@@ -58,8 +60,7 @@ module infinite_sea::player_nft_holder_claim_island_logic {
         let claimed_at = player::nft_holder_island_claimed_claimed_at(nft_holder_island_claimed);
         let player_id = player::id(player);
 
-
-        player_properties::claim_island_mutate(map_friend_config, player, map, coordinates, claimed_at, ctx);
+        player_properties::claim_island_mutate(map_friend_config, player, map, coordinates, claimed_at, true, ctx);
 
         // create skill processes after claiming the island
         let skill_types = vector[

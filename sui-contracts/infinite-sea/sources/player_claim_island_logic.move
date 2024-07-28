@@ -9,6 +9,7 @@ module infinite_sea::player_claim_island_logic {
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::roster_status;
     use infinite_sea_common::skill_type;
+    use infinite_sea_map::map;
     use infinite_sea_map::map::Map;
     use infinite_sea_map::map_friend_config;
 
@@ -24,6 +25,7 @@ module infinite_sea::player_claim_island_logic {
 
     const ESenderHasNoPermission: u64 = 22;
     const EPlayerAlreadyClaimedIsland: u64 = 23;
+    const EForNftHoldersOnly: u64 = 24;
 
     public(friend) fun verify(
         map: &mut Map,
@@ -34,8 +36,15 @@ module infinite_sea::player_claim_island_logic {
         player: &player::Player,
         ctx: &TxContext,
     ): player::IslandClaimed {
+        let for_nft_holders_only = map::for_nft_holders_only(map);
+        assert!(
+            option::is_none(&for_nft_holders_only) || !*option::borrow(&for_nft_holders_only),
+            EForNftHoldersOnly
+        );
+
         assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
         assert!(option::is_none(&player::claimed_island(player)), EPlayerAlreadyClaimedIsland);
+
         let claimed_at = clock::timestamp_ms(clock) / 1000;
         player::new_island_claimed(player, coordinates, claimed_at)
     }
@@ -53,7 +62,7 @@ module infinite_sea::player_claim_island_logic {
         let claimed_at = player::island_claimed_claimed_at(island_claimed);
         let player_id = player::id(player);
 
-        player_properties::claim_island_mutate(map_friend_config, player, map, coordinates, claimed_at, ctx);
+        player_properties::claim_island_mutate(map_friend_config, player, map, coordinates, claimed_at, false, ctx);
 
         // create skill processes after claiming the island
         let skill_types = vector[

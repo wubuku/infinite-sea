@@ -1,8 +1,8 @@
 module infinite_sea::player_properties {
     use std::option;
     use std::vector;
-    use sui::tx_context::TxContext;
 
+    use sui::tx_context::TxContext;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::item_id_quantity_pair;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
@@ -82,15 +82,21 @@ module infinite_sea::player_properties {
         map: &mut Map,
         coordinates: Coordinates,
         claimed_at: u64,
+        is_nft_holders: bool,
         ctx: &mut TxContext,
     ) {
         let player_id = player::id(player);
-
         player::set_claimed_island(player, option::some(coordinates));
+
         // move resources from island to player inventory
         let island = map::borrow_location(map, coordinates);
+        let island_resources = map_location::borrow_resources(island);
         let inv = player::borrow_mut_inventory(player);
-        sorted_vector_util::merge_item_id_quantity_pairs(inv, map_location::borrow_resources(island));
+        if (is_nft_holders) {
+            //NOTE: double island resources for NFT holders
+            island_resources = &sorted_vector_util::item_id_quantity_pairs_multiply(island_resources, 2);
+        };
+        sorted_vector_util::merge_item_id_quantity_pairs(inv, island_resources);
         // call map_aggregate::claim_island
         map_aggregate::claim_island(
             map_friend_config, player::friend_witness(), map, coordinates, player_id, claimed_at, ctx);
