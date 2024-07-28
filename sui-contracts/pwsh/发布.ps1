@@ -17,18 +17,21 @@ $logFile = "$startLocation\publish_$formattedNow.log"
 $dataFile = "$startLocation\data.json"
 
 
+
 $dataJson = New-Object -TypeName PSObject
 $dataCoin = New-Object -TypeName PSObject
 $dataFaucet = New-Object -TypeName PSObject
 $dataNft = New-Object -TypeName PSObject
 $dataCommon = New-Object -TypeName PSObject
 $dataMain = New-Object -TypeName PSObject
+$dataMap = New-Object -TypeName PSObject
 
 $dataJson | Add-Member -MemberType NoteProperty -Name "coin" -Value $dataCoin
 $dataJson | Add-Member -MemberType NoteProperty -Name "common" -Value $dataCommon
 $dataJson | Add-Member -MemberType NoteProperty -Name "main" -Value $dataMain
 $dataJson | Add-Member -MemberType NoteProperty -Name "faucet" -Value $dataFaucet
 $dataJson | Add-Member -MemberType NoteProperty -Name "nft" -Value $dataNft
+$dataJson | Add-Member -MemberType NoteProperty -Name "map" -Value $dataMap
 
 #要不要测试挖矿
 $testSkillProcessMining = $true
@@ -44,7 +47,8 @@ $playerName = 'Li Dahai'
 $environmentPlayName = "@Environment Player@"
 
 # Mint Energy Amount 600万
-$mintAmout = 6000000 * 1000 * 1000 * 1000
+$mintAmout = 600000 * 1000 * 1000 * 1000
+
 
 
 "------------------------------------- 发布 infinite-sea-nft -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
@@ -696,6 +700,124 @@ foreach ($item in $itemArray) {
     }
 }
 "添加了" + $itemArray.Count + "个Item。`n" | Tee-Object $logFile -Append | Write-Host 
+
+
+
+
+"------------------------------------- 发布 infinite-sea-map -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+# 重新发布 infinite-sea-map
+$mapPath = Join-Path $startLocation "..\infinite-sea-map"
+#加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-map
+$mapPath = Get-Item -Path $mapPath
+#$mapPath 其实是个对象
+"切换目录到 $mapPath" | Tee-Object -FilePath $logFile -Append | Write-Host
+if (-not (Test-Path -Path $mapPath)) {
+    "目录 $mapPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    return
+}
+
+Set-Location $mapPath
+
+"发布之前将 Move.toml 文件恢复到初始状态" | Tee-Object -FilePath $logFile -Append | Write-Host
+$file = "$mapPath\Move.toml"
+if (-not (Test-Path -Path $file -PathType Leaf)) {
+    "文件 $file 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+    return
+}
+$fileContent = Get-Content -Path $file 
+for ($i = 0; $i -lt $fileContent.Count; $i++) {
+    #Write-Host $fileContent[$i]
+    if ($fileContent[$i].Contains('published-at')) {
+        if ($fileContent[$i] -like "#*") {            
+        }
+        else {
+            $fileContent[$i] = "#" + $fileContent[$i]
+        }
+    }
+    if ($fileContent[$i].Contains('infinite-sea-map =')) {
+        $fileContent[$i] = 'infinite-sea-map = "0x0"'
+    }
+}
+$fileContent | Set-Content $file
+"Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+"开始发布合约 infinite-sea-map..." | Tee-Object -FilePath $logFile -Append | Write-Host
+
+$publishMapJson = ""
+$mapPackingId = ""
+$mapPublisherId = ""
+
+try {
+    $publishMapJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --json
+    if (-not ('System.Object[]' -eq $publishMapJson.GetType())) {
+        "发布 infinite-sea-map 合约失败: $publishMapJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    $publishMapJsonObj = $publishMapJson | ConvertFrom-Json
+    try {
+        foreach ($object in $publishMapJsonObj.objectChanges) {
+            if ($null -ne $object.packageId -and $object.packageId -ne "") {
+                $mapPackingId = $object.packageId;
+                $dataMap | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $mapPackingId
+                "Map PackageID: $mapPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+            if ($object.objectType -eq '0x2::package::Publisher') {
+                $mapPublisherId = $object.objectId;
+                $dataMap | Add-Member -MemberType NoteProperty -Name "Publisher" -Value $mapPublisherId
+                "Publisher ID: $mapPublisherId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+            if ($object.objectType -like '*map_friend_config::MapFriendConfig') {
+                $MapFriendConfigId = $object.objectId;
+                $dataMap | Add-Member -MemberType NoteProperty -Name "MapFriendConfig" -Value $MapFriendConfigId
+                "MapFriendConfig ID: $MapFriendConfigId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            }
+        }
+        $mapDigest = $publishMapJsonObj.digest
+        $dataMap | Add-Member -MemberType NoteProperty -Name "Digest" -Value $mapDigest
+        "Map digest: $mapDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+    }
+    catch {
+        "解析 Map 返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    if ($mapPackingId -eq "") {
+        "Cant find Map package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+}
+catch {
+    "发布 infinite-sea-map 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    "返回的结果为:$publishMapJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    Set-Location $startLocation
+    return
+}
+"更新 Move.toml 文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
+$fileContent = Get-Content -Path $file 
+for ($i = 0; $i -lt $fileContent.Count; $i++) {
+    #Write-Host $fileContent[$i]
+    if ($fileContent[$i].Contains('published-at')) {
+        $fileContent[$i] = 'published-at = "' + $coinPackingId + '"'
+    }
+    if ($fileContent[$i].Contains('infinite-sea-map =')) {
+        $fileContent[$i] = 'infinite-sea-map = "' + $coinPackingId + '"'
+    }
+}
+$fileContent | Set-Content $file
+"Map Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+"`n休息一下,以免不能及时同步..." | Write-Host
+Start-Sleep -Seconds 3
+"休息完成，继续干活..." | Write-Host
+
+Set-Location $startLocation
+
+return
+
+
 
 
 "------------------------------------- 重新发布 infinite-sea -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
