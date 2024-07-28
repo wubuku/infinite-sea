@@ -19,6 +19,8 @@ public interface PlayerApplicationService {
 
     void when(PlayerCommands.ClaimIsland c);
 
+    void when(PlayerCommands.NftHolderClaimIsland c);
+
     void when(PlayerCommands.Airdrop c);
 
     void when(PlayerCommands.GatherIslandResources c);

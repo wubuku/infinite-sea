@@ -20,6 +20,8 @@ public interface MapState extends VersionedSuiMoveObject
 
     String getId();
 
+    Boolean getForNftHoldersOnly();
+
     Long getOffChainVersion();
 
     String getCreatedBy();
@@ -38,6 +40,8 @@ public interface MapState extends VersionedSuiMoveObject
 
     interface MutableMapState extends MapState, VersionedSuiMoveObject.MutableVersionedSuiMoveObject {
         void setId(String id);
+
+        void setForNftHoldersOnly(Boolean forNftHoldersOnly);
 
         void setOffChainVersion(Long offChainVersion);
 

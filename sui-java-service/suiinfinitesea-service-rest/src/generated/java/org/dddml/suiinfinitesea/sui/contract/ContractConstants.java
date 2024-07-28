@@ -95,6 +95,8 @@ public class ContractConstants {
 
     public static final String PLAYER_MODULE_ISLAND_CLAIMED = "player::IslandClaimed";
 
+    public static final String PLAYER_MODULE_NFT_HOLDER_ISLAND_CLAIMED = "player::NftHolderIslandClaimed";
+
     public static final String PLAYER_MODULE_PLAYER_AIRDROPPED = "player::PlayerAirdropped";
 
     public static final String PLAYER_MODULE_PLAYER_ISLAND_RESOURCES_GATHERED = "player::PlayerIslandResourcesGathered";
@@ -118,6 +120,8 @@ public class ContractConstants {
     public static final String MAP_MODULE_MAP_ISLAND_CLAIMED = "map::MapIslandClaimed";
 
     public static final String MAP_MODULE_ISLAND_RESOURCES_GATHERED = "map::IslandResourcesGathered";
+
+    public static final String MAP_MODULE_MAP_SETTINGS_UPDATED = "map::MapSettingsUpdated";
 
     public static final String EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT = "experience_table::InitExperienceTableEvent";
 

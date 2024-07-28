@@ -23,5 +23,7 @@ public interface MapEventRepository extends JpaRepository<AbstractMapEvent, MapE
 
     AbstractMapEvent.IslandResourcesGathered findFirstIslandResourcesGatheredByOrderBySuiTimestampDesc();
 
+    AbstractMapEvent.MapSettingsUpdated findFirstMapSettingsUpdatedByOrderBySuiTimestampDesc();
+
     List<AbstractMapEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }

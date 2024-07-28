@@ -43,6 +43,17 @@ public interface PlayerEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
     }
 
+    interface NftHolderIslandClaimed extends PlayerEvent {
+        Coordinates getCoordinates();
+
+        void setCoordinates(Coordinates value);
+
+        BigInteger getClaimedAt();
+
+        void setClaimedAt(BigInteger value);
+
+    }
+
     interface PlayerAirdropped extends PlayerEvent {
         Long getItemId();
 

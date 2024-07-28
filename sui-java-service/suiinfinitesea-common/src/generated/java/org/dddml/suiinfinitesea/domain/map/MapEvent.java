@@ -69,6 +69,13 @@ public interface MapEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEven
 
     }
 
+    interface MapSettingsUpdated extends MapEvent {
+        Boolean getForNftHoldersOnly();
+
+        void setForNftHoldersOnly(Boolean value);
+
+    }
+
     String getId();
 
     //void setId(String id);

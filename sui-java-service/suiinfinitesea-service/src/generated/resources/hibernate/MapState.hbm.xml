@@ -13,6 +13,9 @@
       </key>
       <one-to-many class="org.dddml.suiinfinitesea.domain.map.AbstractMapLocationState$SimpleMapLocationState" />
     </set>
+    <property name="forNftHoldersOnly">
+      <column name="for_nft_holders_only" />
+    </property>
     <property name="createdBy">
       <column name="created_by" />
     </property>

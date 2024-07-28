@@ -368,6 +368,27 @@ public abstract class AbstractMapEvent extends AbstractEvent implements MapEvent
 
     }
 
+    public static class MapSettingsUpdated extends MapLobEvent implements MapEvent.MapSettingsUpdated {
+
+        @Override
+        public String getEventType() {
+            return "MapSettingsUpdated";
+        }
+
+        public Boolean getForNftHoldersOnly() {
+            Object val = getDynamicProperties().get("forNftHoldersOnly");
+            if (val instanceof Boolean) {
+                return (Boolean) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Boolean.class);
+        }
+
+        public void setForNftHoldersOnly(Boolean value) {
+            getDynamicProperties().put("forNftHoldersOnly", value);
+        }
+
+    }
+
 
 }
 

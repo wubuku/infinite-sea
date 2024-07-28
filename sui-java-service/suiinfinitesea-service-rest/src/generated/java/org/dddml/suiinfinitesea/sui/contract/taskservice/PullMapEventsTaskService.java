@@ -36,4 +36,9 @@ public class PullMapEventsTaskService {
         mapEventService.pullIslandResourcesGatheredEvents();
     }
 
+    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.map-settings-updated.fixed-delay:5000}")
+    public void pullMapSettingsUpdatedEvents() {
+        mapEventService.pullMapSettingsUpdatedEvents();
+    }
+
 }

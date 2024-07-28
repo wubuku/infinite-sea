@@ -18,6 +18,7 @@ import org.dddml.suiinfinitesea.sui.contract.map.InitMapEvent;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
 import org.dddml.suiinfinitesea.sui.contract.map.MapIslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandResourcesGathered;
+import org.dddml.suiinfinitesea.sui.contract.map.MapSettingsUpdated;
 import org.dddml.suiinfinitesea.sui.contract.repository.MapEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,6 +201,46 @@ public class MapEventService {
             return;
         }
         mapEventRepository.save(islandResourcesGathered);
+    }
+
+    @Transactional
+    public void pullMapSettingsUpdatedEvents() {
+        String packageId = getMapSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getMapSettingsUpdatedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<MapSettingsUpdated> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.MAP_MODULE_MAP_SETTINGS_UPDATED,
+                    cursor, limit, false, MapSettingsUpdated.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<MapSettingsUpdated> eventEnvelope : eventPage.getData()) {
+                    saveMapSettingsUpdated(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getMapSettingsUpdatedEventNextCursor() {
+        AbstractMapEvent lastEvent = mapEventRepository.findFirstMapSettingsUpdatedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveMapSettingsUpdated(SuiMoveEventEnvelope<MapSettingsUpdated> eventEnvelope) {
+        AbstractMapEvent.MapSettingsUpdated mapSettingsUpdated = DomainBeanUtils.toMapSettingsUpdated(eventEnvelope);
+        if (mapEventRepository.findById(mapSettingsUpdated.getMapEventId()).isPresent()) {
+            return;
+        }
+        mapEventRepository.save(mapSettingsUpdated);
     }
 
 

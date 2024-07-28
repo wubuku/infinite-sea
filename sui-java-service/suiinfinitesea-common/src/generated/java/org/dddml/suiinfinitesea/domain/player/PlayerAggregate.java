@@ -21,6 +21,8 @@ public interface PlayerAggregate {
 
     void claimIsland(String map, Coordinates coordinates, String clock, String rosterTable, String skillProcessTable, Long offChainVersion, String commandId, String requesterId, PlayerCommands.ClaimIsland c);
 
+    void nftHolderClaimIsland(String avatar, String map, Coordinates coordinates, String clock, String rosterTable, String skillProcessTable, Long offChainVersion, String commandId, String requesterId, PlayerCommands.NftHolderClaimIsland c);
+
     void airdrop(Long itemId, Long quantity, Long offChainVersion, String commandId, String requesterId, PlayerCommands.Airdrop c);
 
     void gatherIslandResources(String map, String clock, Long offChainVersion, String commandId, String requesterId, PlayerCommands.GatherIslandResources c);

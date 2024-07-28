@@ -58,6 +58,7 @@ import org.dddml.suiinfinitesea.sui.contract.itemproduction.ItemProductionUpdate
 import org.dddml.suiinfinitesea.domain.player.AbstractPlayerEvent;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
 import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
+import org.dddml.suiinfinitesea.sui.contract.player.NftHolderIslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerIslandResourcesGathered;
 import org.dddml.suiinfinitesea.domain.whitelist.AbstractWhitelistEvent;
@@ -72,6 +73,7 @@ import org.dddml.suiinfinitesea.sui.contract.map.InitMapEvent;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
 import org.dddml.suiinfinitesea.sui.contract.map.MapIslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandResourcesGathered;
+import org.dddml.suiinfinitesea.sui.contract.map.MapSettingsUpdated;
 import org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.InitExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelAdded;
@@ -1139,6 +1141,26 @@ public class DomainBeanUtils {
         return islandClaimed;
     }
 
+    public static AbstractPlayerEvent.NftHolderIslandClaimed toNftHolderIslandClaimed(SuiMoveEventEnvelope<NftHolderIslandClaimed> eventEnvelope) {
+        NftHolderIslandClaimed contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractPlayerEvent.NftHolderIslandClaimed nftHolderIslandClaimed = new AbstractPlayerEvent.NftHolderIslandClaimed();
+        nftHolderIslandClaimed.setId(contractEvent.getId());
+        nftHolderIslandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        nftHolderIslandClaimed.setClaimedAt(contractEvent.getClaimedAt());
+        nftHolderIslandClaimed.setVersion(contractEvent.getVersion());
+
+        nftHolderIslandClaimed.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        nftHolderIslandClaimed.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        nftHolderIslandClaimed.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        nftHolderIslandClaimed.setSuiPackageId(eventEnvelope.getPackageId());
+        nftHolderIslandClaimed.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        nftHolderIslandClaimed.setSuiSender(eventEnvelope.getSender());
+
+        return nftHolderIslandClaimed;
+    }
+
     public static AbstractPlayerEvent.PlayerAirdropped toPlayerAirdropped(SuiMoveEventEnvelope<PlayerAirdropped> eventEnvelope) {
         PlayerAirdropped contractEvent = eventEnvelope.getParsedJson();
 
@@ -1392,6 +1414,25 @@ public class DomainBeanUtils {
         islandResourcesGathered.setSuiSender(eventEnvelope.getSender());
 
         return islandResourcesGathered;
+    }
+
+    public static AbstractMapEvent.MapSettingsUpdated toMapSettingsUpdated(SuiMoveEventEnvelope<MapSettingsUpdated> eventEnvelope) {
+        MapSettingsUpdated contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.MapSettingsUpdated mapSettingsUpdated = new AbstractMapEvent.MapSettingsUpdated();
+        mapSettingsUpdated.setId(contractEvent.getId());
+        mapSettingsUpdated.setForNftHoldersOnly(contractEvent.getForNftHoldersOnly());
+        mapSettingsUpdated.setVersion(contractEvent.getVersion());
+
+        mapSettingsUpdated.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        mapSettingsUpdated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        mapSettingsUpdated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        mapSettingsUpdated.setSuiPackageId(eventEnvelope.getPackageId());
+        mapSettingsUpdated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        mapSettingsUpdated.setSuiSender(eventEnvelope.getSender());
+
+        return mapSettingsUpdated;
     }
 
     public static AbstractExperienceTableEvent.InitExperienceTableEvent toInitExperienceTableEvent(SuiMoveEventEnvelope<InitExperienceTableEvent> eventEnvelope) {

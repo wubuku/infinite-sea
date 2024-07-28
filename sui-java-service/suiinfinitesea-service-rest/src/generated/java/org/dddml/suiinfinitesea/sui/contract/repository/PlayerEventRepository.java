@@ -19,6 +19,8 @@ public interface PlayerEventRepository extends JpaRepository<AbstractPlayerEvent
 
     AbstractPlayerEvent.IslandClaimed findFirstIslandClaimedByOrderBySuiTimestampDesc();
 
+    AbstractPlayerEvent.NftHolderIslandClaimed findFirstNftHolderIslandClaimedByOrderBySuiTimestampDesc();
+
     AbstractPlayerEvent.PlayerAirdropped findFirstPlayerAirdroppedByOrderBySuiTimestampDesc();
 
     AbstractPlayerEvent.PlayerIslandResourcesGathered findFirstPlayerIslandResourcesGatheredByOrderBySuiTimestampDesc();

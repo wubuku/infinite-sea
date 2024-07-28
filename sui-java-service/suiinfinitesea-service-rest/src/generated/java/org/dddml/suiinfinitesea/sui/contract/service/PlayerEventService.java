@@ -16,6 +16,7 @@ import org.dddml.suiinfinitesea.sui.contract.DomainBeanUtils;
 import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
 import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
+import org.dddml.suiinfinitesea.sui.contract.player.NftHolderIslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
 import org.dddml.suiinfinitesea.sui.contract.player.PlayerIslandResourcesGathered;
 import org.dddml.suiinfinitesea.sui.contract.repository.PlayerEventRepository;
@@ -120,6 +121,46 @@ public class PlayerEventService {
             return;
         }
         playerEventRepository.save(islandClaimed);
+    }
+
+    @Transactional
+    public void pullNftHolderIslandClaimedEvents() {
+        String packageId = getDefaultSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getNftHolderIslandClaimedEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<NftHolderIslandClaimed> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.PLAYER_MODULE_NFT_HOLDER_ISLAND_CLAIMED,
+                    cursor, limit, false, NftHolderIslandClaimed.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<NftHolderIslandClaimed> eventEnvelope : eventPage.getData()) {
+                    saveNftHolderIslandClaimed(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getNftHolderIslandClaimedEventNextCursor() {
+        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstNftHolderIslandClaimedByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveNftHolderIslandClaimed(SuiMoveEventEnvelope<NftHolderIslandClaimed> eventEnvelope) {
+        AbstractPlayerEvent.NftHolderIslandClaimed nftHolderIslandClaimed = DomainBeanUtils.toNftHolderIslandClaimed(eventEnvelope);
+        if (playerEventRepository.findById(nftHolderIslandClaimed.getPlayerEventId()).isPresent()) {
+            return;
+        }
+        playerEventRepository.save(nftHolderIslandClaimed);
     }
 
     @Transactional

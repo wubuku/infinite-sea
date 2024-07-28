@@ -54,6 +54,10 @@ public abstract class AbstractMapApplicationService implements MapApplicationSer
         update(c, ar -> ar.addIsland(c.getCoordinates(), c.getResources(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
+    public void when(MapCommands.UpdateSettings c) {
+        update(c, ar -> ar.updateSettings(c.getForNftHoldersOnly(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
     public MapState get(String id) {
         MapState state = getStateRepository().get(id, true);
         return state;

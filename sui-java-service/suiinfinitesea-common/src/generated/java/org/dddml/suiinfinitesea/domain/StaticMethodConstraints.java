@@ -320,6 +320,14 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.player.NftHolderClaimIslandLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, Coordinates.class, VerificationContext.class},
+                    new String[]{"_", "_", "avatar", "map", "coordinates"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.player.AirdropLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, PlayerState.class, Long.class, Long.class, VerificationContext.class},
@@ -412,6 +420,14 @@ public class StaticMethodConstraints {
                     "verify",
                     new Class[]{java.util.function.Supplier.class, MapState.class, String.class, Coordinates.class, VerificationContext.class},
                     new String[]{"_", "_", "playerId", "coordinates"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.map.UpdateSettingsLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, MapState.class, Boolean.class, VerificationContext.class},
+                    new String[]{"_", "_", "forNftHoldersOnly"}
             );
 
 
@@ -696,6 +712,14 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.player.NftHolderClaimIslandLogic",
+                    "mutate",
+                    new Class[]{PlayerState.class, Coordinates.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "coordinates", "claimedAt", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.player.AirdropLogic",
                     "mutate",
                     new Class[]{PlayerState.class, Long.class, Long.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
@@ -788,6 +812,14 @@ public class StaticMethodConstraints {
                     "mutate",
                     new Class[]{MapState.class, String.class, Coordinates.class, ItemIdQuantityPair[].class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "playerId", "coordinates", "resources", "gatheredAt", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.map.UpdateSettingsLogic",
+                    "mutate",
+                    new Class[]{MapState.class, Boolean.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "forNftHoldersOnly", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 

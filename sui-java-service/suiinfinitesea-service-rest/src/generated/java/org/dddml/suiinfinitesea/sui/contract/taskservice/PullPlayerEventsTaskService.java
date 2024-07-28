@@ -26,6 +26,11 @@ public class PullPlayerEventsTaskService {
         playerEventService.pullIslandClaimedEvents();
     }
 
+    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.nft-holder-island-claimed.fixed-delay:5000}")
+    public void pullNftHolderIslandClaimedEvents() {
+        playerEventService.pullNftHolderIslandClaimedEvents();
+    }
+
     @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.player-airdropped.fixed-delay:5000}")
     public void pullPlayerAirdroppedEvents() {
         playerEventService.pullPlayerAirdroppedEvents();

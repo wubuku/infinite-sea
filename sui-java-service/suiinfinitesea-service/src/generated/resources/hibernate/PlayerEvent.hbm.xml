@@ -48,6 +48,7 @@
       </property>
       <subclass name="AbstractPlayerEvent$PlayerCreated" discriminator-value="PlayerCreated" />
       <subclass name="AbstractPlayerEvent$IslandClaimed" discriminator-value="IslandClaimed" />
+      <subclass name="AbstractPlayerEvent$NftHolderIslandClaimed" discriminator-value="NftHolderIslandClaimed" />
       <subclass name="AbstractPlayerEvent$PlayerAirdropped" discriminator-value="PlayerAirdropped" />
       <subclass name="AbstractPlayerEvent$PlayerIslandResourcesGathered" discriminator-value="PlayerIslandResourcesGathered" />
     </subclass>

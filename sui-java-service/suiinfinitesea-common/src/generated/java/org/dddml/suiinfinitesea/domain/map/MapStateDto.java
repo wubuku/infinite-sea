@@ -27,6 +27,18 @@ public class MapStateDto {
         this.id = id;
     }
 
+    private Boolean forNftHoldersOnly;
+
+    public Boolean getForNftHoldersOnly()
+    {
+        return this.forNftHoldersOnly;
+    }
+
+    public void setForNftHoldersOnly(Boolean forNftHoldersOnly)
+    {
+        this.forNftHoldersOnly = forNftHoldersOnly;
+    }
+
     private Boolean active;
 
     public Boolean getActive()
@@ -154,6 +166,9 @@ public class MapStateDto {
             MapStateDto dto = new MapStateDto();
             if (returnedFieldsContains("Id")) {
                 dto.setId(state.getId());
+            }
+            if (returnedFieldsContains("ForNftHoldersOnly")) {
+                dto.setForNftHoldersOnly(state.getForNftHoldersOnly());
             }
             if (returnedFieldsContains("Active")) {
                 dto.setActive(state.getActive());

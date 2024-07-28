@@ -58,6 +58,10 @@ public abstract class AbstractPlayerApplicationService implements PlayerApplicat
         update(c, ar -> ar.claimIsland(c.getMap(), c.getCoordinates(), c.getClock(), c.getRosterTable(), c.getSkillProcessTable(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
+    public void when(PlayerCommands.NftHolderClaimIsland c) {
+        update(c, ar -> ar.nftHolderClaimIsland(c.getAvatar(), c.getMap(), c.getCoordinates(), c.getClock(), c.getRosterTable(), c.getSkillProcessTable(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
     public void when(PlayerCommands.Airdrop c) {
         update(c, ar -> ar.airdrop(c.getItemId(), c.getQuantity(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }

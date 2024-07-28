@@ -39,6 +39,8 @@ public class Map {
 
     private Long offChainVersion;
 
+    private Boolean forNftHoldersOnly;
+
     private BigInteger version;
 
     private Table locations;
@@ -57,6 +59,14 @@ public class Map {
 
     public void setOffChainVersion(Long offChainVersion) {
         this.offChainVersion = offChainVersion;
+    }
+
+    public Boolean getForNftHoldersOnly() {
+        return forNftHoldersOnly;
+    }
+
+    public void setForNftHoldersOnly(Boolean forNftHoldersOnly) {
+        this.forNftHoldersOnly = forNftHoldersOnly;
     }
 
     public BigInteger getVersion() {
@@ -80,6 +90,7 @@ public class Map {
         return "Map{" +
                 "id=" + id +
                 ", offChainVersion=" + offChainVersion +
+                ", forNftHoldersOnly=" + forNftHoldersOnly +
                 ", version=" + version +
                 ", locations=" + locations +
                 '}';

@@ -1934,6 +1934,7 @@ public class M {
 
     public static final String[] propertyNames = new String[] {
             "id",
+            "forNftHoldersOnly",
             "offChainVersion",
             "createdBy",
             "createdAt",
@@ -1946,6 +1947,7 @@ public class M {
 
     public static final String[] propertyTypes = new String[] {
             "String",
+            "Boolean",
             "Long",
             "String",
             "Date",
@@ -1970,6 +1972,8 @@ public class M {
     private static  void initAliasMap() {
         aliasMap.put("id", "id");
         aliasMap.put("Id", "id");
+        aliasMap.put("forNftHoldersOnly", "forNftHoldersOnly");
+        aliasMap.put("ForNftHoldersOnly", "forNftHoldersOnly");
         aliasMap.put("offChainVersion", "offChainVersion");
         aliasMap.put("OffChainVersion", "offChainVersion");
         aliasMap.put("createdBy", "createdBy");

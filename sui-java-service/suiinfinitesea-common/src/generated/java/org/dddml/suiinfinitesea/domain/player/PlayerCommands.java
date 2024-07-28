@@ -168,6 +168,122 @@ public class PlayerCommands {
 
     }
 
+    public static class NftHolderClaimIsland extends AbstractPlayerCommand implements PlayerCommand {
+
+        public String getCommandType() {
+            return "NftHolderClaimIsland";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Id
+         */
+        private String id;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        /**
+         * Avatar
+         */
+        private String avatar;
+
+        public String getAvatar() {
+            return this.avatar;
+        }
+
+        public void setAvatar(String avatar) {
+            this.avatar = avatar;
+        }
+
+        /**
+         * Map
+         */
+        private String map;
+
+        public String getMap() {
+            return this.map;
+        }
+
+        public void setMap(String map) {
+            this.map = map;
+        }
+
+        /**
+         * Coordinates
+         */
+        private Coordinates coordinates;
+
+        public Coordinates getCoordinates() {
+            return this.coordinates;
+        }
+
+        public void setCoordinates(Coordinates coordinates) {
+            this.coordinates = coordinates;
+        }
+
+        /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
+         * Roster Table
+         */
+        private String rosterTable;
+
+        public String getRosterTable() {
+            return this.rosterTable;
+        }
+
+        public void setRosterTable(String rosterTable) {
+            this.rosterTable = rosterTable;
+        }
+
+        /**
+         * Skill Process Table
+         */
+        private String skillProcessTable;
+
+        public String getSkillProcessTable() {
+            return this.skillProcessTable;
+        }
+
+        public void setSkillProcessTable(String skillProcessTable) {
+            this.skillProcessTable = skillProcessTable;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
     public static class Airdrop extends AbstractPlayerCommand implements PlayerCommand {
 
         public String getCommandType() {

@@ -270,5 +270,56 @@ public class MapCommands {
 
     }
 
+    public static class UpdateSettings extends AbstractMapCommand implements MapCommand {
+
+        public String getCommandType() {
+            return "UpdateSettings";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Id
+         */
+        private String id;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        /**
+         * For Nft Holders Only
+         */
+        private Boolean forNftHoldersOnly;
+
+        public Boolean getForNftHoldersOnly() {
+            return this.forNftHoldersOnly;
+        }
+
+        public void setForNftHoldersOnly(Boolean forNftHoldersOnly) {
+            this.forNftHoldersOnly = forNftHoldersOnly;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
 }
 

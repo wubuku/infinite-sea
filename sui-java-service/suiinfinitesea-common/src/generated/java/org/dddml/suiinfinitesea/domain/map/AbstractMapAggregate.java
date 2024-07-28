@@ -72,6 +72,19 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
             apply(e);
         }
 
+        @Override
+        public void updateSettings(Boolean forNftHoldersOnly, Long offChainVersion, String commandId, String requesterId, MapCommands.UpdateSettings c) {
+            java.util.function.Supplier<MapEvent.MapSettingsUpdated> eventFactory = () -> newMapSettingsUpdated(forNftHoldersOnly, offChainVersion, commandId, requesterId);
+            MapEvent.MapSettingsUpdated e;
+            try {
+                e = verifyUpdateSettings(eventFactory, forNftHoldersOnly, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
         protected MapEvent.InitMapEvent verify__Init__(java.util.function.Supplier<MapEvent.InitMapEvent> eventFactory, MapCommands.__Init__ c) {
 
             MapEvent.InitMapEvent e = (MapEvent.InitMapEvent) ReflectUtils.invokeStaticMethod(
@@ -159,6 +172,27 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
         }
            
 
+        protected MapEvent.MapSettingsUpdated verifyUpdateSettings(java.util.function.Supplier<MapEvent.MapSettingsUpdated> eventFactory, Boolean forNftHoldersOnly, MapCommands.UpdateSettings c) {
+            Boolean ForNftHoldersOnly = forNftHoldersOnly;
+
+            MapEvent.MapSettingsUpdated e = (MapEvent.MapSettingsUpdated) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.map.UpdateSettingsLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, MapState.class, Boolean.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), forNftHoldersOnly, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.map;
+//
+//public class UpdateSettingsLogic {
+//    public static MapEvent.MapSettingsUpdated verify(java.util.function.Supplier<MapEvent.MapSettingsUpdated> eventFactory, MapState mapState, Boolean forNftHoldersOnly, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
         protected AbstractMapEvent.InitMapEvent newInitMapEvent(Long offChainVersion, String commandId, String requesterId) {
             MapEventId eventId = new MapEventId(getState().getId(), null);
             AbstractMapEvent.InitMapEvent e = new AbstractMapEvent.InitMapEvent();
@@ -235,6 +269,28 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
             e.getDynamicProperties().put("coordinates", coordinates);
             e.setResources(null);
             e.setGatheredAt(null);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setMapEventId(eventId);
+            return e;
+        }
+
+        protected AbstractMapEvent.MapSettingsUpdated newMapSettingsUpdated(Boolean forNftHoldersOnly, Long offChainVersion, String commandId, String requesterId) {
+            MapEventId eventId = new MapEventId(getState().getId(), null);
+            AbstractMapEvent.MapSettingsUpdated e = new AbstractMapEvent.MapSettingsUpdated();
+
+            e.getDynamicProperties().put("forNftHoldersOnly", forNftHoldersOnly);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

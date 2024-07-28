@@ -233,6 +233,8 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState 
             when((AbstractPlayerEvent.PlayerCreated)e);
         } else if (e instanceof AbstractPlayerEvent.IslandClaimed) {
             when((AbstractPlayerEvent.IslandClaimed)e);
+        } else if (e instanceof AbstractPlayerEvent.NftHolderIslandClaimed) {
+            when((AbstractPlayerEvent.NftHolderIslandClaimed)e);
         } else if (e instanceof AbstractPlayerEvent.PlayerAirdropped) {
             when((AbstractPlayerEvent.PlayerAirdropped)e);
         } else if (e instanceof AbstractPlayerEvent.PlayerIslandResourcesGathered) {
@@ -350,6 +352,57 @@ public abstract class AbstractPlayerState implements PlayerState.SqlPlayerState 
 //package org.dddml.suiinfinitesea.domain.player;
 //
 //public class ClaimIslandLogic {
+//    public static PlayerState mutate(PlayerState playerState, Coordinates coordinates, BigInteger claimedAt, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedPlayerState) { merge(updatedPlayerState); } //else do nothing
+
+    }
+
+    public void when(AbstractPlayerEvent.NftHolderIslandClaimed e) {
+        throwOnWrongEvent(e);
+
+        Coordinates coordinates = e.getCoordinates();
+        Coordinates Coordinates = coordinates;
+        BigInteger claimedAt = e.getClaimedAt();
+        BigInteger ClaimedAt = claimedAt;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        PlayerState updatedPlayerState = (PlayerState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.player.NftHolderClaimIslandLogic",
+                    "mutate",
+                    new Class[]{PlayerState.class, Coordinates.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, coordinates, claimedAt, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.player;
+//
+//public class NftHolderClaimIslandLogic {
 //    public static PlayerState mutate(PlayerState playerState, Coordinates coordinates, BigInteger claimedAt, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<PlayerState, PlayerState.MutablePlayerState> mutationContext) {
 //    }
 //}

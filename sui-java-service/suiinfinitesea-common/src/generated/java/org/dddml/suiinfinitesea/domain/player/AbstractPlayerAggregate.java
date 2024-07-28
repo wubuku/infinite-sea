@@ -73,6 +73,19 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         }
 
         @Override
+        public void nftHolderClaimIsland(String avatar, String map, Coordinates coordinates, String clock, String rosterTable, String skillProcessTable, Long offChainVersion, String commandId, String requesterId, PlayerCommands.NftHolderClaimIsland c) {
+            java.util.function.Supplier<PlayerEvent.NftHolderIslandClaimed> eventFactory = () -> newNftHolderIslandClaimed(avatar, map, coordinates, clock, rosterTable, skillProcessTable, offChainVersion, commandId, requesterId);
+            PlayerEvent.NftHolderIslandClaimed e;
+            try {
+                e = verifyNftHolderClaimIsland(eventFactory, avatar, map, coordinates, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
+        @Override
         public void airdrop(Long itemId, Long quantity, Long offChainVersion, String commandId, String requesterId, PlayerCommands.Airdrop c) {
             java.util.function.Supplier<PlayerEvent.PlayerAirdropped> eventFactory = () -> newPlayerAirdropped(itemId, quantity, offChainVersion, commandId, requesterId);
             PlayerEvent.PlayerAirdropped e;
@@ -134,6 +147,29 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
 //
 //public class ClaimIslandLogic {
 //    public static PlayerEvent.IslandClaimed verify(java.util.function.Supplier<PlayerEvent.IslandClaimed> eventFactory, PlayerState playerState, String map, Coordinates coordinates, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
+        protected PlayerEvent.NftHolderIslandClaimed verifyNftHolderClaimIsland(java.util.function.Supplier<PlayerEvent.NftHolderIslandClaimed> eventFactory, String avatar, String map, Coordinates coordinates, PlayerCommands.NftHolderClaimIsland c) {
+            String Avatar = avatar;
+            String Map = map;
+            Coordinates Coordinates = coordinates;
+
+            PlayerEvent.NftHolderIslandClaimed e = (PlayerEvent.NftHolderIslandClaimed) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.player.NftHolderClaimIslandLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, PlayerState.class, Coordinates.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), avatar, map, coordinates, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.player;
+//
+//public class NftHolderClaimIslandLogic {
+//    public static PlayerEvent.NftHolderIslandClaimed verify(java.util.function.Supplier<PlayerEvent.NftHolderIslandClaimed> eventFactory, PlayerState playerState, String avatar, String map, Coordinates coordinates, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -210,6 +246,29 @@ public abstract class AbstractPlayerAggregate extends AbstractAggregate implemen
         protected AbstractPlayerEvent.IslandClaimed newIslandClaimed(String map, Coordinates coordinates, String clock, String rosterTable, String skillProcessTable, Long offChainVersion, String commandId, String requesterId) {
             PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
             AbstractPlayerEvent.IslandClaimed e = new AbstractPlayerEvent.IslandClaimed();
+
+            e.getDynamicProperties().put("coordinates", coordinates);
+            e.setClaimedAt(null);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setPlayerEventId(eventId);
+            return e;
+        }
+
+        protected AbstractPlayerEvent.NftHolderIslandClaimed newNftHolderIslandClaimed(String avatar, String map, Coordinates coordinates, String clock, String rosterTable, String skillProcessTable, Long offChainVersion, String commandId, String requesterId) {
+            PlayerEventId eventId = new PlayerEventId(getState().getId(), null);
+            AbstractPlayerEvent.NftHolderIslandClaimed e = new AbstractPlayerEvent.NftHolderIslandClaimed();
 
             e.getDynamicProperties().put("coordinates", coordinates);
             e.setClaimedAt(null);

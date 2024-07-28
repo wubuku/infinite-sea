@@ -25,6 +25,16 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         this.id = id;
     }
 
+    private Boolean forNftHoldersOnly;
+
+    public Boolean getForNftHoldersOnly() {
+        return this.forNftHoldersOnly;
+    }
+
+    public void setForNftHoldersOnly(Boolean forNftHoldersOnly) {
+        this.forNftHoldersOnly = forNftHoldersOnly;
+    }
+
     private Long offChainVersion;
 
     public Long getOffChainVersion() {
@@ -194,6 +204,8 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
             when((AbstractMapEvent.InitMapEvent)e);
         } else if (e instanceof AbstractMapEvent.IslandAdded) {
             when((AbstractMapEvent.IslandAdded)e);
+        } else if (e instanceof AbstractMapEvent.MapSettingsUpdated) {
+            when((AbstractMapEvent.MapSettingsUpdated)e);
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported event type: %1$s", e.getClass().getName()));
         }
@@ -203,6 +215,7 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         if (s == this) {
             return;
         }
+        this.setForNftHoldersOnly(s.getForNftHoldersOnly());
         this.setActive(s.getActive());
         this.setVersion(s.getVersion());
 
@@ -387,6 +400,55 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
 //
 //public class ClaimIslandLogic {
 //    public static MapState mutate(MapState mapState, Coordinates coordinates, String claimedBy, BigInteger claimedAt, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedMapState) { merge(updatedMapState); } //else do nothing
+
+    }
+
+    public void when(AbstractMapEvent.MapSettingsUpdated e) {
+        throwOnWrongEvent(e);
+
+        Boolean forNftHoldersOnly = e.getForNftHoldersOnly();
+        Boolean ForNftHoldersOnly = forNftHoldersOnly;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        MapState updatedMapState = (MapState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.map.UpdateSettingsLogic",
+                    "mutate",
+                    new Class[]{MapState.class, Boolean.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, forNftHoldersOnly, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.map;
+//
+//public class UpdateSettingsLogic {
+//    public static MapState mutate(MapState mapState, Boolean forNftHoldersOnly, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
 //    }
 //}
 

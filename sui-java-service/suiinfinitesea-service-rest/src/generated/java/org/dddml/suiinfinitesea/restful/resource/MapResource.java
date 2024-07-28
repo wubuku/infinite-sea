@@ -188,6 +188,24 @@ public class MapResource {
         } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
     }
 
+
+    @PutMapping("{id}/_commands/UpdateSettings")
+    public void updateSettings(@PathVariable("id") String id, @RequestBody MapCommands.UpdateSettings content) {
+        try {
+
+            MapCommands.UpdateSettings cmd = content;//.toUpdateSettings();
+            String idObj = id;
+            if (cmd.getId() == null) {
+                cmd.setId(idObj);
+            } else if (!cmd.getId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", id, cmd.getId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            mapApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
     @GetMapping("_metadata/filteringFields")
     public List<PropertyMetadataDto> getMetadataFilteringFields() {
         try {

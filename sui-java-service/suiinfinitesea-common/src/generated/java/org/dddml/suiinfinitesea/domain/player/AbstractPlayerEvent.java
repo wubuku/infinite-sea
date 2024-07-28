@@ -264,6 +264,39 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
 
     }
 
+    public static class NftHolderIslandClaimed extends PlayerLobEvent implements PlayerEvent.NftHolderIslandClaimed {
+
+        @Override
+        public String getEventType() {
+            return "NftHolderIslandClaimed";
+        }
+
+        public Coordinates getCoordinates() {
+            Object val = getDynamicProperties().get("coordinates");
+            if (val instanceof Coordinates) {
+                return (Coordinates) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
+        }
+
+        public void setCoordinates(Coordinates value) {
+            getDynamicProperties().put("coordinates", value);
+        }
+
+        public BigInteger getClaimedAt() {
+            Object val = getDynamicProperties().get("claimedAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setClaimedAt(BigInteger value) {
+            getDynamicProperties().put("claimedAt", value);
+        }
+
+    }
+
     public static class PlayerAirdropped extends PlayerLobEvent implements PlayerEvent.PlayerAirdropped {
 
         @Override

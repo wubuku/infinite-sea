@@ -48,6 +48,7 @@ public class SuiMapStateRetriever {
     private MapState toMapState(Map map) {
         MapState.MutableMapState mapState = mapStateFactory.apply(map.getId().getId());
         mapState.setVersion(map.getVersion());
+        mapState.setForNftHoldersOnly(map.getForNftHoldersOnly());
         if (map.getLocations() != null) {
             String mapLocationTableId = map.getLocations().getFields().getId().getId();
             List<MapLocation> locations = getMapLocations(mapLocationTableId);
