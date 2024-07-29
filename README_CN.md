@@ -1038,7 +1038,7 @@ sui client call --package {main.PackageId} \
 ```shell
 sui client call --package {main.PackageId} \
 --module player_aggregate \
---function claim_island \
+--function nft_holder_claim_island \
 --args 
 {map.MapFriendConfig} \
 {playerId} \
