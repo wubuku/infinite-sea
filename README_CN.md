@@ -3045,44 +3045,44 @@ sui client object {nft.Whitelist} --json
 We will get response in the following format:
 ```json
 {
-  "objectId": "0x785c5465137ae06615f64d19901124490f8fc926a99e0c4ead6b4e6c49af3604",
-  "version": "80116790",
-  "digest": "13GNNxJMfFdhYUC8JvFoxfeUNQpWTG4D17yxgQwr2AJ5",
-  "type": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist::Whitelist",
+  "objectId": "0xc8853bb01fc2d391a02c4015fe642bb12979cb6ca444a2b3518239a01e0aae8f",
+  "version": "94539000",
+  "digest": "C1bSCrwtTw316NumPgmE9zuFqWgGNBD6kqPnCPzLb7S7",
+  "type": "0x74b3bcc59df0c47feb53c2055137471be76e4b9dd0c05cf197c72a5e6055fe87::whitelist::Whitelist",
   "owner": {
     "Shared": {
-      "initial_shared_version": 80116786
+      "initial_shared_version": 87451431
     }
   },
-  "previousTransaction": "BeKqtCLdRpFaLX5BC4tFYYYz1t5AaVT4q1qqFsEA1jAN",
+  "previousTransaction": "8u8pB4AdSzqhvAJbPmnddNf4GnTcPod8Wdd6X8dQJgBg",
   "storageRebate": "1702400",
   "content": {
     "dataType": "moveObject",
-    "type": "0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist::Whitelist",
+    "type": "0x74b3bcc59df0c47feb53c2055137471be76e4b9dd0c05cf197c72a5e6055fe87::whitelist::Whitelist",
     "hasPublicTransfer": false,
     "fields": {
       "entries": {
-        "type": "0x2::table::Table<address, 0x3a052925386eb45ef30a14cf75c393fab2a0ca10fbdf138987f310c956209191::whitelist_entry::WhitelistEntry>",
+        "type": "0x2::table::Table<address, 0x74b3bcc59df0c47feb53c2055137471be76e4b9dd0c05cf197c72a5e6055fe87::whitelist_entry::WhitelistEntry>",
         "fields": {
           "id": {
-            "id": "0xebe9a79a94b366edecd97e3e7ec3f1714042e98a26562b9075d144a152a777ca"
+            "id": "0x254c1c002d3f61bd56b0bcec5cfdb9b9c9c177e492c03897a4c27e9031351aec"
           },
-          "size": "1"
+          "size": "45"
         }
       },
       "id": {
-        "id": "0x785c5465137ae06615f64d19901124490f8fc926a99e0c4ead6b4e6c49af3604"
+        "id": "0xc8853bb01fc2d391a02c4015fe642bb12979cb6ca444a2b3518239a01e0aae8f"
       },
       "paused": false,
-      "version": "2"
+      "version": "46"
     }
   }
 }
 ```
 
-Call the following command with `{content.fields.entries.id.id}` as a parameter in the returned result:
+Call the following command with `{content.fields.entries.fields.id.id}` as a parameter in the returned result:
 ```shell
-curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":["{content.fields.entries.id.id}"]}' https://fullnode.testnet.sui.io/
+curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":["{content.fields.entries.fields.id.id}"]}' https://fullnode.testnet.sui.io/
 ```
 We will get response in the following format:
 ```json
