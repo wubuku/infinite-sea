@@ -220,6 +220,8 @@ wubuku/dddappp-sui:master \
 
 #### Sui Testnet (From 2024/7/30)
 
+对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090/api
+
 我们在 Sui testnet 上发布以上 6 个合约包，相关信息记录如下：
 
 ```json
