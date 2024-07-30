@@ -3359,7 +3359,6 @@ Input parameter description:
 * `{map.PackageId}`：Map 合约包 ID（Map Contract Package ID）。
 * `{map.Map}`： 类型为 `&mut Map`。地图单对象 ID（Map object ID）。
 * `{map.AdminCap}`： 类型为 `&map::AdminCap`。管理权限对象 ID（Administrative permission object ID）。
-* `{account_address}`： 类型为 `address`。加入白名单的账号地址（Account addresses that have been added to the whitelist）。
 * `{claim_island_setting}`： 类型为 `u32`。通过修改该参数来指定那些玩家可以认领岛屿。1：拥有NFT的玩家；2：被加入白名单的人；3：任何人。
 
 以上命令执行成功之后，通过查看执行以下`Sui CLI`命令来查看 `Map`对象：
@@ -3416,8 +3415,52 @@ sui client object {map.Map} --json
 ```
 查看 `content.fields.claim_island_setting`即为我们刚刚设定的值，以上示例中为`2`，表示：只有加入白名单的玩家才可以认领岛屿。
 
+### 加入白名单
+通过以下`Sui CLI`命令可以将指定的`address`加入可以认领岛屿的白名单。
+```shell
+sui client call --package {map.PackageId} --module map_aggregate --function add_to_whitelist --args \
+{map.Map}\
+{map.AdminCap}\ 
+{address} --json
+```
 
+参数解释：
 
+Input parameter description:
+
+* `{map.PackageId}`：Map 合约包 ID（Map Contract Package ID）。
+* `{map.Map}`： 类型为 `&mut Map`。地图单对象 ID（Map object ID）。
+* `{map.AdminCap}`： 类型为 `&map::AdminCap`。管理权限对象 ID（Administrative permission object ID）。
+* `{address}`： 类型为 `address`。加入白名单的账号地址（Account addresses that have been added to the whitelist）。
+
+以上命令执行成功之后，再次查询 `Map` 对象，并且使用其 `{content.fields.claim_island_whitelist.id.id}` 属性的值，来执行以下 `curl` 命令：
+```shell
+curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"method":"suix_getDynamicFields","params":["{content.fields.claim_island_whitelist.id.id}"]}' https://fullnode.testnet.sui.io/
+```
+得到以下格式输出信息：
+```json
+{
+	"jsonrpc": "2.0",
+	"result": {
+		"data": [{
+			"name": {
+				"type": "address",
+				"value": "0x30a98939ee8eb9a44927ad2fac6f9da7c0d6d17e13b2725293796f0693cd7fde"
+			},
+			"bcsName": "4GxWTzxfgjds3iRkN3oKbQadc5fqUydrYUsNB2W92foK",
+			"type": "DynamicField",
+			"objectType": "bool",
+			"objectId": "0x1be948103203f31c1a8caec02b345a0c404d326a8364632436350d181423889f",
+			"version": 96655939,
+			"digest": "7aYNZwaJiYxi3CUF66oaDrtppXx61QbBZkH1XKDmZunT"
+		}],
+		"nextCursor": "0x1be948103203f31c1a8caec02b345a0c404d326a8364632436350d181423889f",
+		"hasNextPage": false
+	},
+	"id": 1
+}
+```
+可以看到 `result.data` 属性为数组，每个数组元素的 `name.type` 的值为 `address`， `name.value` 的值即为加入白名单的账户地址。
 
 [TBD]
 
