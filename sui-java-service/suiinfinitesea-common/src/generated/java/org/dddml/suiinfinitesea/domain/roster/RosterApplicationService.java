@@ -17,8 +17,6 @@ import org.dddml.suiinfinitesea.domain.Command;
 public interface RosterApplicationService {
     void when(RosterCommands.CreateEnvironmentRoster c);
 
-    void when(RosterCommands.UpdateLocation c);
-
     void when(RosterCommands.AdjustShipsPosition c);
 
     void when(RosterCommands.TransferShip c);

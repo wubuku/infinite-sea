@@ -36,7 +36,6 @@ import org.dddml.suiinfinitesea.sui.contract.roster.RosterCreated;
 import org.dddml.suiinfinitesea.sui.contract.roster.EnvironmentRosterCreated;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipAdded;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterSetSail;
-import org.dddml.suiinfinitesea.sui.contract.roster.RosterLocationUpdated;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipsPositionAdjusted;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipTransferred;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTransferred;
@@ -74,6 +73,8 @@ import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
 import org.dddml.suiinfinitesea.sui.contract.map.MapIslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandResourcesGathered;
 import org.dddml.suiinfinitesea.sui.contract.map.MapSettingsUpdated;
+import org.dddml.suiinfinitesea.sui.contract.map.WhitelistedForClaimingIsland;
+import org.dddml.suiinfinitesea.sui.contract.map.UnWhitelistedForClaimingIsland;
 import org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.InitExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelAdded;
@@ -742,28 +743,6 @@ public class DomainBeanUtils {
         return rosterSetSail;
     }
 
-    public static AbstractRosterEvent.RosterLocationUpdated toRosterLocationUpdated(SuiMoveEventEnvelope<RosterLocationUpdated> eventEnvelope) {
-        RosterLocationUpdated contractEvent = eventEnvelope.getParsedJson();
-
-        AbstractRosterEvent.RosterLocationUpdated rosterLocationUpdated = new AbstractRosterEvent.RosterLocationUpdated();
-        rosterLocationUpdated.setId_(contractEvent.getId());
-        rosterLocationUpdated.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
-        rosterLocationUpdated.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
-        rosterLocationUpdated.setCoordinatesUpdatedAt(contractEvent.getCoordinatesUpdatedAt());
-        rosterLocationUpdated.setNewStatus(contractEvent.getNewStatus());
-        rosterLocationUpdated.setVersion(contractEvent.getVersion());
-
-        rosterLocationUpdated.setSuiTimestamp(eventEnvelope.getTimestampMs());
-        rosterLocationUpdated.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
-        rosterLocationUpdated.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
-
-        rosterLocationUpdated.setSuiPackageId(eventEnvelope.getPackageId());
-        rosterLocationUpdated.setSuiTransactionModule(eventEnvelope.getTransactionModule());
-        rosterLocationUpdated.setSuiSender(eventEnvelope.getSender());
-
-        return rosterLocationUpdated;
-    }
-
     public static AbstractRosterEvent.RosterShipsPositionAdjusted toRosterShipsPositionAdjusted(SuiMoveEventEnvelope<RosterShipsPositionAdjusted> eventEnvelope) {
         RosterShipsPositionAdjusted contractEvent = eventEnvelope.getParsedJson();
 
@@ -1421,7 +1400,7 @@ public class DomainBeanUtils {
 
         AbstractMapEvent.MapSettingsUpdated mapSettingsUpdated = new AbstractMapEvent.MapSettingsUpdated();
         mapSettingsUpdated.setId(contractEvent.getId());
-        mapSettingsUpdated.setForNftHoldersOnly(contractEvent.getForNftHoldersOnly());
+        mapSettingsUpdated.setClaimIslandSetting(contractEvent.getClaimIslandSetting());
         mapSettingsUpdated.setVersion(contractEvent.getVersion());
 
         mapSettingsUpdated.setSuiTimestamp(eventEnvelope.getTimestampMs());
@@ -1433,6 +1412,44 @@ public class DomainBeanUtils {
         mapSettingsUpdated.setSuiSender(eventEnvelope.getSender());
 
         return mapSettingsUpdated;
+    }
+
+    public static AbstractMapEvent.WhitelistedForClaimingIsland toWhitelistedForClaimingIsland(SuiMoveEventEnvelope<WhitelistedForClaimingIsland> eventEnvelope) {
+        WhitelistedForClaimingIsland contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.WhitelistedForClaimingIsland whitelistedForClaimingIsland = new AbstractMapEvent.WhitelistedForClaimingIsland();
+        whitelistedForClaimingIsland.setId(contractEvent.getId());
+        whitelistedForClaimingIsland.setAccountAddress(contractEvent.getAccountAddress());
+        whitelistedForClaimingIsland.setVersion(contractEvent.getVersion());
+
+        whitelistedForClaimingIsland.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        whitelistedForClaimingIsland.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        whitelistedForClaimingIsland.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        whitelistedForClaimingIsland.setSuiPackageId(eventEnvelope.getPackageId());
+        whitelistedForClaimingIsland.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        whitelistedForClaimingIsland.setSuiSender(eventEnvelope.getSender());
+
+        return whitelistedForClaimingIsland;
+    }
+
+    public static AbstractMapEvent.UnWhitelistedForClaimingIsland toUnWhitelistedForClaimingIsland(SuiMoveEventEnvelope<UnWhitelistedForClaimingIsland> eventEnvelope) {
+        UnWhitelistedForClaimingIsland contractEvent = eventEnvelope.getParsedJson();
+
+        AbstractMapEvent.UnWhitelistedForClaimingIsland unWhitelistedForClaimingIsland = new AbstractMapEvent.UnWhitelistedForClaimingIsland();
+        unWhitelistedForClaimingIsland.setId(contractEvent.getId());
+        unWhitelistedForClaimingIsland.setAccountAddress(contractEvent.getAccountAddress());
+        unWhitelistedForClaimingIsland.setVersion(contractEvent.getVersion());
+
+        unWhitelistedForClaimingIsland.setSuiTimestamp(eventEnvelope.getTimestampMs());
+        unWhitelistedForClaimingIsland.setSuiTxDigest(eventEnvelope.getId().getTxDigest());
+        unWhitelistedForClaimingIsland.setSuiEventSeq(new BigInteger(eventEnvelope.getId().getEventSeq()));
+
+        unWhitelistedForClaimingIsland.setSuiPackageId(eventEnvelope.getPackageId());
+        unWhitelistedForClaimingIsland.setSuiTransactionModule(eventEnvelope.getTransactionModule());
+        unWhitelistedForClaimingIsland.setSuiSender(eventEnvelope.getSender());
+
+        return unWhitelistedForClaimingIsland;
     }
 
     public static AbstractExperienceTableEvent.InitExperienceTableEvent toInitExperienceTableEvent(SuiMoveEventEnvelope<InitExperienceTableEvent> eventEnvelope) {

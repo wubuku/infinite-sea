@@ -36,11 +36,6 @@ public class PullRosterEventsTaskService {
         rosterEventService.pullRosterSetSailEvents();
     }
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.roster-location-updated.fixed-delay:5000}")
-    public void pullRosterLocationUpdatedEvents() {
-        rosterEventService.pullRosterLocationUpdatedEvents();
-    }
-
     @Scheduled(fixedDelayString = "${sui.contract.pull-roster-events.roster-ships-position-adjusted.fixed-delay:5000}")
     public void pullRosterShipsPositionAdjustedEvents() {
         rosterEventService.pullRosterShipsPositionAdjustedEvents();

@@ -54,10 +54,6 @@ public abstract class AbstractRosterApplicationService implements RosterApplicat
         update(c, ar -> ar.createEnvironmentRoster(c.getCoordinates(), c.getShipResourceQuantity(), c.getShipBaseResourceQuantity(), c.getBaseExperience(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
-    public void when(RosterCommands.UpdateLocation c) {
-        update(c, ar -> ar.updateLocation(c.getClock(), c.getUpdatedCoordinates(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
-    }
-
     public void when(RosterCommands.AdjustShipsPosition c) {
         update(c, ar -> ar.adjustShipsPosition(c.getPlayer(), c.getPositions(), c.getShipIds(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }

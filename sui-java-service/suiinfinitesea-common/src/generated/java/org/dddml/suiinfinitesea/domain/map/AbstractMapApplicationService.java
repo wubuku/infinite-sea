@@ -55,7 +55,15 @@ public abstract class AbstractMapApplicationService implements MapApplicationSer
     }
 
     public void when(MapCommands.UpdateSettings c) {
-        update(c, ar -> ar.updateSettings(c.getForNftHoldersOnly(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+        update(c, ar -> ar.updateSettings(c.getClaimIslandSetting(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(MapCommands.AddToWhitelist c) {
+        update(c, ar -> ar.addToWhitelist(c.getAccountAddress(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
+    public void when(MapCommands.RemoveFromWhitelist c) {
+        update(c, ar -> ar.removeFromWhitelist(c.getAccountAddress(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public MapState get(String id) {
@@ -108,6 +116,14 @@ public abstract class AbstractMapApplicationService implements MapApplicationSer
 
     public Iterable<MapLocationState> getMapLocations(String mapId, Criterion filter, List<String> orders) {
         return getStateQueryRepository().getMapLocations(mapId, filter, orders);
+    }
+
+    public MapClaimIslandWhitelistItemState getMapClaimIslandWhitelistItem(String mapId, String key) {
+        return getStateQueryRepository().getMapClaimIslandWhitelistItem(mapId, key);
+    }
+
+    public Iterable<MapClaimIslandWhitelistItemState> getMapClaimIslandWhitelistItems(String mapId, Criterion filter, List<String> orders) {
+        return getStateQueryRepository().getMapClaimIslandWhitelistItems(mapId, filter, orders);
     }
 
 

@@ -8,21 +8,18 @@ package org.dddml.suiinfinitesea.domain.map;
 import java.util.*;
 import java.math.*;
 import java.util.Date;
-import java.math.BigInteger;
 import org.dddml.suiinfinitesea.domain.*;
 import org.dddml.suiinfinitesea.specialization.Event;
 
-public interface MapState extends VersionedSuiMoveObject
+public interface MapClaimIslandWhitelistItemState
 {
     Long VERSION_ZERO = 0L;
 
     Long VERSION_NULL = VERSION_ZERO - 1;
 
-    String getId();
+    String getKey();
 
-    Integer getClaimIslandSetting();
-
-    Table getClaimIslandWhitelist();
+    Boolean getValue();
 
     Long getOffChainVersion();
 
@@ -38,16 +35,12 @@ public interface MapState extends VersionedSuiMoveObject
 
     Boolean getDeleted();
 
-    EntityStateCollection<Coordinates, MapLocationState> getLocations();
+    String getMapId();
 
-    EntityStateCollection<String, MapClaimIslandWhitelistItemState> getMapClaimIslandWhitelistItems();
+    interface MutableMapClaimIslandWhitelistItemState extends MapClaimIslandWhitelistItemState {
+        void setKey(String key);
 
-    interface MutableMapState extends MapState, VersionedSuiMoveObject.MutableVersionedSuiMoveObject {
-        void setId(String id);
-
-        void setClaimIslandSetting(Integer claimIslandSetting);
-
-        void setClaimIslandWhitelist(Table claimIslandWhitelist);
+        void setValue(Boolean value);
 
         void setOffChainVersion(Long offChainVersion);
 
@@ -63,17 +56,23 @@ public interface MapState extends VersionedSuiMoveObject
 
         void setDeleted(Boolean deleted);
 
+        void setMapId(String mapId);
+
 
         void mutate(Event e);
 
-        //void when(MapEvent.MapStateCreated e);
+        //void when(MapClaimIslandWhitelistItemEvent.MapClaimIslandWhitelistItemStateCreated e);
 
-        //void when(MapEvent.MapStateMergePatched e);
+        //void when(MapClaimIslandWhitelistItemEvent.MapClaimIslandWhitelistItemStateMergePatched e);
 
-        //void when(MapEvent.MapStateDeleted e);
+        //void when(MapClaimIslandWhitelistItemEvent.MapClaimIslandWhitelistItemStateRemoved e);
     }
 
-    interface SqlMapState extends MutableMapState {
+    interface SqlMapClaimIslandWhitelistItemState extends MutableMapClaimIslandWhitelistItemState {
+        MapClaimIslandWhitelistItemId getMapClaimIslandWhitelistItemId();
+
+        void setMapClaimIslandWhitelistItemId(MapClaimIslandWhitelistItemId mapClaimIslandWhitelistItemId);
+
 
         boolean isStateUnsaved();
 

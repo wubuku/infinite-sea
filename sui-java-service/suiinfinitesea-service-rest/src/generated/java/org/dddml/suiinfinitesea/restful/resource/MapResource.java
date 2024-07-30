@@ -206,6 +206,42 @@ public class MapResource {
         } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
     }
 
+
+    @PutMapping("{id}/_commands/AddToWhitelist")
+    public void addToWhitelist(@PathVariable("id") String id, @RequestBody MapCommands.AddToWhitelist content) {
+        try {
+
+            MapCommands.AddToWhitelist cmd = content;//.toAddToWhitelist();
+            String idObj = id;
+            if (cmd.getId() == null) {
+                cmd.setId(idObj);
+            } else if (!cmd.getId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", id, cmd.getId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            mapApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+
+    @PutMapping("{id}/_commands/RemoveFromWhitelist")
+    public void removeFromWhitelist(@PathVariable("id") String id, @RequestBody MapCommands.RemoveFromWhitelist content) {
+        try {
+
+            MapCommands.RemoveFromWhitelist cmd = content;//.toRemoveFromWhitelist();
+            String idObj = id;
+            if (cmd.getId() == null) {
+                cmd.setId(idObj);
+            } else if (!cmd.getId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", id, cmd.getId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            mapApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
     @GetMapping("_metadata/filteringFields")
     public List<PropertyMetadataDto> getMetadataFilteringFields() {
         try {
@@ -306,6 +342,59 @@ public class MapResource {
         } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
     }
 
+    /**
+     * Retrieve.
+     * Retrieves MapClaimIslandWhitelistItem with the specified Key.
+     */
+    @GetMapping("{id}/MapClaimIslandWhitelistItems/{key}")
+    @Transactional(readOnly = true)
+    public MapClaimIslandWhitelistItemStateDto getMapClaimIslandWhitelistItem(@PathVariable("id") String id, @PathVariable("key") String key) {
+        try {
+
+            MapClaimIslandWhitelistItemState state = mapApplicationService.getMapClaimIslandWhitelistItem(id, key);
+            if (state == null) { return null; }
+            MapClaimIslandWhitelistItemStateDto.DtoConverter dtoConverter = new MapClaimIslandWhitelistItemStateDto.DtoConverter();
+            MapClaimIslandWhitelistItemStateDto stateDto = dtoConverter.toMapClaimIslandWhitelistItemStateDto(state);
+            dtoConverter.setAllFieldsReturned(true);
+            return stateDto;
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
+    /**
+     * MapClaimIslandWhitelistItem List
+     */
+    @GetMapping("{id}/MapClaimIslandWhitelistItems")
+    @Transactional(readOnly = true)
+    public MapClaimIslandWhitelistItemStateDto[] getMapClaimIslandWhitelistItems(@PathVariable("id") String id,
+                    @RequestParam(value = "sort", required = false) String sort,
+                    @RequestParam(value = "fields", required = false) String fields,
+                    @RequestParam(value = "filter", required = false) String filter,
+                     HttpServletRequest request) {
+        try {
+            CriterionDto criterion = null;
+            if (!StringHelper.isNullOrEmpty(filter)) {
+                criterion = new ObjectMapper().readValue(filter, CriterionDto.class);
+            } else {
+                criterion = QueryParamUtils.getQueryCriterionDto(request.getParameterMap().entrySet().stream()
+                    .filter(kv -> MapResourceUtils.getMapClaimIslandWhitelistItemFilterPropertyName(kv.getKey()) != null)
+                    .collect(Collectors.toMap(kv -> kv.getKey(), kv -> kv.getValue())));
+            }
+            Criterion c = CriterionDto.toSubclass(criterion, getCriterionTypeConverter(), getPropertyTypeResolver(), 
+                n -> (MapClaimIslandWhitelistItemMetadata.aliasMap.containsKey(n) ? MapClaimIslandWhitelistItemMetadata.aliasMap.get(n) : n));
+            Iterable<MapClaimIslandWhitelistItemState> states = mapApplicationService.getMapClaimIslandWhitelistItems(id, c,
+                    MapResourceUtils.getMapClaimIslandWhitelistItemQuerySorts(request.getParameterMap()));
+            if (states == null) { return null; }
+            MapClaimIslandWhitelistItemStateDto.DtoConverter dtoConverter = new MapClaimIslandWhitelistItemStateDto.DtoConverter();
+            if (StringHelper.isNullOrEmpty(fields)) {
+                dtoConverter.setAllFieldsReturned(true);
+            } else {
+                dtoConverter.setReturnedFieldsString(fields);
+            }
+            return dtoConverter.toMapClaimIslandWhitelistItemStateDtoArray(states);
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
 
 
     //protected  MapStateEventDtoConverter getMapStateEventDtoConverter() {
@@ -330,6 +419,15 @@ public class MapResource {
             @Override
             public Class resolveTypeByPropertyName(String propertyName) {
                 return MapResourceUtils.getMapLocationFilterPropertyType(propertyName);
+            }
+        };
+    }
+
+    protected PropertyTypeResolver getMapClaimIslandWhitelistItemPropertyTypeResolver() {
+        return new PropertyTypeResolver() {
+            @Override
+            public Class resolveTypeByPropertyName(String propertyName) {
+                return MapResourceUtils.getMapClaimIslandWhitelistItemFilterPropertyType(propertyName);
             }
         };
     }
@@ -436,6 +534,54 @@ public class MapResource {
                     String pName = getMapLocationFilterPropertyName(key);
                     if (!StringHelper.isNullOrEmpty(pName)) {
                         Class pClass = getMapLocationFilterPropertyType(pName);
+                        filter.put(pName, ApplicationContext.current.getTypeConverter().convertFromString(pClass, values[0]));
+                    }
+                }
+            });
+            return filter.entrySet();
+        }
+
+        public static List<String> getMapClaimIslandWhitelistItemQueryOrders(String str, String separator) {
+            return QueryParamUtils.getQueryOrders(str, separator, MapClaimIslandWhitelistItemMetadata.aliasMap);
+        }
+
+        public static List<String> getMapClaimIslandWhitelistItemQuerySorts(Map<String, String[]> queryNameValuePairs) {
+            String[] values = queryNameValuePairs.get("sort");
+            return QueryParamUtils.getQuerySorts(values, MapClaimIslandWhitelistItemMetadata.aliasMap);
+        }
+
+        public static String getMapClaimIslandWhitelistItemFilterPropertyName(String fieldName) {
+            if ("sort".equalsIgnoreCase(fieldName)
+                    || "firstResult".equalsIgnoreCase(fieldName)
+                    || "maxResults".equalsIgnoreCase(fieldName)
+                    || "fields".equalsIgnoreCase(fieldName)) {
+                return null;
+            }
+            if (MapClaimIslandWhitelistItemMetadata.aliasMap.containsKey(fieldName)) {
+                return MapClaimIslandWhitelistItemMetadata.aliasMap.get(fieldName);
+            }
+            return null;
+        }
+
+        public static Class getMapClaimIslandWhitelistItemFilterPropertyType(String propertyName) {
+            if (MapClaimIslandWhitelistItemMetadata.propertyTypeMap.containsKey(propertyName)) {
+                String propertyType = MapClaimIslandWhitelistItemMetadata.propertyTypeMap.get(propertyName);
+                if (!StringHelper.isNullOrEmpty(propertyType)) {
+                    if (BoundedContextMetadata.CLASS_MAP.containsKey(propertyType)) {
+                        return BoundedContextMetadata.CLASS_MAP.get(propertyType);
+                    }
+                }
+            }
+            return String.class;
+        }
+
+        public static Iterable<Map.Entry<String, Object>> getMapClaimIslandWhitelistItemQueryFilterMap(Map<String, String[]> queryNameValuePairs) {
+            Map<String, Object> filter = new HashMap<>();
+            queryNameValuePairs.forEach((key, values) -> {
+                if (values.length > 0) {
+                    String pName = getMapClaimIslandWhitelistItemFilterPropertyName(key);
+                    if (!StringHelper.isNullOrEmpty(pName)) {
+                        Class pClass = getMapClaimIslandWhitelistItemFilterPropertyType(pName);
                         filter.put(pName, ApplicationContext.current.getTypeConverter().convertFromString(pClass, values[0]));
                     }
                 }

@@ -13,9 +13,23 @@
       </key>
       <one-to-many class="org.dddml.suiinfinitesea.domain.map.AbstractMapLocationState$SimpleMapLocationState" />
     </set>
-    <property name="forNftHoldersOnly">
-      <column name="for_nft_holders_only" />
+    <set name="protectedMapClaimIslandWhitelistItems" inverse="true" cascade="all-delete-orphan" fetch="join">
+      <key>
+        <column name="map_id" />
+      </key>
+      <one-to-many class="org.dddml.suiinfinitesea.domain.map.AbstractMapClaimIslandWhitelistItemState$SimpleMapClaimIslandWhitelistItemState" />
+    </set>
+    <property name="claimIslandSetting">
+      <column name="claim_island_setting" />
     </property>
+    <component name="claimIslandWhitelist" class="org.dddml.suiinfinitesea.domain.Table">
+      <property name="id">
+        <column name="claim_island_whitelist_id" sql-type="VARCHAR(66)" />
+      </property>
+      <property name="size">
+        <column name="claim_island_whitelist_size" />
+      </property>
+    </component>
     <property name="createdBy">
       <column name="created_by" />
     </property>

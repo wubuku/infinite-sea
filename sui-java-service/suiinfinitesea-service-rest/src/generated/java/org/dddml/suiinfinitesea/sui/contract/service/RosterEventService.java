@@ -18,7 +18,6 @@ import org.dddml.suiinfinitesea.sui.contract.roster.RosterCreated;
 import org.dddml.suiinfinitesea.sui.contract.roster.EnvironmentRosterCreated;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipAdded;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterSetSail;
-import org.dddml.suiinfinitesea.sui.contract.roster.RosterLocationUpdated;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipsPositionAdjusted;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipTransferred;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTransferred;
@@ -206,46 +205,6 @@ public class RosterEventService {
             return;
         }
         rosterEventRepository.save(rosterSetSail);
-    }
-
-    @Transactional
-    public void pullRosterLocationUpdatedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getRosterLocationUpdatedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<RosterLocationUpdated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_LOCATION_UPDATED,
-                    cursor, limit, false, RosterLocationUpdated.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<RosterLocationUpdated> eventEnvelope : eventPage.getData()) {
-                    saveRosterLocationUpdated(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getRosterLocationUpdatedEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstRosterLocationUpdatedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveRosterLocationUpdated(SuiMoveEventEnvelope<RosterLocationUpdated> eventEnvelope) {
-        AbstractRosterEvent.RosterLocationUpdated rosterLocationUpdated = DomainBeanUtils.toRosterLocationUpdated(eventEnvelope);
-        if (rosterEventRepository.findById(rosterLocationUpdated.getRosterEventId()).isPresent()) {
-            return;
-        }
-        rosterEventRepository.save(rosterLocationUpdated);
     }
 
     @Transactional

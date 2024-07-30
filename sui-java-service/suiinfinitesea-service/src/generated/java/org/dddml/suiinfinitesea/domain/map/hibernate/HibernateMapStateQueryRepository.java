@@ -31,7 +31,7 @@ public class HibernateMapStateQueryRepository implements MapStateQueryRepository
         return this.sessionFactory.getCurrentSession();
     }
     
-    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Locations", "ForNftHoldersOnly", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted", "Version"));
+    private static final Set<String> readOnlyPropertyPascalCaseNames = new HashSet<String>(Arrays.asList("Id", "Locations", "ClaimIslandSetting", "ClaimIslandWhitelist", "OffChainVersion", "CreatedBy", "CreatedAt", "UpdatedBy", "UpdatedAt", "Active", "Deleted", "Version", "MapClaimIslandWhitelistItems"));
     
     private ReadOnlyProxyGenerator readOnlyProxyGenerator;
     
@@ -141,6 +141,22 @@ public class HibernateMapStateQueryRepository implements MapStateQueryRepository
         Criteria criteria = getCurrentSession().createCriteria(AbstractMapLocationState.SimpleMapLocationState.class);
         org.hibernate.criterion.Junction partIdCondition = org.hibernate.criterion.Restrictions.conjunction()
             .add(org.hibernate.criterion.Restrictions.eq("mapLocationId.mapId", mapId))
+            ;
+        HibernateUtils.criteriaAddFilterAndOrdersAndSetFirstResultAndMaxResults(criteria, filter, orders, 0, Integer.MAX_VALUE);
+        return criteria.add(partIdCondition).list();
+    }
+
+    @Transactional(readOnly = true)
+    public MapClaimIslandWhitelistItemState getMapClaimIslandWhitelistItem(String mapId, String key) {
+        MapClaimIslandWhitelistItemId entityId = new MapClaimIslandWhitelistItemId(mapId, key);
+        return (MapClaimIslandWhitelistItemState) getCurrentSession().get(AbstractMapClaimIslandWhitelistItemState.SimpleMapClaimIslandWhitelistItemState.class, entityId);
+    }
+
+    @Transactional(readOnly = true)
+    public Iterable<MapClaimIslandWhitelistItemState> getMapClaimIslandWhitelistItems(String mapId, org.dddml.support.criterion.Criterion filter, List<String> orders) {
+        Criteria criteria = getCurrentSession().createCriteria(AbstractMapClaimIslandWhitelistItemState.SimpleMapClaimIslandWhitelistItemState.class);
+        org.hibernate.criterion.Junction partIdCondition = org.hibernate.criterion.Restrictions.conjunction()
+            .add(org.hibernate.criterion.Restrictions.eq("mapClaimIslandWhitelistItemId.mapId", mapId))
             ;
         HibernateUtils.criteriaAddFilterAndOrdersAndSetFirstResultAndMaxResults(criteria, filter, orders, 0, Integer.MAX_VALUE);
         return criteria.add(partIdCondition).list();

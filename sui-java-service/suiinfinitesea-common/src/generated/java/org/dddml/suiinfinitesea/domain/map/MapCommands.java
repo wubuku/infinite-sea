@@ -294,16 +294,118 @@ public class MapCommands {
         }
 
         /**
-         * For Nft Holders Only
+         * Claim Island Setting
          */
-        private Boolean forNftHoldersOnly;
+        private Integer claimIslandSetting;
 
-        public Boolean getForNftHoldersOnly() {
-            return this.forNftHoldersOnly;
+        public Integer getClaimIslandSetting() {
+            return this.claimIslandSetting;
         }
 
-        public void setForNftHoldersOnly(Boolean forNftHoldersOnly) {
-            this.forNftHoldersOnly = forNftHoldersOnly;
+        public void setClaimIslandSetting(Integer claimIslandSetting) {
+            this.claimIslandSetting = claimIslandSetting;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class AddToWhitelist extends AbstractMapCommand implements MapCommand {
+
+        public String getCommandType() {
+            return "AddToWhitelist";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Id
+         */
+        private String id;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        /**
+         * Account Address
+         */
+        private String accountAddress;
+
+        public String getAccountAddress() {
+            return this.accountAddress;
+        }
+
+        public void setAccountAddress(String accountAddress) {
+            this.accountAddress = accountAddress;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
+    public static class RemoveFromWhitelist extends AbstractMapCommand implements MapCommand {
+
+        public String getCommandType() {
+            return "RemoveFromWhitelist";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Id
+         */
+        private String id;
+
+        public String getId() {
+            return this.id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        /**
+         * Account Address
+         */
+        private String accountAddress;
+
+        public String getAccountAddress() {
+            return this.accountAddress;
+        }
+
+        public void setAccountAddress(String accountAddress) {
+            this.accountAddress = accountAddress;
         }
 
         /**

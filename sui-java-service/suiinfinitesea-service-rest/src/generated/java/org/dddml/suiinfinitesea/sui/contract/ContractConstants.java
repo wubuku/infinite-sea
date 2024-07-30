@@ -61,8 +61,6 @@ public class ContractConstants {
 
     public static final String ROSTER_MODULE_ROSTER_SET_SAIL = "roster::RosterSetSail";
 
-    public static final String ROSTER_MODULE_ROSTER_LOCATION_UPDATED = "roster::RosterLocationUpdated";
-
     public static final String ROSTER_MODULE_ROSTER_SHIPS_POSITION_ADJUSTED = "roster::RosterShipsPositionAdjusted";
 
     public static final String ROSTER_MODULE_ROSTER_SHIP_TRANSFERRED = "roster::RosterShipTransferred";
@@ -122,6 +120,10 @@ public class ContractConstants {
     public static final String MAP_MODULE_ISLAND_RESOURCES_GATHERED = "map::IslandResourcesGathered";
 
     public static final String MAP_MODULE_MAP_SETTINGS_UPDATED = "map::MapSettingsUpdated";
+
+    public static final String MAP_MODULE_WHITELISTED_FOR_CLAIMING_ISLAND = "map::WhitelistedForClaimingIsland";
+
+    public static final String MAP_MODULE_UN_WHITELISTED_FOR_CLAIMING_ISLAND = "map::UnWhitelistedForClaimingIsland";
 
     public static final String EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT = "experience_table::InitExperienceTableEvent";
 

@@ -41,4 +41,14 @@ public class PullMapEventsTaskService {
         mapEventService.pullMapSettingsUpdatedEvents();
     }
 
+    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.whitelisted-for-claiming-island.fixed-delay:5000}")
+    public void pullWhitelistedForClaimingIslandEvents() {
+        mapEventService.pullWhitelistedForClaimingIslandEvents();
+    }
+
+    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.un-whitelisted-for-claiming-island.fixed-delay:5000}")
+    public void pullUnWhitelistedForClaimingIslandEvents() {
+        mapEventService.pullUnWhitelistedForClaimingIslandEvents();
+    }
+
 }

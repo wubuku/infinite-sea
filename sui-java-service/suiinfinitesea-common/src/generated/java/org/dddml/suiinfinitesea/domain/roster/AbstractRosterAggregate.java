@@ -86,19 +86,6 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void updateLocation(String clock, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId, RosterCommands.UpdateLocation c) {
-            java.util.function.Supplier<RosterEvent.RosterLocationUpdated> eventFactory = () -> newRosterLocationUpdated(clock, updatedCoordinates, offChainVersion, commandId, requesterId);
-            RosterEvent.RosterLocationUpdated e;
-            try {
-                e = verifyUpdateLocation(eventFactory, updatedCoordinates, c);
-            } catch (Exception ex) {
-                throw new DomainError("VerificationFailed", ex);
-            }
-
-            apply(e);
-        }
-
-        @Override
         public void adjustShipsPosition(String player, BigInteger[] positions, String[] shipIds, Long offChainVersion, String commandId, String requesterId, RosterCommands.AdjustShipsPosition c) {
             java.util.function.Supplier<RosterEvent.RosterShipsPositionAdjusted> eventFactory = () -> newRosterShipsPositionAdjusted(player, positions, shipIds, offChainVersion, commandId, requesterId);
             RosterEvent.RosterShipsPositionAdjusted e;
@@ -253,27 +240,6 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
 //
 //public class SetSailLogic {
 //    public static RosterEvent.RosterSetSail verify(java.util.function.Supplier<RosterEvent.RosterSetSail> eventFactory, RosterState rosterState, String player, Coordinates targetCoordinates, BigInteger sailDuration, Coordinates updatedCoordinates, VerificationContext verificationContext) {
-//    }
-//}
-
-            return e;
-        }
-           
-
-        protected RosterEvent.RosterLocationUpdated verifyUpdateLocation(java.util.function.Supplier<RosterEvent.RosterLocationUpdated> eventFactory, Coordinates updatedCoordinates, RosterCommands.UpdateLocation c) {
-            Coordinates UpdatedCoordinates = updatedCoordinates;
-
-            RosterEvent.RosterLocationUpdated e = (RosterEvent.RosterLocationUpdated) ReflectUtils.invokeStaticMethod(
-                    "org.dddml.suiinfinitesea.domain.roster.UpdateLocationLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), updatedCoordinates, VerificationContext.forCommand(c)}
-            );
-
-//package org.dddml.suiinfinitesea.domain.roster;
-//
-//public class UpdateLocationLogic {
-//    public static RosterEvent.RosterLocationUpdated verify(java.util.function.Supplier<RosterEvent.RosterLocationUpdated> eventFactory, RosterState rosterState, Coordinates updatedCoordinates, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -459,30 +425,6 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
 
             e.getDynamicProperties().put("ship", ship);
             e.getDynamicProperties().put("position", position);
-            e.setSuiTimestamp(null);
-            e.setSuiTxDigest(null);
-            e.setSuiEventSeq(null);
-            e.setSuiPackageId(null);
-            e.setSuiTransactionModule(null);
-            e.setSuiSender(null);
-            e.setSuiType(null);
-            e.setEventStatus(null);
-
-            e.setCommandId(commandId);
-            e.setCreatedBy(requesterId);
-            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
-
-            e.setRosterEventId(eventId);
-            return e;
-        }
-
-        protected AbstractRosterEvent.RosterLocationUpdated newRosterLocationUpdated(String clock, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId) {
-            RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
-            AbstractRosterEvent.RosterLocationUpdated e = new AbstractRosterEvent.RosterLocationUpdated();
-
-            e.getDynamicProperties().put("updatedCoordinates", updatedCoordinates);
-            e.setCoordinatesUpdatedAt(null);
-            e.setNewStatus(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

@@ -27,16 +27,28 @@ public class MapStateDto {
         this.id = id;
     }
 
-    private Boolean forNftHoldersOnly;
+    private Integer claimIslandSetting;
 
-    public Boolean getForNftHoldersOnly()
+    public Integer getClaimIslandSetting()
     {
-        return this.forNftHoldersOnly;
+        return this.claimIslandSetting;
     }
 
-    public void setForNftHoldersOnly(Boolean forNftHoldersOnly)
+    public void setClaimIslandSetting(Integer claimIslandSetting)
     {
-        this.forNftHoldersOnly = forNftHoldersOnly;
+        this.claimIslandSetting = claimIslandSetting;
+    }
+
+    private Table claimIslandWhitelist;
+
+    public Table getClaimIslandWhitelist()
+    {
+        return this.claimIslandWhitelist;
+    }
+
+    public void setClaimIslandWhitelist(Table claimIslandWhitelist)
+    {
+        this.claimIslandWhitelist = claimIslandWhitelist;
     }
 
     private Boolean active;
@@ -135,10 +147,22 @@ public class MapStateDto {
         this.locations = locations;
     }
 
+    private MapClaimIslandWhitelistItemStateDto[] mapClaimIslandWhitelistItems;
+
+    public MapClaimIslandWhitelistItemStateDto[] getMapClaimIslandWhitelistItems()
+    {
+        return this.mapClaimIslandWhitelistItems;
+    }    
+
+    public void setMapClaimIslandWhitelistItems(MapClaimIslandWhitelistItemStateDto[] mapClaimIslandWhitelistItems)
+    {
+        this.mapClaimIslandWhitelistItems = mapClaimIslandWhitelistItems;
+    }
+
 
     public static class DtoConverter extends AbstractStateDtoConverter
     {
-        public static Collection<String> collectionFieldNames = Arrays.asList(new String[]{"Locations"});
+        public static Collection<String> collectionFieldNames = Arrays.asList(new String[]{"Locations", "MapClaimIslandWhitelistItems"});
 
         @Override
         protected boolean isCollectionField(String fieldName) {
@@ -167,8 +191,11 @@ public class MapStateDto {
             if (returnedFieldsContains("Id")) {
                 dto.setId(state.getId());
             }
-            if (returnedFieldsContains("ForNftHoldersOnly")) {
-                dto.setForNftHoldersOnly(state.getForNftHoldersOnly());
+            if (returnedFieldsContains("ClaimIslandSetting")) {
+                dto.setClaimIslandSetting(state.getClaimIslandSetting());
+            }
+            if (returnedFieldsContains("ClaimIslandWhitelist")) {
+                dto.setClaimIslandWhitelist(state.getClaimIslandWhitelist());
             }
             if (returnedFieldsContains("Active")) {
                 dto.setActive(state.getActive());
@@ -202,6 +229,18 @@ public class MapStateDto {
                     }
                 }
                 dto.setLocations(arrayList.toArray(new MapLocationStateDto[0]));
+            }
+            if (returnedFieldsContains("MapClaimIslandWhitelistItems")) {
+                ArrayList<MapClaimIslandWhitelistItemStateDto> arrayList = new ArrayList();
+                if (state.getMapClaimIslandWhitelistItems() != null) {
+                    MapClaimIslandWhitelistItemStateDto.DtoConverter conv = new MapClaimIslandWhitelistItemStateDto.DtoConverter();
+                    String returnFS = CollectionUtils.mapGetValueIgnoringCase(getReturnedFields(), "MapClaimIslandWhitelistItems");
+                    if(returnFS != null) { conv.setReturnedFieldsString(returnFS); } else { conv.setAllFieldsReturned(this.getAllFieldsReturned()); }
+                    for (MapClaimIslandWhitelistItemState s : state.getMapClaimIslandWhitelistItems()) {
+                        arrayList.add(conv.toMapClaimIslandWhitelistItemStateDto(s));
+                    }
+                }
+                dto.setMapClaimIslandWhitelistItems(arrayList.toArray(new MapClaimIslandWhitelistItemStateDto[0]));
             }
             return dto;
         }

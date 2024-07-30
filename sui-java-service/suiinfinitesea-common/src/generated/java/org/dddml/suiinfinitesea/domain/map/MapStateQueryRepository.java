@@ -35,5 +35,9 @@ public interface MapStateQueryRepository {
 
     Iterable<MapLocationState> getMapLocations(String mapId, Criterion filter, List<String> orders);
 
+    MapClaimIslandWhitelistItemState getMapClaimIslandWhitelistItem(String mapId, String key);
+
+    Iterable<MapClaimIslandWhitelistItemState> getMapClaimIslandWhitelistItems(String mapId, Criterion filter, List<String> orders);
+
 }
 

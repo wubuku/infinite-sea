@@ -21,7 +21,11 @@ public interface MapAggregate {
 
     void claimIsland(Coordinates coordinates, String claimedBy, BigInteger claimedAt, Long offChainVersion, String commandId, String requesterId, MapCommands.ClaimIsland c);
 
-    void updateSettings(Boolean forNftHoldersOnly, Long offChainVersion, String commandId, String requesterId, MapCommands.UpdateSettings c);
+    void updateSettings(Integer claimIslandSetting, Long offChainVersion, String commandId, String requesterId, MapCommands.UpdateSettings c);
+
+    void addToWhitelist(String accountAddress, Long offChainVersion, String commandId, String requesterId, MapCommands.AddToWhitelist c);
+
+    void removeFromWhitelist(String accountAddress, Long offChainVersion, String commandId, String requesterId, MapCommands.RemoveFromWhitelist c);
 
     void throwOnInvalidStateTransition(Command c);
 }

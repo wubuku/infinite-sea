@@ -105,21 +105,6 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
     }
 
-    interface RosterLocationUpdated extends RosterEvent {
-        Coordinates getUpdatedCoordinates();
-
-        void setUpdatedCoordinates(Coordinates value);
-
-        BigInteger getCoordinatesUpdatedAt();
-
-        void setCoordinatesUpdatedAt(BigInteger value);
-
-        Integer getNewStatus();
-
-        void setNewStatus(Integer value);
-
-    }
-
     interface RosterShipsPositionAdjusted extends RosterEvent {
         BigInteger[] getPositions();
 

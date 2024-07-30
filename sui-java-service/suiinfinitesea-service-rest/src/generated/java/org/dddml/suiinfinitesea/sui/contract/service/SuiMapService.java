@@ -33,7 +33,9 @@ public class SuiMapService {
                     return s;
                 },
                 (mapState, coordinates) -> (MapLocationState.MutableMapLocationState)
-                        ((EntityStateCollection.ModifiableEntityStateCollection<Coordinates, MapLocationState>) mapState.getLocations()).getOrAddDefault(coordinates)
+                        ((EntityStateCollection.ModifiableEntityStateCollection<Coordinates, MapLocationState>) mapState.getLocations()).getOrAddDefault(coordinates),
+                (mapState, key) -> (MapClaimIslandWhitelistItemState.MutableMapClaimIslandWhitelistItemState)
+                        ((EntityStateCollection.ModifiableEntityStateCollection<String, MapClaimIslandWhitelistItemState>) mapState.getMapClaimIslandWhitelistItems()).getOrAddDefault(key)
         );
     }
 

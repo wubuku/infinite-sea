@@ -70,9 +70,23 @@ public interface MapEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasEven
     }
 
     interface MapSettingsUpdated extends MapEvent {
-        Boolean getForNftHoldersOnly();
+        Integer getClaimIslandSetting();
 
-        void setForNftHoldersOnly(Boolean value);
+        void setClaimIslandSetting(Integer value);
+
+    }
+
+    interface WhitelistedForClaimingIsland extends MapEvent {
+        String getAccountAddress();
+
+        void setAccountAddress(String value);
+
+    }
+
+    interface UnWhitelistedForClaimingIsland extends MapEvent {
+        String getAccountAddress();
+
+        void setAccountAddress(String value);
 
     }
 

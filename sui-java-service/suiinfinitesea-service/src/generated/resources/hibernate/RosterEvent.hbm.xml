@@ -56,7 +56,6 @@
       <subclass name="AbstractRosterEvent$EnvironmentRosterCreated" discriminator-value="EnvironmentRosterCreated" />
       <subclass name="AbstractRosterEvent$RosterShipAdded" discriminator-value="RosterShipAdded" />
       <subclass name="AbstractRosterEvent$RosterSetSail" discriminator-value="RosterSetSail" />
-      <subclass name="AbstractRosterEvent$RosterLocationUpdated" discriminator-value="RosterLocationUpdated" />
       <subclass name="AbstractRosterEvent$RosterShipsPositionAdjusted" discriminator-value="RosterShipsPositionAdjusted" />
       <subclass name="AbstractRosterEvent$RosterShipTransferred" discriminator-value="RosterShipTransferred" />
       <subclass name="AbstractRosterEvent$RosterShipInventoryTransferred" discriminator-value="RosterShipInventoryTransferred" />

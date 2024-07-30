@@ -51,6 +51,8 @@
       <subclass name="AbstractMapEvent$MapIslandClaimed" discriminator-value="MapIslandClaimed" />
       <subclass name="AbstractMapEvent$IslandResourcesGathered" discriminator-value="IslandResourcesGathered" />
       <subclass name="AbstractMapEvent$MapSettingsUpdated" discriminator-value="MapSettingsUpdated" />
+      <subclass name="AbstractMapEvent$WhitelistedForClaimingIsland" discriminator-value="WhitelistedForClaimingIsland" />
+      <subclass name="AbstractMapEvent$UnWhitelistedForClaimingIsland" discriminator-value="UnWhitelistedForClaimingIsland" />
     </subclass>
   </class>
 </hibernate-mapping>

@@ -25,14 +25,24 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         this.id = id;
     }
 
-    private Boolean forNftHoldersOnly;
+    private Integer claimIslandSetting;
 
-    public Boolean getForNftHoldersOnly() {
-        return this.forNftHoldersOnly;
+    public Integer getClaimIslandSetting() {
+        return this.claimIslandSetting;
     }
 
-    public void setForNftHoldersOnly(Boolean forNftHoldersOnly) {
-        this.forNftHoldersOnly = forNftHoldersOnly;
+    public void setClaimIslandSetting(Integer claimIslandSetting) {
+        this.claimIslandSetting = claimIslandSetting;
+    }
+
+    private Table claimIslandWhitelist;
+
+    public Table getClaimIslandWhitelist() {
+        return this.claimIslandWhitelist;
+    }
+
+    public void setClaimIslandWhitelist(Table claimIslandWhitelist) {
+        this.claimIslandWhitelist = claimIslandWhitelist;
     }
 
     private Long offChainVersion;
@@ -139,6 +149,26 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         this.locations = locations;
     }
 
+    private Set<MapClaimIslandWhitelistItemState> protectedMapClaimIslandWhitelistItems = new HashSet<>();
+
+    protected Set<MapClaimIslandWhitelistItemState> getProtectedMapClaimIslandWhitelistItems() {
+        return this.protectedMapClaimIslandWhitelistItems;
+    }
+
+    protected void setProtectedMapClaimIslandWhitelistItems(Set<MapClaimIslandWhitelistItemState> protectedMapClaimIslandWhitelistItems) {
+        this.protectedMapClaimIslandWhitelistItems = protectedMapClaimIslandWhitelistItems;
+    }
+
+    private EntityStateCollection<String, MapClaimIslandWhitelistItemState> mapClaimIslandWhitelistItems;
+
+    public EntityStateCollection<String, MapClaimIslandWhitelistItemState> getMapClaimIslandWhitelistItems() {
+        return this.mapClaimIslandWhitelistItems;
+    }
+
+    public void setMapClaimIslandWhitelistItems(EntityStateCollection<String, MapClaimIslandWhitelistItemState> mapClaimIslandWhitelistItems) {
+        this.mapClaimIslandWhitelistItems = mapClaimIslandWhitelistItems;
+    }
+
     private Boolean stateReadOnly;
 
     public Boolean getStateReadOnly() { return this.stateReadOnly; }
@@ -179,6 +209,7 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
     
     protected void initializeProperties() {
         locations = new SimpleMapLocationStateCollection();
+        mapClaimIslandWhitelistItems = new SimpleMapClaimIslandWhitelistItemStateCollection();
     }
 
     @Override
@@ -206,6 +237,10 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
             when((AbstractMapEvent.IslandAdded)e);
         } else if (e instanceof AbstractMapEvent.MapSettingsUpdated) {
             when((AbstractMapEvent.MapSettingsUpdated)e);
+        } else if (e instanceof AbstractMapEvent.WhitelistedForClaimingIsland) {
+            when((AbstractMapEvent.WhitelistedForClaimingIsland)e);
+        } else if (e instanceof AbstractMapEvent.UnWhitelistedForClaimingIsland) {
+            when((AbstractMapEvent.UnWhitelistedForClaimingIsland)e);
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported event type: %1$s", e.getClass().getName()));
         }
@@ -215,7 +250,8 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         if (s == this) {
             return;
         }
-        this.setForNftHoldersOnly(s.getForNftHoldersOnly());
+        this.setClaimIslandSetting(s.getClaimIslandSetting());
+        this.setClaimIslandWhitelist(s.getClaimIslandWhitelist());
         this.setActive(s.getActive());
         this.setVersion(s.getVersion());
 
@@ -248,6 +284,42 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
                     for (Coordinates i : removedStateIds) {
                         MapLocationState thisInnerState = ((EntityStateCollection.ModifiableEntityStateCollection<Coordinates, MapLocationState>)this.getLocations()).getOrAddDefault(i);
                         ((EntityStateCollection.ModifiableEntityStateCollection)this.getLocations()).removeState(thisInnerState);
+                    }
+                } else {
+                    throw new UnsupportedOperationException();
+                }
+            }
+        }
+
+        if (s.getMapClaimIslandWhitelistItems() != null) {
+            Iterable<MapClaimIslandWhitelistItemState> iterable;
+            if (s.getMapClaimIslandWhitelistItems().isLazy()) {
+                iterable = s.getMapClaimIslandWhitelistItems().getLoadedStates();
+            } else {
+                iterable = s.getMapClaimIslandWhitelistItems();
+            }
+            if (iterable != null) {
+                for (MapClaimIslandWhitelistItemState ss : iterable) {
+                    MapClaimIslandWhitelistItemState thisInnerState = ((EntityStateCollection.ModifiableEntityStateCollection<String, MapClaimIslandWhitelistItemState>)this.getMapClaimIslandWhitelistItems()).getOrAddDefault(ss.getKey());
+                    ((AbstractMapClaimIslandWhitelistItemState) thisInnerState).merge(ss);
+                }
+            }
+        }
+        if (s.getMapClaimIslandWhitelistItems() != null) {
+            if (s.getMapClaimIslandWhitelistItems() instanceof EntityStateCollection.RemovalLoggedEntityStateCollection) {
+                if (((EntityStateCollection.RemovalLoggedEntityStateCollection)s.getMapClaimIslandWhitelistItems()).getRemovedStates() != null) {
+                    for (MapClaimIslandWhitelistItemState ss : ((EntityStateCollection.RemovalLoggedEntityStateCollection<String, MapClaimIslandWhitelistItemState>)s.getMapClaimIslandWhitelistItems()).getRemovedStates()) {
+                        MapClaimIslandWhitelistItemState thisInnerState = ((EntityStateCollection.ModifiableEntityStateCollection<String, MapClaimIslandWhitelistItemState>)this.getMapClaimIslandWhitelistItems()).getOrAddDefault(ss.getKey());
+                        ((EntityStateCollection.ModifiableEntityStateCollection)this.getMapClaimIslandWhitelistItems()).removeState(thisInnerState);
+                    }
+                }
+            } else {
+                if (s.getMapClaimIslandWhitelistItems().isAllLoaded()) {
+                    Set<String> removedStateIds = new HashSet<>(this.getMapClaimIslandWhitelistItems().stream().map(i -> i.getKey()).collect(java.util.stream.Collectors.toList()));
+                    s.getMapClaimIslandWhitelistItems().forEach(i -> removedStateIds.remove(i.getKey()));
+                    for (String i : removedStateIds) {
+                        MapClaimIslandWhitelistItemState thisInnerState = ((EntityStateCollection.ModifiableEntityStateCollection<String, MapClaimIslandWhitelistItemState>)this.getMapClaimIslandWhitelistItems()).getOrAddDefault(i);
+                        ((EntityStateCollection.ModifiableEntityStateCollection)this.getMapClaimIslandWhitelistItems()).removeState(thisInnerState);
                     }
                 } else {
                     throw new UnsupportedOperationException();
@@ -410,8 +482,8 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
     public void when(AbstractMapEvent.MapSettingsUpdated e) {
         throwOnWrongEvent(e);
 
-        Boolean forNftHoldersOnly = e.getForNftHoldersOnly();
-        Boolean ForNftHoldersOnly = forNftHoldersOnly;
+        Integer claimIslandSetting = e.getClaimIslandSetting();
+        Integer ClaimIslandSetting = claimIslandSetting;
         Long suiTimestamp = e.getSuiTimestamp();
         Long SuiTimestamp = suiTimestamp;
         String suiTxDigest = e.getSuiTxDigest();
@@ -441,14 +513,112 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         MapState updatedMapState = (MapState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.map.UpdateSettingsLogic",
                     "mutate",
-                    new Class[]{MapState.class, Boolean.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, forNftHoldersOnly, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{MapState.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, claimIslandSetting, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.map;
 //
 //public class UpdateSettingsLogic {
-//    public static MapState mutate(MapState mapState, Boolean forNftHoldersOnly, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
+//    public static MapState mutate(MapState mapState, Integer claimIslandSetting, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedMapState) { merge(updatedMapState); } //else do nothing
+
+    }
+
+    public void when(AbstractMapEvent.WhitelistedForClaimingIsland e) {
+        throwOnWrongEvent(e);
+
+        String accountAddress = e.getAccountAddress();
+        String AccountAddress = accountAddress;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        MapState updatedMapState = (MapState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.map.AddToWhitelistLogic",
+                    "mutate",
+                    new Class[]{MapState.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, accountAddress, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.map;
+//
+//public class AddToWhitelistLogic {
+//    public static MapState mutate(MapState mapState, String accountAddress, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedMapState) { merge(updatedMapState); } //else do nothing
+
+    }
+
+    public void when(AbstractMapEvent.UnWhitelistedForClaimingIsland e) {
+        throwOnWrongEvent(e);
+
+        String accountAddress = e.getAccountAddress();
+        String AccountAddress = accountAddress;
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        MapState updatedMapState = (MapState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.map.RemoveFromWhitelistLogic",
+                    "mutate",
+                    new Class[]{MapState.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, accountAddress, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.map;
+//
+//public class RemoveFromWhitelistLogic {
+//    public static MapState mutate(MapState mapState, String accountAddress, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<MapState, MapState.MutableMapState> mutationContext) {
 //    }
 //}
 
@@ -459,6 +629,9 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
     public void save() {
         if (locations instanceof Saveable) {
             ((Saveable)locations).save();
+        }
+        if (mapClaimIslandWhitelistItems instanceof Saveable) {
+            ((Saveable)mapClaimIslandWhitelistItems).save();
         }
     }
 
@@ -611,6 +784,127 @@ public abstract class AbstractMapState implements MapState.SqlMapState, Saveable
         @Override
         public void clear() {
             protectedLocations.clear();
+        }
+    }
+
+    class SimpleMapClaimIslandWhitelistItemStateCollection implements EntityStateCollection.ModifiableEntityStateCollection<String, MapClaimIslandWhitelistItemState>, Collection<MapClaimIslandWhitelistItemState> {
+
+        @Override
+        public MapClaimIslandWhitelistItemState get(String key) {
+            return protectedMapClaimIslandWhitelistItems.stream().filter(
+                            e -> e.getKey().equals(key))
+                    .findFirst().orElse(null);
+        }
+
+        @Override
+        public boolean isLazy() {
+            return false;
+        }
+
+        @Override
+        public boolean isAllLoaded() {
+            return true;
+        }
+
+        @Override
+        public Collection<MapClaimIslandWhitelistItemState> getLoadedStates() {
+            return protectedMapClaimIslandWhitelistItems;
+        }
+
+        @Override
+        public MapClaimIslandWhitelistItemState getOrAddDefault(String key) {
+            MapClaimIslandWhitelistItemState s = get(key);
+            if (s == null) {
+                MapClaimIslandWhitelistItemId globalId = new MapClaimIslandWhitelistItemId(getId(), key);
+                AbstractMapClaimIslandWhitelistItemState state = new AbstractMapClaimIslandWhitelistItemState.SimpleMapClaimIslandWhitelistItemState();
+                state.setMapClaimIslandWhitelistItemId(globalId);
+                add(state);
+                s = state;
+            }
+            return s;
+        }
+
+        @Override
+        public int size() {
+            return protectedMapClaimIslandWhitelistItems.size();
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return protectedMapClaimIslandWhitelistItems.isEmpty();
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            return protectedMapClaimIslandWhitelistItems.contains(o);
+        }
+
+        @Override
+        public Iterator<MapClaimIslandWhitelistItemState> iterator() {
+            return protectedMapClaimIslandWhitelistItems.iterator();
+        }
+
+        @Override
+        public java.util.stream.Stream<MapClaimIslandWhitelistItemState> stream() {
+            return protectedMapClaimIslandWhitelistItems.stream();
+        }
+
+        @Override
+        public Object[] toArray() {
+            return protectedMapClaimIslandWhitelistItems.toArray();
+        }
+
+        @Override
+        public <T> T[] toArray(T[] a) {
+            return protectedMapClaimIslandWhitelistItems.toArray(a);
+        }
+
+        @Override
+        public boolean add(MapClaimIslandWhitelistItemState s) {
+            if (s instanceof AbstractMapClaimIslandWhitelistItemState) {
+                AbstractMapClaimIslandWhitelistItemState state = (AbstractMapClaimIslandWhitelistItemState) s;
+                state.setProtectedMapState(AbstractMapState.this);
+            }
+            return protectedMapClaimIslandWhitelistItems.add(s);
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            if (o instanceof AbstractMapClaimIslandWhitelistItemState) {
+                AbstractMapClaimIslandWhitelistItemState s = (AbstractMapClaimIslandWhitelistItemState) o;
+                s.setProtectedMapState(null);
+            }
+            return protectedMapClaimIslandWhitelistItems.remove(o);
+        }
+
+        @Override
+        public boolean removeState(MapClaimIslandWhitelistItemState s) {
+            return remove(s);
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> c) {
+            return protectedMapClaimIslandWhitelistItems.contains(c);
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends MapClaimIslandWhitelistItemState> c) {
+            return protectedMapClaimIslandWhitelistItems.addAll(c);
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> c) {
+            return protectedMapClaimIslandWhitelistItems.removeAll(c);
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> c) {
+            return protectedMapClaimIslandWhitelistItems.retainAll(c);
+        }
+
+        @Override
+        public void clear() {
+            protectedMapClaimIslandWhitelistItems.clear();
         }
     }
 

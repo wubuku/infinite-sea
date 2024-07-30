@@ -14,12 +14,12 @@ import java.math.*;
 import java.util.*;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class MapSettingsUpdated {
+public class WhitelistedForClaimingIsland {
     private String id;
 
     private BigInteger version;
 
-    private Integer claimIslandSetting;
+    private String accountAddress;
 
     public String getId() {
         return id;
@@ -37,20 +37,20 @@ public class MapSettingsUpdated {
         this.version = version;
     }
 
-    public Integer getClaimIslandSetting() {
-        return claimIslandSetting;
+    public String getAccountAddress() {
+        return accountAddress;
     }
 
-    public void setClaimIslandSetting(Integer claimIslandSetting) {
-        this.claimIslandSetting = claimIslandSetting;
+    public void setAccountAddress(String accountAddress) {
+        this.accountAddress = accountAddress;
     }
 
     @Override
     public String toString() {
-        return "MapSettingsUpdated{" +
+        return "WhitelistedForClaimingIsland{" +
                 "id=" + '\'' + id + '\'' +
                 ", version=" + version +
-                ", claimIslandSetting=" + claimIslandSetting +
+                ", accountAddress=" + '\'' + accountAddress + '\'' +
                 '}';
     }
 

@@ -661,6 +661,13 @@ public class AggregatesHibernateConfig {
     }
 
     @Bean
+    public MapClaimIslandWhitelistItemEventDao mapClaimIslandWhitelistItemEventDao(SessionFactory hibernateSessionFactory) {
+        HibernateMapClaimIslandWhitelistItemEventDao dao = new HibernateMapClaimIslandWhitelistItemEventDao();
+        dao.setSessionFactory(hibernateSessionFactory);
+        return dao;
+    }
+
+    @Bean
     public MapStateRepository mapStateRepository(
             SessionFactory hibernateSessionFactory,
             ReadOnlyProxyGenerator stateReadOnlyProxyGenerator

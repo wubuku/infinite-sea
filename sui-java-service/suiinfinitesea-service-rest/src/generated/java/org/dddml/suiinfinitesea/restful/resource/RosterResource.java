@@ -189,24 +189,6 @@ public class RosterResource {
     }
 
 
-    @PutMapping("{rosterId}/_commands/UpdateLocation")
-    public void updateLocation(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.UpdateLocation content) {
-        try {
-
-            RosterCommands.UpdateLocation cmd = content;//.toUpdateLocation();
-            RosterId idObj = RosterResourceUtils.parseIdString(rosterId);
-            if (cmd.getRosterId() == null) {
-                cmd.setRosterId(idObj);
-            } else if (!cmd.getRosterId().equals(idObj)) {
-                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", rosterId, cmd.getRosterId());
-            }
-            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
-            rosterApplicationService.when(cmd);
-
-        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
-    }
-
-
     @PutMapping("{rosterId}/_commands/AdjustShipsPosition")
     public void adjustShipsPosition(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.AdjustShipsPosition content) {
         try {

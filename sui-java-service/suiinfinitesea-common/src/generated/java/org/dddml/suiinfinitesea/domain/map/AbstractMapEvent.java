@@ -199,6 +199,32 @@ public abstract class AbstractMapEvent extends AbstractEvent implements MapEvent
         }
     }
 
+    protected MapClaimIslandWhitelistItemEventDao getMapClaimIslandWhitelistItemEventDao() {
+        return (MapClaimIslandWhitelistItemEventDao)ApplicationContext.current.get("mapClaimIslandWhitelistItemEventDao");
+    }
+
+    protected MapClaimIslandWhitelistItemEventId newMapClaimIslandWhitelistItemEventId(String key)
+    {
+        MapClaimIslandWhitelistItemEventId eventId = new MapClaimIslandWhitelistItemEventId(this.getMapEventId().getId(), 
+            key, 
+            this.getMapEventId().getVersion());
+        return eventId;
+    }
+
+    protected void throwOnInconsistentEventIds(MapClaimIslandWhitelistItemEvent.SqlMapClaimIslandWhitelistItemEvent e)
+    {
+        throwOnInconsistentEventIds(this, e);
+    }
+
+    public static void throwOnInconsistentEventIds(MapEvent.SqlMapEvent oe, MapClaimIslandWhitelistItemEvent.SqlMapClaimIslandWhitelistItemEvent e)
+    {
+        if (!oe.getMapEventId().getId().equals(e.getMapClaimIslandWhitelistItemEventId().getMapId()))
+        { 
+            throw DomainError.named("inconsistentEventIds", "Outer Id Id %1$s but inner id MapId %2$s", 
+                oe.getMapEventId().getId(), e.getMapClaimIslandWhitelistItemEventId().getMapId());
+        }
+    }
+
 
     public abstract String getEventType();
 
@@ -375,16 +401,58 @@ public abstract class AbstractMapEvent extends AbstractEvent implements MapEvent
             return "MapSettingsUpdated";
         }
 
-        public Boolean getForNftHoldersOnly() {
-            Object val = getDynamicProperties().get("forNftHoldersOnly");
-            if (val instanceof Boolean) {
-                return (Boolean) val;
+        public Integer getClaimIslandSetting() {
+            Object val = getDynamicProperties().get("claimIslandSetting");
+            if (val instanceof Integer) {
+                return (Integer) val;
             }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, Boolean.class);
+            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
         }
 
-        public void setForNftHoldersOnly(Boolean value) {
-            getDynamicProperties().put("forNftHoldersOnly", value);
+        public void setClaimIslandSetting(Integer value) {
+            getDynamicProperties().put("claimIslandSetting", value);
+        }
+
+    }
+
+    public static class WhitelistedForClaimingIsland extends MapLobEvent implements MapEvent.WhitelistedForClaimingIsland {
+
+        @Override
+        public String getEventType() {
+            return "WhitelistedForClaimingIsland";
+        }
+
+        public String getAccountAddress() {
+            Object val = getDynamicProperties().get("accountAddress");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setAccountAddress(String value) {
+            getDynamicProperties().put("accountAddress", value);
+        }
+
+    }
+
+    public static class UnWhitelistedForClaimingIsland extends MapLobEvent implements MapEvent.UnWhitelistedForClaimingIsland {
+
+        @Override
+        public String getEventType() {
+            return "UnWhitelistedForClaimingIsland";
+        }
+
+        public String getAccountAddress() {
+            Object val = getDynamicProperties().get("accountAddress");
+            if (val instanceof String) {
+                return (String) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, String.class);
+        }
+
+        public void setAccountAddress(String value) {
+            getDynamicProperties().put("accountAddress", value);
         }
 
     }

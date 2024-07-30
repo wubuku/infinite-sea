@@ -19,6 +19,8 @@ import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
 import org.dddml.suiinfinitesea.sui.contract.map.MapIslandClaimed;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandResourcesGathered;
 import org.dddml.suiinfinitesea.sui.contract.map.MapSettingsUpdated;
+import org.dddml.suiinfinitesea.sui.contract.map.WhitelistedForClaimingIsland;
+import org.dddml.suiinfinitesea.sui.contract.map.UnWhitelistedForClaimingIsland;
 import org.dddml.suiinfinitesea.sui.contract.repository.MapEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -241,6 +243,86 @@ public class MapEventService {
             return;
         }
         mapEventRepository.save(mapSettingsUpdated);
+    }
+
+    @Transactional
+    public void pullWhitelistedForClaimingIslandEvents() {
+        String packageId = getMapSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getWhitelistedForClaimingIslandEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<WhitelistedForClaimingIsland> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.MAP_MODULE_WHITELISTED_FOR_CLAIMING_ISLAND,
+                    cursor, limit, false, WhitelistedForClaimingIsland.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<WhitelistedForClaimingIsland> eventEnvelope : eventPage.getData()) {
+                    saveWhitelistedForClaimingIsland(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getWhitelistedForClaimingIslandEventNextCursor() {
+        AbstractMapEvent lastEvent = mapEventRepository.findFirstWhitelistedForClaimingIslandByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveWhitelistedForClaimingIsland(SuiMoveEventEnvelope<WhitelistedForClaimingIsland> eventEnvelope) {
+        AbstractMapEvent.WhitelistedForClaimingIsland whitelistedForClaimingIsland = DomainBeanUtils.toWhitelistedForClaimingIsland(eventEnvelope);
+        if (mapEventRepository.findById(whitelistedForClaimingIsland.getMapEventId()).isPresent()) {
+            return;
+        }
+        mapEventRepository.save(whitelistedForClaimingIsland);
+    }
+
+    @Transactional
+    public void pullUnWhitelistedForClaimingIslandEvents() {
+        String packageId = getMapSuiPackageId();
+        if (packageId == null) {
+            return;
+        }
+        int limit = 1;
+        EventId cursor = getUnWhitelistedForClaimingIslandEventNextCursor();
+        while (true) {
+            PaginatedMoveEvents<UnWhitelistedForClaimingIsland> eventPage = suiJsonRpcClient.queryMoveEvents(
+                    packageId + "::" + ContractConstants.MAP_MODULE_UN_WHITELISTED_FOR_CLAIMING_ISLAND,
+                    cursor, limit, false, UnWhitelistedForClaimingIsland.class);
+
+            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
+                cursor = eventPage.getNextCursor();
+                for (SuiMoveEventEnvelope<UnWhitelistedForClaimingIsland> eventEnvelope : eventPage.getData()) {
+                    saveUnWhitelistedForClaimingIsland(eventEnvelope);
+                }
+            } else {
+                break;
+            }
+            if (!Page.hasNextPage(eventPage)) {
+                break;
+            }
+        }
+    }
+
+    private EventId getUnWhitelistedForClaimingIslandEventNextCursor() {
+        AbstractMapEvent lastEvent = mapEventRepository.findFirstUnWhitelistedForClaimingIslandByOrderBySuiTimestampDesc();
+        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
+    }
+
+    private void saveUnWhitelistedForClaimingIsland(SuiMoveEventEnvelope<UnWhitelistedForClaimingIsland> eventEnvelope) {
+        AbstractMapEvent.UnWhitelistedForClaimingIsland unWhitelistedForClaimingIsland = DomainBeanUtils.toUnWhitelistedForClaimingIsland(eventEnvelope);
+        if (mapEventRepository.findById(unWhitelistedForClaimingIsland.getMapEventId()).isPresent()) {
+            return;
+        }
+        mapEventRepository.save(unWhitelistedForClaimingIsland);
     }
 
 

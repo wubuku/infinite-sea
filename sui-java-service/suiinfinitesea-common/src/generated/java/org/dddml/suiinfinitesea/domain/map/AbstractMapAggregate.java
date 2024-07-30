@@ -73,11 +73,37 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
         }
 
         @Override
-        public void updateSettings(Boolean forNftHoldersOnly, Long offChainVersion, String commandId, String requesterId, MapCommands.UpdateSettings c) {
-            java.util.function.Supplier<MapEvent.MapSettingsUpdated> eventFactory = () -> newMapSettingsUpdated(forNftHoldersOnly, offChainVersion, commandId, requesterId);
+        public void updateSettings(Integer claimIslandSetting, Long offChainVersion, String commandId, String requesterId, MapCommands.UpdateSettings c) {
+            java.util.function.Supplier<MapEvent.MapSettingsUpdated> eventFactory = () -> newMapSettingsUpdated(claimIslandSetting, offChainVersion, commandId, requesterId);
             MapEvent.MapSettingsUpdated e;
             try {
-                e = verifyUpdateSettings(eventFactory, forNftHoldersOnly, c);
+                e = verifyUpdateSettings(eventFactory, claimIslandSetting, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
+        @Override
+        public void addToWhitelist(String accountAddress, Long offChainVersion, String commandId, String requesterId, MapCommands.AddToWhitelist c) {
+            java.util.function.Supplier<MapEvent.WhitelistedForClaimingIsland> eventFactory = () -> newWhitelistedForClaimingIsland(accountAddress, offChainVersion, commandId, requesterId);
+            MapEvent.WhitelistedForClaimingIsland e;
+            try {
+                e = verifyAddToWhitelist(eventFactory, accountAddress, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
+        @Override
+        public void removeFromWhitelist(String accountAddress, Long offChainVersion, String commandId, String requesterId, MapCommands.RemoveFromWhitelist c) {
+            java.util.function.Supplier<MapEvent.UnWhitelistedForClaimingIsland> eventFactory = () -> newUnWhitelistedForClaimingIsland(accountAddress, offChainVersion, commandId, requesterId);
+            MapEvent.UnWhitelistedForClaimingIsland e;
+            try {
+                e = verifyRemoveFromWhitelist(eventFactory, accountAddress, c);
             } catch (Exception ex) {
                 throw new DomainError("VerificationFailed", ex);
             }
@@ -172,20 +198,62 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
         }
            
 
-        protected MapEvent.MapSettingsUpdated verifyUpdateSettings(java.util.function.Supplier<MapEvent.MapSettingsUpdated> eventFactory, Boolean forNftHoldersOnly, MapCommands.UpdateSettings c) {
-            Boolean ForNftHoldersOnly = forNftHoldersOnly;
+        protected MapEvent.MapSettingsUpdated verifyUpdateSettings(java.util.function.Supplier<MapEvent.MapSettingsUpdated> eventFactory, Integer claimIslandSetting, MapCommands.UpdateSettings c) {
+            Integer ClaimIslandSetting = claimIslandSetting;
 
             MapEvent.MapSettingsUpdated e = (MapEvent.MapSettingsUpdated) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.map.UpdateSettingsLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, MapState.class, Boolean.class, VerificationContext.class},
-                    new Object[]{eventFactory, getState(), forNftHoldersOnly, VerificationContext.forCommand(c)}
+                    new Class[]{java.util.function.Supplier.class, MapState.class, Integer.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), claimIslandSetting, VerificationContext.forCommand(c)}
             );
 
 //package org.dddml.suiinfinitesea.domain.map;
 //
 //public class UpdateSettingsLogic {
-//    public static MapEvent.MapSettingsUpdated verify(java.util.function.Supplier<MapEvent.MapSettingsUpdated> eventFactory, MapState mapState, Boolean forNftHoldersOnly, VerificationContext verificationContext) {
+//    public static MapEvent.MapSettingsUpdated verify(java.util.function.Supplier<MapEvent.MapSettingsUpdated> eventFactory, MapState mapState, Integer claimIslandSetting, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
+        protected MapEvent.WhitelistedForClaimingIsland verifyAddToWhitelist(java.util.function.Supplier<MapEvent.WhitelistedForClaimingIsland> eventFactory, String accountAddress, MapCommands.AddToWhitelist c) {
+            String AccountAddress = accountAddress;
+
+            MapEvent.WhitelistedForClaimingIsland e = (MapEvent.WhitelistedForClaimingIsland) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.map.AddToWhitelistLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, MapState.class, String.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), accountAddress, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.map;
+//
+//public class AddToWhitelistLogic {
+//    public static MapEvent.WhitelistedForClaimingIsland verify(java.util.function.Supplier<MapEvent.WhitelistedForClaimingIsland> eventFactory, MapState mapState, String accountAddress, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
+        protected MapEvent.UnWhitelistedForClaimingIsland verifyRemoveFromWhitelist(java.util.function.Supplier<MapEvent.UnWhitelistedForClaimingIsland> eventFactory, String accountAddress, MapCommands.RemoveFromWhitelist c) {
+            String AccountAddress = accountAddress;
+
+            MapEvent.UnWhitelistedForClaimingIsland e = (MapEvent.UnWhitelistedForClaimingIsland) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.map.RemoveFromWhitelistLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, MapState.class, String.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), accountAddress, VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.map;
+//
+//public class RemoveFromWhitelistLogic {
+//    public static MapEvent.UnWhitelistedForClaimingIsland verify(java.util.function.Supplier<MapEvent.UnWhitelistedForClaimingIsland> eventFactory, MapState mapState, String accountAddress, VerificationContext verificationContext) {
 //    }
 //}
 
@@ -286,11 +354,55 @@ public abstract class AbstractMapAggregate extends AbstractAggregate implements 
             return e;
         }
 
-        protected AbstractMapEvent.MapSettingsUpdated newMapSettingsUpdated(Boolean forNftHoldersOnly, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractMapEvent.MapSettingsUpdated newMapSettingsUpdated(Integer claimIslandSetting, Long offChainVersion, String commandId, String requesterId) {
             MapEventId eventId = new MapEventId(getState().getId(), null);
             AbstractMapEvent.MapSettingsUpdated e = new AbstractMapEvent.MapSettingsUpdated();
 
-            e.getDynamicProperties().put("forNftHoldersOnly", forNftHoldersOnly);
+            e.getDynamicProperties().put("claimIslandSetting", claimIslandSetting);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setMapEventId(eventId);
+            return e;
+        }
+
+        protected AbstractMapEvent.WhitelistedForClaimingIsland newWhitelistedForClaimingIsland(String accountAddress, Long offChainVersion, String commandId, String requesterId) {
+            MapEventId eventId = new MapEventId(getState().getId(), null);
+            AbstractMapEvent.WhitelistedForClaimingIsland e = new AbstractMapEvent.WhitelistedForClaimingIsland();
+
+            e.getDynamicProperties().put("accountAddress", accountAddress);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setMapEventId(eventId);
+            return e;
+        }
+
+        protected AbstractMapEvent.UnWhitelistedForClaimingIsland newUnWhitelistedForClaimingIsland(String accountAddress, Long offChainVersion, String commandId, String requesterId) {
+            MapEventId eventId = new MapEventId(getState().getId(), null);
+            AbstractMapEvent.UnWhitelistedForClaimingIsland e = new AbstractMapEvent.UnWhitelistedForClaimingIsland();
+
+            e.getDynamicProperties().put("accountAddress", accountAddress);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

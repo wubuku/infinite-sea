@@ -50,6 +50,7 @@ public class M {
         typeToAggMap.put("WhitelistEntry", "Whitelist");
         typeToAggMap.put("Whitelist", "Whitelist");
         typeToAggMap.put("RosterShipsItem", "Roster");
+        typeToAggMap.put("MapClaimIslandWhitelistItem", "Map");
         typeToAggMap.put("ExperienceTable", "ExperienceTable");
         TYPE_NAME_TO_AGGREGATE_NAME_MAP = typeToAggMap;
 
@@ -1934,7 +1935,8 @@ public class M {
 
     public static final String[] propertyNames = new String[] {
             "id",
-            "forNftHoldersOnly",
+            "claimIslandSetting",
+            "claimIslandWhitelist",
             "offChainVersion",
             "createdBy",
             "createdAt",
@@ -1947,7 +1949,8 @@ public class M {
 
     public static final String[] propertyTypes = new String[] {
             "String",
-            "Boolean",
+            "Integer",
+            "Table",
             "Long",
             "String",
             "Date",
@@ -1972,8 +1975,10 @@ public class M {
     private static  void initAliasMap() {
         aliasMap.put("id", "id");
         aliasMap.put("Id", "id");
-        aliasMap.put("forNftHoldersOnly", "forNftHoldersOnly");
-        aliasMap.put("ForNftHoldersOnly", "forNftHoldersOnly");
+        aliasMap.put("claimIslandSetting", "claimIslandSetting");
+        aliasMap.put("ClaimIslandSetting", "claimIslandSetting");
+        aliasMap.put("claimIslandWhitelist", "claimIslandWhitelist");
+        aliasMap.put("ClaimIslandWhitelist", "claimIslandWhitelist");
         aliasMap.put("offChainVersion", "offChainVersion");
         aliasMap.put("OffChainVersion", "offChainVersion");
         aliasMap.put("createdBy", "createdBy");
@@ -2105,6 +2110,97 @@ public class M {
         aliasMap.put("MapLocationId.CoordinatesY", "mapLocationId.coordinatesY");
         aliasMap.put("mapLocationId.coordinates.y", "mapLocationId.coordinatesY");
         aliasMap.put("MapLocationId.Coordinates.Y", "mapLocationId.coordinatesY");
+    }
+
+    private static void initPropertyTypeMap() {
+        for (int i = 0; i < propertyNames.length; i++ ) {
+            propertyTypeMap.put(propertyNames[i], propertyTypes[i]);
+        }
+    }
+
+  }
+
+
+  // /////////////////////////////////////////////////////////  
+  public static class MapClaimIslandWhitelistItemMetadata {
+
+    private MapClaimIslandWhitelistItemMetadata() {
+    }
+
+    public static final String PROPERTY_NAME_VERSION      = "offChainVersion";
+    public static final String PROPERTY_NAME_ACTIVE       = "active";
+    public static final String PROPERTY_NAME_DELETED      = "deleted";
+    public static final String PROPERTY_NAME_CREATED_BY   = "createdBy";
+    public static final String PROPERTY_NAME_CREATED_AT   = "createdAt";
+    public static final String PROPERTY_NAME_UPDATED_BY   = "updatedBy";
+    public static final String PROPERTY_NAME_UPDATED_AT   = "updatedAt";
+
+    public static final String[] propertyNames = new String[] {
+            "key",
+            "value",
+            "offChainVersion",
+            "createdBy",
+            "createdAt",
+            "updatedBy",
+            "updatedAt",
+            "active",
+            "deleted",
+            "mapId",
+            "mapClaimIslandWhitelistItemId.mapId",
+            "mapClaimIslandWhitelistItemId.key",
+    };
+
+    public static final String[] propertyTypes = new String[] {
+            "String",
+            "Boolean",
+            "Long",
+            "String",
+            "Date",
+            "String",
+            "Date",
+            "Boolean",
+            "Boolean",
+            "String",
+            "String",
+            "String",
+    };
+
+    public static final Map<String, String> propertyTypeMap;
+
+    public static final Map<String, String> aliasMap;
+
+    static {
+        propertyTypeMap = new HashMap<String, String>();
+        initPropertyTypeMap();
+        aliasMap = new HashMap<String, String>();
+        initAliasMap();
+    }
+
+    private static  void initAliasMap() {
+        aliasMap.put("key", "mapClaimIslandWhitelistItemId.key");
+        aliasMap.put("Key", "mapClaimIslandWhitelistItemId.key");
+        aliasMap.put("value", "value");
+        aliasMap.put("Value", "value");
+        aliasMap.put("offChainVersion", "offChainVersion");
+        aliasMap.put("OffChainVersion", "offChainVersion");
+        aliasMap.put("createdBy", "createdBy");
+        aliasMap.put("CreatedBy", "createdBy");
+        aliasMap.put("createdAt", "createdAt");
+        aliasMap.put("CreatedAt", "createdAt");
+        aliasMap.put("updatedBy", "updatedBy");
+        aliasMap.put("UpdatedBy", "updatedBy");
+        aliasMap.put("updatedAt", "updatedAt");
+        aliasMap.put("UpdatedAt", "updatedAt");
+        aliasMap.put("active", "active");
+        aliasMap.put("Active", "active");
+        aliasMap.put("deleted", "deleted");
+        aliasMap.put("Deleted", "deleted");
+        aliasMap.put("mapId", "mapClaimIslandWhitelistItemId.mapId");
+        aliasMap.put("MapId", "mapClaimIslandWhitelistItemId.mapId");
+        aliasMap.put("mapClaimIslandWhitelistItemId.mapId", "mapClaimIslandWhitelistItemId.mapId");
+        aliasMap.put("MapClaimIslandWhitelistItemId.MapId", "mapClaimIslandWhitelistItemId.mapId");
+        aliasMap.put("mapClaimIslandWhitelistItemId.key", "mapClaimIslandWhitelistItemId.key");
+        aliasMap.put("MapClaimIslandWhitelistItemId.Key", "mapClaimIslandWhitelistItemId.key");
     }
 
     private static void initPropertyTypeMap() {

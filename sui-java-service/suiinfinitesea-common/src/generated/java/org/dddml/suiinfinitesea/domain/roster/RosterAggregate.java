@@ -23,8 +23,6 @@ public interface RosterAggregate {
 
     void addShip(String ship, BigInteger position, Long offChainVersion, String commandId, String requesterId, RosterCommands.AddShip c);
 
-    void updateLocation(String clock, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId, RosterCommands.UpdateLocation c);
-
     void adjustShipsPosition(String player, BigInteger[] positions, String[] shipIds, Long offChainVersion, String commandId, String requesterId, RosterCommands.AdjustShipsPosition c);
 
     void transferShip(String player, String shipId, RosterId toRoster, BigInteger toPosition, Long offChainVersion, String commandId, String requesterId, RosterCommands.TransferShip c);

@@ -25,5 +25,9 @@ public interface MapEventRepository extends JpaRepository<AbstractMapEvent, MapE
 
     AbstractMapEvent.MapSettingsUpdated findFirstMapSettingsUpdatedByOrderBySuiTimestampDesc();
 
+    AbstractMapEvent.WhitelistedForClaimingIsland findFirstWhitelistedForClaimingIslandByOrderBySuiTimestampDesc();
+
+    AbstractMapEvent.UnWhitelistedForClaimingIsland findFirstUnWhitelistedForClaimingIslandByOrderBySuiTimestampDesc();
+
     List<AbstractMapEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }

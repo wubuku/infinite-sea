@@ -24,14 +24,17 @@ public class SuiMapStateRetriever {
 
     private Function<String, MapState.MutableMapState> mapStateFactory;
     private BiFunction<MapState, Coordinates, MapLocationState.MutableMapLocationState> mapLocationStateFactory;
+    private BiFunction<MapState, String, MapClaimIslandWhitelistItemState.MutableMapClaimIslandWhitelistItemState> mapClaimIslandWhitelistItemStateFactory;
 
     public SuiMapStateRetriever(SuiJsonRpcClient suiJsonRpcClient,
                                   Function<String, MapState.MutableMapState> mapStateFactory,
-                                  BiFunction<MapState, Coordinates, MapLocationState.MutableMapLocationState> mapLocationStateFactory
+                                  BiFunction<MapState, Coordinates, MapLocationState.MutableMapLocationState> mapLocationStateFactory,
+                                  BiFunction<MapState, String, MapClaimIslandWhitelistItemState.MutableMapClaimIslandWhitelistItemState> mapClaimIslandWhitelistItemStateFactory
     ) {
         this.suiJsonRpcClient = suiJsonRpcClient;
         this.mapStateFactory = mapStateFactory;
         this.mapLocationStateFactory = mapLocationStateFactory;
+        this.mapClaimIslandWhitelistItemStateFactory = mapClaimIslandWhitelistItemStateFactory;
     }
 
     public MapState retrieveMapState(String objectId) {
@@ -48,12 +51,21 @@ public class SuiMapStateRetriever {
     private MapState toMapState(Map map) {
         MapState.MutableMapState mapState = mapStateFactory.apply(map.getId().getId());
         mapState.setVersion(map.getVersion());
-        mapState.setForNftHoldersOnly(map.getForNftHoldersOnly());
+        mapState.setClaimIslandSetting(map.getClaimIslandSetting());
+        mapState.setClaimIslandWhitelist(DomainBeanUtils.toTable(map.getClaimIslandWhitelist()));
         if (map.getLocations() != null) {
             String mapLocationTableId = map.getLocations().getFields().getId().getId();
             List<MapLocation> locations = getMapLocations(mapLocationTableId);
             for (MapLocation i : locations) {
                 ((EntityStateCollection.ModifiableEntityStateCollection)mapState.getLocations()).add(toMapLocationState(mapState, i));
+            }
+        }
+
+        if (map.getClaimIslandWhitelist() != null) {
+            String mapClaimIslandWhitelistItemTableId = map.getClaimIslandWhitelist().getFields().getId().getId();
+            List<MapClaimIslandWhitelistItemState> mapClaimIslandWhitelistItems = getMapClaimIslandWhitelistItems(mapState, mapClaimIslandWhitelistItemTableId);
+            for (MapClaimIslandWhitelistItemState i : mapClaimIslandWhitelistItems) {
+                ((EntityStateCollection.ModifiableEntityStateCollection)mapState.getMapClaimIslandWhitelistItems()).add(i);
             }
         }
 
@@ -67,6 +79,12 @@ public class SuiMapStateRetriever {
         mapLocationState.setResources(java.util.Arrays.stream(mapLocation.getResources()).map(x -> DomainBeanUtils.toItemIdQuantityPair(x)).collect(java.util.stream.Collectors.toSet()));
         mapLocationState.setGatheredAt(mapLocation.getGatheredAt());
         return mapLocationState;
+    }
+
+    private MapClaimIslandWhitelistItemState toMapClaimIslandWhitelistItemState(MapState mapState, String key, Boolean value) {
+        MapClaimIslandWhitelistItemState.MutableMapClaimIslandWhitelistItemState mapClaimIslandWhitelistItemState = mapClaimIslandWhitelistItemStateFactory.apply(mapState, key);
+        mapClaimIslandWhitelistItemState.setValue(value);
+        return mapClaimIslandWhitelistItemState;
     }
 
     private List<MapLocation> getMapLocations(String mapLocationTableId) {
@@ -88,6 +106,28 @@ public class SuiMapStateRetriever {
             }
         }
         return mapLocations;
+    }
+
+    private List<MapClaimIslandWhitelistItemState> getMapClaimIslandWhitelistItems(MapState mapState, String mapClaimIslandWhitelistItemTableId) {
+        List<MapClaimIslandWhitelistItemState> mapClaimIslandWhitelistItems = new ArrayList<>();
+        String cursor = null;
+        while (true) {
+            DynamicFieldPage<?> mapClaimIslandWhitelistItemFieldPage = suiJsonRpcClient.getDynamicFields(mapClaimIslandWhitelistItemTableId, cursor, null);
+            for (DynamicFieldInfo mapClaimIslandWhitelistItemFieldInfo : mapClaimIslandWhitelistItemFieldPage.getData()) {
+                String fieldObjectId = mapClaimIslandWhitelistItemFieldInfo.getObjectId();
+                SuiMoveObjectResponse<SimpleDynamicField<String, Boolean>> getMapClaimIslandWhitelistItemFieldResponse
+                        = suiJsonRpcClient.getMoveObject(fieldObjectId, new SuiObjectDataOptions(true, true, true, true, true, true, true), new com.fasterxml.jackson.core.type.TypeReference<SuiMoveObjectResponse<SimpleDynamicField<String, Boolean>>>() {});
+                String key = getMapClaimIslandWhitelistItemFieldResponse.getData().getContent().getFields().getName();
+                Boolean value = getMapClaimIslandWhitelistItemFieldResponse.getData().getContent().getFields().getValue();
+                MapClaimIslandWhitelistItemState mapClaimIslandWhitelistItemState = toMapClaimIslandWhitelistItemState(mapState, key, value);
+                mapClaimIslandWhitelistItems.add(mapClaimIslandWhitelistItemState);
+            }
+            cursor = mapClaimIslandWhitelistItemFieldPage.getNextCursor();
+            if (!Page.hasNextPage(mapClaimIslandWhitelistItemFieldPage)) {
+                break;
+            }
+        }
+        return mapClaimIslandWhitelistItems;
     }
 
     

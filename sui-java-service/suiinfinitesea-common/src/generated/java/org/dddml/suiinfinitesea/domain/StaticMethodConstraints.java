@@ -184,14 +184,6 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.roster.UpdateLocationLogic",
-                    "verify",
-                    new Class[]{java.util.function.Supplier.class, RosterState.class, Coordinates.class, VerificationContext.class},
-                    new String[]{"_", "_", "updatedCoordinates"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.roster.AdjustShipsPositionLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, RosterState.class, BigInteger[].class, String[].class, VerificationContext.class},
@@ -426,8 +418,24 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.map.UpdateSettingsLogic",
                     "verify",
-                    new Class[]{java.util.function.Supplier.class, MapState.class, Boolean.class, VerificationContext.class},
-                    new String[]{"_", "_", "forNftHoldersOnly"}
+                    new Class[]{java.util.function.Supplier.class, MapState.class, Integer.class, VerificationContext.class},
+                    new String[]{"_", "_", "claimIslandSetting"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.map.AddToWhitelistLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, MapState.class, String.class, VerificationContext.class},
+                    new String[]{"_", "_", "accountAddress"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.map.RemoveFromWhitelistLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, MapState.class, String.class, VerificationContext.class},
+                    new String[]{"_", "_", "accountAddress"}
             );
 
 
@@ -572,14 +580,6 @@ public class StaticMethodConstraints {
                     "mutate",
                     new Class[]{RosterState.class, String.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "ship", "position", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
-            );
-
-
-        ReflectUtils.assertStaticMethodIfClassExists(
-                    "org.dddml.suiinfinitesea.domain.roster.UpdateLocationLogic",
-                    "mutate",
-                    new Class[]{RosterState.class, Coordinates.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "updatedCoordinates", "coordinatesUpdatedAt", "newStatus", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 
@@ -818,8 +818,24 @@ public class StaticMethodConstraints {
         ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.map.UpdateSettingsLogic",
                     "mutate",
-                    new Class[]{MapState.class, Boolean.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new String[]{"_", "forNftHoldersOnly", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+                    new Class[]{MapState.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "claimIslandSetting", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.map.AddToWhitelistLogic",
+                    "mutate",
+                    new Class[]{MapState.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "accountAddress", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.map.RemoveFromWhitelistLogic",
+                    "mutate",
+                    new Class[]{MapState.class, String.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "accountAddress", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 

@@ -332,8 +332,6 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
             ;
         } else if (e instanceof AbstractRosterEvent.EnvironmentRosterCreated) {
             when((AbstractRosterEvent.EnvironmentRosterCreated)e);
-        } else if (e instanceof AbstractRosterEvent.RosterLocationUpdated) {
-            when((AbstractRosterEvent.RosterLocationUpdated)e);
         } else if (e instanceof AbstractRosterEvent.RosterShipsPositionAdjusted) {
             when((AbstractRosterEvent.RosterShipsPositionAdjusted)e);
         } else if (e instanceof AbstractRosterEvent.RosterShipTransferred) {
@@ -623,59 +621,6 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
 //
 //public class SetSailLogic {
 //    public static RosterState mutate(RosterState rosterState, Coordinates targetCoordinates, BigInteger sailDuration, BigInteger setSailAt, Coordinates updatedCoordinates, BigInteger energyCost, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
-//    }
-//}
-
-        if (this != updatedRosterState) { merge(updatedRosterState); } //else do nothing
-
-    }
-
-    public void when(AbstractRosterEvent.RosterLocationUpdated e) {
-        throwOnWrongEvent(e);
-
-        Coordinates updatedCoordinates = e.getUpdatedCoordinates();
-        Coordinates UpdatedCoordinates = updatedCoordinates;
-        BigInteger coordinatesUpdatedAt = e.getCoordinatesUpdatedAt();
-        BigInteger CoordinatesUpdatedAt = coordinatesUpdatedAt;
-        Integer newStatus = e.getNewStatus();
-        Integer NewStatus = newStatus;
-        Long suiTimestamp = e.getSuiTimestamp();
-        Long SuiTimestamp = suiTimestamp;
-        String suiTxDigest = e.getSuiTxDigest();
-        String SuiTxDigest = suiTxDigest;
-        BigInteger suiEventSeq = e.getSuiEventSeq();
-        BigInteger SuiEventSeq = suiEventSeq;
-        String suiPackageId = e.getSuiPackageId();
-        String SuiPackageId = suiPackageId;
-        String suiTransactionModule = e.getSuiTransactionModule();
-        String SuiTransactionModule = suiTransactionModule;
-        String suiSender = e.getSuiSender();
-        String SuiSender = suiSender;
-        String suiType = e.getSuiType();
-        String SuiType = suiType;
-        String eventStatus = e.getEventStatus();
-        String EventStatus = eventStatus;
-
-        if (this.getCreatedBy() == null){
-            this.setCreatedBy(e.getCreatedBy());
-        }
-        if (this.getCreatedAt() == null){
-            this.setCreatedAt(e.getCreatedAt());
-        }
-        this.setUpdatedBy(e.getCreatedBy());
-        this.setUpdatedAt(e.getCreatedAt());
-
-        RosterState updatedRosterState = (RosterState) ReflectUtils.invokeStaticMethod(
-                    "org.dddml.suiinfinitesea.domain.roster.UpdateLocationLogic",
-                    "mutate",
-                    new Class[]{RosterState.class, Coordinates.class, BigInteger.class, Integer.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, updatedCoordinates, coordinatesUpdatedAt, newStatus, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
-            );
-
-//package org.dddml.suiinfinitesea.domain.roster;
-//
-//public class UpdateLocationLogic {
-//    public static RosterState mutate(RosterState rosterState, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Integer newStatus, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
 //    }
 //}
 

@@ -39,7 +39,9 @@ public class Map {
 
     private Long offChainVersion;
 
-    private Boolean forNftHoldersOnly;
+    private Integer claimIslandSetting;
+
+    private Table claimIslandWhitelist;
 
     private BigInteger version;
 
@@ -61,12 +63,20 @@ public class Map {
         this.offChainVersion = offChainVersion;
     }
 
-    public Boolean getForNftHoldersOnly() {
-        return forNftHoldersOnly;
+    public Integer getClaimIslandSetting() {
+        return claimIslandSetting;
     }
 
-    public void setForNftHoldersOnly(Boolean forNftHoldersOnly) {
-        this.forNftHoldersOnly = forNftHoldersOnly;
+    public void setClaimIslandSetting(Integer claimIslandSetting) {
+        this.claimIslandSetting = claimIslandSetting;
+    }
+
+    public Table getClaimIslandWhitelist() {
+        return claimIslandWhitelist;
+    }
+
+    public void setClaimIslandWhitelist(Table claimIslandWhitelist) {
+        this.claimIslandWhitelist = claimIslandWhitelist;
     }
 
     public BigInteger getVersion() {
@@ -90,7 +100,8 @@ public class Map {
         return "Map{" +
                 "id=" + id +
                 ", offChainVersion=" + offChainVersion +
-                ", forNftHoldersOnly=" + forNftHoldersOnly +
+                ", claimIslandSetting=" + claimIslandSetting +
+                ", claimIslandWhitelist=" + claimIslandWhitelist +
                 ", version=" + version +
                 ", locations=" + locations +
                 '}';

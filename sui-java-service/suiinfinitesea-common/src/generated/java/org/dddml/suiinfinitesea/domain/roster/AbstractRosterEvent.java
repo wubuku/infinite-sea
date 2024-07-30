@@ -486,51 +486,6 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
-    public static class RosterLocationUpdated extends RosterLobEvent implements RosterEvent.RosterLocationUpdated {
-
-        @Override
-        public String getEventType() {
-            return "RosterLocationUpdated";
-        }
-
-        public Coordinates getUpdatedCoordinates() {
-            Object val = getDynamicProperties().get("updatedCoordinates");
-            if (val instanceof Coordinates) {
-                return (Coordinates) val;
-            }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, Coordinates.class);
-        }
-
-        public void setUpdatedCoordinates(Coordinates value) {
-            getDynamicProperties().put("updatedCoordinates", value);
-        }
-
-        public BigInteger getCoordinatesUpdatedAt() {
-            Object val = getDynamicProperties().get("coordinatesUpdatedAt");
-            if (val instanceof BigInteger) {
-                return (BigInteger) val;
-            }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
-        }
-
-        public void setCoordinatesUpdatedAt(BigInteger value) {
-            getDynamicProperties().put("coordinatesUpdatedAt", value);
-        }
-
-        public Integer getNewStatus() {
-            Object val = getDynamicProperties().get("newStatus");
-            if (val instanceof Integer) {
-                return (Integer) val;
-            }
-            return ApplicationContext.current.getTypeConverter().convertValue(val, Integer.class);
-        }
-
-        public void setNewStatus(Integer value) {
-            getDynamicProperties().put("newStatus", value);
-        }
-
-    }
-
     public static class RosterShipsPositionAdjusted extends RosterLobEvent implements RosterEvent.RosterShipsPositionAdjusted {
 
         @Override

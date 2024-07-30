@@ -23,8 +23,6 @@ public interface RosterEventRepository extends JpaRepository<AbstractRosterEvent
 
     AbstractRosterEvent.RosterSetSail findFirstRosterSetSailByOrderBySuiTimestampDesc();
 
-    AbstractRosterEvent.RosterLocationUpdated findFirstRosterLocationUpdatedByOrderBySuiTimestampDesc();
-
     AbstractRosterEvent.RosterShipsPositionAdjusted findFirstRosterShipsPositionAdjustedByOrderBySuiTimestampDesc();
 
     AbstractRosterEvent.RosterShipTransferred findFirstRosterShipTransferredByOrderBySuiTimestampDesc();

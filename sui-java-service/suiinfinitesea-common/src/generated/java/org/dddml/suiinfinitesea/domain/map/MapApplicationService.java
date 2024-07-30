@@ -19,6 +19,10 @@ public interface MapApplicationService {
 
     void when(MapCommands.UpdateSettings c);
 
+    void when(MapCommands.AddToWhitelist c);
+
+    void when(MapCommands.RemoveFromWhitelist c);
+
     MapState get(String id);
 
     Iterable<MapState> getAll(Integer firstResult, Integer maxResults);
@@ -40,6 +44,10 @@ public interface MapApplicationService {
     MapLocationState getMapLocation(String mapId, Coordinates coordinates);
 
     Iterable<MapLocationState> getMapLocations(String mapId, Criterion filter, List<String> orders);
+
+    MapClaimIslandWhitelistItemState getMapClaimIslandWhitelistItem(String mapId, String key);
+
+    Iterable<MapClaimIslandWhitelistItemState> getMapClaimIslandWhitelistItems(String mapId, Criterion filter, List<String> orders);
 
 }
 
