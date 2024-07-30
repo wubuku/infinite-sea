@@ -3344,6 +3344,81 @@ Response:
 * winner:Indicate who has won the victory.(1:Player1,0:Player2).
 
 
+### 修改配置
+
+那些人可以认领岛屿，可以通过执行以下 `Sui CLI` 来实现：
+```shell
+
+sui client call --package {map.PackageId} --module map_aggregate --function update_settings --args {map.Map} {map.AdminCap} {claim_island_setting} --json
+```
+
+参数解释：
+
+Input parameter description:
+
+* `{map.PackageId}`：Map 合约包 ID（Map Contract Package ID）。
+* `{map.Map}`： 类型为 `&mut Map`。地图单对象 ID（Map object ID）。
+* `{map.AdminCap}`： 类型为 `&map::AdminCap`。管理权限对象 ID（Administrative permission object ID）。
+* `{account_address}`： 类型为 `address`。加入白名单的账号地址（Account addresses that have been added to the whitelist）。
+* `{claim_island_setting}`： 类型为 `u32`。通过修改该参数来指定那些玩家可以认领岛屿。1：拥有NFT的玩家；2：被加入白名单的人；3：任何人。
+
+以上命令执行成功之后，通过查看执行以下`Sui CLI`命令来查看 `Map`对象：
+```shell
+sui client object {map.Map} --json
+```
+可以得到如下输出：
+```json
+{
+  "objectId": "0x455d6bceb7c78c939f4e8b41b33ed9833f64b799515789382d381c669977ef7f",
+  "version": "96490503",
+  "digest": "69N86pDZi1xkMwYfo1hGsxZpW95GoFS7NdQ6isjbCZkB",
+  "type": "0x0eeb10261a3f1b5e11c592da23f3e5d8730898730c80f0e57c5c07e9a1ed60b4::map::Map",
+  "owner": {
+    "Shared": {
+      "initial_shared_version": 94538963
+    }
+  },
+  "previousTransaction": "srCuye5QXuR59ifrwakAea6pbZ7baYRnHzoTAkZSfoS",
+  "storageRebate": "2226800",
+  "content": {
+    "dataType": "moveObject",
+    "type": "0x0eeb10261a3f1b5e11c592da23f3e5d8730898730c80f0e57c5c07e9a1ed60b4::map::Map",
+    "hasPublicTransfer": false,
+    "fields": {
+      "admin_cap": "0xd076edb2fb9fc0f8295135af34c32951da5f9f98cec68865f5e17cb09b5b6eef",
+      "claim_island_setting": 2,
+      "claim_island_whitelist": {
+        "type": "0x2::table::Table<address, bool>",
+        "fields": {
+          "id": {
+            "id": "0xd2906b0214c678abf16aecd8c7bfd67f8e0073dc05f158f05beaf097fe0dc439"
+          },
+          "size": "0"
+        }
+      },
+      "id": {
+        "id": "0x455d6bceb7c78c939f4e8b41b33ed9833f64b799515789382d381c669977ef7f"
+      },
+      "locations": {
+        "type": "0x2::table::Table<0x00ad128e4abe153ed77ddc404d03c64c07f0f06efbedfc0557951a90197b1168::coordinates::Coordinates, 0x0eeb10261a3f1b5e11c592da23f3e5d8730898730c80f0e57c5c07e9a1ed60b4::map_location::MapLocation>",
+        "fields": {
+          "id": {
+            "id": "0x20814c4ed49e08be3860ba4934c94d3ce959b723327f6263fd0321a998c4dcd2"
+          },
+          "size": "65"
+        }
+      },
+      "schema_version": "0",
+      "version": "67"
+    }
+  }
+}
+```
+查看 `content.fields.claim_island_setting`即为我们刚刚设定的值，以上示例中为`2`，表示：只有加入白名单的玩家才可以认领岛屿。
+
+
+
+
 [TBD]
 
 ### 关于 Move Table 或者 ObjectTable 内容的查询
