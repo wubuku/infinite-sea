@@ -3359,7 +3359,7 @@ Input parameter description:
 * `{map.PackageId}`：Map 合约包 ID（Map Contract Package ID）。
 * `{map.Map}`： 类型为 `&mut Map`。地图单对象 ID（Map object ID）。
 * `{map.AdminCap}`： 类型为 `&map::AdminCap`。管理权限对象 ID（Administrative permission object ID）。
-* `{claim_island_setting}`： 类型为 `u32`。通过修改该参数来指定那些玩家可以认领岛屿。1：拥有NFT的玩家；2：被加入白名单的人；3：任何人。
+* `{claim_island_setting}`： 类型为 `u8`。通过修改该参数来指定那些玩家可以认领岛屿。1：拥有NFT的玩家；2：被加入白名单的人；3：任何人。
 
 以上命令执行成功之后，通过查看执行以下`Sui CLI`命令来查看 `Map`对象：
 ```shell
@@ -3431,7 +3431,7 @@ Input parameter description:
 * `{map.PackageId}`：Map 合约包 ID（Map Contract Package ID）。
 * `{map.Map}`： 类型为 `&mut Map`。地图单对象 ID（Map object ID）。
 * `{map.AdminCap}`： 类型为 `&map::AdminCap`。管理权限对象 ID（Administrative permission object ID）。
-* `{address}`： 类型为 `address`。加入白名单的账号地址（Account addresses that have been added to the whitelist）。
+* `{address}`： 类型为 `address`。加入白名单的账号地址（Account address to be added to the whitelist）。
 
 以上命令执行成功之后，再次查询 `Map` 对象，并且使用其 `{content.fields.claim_island_whitelist.id.id}` 属性的值，来执行以下 `curl` 命令：
 ```shell
@@ -3461,6 +3461,27 @@ curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1,"me
 }
 ```
 可以看到 `result.data` 属性为数组，每个数组元素的 `name.type` 的值为 `address`， `name.value` 的值即为加入白名单的账户地址。
+通过比对 `name.value` 的值可以判定指定的账户地址是否进入了可以认领岛屿的白名单。
+
+### 从白名单中移除
+
+通过以下`Sui CLI`命令可以将指定的`address`从可以认领岛屿的白名单中删除。
+```shell
+sui client call --package {map.PackageId} --module map_aggregate --function remove_from_whitelist --args \
+{map.Map}\
+{map.AdminCap}\ 
+{address} --json
+```
+
+参数解释：
+
+Input parameter description:
+
+* `{map.PackageId}`：Map 合约包 ID（Map Contract Package ID）。
+* `{map.Map}`： 类型为 `&mut Map`。地图对象 ID（Map object ID）。
+* `{map.AdminCap}`： 类型为 `&map::AdminCap`。管理权限对象 ID（Administrative permission object ID）。
+* `{address}`： 类型为 `address`。要从白名单中删除的账号地址（The account address to be removed from the whitelist）。
+
 
 [TBD]
 
