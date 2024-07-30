@@ -40,6 +40,8 @@ $testSkillProcessFarming = $true
 #要不要测试伐木进程一次？
 $testSkillProcessWooding = $true
 
+# map 包发布后，将占领岛屿白名单配置为何值？1：拥有NFT的玩家；2：被加入白名单的人；3：任何人。
+$claimIslandSetting = 3
 
 $playerName = 'Li Dahai'
 
@@ -825,6 +827,27 @@ $fileContent | Set-Content $file
 "`n休息一下,以免不能及时同步..." | Write-Host
 Start-Sleep -Seconds 3
 "休息完成，继续干活..." | Write-Host
+
+$updateSettingResult = ""
+"将认领岛屿白名单配置的值设置为: $claimIslandSetting " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+try {
+    $command = "sui client call --package $mapPackingId --module map_aggregate --function update_settings --args $mapId $mapAdminCap $claimIslandSetting --json"
+    $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+    $updateSettingResult = Invoke-Expression -Command $command
+    if (-not ('System.Object[]' -eq $updateSettingResult.GetType())) {
+        "修改配置时返回信息: $updateSettingResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        Set-Location $startLocation
+        return
+    }
+    $updateSettingResultObj = $updateSettingResult | ConvertFrom-Json
+    "配置成功！" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+}
+catch {
+    "修改配置失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    "返回的结果为: $updateSettingResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host
+    Set-Location $startLocation
+    return 
+}
 
 Set-Location $startLocation
 
