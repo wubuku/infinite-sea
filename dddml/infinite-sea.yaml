@@ -341,24 +341,24 @@ aggregates:
             EnergyCost:
               type: u64
 
-      UpdateLocation:
-        parameters:
-          Clock:
-            referenceType: Clock
-            isIgnoredInEvent: true
-          UpdatedCoordinates:
-            type: Coordinates
-        event:
-          name: RosterLocationUpdated
-          properties:
-            UpdatedCoordinates:
-              type: Coordinates
-            CoordinatesUpdatedAt:
-              type: u64
-            NewStatus:
-              type: u8
-            #OldStatus:
-            #  type: u8
+#      UpdateLocation:
+#        parameters:
+#          Clock:
+#            referenceType: Clock
+#            isIgnoredInEvent: true
+#          UpdatedCoordinates:
+#            type: Coordinates
+#        event:
+#          name: RosterLocationUpdated
+#          properties:
+#            UpdatedCoordinates:
+#              type: Coordinates
+#            CoordinatesUpdatedAt:
+#              type: u64
+#            NewStatus:
+#              type: u8
+#            #OldStatus:
+#            #  type: u8
 
       AdjustShipsPosition:
         parameters:

@@ -11,12 +11,24 @@ singletonObjects:
     properties:
       Locations:
         itemType: MapLocation
-      ForNftHoldersOnly:
-        type: bool
+      #ForNftHoldersOnly:
+      #  type: bool
+      #  optional: true
+      #  description: "Is island only for NFT holders to claim"
+      #  defaultLogic:
+      #    Move: "std::option::none()"
+      ClaimIslandSetting:
+        type: u8
         optional: true
-        description: "Is island only for NFT holders to claim"
         defaultLogic:
           Move: "std::option::none()"
+        description: "1: For NFT holders only; 2: For whitelisted accounts only, 3: For everyone"
+
+      ClaimIslandWhitelist:
+        type: Table<address, bool>
+        defaultLogic:
+          Move: "sui::table::new(ctx)"
+
     entities:
       MapLocation:
         id:
@@ -93,7 +105,25 @@ singletonObjects:
       UpdateSettings:
         requiredPermission: AdminCap
         parameters:
-          ForNftHoldersOnly:
-            type: bool
+          #ForNftHoldersOnly:
+          #  type: bool
+          ClaimIslandSetting:
+            type: u8
         event:
           name: MapSettingsUpdated
+
+      AddToWhitelist:
+        requiredPermission: AdminCap
+        parameters:
+          AccountAddress:
+            type: address
+        event:
+          name: WhitelistedForClaimingIsland
+
+      RemoveFromWhitelist:
+        requiredPermission: AdminCap
+        parameters:
+          AccountAddress:
+            type: address
+        event:
+          name: UnWhitelistedForClaimingIsland

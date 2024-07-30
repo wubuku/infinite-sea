@@ -15,7 +15,6 @@ module infinite_sea::roster_aggregate {
     use infinite_sea::roster_take_out_ship_inventory_logic;
     use infinite_sea::roster_transfer_ship_inventory_logic;
     use infinite_sea::roster_transfer_ship_logic;
-    use infinite_sea::roster_update_location_logic;
     use infinite_sea::ship::Ship;
     use infinite_sea_coin::energy::ENERGY;
     use infinite_sea_common::coordinates::{Self, Coordinates};
@@ -186,33 +185,6 @@ module infinite_sea::roster_aggregate {
         );
         roster::update_object_version(roster);
         roster::emit_roster_set_sail(roster_set_sail);
-    }
-
-    public entry fun update_location(
-        roster: &mut roster::Roster,
-        clock: &Clock,
-        updated_coordinates_x: u32,
-        updated_coordinates_y: u32,
-        ctx: &mut tx_context::TxContext,
-    ) {
-        roster::assert_schema_version(roster);
-        let updated_coordinates: Coordinates = coordinates::new(
-            updated_coordinates_x,
-            updated_coordinates_y,
-        );
-        let roster_location_updated = roster_update_location_logic::verify(
-            clock,
-            updated_coordinates,
-            roster,
-            ctx,
-        );
-        roster_update_location_logic::mutate(
-            &roster_location_updated,
-            roster,
-            ctx,
-        );
-        roster::update_object_version(roster);
-        roster::emit_roster_location_updated(roster_location_updated);
     }
 
     public entry fun adjust_ships_position(

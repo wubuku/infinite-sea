@@ -5,6 +5,8 @@ module infinite_sea::player_claim_island_logic {
 
     use sui::clock;
     use sui::clock::Clock;
+    use sui::table;
+    use sui::tx_context;
     use sui::tx_context::TxContext;
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::roster_status;
@@ -26,6 +28,12 @@ module infinite_sea::player_claim_island_logic {
     const ESenderHasNoPermission: u64 = 22;
     const EPlayerAlreadyClaimedIsland: u64 = 23;
     const EForNftHoldersOnly: u64 = 24;
+    const ENotForEveryone: u64 = 25;
+    const EInvalidClaimIslandSetting: u64 = 26;
+
+    const FOR_NFT_HOLDERS_ONLY: u8 = 1;
+    const FOR_WHITELISTED_ACCOUNTS_ONLY: u8 = 2;
+    const FOR_EVERYONE: u8 = 3;
 
     public(friend) fun verify(
         map: &mut Map,
@@ -36,12 +44,28 @@ module infinite_sea::player_claim_island_logic {
         player: &player::Player,
         ctx: &TxContext,
     ): player::IslandClaimed {
-        let for_nft_holders_only = map::for_nft_holders_only(map);
+        //let for_nft_holders_only = map::for_nft_holders_only(map);
+        let claim_island_setting_o = map::claim_island_setting(map);
+        let claim_island_setting = if (option::is_none(&claim_island_setting_o)) {
+            FOR_EVERYONE
+        } else {
+            *option::borrow(&claim_island_setting_o)
+        };
         assert!(
-            option::is_none(&for_nft_holders_only) || !*option::borrow(&for_nft_holders_only),
+            claim_island_setting != FOR_NFT_HOLDERS_ONLY, //option::is_none(&for_nft_holders_only) || !*option::borrow(&for_nft_holders_only),
             EForNftHoldersOnly
         );
-
+        if (claim_island_setting != FOR_EVERYONE) {
+            if (claim_island_setting == FOR_WHITELISTED_ACCOUNTS_ONLY) {
+                let whitelist = map::borrow_claim_island_whitelist(map);
+                assert!(
+                    table::contains(whitelist, tx_context::sender(ctx)),
+                    ENotForEveryone
+                );
+            } else {
+                abort EInvalidClaimIslandSetting
+            }
+        };
         assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
         assert!(option::is_none(&player::claimed_island(player)), EPlayerAlreadyClaimedIsland);
 

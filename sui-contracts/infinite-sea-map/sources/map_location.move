@@ -12,6 +12,8 @@ module infinite_sea_map::map_location {
     friend infinite_sea_map::map_claim_island_logic;
     friend infinite_sea_map::map_gather_island_resources_logic;
     friend infinite_sea_map::map_update_settings_logic;
+    friend infinite_sea_map::map_add_to_whitelist_logic;
+    friend infinite_sea_map::map_remove_from_whitelist_logic;
     friend infinite_sea_map::map;
 
     #[allow(unused_const)]

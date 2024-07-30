@@ -11,7 +11,7 @@ module infinite_sea_map::map {
     use std::option::Option;
     use sui::event;
     use sui::object::{Self, ID, UID};
-    use sui::table;
+    use sui::table::{Self, Table};
     use sui::transfer;
     use sui::tx_context::TxContext;
 
@@ -21,6 +21,8 @@ module infinite_sea_map::map {
     friend infinite_sea_map::map_claim_island_logic;
     friend infinite_sea_map::map_gather_island_resources_logic;
     friend infinite_sea_map::map_update_settings_logic;
+    friend infinite_sea_map::map_add_to_whitelist_logic;
+    friend infinite_sea_map::map_remove_from_whitelist_logic;
     friend infinite_sea_map::map_aggregate;
 
     const EIdAlreadyExists: u64 = 101;
@@ -62,7 +64,8 @@ module infinite_sea_map::map {
         version: u64,
         schema_version: u64,
         admin_cap: ID,
-        for_nft_holders_only: Option<bool>,
+        claim_island_setting: Option<u8>,
+        claim_island_whitelist: Table<address, bool>,
         locations: table::Table<Coordinates, MapLocation>,
     }
 
@@ -74,12 +77,20 @@ module infinite_sea_map::map {
         map.version
     }
 
-    public fun for_nft_holders_only(map: &Map): Option<bool> {
-        map.for_nft_holders_only
+    public fun claim_island_setting(map: &Map): Option<u8> {
+        map.claim_island_setting
     }
 
-    public(friend) fun set_for_nft_holders_only(map: &mut Map, for_nft_holders_only: Option<bool>) {
-        map.for_nft_holders_only = for_nft_holders_only;
+    public(friend) fun set_claim_island_setting(map: &mut Map, claim_island_setting: Option<u8>) {
+        map.claim_island_setting = claim_island_setting;
+    }
+
+    public fun borrow_claim_island_whitelist(map: &Map): &Table<address, bool> {
+        &map.claim_island_whitelist
+    }
+
+    public(friend) fun borrow_mut_claim_island_whitelist(map: &mut Map): &mut Table<address, bool> {
+        &mut map.claim_island_whitelist
     }
 
     public(friend) fun add_location(map: &mut Map, location: MapLocation) {
@@ -133,7 +144,8 @@ module infinite_sea_map::map {
             version: 0,
             schema_version: SCHEMA_VERSION,
             admin_cap: admin_cap_id,
-            for_nft_holders_only: std::option::none(),
+            claim_island_setting: std::option::none(),
+            claim_island_whitelist: sui::table::new(ctx),
             locations: table::new<Coordinates, MapLocation>(ctx),
         }
     }
@@ -280,25 +292,75 @@ module infinite_sea_map::map {
     struct MapSettingsUpdated has copy, drop {
         id: object::ID,
         version: u64,
-        for_nft_holders_only: bool,
+        claim_island_setting: u8,
     }
 
     public fun map_settings_updated_id(map_settings_updated: &MapSettingsUpdated): object::ID {
         map_settings_updated.id
     }
 
-    public fun map_settings_updated_for_nft_holders_only(map_settings_updated: &MapSettingsUpdated): bool {
-        map_settings_updated.for_nft_holders_only
+    public fun map_settings_updated_claim_island_setting(map_settings_updated: &MapSettingsUpdated): u8 {
+        map_settings_updated.claim_island_setting
     }
 
     public(friend) fun new_map_settings_updated(
         map: &Map,
-        for_nft_holders_only: bool,
+        claim_island_setting: u8,
     ): MapSettingsUpdated {
         MapSettingsUpdated {
             id: id(map),
             version: version(map),
-            for_nft_holders_only,
+            claim_island_setting,
+        }
+    }
+
+    struct WhitelistedForClaimingIsland has copy, drop {
+        id: object::ID,
+        version: u64,
+        account_address: address,
+    }
+
+    public fun whitelisted_for_claiming_island_id(whitelisted_for_claiming_island: &WhitelistedForClaimingIsland): object::ID {
+        whitelisted_for_claiming_island.id
+    }
+
+    public fun whitelisted_for_claiming_island_account_address(whitelisted_for_claiming_island: &WhitelistedForClaimingIsland): address {
+        whitelisted_for_claiming_island.account_address
+    }
+
+    public(friend) fun new_whitelisted_for_claiming_island(
+        map: &Map,
+        account_address: address,
+    ): WhitelistedForClaimingIsland {
+        WhitelistedForClaimingIsland {
+            id: id(map),
+            version: version(map),
+            account_address,
+        }
+    }
+
+    struct UnWhitelistedForClaimingIsland has copy, drop {
+        id: object::ID,
+        version: u64,
+        account_address: address,
+    }
+
+    public fun un_whitelisted_for_claiming_island_id(un_whitelisted_for_claiming_island: &UnWhitelistedForClaimingIsland): object::ID {
+        un_whitelisted_for_claiming_island.id
+    }
+
+    public fun un_whitelisted_for_claiming_island_account_address(un_whitelisted_for_claiming_island: &UnWhitelistedForClaimingIsland): address {
+        un_whitelisted_for_claiming_island.account_address
+    }
+
+    public(friend) fun new_un_whitelisted_for_claiming_island(
+        map: &Map,
+        account_address: address,
+    ): UnWhitelistedForClaimingIsland {
+        UnWhitelistedForClaimingIsland {
+            id: id(map),
+            version: version(map),
+            account_address,
         }
     }
 
@@ -320,10 +382,12 @@ module infinite_sea_map::map {
             version: _version,
             schema_version: _,
             admin_cap: _,
-            for_nft_holders_only: _for_nft_holders_only,
+            claim_island_setting: _claim_island_setting,
+            claim_island_whitelist,
             locations,
         } = map;
         object::delete(id);
+        sui::table::destroy_empty(claim_island_whitelist);
         table::destroy_empty(locations);
     }
 
@@ -341,6 +405,14 @@ module infinite_sea_map::map {
 
     public(friend) fun emit_map_settings_updated(map_settings_updated: MapSettingsUpdated) {
         event::emit(map_settings_updated);
+    }
+
+    public(friend) fun emit_whitelisted_for_claiming_island(whitelisted_for_claiming_island: WhitelistedForClaimingIsland) {
+        event::emit(whitelisted_for_claiming_island);
+    }
+
+    public(friend) fun emit_un_whitelisted_for_claiming_island(un_whitelisted_for_claiming_island: UnWhitelistedForClaimingIsland) {
+        event::emit(un_whitelisted_for_claiming_island);
     }
 
 }

@@ -8,9 +8,11 @@ module infinite_sea_map::map_aggregate {
     use infinite_sea_common::item_id_quantity_pairs::{Self, ItemIdQuantityPairs};
     use infinite_sea_map::map;
     use infinite_sea_map::map_add_island_logic;
+    use infinite_sea_map::map_add_to_whitelist_logic;
     use infinite_sea_map::map_claim_island_logic;
     use infinite_sea_map::map_friend_config;
     use infinite_sea_map::map_gather_island_resources_logic;
+    use infinite_sea_map::map_remove_from_whitelist_logic;
     use infinite_sea_map::map_update_settings_logic;
     use sui::clock::Clock;
     use sui::object::ID;
@@ -111,13 +113,13 @@ module infinite_sea_map::map_aggregate {
     public entry fun update_settings(
         map: &mut map::Map,
         admin_cap: &map::AdminCap,
-        for_nft_holders_only: bool,
+        claim_island_setting: u8,
         ctx: &mut tx_context::TxContext,
     ) {
         assert!(map::admin_cap(map) == sui::object::id(admin_cap), EInvalidAdminCap);
         map::assert_schema_version(map);
         let map_settings_updated = map_update_settings_logic::verify(
-            for_nft_holders_only,
+            claim_island_setting,
             map,
             ctx,
         );
@@ -128,6 +130,50 @@ module infinite_sea_map::map_aggregate {
         );
         map::update_object_version(map);
         map::emit_map_settings_updated(map_settings_updated);
+    }
+
+    public entry fun add_to_whitelist(
+        map: &mut map::Map,
+        admin_cap: &map::AdminCap,
+        account_address: address,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        assert!(map::admin_cap(map) == sui::object::id(admin_cap), EInvalidAdminCap);
+        map::assert_schema_version(map);
+        let whitelisted_for_claiming_island = map_add_to_whitelist_logic::verify(
+            account_address,
+            map,
+            ctx,
+        );
+        map_add_to_whitelist_logic::mutate(
+            &whitelisted_for_claiming_island,
+            map,
+            ctx,
+        );
+        map::update_object_version(map);
+        map::emit_whitelisted_for_claiming_island(whitelisted_for_claiming_island);
+    }
+
+    public entry fun remove_from_whitelist(
+        map: &mut map::Map,
+        admin_cap: &map::AdminCap,
+        account_address: address,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        assert!(map::admin_cap(map) == sui::object::id(admin_cap), EInvalidAdminCap);
+        map::assert_schema_version(map);
+        let un_whitelisted_for_claiming_island = map_remove_from_whitelist_logic::verify(
+            account_address,
+            map,
+            ctx,
+        );
+        map_remove_from_whitelist_logic::mutate(
+            &un_whitelisted_for_claiming_island,
+            map,
+            ctx,
+        );
+        map::update_object_version(map);
+        map::emit_un_whitelisted_for_claiming_island(un_whitelisted_for_claiming_island);
     }
 
 }

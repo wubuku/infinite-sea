@@ -24,7 +24,6 @@ module infinite_sea::roster {
     friend infinite_sea::roster_create_environment_roster_logic;
     friend infinite_sea::roster_add_ship_logic;
     friend infinite_sea::roster_set_sail_logic;
-    friend infinite_sea::roster_update_location_logic;
     friend infinite_sea::roster_adjust_ships_position_logic;
     friend infinite_sea::roster_transfer_ship_logic;
     friend infinite_sea::roster_transfer_ship_inventory_logic;
@@ -512,51 +511,6 @@ module infinite_sea::roster {
         }
     }
 
-    struct RosterLocationUpdated has copy, drop {
-        id: object::ID,
-        roster_id: RosterId,
-        version: u64,
-        updated_coordinates: Coordinates,
-        coordinates_updated_at: u64,
-        new_status: u8,
-    }
-
-    public fun roster_location_updated_id(roster_location_updated: &RosterLocationUpdated): object::ID {
-        roster_location_updated.id
-    }
-
-    public fun roster_location_updated_roster_id(roster_location_updated: &RosterLocationUpdated): RosterId {
-        roster_location_updated.roster_id
-    }
-
-    public fun roster_location_updated_updated_coordinates(roster_location_updated: &RosterLocationUpdated): Coordinates {
-        roster_location_updated.updated_coordinates
-    }
-
-    public fun roster_location_updated_coordinates_updated_at(roster_location_updated: &RosterLocationUpdated): u64 {
-        roster_location_updated.coordinates_updated_at
-    }
-
-    public fun roster_location_updated_new_status(roster_location_updated: &RosterLocationUpdated): u8 {
-        roster_location_updated.new_status
-    }
-
-    public(friend) fun new_roster_location_updated(
-        roster: &Roster,
-        updated_coordinates: Coordinates,
-        coordinates_updated_at: u64,
-        new_status: u8,
-    ): RosterLocationUpdated {
-        RosterLocationUpdated {
-            id: id(roster),
-            roster_id: roster_id(roster),
-            version: version(roster),
-            updated_coordinates,
-            coordinates_updated_at,
-            new_status,
-        }
-    }
-
     struct RosterShipsPositionAdjusted has copy, drop {
         id: object::ID,
         roster_id: RosterId,
@@ -877,10 +831,6 @@ module infinite_sea::roster {
 
     public(friend) fun emit_roster_set_sail(roster_set_sail: RosterSetSail) {
         event::emit(roster_set_sail);
-    }
-
-    public(friend) fun emit_roster_location_updated(roster_location_updated: RosterLocationUpdated) {
-        event::emit(roster_location_updated);
     }
 
     public(friend) fun emit_roster_ships_position_adjusted(roster_ships_position_adjusted: RosterShipsPositionAdjusted) {
