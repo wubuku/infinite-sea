@@ -1,5 +1,5 @@
 [package]
-published-at = "0xd95a23bf63c51250c136ac6f2443c37644834977303dfe985ac73442324e925b"
+published-at = "0x33c15fdd1220d271bdc111e29669b7b6774365de6303b4072fa92f75959292d1"
 name = "infinite_sea"
 version = "0.0.1"
 
@@ -12,4 +12,4 @@ infinite_sea_coin = { local = "../infinite-sea-coin" }
 infinite_sea_nft = { local = "../infinite-sea-nft" }
 
 [addresses]
-infinite_sea = "0xd95a23bf63c51250c136ac6f2443c37644834977303dfe985ac73442324e925b"
+infinite_sea = "0x33c15fdd1220d271bdc111e29669b7b6774365de6303b4072fa92f75959292d1"

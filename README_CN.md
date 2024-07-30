@@ -218,59 +218,59 @@ wubuku/dddappp-sui:master \
 5. Faucet 合约项目 
 6. Map 合约项目
 
-#### Sui Testnet (From 2024/7/28)
+#### Sui Testnet (From 2024/7/30)
 
 我们在 Sui testnet 上发布以上 6 个合约包，相关信息记录如下：
 
 ```json
 {
   "coin": {
-    "TreasuryCap": "0x5f7b496474d1d6f811a8427fb42d9f6deeca63dda7e166d774cb1efc3499b89f",
-    "PackageId": "0xb0cc1ce62612a8dd3536f6cd0ce3512a394b462d415d9c08bf18f07585f10fdb",
-    "Digest": "Bja3yoWDQCw8pXuEVkQXbHGNMzzEdrTWHGqogA9wnERN",
-    "EnergyId": "0x7b5f962702f64c6f9a3ae929540ac39f81671ce20a4f717dcc6ec16f867c53d6"
+    "TreasuryCap": "0x3c344ba30ad6e8c68e7ae94cca39f6fc1aeac520f3934fc16addc1d01fb5b5bd",
+    "PackageId": "0xc066d95330f4e9ef7a4d463056c2acb1d25b29354db39f0fcf9378d3f0d26972",
+    "Digest": "8bV7PnEQc3VqW49JLVr6Eu1CJZ36PT5nLQ3C375oXN6n",
+    "EnergyId": "0xa02e9bdfba924fa10e11962220048f2c46845ee1f130a1db09ea82e925fe51d6"
   },
   "common": {
-    "Digest": "G1cVF8LTVeF2pzWFXMVcXnX9KoBfYxcgL4dbYQBQaZCC",
-    "ItemCreationTable": "0x92962a33d86ec7cacf6e8673eb1c94a13b5831ccf4bfea7f520f26164dda898e",
-    "ExperienceTable": "0xa6c52b8b101808f5a22a1bced69e6db5defd9191f2ed36e82c8c1fa0ded52c16",
-    "Publisher": "0xb8b7a31a7a2bc265e6c41772eeecff33c65a7210b8f55db7e9057713eedd289e",
-    "ItemTable": "0xbabe0ea9ce820ad69307257a0aeb6db8953879bdc4f02b639e69b125ccf6107f",
-    "PackageId": "0xc8747489819fba4a45a252c042f7243364d8c04cb561999374399e1f466152d5",
-    "ItemProductionTable": "0xe8d20084f52829b8f8283bd83fe5df2e26e0736e6e798e8651ccabd62e3e8796",
-    "ItemCreationMining": "0xba420ac39c4413dba55d542d8f992f3a333ce8a457b6dd9f079010887064078d",
-    "ItemProductionFarming": "0x2b1757b863434fb0336b75ce73e1ffb4e17b0d4cd1ab5074063469aeaedb79d2",
-    "ItemCreationWooding": "0x80ac7865f74f6787c6f79e7edcb683dac6873d2962f1bc0f11b1d68bbfc25f8e",
-    "ItemProductionCrafting": "0xa1f792980b75cb01e828d34094b95d4bf054e10914d9d59317728a4800cfd0ec"
+    "Digest": "57kP4PW9cdZY8rmwTygrJDhZRtd6eF42UAJwEDXWtGkg",
+    "PackageId": "0x00ad128e4abe153ed77ddc404d03c64c07f0f06efbedfc0557951a90197b1168",
+    "ExperienceTable": "0x1e55fe797ab885a39ff8a5bc43836732955f05b73b7629cfbe341715880fa737",
+    "Publisher": "0x5d015cf94b0d12b241806a9c745702a15d6394acfdd619007bc23b28c6cf897e",
+    "ItemTable": "0xb6a29c026a9e60837419ab2eb6d5743a26e2b45ae435cb4b32a18971af8f3cff",
+    "ItemProductionTable": "0xd1282572c7d6ebdc4183b5852d6bcd0373367e8ce2ebe3ef9cf2b78742c59c60",
+    "ItemCreationTable": "0xe18a367d7541e0f14891321a2bef4e4e69a6bd733684b8ea84f8a256b58b3334",
+    "ItemCreationMining": "0x20adf8be1fb1d7ccc1afe3605f5615421a44ed1714d23651072be28b6d0ce37b",
+    "ItemProductionFarming": "0x742da9267cc2b223876ca73f95c2b103668353a1810cfad6af2778b050104fa1",
+    "ItemCreationWooding": "0xe6141a4a8546246266c4111aeb6ac3a52862d62abaa14ce9582292c8dabff542",
+    "ItemProductionCrafting": "0xb11ccd6bf443a1a48266d70eb3ff605989490249d16b452fef29d84bdbf349e0"
   },
   "main": {
-    "Digest": "cMcBak6h8Kx7eyd3DXr49XEtvTnZ9qQvVqy9wfKtwdX",
-    "Publisher": "0x0e7512ddafa61b82f5dca5ad2d6b33090152fa3e16f1f18e2557ef8a2fa5f3e9",
-    "PackageId": "0x44418a1f8d851b0e8874a8e276dd8b465f93fe9f1faf996f706689aacfe0423b",
-    "UpgradeCap": "0x6057b6af76658ddf86c6e82519fbe03f44defc2afb5edd21f502c3e8d5ddfb03",
-    "RosterTable": "0x76ef059681445cf6b88d68af80d26f88da3800d4f977ad9ea0ddccce94a8551d",
-    "SkillProcessTable": "0xe286e70ed9edb445a5506c87bb1b27e2271270a4f6c7850ce0e4e8cc5f7a7235",
-    },
+    "Digest": "CBDfSrk9uSJGxXEQYCdzHn59ZVfhDLXaCQYWWejRr7DC",
+    "SkillProcessTable": "0x26ff1420471980c060e9ff37984402ae79da201970f3d7d518284e211319a20c",
+    "UpgradeCap": "0x2d54952fe0db6e14854a98c2d9d8ade82854c6e1ec02f0d7e77c3a43bc528740",
+    "PackageId": "0x33c15fdd1220d271bdc111e29669b7b6774365de6303b4072fa92f75959292d1",
+    "Publisher": "0x41f276771143143c8fc8f44c0220422d8c7cdbe7d9b46d698b782cd57eec0563",
+    "RosterTable": "0xc6ac3db4a0247e7bf8c797e476b7759c975e96e64333f9f8b3e2ede8adbaea5a"
+  },
   "faucet": {
-    "EnergyFaucet": "0x29e61938f0ae4c3dcd12d685217cf9a601320c807f34c34f43ab59a5dba516d8",
-    "PackageId": "0x7e5bef3aa6f245388b2db061eb701173ac26467510e84786de82bdd7cf3db8f2",
-    "Digest": "8fpBTLLx9MgnBWa2uZZD4rKTMMesCYKW3qtDmQCfvGfu"
+    "EnergyFaucet": "0x2b28b2d35f831a42075b9c58d55d16d2efdb0a1a1383b6cafe8abdcee906ebdc",
+    "PackageId": "0xc380ec1877bdc53fec0f9bff2cc5411e1122d5b72b8d930f6b1622cdd6341291",
+    "Digest": "9P7KQSBFUEzSAUbrVFFBDrD8DZ6hDZba1SCx6b1VdT5t"
   },
   "nft": {
-    "AvatarDisplay": "0x4ab9e6787b902cbfaa78e15617bfcafcba07e2dac9e653711db98d0c7b805572",
-    "PackageId": "0x74b3bcc59df0c47feb53c2055137471be76e4b9dd0c05cf197c72a5e6055fe87",
-    "AvatarChangeTable": "0xa326e90e181f3727c1ad388637a3ca9bdbee47733d83004a22a44f27ee999c9f",
-    "Whitelist": "0xc8853bb01fc2d391a02c4015fe642bb12979cb6ca444a2b3518239a01e0aae8f",
-    "Publisher": "0xddd3ac98aecfb8904bdeaf8b9112d9746e1df3ac25574f655cac840915d7e338",
-    "Digest": "4fvoBtVBqjkZBuXan7TYnviBBbPcPx2MSLzjGvDwUEAT"
+    "PackageId": "0x381cacfd44946cca9635b2f8f7e99c14f57d6731d2835963e23fe28b731f9dd1",
+    "AvatarDisplay": "0x875c2e71c7b6e5d694242f5623bfcf6d965b29f93b11be9bfb69ec4b2358665f",
+    "Whitelist": "0x9b931526773833a7a534adeaecc6dc8574bf10b764a622dba1e6e543c95b4e9a",
+    "AvatarChangeTable": "0xcf401353ac2b3293ecbdfa902744189a91e34d45148d916308e5ff4f8d9bb726",
+    "Publisher": "0xe837de30a01679bc06f8e18455b7fc918c7c12c4efaeb9039cf8bea81f24704c",
+    "Digest": "61gfuCnzsvgFs3vzwY1LYZwPbe36aFevQjPgUdrsJ9Mv"
   },
   "map": {
-    "Publisher": "0x23213b69042384ff2a3d89e7c262e38b74aa3ef4e5642f1441e7d5b665b180cd",
-    "AdminCap": "0x46a1a5c8139e9fe021d9781b1283ae71296cfbb151980db6e9ab8739fcefa2cc",
-    "MapFriendConfig": "0x470645bbddc82e431261534baca6a533953696f08a3a971b566f64c15b66fbb5",
-    "PackageId": "0x977f56f794e2f869a2486974fd8905e5a7a9c72d998bef6897910f08816171eb",
-    "Map": "0xe2d65215e1eae87e98ffedafb73a21860f0ada5bd84036b9bdfd7ac1fa6215f0",
-    "Digest": "DpkHEB9FVvo7BtDVvHXqbiQMkzMLndWvmtNFuwFF8yfR"
+    "PackageId": "0x0eeb10261a3f1b5e11c592da23f3e5d8730898730c80f0e57c5c07e9a1ed60b4",
+    "MapFriendConfig": "0x29f15916c348cf8686c2552370fc5c95b4621ec4357210f93cb1eec98ca6ca40",
+    "Publisher": "0x2cc6464abb25f8332e9d0401a58107fb4ad90e555719eef915236baf04a5efbb",
+    "Map": "0x455d6bceb7c78c939f4e8b41b33ed9833f64b799515789382d381c669977ef7f",
+    "AdminCap": "0xd076edb2fb9fc0f8295135af34c32951da5f9f98cec68865f5e17cb09b5b6eef",
+    "Digest": "FWBNvGuRsvQZcLiUhnC91oLYsgUQuJLSGN1pQzYqQHtx"
   }
 }
 
