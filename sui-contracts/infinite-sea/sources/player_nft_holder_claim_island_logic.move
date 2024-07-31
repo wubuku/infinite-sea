@@ -9,6 +9,7 @@ module infinite_sea::player_nft_holder_claim_island_logic {
     use infinite_sea_common::coordinates::Coordinates;
     use infinite_sea_common::roster_status;
     use infinite_sea_common::skill_type;
+    use infinite_sea_map::map;
     use infinite_sea_map::map::Map;
     use infinite_sea_map::map_friend_config;
     use infinite_sea_nft::avatar;
@@ -27,6 +28,7 @@ module infinite_sea::player_nft_holder_claim_island_logic {
     const ESenderHasNoPermission: u64 = 22;
     const EPlayerAlreadyClaimedIsland: u64 = 23;
     const EMismatchAvatarOwner: u64 = 24;
+    const EInvalidCoordinates: u64 = 27;
 
     public(friend) fun verify(
         avatar: &Avatar,
@@ -38,6 +40,8 @@ module infinite_sea::player_nft_holder_claim_island_logic {
         player: &player::Player,
         ctx: &TxContext,
     ): player::NftHolderIslandClaimed {
+        assert!(map::locations_contains(map, coordinates), EInvalidCoordinates);
+
         assert!(sui::tx_context::sender(ctx) == player::owner(player), ESenderHasNoPermission);
         assert!(option::is_none(&player::claimed_island(player)), EPlayerAlreadyClaimedIsland);
 

@@ -30,6 +30,7 @@ module infinite_sea::player_claim_island_logic {
     const EForNftHoldersOnly: u64 = 24;
     const ENotForEveryone: u64 = 25;
     const EInvalidClaimIslandSetting: u64 = 26;
+    const EInvalidCoordinates: u64 = 27;
 
     const FOR_NFT_HOLDERS_ONLY: u8 = 1;
     const FOR_WHITELISTED_ACCOUNTS_ONLY: u8 = 2;
@@ -44,6 +45,7 @@ module infinite_sea::player_claim_island_logic {
         player: &player::Player,
         ctx: &TxContext,
     ): player::IslandClaimed {
+        assert!(map::locations_contains(map, coordinates), EInvalidCoordinates);
         //let for_nft_holders_only = map::for_nft_holders_only(map);
         let claim_island_setting_o = map::claim_island_setting(map);
         let claim_island_setting = if (option::is_none(&claim_island_setting_o)) {

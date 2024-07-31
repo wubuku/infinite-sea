@@ -26,6 +26,8 @@ module infinite_sea::player_properties {
     friend infinite_sea::player_claim_island_logic;
     friend infinite_sea::player_nft_holder_claim_island_logic;
 
+    const EInvalidCoordinates: u64 = 27;
+
     public(friend) fun deduct_inventory(player: &mut Player, items: vector<ItemIdQuantityPair>) {
         let inv = player::borrow_mut_inventory(player);
         let i = 0;
@@ -85,6 +87,8 @@ module infinite_sea::player_properties {
         is_nft_holders: bool,
         ctx: &mut TxContext,
     ) {
+        assert!(map::locations_contains(map, coordinates), EInvalidCoordinates); // Paranoid to check again.
+
         let player_id = player::id(player);
         player::set_claimed_island(player, option::some(coordinates));
 
