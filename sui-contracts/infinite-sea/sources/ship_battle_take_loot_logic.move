@@ -248,11 +248,14 @@ module infinite_sea::ship_battle_take_loot_logic {
         if (roster::environment_owned(loser_roster)) {
             return
         };
-        // send the loser roster back to the player claimed island
-        let island_coordinates = player::claimed_island(loser_player);
-        assert!(option::is_some(&island_coordinates), EPayerHasNoClaimedIsland);
-        roster::set_updated_coordinates(loser_roster, option::extract(&mut island_coordinates));
-        roster::set_coordinates_updated_at(loser_roster, looted_at);
+        if (!roster::environment_owned(loser_roster)) {
+            // Ignore environment rosters
+            // send the loser roster back to the player claimed island
+            let island_coordinates = player::claimed_island(loser_player);
+            assert!(option::is_some(&island_coordinates), EPayerHasNoClaimedIsland);
+            roster::set_updated_coordinates(loser_roster, option::extract(&mut island_coordinates));
+            roster::set_coordinates_updated_at(loser_roster, looted_at);
+        };
         roster::set_status(loser_roster, roster_status::at_anchor());
     }
 

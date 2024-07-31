@@ -33,6 +33,7 @@ module infinite_sea::roster_util {
     const ERosterIsUnassignedShips: u64 = 23;
     const EInconsistentRosterShipId: u64 = 24;
     const ERosterIsFull: u64 = 25;
+    const EIsEnvironmentRoster: u64 = 26;
 
     const MIN_DISTANCE_TO_TRANSFER: u64 = 250;
 
@@ -68,6 +69,7 @@ module infinite_sea::roster_util {
     public fun assert_roster_is_anchored_at_claimed_island(roster: &Roster, player: &Player) {
         let status = roster::status(roster);
         assert!(status == roster_status::at_anchor(), EInvalidRosterStatus);
+        assert!(!roster::environment_owned(roster), EIsEnvironmentRoster);
         let claimed_island_coordinates = player::claimed_island(player);
         assert!(option::is_some(&claimed_island_coordinates), EPayerHasNoClaimedIsland);
         let ros = roster::updated_coordinates(roster);
