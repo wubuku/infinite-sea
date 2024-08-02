@@ -26,7 +26,6 @@ module infinite_sea::roster_aggregate {
     use sui::object::ID;
     use sui::tx_context;
 
-    friend infinite_sea::player_create_logic;
     friend infinite_sea::player_claim_island_logic;
     friend infinite_sea::player_nft_holder_claim_island_logic;
     friend infinite_sea::skill_process_complete_ship_production_logic;

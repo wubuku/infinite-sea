@@ -218,9 +218,9 @@ aggregates:
         - ShipBattle.MakeMove
         - ShipBattle.TakeLoot
     friends:
-      - Player.Create
       - Player.ClaimIsland
       - Player.NftHolderClaimIsland
+      #- Player.Create
       - SkillProcess.CompleteShipProduction
       - ShipBattle.InitiateBattle
     properties:
