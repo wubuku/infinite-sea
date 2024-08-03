@@ -45,7 +45,7 @@ module infinite_sea::roster_take_out_ship_inventory_logic {
                 roster::set_status(roster, new_status);
             }
         };
-        roster_util::assert_roster_is_anchored_at_claimed_island(roster, player);
+        roster_util::assert_roster_island_close_enough_to_transfer(roster, player);
 
         roster::new_roster_ship_inventory_taken_out(roster, ship_id, item_id_quantity_pairs, updated_coordinates)
     }

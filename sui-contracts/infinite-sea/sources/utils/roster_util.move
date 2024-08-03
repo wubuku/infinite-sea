@@ -29,11 +29,12 @@ module infinite_sea::roster_util {
     const EOriginCoordinatesNotSet: u64 = 13;
 
     const EPayerHasNoClaimedIsland: u64 = 21;
-    const ERosterNotAnchoredAtIsland: u64 = 22;
+    //const ERosterNotAnchoredAtIsland: u64 = 22;
     const ERosterIsUnassignedShips: u64 = 23;
     const EInconsistentRosterShipId: u64 = 24;
     const ERosterIsFull: u64 = 25;
     const EIsEnvironmentRoster: u64 = 26;
+    const ERosterIslandNotCloseEnough: u64 = 27;
 
     const MIN_DISTANCE_TO_TRANSFER: u64 = 250;
 
@@ -66,14 +67,16 @@ module infinite_sea::roster_util {
     }
 
     /// Assert that the roster is anchored at the island claimed by the player.
-    public fun assert_roster_is_anchored_at_claimed_island(roster: &Roster, player: &Player) {
-        let status = roster::status(roster);
-        assert!(status == roster_status::at_anchor(), EInvalidRosterStatus);
+    public fun assert_roster_island_close_enough_to_transfer(roster: &Roster, player: &Player) {
+        //let status = roster::status(roster);
+        //assert!(status == roster_status::at_anchor(), EInvalidRosterStatus);
         assert!(!roster::environment_owned(roster), EIsEnvironmentRoster);
-        let claimed_island_coordinates = player::claimed_island(player);
-        assert!(option::is_some(&claimed_island_coordinates), EPayerHasNoClaimedIsland);
-        let ros = roster::updated_coordinates(roster);
-        assert!(ros == *option::borrow(&claimed_island_coordinates), ERosterNotAnchoredAtIsland);
+        let claimed_island_coordinates_o = player::claimed_island(player);
+        assert!(option::is_some(&claimed_island_coordinates_o), EPayerHasNoClaimedIsland);
+        let c_1 = roster::updated_coordinates(roster);
+        let c_2 = *option::borrow(&claimed_island_coordinates_o);
+        //assert!(roster_coordinates == *option::borrow(&claimed_island_coordinates), ERosterNotAnchoredAtIsland);
+        assert!(direct_route_util::get_distance(c_1, c_2) < MIN_DISTANCE_TO_TRANSFER, ERosterIslandNotCloseEnough);
     }
 
     /// Wether the sequence number of the "player" roster is valid.
@@ -232,5 +235,4 @@ module infinite_sea::roster_util {
     //     coordinates_updated_at = now_time;
     //     (updated_coordinates, coordinates_updated_at, new_status)
     // }
-
 }
