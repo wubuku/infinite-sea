@@ -36,7 +36,7 @@ module infinite_sea::roster_util {
     const EIsEnvironmentRoster: u64 = 26;
     const ERosterIslandNotCloseEnough: u64 = 27;
 
-    const MIN_DISTANCE_TO_TRANSFER: u64 = 250;
+    const MIN_DISTANCE_TO_TRANSFER: u64 = 3000;
 
     public fun are_rosters_close_enough_to_transfer(roster_1: &Roster, roster_2: &Roster): bool {
         let c_1 = roster::updated_coordinates(roster_1);
