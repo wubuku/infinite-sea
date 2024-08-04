@@ -286,54 +286,55 @@ wubuku/dddappp-sui:master \
 ```json
 {
   "coin": {
-    "TreasuryCap": "0x41050763dd15428f0617531045f20e124166787dae166c99ee5b7bb9da16a73a",
-    "PackageId": "0x4bdc189976e8caf547cbae9445609519cd679423aad327e264854757c5b00860",
-    "Digest": "5a3U7VNgSijzEmNo42Brf7QVRMmj6YeB7nYoF4qApYko",
-    "EnergyId": "0x713fc18a0d5158cfb30cb109a718accccadba6a212b7317dc9f29cfa03f9e8fc"
+    "TreasuryCap": "0x6d9c296ffa233c4943e6edd3dd4fb345263d336910f1c8701561307eb336f7bb",
+    "PackageId": "0xf1604cdafb37de4338ec0768582b2e56ee6e356320a9d57a41ac5a719e484360",
+    "Digest": "FVgWp6voVYFw6jshdXjhDqwm8M7XVjxHX3tGdqfuyRs8",
+    "EnergyId": "0x6c094561651de18d2b1df1db36f27c4f7a6b13727177bf60fae5aa75bab44ecc"
   },
   "common": {
-    "Digest": "878yxBwofaUXEqbKfJJj9Zp2yVK8i6DRUEC1VJHwPTkf",
-    "ItemCreationTable": "0x38f5c8df8f7105a6cfd37f2c8fbbe1e77840168e0f95f6311593888315e7c896",
-    "ItemTable": "0x5b0f7be6fcf87cc014c5a247144a1e33170e1b3883ea7145607f7012c142fae8",
-    "ExperienceTable": "0x9d5135f03ad435ef711b16186888cb8e00b1e2f8c2136697ed32d3c5bb63df85",
-    "Publisher": "0xb40984488e221672eadb8cecaacf8241b5bc3c5f3025737f36ac2b90ed5a7566",
-    "ItemProductionTable": "0xe7459475bd2937e7af53bfde9fc59b7edd0c4e2edc530da2c33dddadfa8edf33",
-    "PackageId": "0xf3bb3821436330196447256a3d32d7002afa5fabf1dc6fcc32bf1c86837df283",
-    "ItemCreationMining": "0xa21e86fcd511dd6f44e964d5ddabee64380285c2a49a748a3a3754c55d42f66c",
-    "ItemProductionFarming": "0x2f757e6d29c41cdbf27fe9f4a5856c2d362ce12e3007886255b699fbd8f202da",
-    "ItemCreationWooding": "0x69ea203119d3a405a5b81b2473a3be4c3a0184e451c4dbe9319ce5ce40f56cfd",
-    "ItemProductionCrafting": "0xf39bc472a5527f8511b2a1478dd7402d354ccf49819fcbe7ee771249aec53d35"
+    "Digest": "DLyY9xWPaphCffiZDHMWXySAy8mef1uX1rf8kwmLHHoe",
+    "ExperienceTable": "0x4f49f76d62e50a5c24d91f6ffcdc8a2ca7517be1994e52b3d773e1442f227739",
+    "PackageId": "0x7ba817be8459ef4182bc1f05b7977e5209163b696e6b0436faa708d3505aaa35",
+    "ItemCreationTable": "0x7d5e10cbcbb1c198d55f0cf88f4725eabb60f3734d97253ecfc72049b42ed686",
+    "ItemProductionTable": "0xca9345e8ce28e947fac1930a6e8c3dd3ad24c97e3b1bebd5c2ee82612f19e5e7",
+    "ItemTable": "0xd3468db7acbb137c149b0f0a13ca560ae3476a95a0bb96485fdfa9977349ce1c",
+    "Publisher": "0xf382078f3d67a84763f5ef777ce432482238b0b08c1fe9c327d786feca22da50",
+    "ItemCreationMining": "0x76d7864705a5016602f0bf35ce49c8d4cef8704b3c30c96b0ea4bdfe9e622f15",
+    "ItemProductionFarming": "0xbb23fee55e303202d1cdc60a16cd0e077e6d0fef6cbdfd09c7d849df759236a4",
+    "ItemCreationWooding": "0xae0dfffe4828dee5fdc4b350be2bdc016bba6d26d115c2d180841f70ebd07295",
+    "ItemProductionCrafting": "0x04c34de9a7228f1694c2bb9f1b7a27ccce4e7aff3dc65e05a5075a24122a553b"
   },
   "main": {
-    "Digest": "5fenaJWsRZuL2XfM4y6BwA62e5AXY1htPH5JWcw7NjB9",
-    "UpgradeCap": "0x046f8173c8230ef58ffab7f636e08140f943257504de648212397a5c6084bf60",
-    "PackageId": "0x07a05cc86194b505d7bd6a2eab17d31eefa8835c7458fedde361d5aaa9c8277d",
-    "Publisher": "0x1fe864f811eea55a4d32057dfda546f110cc6154ece8907637fed455776b3a5c",
-    "RosterTable": "0x27b712ae8535a935de325f9475783d7a3d42abc78a2d3d74186e0096bced184e",
-    "SkillProcessTable": "0x48a7f9d1c9722fa4e8f5bc165d2146315f797c269428c54411963dcab2abd0b4"
+    "Digest": "FLrovuD1qikZmuvS5hP3gcH7i3EiDcduThPktVdpCsR1",
+    "SkillProcessTable": "0x02e7630c7d8eb3b31978f3f03e4c76502e9b4afdc6bca8ddbabfd34a4f53edbc",
+    "PackageId": "0x564fec433b2529a7b6dd0085268f48bbd2bef05bf8d05281e81b627bc3d670a8",
+    "Publisher": "0x5ff6fca59968394fbe5a3867ac4d3317ef04007c20d2bf605e7e8752fc07fa7b",
+    "RosterTable": "0x8c5eb9e436b72ca8951188156581405c6b292bd667dcd359096d9e890a914812",
+    "UpgradeCap": "0xb7fd6475d39059e143713bb6d36015598816ec56fb1dde4d75fe3b828f64ec94"
   },
   "faucet": {
-    "PackageId": "0x555cae139692ab5f6320854ae33f474670a825cdaf1d6def157af0d482afae07",
-    "EnergyFaucet": "0x84a93fe749bbcf9d4ce1841ed43f08d20d9bd7eb15d2e469b75b8ee71cd79b2d",
-    "Digest": "wrpb1YuBiu357B5c5VrXuBMHaEHbsDdubFNc37ZrRin"
+    "PackageId": "0xb0937d8af38f18af582c857c9c8750b74952610749ec84f06d759642d0c39dbd",
+    "EnergyFaucet": "0xb76093cf7e9b4dc421f0707c65d0af3c1a7bffe9de34985d45d10c69b5d3e134",
+    "Digest": "AV9m9MwpzsZRcDy8p9p8rwfKz38BXoHd5RnMZqyVU8MC"
   },
   "nft": {
-    "AvatarDisplay": "0x24a711429b9825620527d2a59602de1007683f9f396475cdbba1dfd2e65ad5bb",
-    "PackageId": "0x4d3dc5e302afe0737bc7ab5c7332ffc1bf4ea86bcac5660567846ac6c9f302d9",
-    "Whitelist": "0xc21784f9fe6534bd783bc086544842f778c27bd713aeea2a8ab70bbadb302055",
-    "AvatarChangeTable": "0xd6f8b96452003cfa4bb1df1372be988cc7a44402c7562cc7018d13c1c98681e2",
-    "Publisher": "0xfdf177a71acb2ed4a2932858e213731ecb8052de22f7efa5565d4d9edc925d3c",
-    "Digest": "ApBXJrqXAozvFmtB7XRArfHNujeqTFSp7Nt4LtdAkqhr"
+    "PackageId": "0x2a9a3f99949033db22b0015bae4c46daa8072c5c0a87e868fa628062bfe7eae0",
+    "Whitelist": "0x3be822c11821e0b8bf0b9f37899d7f9e55046aca2717e29d431b7ae36260ff12",
+    "Publisher": "0x576beb8b98846e8b89650f3884210dad9b8a393c9a97e6923ff418255e84503a",
+    "AvatarDisplay": "0x8e0830249b9c763381d2b470be437ce8668003b1db3a1558e1dddb39f1f92815",
+    "AvatarChangeTable": "0xb1eb14f8fd3d8ed1b94a8bda12861644cc274fa5a3c8c21120afa2dca5b38343",
+    "Digest": "6G5A2BqQLkBRFAWRvjwTqd1M1WHDbhqnaS8oxSuHvUVs"
   },
   "map": {
-    "Publisher": "0x2c8b482e670bdc4d3641d783e098c5051e17516c16ee9e05bc3f7994ae031119",
-    "Map": "0x4df3150e648e7586fade39a379be114324403722c16c578b2cb9ed6f79b015eb",
-    "AdminCap": "0x5d0dc349f7e9349846a671b773574b2a56035e7cfc14652ff8ebcca6c3c99213",
-    "MapFriendConfig": "0xa93e61da93653bb42914d40d7dcc46f878b738472010dcf42d07868facb38b80",
-    "PackageId": "0xc437aaa4b058c1e30d0390e5162e735c3d5e96115f236684499300fd0ebc7f5b",
-    "Digest": "ELiHR7uP2p84UPWvVwVaUaq8ekGRVfQ3GPhHygc4bk6P"
+    "Map": "0x156f30885b588c3c6fb9b992529eb4c41935e42fec0ade3e3cf5ec08dadd390a",
+    "Publisher": "0x24e909f5835a75c902c30191d923562af3c35c884dc5052189fe2a6ca03c16b1",
+    "AdminCap": "0x5235f45c70be6162ac898f1a79c02df0c97edabbc4f08a1f956fb8331b7c90f1",
+    "MapFriendConfig": "0xf0415ee75c74f5085001a8d3d46eb9c3bbcdebeafae56676fa834beb2cdccfa9",
+    "PackageId": "0xf88e1a618242584d2639502537198c037180bbba7bed03e150bfe0815ec0a671",
+    "Digest": "7j33JwDzpQth9SiVjvnNraRJW1fPwNuusLXLSvdLGShc"
   }
 }
+
 ```
 
 解释如下：
