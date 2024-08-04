@@ -25,7 +25,7 @@ $formattedNow = $now.ToString('yyyyMMddHHmmss')
 $logFile = "$startLocation\environment_roster_rebirth_$formattedNow.log"
 
 #链下服务相关配置
-$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090"
+$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8091"
 
 # 目前岛屿所占海域大小
 $islandWidth = 5000
@@ -37,11 +37,11 @@ $environmentQuntityPerIsland = 3
 #添加船队时，最大出错次数不能超过$maxErrorTimes
 $maxErrorTimes = 5
 
-$node = "https://fullnode.testnet.sui.io/"
+$node = "https://devnet.baku.movementlabs.xyz/"
 $getMapResult = $null
 $dynamicFiledsId = $null;
 try {
-    $getMapResult = sui client object $dataInfo.main.Map --json
+    $getMapResult = sui client object $dataInfo.map.Map --json
     $map = $getMapResult | ConvertFrom-Json
     $dynamicFiledsId = $map.content.fields.locations.fields.id.id;
     $quntity = $map.content.fields.locations.fields.size;
