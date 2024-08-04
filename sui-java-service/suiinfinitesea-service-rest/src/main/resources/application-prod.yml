@@ -3,15 +3,13 @@ spring:
     url: jdbc:mysql://localhost:3306/test7?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
     username: root
     password: qingdao
-    #url: jdbc:mysql://localhost/test2?characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false
-    #username: root
 
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         hbm2ddl:
-          auto: update
+          auto: update #TODO change to none
 
 server:
   port: 1023
@@ -32,154 +30,154 @@ sui:
 
     pull-avatar-change-events:
       avatar-change-created:
-        fixed-delay: 6666
+        fixed-delay: 60000
       avatar-change-deleted:
-        fixed-delay: 6666
+        fixed-delay: 60000
       avatar-change-updated:
-        fixed-delay: 6666
+        fixed-delay: 60000
     pull-avatar-events:
       avatar-burned:
-        fixed-delay: 6666
+        fixed-delay: 60000
       avatar-minted:
-        fixed-delay: 6666
+        fixed-delay: 60000
       avatar-updated:
-        fixed-delay: 6666
+        fixed-delay: 60000
       avatar-whitelist-minted:
-        fixed-delay: 6666
+        fixed-delay: 6000
     pull-experience-table-events:
       experience-level-added:
-        fixed-delay: 6666
+        fixed-delay: 600000 # 10 minutes
       experience-level-updated:
-        fixed-delay: 6666
+        fixed-delay: 600000 # 10 minutes
       init-experience-table-event:
-        fixed-delay: 6666
+        fixed-delay: 600000
     pull-faucet-request:
-      fixed-delay: 6666
+      fixed-delay: 60000 # 1 minute
     pull-item-creation-events:
       item-creation-created:
-        fixed-delay: 6666
+        fixed-delay: 600000 # 10 minutes
       item-creation-updated:
-        fixed-delay: 6666
+        fixed-delay: 600000 # 10 minutes
     pull-item-events:
       item-created:
-        fixed-delay: 6666
+        fixed-delay: 600000 # 10 minutes
       item-updated:
-        fixed-delay: 6666
+        fixed-delay: 600000 # 10 minutes
     pull-item-production-events:
       item-production-created:
-        fixed-delay: 6666
+        fixed-delay: 600000 # 10 minutes
       item-production-updated:
-        fixed-delay: 6666
+        fixed-delay: 600000 # 10 minutes
     pull-map-events:
       init-map-event:
-        fixed-delay: 6666
+        fixed-delay: 36000000 # 10 hours
       island-added:
-        fixed-delay: 6666
+        fixed-delay: 60000 # 1 minute
       island-resources-gathered:
-        fixed-delay: 6666
+        fixed-delay: 60000 # 1 minute
       map-island-claimed:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       map-settings-updated:
-        fixed-delay: 6666
+        fixed-delay: 60000 # 1 minute
       un-whitelisted-for-claiming-island:
-        fixed-delay: 6666
+        fixed-delay: 60000 # 1 minute
       whitelisted-for-claiming-island:
-        fixed-delay: 6666
+        fixed-delay: 60000 # 1 minute
     pull-player-events:
       island-claimed:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       nft-holder-island-claimed:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       player-airdropped:
-        fixed-delay: 6666
+        fixed-delay: 60000 # 1 minute
       player-created:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       player-island-resources-gathered:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
     pull-roster-events:
       environment-roster-created:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       roster-created:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       roster-set-sail:
-        fixed-delay: 6666
+        fixed-delay: 5000 # 5 seconds
       roster-ship-added:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       roster-ship-inventory-put-in:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       roster-ship-inventory-taken-out:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       roster-ship-inventory-transferred:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       roster-ship-transferred:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       roster-ships-position-adjusted:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
     pull-ship-battle-events:
       ship-battle-initiated:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       ship-battle-loot-taken:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       ship-battle-move-made:
-        fixed-delay: 6666
+        fixed-delay: 60000 # 1 minute
     pull-ship-events:
       ship-created:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
     pull-skill-process-events:
       creation-process-completed:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       creation-process-started:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       production-process-completed:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       production-process-started:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       ship-production-process-completed:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       ship-production-process-started:
-        fixed-delay: 6666
+        fixed-delay: 10000 # 10 seconds
       skill-process-created:
-        fixed-delay: 6666
+        fixed-delay: 30000 # 30 seconds
     pull-whitelist-events:
       init-whitelist-event:
-        fixed-delay: 6666
+        fixed-delay: 60000 # 1 minute
       whitelist-claimed:
-        fixed-delay: 6666
+        fixed-delay: 20000 # 20 seconds
       whitelist-created:
-        fixed-delay: 6666
+        fixed-delay: 20000 # 20 seconds
       whitelist-entry-added:
-        fixed-delay: 6666
+        fixed-delay: 20000 # 20 seconds
       whitelist-entry-updated:
-        fixed-delay: 6666
+        fixed-delay: 20000 # 20 seconds
       whitelist-updated:
-        fixed-delay: 6666
+        fixed-delay: 20000 # 20 seconds
     update-all-player-states:
-      fixed-delay: 66660
+      fixed-delay: 6000 # 6 seconds
     update-all-roster-locations:
-      fixed-delay: 6666
+      fixed-delay: 6000 # 6 seconds
     update-avatar-change-states:
-      fixed-delay: 6666
+      fixed-delay: 30000 # 30 seconds
     update-avatar-states:
-      fixed-delay: 6666
+      fixed-delay: 30000 # 30 seconds
     update-experience-table-states:
-      fixed-delay: 6666
+      fixed-delay: 10000 # 10 seconds
     update-item-creation-states:
-      fixed-delay: 6666
+      fixed-delay: 10000 # 10 seconds
     update-item-production-states:
-      fixed-delay: 6666
+      fixed-delay: 10000 # 10 seconds
     update-item-states:
-      fixed-delay: 6666
+      fixed-delay: 10000 # 10 seconds
     update-map-states:
-      fixed-delay: 6666
+      fixed-delay: 30000 # 30 seconds
     update-player-states:
-      fixed-delay: 6666
+      fixed-delay: 10000 # 10 seconds
     update-roster-states:
-      fixed-delay: 6666
+      fixed-delay: 10000 # 10 seconds
     update-ship-battle-states:
-      fixed-delay: 6666
+      fixed-delay: 5000 # 5 seconds
     update-ship-states:
-      fixed-delay: 6666
+      fixed-delay: 10000 # 10 seconds
     update-skill-process-states:
-      fixed-delay: 6666
+      fixed-delay: 10000 # 10 seconds
     update-whitelist-states:
-      fixed-delay: 6666
+      fixed-delay: 30000 # 30 seconds
