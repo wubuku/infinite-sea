@@ -211,6 +211,8 @@ aggregates:
       CRUD_IT_NO_DELETE: true
       ShouldIssuePublisherObject: true
       IS_MOVE_SCHEMA_VERSIONED: true
+      # Generate scheduled method that pulls on-chain states of all instances
+      GENERATE_PULLING_ALL_ON_CHAIN_INSTANCE_STATES: true
       DataAccessFriends:
         # Make some methods can access ("write") Roster's data model.
         # This should only be done occasionally!
