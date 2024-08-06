@@ -8,7 +8,6 @@ package org.dddml.suiinfinitesea.sui.contract.taskservice;
 import org.dddml.suiinfinitesea.domain.roster.AbstractRosterEvent;
 import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.service.*;
-import org.dddml.suiinfinitesea.domain.roster.RosterStateQueryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,6 @@ public class UpdateRosterStateTaskService {
     @Autowired
     private RosterEventService rosterEventService;
 
-    @Autowired
-    private RosterStateQueryRepository rosterStateQueryRepository;
-
     @Scheduled(fixedDelayString = "${sui.contract.update-roster-states.fixed-delay:5000}")
     @Transactional
     public void updateRosterStates() {
@@ -40,14 +36,5 @@ public class UpdateRosterStateTaskService {
             es.stream().filter(ee -> ee.getId_().equals(objectId))
                     .forEach(rosterEventService::updateStatusToProcessed);
         }
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.update-all-roster-states.fixed-delay:50000}")
-    @Transactional
-    public void updateAllRosterStates() {
-        rosterStateQueryRepository.getAll(0, Integer.MAX_VALUE).forEach(s -> {
-            String objectId = s.getId_();
-            suiRosterService.updateRosterState(objectId);
-        });
     }
 }

@@ -93,26 +93,26 @@ sui:
       player-created:
         fixed-delay: 10000 # 10 seconds
       player-island-resources-gathered:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 60000 # 1 minute
     pull-roster-events:
       environment-roster-created:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 20000 # 30 seconds
       roster-created:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 30000 # 30 seconds
       roster-set-sail:
-        fixed-delay: 5000 # 5 seconds
+        fixed-delay: 10000 # 10 seconds
       roster-ship-added:
         fixed-delay: 10000 # 10 seconds
       roster-ship-inventory-put-in:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 30000 # 30 seconds
       roster-ship-inventory-taken-out:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 30000 # 10 seconds
       roster-ship-inventory-transferred:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 30000 # 10 seconds
       roster-ship-transferred:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 30000 # 10 seconds
       roster-ships-position-adjusted:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 60000 # 1 minute
     pull-ship-battle-events:
       ship-battle-initiated:
         fixed-delay: 10000 # 10 seconds
@@ -122,35 +122,35 @@ sui:
         fixed-delay: 60000 # 1 minute
     pull-ship-events:
       ship-created:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 180000 # 3 minutes
     pull-skill-process-events:
       creation-process-completed:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 20000 # 20 seconds
       creation-process-started:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 20000 # 20 seconds
       production-process-completed:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 20000 # 20 seconds
       production-process-started:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 20000 # 20 seconds
       ship-production-process-completed:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 20000 # 20 seconds
       ship-production-process-started:
-        fixed-delay: 10000 # 10 seconds
+        fixed-delay: 20000 # 20 seconds
       skill-process-created:
-        fixed-delay: 30000 # 30 seconds
+        fixed-delay: 300000 # 5 minutes
     pull-whitelist-events:
       init-whitelist-event:
         fixed-delay: 60000 # 1 minute
       whitelist-claimed:
         fixed-delay: 20000 # 20 seconds
       whitelist-created:
-        fixed-delay: 20000 # 20 seconds
+        fixed-delay: 60000 # 1 minute
       whitelist-entry-added:
-        fixed-delay: 20000 # 20 seconds
+        fixed-delay: 60000 # 1 minute
       whitelist-entry-updated:
-        fixed-delay: 20000 # 20 seconds
+        fixed-delay: 60000 # 1 minute
       whitelist-updated:
-        fixed-delay: 20000 # 20 seconds
+        fixed-delay: 180000 # 3 minutes
     update-all-player-states:
       fixed-delay: 6000 # 6 seconds
     update-all-roster-locations:
@@ -160,7 +160,7 @@ sui:
     update-avatar-states:
       fixed-delay: 30000 # 30 seconds
     update-experience-table-states:
-      fixed-delay: 10000 # 10 seconds
+      fixed-delay: 180000 # 3 minutes
     update-item-creation-states:
       fixed-delay: 10000 # 10 seconds
     update-item-production-states:
@@ -182,4 +182,4 @@ sui:
     update-whitelist-states:
       fixed-delay: 30000 # 30 seconds
     update-all-roster-states:
-      fixed-delay: 3600000 # 3600 seconds
+      fixed-delay: 10000 # 10 seconds
