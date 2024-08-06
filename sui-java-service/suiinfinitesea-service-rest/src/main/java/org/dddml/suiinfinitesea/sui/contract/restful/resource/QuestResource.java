@@ -38,4 +38,10 @@ public class QuestResource {
     public Integer getWoodQuantity(@RequestParam(value = "senderAddress") String senderAddress) {
         return skillProcessEventExtendRepository.getCreationQuantity(senderAddress, 200L);
     }
+
+    @GetMapping(path = "plantedCottonQuantity")
+    @Transactional(readOnly = true)
+    public Integer getCottonQuantity(@RequestParam(value = "senderAddress") String senderAddress) {
+        return skillProcessEventExtendRepository.getCottonQuantity(senderAddress);
+    }
 }

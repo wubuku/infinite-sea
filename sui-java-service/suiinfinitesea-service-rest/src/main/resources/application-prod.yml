@@ -182,4 +182,4 @@ sui:
     update-whitelist-states:
       fixed-delay: 30000 # 30 seconds
     update-all-roster-states:
-      fixed-delay: 10000 # 10 seconds
+      fixed-delay: 3600000 # 3600 seconds
