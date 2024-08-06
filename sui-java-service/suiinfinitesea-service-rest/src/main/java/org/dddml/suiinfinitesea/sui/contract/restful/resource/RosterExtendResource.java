@@ -54,7 +54,7 @@ public class RosterExtendResource {
                     }
                 }
                 List<ItemIdQuantityPair> buildExpenses = rosterShipsItemRepository.getBuildingExpenses(shipId);
-                for (ItemIdQuantityPair pair : inventory) {
+                for (ItemIdQuantityPair pair : buildExpenses) {
                     if (itemQuantityPairs.containsKey(pair.getItemId())) {
                         itemQuantityPairs.put(pair.getItemId(), itemQuantityPairs.get(pair.getItemId()) + pair.getQuantity() * 4 / 5);
                     } else {

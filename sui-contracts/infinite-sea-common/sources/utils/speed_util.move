@@ -38,9 +38,9 @@ module infinite_sea_common::speed_util {
     #[test]
     public fun test_calculate_total_time()
     {
-        let original = coordinates::new(2147501897, 2147489647);
-        let destination = coordinates::new(214741763, 214741653);
-        let speed = 9;
+        let original = coordinates::new(2147481827, 2147482947);
+        let destination = coordinates::new(2147482142, 2147482601);
+        let speed = 5;
         let total_time = calculate_total_time(original, destination, speed);
         debug::print(&total_time);
     }
