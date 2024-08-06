@@ -32,11 +32,13 @@ public class UpdateRosterStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-roster-states.fixed-delay:5000}")
     @Transactional
     public void updateRosterStates() {
-        AbstractRosterEvent e = rosterEventRepository.findFirstByEventStatusIsNull();
+        java.util.List<AbstractRosterEvent> es = rosterEventRepository.findByEventStatusIsNull();
+        AbstractRosterEvent e = es.stream().findFirst().orElse(null);
         if (e != null) {
             String objectId = e.getId_();
             suiRosterService.updateRosterState(objectId);
-            rosterEventService.updateStatusToProcessed(e);
+            es.stream().filter(ee -> ee.getId_().equals(objectId))
+                    .forEach(rosterEventService::updateStatusToProcessed);
         }
     }
 

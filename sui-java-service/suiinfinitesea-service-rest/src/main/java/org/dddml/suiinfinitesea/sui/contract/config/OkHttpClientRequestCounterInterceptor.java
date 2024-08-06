@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class OkHttpClientRequestCounterInterceptor implements Interceptor {
-    // create a logger
+
     private static final Logger logger = LoggerFactory.getLogger(OkHttpClientRequestCounterInterceptor.class);
 
     private final AtomicInteger count = new AtomicInteger(0);
@@ -27,11 +27,10 @@ public class OkHttpClientRequestCounterInterceptor implements Interceptor {
         long elapsedTime = currentTime - lastTime.get();
 
         if (elapsedTime >= 1000) {
+            lastTime.set(currentTime);
             int currentCount = count.getAndSet(0);
             long reqPerSecond = currentCount / (elapsedTime / 1000);
-            //System.out.println("Recent One Second Counter: " + reqPerSecond);
             logger.info(String.format("======== OkHttpClient requests per second: %d ========", reqPerSecond));
-            lastTime.set(currentTime);
         }
 
         count.incrementAndGet();

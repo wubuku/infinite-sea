@@ -28,11 +28,13 @@ public class UpdateShipStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-ship-states.fixed-delay:5000}")
     @Transactional
     public void updateShipStates() {
-        AbstractShipEvent e = shipEventRepository.findFirstByEventStatusIsNull();
+        java.util.List<AbstractShipEvent> es = shipEventRepository.findByEventStatusIsNull();
+        AbstractShipEvent e = es.stream().findFirst().orElse(null);
         if (e != null) {
             String objectId = e.getId();
             suiShipService.updateShipState(objectId);
-            shipEventService.updateStatusToProcessed(e);
+            es.stream().filter(ee -> ee.getId().equals(objectId))
+                    .forEach(shipEventService::updateStatusToProcessed);
         }
     }
 }

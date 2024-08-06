@@ -28,11 +28,13 @@ public class UpdateMapStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-map-states.fixed-delay:5000}")
     @Transactional
     public void updateMapStates() {
-        AbstractMapEvent e = mapEventRepository.findFirstByEventStatusIsNull();
+        java.util.List<AbstractMapEvent> es = mapEventRepository.findByEventStatusIsNull();
+        AbstractMapEvent e = es.stream().findFirst().orElse(null);
         if (e != null) {
             String objectId = e.getId();
             suiMapService.updateMapState(objectId);
-            mapEventService.updateStatusToProcessed(e);
+            es.stream().filter(ee -> ee.getId().equals(objectId))
+                    .forEach(mapEventService::updateStatusToProcessed);
         }
     }
 }

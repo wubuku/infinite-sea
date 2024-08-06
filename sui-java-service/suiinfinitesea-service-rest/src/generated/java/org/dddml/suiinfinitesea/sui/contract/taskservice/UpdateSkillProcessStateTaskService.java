@@ -28,11 +28,13 @@ public class UpdateSkillProcessStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-skill-process-states.fixed-delay:5000}")
     @Transactional
     public void updateSkillProcessStates() {
-        AbstractSkillProcessEvent e = skillProcessEventRepository.findFirstByEventStatusIsNull();
+        java.util.List<AbstractSkillProcessEvent> es = skillProcessEventRepository.findByEventStatusIsNull();
+        AbstractSkillProcessEvent e = es.stream().findFirst().orElse(null);
         if (e != null) {
             String objectId = e.getId_();
             suiSkillProcessService.updateSkillProcessState(objectId);
-            skillProcessEventService.updateStatusToProcessed(e);
+            es.stream().filter(ee -> ee.getId_().equals(objectId))
+                    .forEach(skillProcessEventService::updateStatusToProcessed);
         }
     }
 }
