@@ -280,7 +280,7 @@ wubuku/dddappp-sui:master \
 
 ```
 
-### Movement Baku 
+### Movement Baku test
 
 对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8091/api
 
@@ -335,6 +335,66 @@ wubuku/dddappp-sui:master \
     "Digest": "7j33JwDzpQth9SiVjvnNraRJW1fPwNuusLXLSvdLGShc"
   }
 }
+
+```
+
+
+### Movement Baku "production"(8-7)
+
+对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8092/api
+
+```json
+{
+  "coin": {
+    "TreasuryCap": "0x0b3758bbb58b3da800d92d4577f4fe66dae9537ec0bebe57d5278cea2ddba21e",
+    "PackageId": "0xed400e4c806cc4cd85d103f48713f7c04a360ac0dbee0a9939fab07a11b6bbd3",
+    "Digest": "5stbmgx182Bob3HMb3HKmKazPr3o8cnyHBzENGrDS7A3",
+    "EnergyId": "0x108be611919149a5cbb3470e83aa84746f4bdc0824be89a43591880a5346d896"
+  },
+  "common": {
+    "Digest": "AzeE1Za1BWcTdveKiRmTDYbiqEaCJLeo4Z5ffGUKEYST",
+    "ItemProductionTable": "0x2c37c4d6f5670965a0212b03f198692f0fced2dd700c2a68473af96e8ad0c49c",
+    "Publisher": "0x47325227c9e9b22477b1d181263c15409cce2dfa85e0c71f6eeb0282bd559ce0",
+    "ItemTable": "0x58579e092cd9941d32ea334ddb980b35c871d778afbff7fa51cf73c1c72c4b75",
+    "ExperienceTable": "0xaa18b1ad5a1176d67544c7c18b863b9ebb99fc77ca49c677ebca39baef722625",
+    "PackageId": "0xaa61a7997581b17b181aa0825f121caaa696b26a55956d1b4f576bbf2ec0c05f",
+    "ItemCreationTable": "0xea860f19be51356be5bce2ae6a3600327b66f60de1219deddda461d64f48cd2d",
+    "ItemCreationMining": "0xdacc8cfbcffd9dcd065dc01c7d4584bdfe3b626509bdf8ff48a7bd55143f64f5",
+    "ItemProductionFarming": "0x7a6836c81f8681adb9c3fc0525708b02b7b2890487deaff7f6a11a4f9b0f123b",
+    "ItemCreationWooding": "0x28f942c672b31b05d8025040cf85bfb2ad5842eb965ed0e616837f6b75a5acbf",
+    "ItemProductionCrafting": "0x228ed378e5b7b4eed21e63f91c6b317fc92ce8de20f7d48b5a4d496594763dd1"
+  },
+  "main": {
+    "Digest": "3e35UDbcHz31sjEL9CK4PNmxNEK4hQFPrpnLPqdM96zU",
+    "PackageId": "0x31621b12df3f5db8bd1a5fbccc11b47228cf98562a29f528f5828d11f086a6de",
+    "SkillProcessTable": "0x3f59c880f401a8ed2b75e435ba95186119b70bf79fa81a69eb3e8523b005e9ae",
+    "UpgradeCap": "0x623f9bfdbd2ba74a71b23d17d0bf2f37006c8e053636e82ad191cf14d26901cc",
+    "Publisher": "0x81a1fa4e0674327cedaaef1b8692c2d97698f76c3a829fba237c07ae81a5dd38",
+    "RosterTable": "0x99da97a459bb95c82f4fc9af53f827341085bb5169d8bb79b2b556005bde2387"
+  },
+  "faucet": {
+    "PackageId": "0x2ef33638285dad7062be2670e8aa88d6ec40903dd0ee7ad3e058c93932f1a46a",
+    "EnergyFaucet": "0xb009e89184a0eb0375822a57d823851c184bbeb16b95759681a0f92b3d80b62a",
+    "Digest": "Bkifj2BpXL7uDA3qqZC5fRviStpxMRUr5eyAjfUgfT8W"
+  },
+  "nft": {
+    "Whitelist": "0x120ff3ca22143114e9f46374cf9a2fdfc48bf1abd08de3eb07c653f046518cf5",
+    "AvatarDisplay": "0x4bb4d4e18f15484c8eccc72c74284a7bf1d781eb1ae0119d8e81cacdebbf29f4",
+    "Publisher": "0xaf22054c76c5008ba3d1fd4763286eef827ee7f596bd7807cc64e4078ba43218",
+    "AvatarChangeTable": "0xc5dd8cb9a2f2190d9eebdcf82359e4d17b5de5a88a79ef8874a76e58357569c8",
+    "PackageId": "0xf2322ab60beacd7dfdf1e1b0692b69c75adbaee86263c09d7a468602ea53527c",
+    "Digest": "FrRzJF9jbvjNrXqVKi2LtoZcc1x1ZhAhSGVzTp94PVLF"
+  },
+  "map": {
+    "MapFriendConfig": "0x38cc22c26e24966ebb6efe5da1f15ec36d2269e5e3e88535133f12a24b5272a6",
+    "AdminCap": "0x497b63ce1dc2d7827959ea02d051ce3860c87d39deedca7ec92d3cd13fd8d7c2",
+    "Map": "0x89f70b668df72629db289e417fe683c6ff2ade79b412f0d2d9c4aa97f5d9d8f5",
+    "PackageId": "0x91eb633cd9efb5db72c0df35bfdfb0f2163914d561ce3c4548dc225da67459bb",
+    "Publisher": "0xf0d3c911784f5bfb6ed49968b7e5036144393c36e5eb96f780df136ef5fab30b",
+    "Digest": "4UrG1cgxiMp5woCigVAULnaWcu5NpBHiYo7UQsQDb3rr"
+  }
+}
+
 
 ```
 
