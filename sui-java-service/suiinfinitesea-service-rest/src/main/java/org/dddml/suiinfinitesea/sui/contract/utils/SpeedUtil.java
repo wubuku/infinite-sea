@@ -1,9 +1,9 @@
 package org.dddml.suiinfinitesea.sui.contract.utils;
 
 public class SpeedUtil {
-    public static final long STANDARD_SPEED_NUMERATOR = 5892;
+    public static final long STANDARD_SPEED_NUMERATOR = 11784;
     public static final long STANDARD_SPEED_DENOMINATOR = 1000;
-    public static final long SPEED_NUMERATOR_DELTA = 589;
+    public static final long SPEED_NUMERATOR_DELTA = 1178;
     private SpeedUtil() {
     }
 
