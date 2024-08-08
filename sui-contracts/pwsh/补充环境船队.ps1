@@ -28,10 +28,10 @@ $logFile = "$startLocation\environment_roster_rebirth_$formattedNow.log"
 $serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090"
 
 # 目前岛屿所占海域大小
-# $islandWidth = 10000
-# $islandHeight = 10000
-$islandWidth = 5000
-$islandHeight = 5000
+$islandWidth = 10000
+$islandHeight = 10000
+# $islandWidth = 5000
+# $islandHeight = 5000
 $u32MaxHalf = 2147483647
 # 在岛屿周边查找环境船队，以岛屿的中心坐标为准做一个矩形，矩形的大小 $islandWidth*$range,$islandHeight*$range
 #$range = 0.2
@@ -82,8 +82,8 @@ while ($hasNextPage) {
     }
     foreach ($coordinate in $resultObj.result.data) {
         $islandCoordinates += $coordinate.name.value
-        #"($($coordinate.name.value.x),$($coordinate.name.value.y))" |  Write-Host -ForegroundColor White 
-        "($($coordinate.name.value.x-$u32MaxHalf),$($coordinate.name.value.y-$u32MaxHalf))" |  Write-Host -ForegroundColor White 
+        "($($coordinate.name.value.x),$($coordinate.name.value.y))" |  Write-Host -ForegroundColor White 
+        #"($($coordinate.name.value.x-$u32MaxHalf),$($coordinate.name.value.y-$u32MaxHalf))" |  Write-Host -ForegroundColor White 
     }
     $hasNextPage = $resultObj.result.hasNextPage
     $nextCursor = $resultObj.result.nextCursor;
@@ -107,8 +107,8 @@ try {
     "目前一共有 $($getAllEnviornmentRostersResultObj.Count) 个活着的环境船队..." | Tee-Object -FilePath $logFile -Append  |  Write-Host     
     foreach ($roster in $getAllEnviornmentRostersResultObj) {
         $rosterCoordinates += $roster.updatedCoordinates;
-        #"coordinates:($($roster.updatedCoordinates.x),$($roster.updatedCoordinates.y))" |  Write-Host 
-        "coordinates:($($roster.updatedCoordinates.x-$u32MaxHalf),$($roster.updatedCoordinates.y-$u32MaxHalf))" |  Write-Host 
+        "coordinates:($($roster.updatedCoordinates.x),$($roster.updatedCoordinates.y))" |  Write-Host 
+        #"coordinates:($($roster.updatedCoordinates.x-$u32MaxHalf),$($roster.updatedCoordinates.y-$u32MaxHalf))" |  Write-Host 
     }
 }
 catch {
@@ -143,14 +143,6 @@ function Get-Distance {
     return $result
 }
 
-Add-Type -TypeDefinition @"
-public class Requirement{
-    public long X { get; set; }
-    public long Y { get; set; }
-    public int NeedToAdd{get;set;}
-}
-"@
-
 # 定义 Coordinate 类型
 class Coordinate {
     [long]$X
@@ -178,8 +170,8 @@ $needAddTotal = 0
 
 #循环每个岛屿-$u32MaxHalf
 foreach ($islandCoordinate in $islandCoordinates) {
-    #"岛屿坐标：($($islandCoordinate.x),$($islandCoordinate.y))" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    "岛屿坐标：($($islandCoordinate.x-$u32MaxHalf),$($islandCoordinate.y-$u32MaxHalf))" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    "岛屿坐标：($($islandCoordinate.x),$($islandCoordinate.y))" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    #"岛屿坐标：($($islandCoordinate.x-$u32MaxHalf),$($islandCoordinate.y-$u32MaxHalf))" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
     #查询这个区域内有没有环境船队
     $inRange = 0
     $equipment = [Equipment]::new()
@@ -190,9 +182,8 @@ foreach ($islandCoordinate in $islandCoordinates) {
         #$pointBetweenRectangles = IsPointInAnnulus -px $rosterCoordinate.x -py $rosterCoordinate.y -left $left -bottom $bottom -right $right -top $top -outerLeft $outerLeft -outerBottom $outerBottom -outerRight $outerRight -outerTop $outerTop
         $distance = Get-Distance -x1 $rosterCoordinate.x -y1 $rosterCoordinate.y -x2 $islandCoordinate.x -y2 $islandCoordinate.y
         if ($distance -ge $innerDistince -and $distance -le $outerDistince) {
-            #if ($rosterCoordinate.x -le $left -and $rosterCoordinate.x -ge $right -and $rosterCoordinate.y -ge $bottom -and $rosterCoordinate.y -le $top) {
-            #"   坐标为($($rosterCoordinate.x),$($rosterCoordinate.y) 的船队处于岛屿范围之内,横纵距离分别是" | Tee-Object -FilePath $logFile -Append  |  Write-Host -NoNewline
-            "   坐标为($($rosterCoordinate.x-$u32MaxHalf),$($rosterCoordinate.y-$u32MaxHalf)) 的船队处于岛屿范围之内,距离为 $distance." | Tee-Object -FilePath $logFile -Append  
+            "   坐标为($($rosterCoordinate.x),$($rosterCoordinate.y)) 的船队处于岛屿范围之内,距离为 $distance." | Tee-Object -FilePath $logFile -Append  
+            #"   坐标为($($rosterCoordinate.x-$u32MaxHalf),$($rosterCoordinate.y-$u32MaxHalf)) 的船队处于岛屿范围之内,距离为 $distance." | Tee-Object -FilePath $logFile -Append  
             $roster = [Coordinate]::new($rosterCoordinate.x, $rosterCoordinate.y)
             $equipment.Rosters.Add($roster)
             $inRange = $inRange + 1;
@@ -212,7 +203,6 @@ if ($needAddTotal -lt 1) {
 }
 "需要补充 $needAddTotal 个环境船队..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
 
-$random = New-Object System.Random  
 $errorTimes = 0
 
 $ship_resource_quantity = 15
@@ -288,27 +278,27 @@ foreach ($equipment in $equipments) {
         $rosterId = ""
         $createEnvironmentRosterResult = ""
         try {
-            # $command = "sui client call --package $($dataInfo.main.PackageId) --module roster_aggregate --function create_environment_roster --args  $($dataInfo.main.EnvironmentPlayId) $($islandEnvironmentRosterInfo.LastRosterIdSequenceNumber) $($dataInfo.main.Publisher) $($randomPoint.X) $($randomPoint.Y) $ship_resource_quantity $ship_base_resource_quantity $base_experience $clock $($dataInfo.main.RosterTable) --gas-budget 42000000 --json"
-            # $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
-            # $createEnvironmentRosterResult = Invoke-Expression -Command $command
-            # if (-not ('System.Object[]' -eq $createEnvironmentRosterResult.GetType())) {
-            #     "创建环境船队时返回信息 $createEnvironmentRosterResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            #     $errorTimes++
-            #     if ($errorTimes -ge $maxErrorTimes) {
-            #         "创建环境船队出错次数:$errorTimes,已经达到上限:$maxErrorTimes,退出..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            #         $islandEnvironmentRosterInfo | ConvertTo-Json | Tee-Object -FilePath $environmentRosterJsonFile | Write-Host -ForegroundColor White
-            #         return
-            #     }
-            #     continue
-            # }
-            # $createEnvironmentRosterResultObj = $createEnvironmentRosterResult | ConvertFrom-Json
-            # foreach ($object in $createEnvironmentRosterResultObj.objectChanges) {
-            #     if ($object.objectType -like "*::roster::Roster") {
-            #         $rosterId = $object.objectId
-            #         "创建环境船队成功， Roster Id: $rosterId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-            #         break
-            #     }
-            # }
+            $command = "sui client call --package $($dataInfo.main.PackageId) --module roster_aggregate --function create_environment_roster --args  $($dataInfo.main.EnvironmentPlayId) $($islandEnvironmentRosterInfo.LastRosterIdSequenceNumber) $($dataInfo.main.Publisher) $($randomPoint.X) $($randomPoint.Y) $ship_resource_quantity $ship_base_resource_quantity $base_experience $clock $($dataInfo.main.RosterTable) --gas-budget 42000000 --json"
+            $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+            $createEnvironmentRosterResult = Invoke-Expression -Command $command
+            if (-not ('System.Object[]' -eq $createEnvironmentRosterResult.GetType())) {
+                "创建环境船队时返回信息 $createEnvironmentRosterResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                $errorTimes++
+                if ($errorTimes -ge $maxErrorTimes) {
+                    "创建环境船队出错次数:$errorTimes,已经达到上限:$maxErrorTimes,退出..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                    $islandEnvironmentRosterInfo | ConvertTo-Json | Tee-Object -FilePath $environmentRosterJsonFile | Write-Host -ForegroundColor White
+                    return
+                }
+                continue
+            }
+            $createEnvironmentRosterResultObj = $createEnvironmentRosterResult | ConvertFrom-Json
+            foreach ($object in $createEnvironmentRosterResultObj.objectChanges) {
+                if ($object.objectType -like "*::roster::Roster") {
+                    $rosterId = $object.objectId
+                    "创建环境船队成功， Roster Id: $rosterId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+                    break
+                }
+            }
             "船队RosterId={$($dataInfo.main.EnvironmentPlayId),$($islandEnvironmentRosterInfo.LastRosterIdSequenceNumber)}" | Write-Host -ForegroundColor Blue
             "已经补充 $($roster_id_sequence_number) 只环境船队" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
             $roster_id_sequence_number++;
