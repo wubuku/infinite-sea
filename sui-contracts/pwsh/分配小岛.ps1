@@ -29,20 +29,20 @@ $u32Max = 4294967295
 $u32MaxHalf = 2147483647
 
 #最终坐标在初始坐标上的随机波动范围
-$rand_rate_x = 0.3
-$rand_rate_y = 0.3
+$rand_rate_x = 0.2
+$rand_rate_y = 0.2
 
 $original_x = $u32MaxHalf
 $original_y = $u32MaxHalf
 
 
 
-$island_width = 5000
-$island_height = 5000
+$island_width = 10000
+$island_height = 10000
 
 
-$block_width = 20000
-$block_height = 20000
+$block_width = 40000
+$block_height = 40000
 
 if ($block_width -lt $island_width -or $block_height -lt $island_height) {
     "分配区域的尺寸不能小于岛屿的尺寸" | Write-Host -ForegroundColor Red
