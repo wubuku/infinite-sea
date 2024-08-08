@@ -29,7 +29,7 @@ module infinite_sea::ship_battle_util {
     const ERoundMoverNotSet: u64 = 23;
     const EInvalidSide: u64 = 24;
 
-    const MIN_DISTANCE_TO_BATTLE: u64 = 600;
+    const MIN_DISTANCE_TO_BATTLE: u64 = 1000;
 
     // const MAX_DODGE_CHANCE: u64 = 60;
     // /// TODO: Is this CRITICAL_MISS_CHANCE a good value?
