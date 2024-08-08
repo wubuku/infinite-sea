@@ -28,12 +28,20 @@ public class SuiPackageInitializer {
             SuiJsonRpcClient suiJsonRpcClient,
             @Value("${sui.contract.package-publish-transactions.nft:}")
             String nftPackagePublishTransactionDigest,
+            @Value("${sui.contract.event-type-patterns-for-extract-package-id.nft:}")
+            String nftEventTypePatternForExtractPackageId,
             @Value("${sui.contract.package-publish-transactions.map:}")
             String mapPackagePublishTransactionDigest,
+            @Value("${sui.contract.event-type-patterns-for-extract-package-id.map:}")
+            String mapEventTypePatternForExtractPackageId,
             @Value("${sui.contract.package-publish-transactions.common:}")
             String commonPackagePublishTransactionDigest,
+            @Value("${sui.contract.event-type-patterns-for-extract-package-id.common:}")
+            String commonEventTypePatternForExtractPackageId,
             @Value("${sui.contract.package-publish-transactions.default:}")
-            String defaultPackagePublishTransactionDigest
+            String defaultPackagePublishTransactionDigest,
+            @Value("${sui.contract.event-type-patterns-for-extract-package-id.default:}")
+            String defaultEventTypePatternForExtractPackageId
     ) {
         if (nftPackagePublishTransactionDigest != null && !nftPackagePublishTransactionDigest.trim().isEmpty()) {
             nftPackageInitializationService = new SuiPackageInitializationService(
@@ -42,7 +50,8 @@ public class SuiPackageInitializer {
                     suiJsonRpcClient,
                     nftPackagePublishTransactionDigest,
                     ContractConstants.NFT_SUI_PACKAGE_NAME,
-                    ContractConstants::getNftPackageIdGeneratorObjectTypes
+                    ContractConstants::getNftPackageIdGeneratorObjectTypes,
+                    nftEventTypePatternForExtractPackageId
             );
         } else {
             //throw new IllegalArgumentException("nftPackagePublishTransactionDigest is null");
@@ -55,7 +64,8 @@ public class SuiPackageInitializer {
                     suiJsonRpcClient,
                     mapPackagePublishTransactionDigest,
                     ContractConstants.MAP_SUI_PACKAGE_NAME,
-                    ContractConstants::getMapPackageIdGeneratorObjectTypes
+                    ContractConstants::getMapPackageIdGeneratorObjectTypes,
+                    mapEventTypePatternForExtractPackageId
             );
         } else {
             //throw new IllegalArgumentException("mapPackagePublishTransactionDigest is null");
@@ -68,7 +78,8 @@ public class SuiPackageInitializer {
                     suiJsonRpcClient,
                     commonPackagePublishTransactionDigest,
                     ContractConstants.COMMON_SUI_PACKAGE_NAME,
-                    ContractConstants::getCommonPackageIdGeneratorObjectTypes
+                    ContractConstants::getCommonPackageIdGeneratorObjectTypes,
+                    commonEventTypePatternForExtractPackageId
             );
         } else {
             //throw new IllegalArgumentException("commonPackagePublishTransactionDigest is null");
@@ -81,7 +92,8 @@ public class SuiPackageInitializer {
                     suiJsonRpcClient,
                     defaultPackagePublishTransactionDigest,
                     ContractConstants.DEFAULT_SUI_PACKAGE_NAME,
-                    ContractConstants::getDefaultPackageIdGeneratorObjectTypes
+                    ContractConstants::getDefaultPackageIdGeneratorObjectTypes,
+                    defaultEventTypePatternForExtractPackageId
             );
         } else {
             //throw new IllegalArgumentException("defaultPackagePublishTransactionDigest is null");
