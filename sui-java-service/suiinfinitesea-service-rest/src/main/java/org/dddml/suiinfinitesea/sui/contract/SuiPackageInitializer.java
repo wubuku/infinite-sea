@@ -28,19 +28,19 @@ public class SuiPackageInitializer {
             SuiJsonRpcClient suiJsonRpcClient,
             @Value("${sui.contract.package-publish-transactions.nft:}")
             String nftPackagePublishTransactionDigest,
-            @Value("${sui.contract.event-type-pattern-for-extract-package-id.nft:}")
+            @Value("${sui.contract.event-type-patterns-for-extract-package-id.nft:}")
             String nftEventTypePatternForExtractPackageId,
             @Value("${sui.contract.package-publish-transactions.map:}")
             String mapPackagePublishTransactionDigest,
-            @Value("${sui.contract.event-type-pattern-for-extract-package-id.map:}")
+            @Value("${sui.contract.event-type-patterns-for-extract-package-id.map:}")
             String mapEventTypePatternForExtractPackageId,
             @Value("${sui.contract.package-publish-transactions.common:}")
             String commonPackagePublishTransactionDigest,
-            @Value("${sui.contract.event-type-pattern-for-extract-package-id.common:}")
+            @Value("${sui.contract.event-type-patterns-for-extract-package-id.common:}")
             String commonEventTypePatternForExtractPackageId,
             @Value("${sui.contract.package-publish-transactions.default:}")
             String defaultPackagePublishTransactionDigest,
-            @Value("${sui.contract.event-type-pattern-for-extract-package-id.default:}")
+            @Value("${sui.contract.event-type-patterns-for-extract-package-id.default:}")
             String defaultEventTypePatternForExtractPackageId
     ) {
         if (nftPackagePublishTransactionDigest != null && !nftPackagePublishTransactionDigest.trim().isEmpty()) {
