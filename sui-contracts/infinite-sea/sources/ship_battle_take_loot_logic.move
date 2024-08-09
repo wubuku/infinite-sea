@@ -11,6 +11,7 @@ module infinite_sea::ship_battle_take_loot_logic {
     use infinite_sea_common::battle_status;
     use infinite_sea_common::experience_table::ExperienceTable;
     use infinite_sea_common::item_id_quantity_pair::ItemIdQuantityPair;
+    use infinite_sea_common::roster_id;
     use infinite_sea_common::roster_status;
     use infinite_sea_common::sorted_vector_util;
 
@@ -248,11 +249,17 @@ module infinite_sea::ship_battle_take_loot_logic {
         if (roster::environment_owned(loser_roster)) {
             return
         };
-        // Ignore environment rosters
-        // send the loser roster back to the player claimed island
+        // Ignore environment rosters.
+        //
+        // Send the loser roster back to the player claimed island
         let island_coordinates = player::claimed_island(loser_player);
         assert!(option::is_some(&island_coordinates), EPayerHasNoClaimedIsland);
-        roster::set_updated_coordinates(loser_roster, option::extract(&mut island_coordinates));
+        let roster_seq = roster_id::sequence_number(&roster::roster_id(loser_roster));
+        roster::set_updated_coordinates(loser_roster,
+            infinite_sea_common::roster_util::get_roster_origin_coordinates(option::borrow(&island_coordinates),
+                roster_seq
+            )
+        );
         roster::set_coordinates_updated_at(loser_roster, looted_at);
         roster::set_status(loser_roster, roster_status::at_anchor());
     }

@@ -112,7 +112,8 @@ module infinite_sea::player_claim_island_logic {
         while (roster_sequence_number < 5) {
             // 0-4
             let r = roster_aggregate::create(player_id, roster_sequence_number, roster_status::at_anchor(), 0,
-                coordinates, 0, option::none(), option::none(),
+                infinite_sea_common::roster_util::get_roster_origin_coordinates(&coordinates, roster_sequence_number),
+                0, option::none(), option::none(),
                 option::none(), roster_table, ctx
             );
             roster::share_object(r);
