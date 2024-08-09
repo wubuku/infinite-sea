@@ -3564,12 +3564,12 @@ Input parameter description:
 ### 关于白名单，认领 NFT，认领岛屿 以及 Map 的 claim_island_setting
 
 * 要想认领 NFT，需要将认领者钱包地址加入 `NFT 白名单`；
-* 持有 NFT 的玩家使用可以通过 nft_holder_claim_island 认领岛屿，此方法中没有判断 claim_island_setting 的值；
-* 非 NFT 持有者通过 claim_island 认领岛屿，能否认领成功与 Map 的 claim_island_setting 的值和以及是否被加入`认领岛屿白名单`有关；
+* 持有 NFT 的玩家使用可以通过 `nft_holder_claim_island` 认领岛屿，此方法中没有判断 `claim_island_setting` 的值；
+* 非 NFT 持有者通过 `player_claim_island_logic.claim_island` 认领岛屿，能否认领成功与 Map 的 `claim_island_setting` 的值和以及是否被加入`认领岛屿白名单`有关；
 * 通过 `add_to_whitelist` 可以将钱包地址加入`认领岛屿白名单`；
-* claim_island_setting 为 1 时表示只允许 NFT 持有者可以认领岛屿，并且使用的方法还是 nft_holder_claim_island
-* claim_island_setting 为 2 时表示允许加入`认领岛屿白名单`的钱包地址可以认领岛屿。（与 NFT 持有者无关，他们仍然可以通过 nft_holder_claim_island 认领）；
-* claim_island_setting 为 3 时表示任何人都可以认领岛屿。
+* `claim_island_setting` 为 1 时表示只允许 NFT 持有者可以认领岛屿，并且使用的方法还是 `nft_holder_claim_island`；
+* `claim_island_setting` 为 2 时表示允许加入`认领岛屿白名单`的钱包地址可以认领岛屿。（与 NFT 持有者无关，他们仍然可以通过 `nft_holder_claim_island` 认领）；
+* `claim_island_setting` 为 3 时表示任何人都可以认领岛屿。
 
 [TBD]
 
