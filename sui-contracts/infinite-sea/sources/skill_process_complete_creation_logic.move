@@ -7,8 +7,8 @@ module infinite_sea::skill_process_complete_creation_logic {
     use infinite_sea_common::item_id;
     use infinite_sea_common::item_id_quantity_pair;
 
-    use infinite_sea::experience_table_util;
-    use infinite_sea::player::Player;
+    use infinite_sea_common::experience_table_util;
+    use infinite_sea::player::{Self, Player};
     use infinite_sea::player_properties;
     use infinite_sea::skill_process;
     use infinite_sea::skill_process_util;
@@ -51,7 +51,7 @@ module infinite_sea::skill_process_complete_creation_logic {
         let successful = true; //todo always successful for now
         let quantity = item_creation::base_quantity(item_creation) * batch_size;
         let increased_experience = item_creation::base_experience(item_creation) * batch_size;
-        let new_level = experience_table_util::calculate_new_level(player, experience_table, increased_experience);
+        let new_level = experience_table_util::calculate_new_level(player::level(player), player::experience(player), experience_table, increased_experience);
         skill_process::new_creation_process_completed(
             skill_process,
             item_id,

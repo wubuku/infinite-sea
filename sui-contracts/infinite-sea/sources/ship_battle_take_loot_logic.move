@@ -15,11 +15,10 @@ module infinite_sea::ship_battle_take_loot_logic {
     use infinite_sea_common::roster_status;
     use infinite_sea_common::sorted_vector_util;
 
-    use infinite_sea::experience_table_util;
+    use infinite_sea_common::experience_table_util;
     use infinite_sea::loot_util;
     use infinite_sea::permission_util;
-    use infinite_sea::player;
-    use infinite_sea::player::Player;
+    use infinite_sea::player::{Self, Player};
     use infinite_sea::roster::{Self, Roster};
     use infinite_sea::roster_util;
     use infinite_sea::ship;
@@ -150,10 +149,10 @@ module infinite_sea::ship_battle_take_loot_logic {
             if (b > winner_increased_experience) { winner_increased_experience = b; };
         };
         let new_level = experience_table_util::calculate_new_level(
-            player, experience_table, winner_increased_experience
+            player::level(player), player::experience(player), experience_table, winner_increased_experience
         );
         let loser_new_level = experience_table_util::calculate_new_level(
-            loser_player, experience_table, loser_increased_experience
+            player::level(loser_player), player::experience(loser_player), experience_table, loser_increased_experience
         );
 
         ship_battle::new_ship_battle_loot_taken(

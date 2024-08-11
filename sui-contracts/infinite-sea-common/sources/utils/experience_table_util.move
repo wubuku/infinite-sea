@@ -1,21 +1,18 @@
-module infinite_sea::experience_table_util {
+module infinite_sea_common::experience_table_util {
 
     use std::vector;
 
     use infinite_sea_common::experience_level;
     use infinite_sea_common::experience_table::{Self, ExperienceTable};
 
-    use infinite_sea::player::{Self, Player};
-
     const EExperienceTableNotInitialized: u64 = 15;
 
     public fun calculate_new_level(
-        player: &Player,
+        old_level: u16, // = player::level(player);
+        old_experience: u32, // = player::experience(player);
         experience_table: &ExperienceTable,
         increased_experience: u32,
     ): u16 {
-        let old_level = player::level(player);
-        let old_experience = player::experience(player);
         let new_experience = old_experience + increased_experience;
         let new_level = old_level;
         let xp_levels = experience_table::borrow_levels(experience_table);

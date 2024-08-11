@@ -13,7 +13,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
     use infinite_sea_common::roster_sequence_number;
     use infinite_sea_common::ship_util;
 
-    use infinite_sea::experience_table_util;
+    use infinite_sea_common::experience_table_util;
     use infinite_sea::player::{Self, Player};
     use infinite_sea::player_properties;
     use infinite_sea::roster;
@@ -71,7 +71,7 @@ module infinite_sea::skill_process_complete_ship_production_logic {
         let successful = true; //todo always successful for now
         let quantity = item_production::base_quantity(item_production);
         let increased_experience = item_production::base_experience(item_production);
-        let new_level = experience_table_util::calculate_new_level(player, experience_table, increased_experience);
+        let new_level = experience_table_util::calculate_new_level(player::level(player), player::experience(player), experience_table, increased_experience);
         skill_process::new_ship_production_process_completed(
             skill_process,
             item_id,
