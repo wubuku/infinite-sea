@@ -5,15 +5,20 @@
 
 package org.dddml.suiinfinitesea.sui.contract.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.github.wubuku.sui.bean.EventId;
 import com.github.wubuku.sui.bean.Page;
-import com.github.wubuku.sui.bean.PaginatedMoveEvents;
-import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
+import com.github.wubuku.sui.bean.PaginatedEvents;
+import com.github.wubuku.sui.bean.SuiEventEnvelope;
+import com.github.wubuku.sui.bean.SuiEventFilter;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.dddml.suiinfinitesea.domain.roster.AbstractRosterEvent;
 import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
 import org.dddml.suiinfinitesea.sui.contract.DomainBeanUtils;
 import org.dddml.suiinfinitesea.sui.contract.SuiPackage;
+import org.dddml.suiinfinitesea.sui.contract.repository.RosterEventRepository;
+import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterCreated;
 import org.dddml.suiinfinitesea.sui.contract.roster.EnvironmentRosterCreated;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipAdded;
@@ -23,14 +28,14 @@ import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipTransferred;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTransferred;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTakenOut;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryPutIn;
-import org.dddml.suiinfinitesea.sui.contract.repository.RosterEventRepository;
-import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RosterEventService {
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private SuiPackageRepository suiPackageRepository;
@@ -48,22 +53,49 @@ public class RosterEventService {
     }
 
     @Transactional
-    public void pullRosterCreatedEvents() {
+    public void pullRosterEvents() {
         String packageId = getDefaultSuiPackageId();
         if (packageId == null) {
             return;
         }
-        int limit = 1;
-        EventId cursor = getRosterCreatedEventNextCursor();
+        SuiEventFilter suiEventFilter = new SuiEventFilter.MoveEventModule(packageId, "roster");
+        int limit = 10;
+        EventId cursor = getRosterEventNextCursor();
         while (true) {
-            PaginatedMoveEvents<RosterCreated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_CREATED,
-                    cursor, limit, false, RosterCreated.class);
+            PaginatedEvents eventPage = suiJsonRpcClient.queryEvents(
+                    suiEventFilter,
+                    cursor, limit, false);
 
             if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
                 cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<RosterCreated> eventEnvelope : eventPage.getData()) {
-                    saveRosterCreated(eventEnvelope);
+                for (SuiEventEnvelope eventEnvelope : eventPage.getData()) {
+                    String t = eventEnvelope.getType();
+                    AbstractRosterEvent e;
+                    if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_CREATED)) {
+                        e = DomainBeanUtils.toRosterCreated(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterCreated.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ENVIRONMENT_ROSTER_CREATED)) {
+                        e = DomainBeanUtils.toEnvironmentRosterCreated(objectMapper.convertValue(eventEnvelope.getParsedJson(), EnvironmentRosterCreated.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_ADDED)) {
+                        e = DomainBeanUtils.toRosterShipAdded(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterShipAdded.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SET_SAIL)) {
+                        e = DomainBeanUtils.toRosterSetSail(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterSetSail.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIPS_POSITION_ADJUSTED)) {
+                        e = DomainBeanUtils.toRosterShipsPositionAdjusted(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterShipsPositionAdjusted.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_TRANSFERRED)) {
+                        e = DomainBeanUtils.toRosterShipTransferred(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterShipTransferred.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_INVENTORY_TRANSFERRED)) {
+                        e = DomainBeanUtils.toRosterShipInventoryTransferred(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterShipInventoryTransferred.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_INVENTORY_TAKEN_OUT)) {
+                        e = DomainBeanUtils.toRosterShipInventoryTakenOut(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterShipInventoryTakenOut.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_INVENTORY_PUT_IN)) {
+                        e = DomainBeanUtils.toRosterShipInventoryPutIn(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterShipInventoryPutIn.class));
+                    } else {
+                        e = null;
+                    }
+                    if (e != null) {
+                        DomainBeanUtils.setRosterEventEnvelopeProperties(e, eventEnvelope);
+                        saveRosterEvent(e);
+                    }
                 }
             } else {
                 break;
@@ -74,337 +106,16 @@ public class RosterEventService {
         }
     }
 
-    private EventId getRosterCreatedEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstRosterCreatedByOrderBySuiTimestampDesc();
+    private EventId getRosterEventNextCursor() {
+        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstByOrderBySuiTimestampDesc();
         return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
     }
 
-    private void saveRosterCreated(SuiMoveEventEnvelope<RosterCreated> eventEnvelope) {
-        AbstractRosterEvent.RosterCreated rosterCreated = DomainBeanUtils.toRosterCreated(eventEnvelope);
-        if (rosterEventRepository.findById(rosterCreated.getRosterEventId()).isPresent()) {
+    private void saveRosterEvent(AbstractRosterEvent event) {
+        if (rosterEventRepository.findById(event.getRosterEventId()).isPresent()) {
             return;
         }
-        rosterEventRepository.save(rosterCreated);
-    }
-
-    @Transactional
-    public void pullEnvironmentRosterCreatedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getEnvironmentRosterCreatedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<EnvironmentRosterCreated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ENVIRONMENT_ROSTER_CREATED,
-                    cursor, limit, false, EnvironmentRosterCreated.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<EnvironmentRosterCreated> eventEnvelope : eventPage.getData()) {
-                    saveEnvironmentRosterCreated(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getEnvironmentRosterCreatedEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstEnvironmentRosterCreatedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveEnvironmentRosterCreated(SuiMoveEventEnvelope<EnvironmentRosterCreated> eventEnvelope) {
-        AbstractRosterEvent.EnvironmentRosterCreated environmentRosterCreated = DomainBeanUtils.toEnvironmentRosterCreated(eventEnvelope);
-        if (rosterEventRepository.findById(environmentRosterCreated.getRosterEventId()).isPresent()) {
-            return;
-        }
-        rosterEventRepository.save(environmentRosterCreated);
-    }
-
-    @Transactional
-    public void pullRosterShipAddedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getRosterShipAddedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<RosterShipAdded> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_ADDED,
-                    cursor, limit, false, RosterShipAdded.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<RosterShipAdded> eventEnvelope : eventPage.getData()) {
-                    saveRosterShipAdded(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getRosterShipAddedEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstRosterShipAddedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveRosterShipAdded(SuiMoveEventEnvelope<RosterShipAdded> eventEnvelope) {
-        AbstractRosterEvent.RosterShipAdded rosterShipAdded = DomainBeanUtils.toRosterShipAdded(eventEnvelope);
-        if (rosterEventRepository.findById(rosterShipAdded.getRosterEventId()).isPresent()) {
-            return;
-        }
-        rosterEventRepository.save(rosterShipAdded);
-    }
-
-    @Transactional
-    public void pullRosterSetSailEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getRosterSetSailEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<RosterSetSail> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SET_SAIL,
-                    cursor, limit, false, RosterSetSail.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<RosterSetSail> eventEnvelope : eventPage.getData()) {
-                    saveRosterSetSail(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getRosterSetSailEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstRosterSetSailByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveRosterSetSail(SuiMoveEventEnvelope<RosterSetSail> eventEnvelope) {
-        AbstractRosterEvent.RosterSetSail rosterSetSail = DomainBeanUtils.toRosterSetSail(eventEnvelope);
-        if (rosterEventRepository.findById(rosterSetSail.getRosterEventId()).isPresent()) {
-            return;
-        }
-        rosterEventRepository.save(rosterSetSail);
-    }
-
-    @Transactional
-    public void pullRosterShipsPositionAdjustedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getRosterShipsPositionAdjustedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<RosterShipsPositionAdjusted> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIPS_POSITION_ADJUSTED,
-                    cursor, limit, false, RosterShipsPositionAdjusted.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<RosterShipsPositionAdjusted> eventEnvelope : eventPage.getData()) {
-                    saveRosterShipsPositionAdjusted(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getRosterShipsPositionAdjustedEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstRosterShipsPositionAdjustedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveRosterShipsPositionAdjusted(SuiMoveEventEnvelope<RosterShipsPositionAdjusted> eventEnvelope) {
-        AbstractRosterEvent.RosterShipsPositionAdjusted rosterShipsPositionAdjusted = DomainBeanUtils.toRosterShipsPositionAdjusted(eventEnvelope);
-        if (rosterEventRepository.findById(rosterShipsPositionAdjusted.getRosterEventId()).isPresent()) {
-            return;
-        }
-        rosterEventRepository.save(rosterShipsPositionAdjusted);
-    }
-
-    @Transactional
-    public void pullRosterShipTransferredEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getRosterShipTransferredEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<RosterShipTransferred> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_TRANSFERRED,
-                    cursor, limit, false, RosterShipTransferred.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<RosterShipTransferred> eventEnvelope : eventPage.getData()) {
-                    saveRosterShipTransferred(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getRosterShipTransferredEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstRosterShipTransferredByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveRosterShipTransferred(SuiMoveEventEnvelope<RosterShipTransferred> eventEnvelope) {
-        AbstractRosterEvent.RosterShipTransferred rosterShipTransferred = DomainBeanUtils.toRosterShipTransferred(eventEnvelope);
-        if (rosterEventRepository.findById(rosterShipTransferred.getRosterEventId()).isPresent()) {
-            return;
-        }
-        rosterEventRepository.save(rosterShipTransferred);
-    }
-
-    @Transactional
-    public void pullRosterShipInventoryTransferredEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getRosterShipInventoryTransferredEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<RosterShipInventoryTransferred> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_INVENTORY_TRANSFERRED,
-                    cursor, limit, false, RosterShipInventoryTransferred.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<RosterShipInventoryTransferred> eventEnvelope : eventPage.getData()) {
-                    saveRosterShipInventoryTransferred(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getRosterShipInventoryTransferredEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstRosterShipInventoryTransferredByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveRosterShipInventoryTransferred(SuiMoveEventEnvelope<RosterShipInventoryTransferred> eventEnvelope) {
-        AbstractRosterEvent.RosterShipInventoryTransferred rosterShipInventoryTransferred = DomainBeanUtils.toRosterShipInventoryTransferred(eventEnvelope);
-        if (rosterEventRepository.findById(rosterShipInventoryTransferred.getRosterEventId()).isPresent()) {
-            return;
-        }
-        rosterEventRepository.save(rosterShipInventoryTransferred);
-    }
-
-    @Transactional
-    public void pullRosterShipInventoryTakenOutEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getRosterShipInventoryTakenOutEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<RosterShipInventoryTakenOut> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_INVENTORY_TAKEN_OUT,
-                    cursor, limit, false, RosterShipInventoryTakenOut.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<RosterShipInventoryTakenOut> eventEnvelope : eventPage.getData()) {
-                    saveRosterShipInventoryTakenOut(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getRosterShipInventoryTakenOutEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstRosterShipInventoryTakenOutByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveRosterShipInventoryTakenOut(SuiMoveEventEnvelope<RosterShipInventoryTakenOut> eventEnvelope) {
-        AbstractRosterEvent.RosterShipInventoryTakenOut rosterShipInventoryTakenOut = DomainBeanUtils.toRosterShipInventoryTakenOut(eventEnvelope);
-        if (rosterEventRepository.findById(rosterShipInventoryTakenOut.getRosterEventId()).isPresent()) {
-            return;
-        }
-        rosterEventRepository.save(rosterShipInventoryTakenOut);
-    }
-
-    @Transactional
-    public void pullRosterShipInventoryPutInEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getRosterShipInventoryPutInEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<RosterShipInventoryPutIn> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_INVENTORY_PUT_IN,
-                    cursor, limit, false, RosterShipInventoryPutIn.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<RosterShipInventoryPutIn> eventEnvelope : eventPage.getData()) {
-                    saveRosterShipInventoryPutIn(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getRosterShipInventoryPutInEventNextCursor() {
-        AbstractRosterEvent lastEvent = rosterEventRepository.findFirstRosterShipInventoryPutInByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveRosterShipInventoryPutIn(SuiMoveEventEnvelope<RosterShipInventoryPutIn> eventEnvelope) {
-        AbstractRosterEvent.RosterShipInventoryPutIn rosterShipInventoryPutIn = DomainBeanUtils.toRosterShipInventoryPutIn(eventEnvelope);
-        if (rosterEventRepository.findById(rosterShipInventoryPutIn.getRosterEventId()).isPresent()) {
-            return;
-        }
-        rosterEventRepository.save(rosterShipInventoryPutIn);
+        rosterEventRepository.save(event);
     }
 
 

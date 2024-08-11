@@ -15,6 +15,8 @@ public interface RosterEventRepository extends JpaRepository<AbstractRosterEvent
 
     List<AbstractRosterEvent> findByEventStatusIsNull();
 
+    AbstractRosterEvent findFirstByOrderBySuiTimestampDesc();
+
     AbstractRosterEvent.RosterCreated findFirstRosterCreatedByOrderBySuiTimestampDesc();
 
     AbstractRosterEvent.EnvironmentRosterCreated findFirstEnvironmentRosterCreatedByOrderBySuiTimestampDesc();
