@@ -5,10 +5,15 @@
 
 package org.dddml.suiinfinitesea.sui.contract.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.github.wubuku.sui.bean.EventId;
 import com.github.wubuku.sui.bean.Page;
 import com.github.wubuku.sui.bean.PaginatedMoveEvents;
 import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
+import com.github.wubuku.sui.bean.PaginatedEvents;
+import com.github.wubuku.sui.bean.SuiEventEnvelope;
+import com.github.wubuku.sui.bean.SuiEventFilter;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.dddml.suiinfinitesea.domain.ship.AbstractShipEvent;
 import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
@@ -23,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ShipEventService {
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private SuiPackageRepository suiPackageRepository;
@@ -40,22 +46,33 @@ public class ShipEventService {
     }
 
     @Transactional
-    public void pullShipCreatedEvents() {
+    public void pullShipEvents() {
         String packageId = getDefaultSuiPackageId();
         if (packageId == null) {
             return;
         }
-        int limit = 1;
-        EventId cursor = getShipCreatedEventNextCursor();
+        SuiEventFilter suiEventFilter = new SuiEventFilter.MoveEventModule(packageId, "ship");
+        int limit = 10;
+        EventId cursor = getShipEventNextCursor();
         while (true) {
-            PaginatedMoveEvents<ShipCreated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.SHIP_MODULE_SHIP_CREATED,
-                    cursor, limit, false, ShipCreated.class);
+            PaginatedEvents eventPage = suiJsonRpcClient.queryEvents(
+                    suiEventFilter,
+                    cursor, limit, false);
 
             if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
                 cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<ShipCreated> eventEnvelope : eventPage.getData()) {
-                    saveShipCreated(eventEnvelope);
+                for (SuiEventEnvelope eventEnvelope : eventPage.getData()) {
+                    String t = eventEnvelope.getType();
+                    AbstractShipEvent e;
+                    if (t.equals(packageId + "::" + ContractConstants.SHIP_MODULE_SHIP_CREATED)) {
+                        e = DomainBeanUtils.toShipCreated(objectMapper.convertValue(eventEnvelope.getParsedJson(), ShipCreated.class));
+                    } else {
+                        e = null;
+                    }
+                    if (e != null) {
+                        DomainBeanUtils.setShipEventEnvelopeProperties(e, eventEnvelope);
+                        saveShipEvent(e);
+                    }
                 }
             } else {
                 break;
@@ -66,17 +83,16 @@ public class ShipEventService {
         }
     }
 
-    private EventId getShipCreatedEventNextCursor() {
-        AbstractShipEvent lastEvent = shipEventRepository.findFirstShipCreatedByOrderBySuiTimestampDesc();
+    private EventId getShipEventNextCursor() {
+        AbstractShipEvent lastEvent = shipEventRepository.findFirstByOrderBySuiTimestampDesc();
         return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
     }
 
-    private void saveShipCreated(SuiMoveEventEnvelope<ShipCreated> eventEnvelope) {
-        AbstractShipEvent.ShipCreated shipCreated = DomainBeanUtils.toShipCreated(eventEnvelope);
-        if (shipEventRepository.findById(shipCreated.getShipEventId()).isPresent()) {
+    private void saveShipEvent(AbstractShipEvent event) {
+        if (shipEventRepository.findById(event.getShipEventId()).isPresent()) {
             return;
         }
-        shipEventRepository.save(shipCreated);
+        shipEventRepository.save(event);
     }
 
 

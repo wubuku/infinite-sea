@@ -16,19 +16,8 @@ public class PullExperienceTableEventsTaskService {
     @Autowired
     private ExperienceTableEventService experienceTableEventService;
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-experience-table-events.init-experience-table-event.fixed-delay:5000}")
-    public void pullInitExperienceTableEvents() {
-        experienceTableEventService.pullInitExperienceTableEvents();
+    @Scheduled(fixedDelayString = "${sui.contract.pull-experience-table-events.fixed-delay:5000}")
+    public void pullExperienceTableEvents() {
+        experienceTableEventService.pullExperienceTableEvents();
     }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-experience-table-events.experience-level-added.fixed-delay:5000}")
-    public void pullExperienceLevelAddedEvents() {
-        experienceTableEventService.pullExperienceLevelAddedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-experience-table-events.experience-level-updated.fixed-delay:5000}")
-    public void pullExperienceLevelUpdatedEvents() {
-        experienceTableEventService.pullExperienceLevelUpdatedEvents();
-    }
-
 }

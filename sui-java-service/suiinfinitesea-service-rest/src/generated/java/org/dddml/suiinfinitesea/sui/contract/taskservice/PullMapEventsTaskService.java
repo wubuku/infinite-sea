@@ -16,39 +16,8 @@ public class PullMapEventsTaskService {
     @Autowired
     private MapEventService mapEventService;
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.init-map-event.fixed-delay:5000}")
-    public void pullInitMapEvents() {
-        mapEventService.pullInitMapEvents();
+    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.fixed-delay:5000}")
+    public void pullMapEvents() {
+        mapEventService.pullMapEvents();
     }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.island-added.fixed-delay:5000}")
-    public void pullIslandAddedEvents() {
-        mapEventService.pullIslandAddedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.map-island-claimed.fixed-delay:5000}")
-    public void pullMapIslandClaimedEvents() {
-        mapEventService.pullMapIslandClaimedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.island-resources-gathered.fixed-delay:5000}")
-    public void pullIslandResourcesGatheredEvents() {
-        mapEventService.pullIslandResourcesGatheredEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.map-settings-updated.fixed-delay:5000}")
-    public void pullMapSettingsUpdatedEvents() {
-        mapEventService.pullMapSettingsUpdatedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.whitelisted-for-claiming-island.fixed-delay:5000}")
-    public void pullWhitelistedForClaimingIslandEvents() {
-        mapEventService.pullWhitelistedForClaimingIslandEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-map-events.un-whitelisted-for-claiming-island.fixed-delay:5000}")
-    public void pullUnWhitelistedForClaimingIslandEvents() {
-        mapEventService.pullUnWhitelistedForClaimingIslandEvents();
-    }
-
 }

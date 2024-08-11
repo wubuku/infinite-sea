@@ -15,6 +15,8 @@ public interface ItemEventRepository extends JpaRepository<AbstractItemEvent, It
 
     List<AbstractItemEvent> findByEventStatusIsNull();
 
+    AbstractItemEvent findFirstByOrderBySuiTimestampDesc();
+
     AbstractItemEvent.ItemCreated findFirstItemCreatedByOrderBySuiTimestampDesc();
 
     AbstractItemEvent.ItemUpdated findFirstItemUpdatedByOrderBySuiTimestampDesc();

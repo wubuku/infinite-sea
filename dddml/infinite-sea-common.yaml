@@ -6,6 +6,7 @@ aggregates:
       #CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
       ShouldIssuePublisherObject: true
+      ENABLE_PULLING_MULTI_TYPE_EVENTS_AT_ONCE: true
     id:
       name: ItemId
       type: u32
@@ -37,6 +38,7 @@ aggregates:
       Preprocessors: [ "MOVE_CRUD_IT" ]
       #CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
+      ENABLE_PULLING_MULTI_TYPE_EVENTS_AT_ONCE: true
     implements:
       - ItemCreationOrProduction
     id:
@@ -63,6 +65,7 @@ aggregates:
       Preprocessors: [ "MOVE_CRUD_IT" ]
       #CRUD_IT_NO_UPDATE: true
       CRUD_IT_NO_DELETE: true
+      ENABLE_PULLING_MULTI_TYPE_EVENTS_AT_ONCE: true
     implements:
       - ItemCreationOrProduction
     id:
@@ -105,6 +108,8 @@ superObjects:
 singletonObjects:
   ExperienceTable:
     module: "Common"
+    metadata:
+      ENABLE_PULLING_MULTI_TYPE_EVENTS_AT_ONCE: true
     properties:
       Levels:
         itemType: ExperienceLevel

@@ -9,6 +9,7 @@ aggregates:
       CRUD_IT_CREATE_METHOD_NAME: "Mint"
       CRUD_IT_DELETE_METHOD_NAME: "Burn"
       ShouldIssuePublisherObject: true
+      #ENABLE_PULLING_MULTI_TYPE_EVENTS_AT_ONCE: true
       SUI_DISPLAY_KEYS:
         - name
         #- link

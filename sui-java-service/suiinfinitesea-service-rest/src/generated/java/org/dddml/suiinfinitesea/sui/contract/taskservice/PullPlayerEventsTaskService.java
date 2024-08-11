@@ -16,29 +16,8 @@ public class PullPlayerEventsTaskService {
     @Autowired
     private PlayerEventService playerEventService;
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.player-created.fixed-delay:5000}")
-    public void pullPlayerCreatedEvents() {
-        playerEventService.pullPlayerCreatedEvents();
+    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.fixed-delay:5000}")
+    public void pullPlayerEvents() {
+        playerEventService.pullPlayerEvents();
     }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.island-claimed.fixed-delay:5000}")
-    public void pullIslandClaimedEvents() {
-        playerEventService.pullIslandClaimedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.nft-holder-island-claimed.fixed-delay:5000}")
-    public void pullNftHolderIslandClaimedEvents() {
-        playerEventService.pullNftHolderIslandClaimedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.player-airdropped.fixed-delay:5000}")
-    public void pullPlayerAirdroppedEvents() {
-        playerEventService.pullPlayerAirdroppedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-player-events.player-island-resources-gathered.fixed-delay:5000}")
-    public void pullPlayerIslandResourcesGatheredEvents() {
-        playerEventService.pullPlayerIslandResourcesGatheredEvents();
-    }
-
 }

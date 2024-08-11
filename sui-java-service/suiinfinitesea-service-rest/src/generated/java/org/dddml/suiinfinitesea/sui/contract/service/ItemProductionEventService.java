@@ -5,10 +5,15 @@
 
 package org.dddml.suiinfinitesea.sui.contract.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.github.wubuku.sui.bean.EventId;
 import com.github.wubuku.sui.bean.Page;
 import com.github.wubuku.sui.bean.PaginatedMoveEvents;
 import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
+import com.github.wubuku.sui.bean.PaginatedEvents;
+import com.github.wubuku.sui.bean.SuiEventEnvelope;
+import com.github.wubuku.sui.bean.SuiEventFilter;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.dddml.suiinfinitesea.domain.itemproduction.AbstractItemProductionEvent;
 import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
@@ -24,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ItemProductionEventService {
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private SuiPackageRepository suiPackageRepository;
@@ -41,22 +47,35 @@ public class ItemProductionEventService {
     }
 
     @Transactional
-    public void pullItemProductionCreatedEvents() {
+    public void pullItemProductionEvents() {
         String packageId = getCommonSuiPackageId();
         if (packageId == null) {
             return;
         }
-        int limit = 1;
-        EventId cursor = getItemProductionCreatedEventNextCursor();
+        SuiEventFilter suiEventFilter = new SuiEventFilter.MoveEventModule(packageId, "item_production");
+        int limit = 10;
+        EventId cursor = getItemProductionEventNextCursor();
         while (true) {
-            PaginatedMoveEvents<ItemProductionCreated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_CREATED,
-                    cursor, limit, false, ItemProductionCreated.class);
+            PaginatedEvents eventPage = suiJsonRpcClient.queryEvents(
+                    suiEventFilter,
+                    cursor, limit, false);
 
             if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
                 cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<ItemProductionCreated> eventEnvelope : eventPage.getData()) {
-                    saveItemProductionCreated(eventEnvelope);
+                for (SuiEventEnvelope eventEnvelope : eventPage.getData()) {
+                    String t = eventEnvelope.getType();
+                    AbstractItemProductionEvent e;
+                    if (t.equals(packageId + "::" + ContractConstants.ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_CREATED)) {
+                        e = DomainBeanUtils.toItemProductionCreated(objectMapper.convertValue(eventEnvelope.getParsedJson(), ItemProductionCreated.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_UPDATED)) {
+                        e = DomainBeanUtils.toItemProductionUpdated(objectMapper.convertValue(eventEnvelope.getParsedJson(), ItemProductionUpdated.class));
+                    } else {
+                        e = null;
+                    }
+                    if (e != null) {
+                        DomainBeanUtils.setItemProductionEventEnvelopeProperties(e, eventEnvelope);
+                        saveItemProductionEvent(e);
+                    }
                 }
             } else {
                 break;
@@ -67,57 +86,16 @@ public class ItemProductionEventService {
         }
     }
 
-    private EventId getItemProductionCreatedEventNextCursor() {
-        AbstractItemProductionEvent lastEvent = itemProductionEventRepository.findFirstItemProductionCreatedByOrderBySuiTimestampDesc();
+    private EventId getItemProductionEventNextCursor() {
+        AbstractItemProductionEvent lastEvent = itemProductionEventRepository.findFirstByOrderBySuiTimestampDesc();
         return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
     }
 
-    private void saveItemProductionCreated(SuiMoveEventEnvelope<ItemProductionCreated> eventEnvelope) {
-        AbstractItemProductionEvent.ItemProductionCreated itemProductionCreated = DomainBeanUtils.toItemProductionCreated(eventEnvelope);
-        if (itemProductionEventRepository.findById(itemProductionCreated.getItemProductionEventId()).isPresent()) {
+    private void saveItemProductionEvent(AbstractItemProductionEvent event) {
+        if (itemProductionEventRepository.findById(event.getItemProductionEventId()).isPresent()) {
             return;
         }
-        itemProductionEventRepository.save(itemProductionCreated);
-    }
-
-    @Transactional
-    public void pullItemProductionUpdatedEvents() {
-        String packageId = getCommonSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getItemProductionUpdatedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<ItemProductionUpdated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_UPDATED,
-                    cursor, limit, false, ItemProductionUpdated.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<ItemProductionUpdated> eventEnvelope : eventPage.getData()) {
-                    saveItemProductionUpdated(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getItemProductionUpdatedEventNextCursor() {
-        AbstractItemProductionEvent lastEvent = itemProductionEventRepository.findFirstItemProductionUpdatedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveItemProductionUpdated(SuiMoveEventEnvelope<ItemProductionUpdated> eventEnvelope) {
-        AbstractItemProductionEvent.ItemProductionUpdated itemProductionUpdated = DomainBeanUtils.toItemProductionUpdated(eventEnvelope);
-        if (itemProductionEventRepository.findById(itemProductionUpdated.getItemProductionEventId()).isPresent()) {
-            return;
-        }
-        itemProductionEventRepository.save(itemProductionUpdated);
+        itemProductionEventRepository.save(event);
     }
 
 

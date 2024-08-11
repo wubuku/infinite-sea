@@ -16,39 +16,8 @@ public class PullSkillProcessEventsTaskService {
     @Autowired
     private SkillProcessEventService skillProcessEventService;
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.skill-process-created.fixed-delay:5000}")
-    public void pullSkillProcessCreatedEvents() {
-        skillProcessEventService.pullSkillProcessCreatedEvents();
+    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.fixed-delay:5000}")
+    public void pullSkillProcessEvents() {
+        skillProcessEventService.pullSkillProcessEvents();
     }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.production-process-started.fixed-delay:5000}")
-    public void pullProductionProcessStartedEvents() {
-        skillProcessEventService.pullProductionProcessStartedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.production-process-completed.fixed-delay:5000}")
-    public void pullProductionProcessCompletedEvents() {
-        skillProcessEventService.pullProductionProcessCompletedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.ship-production-process-started.fixed-delay:5000}")
-    public void pullShipProductionProcessStartedEvents() {
-        skillProcessEventService.pullShipProductionProcessStartedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.ship-production-process-completed.fixed-delay:5000}")
-    public void pullShipProductionProcessCompletedEvents() {
-        skillProcessEventService.pullShipProductionProcessCompletedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.creation-process-started.fixed-delay:5000}")
-    public void pullCreationProcessStartedEvents() {
-        skillProcessEventService.pullCreationProcessStartedEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-skill-process-events.creation-process-completed.fixed-delay:5000}")
-    public void pullCreationProcessCompletedEvents() {
-        skillProcessEventService.pullCreationProcessCompletedEvents();
-    }
-
 }

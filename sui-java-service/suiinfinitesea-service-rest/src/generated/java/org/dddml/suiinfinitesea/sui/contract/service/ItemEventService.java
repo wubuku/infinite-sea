@@ -5,10 +5,15 @@
 
 package org.dddml.suiinfinitesea.sui.contract.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.github.wubuku.sui.bean.EventId;
 import com.github.wubuku.sui.bean.Page;
 import com.github.wubuku.sui.bean.PaginatedMoveEvents;
 import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
+import com.github.wubuku.sui.bean.PaginatedEvents;
+import com.github.wubuku.sui.bean.SuiEventEnvelope;
+import com.github.wubuku.sui.bean.SuiEventFilter;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.dddml.suiinfinitesea.domain.item.AbstractItemEvent;
 import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
@@ -24,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ItemEventService {
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private SuiPackageRepository suiPackageRepository;
@@ -41,22 +47,35 @@ public class ItemEventService {
     }
 
     @Transactional
-    public void pullItemCreatedEvents() {
+    public void pullItemEvents() {
         String packageId = getCommonSuiPackageId();
         if (packageId == null) {
             return;
         }
-        int limit = 1;
-        EventId cursor = getItemCreatedEventNextCursor();
+        SuiEventFilter suiEventFilter = new SuiEventFilter.MoveEventModule(packageId, "item");
+        int limit = 10;
+        EventId cursor = getItemEventNextCursor();
         while (true) {
-            PaginatedMoveEvents<ItemCreated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ITEM_MODULE_ITEM_CREATED,
-                    cursor, limit, false, ItemCreated.class);
+            PaginatedEvents eventPage = suiJsonRpcClient.queryEvents(
+                    suiEventFilter,
+                    cursor, limit, false);
 
             if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
                 cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<ItemCreated> eventEnvelope : eventPage.getData()) {
-                    saveItemCreated(eventEnvelope);
+                for (SuiEventEnvelope eventEnvelope : eventPage.getData()) {
+                    String t = eventEnvelope.getType();
+                    AbstractItemEvent e;
+                    if (t.equals(packageId + "::" + ContractConstants.ITEM_MODULE_ITEM_CREATED)) {
+                        e = DomainBeanUtils.toItemCreated(objectMapper.convertValue(eventEnvelope.getParsedJson(), ItemCreated.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ITEM_MODULE_ITEM_UPDATED)) {
+                        e = DomainBeanUtils.toItemUpdated(objectMapper.convertValue(eventEnvelope.getParsedJson(), ItemUpdated.class));
+                    } else {
+                        e = null;
+                    }
+                    if (e != null) {
+                        DomainBeanUtils.setItemEventEnvelopeProperties(e, eventEnvelope);
+                        saveItemEvent(e);
+                    }
                 }
             } else {
                 break;
@@ -67,57 +86,16 @@ public class ItemEventService {
         }
     }
 
-    private EventId getItemCreatedEventNextCursor() {
-        AbstractItemEvent lastEvent = itemEventRepository.findFirstItemCreatedByOrderBySuiTimestampDesc();
+    private EventId getItemEventNextCursor() {
+        AbstractItemEvent lastEvent = itemEventRepository.findFirstByOrderBySuiTimestampDesc();
         return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
     }
 
-    private void saveItemCreated(SuiMoveEventEnvelope<ItemCreated> eventEnvelope) {
-        AbstractItemEvent.ItemCreated itemCreated = DomainBeanUtils.toItemCreated(eventEnvelope);
-        if (itemEventRepository.findById(itemCreated.getItemEventId()).isPresent()) {
+    private void saveItemEvent(AbstractItemEvent event) {
+        if (itemEventRepository.findById(event.getItemEventId()).isPresent()) {
             return;
         }
-        itemEventRepository.save(itemCreated);
-    }
-
-    @Transactional
-    public void pullItemUpdatedEvents() {
-        String packageId = getCommonSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getItemUpdatedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<ItemUpdated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ITEM_MODULE_ITEM_UPDATED,
-                    cursor, limit, false, ItemUpdated.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<ItemUpdated> eventEnvelope : eventPage.getData()) {
-                    saveItemUpdated(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getItemUpdatedEventNextCursor() {
-        AbstractItemEvent lastEvent = itemEventRepository.findFirstItemUpdatedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveItemUpdated(SuiMoveEventEnvelope<ItemUpdated> eventEnvelope) {
-        AbstractItemEvent.ItemUpdated itemUpdated = DomainBeanUtils.toItemUpdated(eventEnvelope);
-        if (itemEventRepository.findById(itemUpdated.getItemEventId()).isPresent()) {
-            return;
-        }
-        itemEventRepository.save(itemUpdated);
+        itemEventRepository.save(event);
     }
 
 

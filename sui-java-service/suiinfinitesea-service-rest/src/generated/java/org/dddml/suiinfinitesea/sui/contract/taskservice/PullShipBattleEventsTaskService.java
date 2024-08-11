@@ -16,19 +16,8 @@ public class PullShipBattleEventsTaskService {
     @Autowired
     private ShipBattleEventService shipBattleEventService;
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-ship-battle-events.ship-battle-initiated.fixed-delay:5000}")
-    public void pullShipBattleInitiatedEvents() {
-        shipBattleEventService.pullShipBattleInitiatedEvents();
+    @Scheduled(fixedDelayString = "${sui.contract.pull-ship-battle-events.fixed-delay:5000}")
+    public void pullShipBattleEvents() {
+        shipBattleEventService.pullShipBattleEvents();
     }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-ship-battle-events.ship-battle-move-made.fixed-delay:5000}")
-    public void pullShipBattleMoveMadeEvents() {
-        shipBattleEventService.pullShipBattleMoveMadeEvents();
-    }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-ship-battle-events.ship-battle-loot-taken.fixed-delay:5000}")
-    public void pullShipBattleLootTakenEvents() {
-        shipBattleEventService.pullShipBattleLootTakenEvents();
-    }
-
 }

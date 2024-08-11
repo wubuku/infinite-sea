@@ -4,6 +4,7 @@ singletonObjects:
     metadata:
       IS_MOVE_SCHEMA_VERSIONED: true
       #MoveExternalFriendConfiguration: "MapFriendConfig" # This is default.
+      ENABLE_PULLING_MULTI_TYPE_EVENTS_AT_ONCE: true
     friends:
       - Player.ClaimIsland
       - Player.NftHolderClaimIsland

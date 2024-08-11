@@ -16,9 +16,8 @@ public class PullShipEventsTaskService {
     @Autowired
     private ShipEventService shipEventService;
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-ship-events.ship-created.fixed-delay:5000}")
-    public void pullShipCreatedEvents() {
-        shipEventService.pullShipCreatedEvents();
+    @Scheduled(fixedDelayString = "${sui.contract.pull-ship-events.fixed-delay:5000}")
+    public void pullShipEvents() {
+        shipEventService.pullShipEvents();
     }
-
 }

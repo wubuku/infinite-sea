@@ -51,7 +51,7 @@ module infinite_sea::roster {
 
     const SCHEMA_VERSION: u64 = 0;
 
-    struct AdminCap has key {
+    struct AdminCap has key, store {
         id: UID,
     }
 
@@ -231,6 +231,7 @@ module infinite_sea::roster {
         roster.admin_cap
     }
 
+    #[allow(lint(self_transfer))]
     fun new_roster(
         roster_id: RosterId,
         status: u8,
@@ -247,7 +248,7 @@ module infinite_sea::roster {
             id: object::new(ctx),
         };
         let admin_cap_id = object::id(&admin_cap);
-        transfer::transfer(admin_cap, sui::tx_context::sender(ctx));
+        transfer::public_transfer(admin_cap, sui::tx_context::sender(ctx));
         Roster {
             id: object::new(ctx),
             roster_id,

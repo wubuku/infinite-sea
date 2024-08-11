@@ -16,14 +16,8 @@ public class PullItemEventsTaskService {
     @Autowired
     private ItemEventService itemEventService;
 
-    @Scheduled(fixedDelayString = "${sui.contract.pull-item-events.item-created.fixed-delay:5000}")
-    public void pullItemCreatedEvents() {
-        itemEventService.pullItemCreatedEvents();
+    @Scheduled(fixedDelayString = "${sui.contract.pull-item-events.fixed-delay:5000}")
+    public void pullItemEvents() {
+        itemEventService.pullItemEvents();
     }
-
-    @Scheduled(fixedDelayString = "${sui.contract.pull-item-events.item-updated.fixed-delay:5000}")
-    public void pullItemUpdatedEvents() {
-        itemEventService.pullItemUpdatedEvents();
-    }
-
 }

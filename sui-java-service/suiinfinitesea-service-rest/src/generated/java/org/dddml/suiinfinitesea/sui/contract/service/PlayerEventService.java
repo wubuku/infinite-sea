@@ -5,10 +5,15 @@
 
 package org.dddml.suiinfinitesea.sui.contract.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.github.wubuku.sui.bean.EventId;
 import com.github.wubuku.sui.bean.Page;
 import com.github.wubuku.sui.bean.PaginatedMoveEvents;
 import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
+import com.github.wubuku.sui.bean.PaginatedEvents;
+import com.github.wubuku.sui.bean.SuiEventEnvelope;
+import com.github.wubuku.sui.bean.SuiEventFilter;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.dddml.suiinfinitesea.domain.player.AbstractPlayerEvent;
 import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
@@ -27,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PlayerEventService {
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private SuiPackageRepository suiPackageRepository;
@@ -44,22 +50,41 @@ public class PlayerEventService {
     }
 
     @Transactional
-    public void pullPlayerCreatedEvents() {
+    public void pullPlayerEvents() {
         String packageId = getDefaultSuiPackageId();
         if (packageId == null) {
             return;
         }
-        int limit = 1;
-        EventId cursor = getPlayerCreatedEventNextCursor();
+        SuiEventFilter suiEventFilter = new SuiEventFilter.MoveEventModule(packageId, "player");
+        int limit = 10;
+        EventId cursor = getPlayerEventNextCursor();
         while (true) {
-            PaginatedMoveEvents<PlayerCreated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.PLAYER_MODULE_PLAYER_CREATED,
-                    cursor, limit, false, PlayerCreated.class);
+            PaginatedEvents eventPage = suiJsonRpcClient.queryEvents(
+                    suiEventFilter,
+                    cursor, limit, false);
 
             if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
                 cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<PlayerCreated> eventEnvelope : eventPage.getData()) {
-                    savePlayerCreated(eventEnvelope);
+                for (SuiEventEnvelope eventEnvelope : eventPage.getData()) {
+                    String t = eventEnvelope.getType();
+                    AbstractPlayerEvent e;
+                    if (t.equals(packageId + "::" + ContractConstants.PLAYER_MODULE_PLAYER_CREATED)) {
+                        e = DomainBeanUtils.toPlayerCreated(objectMapper.convertValue(eventEnvelope.getParsedJson(), PlayerCreated.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.PLAYER_MODULE_ISLAND_CLAIMED)) {
+                        e = DomainBeanUtils.toIslandClaimed(objectMapper.convertValue(eventEnvelope.getParsedJson(), IslandClaimed.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.PLAYER_MODULE_NFT_HOLDER_ISLAND_CLAIMED)) {
+                        e = DomainBeanUtils.toNftHolderIslandClaimed(objectMapper.convertValue(eventEnvelope.getParsedJson(), NftHolderIslandClaimed.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.PLAYER_MODULE_PLAYER_AIRDROPPED)) {
+                        e = DomainBeanUtils.toPlayerAirdropped(objectMapper.convertValue(eventEnvelope.getParsedJson(), PlayerAirdropped.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.PLAYER_MODULE_PLAYER_ISLAND_RESOURCES_GATHERED)) {
+                        e = DomainBeanUtils.toPlayerIslandResourcesGathered(objectMapper.convertValue(eventEnvelope.getParsedJson(), PlayerIslandResourcesGathered.class));
+                    } else {
+                        e = null;
+                    }
+                    if (e != null) {
+                        DomainBeanUtils.setPlayerEventEnvelopeProperties(e, eventEnvelope);
+                        savePlayerEvent(e);
+                    }
                 }
             } else {
                 break;
@@ -70,177 +95,16 @@ public class PlayerEventService {
         }
     }
 
-    private EventId getPlayerCreatedEventNextCursor() {
-        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstPlayerCreatedByOrderBySuiTimestampDesc();
+    private EventId getPlayerEventNextCursor() {
+        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstByOrderBySuiTimestampDesc();
         return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
     }
 
-    private void savePlayerCreated(SuiMoveEventEnvelope<PlayerCreated> eventEnvelope) {
-        AbstractPlayerEvent.PlayerCreated playerCreated = DomainBeanUtils.toPlayerCreated(eventEnvelope);
-        if (playerEventRepository.findById(playerCreated.getPlayerEventId()).isPresent()) {
+    private void savePlayerEvent(AbstractPlayerEvent event) {
+        if (playerEventRepository.findById(event.getPlayerEventId()).isPresent()) {
             return;
         }
-        playerEventRepository.save(playerCreated);
-    }
-
-    @Transactional
-    public void pullIslandClaimedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getIslandClaimedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<IslandClaimed> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.PLAYER_MODULE_ISLAND_CLAIMED,
-                    cursor, limit, false, IslandClaimed.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<IslandClaimed> eventEnvelope : eventPage.getData()) {
-                    saveIslandClaimed(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getIslandClaimedEventNextCursor() {
-        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstIslandClaimedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveIslandClaimed(SuiMoveEventEnvelope<IslandClaimed> eventEnvelope) {
-        AbstractPlayerEvent.IslandClaimed islandClaimed = DomainBeanUtils.toIslandClaimed(eventEnvelope);
-        if (playerEventRepository.findById(islandClaimed.getPlayerEventId()).isPresent()) {
-            return;
-        }
-        playerEventRepository.save(islandClaimed);
-    }
-
-    @Transactional
-    public void pullNftHolderIslandClaimedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getNftHolderIslandClaimedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<NftHolderIslandClaimed> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.PLAYER_MODULE_NFT_HOLDER_ISLAND_CLAIMED,
-                    cursor, limit, false, NftHolderIslandClaimed.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<NftHolderIslandClaimed> eventEnvelope : eventPage.getData()) {
-                    saveNftHolderIslandClaimed(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getNftHolderIslandClaimedEventNextCursor() {
-        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstNftHolderIslandClaimedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveNftHolderIslandClaimed(SuiMoveEventEnvelope<NftHolderIslandClaimed> eventEnvelope) {
-        AbstractPlayerEvent.NftHolderIslandClaimed nftHolderIslandClaimed = DomainBeanUtils.toNftHolderIslandClaimed(eventEnvelope);
-        if (playerEventRepository.findById(nftHolderIslandClaimed.getPlayerEventId()).isPresent()) {
-            return;
-        }
-        playerEventRepository.save(nftHolderIslandClaimed);
-    }
-
-    @Transactional
-    public void pullPlayerAirdroppedEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getPlayerAirdroppedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<PlayerAirdropped> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.PLAYER_MODULE_PLAYER_AIRDROPPED,
-                    cursor, limit, false, PlayerAirdropped.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<PlayerAirdropped> eventEnvelope : eventPage.getData()) {
-                    savePlayerAirdropped(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getPlayerAirdroppedEventNextCursor() {
-        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstPlayerAirdroppedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void savePlayerAirdropped(SuiMoveEventEnvelope<PlayerAirdropped> eventEnvelope) {
-        AbstractPlayerEvent.PlayerAirdropped playerAirdropped = DomainBeanUtils.toPlayerAirdropped(eventEnvelope);
-        if (playerEventRepository.findById(playerAirdropped.getPlayerEventId()).isPresent()) {
-            return;
-        }
-        playerEventRepository.save(playerAirdropped);
-    }
-
-    @Transactional
-    public void pullPlayerIslandResourcesGatheredEvents() {
-        String packageId = getDefaultSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getPlayerIslandResourcesGatheredEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<PlayerIslandResourcesGathered> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.PLAYER_MODULE_PLAYER_ISLAND_RESOURCES_GATHERED,
-                    cursor, limit, false, PlayerIslandResourcesGathered.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<PlayerIslandResourcesGathered> eventEnvelope : eventPage.getData()) {
-                    savePlayerIslandResourcesGathered(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getPlayerIslandResourcesGatheredEventNextCursor() {
-        AbstractPlayerEvent lastEvent = playerEventRepository.findFirstPlayerIslandResourcesGatheredByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void savePlayerIslandResourcesGathered(SuiMoveEventEnvelope<PlayerIslandResourcesGathered> eventEnvelope) {
-        AbstractPlayerEvent.PlayerIslandResourcesGathered playerIslandResourcesGathered = DomainBeanUtils.toPlayerIslandResourcesGathered(eventEnvelope);
-        if (playerEventRepository.findById(playerIslandResourcesGathered.getPlayerEventId()).isPresent()) {
-            return;
-        }
-        playerEventRepository.save(playerIslandResourcesGathered);
+        playerEventRepository.save(event);
     }
 
 

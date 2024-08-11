@@ -5,10 +5,15 @@
 
 package org.dddml.suiinfinitesea.sui.contract.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.github.wubuku.sui.bean.EventId;
 import com.github.wubuku.sui.bean.Page;
 import com.github.wubuku.sui.bean.PaginatedMoveEvents;
 import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
+import com.github.wubuku.sui.bean.PaginatedEvents;
+import com.github.wubuku.sui.bean.SuiEventEnvelope;
+import com.github.wubuku.sui.bean.SuiEventFilter;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.dddml.suiinfinitesea.domain.itemcreation.AbstractItemCreationEvent;
 import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
@@ -24,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ItemCreationEventService {
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private SuiPackageRepository suiPackageRepository;
@@ -41,22 +47,35 @@ public class ItemCreationEventService {
     }
 
     @Transactional
-    public void pullItemCreationCreatedEvents() {
+    public void pullItemCreationEvents() {
         String packageId = getCommonSuiPackageId();
         if (packageId == null) {
             return;
         }
-        int limit = 1;
-        EventId cursor = getItemCreationCreatedEventNextCursor();
+        SuiEventFilter suiEventFilter = new SuiEventFilter.MoveEventModule(packageId, "item_creation");
+        int limit = 10;
+        EventId cursor = getItemCreationEventNextCursor();
         while (true) {
-            PaginatedMoveEvents<ItemCreationCreated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ITEM_CREATION_MODULE_ITEM_CREATION_CREATED,
-                    cursor, limit, false, ItemCreationCreated.class);
+            PaginatedEvents eventPage = suiJsonRpcClient.queryEvents(
+                    suiEventFilter,
+                    cursor, limit, false);
 
             if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
                 cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<ItemCreationCreated> eventEnvelope : eventPage.getData()) {
-                    saveItemCreationCreated(eventEnvelope);
+                for (SuiEventEnvelope eventEnvelope : eventPage.getData()) {
+                    String t = eventEnvelope.getType();
+                    AbstractItemCreationEvent e;
+                    if (t.equals(packageId + "::" + ContractConstants.ITEM_CREATION_MODULE_ITEM_CREATION_CREATED)) {
+                        e = DomainBeanUtils.toItemCreationCreated(objectMapper.convertValue(eventEnvelope.getParsedJson(), ItemCreationCreated.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ITEM_CREATION_MODULE_ITEM_CREATION_UPDATED)) {
+                        e = DomainBeanUtils.toItemCreationUpdated(objectMapper.convertValue(eventEnvelope.getParsedJson(), ItemCreationUpdated.class));
+                    } else {
+                        e = null;
+                    }
+                    if (e != null) {
+                        DomainBeanUtils.setItemCreationEventEnvelopeProperties(e, eventEnvelope);
+                        saveItemCreationEvent(e);
+                    }
                 }
             } else {
                 break;
@@ -67,57 +86,16 @@ public class ItemCreationEventService {
         }
     }
 
-    private EventId getItemCreationCreatedEventNextCursor() {
-        AbstractItemCreationEvent lastEvent = itemCreationEventRepository.findFirstItemCreationCreatedByOrderBySuiTimestampDesc();
+    private EventId getItemCreationEventNextCursor() {
+        AbstractItemCreationEvent lastEvent = itemCreationEventRepository.findFirstByOrderBySuiTimestampDesc();
         return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
     }
 
-    private void saveItemCreationCreated(SuiMoveEventEnvelope<ItemCreationCreated> eventEnvelope) {
-        AbstractItemCreationEvent.ItemCreationCreated itemCreationCreated = DomainBeanUtils.toItemCreationCreated(eventEnvelope);
-        if (itemCreationEventRepository.findById(itemCreationCreated.getItemCreationEventId()).isPresent()) {
+    private void saveItemCreationEvent(AbstractItemCreationEvent event) {
+        if (itemCreationEventRepository.findById(event.getItemCreationEventId()).isPresent()) {
             return;
         }
-        itemCreationEventRepository.save(itemCreationCreated);
-    }
-
-    @Transactional
-    public void pullItemCreationUpdatedEvents() {
-        String packageId = getCommonSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getItemCreationUpdatedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<ItemCreationUpdated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.ITEM_CREATION_MODULE_ITEM_CREATION_UPDATED,
-                    cursor, limit, false, ItemCreationUpdated.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<ItemCreationUpdated> eventEnvelope : eventPage.getData()) {
-                    saveItemCreationUpdated(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getItemCreationUpdatedEventNextCursor() {
-        AbstractItemCreationEvent lastEvent = itemCreationEventRepository.findFirstItemCreationUpdatedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveItemCreationUpdated(SuiMoveEventEnvelope<ItemCreationUpdated> eventEnvelope) {
-        AbstractItemCreationEvent.ItemCreationUpdated itemCreationUpdated = DomainBeanUtils.toItemCreationUpdated(eventEnvelope);
-        if (itemCreationEventRepository.findById(itemCreationUpdated.getItemCreationEventId()).isPresent()) {
-            return;
-        }
-        itemCreationEventRepository.save(itemCreationUpdated);
+        itemCreationEventRepository.save(event);
     }
 
 

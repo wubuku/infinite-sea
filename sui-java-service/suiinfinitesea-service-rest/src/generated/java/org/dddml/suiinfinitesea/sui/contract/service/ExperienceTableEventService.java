@@ -5,10 +5,15 @@
 
 package org.dddml.suiinfinitesea.sui.contract.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.github.wubuku.sui.bean.EventId;
 import com.github.wubuku.sui.bean.Page;
 import com.github.wubuku.sui.bean.PaginatedMoveEvents;
 import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
+import com.github.wubuku.sui.bean.PaginatedEvents;
+import com.github.wubuku.sui.bean.SuiEventEnvelope;
+import com.github.wubuku.sui.bean.SuiEventFilter;
 import com.github.wubuku.sui.utils.SuiJsonRpcClient;
 import org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableEvent;
 import org.dddml.suiinfinitesea.sui.contract.ContractConstants;
@@ -25,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ExperienceTableEventService {
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     private SuiPackageRepository suiPackageRepository;
@@ -42,22 +48,37 @@ public class ExperienceTableEventService {
     }
 
     @Transactional
-    public void pullInitExperienceTableEvents() {
+    public void pullExperienceTableEvents() {
         String packageId = getCommonSuiPackageId();
         if (packageId == null) {
             return;
         }
-        int limit = 1;
-        EventId cursor = getInitExperienceTableEventNextCursor();
+        SuiEventFilter suiEventFilter = new SuiEventFilter.MoveEventModule(packageId, "experience_table");
+        int limit = 10;
+        EventId cursor = getExperienceTableEventNextCursor();
         while (true) {
-            PaginatedMoveEvents<InitExperienceTableEvent> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT,
-                    cursor, limit, false, InitExperienceTableEvent.class);
+            PaginatedEvents eventPage = suiJsonRpcClient.queryEvents(
+                    suiEventFilter,
+                    cursor, limit, false);
 
             if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
                 cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<InitExperienceTableEvent> eventEnvelope : eventPage.getData()) {
-                    saveInitExperienceTableEvent(eventEnvelope);
+                for (SuiEventEnvelope eventEnvelope : eventPage.getData()) {
+                    String t = eventEnvelope.getType();
+                    AbstractExperienceTableEvent e;
+                    if (t.equals(packageId + "::" + ContractConstants.EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT)) {
+                        e = DomainBeanUtils.toInitExperienceTableEvent(objectMapper.convertValue(eventEnvelope.getParsedJson(), InitExperienceTableEvent.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_ADDED)) {
+                        e = DomainBeanUtils.toExperienceLevelAdded(objectMapper.convertValue(eventEnvelope.getParsedJson(), ExperienceLevelAdded.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_UPDATED)) {
+                        e = DomainBeanUtils.toExperienceLevelUpdated(objectMapper.convertValue(eventEnvelope.getParsedJson(), ExperienceLevelUpdated.class));
+                    } else {
+                        e = null;
+                    }
+                    if (e != null) {
+                        DomainBeanUtils.setExperienceTableEventEnvelopeProperties(e, eventEnvelope);
+                        saveExperienceTableEvent(e);
+                    }
                 }
             } else {
                 break;
@@ -68,97 +89,16 @@ public class ExperienceTableEventService {
         }
     }
 
-    private EventId getInitExperienceTableEventNextCursor() {
-        AbstractExperienceTableEvent lastEvent = experienceTableEventRepository.findFirstInitExperienceTableEventByOrderBySuiTimestampDesc();
+    private EventId getExperienceTableEventNextCursor() {
+        AbstractExperienceTableEvent lastEvent = experienceTableEventRepository.findFirstByOrderBySuiTimestampDesc();
         return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
     }
 
-    private void saveInitExperienceTableEvent(SuiMoveEventEnvelope<InitExperienceTableEvent> eventEnvelope) {
-        AbstractExperienceTableEvent.InitExperienceTableEvent initExperienceTableEvent = DomainBeanUtils.toInitExperienceTableEvent(eventEnvelope);
-        if (experienceTableEventRepository.findById(initExperienceTableEvent.getExperienceTableEventId()).isPresent()) {
+    private void saveExperienceTableEvent(AbstractExperienceTableEvent event) {
+        if (experienceTableEventRepository.findById(event.getExperienceTableEventId()).isPresent()) {
             return;
         }
-        experienceTableEventRepository.save(initExperienceTableEvent);
-    }
-
-    @Transactional
-    public void pullExperienceLevelAddedEvents() {
-        String packageId = getCommonSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getExperienceLevelAddedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<ExperienceLevelAdded> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_ADDED,
-                    cursor, limit, false, ExperienceLevelAdded.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<ExperienceLevelAdded> eventEnvelope : eventPage.getData()) {
-                    saveExperienceLevelAdded(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getExperienceLevelAddedEventNextCursor() {
-        AbstractExperienceTableEvent lastEvent = experienceTableEventRepository.findFirstExperienceLevelAddedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveExperienceLevelAdded(SuiMoveEventEnvelope<ExperienceLevelAdded> eventEnvelope) {
-        AbstractExperienceTableEvent.ExperienceLevelAdded experienceLevelAdded = DomainBeanUtils.toExperienceLevelAdded(eventEnvelope);
-        if (experienceTableEventRepository.findById(experienceLevelAdded.getExperienceTableEventId()).isPresent()) {
-            return;
-        }
-        experienceTableEventRepository.save(experienceLevelAdded);
-    }
-
-    @Transactional
-    public void pullExperienceLevelUpdatedEvents() {
-        String packageId = getCommonSuiPackageId();
-        if (packageId == null) {
-            return;
-        }
-        int limit = 1;
-        EventId cursor = getExperienceLevelUpdatedEventNextCursor();
-        while (true) {
-            PaginatedMoveEvents<ExperienceLevelUpdated> eventPage = suiJsonRpcClient.queryMoveEvents(
-                    packageId + "::" + ContractConstants.EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_UPDATED,
-                    cursor, limit, false, ExperienceLevelUpdated.class);
-
-            if (eventPage.getData() != null && !eventPage.getData().isEmpty()) {
-                cursor = eventPage.getNextCursor();
-                for (SuiMoveEventEnvelope<ExperienceLevelUpdated> eventEnvelope : eventPage.getData()) {
-                    saveExperienceLevelUpdated(eventEnvelope);
-                }
-            } else {
-                break;
-            }
-            if (!Page.hasNextPage(eventPage)) {
-                break;
-            }
-        }
-    }
-
-    private EventId getExperienceLevelUpdatedEventNextCursor() {
-        AbstractExperienceTableEvent lastEvent = experienceTableEventRepository.findFirstExperienceLevelUpdatedByOrderBySuiTimestampDesc();
-        return lastEvent != null ? new EventId(lastEvent.getSuiTxDigest(), lastEvent.getSuiEventSeq() + "") : null;
-    }
-
-    private void saveExperienceLevelUpdated(SuiMoveEventEnvelope<ExperienceLevelUpdated> eventEnvelope) {
-        AbstractExperienceTableEvent.ExperienceLevelUpdated experienceLevelUpdated = DomainBeanUtils.toExperienceLevelUpdated(eventEnvelope);
-        if (experienceTableEventRepository.findById(experienceLevelUpdated.getExperienceTableEventId()).isPresent()) {
-            return;
-        }
-        experienceTableEventRepository.save(experienceLevelUpdated);
+        experienceTableEventRepository.save(event);
     }
 
 
