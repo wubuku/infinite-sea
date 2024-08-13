@@ -217,7 +217,7 @@ wubuku/dddappp-sui:master \
 5. Faucet 合约项目 
 6. Map 合约项目
 
-#### Sui Testnet (From 2024/8/9)
+#### Sui Testnet (From 2024/8/10)
 
 对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090/api
 
@@ -2377,7 +2377,7 @@ sui client call --package {main.PackageId} \
 * `{energy_amount}`：类型为 `u64`。本次航行需要花费能量币（`ENERGY`）数量。
 * `{sail_duration}`：类型为 `u64`。客户端传递的一个距离值。
 * `{updated_coordinates_x}`：类型为:`u32`。与 `{updated_coordinates_y}`
-  一起表示客户端所为船队指定的当前位置，如果两者同时为 `0`，即 `(0,0)` 时表示不会更改船队位置。
+  一起表示客户端所为船队指定的新的当前位置。只有船队当前的状态是航行中，并且两者都不为 `0`时，才会产生作用。
 * `{updated_coordinates_y}`: 类型为:`u32`。见 `{updated_coordinates_x}`。
 
 ### 更新船队位置
@@ -3504,7 +3504,7 @@ sui client call --package {map.PackageId} --module map_aggregate --function add_
 Input parameter description:
 
 * `{map.PackageId}`：Map 合约包 ID（Map Contract Package ID）。
-* `{map.Map}`： 类型为 `&mut Map`。地图单对象 ID（Map object ID）。
+* `{map.Map}`： 类型为 `&mut Map`。地图对象 ID（Map object ID）。
 * `{map.AdminCap}`： 类型为 `&map::AdminCap`。管理权限对象 ID（Administrative permission object ID）。
 * `{address}`： 类型为 `address`。加入白名单的账号地址（Account address to be added to the whitelist）。
 
