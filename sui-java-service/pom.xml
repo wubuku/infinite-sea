@@ -47,7 +47,7 @@
             <dependency>
                 <groupId>com.github.wubuku</groupId>
                 <artifactId>sui-java-sdk</artifactId>
-                <version>44301adfbc</version>
+                <version>a32c84dffe</version>
             </dependency>
             <dependency>
                 <groupId>commons-beanutils</groupId>
