@@ -28,7 +28,8 @@ public class UpdateAvatarStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-avatar-states.fixed-delay:5000}")
     @Transactional
     public void updateAvatarStates() {
-        AbstractAvatarEvent e = avatarEventRepository.findFirstByEventStatusIsNull();
+        java.util.List<AbstractAvatarEvent> es = avatarEventRepository.findByEventStatusIsNull();
+        AbstractAvatarEvent e = es.stream().findFirst().orElse(null);
         if (e != null) {
             String objectId = e.getId();
             if (AvatarEventService.isDeletionCommand(e)) {
@@ -36,7 +37,8 @@ public class UpdateAvatarStateTaskService {
             } else {
                 suiAvatarService.updateAvatarState(objectId);
             }
-            avatarEventService.updateStatusToProcessed(e);
+            es.stream().filter(ee -> ee.getId().equals(objectId))
+                    .forEach(avatarEventService::updateStatusToProcessed);
         }
     }
 }

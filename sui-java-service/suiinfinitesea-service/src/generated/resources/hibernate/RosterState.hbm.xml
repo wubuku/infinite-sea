@@ -65,6 +65,9 @@
     <property name="sailDuration">
       <column name="sail_duration" sql-type="DECIMAL(20,0)" />
     </property>
+    <property name="setSailAt">
+      <column name="set_sail_at" sql-type="DECIMAL(20,0)" />
+    </property>
     <property name="shipBattleId">
       <column name="ship_battle_id" sql-type="VARCHAR(66)" />
     </property>

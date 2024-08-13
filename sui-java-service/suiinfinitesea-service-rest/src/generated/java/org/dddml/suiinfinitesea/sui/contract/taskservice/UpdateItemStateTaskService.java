@@ -28,11 +28,13 @@ public class UpdateItemStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-item-states.fixed-delay:5000}")
     @Transactional
     public void updateItemStates() {
-        AbstractItemEvent e = itemEventRepository.findFirstByEventStatusIsNull();
+        java.util.List<AbstractItemEvent> es = itemEventRepository.findByEventStatusIsNull();
+        AbstractItemEvent e = es.stream().findFirst().orElse(null);
         if (e != null) {
             String objectId = e.getId_();
             suiItemService.updateItemState(objectId);
-            itemEventService.updateStatusToProcessed(e);
+            es.stream().filter(ee -> ee.getId_().equals(objectId))
+                    .forEach(itemEventService::updateStatusToProcessed);
         }
     }
 }

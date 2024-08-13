@@ -60,7 +60,7 @@ public class AvatarChangeEventService {
         if (packageId == null) {
             return;
         }
-        int limit = 1;
+        int limit = 10;
         EventId cursor = getAvatarChangeCreatedEventNextCursor();
         while (true) {
             PaginatedMoveEvents<AvatarChangeCreated> eventPage = suiJsonRpcClient.queryMoveEvents(
@@ -100,7 +100,7 @@ public class AvatarChangeEventService {
         if (packageId == null) {
             return;
         }
-        int limit = 1;
+        int limit = 10;
         EventId cursor = getAvatarChangeUpdatedEventNextCursor();
         while (true) {
             PaginatedMoveEvents<AvatarChangeUpdated> eventPage = suiJsonRpcClient.queryMoveEvents(
@@ -140,7 +140,7 @@ public class AvatarChangeEventService {
         if (packageId == null) {
             return;
         }
-        int limit = 1;
+        int limit = 10;
         EventId cursor = getAvatarChangeDeletedEventNextCursor();
         while (true) {
             PaginatedMoveEvents<AvatarChangeDeleted> eventPage = suiJsonRpcClient.queryMoveEvents(

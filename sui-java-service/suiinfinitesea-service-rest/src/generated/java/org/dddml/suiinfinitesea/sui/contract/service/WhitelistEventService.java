@@ -50,7 +50,7 @@ public class WhitelistEventService {
         if (packageId == null) {
             return;
         }
-        int limit = 1;
+        int limit = 10;
         EventId cursor = getInitWhitelistEventNextCursor();
         while (true) {
             PaginatedMoveEvents<InitWhitelistEvent> eventPage = suiJsonRpcClient.queryMoveEvents(
@@ -90,7 +90,7 @@ public class WhitelistEventService {
         if (packageId == null) {
             return;
         }
-        int limit = 1;
+        int limit = 10;
         EventId cursor = getWhitelistUpdatedEventNextCursor();
         while (true) {
             PaginatedMoveEvents<WhitelistUpdated> eventPage = suiJsonRpcClient.queryMoveEvents(
@@ -130,7 +130,7 @@ public class WhitelistEventService {
         if (packageId == null) {
             return;
         }
-        int limit = 1;
+        int limit = 10;
         EventId cursor = getWhitelistEntryAddedEventNextCursor();
         while (true) {
             PaginatedMoveEvents<WhitelistEntryAdded> eventPage = suiJsonRpcClient.queryMoveEvents(
@@ -170,7 +170,7 @@ public class WhitelistEventService {
         if (packageId == null) {
             return;
         }
-        int limit = 1;
+        int limit = 10;
         EventId cursor = getWhitelistEntryUpdatedEventNextCursor();
         while (true) {
             PaginatedMoveEvents<WhitelistEntryUpdated> eventPage = suiJsonRpcClient.queryMoveEvents(
@@ -210,7 +210,7 @@ public class WhitelistEventService {
         if (packageId == null) {
             return;
         }
-        int limit = 1;
+        int limit = 10;
         EventId cursor = getWhitelistClaimedEventNextCursor();
         while (true) {
             PaginatedMoveEvents<WhitelistClaimed> eventPage = suiJsonRpcClient.queryMoveEvents(
@@ -250,7 +250,7 @@ public class WhitelistEventService {
         if (packageId == null) {
             return;
         }
-        int limit = 1;
+        int limit = 10;
         EventId cursor = getWhitelistCreatedEventNextCursor();
         while (true) {
             PaginatedMoveEvents<WhitelistCreated> eventPage = suiJsonRpcClient.queryMoveEvents(

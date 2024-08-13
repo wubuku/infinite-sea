@@ -135,6 +135,18 @@ public class RosterStateDto {
         this.sailDuration = sailDuration;
     }
 
+    private BigInteger setSailAt;
+
+    public BigInteger getSetSailAt()
+    {
+        return this.setSailAt;
+    }
+
+    public void setSetSailAt(BigInteger setSailAt)
+    {
+        this.setSailAt = setSailAt;
+    }
+
     private String shipBattleId;
 
     public String getShipBattleId()
@@ -347,6 +359,9 @@ public class RosterStateDto {
             }
             if (returnedFieldsContains("SailDuration")) {
                 dto.setSailDuration(state.getSailDuration());
+            }
+            if (returnedFieldsContains("SetSailAt")) {
+                dto.setSetSailAt(state.getSetSailAt());
             }
             if (returnedFieldsContains("ShipBattleId")) {
                 dto.setShipBattleId(state.getShipBattleId());

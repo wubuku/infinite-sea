@@ -28,11 +28,13 @@ public class UpdateItemCreationStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-item-creation-states.fixed-delay:5000}")
     @Transactional
     public void updateItemCreationStates() {
-        AbstractItemCreationEvent e = itemCreationEventRepository.findFirstByEventStatusIsNull();
+        java.util.List<AbstractItemCreationEvent> es = itemCreationEventRepository.findByEventStatusIsNull();
+        AbstractItemCreationEvent e = es.stream().findFirst().orElse(null);
         if (e != null) {
             String objectId = e.getId_();
             suiItemCreationService.updateItemCreationState(objectId);
-            itemCreationEventService.updateStatusToProcessed(e);
+            es.stream().filter(ee -> ee.getId_().equals(objectId))
+                    .forEach(itemCreationEventService::updateStatusToProcessed);
         }
     }
 }

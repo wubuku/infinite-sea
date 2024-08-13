@@ -273,6 +273,6 @@ module infinite_sea::ship_battle_take_loot_logic {
         } else {
             roster::set_status(winner_roster, roster_status::at_anchor());
         };
-        roster::set_coordinates_updated_at(winner_roster, looted_at);
+        //roster::set_coordinates_updated_at(winner_roster, looted_at);
     }
 }

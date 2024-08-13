@@ -257,6 +257,11 @@ aggregates:
         type: u64
         defaultLogic:
           Move: "0"
+      SetSailAt:
+        type: u64
+        optional: true
+        defaultLogic:
+          Move: "std::option::none()"
       ShipBattleId:
         type: ID
         optional: true

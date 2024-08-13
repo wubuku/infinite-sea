@@ -91,6 +91,7 @@ module infinite_sea::roster_set_sail_logic {
         roster::set_target_coordinates(roster, option::some(target_coordinates));
         roster::set_origin_coordinates(roster, option::some(updated_coordinates));
         roster::set_coordinates_updated_at(roster, set_sail_at);
+        roster::set_set_sail_at(roster, option::some(set_sail_at));
         if (target_coordinates != updated_coordinates) {
             roster::set_status(roster, roster_status::underway());
         } else {

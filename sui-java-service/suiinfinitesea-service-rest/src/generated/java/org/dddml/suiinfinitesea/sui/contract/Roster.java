@@ -59,6 +59,8 @@ public class Roster {
 
     private BigInteger sailDuration;
 
+    private BigInteger setSailAt;
+
     private String shipBattleId;
 
     private Boolean environmentOwned;
@@ -165,6 +167,14 @@ public class Roster {
         this.sailDuration = sailDuration;
     }
 
+    public BigInteger getSetSailAt() {
+        return setSailAt;
+    }
+
+    public void setSetSailAt(BigInteger setSailAt) {
+        this.setSailAt = setSailAt;
+    }
+
     public String getShipBattleId() {
         return shipBattleId;
     }
@@ -220,6 +230,7 @@ public class Roster {
                 ", targetCoordinates=" + targetCoordinates +
                 ", originCoordinates=" + originCoordinates +
                 ", sailDuration=" + sailDuration +
+                ", setSailAt=" + setSailAt +
                 ", shipBattleId=" + '\'' + shipBattleId + '\'' +
                 ", environmentOwned=" + environmentOwned +
                 ", baseExperience=" + baseExperience +

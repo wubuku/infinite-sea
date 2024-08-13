@@ -97,6 +97,7 @@ module infinite_sea::roster {
         target_coordinates: Option<Coordinates>,
         origin_coordinates: Option<Coordinates>,
         sail_duration: u64,
+        set_sail_at: Option<u64>,
         ship_battle_id: Option<ID>,
         environment_owned: bool,
         base_experience: Option<u32>,
@@ -195,6 +196,14 @@ module infinite_sea::roster {
         roster.sail_duration = sail_duration;
     }
 
+    public fun set_sail_at(roster: &Roster): Option<u64> {
+        roster.set_sail_at
+    }
+
+    public(friend) fun set_set_sail_at(roster: &mut Roster, set_sail_at: Option<u64>) {
+        roster.set_sail_at = set_sail_at;
+    }
+
     public fun ship_battle_id(roster: &Roster): Option<ID> {
         roster.ship_battle_id
     }
@@ -264,6 +273,7 @@ module infinite_sea::roster {
             target_coordinates,
             origin_coordinates,
             sail_duration: 0,
+            set_sail_at: std::option::none(),
             ship_battle_id,
             environment_owned: false,
             base_experience: std::option::none(),
@@ -806,6 +816,7 @@ module infinite_sea::roster {
             target_coordinates: _target_coordinates,
             origin_coordinates: _origin_coordinates,
             sail_duration: _sail_duration,
+            set_sail_at: _set_sail_at,
             ship_battle_id: _ship_battle_id,
             environment_owned: _environment_owned,
             base_experience: _base_experience,

@@ -28,11 +28,13 @@ public class UpdateWhitelistStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-whitelist-states.fixed-delay:5000}")
     @Transactional
     public void updateWhitelistStates() {
-        AbstractWhitelistEvent e = whitelistEventRepository.findFirstByEventStatusIsNull();
+        java.util.List<AbstractWhitelistEvent> es = whitelistEventRepository.findByEventStatusIsNull();
+        AbstractWhitelistEvent e = es.stream().findFirst().orElse(null);
         if (e != null) {
             String objectId = e.getId();
             suiWhitelistService.updateWhitelistState(objectId);
-            whitelistEventService.updateStatusToProcessed(e);
+            es.stream().filter(ee -> ee.getId().equals(objectId))
+                    .forEach(whitelistEventService::updateStatusToProcessed);
         }
     }
 }

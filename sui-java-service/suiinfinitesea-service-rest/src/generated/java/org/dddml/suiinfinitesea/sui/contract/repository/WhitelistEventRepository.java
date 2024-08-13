@@ -15,6 +15,8 @@ public interface WhitelistEventRepository extends JpaRepository<AbstractWhitelis
 
     List<AbstractWhitelistEvent> findByEventStatusIsNull();
 
+    AbstractWhitelistEvent findFirstByOrderBySuiTimestampDesc();
+
     AbstractWhitelistEvent.InitWhitelistEvent findFirstInitWhitelistEventByOrderBySuiTimestampDesc();
 
     AbstractWhitelistEvent.WhitelistUpdated findFirstWhitelistUpdatedByOrderBySuiTimestampDesc();

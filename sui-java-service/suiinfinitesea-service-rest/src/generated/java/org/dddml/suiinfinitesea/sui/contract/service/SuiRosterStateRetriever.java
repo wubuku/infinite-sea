@@ -56,6 +56,7 @@ public class SuiRosterStateRetriever {
         rosterState.setTargetCoordinates(DomainBeanUtils.toCoordinates(roster.getTargetCoordinates()));
         rosterState.setOriginCoordinates(DomainBeanUtils.toCoordinates(roster.getOriginCoordinates()));
         rosterState.setSailDuration(roster.getSailDuration());
+        rosterState.setSetSailAt(roster.getSetSailAt());
         rosterState.setShipBattleId(roster.getShipBattleId());
         rosterState.setEnvironmentOwned(roster.getEnvironmentOwned());
         rosterState.setBaseExperience(roster.getBaseExperience());

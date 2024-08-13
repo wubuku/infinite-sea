@@ -680,6 +680,7 @@ public class M {
             "ships",
             "coordinatesUpdatedAt",
             "sailDuration",
+            "setSailAt",
             "shipBattleId",
             "environmentOwned",
             "baseExperience",
@@ -706,6 +707,7 @@ public class M {
             "Integer",
             "Long",
             "ObjectTable",
+            "BigInteger",
             "BigInteger",
             "BigInteger",
             "String",
@@ -752,6 +754,8 @@ public class M {
         aliasMap.put("CoordinatesUpdatedAt", "coordinatesUpdatedAt");
         aliasMap.put("sailDuration", "sailDuration");
         aliasMap.put("SailDuration", "sailDuration");
+        aliasMap.put("setSailAt", "setSailAt");
+        aliasMap.put("SetSailAt", "setSailAt");
         aliasMap.put("shipBattleId", "shipBattleId");
         aliasMap.put("ShipBattleId", "shipBattleId");
         aliasMap.put("environmentOwned", "environmentOwned");

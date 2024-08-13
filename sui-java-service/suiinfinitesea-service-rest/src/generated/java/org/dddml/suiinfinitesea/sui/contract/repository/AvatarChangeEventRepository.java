@@ -15,6 +15,8 @@ public interface AvatarChangeEventRepository extends JpaRepository<AbstractAvata
 
     List<AbstractAvatarChangeEvent> findByEventStatusIsNull();
 
+    AbstractAvatarChangeEvent findFirstByOrderBySuiTimestampDesc();
+
     AbstractAvatarChangeEvent.AvatarChangeCreated findFirstAvatarChangeCreatedByOrderBySuiTimestampDesc();
 
     AbstractAvatarChangeEvent.AvatarChangeUpdated findFirstAvatarChangeUpdatedByOrderBySuiTimestampDesc();

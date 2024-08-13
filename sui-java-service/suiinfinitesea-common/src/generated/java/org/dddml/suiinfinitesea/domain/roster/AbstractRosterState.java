@@ -115,6 +115,16 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         this.sailDuration = sailDuration;
     }
 
+    private BigInteger setSailAt;
+
+    public BigInteger getSetSailAt() {
+        return this.setSailAt;
+    }
+
+    public void setSetSailAt(BigInteger setSailAt) {
+        this.setSailAt = setSailAt;
+    }
+
     private String shipBattleId;
 
     public String getShipBattleId() {
@@ -360,6 +370,7 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         this.setTargetCoordinates(s.getTargetCoordinates());
         this.setOriginCoordinates(s.getOriginCoordinates());
         this.setSailDuration(s.getSailDuration());
+        this.setSetSailAt(s.getSetSailAt());
         this.setShipBattleId(s.getShipBattleId());
         this.setEnvironmentOwned(s.getEnvironmentOwned());
         this.setBaseExperience(s.getBaseExperience());
