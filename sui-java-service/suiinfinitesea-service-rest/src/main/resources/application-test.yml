@@ -17,16 +17,16 @@ server:
 sui:
   contract:
     package-id:
-      faucet: "0xbb53793a91e8f68a15a3934bfcb7c988521f62ba54bb08a2bfb687b003e25dc8"
+      faucet: "0x8bcd56d3a279fe5d33f3fd3ded4d3dd8a7a1c610abd3b30640d69d09c6c22b6a"
     jsonrpc:
       #url: "https://devnet.baku.movementlabs.xyz"
       #url: "https://fullnode.devnet.sui.io/"
       url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "CaEvKQvwcmhNJxtfVjprKcwYirqGzx6dN8JBLN6QpaCv"
-      default: "Beav2uV9cYKYRxDa5YVYM2JM7hc2tfgsETfZ3HU9htud"
-      nft: "CPG2GX2wgFd3YwEKuscZhbbKPaR3SJAe6HzFeQj8NS7G"
-      map: "Fg24PxG1LPYNrZXSHZjYiKGxCWBHYxRmV4Tf6crxzN5H"
+      common: "GQrhECt8CXF68XKPmrw8pj43c9YTQQeyktsqmtwArJLE"
+      default: "FCFoTqQuBxah4WfWZfcsWD6X5dHXUiKmV2Rkicv4ojen"
+      nft: "25d4PmcvHLp2YsGgWxM4cvShLrA6duJrrhiSxzBvCSwh"
+      map: "A2kSEQtae9pL1SZkmab1iGYsETZQfHEBexjNgEpsH9j9"
 
 
     pull-avatar-change-events:

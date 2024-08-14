@@ -1,7 +1,8 @@
 spring:
   profiles:
     active: test
-
+  application:
+    name: infinite-sea
   main:
     allow-bean-definition-overriding: true
 
@@ -42,6 +43,18 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json,application/xml
 
   max-http-header-size: 81920
+
+
+#logging:
+#  level:
+#    org:
+#      dddml:
+#        suiinfinitesea: INFO
+#      springframework:
+#        web: TRACE #打印 Mapped 信息 比如：{PUT /users/{user_id}, produces [application/json;charset=UTF-8]}: updateUser(Long,UserVo)
+#  file:
+#    name: logs/${spring.application.name}.log
+
 
 #  error:
 #    whitelabel:
