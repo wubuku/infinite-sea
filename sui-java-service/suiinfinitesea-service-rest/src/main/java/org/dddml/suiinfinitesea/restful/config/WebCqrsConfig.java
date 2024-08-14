@@ -13,7 +13,7 @@ public class WebCqrsConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
-                .allowCredentials(true)
+                //.allowCredentials(true)
                 .maxAge(3600);
     }
 }
