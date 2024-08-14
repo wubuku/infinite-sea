@@ -16,4 +16,12 @@ public interface FaucetRequestedEventRepository extends JpaRepository<AbstractFa
     List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> getFaucetRequestedEvents(@Param("startAt") Long startAt,
                                                                                            @Param("endAt") Long endAt,
                                                                                            @Param("suiSender") String suiSender);
+
+    @Query(value = "SELECT * " +
+            "FROM faucet_requested fr " +
+            "WHERE fr.sui_timestamp BETWEEN :startAt " +
+            "AND :endAt AND fr.sui_sender in (:suiSenderAddresses)", nativeQuery = true)
+    List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> batchFaucetRequestedEvents(@Param("startAt") Long startAt,
+                                    @Param("endAt") Long endAt,
+                                    @Param("suiSenderAddresses") List<String> suiSenderAddresses);
 }

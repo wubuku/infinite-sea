@@ -7,10 +7,9 @@ import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RequestMapping(path = "contractEvents", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -37,6 +36,25 @@ public class EventResource {
     @Transactional(readOnly = true)
     public java.util.List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> getFaucetRequestedEvents(@RequestParam(value = "startAt") Long startAt, @RequestParam(value = "endedAt") Long endedAt, @RequestParam(value = "senderAddress") String senderAddress) {
         return faucetRequestedEventRepository.getFaucetRequestedEvents(startAt, endedAt, senderAddress);
+    }
+
+
+    @PostMapping(path = "batchFaucetRequestedEvents")
+    @Transactional(readOnly = true)
+    public List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> batchFaucetRequestedEvents(@RequestBody FaucetEventRequestVo requestFaucet) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < requestFaucet.getSenderAddresses().size(); i++) {
+            if (i == 0) {
+                sb.append("(");
+            }
+            sb.append("'").append(requestFaucet.getSenderAddresses().get(i)).append("'");
+            if (i != requestFaucet.getSenderAddresses().size() - 1) {
+                sb.append(",");
+            } else {
+                sb.append(")");
+            }
+        }
+        return faucetRequestedEventRepository.batchFaucetRequestedEvents(requestFaucet.getStartAt(), requestFaucet.getEndAt(), requestFaucet.getSenderAddresses());
     }
 
     @GetMapping(path = "getShipProductionCompletedEvents")
