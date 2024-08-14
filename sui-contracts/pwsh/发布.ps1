@@ -55,7 +55,7 @@ $mintAmout = 600000 * 1000 * 1000 * 1000
 
 "------------------------------------- 发布 infinite-sea-nft -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-# 重新发布 infinite-sea-nft
+# 重新发布 infinite_sea_nft
 $nftPath = Join-Path $startLocation "..\infinite-sea-nft"
 #加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-ntf
 $nftPath = Get-Item -Path $nftPath
@@ -83,14 +83,28 @@ for ($i = 0; $i -lt $fileContent.Count; $i++) {
             $fileContent[$i] = "#" + $fileContent[$i]
         }
     }
-    if ($fileContent[$i].Contains('infinite-sea-nft =')) {
-        $fileContent[$i] = 'infinite-sea-nft = "0x0"'
+    if ($fileContent[$i].Contains('infinite_sea_nft =')) {
+        $fileContent[$i] = 'infinite_sea_nft = "0x0"'
     }
 }
 $fileContent | Set-Content $file
 "Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-"开始发布合约 infinite-sea-nft..." | Tee-Object -FilePath $logFile -Append | Write-Host
+$lockFile = "$nftPath\Move.lock"
+if (Test-Path -Path $lockFile) {
+    "删除 $lockFile," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
+    try {
+        Remove-Item -Path $lockFile -Force
+        "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+    }
+    catch {
+        "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
+        Set-Location $startLocation
+        return
+    }
+}
+
+"开始发布合约 infinite_sea_nft..." | Tee-Object -FilePath $logFile -Append | Write-Host
 
 $publishNftJson = ""
 $nftPackingId = ""
@@ -101,7 +115,7 @@ $avatarDisplayId = ""
 try {
     $publishNftJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --gas-budget 491000000  --json
     if (-not ('System.Object[]' -eq $publishNftJson.GetType())) {
-        "发布 infinite-sea-nft 合约失败: $publishNftJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "发布 infinite_sea_nft 合约失败: $publishNftJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
         return
     }
@@ -150,7 +164,7 @@ try {
     }
 }
 catch {
-    "发布 infinite-sea-nft 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    "发布 infinite_sea_nft 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
     "返回的结果为:$publishNftJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
     Set-Location $startLocation
     return
@@ -160,10 +174,10 @@ $fileContent = Get-Content -Path $file
 for ($i = 0; $i -lt $fileContent.Count; $i++) {
     #Write-Host $fileContent[$i]
     if ($fileContent[$i].Contains('published-at')) {
-        $fileContent[$i] = 'published-at = "' + $coinPackingId + '"'
+        $fileContent[$i] = 'published-at = "' + $nftPackingId + '"'
     }
-    if ($fileContent[$i].Contains('infinite-sea-nft =')) {
-        $fileContent[$i] = 'infinite-sea-nft = "' + $coinPackingId + '"'
+    if ($fileContent[$i].Contains('infinite_sea_nft =')) {
+        $fileContent[$i] = 'infinite_sea_nft = "' + $nftPackingId + '"'
     }
 }
 $fileContent | Set-Content $file
@@ -213,6 +227,19 @@ for ($i = 0; $i -lt $fileContent.Count; $i++) {
 $fileContent | Set-Content $file
 "Move.toml文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
 
+$lockFile = "$coinPath\Move.lock"
+if (Test-Path -Path $file -PathType Leaf) {
+    "删除 $lockFile," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
+    try {
+        Remove-Item -Path $lockFile
+        "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+    }
+    catch {
+        "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
+        Set-Location $startLocation
+        return
+    }
+}
 
 "开始发布合约 infinite_sea_coin..." | Tee-Object -FilePath $logFile -Append | Write-Host
 
@@ -384,6 +411,19 @@ for ($i = 0; $i -lt $fileContent.Count; $i++) {
 $fileContent | Set-Content $file
 "Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
 
+$lockFile = "$faucetPath\Move.lock"
+if (Test-Path -Path $file -PathType Leaf) {
+    "删除 $lockFile ," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
+    try {
+        Remove-Item -Path $lockFile
+        "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+    }
+    catch {
+        "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
+        Set-Location $startLocation
+        return
+    }
+}
 
 "开始发布合约 infinite-sea-faucet..." | Tee-Object -FilePath $logFile -Append | Write-Host
 
@@ -439,10 +479,10 @@ $fileContent = Get-Content -Path $file
 for ($i = 0; $i -lt $fileContent.Count; $i++) {
     #Write-Host $fileContent[$i]
     if ($fileContent[$i].Contains('published-at')) {
-        $fileContent[$i] = 'published-at = "' + $coinPackingId + '"'
+        $fileContent[$i] = 'published-at = "' + $faucetPackingId + '"'
     }
     if ($fileContent[$i].Contains('infinite_sea_faucet =')) {
-        $fileContent[$i] = 'infinite_sea_faucet = "' + $coinPackingId + '"'
+        $fileContent[$i] = 'infinite_sea_faucet = "' + $faucetPackingId + '"'
     }
 }
 $fileContent | Set-Content $file
@@ -522,6 +562,23 @@ for ($i = 0; $i -lt $fileContent.Count; $i++) {
 }
 $fileContent | Set-Content $file
 "Move.toml文件恢复完成" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+
+
+$lockFile = "$commonPath\Move.lock"
+if (Test-Path -Path $file -PathType Leaf) {
+    "删除 $lockFile ," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
+    try {
+        Remove-Item -Path $lockFile
+        "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+    }
+    catch {
+        "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
+        Set-Location $startLocation
+        return
+    }
+}
+
 
 "开始发布Common合约 Publish Common contract..." | Tee-Object -FilePath $logFile -Append | Write-Host
 
@@ -708,7 +765,7 @@ foreach ($item in $itemArray) {
 
 "------------------------------------- 发布 infinite-sea-map -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-# 重新发布 infinite-sea-map
+# 重新发布 infinite_sea_map
 $mapPath = Join-Path $startLocation "..\infinite-sea-map"
 #加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-map
 $mapPath = Get-Item -Path $mapPath
@@ -737,26 +794,41 @@ for ($i = 0; $i -lt $fileContent.Count; $i++) {
             $fileContent[$i] = "#" + $fileContent[$i]
         }
     }
-    if ($fileContent[$i].Contains('infinite-sea-map =')) {
-        $fileContent[$i] = 'infinite-sea-map = "0x0"'
+    if ($fileContent[$i].Contains('infinite_sea_map =')) {
+        $fileContent[$i] = 'infinite_sea_map = "0x0"'
     }
 }
 $fileContent | Set-Content $file
 "Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-"开始发布合约 infinite-sea-map..." | Tee-Object -FilePath $logFile -Append | Write-Host
+$lockFile = "$mapPath\Move.lock"
+if (Test-Path -Path $file -PathType Leaf) {
+    "删除 $lockFile ," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
+    try {
+        Remove-Item -Path $lockFile
+        "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+    }
+    catch {
+        "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
+        Set-Location $startLocation
+        return
+    }
+}
+
+
+"开始发布合约 infinite_sea_map..." | Tee-Object -FilePath $logFile -Append | Write-Host
 
 $publishMapJson = ""
 $mapPackingId = ""
 $mapPublisherId = ""
-$mapFriendConfigId=""
+$mapFriendConfigId = ""
 $mapId = ""
 $mapAdminCap = ""
 
 try {
-    $publishMapJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --json
+    $publishMapJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --gas-budget 900000000 --json
     if (-not ('System.Object[]' -eq $publishMapJson.GetType())) {
-        "发布 infinite-sea-map 合约失败: $publishMapJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        "发布 infinite_sea_map 合约失败: $publishMapJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
         return
     }
@@ -805,7 +877,7 @@ try {
     }
 }
 catch {
-    "发布 infinite-sea-map 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    "发布 infinite_sea_map 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
     "返回的结果为:$publishMapJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
     Set-Location $startLocation
     return
@@ -815,10 +887,10 @@ $fileContent = Get-Content -Path $file
 for ($i = 0; $i -lt $fileContent.Count; $i++) {
     #Write-Host $fileContent[$i]
     if ($fileContent[$i].Contains('published-at')) {
-        $fileContent[$i] = 'published-at = "' + $coinPackingId + '"'
+        $fileContent[$i] = 'published-at = "' + $mapPackingId + '"'
     }
-    if ($fileContent[$i].Contains('infinite-sea-map =')) {
-        $fileContent[$i] = 'infinite-sea-map = "' + $coinPackingId + '"'
+    if ($fileContent[$i].Contains('infinite_sea_map =')) {
+        $fileContent[$i] = 'infinite_sea_map = "' + $mapPackingId + '"'
     }
 }
 $fileContent | Set-Content $file
@@ -886,6 +958,20 @@ for ($i = 0; $i -lt $fileContent.Count; $i++) {
 }
 $fileContent | Set-Content $file
 "Move.toml文件恢复完成。`n" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+$lockFile = "$mainPath\Move.lock"
+if (Test-Path -Path $file -PathType Leaf) {
+    "删除 $lockFile ," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
+    try {
+        Remove-Item -Path $lockFile
+        "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+    }
+    catch {
+        "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
+        Set-Location $startLocation
+        return
+    }
+}
 
 
 "开始发布合约 Publish infinite_sea contract..." | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Blue
@@ -984,12 +1070,12 @@ Start-Sleep -Seconds 5
 "休息完成，继续干活...· `n" | Write-Host
 
 
-$addAllowedCallerResult=$null
-$addAllowedCallerResultObj=$null
+$addAllowedCallerResult = $null
+$addAllowedCallerResultObj = $null
 
 "`n Add allowed caller ..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
 try {
-    $commandRequest= "sui client call --package $mapPackingId --module map_friend_config --function add_allowed_caller --type-args  $mainPackageId::player::FriendWitness --args $mapFriendConfigId $mapPublisherId --json"
+    $commandRequest = "sui client call --package $mapPackingId --module map_friend_config --function add_allowed_caller --type-args  $mainPackageId::player::FriendWitness --args $mapFriendConfigId $mapPublisherId --json"
     $commandRequest | Write-Host  -ForegroundColor Blue
     $addAllowedCallerResult = Invoke-Expression -Command $commandRequest
     if (-not ('System.Object[]' -eq $addAllowedCallerResult.GetType())) {
