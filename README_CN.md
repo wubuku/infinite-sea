@@ -288,7 +288,7 @@ wubuku/dddappp-sui:master \
 
 ### Movement Baku test
 
-对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8091/api
+对应后端 indexer 为：http://ec2-34-213-40-58.us-west-2.compute.amazonaws.com:8091/api
 
 ```json
 {
