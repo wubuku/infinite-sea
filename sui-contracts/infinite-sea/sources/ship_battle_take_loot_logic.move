@@ -253,6 +253,7 @@ module infinite_sea::ship_battle_take_loot_logic {
         // Send the loser roster back to the player claimed island
         let island_coordinates = player::claimed_island(loser_player);
         assert!(option::is_some(&island_coordinates), EPayerHasNoClaimedIsland);
+        roster::set_ship_battle_id(loser_roster, option::none());
         let roster_seq = roster_id::sequence_number(&roster::roster_id(loser_roster));
         roster::set_updated_coordinates(loser_roster,
             infinite_sea_common::roster_util::get_roster_origin_coordinates(option::borrow(&island_coordinates),
