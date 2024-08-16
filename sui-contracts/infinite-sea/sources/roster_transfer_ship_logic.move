@@ -8,6 +8,8 @@ module infinite_sea::roster_transfer_ship_logic {
     use sui::object_table;
     use sui::tx_context::TxContext;
     use infinite_sea_common::ship_util;
+    use infinite_sea_common::roster_id;
+    use infinite_sea_common::roster_sequence_number;
 
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
@@ -18,7 +20,8 @@ module infinite_sea::roster_transfer_ship_logic {
 
     const EShipNotFoundInSourceRoster: u64 = 10;
     const ERostersTooFarAway: u64 = 11;
-    const ENeedToTakeLoot: u64 = 12;
+    const ERosterInBattle: u64 = 12;
+    const EToRosterInBattle: u64 = 13;
 
     public(friend) fun verify(
         player: &Player,
@@ -33,9 +36,12 @@ module infinite_sea::roster_transfer_ship_logic {
         permission_util::assert_player_is_roster_owner(player, roster);
         permission_util::assert_player_is_roster_owner(player, to_roster);
         assert!(roster_util::are_rosters_close_enough_to_transfer(roster, to_roster), ERostersTooFarAway);
-        roster_util::assert_roster_ships_not_full(to_roster);
-        assert!(option::is_none(&roster::ship_battle_id(to_roster)), ENeedToTakeLoot);
-        //todo more checks?  应该检查一下在目标船队里面有这个位置：to_position
+        if (roster_id::sequence_number(&to_roster_id) != roster_sequence_number::unassigned_ships()) {
+            roster_util::assert_roster_ships_not_full(to_roster);
+        };
+        assert!(option::is_none(&roster::ship_battle_id(roster)), ERosterInBattle);
+        assert!(option::is_none(&roster::ship_battle_id(to_roster)), EToRosterInBattle);
+        //todo more checks?
         roster::new_roster_ship_transferred(roster, ship_id, to_roster_id, to_position)
     }
 
