@@ -104,4 +104,33 @@ GROUP BY re.sui_sender,
             "  AND re.sui_sender IN(:suiSenderAddresses) " +
             "GROUP BY re.sui_sender,re.event_type", nativeQuery = true)
     List<AddressCount> batchGetRosterSetSailTimes(@Param("suiSenderAddresses") List<String> suiSenderAddresses);
+
+
+    /**
+     * 指定时间范围内，指定玩家航行总时间
+     *
+     * @param startAt
+     * @param endAt
+     * @param suiSender
+     * @return
+     */
+    @Query(value = "SELECT SUM(JSON_UNQUOTE(dynamic_properties->'$.sailDuration')) AS total_sail_duration " +
+            "FROM roster_event WHERE " +
+            "    sui_sender = :suiSender " +
+            "    AND sui_timestamp BETWEEN :startAt AND :endAt " +
+            "    AND event_type = 'RosterSetSail'", nativeQuery = true)
+    Integer getRostersSailedTime(@Param("startAt") Long startAt,
+                                 @Param("endAt") Long endAt,
+                                 @Param("suiSender") String suiSender);
+
+
+    @Query(value = "SELECT sui_sender as address,SUM(JSON_UNQUOTE(dynamic_properties->'$.sailDuration')) AS count " +
+            "FROM roster_event WHERE " +
+            "    sui_sender IN (:suiSenderAddresses) " +
+            "    AND sui_timestamp BETWEEN :startAt AND :endAt " +
+            "    AND event_type = 'RosterSetSail' " +
+            "GROUP BY sui_sender", nativeQuery = true)
+    List<AddressCount> batchGetRostersSailedTime(@Param("startAt") Long startAt,
+                                                 @Param("endAt") Long endAt,
+                                                 @Param("suiSenderAddresses") List<String> suiSenderAddresses);
 }

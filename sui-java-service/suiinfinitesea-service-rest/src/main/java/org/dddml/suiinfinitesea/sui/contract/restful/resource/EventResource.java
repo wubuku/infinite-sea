@@ -22,6 +22,8 @@ public class EventResource {
     private ShipProductionEventRepository shipProductionEventRepository;
     @Autowired
     private FaucetRequestedEventRepository faucetRequestedEventRepository;
+    @Autowired
+    private RosterEventExtendRepository rosterEventExtendRepository;
 
     @Autowired
     private ShipBattleRelatedRepository shipBattleRelatedRepository;
@@ -55,6 +57,20 @@ public class EventResource {
     @Transactional(readOnly = true)
     public java.util.List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> batchGetShipCompletedEvents(@RequestBody EventRequestVo requestVo) {
         return shipProductionEventRepository.batchGetShipCompletedEvents(requestVo.getStartAt(), requestVo.getEndAt(), requestVo.getSenderAddresses());
+    }
+
+
+    @GetMapping(path = "getRostersSailedTime")
+    @Transactional(readOnly = true)
+    public Integer getRostersSailedTime(@RequestParam(value = "startAt") Long startAt, @RequestParam(value = "endedAt") Long endedAt, @RequestParam(value = "senderAddress") String senderAddress) {
+        return rosterEventExtendRepository.getRostersSailedTime(startAt, endedAt, senderAddress);
+    }
+
+
+    @PostMapping(path = "batchGetRostersSailedTime")
+    @Transactional(readOnly = true)
+    public List<AddressCount> batchGetRostersSailedTime(@RequestBody EventRequestVo requestVo) {
+        return rosterEventExtendRepository.batchGetRostersSailedTime(requestVo.getStartAt(), requestVo.getEndAt(), requestVo.getSenderAddresses());
     }
 
 
