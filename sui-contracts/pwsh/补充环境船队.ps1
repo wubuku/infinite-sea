@@ -28,6 +28,7 @@ $logFile = "$startLocation\environment_roster_rebirth_$formattedNow.log"
 $serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090"
 #$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8092"
 #$serverUrl = "http://ec2-18-236-242-218.us-west-2.compute.amazonaws.com:8091"
+#$serverUrl = "http://localhost:1023"
 
 # 目前岛屿所占海域大小
 $islandWidth = 10000
@@ -110,6 +111,7 @@ while ($hasNextPage) {
 }
 "一共得到了 $($islandCoordinates.Count) 个岛屿坐标。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
 if ($islandCoordinates.Count -ne $quntity) {
+    #这两个数量相等，相当于访问FullNode没有出错。
     "两种方式得到的岛屿数量不同,$($islandCoordinates.Count),$quntity" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Red
     return;
 }
@@ -121,7 +123,7 @@ $getAllEnviornmentRostersResult = $null
 $rosterCoordinates = @()
 $rosterIdsFromIndexer = @()
 try {
-    $getAllEnviornmentRostersUrl = $serverUrl + "/api/Rosters?environmentOwned=true&status=ne(3)"
+    $getAllEnviornmentRostersUrl = $serverUrl + "/api/rosterExtends/getAllEnvironmentRosters"
     #按说应该使用 status=ne(3),但是powershell会报错所以先用status=0吧，毕竟野船队目前不动
     #$getAllEnviornmentRostersUrl = $serverUrl + "/api/Rosters?environmentOwned=true&status=0"
     #$command = "curl -X GET '" + $getAllEnviornmentRostersUrl + "' -H 'accept: application/json'"
@@ -136,14 +138,14 @@ try {
     $getAllEnviornmentRostersResultObj = $getAllEnviornmentRostersResult.Content | ConvertFrom-Json
     "目前一共有 $($getAllEnviornmentRostersResultObj.Count) 个活着的环境船队..." | Tee-Object -FilePath $logFile -Append  |  Write-Host     
     foreach ($roster in $getAllEnviornmentRostersResultObj) {
-        $rosterCoordinates += $roster.updatedCoordinates;
-        $rosterIdsFromIndexer += $roster.rosterId
-        "coordinates:($($roster.updatedCoordinates.x),$($roster.updatedCoordinates.y))" |  Write-Host 
+        $rosterCoordinates += $roster
+        $rosterIdsFromIndexer += $roster
+        "coordinates:($($roster.x),$($roster.y))" |  Write-Host 
         #"coordinates:($($roster.updatedCoordinates.x-$u32MaxHalf),$($roster.updatedCoordinates.y-$u32MaxHalf))" |  Write-Host 
     }
 }
 catch {
-    "获取岛屿列表失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+    "获取环境船队列表失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
     "返回的结果为:$getAllEnviornmentRostersResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
     return    
 }
@@ -340,7 +342,7 @@ if ($null -eq $dynamicFiledsId) {
 
 $nextCursor = $null
 $hasNextPage = $true
-$limit = 50
+$limit = 100
 $rosterIdsFromFullNode = @()
 try {
     while ($hasNextPage) {
