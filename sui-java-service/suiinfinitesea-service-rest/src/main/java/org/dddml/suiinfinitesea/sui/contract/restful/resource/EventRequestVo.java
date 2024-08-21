@@ -2,7 +2,7 @@ package org.dddml.suiinfinitesea.sui.contract.restful.resource;
 
 import java.util.List;
 
-public class FaucetEventRequestVo {
+public class EventRequestVo {
     private Long startAt;
     private Long endAt;
     private List<String> senderAddresses;

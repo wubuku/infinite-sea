@@ -41,19 +41,7 @@ public class EventResource {
 
     @PostMapping(path = "batchFaucetRequestedEvents")
     @Transactional(readOnly = true)
-    public List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> batchFaucetRequestedEvents(@RequestBody FaucetEventRequestVo requestFaucet) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < requestFaucet.getSenderAddresses().size(); i++) {
-            if (i == 0) {
-                sb.append("(");
-            }
-            sb.append("'").append(requestFaucet.getSenderAddresses().get(i)).append("'");
-            if (i != requestFaucet.getSenderAddresses().size() - 1) {
-                sb.append(",");
-            } else {
-                sb.append(")");
-            }
-        }
+    public List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> batchFaucetRequestedEvents(@RequestBody EventRequestVo requestFaucet) {
         return faucetRequestedEventRepository.batchFaucetRequestedEvents(requestFaucet.getStartAt(), requestFaucet.getEndAt(), requestFaucet.getSenderAddresses());
     }
 
@@ -61,6 +49,12 @@ public class EventResource {
     @Transactional(readOnly = true)
     public java.util.List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> getShipProductionCompletedEvents(@RequestParam(value = "startAt") Long startAt, @RequestParam(value = "endedAt") Long endedAt, @RequestParam(value = "senderAddress") String senderAddress) {
         return shipProductionEventRepository.getShipCompletedEvents(startAt, endedAt, senderAddress);
+    }
+
+    @PostMapping(path = "batchShipProductionCompletedEvents")
+    @Transactional(readOnly = true)
+    public java.util.List<AbstractSkillProcessEvent.ShipProductionProcessCompleted> batchGetShipCompletedEvents(@RequestBody EventRequestVo requestVo) {
+        return shipProductionEventRepository.batchGetShipCompletedEvents(requestVo.getStartAt(), requestVo.getEndAt(), requestVo.getSenderAddresses());
     }
 
 
@@ -73,12 +67,30 @@ public class EventResource {
     }
 
 
+    @PostMapping(path = "batchGetPlayerVsEnvironmentEvents")
+    @Transactional(readOnly = true)
+    public java.util.List<PlayerVsEnvironment> batchGetPlayerVsEnvironmentEvents(@RequestBody EventRequestVo requestVo) {
+        Long startAt = requestVo.getStartAt() / 1000;
+        Long endedAt = requestVo.getEndAt() / 1000;
+        return shipBattleRelatedRepository.batchGetPlayerVsEnvironmentEvents(startAt, endedAt, requestVo.getSenderAddresses());
+    }
+
+
     @GetMapping(path = "getPlayerVsPlayerEvents")
     @Transactional(readOnly = true)
     public java.util.List<PlayerVsPlayer> getPlayerVsPlayerEvents(@RequestParam(value = "startAt") Long startAt, @RequestParam(value = "endedAt") Long endedAt, @RequestParam(value = "senderAddress") String senderAddress) {
         startAt = startAt / 1000;
         endedAt = endedAt / 1000;
         return shipBattleRelatedRepository.getPlayerVsPlayerEvents(startAt, endedAt, senderAddress);
+    }
+
+
+    @PostMapping(path = "batchGetPlayerVsPlayerEvents")
+    @Transactional(readOnly = true)
+    public java.util.List<PlayerVsPlayer> getPlayerVsPlayerEvents(@RequestBody EventRequestVo requestVo) {
+        Long startAt = requestVo.getStartAt() / 1000;
+        Long endedAt = requestVo.getEndAt() / 1000;
+        return shipBattleRelatedRepository.batchGetPlayerVsPlayerEvents(startAt, endedAt, requestVo.getSenderAddresses());
     }
 
 }
