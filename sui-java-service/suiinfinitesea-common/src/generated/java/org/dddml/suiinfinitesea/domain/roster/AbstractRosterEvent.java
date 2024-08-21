@@ -699,6 +699,15 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
 
     }
 
+    public static class RosterDeleted extends RosterLobEvent implements RosterEvent.RosterDeleted {
+
+        @Override
+        public String getEventType() {
+            return "RosterDeleted";
+        }
+
+    }
+
 
 }
 

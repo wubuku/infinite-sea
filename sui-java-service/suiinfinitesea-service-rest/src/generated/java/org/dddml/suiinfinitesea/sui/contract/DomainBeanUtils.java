@@ -42,6 +42,7 @@ import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipTransferred;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTransferred;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTakenOut;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryPutIn;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterDeleted;
 import org.dddml.suiinfinitesea.domain.shipbattle.AbstractShipBattleEvent;
 import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleInitiated;
 import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleMoveMade;
@@ -755,6 +756,21 @@ public class DomainBeanUtils {
         rosterShipInventoryPutIn.setUpdatedCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getUpdatedCoordinates()));
         rosterShipInventoryPutIn.setVersion(contractEvent.getVersion());
         return rosterShipInventoryPutIn;
+    }
+
+    public static AbstractRosterEvent.RosterDeleted toRosterDeleted(SuiMoveEventEnvelope<RosterDeleted> eventEnvelope) {
+        RosterDeleted contractEvent = eventEnvelope.getParsedJson();
+        AbstractRosterEvent.RosterDeleted rosterDeleted = toRosterDeleted(contractEvent);
+        setRosterEventEnvelopeProperties(rosterDeleted, eventEnvelope);
+        return rosterDeleted;
+    }
+
+    public static AbstractRosterEvent.RosterDeleted toRosterDeleted(RosterDeleted contractEvent) {
+        AbstractRosterEvent.RosterDeleted rosterDeleted = new AbstractRosterEvent.RosterDeleted();
+        rosterDeleted.setId_(contractEvent.getId());
+        rosterDeleted.setRosterId(DomainBeanUtils.toRosterId(contractEvent.getRosterId()));
+        rosterDeleted.setVersion(contractEvent.getVersion());
+        return rosterDeleted;
     }
 
     public static AbstractShipBattleEvent.ShipBattleInitiated toShipBattleInitiated(SuiMoveEventEnvelope<ShipBattleInitiated> eventEnvelope) {

@@ -32,7 +32,11 @@ public class UpdateRosterStateTaskService {
         AbstractRosterEvent e = es.stream().findFirst().orElse(null);
         if (e != null) {
             String objectId = e.getId_();
-            suiRosterService.updateRosterState(objectId);
+            if (RosterEventService.isDeletionCommand(e)) {
+                suiRosterService.deleteRoster(e.getRosterId());
+            } else {
+                suiRosterService.updateRosterState(objectId);
+            }
             es.stream().filter(ee -> ee.getId_().equals(objectId))
                     .forEach(rosterEventService::updateStatusToProcessed);
         }

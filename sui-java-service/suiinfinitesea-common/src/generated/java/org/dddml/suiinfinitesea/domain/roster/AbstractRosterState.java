@@ -352,6 +352,8 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
             when((AbstractRosterEvent.RosterShipInventoryTakenOut)e);
         } else if (e instanceof AbstractRosterEvent.RosterShipInventoryPutIn) {
             when((AbstractRosterEvent.RosterShipInventoryPutIn)e);
+        } else if (e instanceof AbstractRosterEvent.RosterDeleted) {
+            when((AbstractRosterEvent.RosterDeleted)e);
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported event type: %1$s", e.getClass().getName()));
         }
@@ -895,6 +897,53 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
 //
 //public class PutInShipInventoryLogic {
 //    public static RosterState mutate(RosterState rosterState, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
+//    }
+//}
+
+        if (this != updatedRosterState) { merge(updatedRosterState); } //else do nothing
+
+    }
+
+    public void when(AbstractRosterEvent.RosterDeleted e) {
+        throwOnWrongEvent(e);
+
+        Long suiTimestamp = e.getSuiTimestamp();
+        Long SuiTimestamp = suiTimestamp;
+        String suiTxDigest = e.getSuiTxDigest();
+        String SuiTxDigest = suiTxDigest;
+        BigInteger suiEventSeq = e.getSuiEventSeq();
+        BigInteger SuiEventSeq = suiEventSeq;
+        String suiPackageId = e.getSuiPackageId();
+        String SuiPackageId = suiPackageId;
+        String suiTransactionModule = e.getSuiTransactionModule();
+        String SuiTransactionModule = suiTransactionModule;
+        String suiSender = e.getSuiSender();
+        String SuiSender = suiSender;
+        String suiType = e.getSuiType();
+        String SuiType = suiType;
+        String eventStatus = e.getEventStatus();
+        String EventStatus = eventStatus;
+
+        if (this.getCreatedBy() == null){
+            this.setCreatedBy(e.getCreatedBy());
+        }
+        if (this.getCreatedAt() == null){
+            this.setCreatedAt(e.getCreatedAt());
+        }
+        this.setUpdatedBy(e.getCreatedBy());
+        this.setUpdatedAt(e.getCreatedAt());
+
+        RosterState updatedRosterState = (RosterState) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.roster.DeleteLogic",
+                    "mutate",
+                    new Class[]{RosterState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+            );
+
+//package org.dddml.suiinfinitesea.domain.roster;
+//
+//public class DeleteLogic {
+//    public static RosterState mutate(RosterState rosterState, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
 //    }
 //}
 

@@ -22,6 +22,7 @@ module infinite_sea::ship {
     friend infinite_sea::roster_put_in_ship_inventory_logic;
     friend infinite_sea::roster_take_out_ship_inventory_logic;
     friend infinite_sea::roster_transfer_ship_inventory_logic;
+    friend infinite_sea::roster_delete_logic;
 
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;

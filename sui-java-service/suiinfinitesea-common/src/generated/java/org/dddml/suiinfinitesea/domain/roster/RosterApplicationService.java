@@ -27,6 +27,8 @@ public interface RosterApplicationService {
 
     void when(RosterCommands.PutInShipInventory c);
 
+    void when(RosterCommands.Delete c);
+
     RosterState get(RosterId id);
 
     Iterable<RosterState> getAll(Integer firstResult, Integer maxResults);

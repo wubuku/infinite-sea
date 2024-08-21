@@ -35,5 +35,7 @@ public interface RosterEventRepository extends JpaRepository<AbstractRosterEvent
 
     AbstractRosterEvent.RosterShipInventoryPutIn findFirstRosterShipInventoryPutInByOrderBySuiTimestampDesc();
 
+    AbstractRosterEvent.RosterDeleted findFirstRosterDeletedByOrderBySuiTimestampDesc();
+
     List<AbstractRosterEvent> findBySuiTimestampBetween(Long startSuiTimestamp, Long endSuiTimestamp);
 }

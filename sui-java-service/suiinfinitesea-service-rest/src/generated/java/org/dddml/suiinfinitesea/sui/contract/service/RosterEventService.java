@@ -28,6 +28,7 @@ import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipTransferred;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTransferred;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryTakenOut;
 import org.dddml.suiinfinitesea.sui.contract.roster.RosterShipInventoryPutIn;
+import org.dddml.suiinfinitesea.sui.contract.roster.RosterDeleted;
 import org.dddml.suiinfinitesea.sui.contract.repository.RosterEventRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.SuiPackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RosterEventService {
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public static final java.util.Set<String> DELETION_COMMAND_EVENTS = new java.util.HashSet<>(java.util.Arrays.asList("RosterDeleted"));
+
+    public static boolean isDeletionCommand(String eventType) {
+        return DELETION_COMMAND_EVENTS.contains(eventType);
+    }
+
+    public static boolean isDeletionCommand(AbstractRosterEvent e) {
+        if (isDeletionCommand(e.getEventType())) {
+            return true;
+        }
+        return false;
+    }
 
     @Autowired
     private SuiPackageRepository suiPackageRepository;
@@ -90,6 +104,8 @@ public class RosterEventService {
                         e = DomainBeanUtils.toRosterShipInventoryTakenOut(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterShipInventoryTakenOut.class));
                     } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_SHIP_INVENTORY_PUT_IN)) {
                         e = DomainBeanUtils.toRosterShipInventoryPutIn(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterShipInventoryPutIn.class));
+                    } else if (t.equals(packageId + "::" + ContractConstants.ROSTER_MODULE_ROSTER_DELETED)) {
+                        e = DomainBeanUtils.toRosterDeleted(objectMapper.convertValue(eventEnvelope.getParsedJson(), RosterDeleted.class));
                     } else {
                         e = null;
                     }

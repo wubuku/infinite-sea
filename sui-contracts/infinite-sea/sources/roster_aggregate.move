@@ -10,6 +10,7 @@ module infinite_sea::roster_aggregate {
     use infinite_sea::roster_adjust_ships_position_logic;
     use infinite_sea::roster_create_environment_roster_logic;
     use infinite_sea::roster_create_logic;
+    use infinite_sea::roster_delete_logic;
     use infinite_sea::roster_put_in_ship_inventory_logic;
     use infinite_sea::roster_set_sail_logic;
     use infinite_sea::roster_take_out_ship_inventory_logic;
@@ -345,6 +346,24 @@ module infinite_sea::roster_aggregate {
         );
         roster::update_object_version(roster);
         roster::emit_roster_ship_inventory_put_in(roster_ship_inventory_put_in);
+    }
+
+    public entry fun delete(
+        roster: roster::Roster,
+        ctx: &mut tx_context::TxContext,
+    ) {
+        roster::assert_schema_version(&roster);
+        let roster_deleted = roster_delete_logic::verify(
+            &roster,
+            ctx,
+        );
+        let updated_roster = roster_delete_logic::mutate(
+            &roster_deleted,
+            roster,
+            ctx,
+        );
+        roster::drop_roster(updated_roster);
+        roster::emit_roster_deleted(roster_deleted);
     }
 
 }

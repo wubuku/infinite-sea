@@ -150,6 +150,19 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             apply(e);
         }
 
+        @Override
+        public void delete(Long offChainVersion, String commandId, String requesterId, RosterCommands.Delete c) {
+            java.util.function.Supplier<RosterEvent.RosterDeleted> eventFactory = () -> newRosterDeleted(offChainVersion, commandId, requesterId);
+            RosterEvent.RosterDeleted e;
+            try {
+                e = verifyDelete(eventFactory, c);
+            } catch (Exception ex) {
+                throw new DomainError("VerificationFailed", ex);
+            }
+
+            apply(e);
+        }
+
         protected RosterEvent.RosterCreated verifyCreate(java.util.function.Supplier<RosterEvent.RosterCreated> eventFactory, Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, Coordinates originCoordinates, String shipBattleId, RosterCommands.Create c) {
             Integer Status = status;
             Long Speed = speed;
@@ -366,6 +379,26 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
            
 
+        protected RosterEvent.RosterDeleted verifyDelete(java.util.function.Supplier<RosterEvent.RosterDeleted> eventFactory, RosterCommands.Delete c) {
+
+            RosterEvent.RosterDeleted e = (RosterEvent.RosterDeleted) ReflectUtils.invokeStaticMethod(
+                    "org.dddml.suiinfinitesea.domain.roster.DeleteLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, VerificationContext.class},
+                    new Object[]{eventFactory, getState(), VerificationContext.forCommand(c)}
+            );
+
+//package org.dddml.suiinfinitesea.domain.roster;
+//
+//public class DeleteLogic {
+//    public static RosterEvent.RosterDeleted verify(java.util.function.Supplier<RosterEvent.RosterDeleted> eventFactory, RosterState rosterState, VerificationContext verificationContext) {
+//    }
+//}
+
+            return e;
+        }
+           
+
         protected AbstractRosterEvent.RosterCreated newRosterCreated(Integer status, Long speed, Coordinates updatedCoordinates, BigInteger coordinatesUpdatedAt, Coordinates targetCoordinates, Coordinates originCoordinates, String shipBattleId, Long offChainVersion, String commandId, String requesterId) {
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterCreated e = new AbstractRosterEvent.RosterCreated();
@@ -544,6 +577,27 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             e.getDynamicProperties().put("shipId", shipId);
             e.getDynamicProperties().put("itemIdQuantityPairs", itemIdQuantityPairs);
             e.getDynamicProperties().put("updatedCoordinates", updatedCoordinates);
+            e.setSuiTimestamp(null);
+            e.setSuiTxDigest(null);
+            e.setSuiEventSeq(null);
+            e.setSuiPackageId(null);
+            e.setSuiTransactionModule(null);
+            e.setSuiSender(null);
+            e.setSuiType(null);
+            e.setEventStatus(null);
+
+            e.setCommandId(commandId);
+            e.setCreatedBy(requesterId);
+            e.setCreatedAt((java.util.Date)ApplicationContext.current.getTimestampService().now(java.util.Date.class));
+
+            e.setRosterEventId(eventId);
+            return e;
+        }
+
+        protected AbstractRosterEvent.RosterDeleted newRosterDeleted(Long offChainVersion, String commandId, String requesterId) {
+            RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
+            AbstractRosterEvent.RosterDeleted e = new AbstractRosterEvent.RosterDeleted();
+
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

@@ -278,6 +278,24 @@ public class RosterResource {
         } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
     }
 
+
+    @PutMapping("{rosterId}/_commands/Delete")
+    public void delete(@PathVariable("rosterId") String rosterId, @RequestBody RosterCommands.Delete content) {
+        try {
+
+            RosterCommands.Delete cmd = content;//.toDelete();
+            RosterId idObj = RosterResourceUtils.parseIdString(rosterId);
+            if (cmd.getRosterId() == null) {
+                cmd.setRosterId(idObj);
+            } else if (!cmd.getRosterId().equals(idObj)) {
+                throw DomainError.named("inconsistentId", "Argument Id %1$s NOT equals body Id %2$s", rosterId, cmd.getRosterId());
+            }
+            cmd.setRequesterId(SecurityContextUtil.getRequesterId());
+            rosterApplicationService.when(cmd);
+
+        } catch (Exception ex) { logger.info(ex.getMessage(), ex); throw DomainErrorUtils.convertException(ex); }
+    }
+
     @GetMapping("_metadata/filteringFields")
     public List<PropertyMetadataDto> getMetadataFilteringFields() {
         try {

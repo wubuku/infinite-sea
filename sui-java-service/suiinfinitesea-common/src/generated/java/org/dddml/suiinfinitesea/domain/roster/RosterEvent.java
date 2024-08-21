@@ -176,6 +176,9 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
     }
 
+    interface RosterDeleted extends RosterEvent {
+    }
+
     RosterId getRosterId();
 
     //void setRosterId(RosterId rosterId);

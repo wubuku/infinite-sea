@@ -46,5 +46,14 @@ public class SuiRosterService {
         rosterStateRepository.merge(rosterState);
     }
 
+    @Transactional
+    public void deleteRoster(RosterId rosterId) {
+        RosterState.MutableRosterState s = (RosterState.MutableRosterState) rosterStateRepository.get(rosterId, true);
+        if (s != null) {
+            s.setDeleted(true);
+            rosterStateRepository.merge(s);
+        }
+    }
+
 }
 

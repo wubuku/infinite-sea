@@ -166,6 +166,7 @@ aggregates:
         - Roster.PutInShipInventory
         - Roster.TakeOutShipInventory
         - Roster.TransferShipInventory
+        - Roster.Delete
     friends:
       - SkillProcess.CompleteShipProduction
       #- SkillProcess.StartShipProduction
@@ -210,7 +211,7 @@ aggregates:
       #HasStoreAbility: true
       Preprocessors: [ "MOVE_CRUD_IT" ]
       CRUD_IT_NO_UPDATE: true
-      CRUD_IT_NO_DELETE: true
+      #CRUD_IT_NO_DELETE: true
       ShouldIssuePublisherObject: true
       IS_MOVE_SCHEMA_VERSIONED: true
       ## Generate scheduled method that pulls on-chain states of all instances

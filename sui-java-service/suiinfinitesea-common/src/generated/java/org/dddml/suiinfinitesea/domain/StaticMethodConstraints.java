@@ -224,6 +224,14 @@ public class StaticMethodConstraints {
 
 
         ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.DeleteLogic",
+                    "verify",
+                    new Class[]{java.util.function.Supplier.class, RosterState.class, VerificationContext.class},
+                    new String[]{"_", "_"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
                     "org.dddml.suiinfinitesea.domain.shipbattle.InitiateBattleLogic",
                     "verify",
                     new Class[]{java.util.function.Supplier.class, ShipBattleState.class, Coordinates.class, Coordinates.class, VerificationContext.class},
@@ -620,6 +628,14 @@ public class StaticMethodConstraints {
                     "mutate",
                     new Class[]{RosterState.class, String.class, ItemIdQuantityPairs.class, Coordinates.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
                     new String[]{"_", "shipId", "itemIdQuantityPairs", "updatedCoordinates", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
+            );
+
+
+        ReflectUtils.assertStaticMethodIfClassExists(
+                    "org.dddml.suiinfinitesea.domain.roster.DeleteLogic",
+                    "mutate",
+                    new Class[]{RosterState.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new String[]{"_", "suiTimestamp", "suiTxDigest", "suiEventSeq", "suiPackageId", "suiTransactionModule", "suiSender", "suiType", "eventStatus"}
             );
 
 

@@ -71,6 +71,8 @@ public class ContractConstants {
 
     public static final String ROSTER_MODULE_ROSTER_SHIP_INVENTORY_PUT_IN = "roster::RosterShipInventoryPutIn";
 
+    public static final String ROSTER_MODULE_ROSTER_DELETED = "roster::RosterDeleted";
+
     public static final String SHIP_BATTLE_MODULE_SHIP_BATTLE_INITIATED = "ship_battle::ShipBattleInitiated";
 
     public static final String SHIP_BATTLE_MODULE_SHIP_BATTLE_MOVE_MADE = "ship_battle::ShipBattleMoveMade";

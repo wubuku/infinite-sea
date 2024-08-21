@@ -61,6 +61,7 @@
       <subclass name="AbstractRosterEvent$RosterShipInventoryTransferred" discriminator-value="RosterShipInventoryTransferred" />
       <subclass name="AbstractRosterEvent$RosterShipInventoryTakenOut" discriminator-value="RosterShipInventoryTakenOut" />
       <subclass name="AbstractRosterEvent$RosterShipInventoryPutIn" discriminator-value="RosterShipInventoryPutIn" />
+      <subclass name="AbstractRosterEvent$RosterDeleted" discriminator-value="RosterDeleted" />
     </subclass>
   </class>
 </hibernate-mapping>

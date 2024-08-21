@@ -876,5 +876,43 @@ public class RosterCommands {
 
     }
 
+    public static class Delete extends AbstractRosterCommand implements RosterCommand {
+
+        public String getCommandType() {
+            return "Delete";
+        }
+
+        public void setCommandType(String commandType) {
+            //do nothing
+        }
+
+        /**
+         * Roster Id
+         */
+        private RosterId rosterId;
+
+        public RosterId getRosterId() {
+            return this.rosterId;
+        }
+
+        public void setRosterId(RosterId rosterId) {
+            this.rosterId = rosterId;
+        }
+
+        /**
+         * Off Chain Version
+         */
+        private Long offChainVersion;
+
+        public Long getOffChainVersion() {
+            return this.offChainVersion;
+        }
+
+        public void setOffChainVersion(Long offChainVersion) {
+            this.offChainVersion = offChainVersion;
+        }
+
+    }
+
 }
 

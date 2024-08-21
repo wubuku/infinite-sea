@@ -74,6 +74,10 @@ public abstract class AbstractRosterApplicationService implements RosterApplicat
         update(c, ar -> ar.putInShipInventory(c.getPlayer(), c.getClock(), c.getShipId(), c.getItemIdQuantityPairs(), c.getUpdatedCoordinates(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
+    public void when(RosterCommands.Delete c) {
+        update(c, ar -> ar.delete(c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+    }
+
     public RosterState get(RosterId id) {
         RosterState state = getStateRepository().get(id, true);
         return state;

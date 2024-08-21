@@ -33,6 +33,8 @@ public interface RosterAggregate {
 
     void putInShipInventory(String player, String clock, String shipId, ItemIdQuantityPairs itemIdQuantityPairs, Coordinates updatedCoordinates, Long offChainVersion, String commandId, String requesterId, RosterCommands.PutInShipInventory c);
 
+    void delete(Long offChainVersion, String commandId, String requesterId, RosterCommands.Delete c);
+
     void throwOnInvalidStateTransition(Command c);
 }
 

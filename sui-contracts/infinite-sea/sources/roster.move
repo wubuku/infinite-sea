@@ -29,6 +29,7 @@ module infinite_sea::roster {
     friend infinite_sea::roster_transfer_ship_inventory_logic;
     friend infinite_sea::roster_take_out_ship_inventory_logic;
     friend infinite_sea::roster_put_in_ship_inventory_logic;
+    friend infinite_sea::roster_delete_logic;
     friend infinite_sea::roster_aggregate;
 
     friend infinite_sea::ship_battle_initiate_battle_logic;
@@ -744,6 +745,30 @@ module infinite_sea::roster {
         }
     }
 
+    struct RosterDeleted has copy, drop {
+        id: object::ID,
+        roster_id: RosterId,
+        version: u64,
+    }
+
+    public fun roster_deleted_id(roster_deleted: &RosterDeleted): object::ID {
+        roster_deleted.id
+    }
+
+    public fun roster_deleted_roster_id(roster_deleted: &RosterDeleted): RosterId {
+        roster_deleted.roster_id
+    }
+
+    public(friend) fun new_roster_deleted(
+        roster: &Roster,
+    ): RosterDeleted {
+        RosterDeleted {
+            id: id(roster),
+            roster_id: roster_id(roster),
+            version: version(roster),
+        }
+    }
+
 
     public(friend) fun create_roster(
         roster_id: RosterId,
@@ -788,6 +813,11 @@ module infinite_sea::roster {
     ) {
         asset_roster_id_not_exists(roster_id, roster_table);
         table::add(&mut roster_table.table, roster_id, id);
+    }
+
+    public(friend) fun update_version_and_transfer_object(roster: Roster, recipient: address) {
+        update_object_version(&mut roster);
+        transfer::transfer(roster, recipient);
     }
 
     #[lint_allow(share_owned)]
@@ -863,6 +893,10 @@ module infinite_sea::roster {
 
     public(friend) fun emit_roster_ship_inventory_put_in(roster_ship_inventory_put_in: RosterShipInventoryPutIn) {
         event::emit(roster_ship_inventory_put_in);
+    }
+
+    public(friend) fun emit_roster_deleted(roster_deleted: RosterDeleted) {
+        event::emit(roster_deleted);
     }
 
 }
