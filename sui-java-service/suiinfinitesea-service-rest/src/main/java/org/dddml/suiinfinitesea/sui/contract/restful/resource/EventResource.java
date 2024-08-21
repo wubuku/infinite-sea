@@ -1,5 +1,7 @@
 package org.dddml.suiinfinitesea.sui.contract.restful.resource;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.dddml.suiinfinitesea.domain.faucetrequested.AbstractFaucetRequestedState;
 import org.dddml.suiinfinitesea.domain.item.AbstractItemEvent;
 import org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessEvent;
@@ -32,6 +34,17 @@ public class EventResource {
     @Transactional(readOnly = true)
     public java.util.List<AbstractItemEvent> getItemEvents(@RequestParam(value = "startSuiTimestamp") Long startSuiTimestamp, @RequestParam(value = "endSuiTimestamp") Long endSuiTimestamp) {
         return itemEventRepository.findBySuiTimestampBetween(startSuiTimestamp, endSuiTimestamp);
+    }
+
+
+    @GetMapping(path = "getSenderAddressesWithSailDurationExceeding")
+    @Transactional(readOnly = true)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startAt", value = "start at", required = true, dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "endedAt", value = "ended at", dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "sailDuration", value = "sail duration(Default value:120)",dataType = "int", paramType = "query")})
+    public List<String> getSenderAddressesWithSailDurationExceeding(@RequestParam(value = "startAt") Long startAt, @RequestParam(value = "endedAt") Long endedAt, @RequestParam(value = "sailDuration", defaultValue = "120") Integer sailDuration) {
+        return rosterEventExtendRepository.getSenderAddressesWithSailDurationExceeding(startAt, endedAt, sailDuration);
     }
 
     @GetMapping(path = "getFaucetRequestedEvents")

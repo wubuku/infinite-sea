@@ -133,4 +133,15 @@ GROUP BY re.sui_sender,
     List<AddressCount> batchGetRostersSailedTime(@Param("startAt") Long startAt,
                                                  @Param("endAt") Long endAt,
                                                  @Param("suiSenderAddresses") List<String> suiSenderAddresses);
+
+
+    @Query(value = "SELECT sui_sender " +
+            "FROM roster_event " +
+            "WHERE sui_timestamp BETWEEN :startAt AND :endAt " +
+            "  AND event_type = 'RosterSetSail' " +
+            "GROUP BY sui_sender " +
+            "HAVING SUM(JSON_UNQUOTE(dynamic_properties->'$.sailDuration')) > :sailedTime", nativeQuery = true)
+    List<String> getSenderAddressesWithSailDurationExceeding(@Param("startAt") Long startAt,
+                                                             @Param("endAt") Long endAt,
+                                                             @Param("sailedTime") Integer sailedTime);
 }

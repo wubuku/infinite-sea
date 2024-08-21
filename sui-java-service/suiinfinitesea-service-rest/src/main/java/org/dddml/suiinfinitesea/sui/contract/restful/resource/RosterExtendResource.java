@@ -4,6 +4,7 @@ import org.dddml.suiinfinitesea.domain.roster.AbstractRosterState;
 import org.dddml.suiinfinitesea.sui.contract.repository.ItemIdQuantityPair;
 import org.dddml.suiinfinitesea.sui.contract.repository.RosterRepository;
 import org.dddml.suiinfinitesea.sui.contract.repository.RosterShipsItemRepository;
+import org.dddml.suiinfinitesea.sui.contract.repository.SimpleRoster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,13 @@ public class RosterExtendResource {
     private RosterRepository rosterRepository;
     @Autowired
     private RosterShipsItemRepository rosterShipsItemRepository;
+
+    @GetMapping("getAllEnvironmentRosters")
+    @Transactional(readOnly = true)
+    public List<SimpleRoster> getAllEnvironmentRosters() {
+        return rosterRepository.getAllEnvironmentRosters();
+    }
+
 
     @GetMapping("allRosterIds")
     @Transactional(readOnly = true)
