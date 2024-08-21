@@ -81,7 +81,6 @@ public class FaucetEventService {
         List<Map.Entry<String, Object>> filter = new ArrayList<>();
         List<String> orders = new ArrayList<>();
         orders.add("-suiTimestamp");
-        faucetRequestedStateQueryRepository.getFirst(filter, orders);
         FaucetRequestedState state = faucetRequestedStateQueryRepository.getFirst(filter, orders);
         return state != null ? new EventId(state.getSuiTxDigest(), state.getSuiEventSeq() + "") : null;
     }
