@@ -43,20 +43,6 @@ module infinite_sea::roster {
     const EInappropriateVersion: u64 = 103;
     const EEmptyObjectID: u64 = 107;
 
-    /// Not the right admin for the object
-    const ENotAdmin: u64 = 0;
-    /// Migration is not an upgrade
-    const ENotUpgrade: u64 = 1;
-    /// Calling functions from the wrong package version
-    const EWrongSchemaVersion: u64 = 2;
-
-    const SCHEMA_VERSION: u64 = 0;
-
-    struct AdminCap has key, store {
-        id: UID,
-    }
-
-
     struct RosterTable has key {
         id: UID,
         table: table::Table<RosterId, object::ID>,
@@ -79,16 +65,10 @@ module infinite_sea::roster {
         });
     }
 
-    public fun assert_schema_version(roster: &Roster) {
-        assert!(roster.schema_version == SCHEMA_VERSION, EWrongSchemaVersion);
-    }
-
     struct Roster has key {
         id: UID,
         roster_id: RosterId,
         version: u64,
-        schema_version: u64,
-        admin_cap: ID,
         status: u8,
         speed: u32,
         ship_ids: vector<ID>,
@@ -237,11 +217,6 @@ module infinite_sea::roster {
         &mut roster.energy_vault
     }
 
-    public fun admin_cap(roster: &Roster): ID {
-        roster.admin_cap
-    }
-
-    #[allow(lint(self_transfer))]
     fun new_roster(
         roster_id: RosterId,
         status: u8,
@@ -254,17 +229,10 @@ module infinite_sea::roster {
         ship_battle_id: Option<ID>,
         ctx: &mut TxContext,
     ): Roster {
-        let admin_cap = AdminCap {
-            id: object::new(ctx),
-        };
-        let admin_cap_id = object::id(&admin_cap);
-        transfer::public_transfer(admin_cap, sui::tx_context::sender(ctx));
         Roster {
             id: object::new(ctx),
             roster_id,
             version: 0,
-            schema_version: SCHEMA_VERSION,
-            admin_cap: admin_cap_id,
             status,
             speed,
             ship_ids: std::vector::empty(),
@@ -280,12 +248,6 @@ module infinite_sea::roster {
             base_experience: std::option::none(),
             energy_vault: sui::balance::zero(),
         }
-    }
-
-    entry fun migrate(roster: &mut Roster, a: &AdminCap) {
-        assert!(roster.admin_cap == object::id(a), ENotAdmin);
-        assert!(roster.schema_version < SCHEMA_VERSION, ENotUpgrade);
-        roster.schema_version = SCHEMA_VERSION;
     }
 
     struct RosterCreated has copy, drop {
@@ -835,8 +797,6 @@ module infinite_sea::roster {
             id,
             roster_id: _roster_id,
             version: _version,
-            schema_version: _,
-            admin_cap: _,
             status: _status,
             speed: _speed,
             ship_ids: _ship_ids,

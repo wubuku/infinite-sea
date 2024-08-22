@@ -17,26 +17,6 @@ public class Roster {
 
     private UID id;
 
-    private String adminCap;
-
-    private BigInteger schemaVersion;
-
-    public String getAdminCap() {
-        return adminCap;
-    }
-
-    public void setAdminCap(String adminCap) {
-        this.adminCap = adminCap;
-    }
-
-    public BigInteger getSchemaVersion() {
-        return schemaVersion;
-    }
-
-    public void setSchemaVersion(BigInteger schemaVersion) {
-        this.schemaVersion = schemaVersion;
-    }
-
     private RosterId rosterId;
 
     private Long offChainVersion;

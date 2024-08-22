@@ -129,7 +129,6 @@ module infinite_sea::roster_aggregate {
         position: Option<u64>,
         ctx: &mut tx_context::TxContext,
     ) {
-        roster::assert_schema_version(roster);
         let roster_ship_added = roster_add_ship_logic::verify(
             &ship,
             position,
@@ -158,7 +157,6 @@ module infinite_sea::roster_aggregate {
         updated_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
-        roster::assert_schema_version(roster);
         let target_coordinates: Coordinates = coordinates::new(
             target_coordinates_x,
             target_coordinates_y,
@@ -194,7 +192,6 @@ module infinite_sea::roster_aggregate {
         ship_ids: vector<ID>,
         ctx: &mut tx_context::TxContext,
     ) {
-        roster::assert_schema_version(roster);
         let roster_ships_position_adjusted = roster_adjust_ships_position_logic::verify(
             player,
             positions,
@@ -220,7 +217,6 @@ module infinite_sea::roster_aggregate {
         to_position: Option<u64>,
         ctx: &mut tx_context::TxContext,
     ) {
-        roster::assert_schema_version(roster);
         let roster_ship_transferred = roster_transfer_ship_logic::verify(
             player,
             ship_id,
@@ -248,7 +244,6 @@ module infinite_sea::roster_aggregate {
         item_id_quantity_pairs_item_quantity_list: vector<u32>,
         ctx: &mut tx_context::TxContext,
     ) {
-        roster::assert_schema_version(roster);
         let item_id_quantity_pairs: ItemIdQuantityPairs = item_id_quantity_pairs::new(
             item_id_quantity_pairs_item_id_list,
             item_id_quantity_pairs_item_quantity_list,
@@ -281,7 +276,6 @@ module infinite_sea::roster_aggregate {
         updated_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
-        roster::assert_schema_version(roster);
         let item_id_quantity_pairs: ItemIdQuantityPairs = item_id_quantity_pairs::new(
             item_id_quantity_pairs_item_id_list,
             item_id_quantity_pairs_item_quantity_list,
@@ -320,7 +314,6 @@ module infinite_sea::roster_aggregate {
         updated_coordinates_y: u32,
         ctx: &mut tx_context::TxContext,
     ) {
-        roster::assert_schema_version(roster);
         let item_id_quantity_pairs: ItemIdQuantityPairs = item_id_quantity_pairs::new(
             item_id_quantity_pairs_item_id_list,
             item_id_quantity_pairs_item_quantity_list,
@@ -352,7 +345,6 @@ module infinite_sea::roster_aggregate {
         roster: roster::Roster,
         ctx: &mut tx_context::TxContext,
     ) {
-        roster::assert_schema_version(&roster);
         let roster_deleted = roster_delete_logic::verify(
             &roster,
             ctx,
