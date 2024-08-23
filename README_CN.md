@@ -360,12 +360,10 @@ wubuku/dddappp-sui:master \
   }
 }
 
-
-
 ```
 
 
-#### Movement Baku "production"(8-14)
+#### Movement Baku "production"(8-23)
 
 对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8092/api
 
@@ -378,32 +376,33 @@ wubuku/dddappp-sui:master \
     "EnergyId": "0xf4c51f989a57f31574a96ae8f065f9515bf150f860621237de40bc17326f8790"
   },
   "common": {
-    "Digest": "4ZRsV7C1RNmG2avzFaf26T2RK3HK3Ro1sa28yXTuh4hM",
-    "PackageId": "0x4670133816868aa8ef562ccf15119c88227254d3aef3a6f0b498b46eea4aaba5",
-    "ExperienceTable": "0x57c0669d5a8c58a7190fa647f19a6fbb986a4efd11363ccc68da0b604720597f",
-    "ItemProductionTable": "0xafda8e15328ae15f0411429d48eafa7fad94e8e85c8a19583a3c3ac21292b810",
-    "ItemTable": "0xc0c72afff24354b1681dd49a0ef2fca6873e955e44398331f4f079ac9b23ac27",
-    "Publisher": "0xd57ccaa723c6518ac4b7612ce8eeae98f89cf52d1726c09ede5b0be2ad736017",
-    "ItemCreationTable": "0xd6dba782156db1648ddb894e1406a520999901495580b4ac3094e8f71e9d334c",
-    "ItemCreationMining": "0x202b40d6f8105c36ca01c8acab6e42ffc63917f432f929aa0683829e859cceaf",
-    "ItemProductionFarming": "0xd3e7f252c551c8e532581960b1942f3ea85bbae3b628535d394dece2f3370f37",
-    "ItemCreationWooding": "0xab0337c5a193928026ffa3cff47604701df3c7986896eb1f68b3aad67e998ee6",
-    "ItemProductionCrafting": "0x38631b2cb6973631f8b65200945ea6dabfd6da8e8fbc749e3243eb6103cb7570"
+    "Digest": "AdN26qemfpFXGgtkkFr6nooN77RCwF5aSNuRBKrEYxTh",
+    "UpgradeCap": "0x039b924caa00f5f0a0f09458d9c5ba1bfc1414f259a07537a4c01ad641c588db",
+    "ExperienceTable": "0x1e74f5eb9112192c63342a7adb180eb37693ece9049633810765efd76a38973e",
+    "Publisher": "0x425601101bdafb3fbed1e4a1f4537357e26a90d071f7004c574f63b8b2480c20",
+    "PackageId": "0x49b4cc8891e887a615a39decc5197bbf605858ff537a0ab0cef67af90d59c536",
+    "ItemCreationTable": "0x829891c032e515ddf7c0f4ad535158fc117d06b9b88bde42724a91e3da8fa60e",
+    "ItemTable": "0xeeaec9e51aa67d453a679e151c809a3ea2b3864efc4b03200a5cc4539fe13ee4",
+    "ItemProductionTable": "0xfc58dd0be45edb2e80b04a80a5d560b1f584ec20ef7e312f851daa7e734ed8d3",
+    "ItemCreationMining": "0x72327bb1e04de538c6ac8253e27972058a21ca09f7b9312dd5219329eae69212",
+    "ItemProductionFarming": "0xce6d14172928ad9a58d37e9aa6ad1558b1d3940da3755e786786b061d6196ae2",
+    "ItemCreationWooding": "0x37881767fec45803d424a0e7676adda945ef03e3fb56e83b86e353f842814259",
+    "ItemProductionCrafting": "0x30e2336ac28fab984e256149b0d6ccd6c07f4600c219a4065dbce841d14b0d30"
   },
   "main": {
-    "Digest": "3urJpb1p6ZXw2M5zdUW8bME9Yu51BZX8iU3AeLTFY54o",
-    "SkillProcessTable": "0x044a560d6879db0ed5e7a299fdac2c55e776070a0a352fcc06381150917ed411",
-    "PackageId": "0x56b2225fe27a2b926b85aa11e4f3d5b3bdadceb29674d4026be813e1ddfb561a",
-    "Publisher": "0x61837c8d8c59359252dccb1412f1ee9cdec0210d873b473f0f0295d76776be6c",
-    "UpgradeCap": "0xe41c47e93e7d57096c7a906aabcc35181e633111f797f73acd71fa1b5ba02c05",
-    "RosterTable": "0xf2a584e6de00b11b7d88b125ff090b04d8b6711b6656f446bb3b796231dcad3e",
-    "Player": "0x90e69c968a6a1e7aa371d60b00be7f5d99fc2c253941f4ed8c7e6c43bb67ca04",
-    "EnvironmentPlayId": "0x181bea21f2bff6304b0eb6860a32f59874f6066cfb8038ba90119814f10eeedb",
-    "SkillProcessMining": "0x177549c2313f90eb242bb2a1f0ab4a0cf84e87140cd462017534607e76521821",
-    "SkillProcessWooding": "0x1acdb271cdba527693e237ca860d11ff12ab884b9908a0e91bf60f7cf3dd37f1",
-    "SkillProcessCrafting": "0x516fd8758faffcdcad216205aebd30dad28e80cc69ed8b5d50118ebe88938a1c",
-    "SkillProcessFarming2": "0xb1fe8d3a604802cbac6ced2b6703ad97e03371790528a897a87507a11705e12d",
-    "SkillProcessFarming1": "0xc53ea2e134318e30f7b4b7164c11d63ec9d6051ac854ba528eb46bd65874bd5d"
+    "Digest": "Ecdg1xvFS6d51B73m66vSLevRCV3kFEW27seY3mmSzW4",
+    "Publisher": "0x0a2c814a1dbfaec3b823eee96ea5a41b8f787b8fed332a15a15c7074636a336e",
+    "UpgradeCap": "0x560d4979be3f531fb1528e00d59a0cb109978e6458c95e211b7c7c1fc3842eb4",
+    "PackageId": "0x80eb92cc30e21caabeb8cee5237a52bed82c0802808c4ad51a834d9a9cba49a2",
+    "RosterTable": "0x997a3155697dfc9ebb186befbac7c3aaf30cd88ba216168fb870e115cf2a4063",
+    "SkillProcessTable": "0xf1e93d065da5932cf065e71d770e3e04c788dfea2afc29d57610e30124907748",
+    "Player": "0x792ba6db0b35208f4c2641b6c99b828dc4f3e51e815db9752bc386127f147d19",
+    "EnvironmentPlayId": "0x4f9b110d5749f7565aab3645bc441cccf55ee76061c97c1ab68c8e597b2e89b5",
+    "SkillProcessCrafting": "0x1346ba88e96c504de39d907eb9268e01326ae8f66ec9b6c5fcef1bd311326031",
+    "SkillProcessWooding": "0x18790b70ee42a30ceef658f6c73a224567c44e2232cb1baa9d6079350c1d1c24",
+    "SkillProcessFarming1": "0x2f20ac37810e57449fc860a0ee21cdc792b744707db63ada74c327e172b64d02",
+    "SkillProcessMining": "0x83d2c2c78b16e6388fbac950eead4cc41c7761d8e2a56cf99246de25ebf554d2",
+    "SkillProcessFarming2": "0xbfe84d96a37afc66ee77d253d8794e1c6d13a8c2b6d95008858bee29b86c4ae0"
   },
   "faucet": {
     "EnergyFaucet": "0x3fb72a6823a727d307171d9ad0e33d9d8aca3dd55c7681e8e6d8e79e80670290",
@@ -419,15 +418,15 @@ wubuku/dddappp-sui:master \
     "Digest": "FrRzJF9jbvjNrXqVKi2LtoZcc1x1ZhAhSGVzTp94PVLF"
   },
   "map": {
-    "AdminCap": "0x1680453b405eb01785b8f04e75384d0abed08de2c264cc9b40a6d824fbb22103",
-    "MapFriendConfig": "0x6a3cc9d170661e22c6220516a647a15cf4c614d79175b768c0026be3a8c49d93",
-    "Map": "0xa27c43866fba515f3b34d79a778317873c0ec63ddca6cb3b316c9868817cf10c",
-    "Publisher": "0xcc296988fcae0fc61009ca2d0a54a305411ca5f32347236e3cc34876de7cdfde",
-    "PackageId": "0xe926053e81568ae3deb8a8f4455b9d91be44dbefb19a93ade29c96e1d6b309ec",
-    "Digest": "HewLUnvd3ALjWNYVtVm7SLYuhHPcLfbJqRuD1tCag2Tn"
+    "AdminCap": "0x2e5c5776eec0d6b6d347209cf179b872b2596fa023feeb448eafbe0aac602cc6",
+    "PackageId": "0x32b0d788d19bc2bd01b081e345bcbb74f1927c2ae6fdcbdaa39fab79967badd9",
+    "Map": "0x60d95b0fc31262720359ace7ab6f5627356f5b07be20bbbb16b1d05d21099f20",
+    "Publisher": "0x973ded9337b06fcd324a9d2a1577a9dbffa0b2aa541008873bb3bb2cdbf011c2",
+    "UpgradeCap": "0xb927bb71900afebef531886e334ad3e788807f7a607c2baf46d8d7dca25d4030",
+    "MapFriendConfig": "0xe79f7a3512958e78080dce28389faa5fb465f071be017811f001043c63559ab2",
+    "Digest": "GeqFaJE4JRyTbb4VZPiPmBHsBavexbrrDTSuftbJBDKX"
   }
 }
-
 
 
 ```
