@@ -106,6 +106,7 @@ if (Test-Path -Path $lockFile) {
 
 "开始发布合约 infinite_sea_nft..." | Tee-Object -FilePath $logFile -Append | Write-Host
 
+$upgradeCap = ""
 $publishNftJson = ""
 $nftPackingId = ""
 $nftPublisherId = ""
@@ -127,22 +128,27 @@ try {
                 $dataNft | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $nftPackingId
                 "NFT PackageID: $nftPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
-            if ($object.objectType -eq '0x2::package::Publisher') {
+            elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
+                $upgradeCap = $object.objectId
+                $dataNft | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
+                "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+            }
+            elseif ($object.objectType -eq '0x2::package::Publisher') {
                 $nftPublisherId = $object.objectId;
                 $dataNft | Add-Member -MemberType NoteProperty -Name "Publisher" -Value $nftPublisherId
                 "Publisher ID: $nftPublisherId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
-            if ($object.objectType -like '*avatar_change::AvatarChangeTable') {
+            elseif ($object.objectType -like '*avatar_change::AvatarChangeTable') {
                 $avatarChangeTableId = $object.objectId;
                 $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarChangeTable" -Value $avatarChangeTableId
                 "AvatarChangeTable ID: $avatarChangeTableId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
-            if ($object.ObjectType -like '*Display*avatar::Avatar*') {                
+            elseif ($object.ObjectType -like '*Display*avatar::Avatar*') {                
                 $avatarDisplayId = $object.objectId;
                 $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarDisplay" -Value $avatarDisplayId
                 "Display<Avatar> ID: $avatarDisplayId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
-            if ($object.objectType -like '*whitelist::Whitelist') {
+            elseif ($object.objectType -like '*whitelist::Whitelist') {
                 $whitelistId = $object.objectId;
                 $dataNft | Add-Member -MemberType NoteProperty -Name "Whitelist" -Value $whitelistId
                 "Whitelist ID: $whitelistId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
@@ -279,7 +285,12 @@ try {
             $dataCoin | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $coinPackingId
             "Coin PackageID: $coinPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
         }
-        if ($null -ne $object.ObjectType -and $object.ObjectType -like "*TreasuryCap*") {
+        elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
+            $upgradeCap = $object.objectId
+            $dataCoin | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
+            "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+        }
+        elseif ($null -ne $object.ObjectType -and $object.ObjectType -like "*TreasuryCap*") {
             $treasuryCap = $object.ObjectID
             $dataCoin | Add-Member -MemberType NoteProperty -Name "TreasuryCap" -Value $treasuryCap
             "Coin TreasuryCap ObjectID: $treasuryCap" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
@@ -446,7 +457,12 @@ try {
                 $dataFaucet | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $faucetPackingId
                 "Faucet PackageID: $faucetPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
-            if ($object.objectType -like "*energy_faucet::EnergyFaucet") {
+            elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
+                $upgradeCap = $object.objectId
+                $dataFaucet | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
+                "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+            }
+            elseif ($object.objectType -like "*energy_faucet::EnergyFaucet") {
                 $energyFaucetId = $object.objectId;
                 $dataFaucet | Add-Member -MemberType NoteProperty -Name "EnergyFaucet" -Value $energyFaucetId
                 "EnergyFaucet ID: $energyFaucetId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
@@ -628,6 +644,11 @@ foreach ($object in $publishCommonObj.objectChanges) {
             if ($null -eq $dataCommon.Publisher -or $dataCommon.Publisher -eq "") {
                 $dataCommon | Add-Member -MemberType NoteProperty -Name "Publisher" -Value $commonPublisherId
             }
+        }
+        elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
+            $upgradeCap = $object.objectId
+            $dataCommon | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
+            "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
         }
         elseif ($object.objectType -like '*item_production::ItemProductionTable') {
             $ItemProductionTableId = $object.objectId
@@ -840,12 +861,17 @@ try {
                 $dataMap | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $mapPackingId
                 "Map PackageID: $mapPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
-            if ($object.objectType -eq '0x2::package::Publisher') {
+            elseif ($object.objectType -eq '0x2::package::Publisher') {
                 $mapPublisherId = $object.objectId;
                 $dataMap | Add-Member -MemberType NoteProperty -Name "Publisher" -Value $mapPublisherId
                 "Publisher ID: $mapPublisherId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             }
-            if ($object.objectType -like '*map_friend_config::MapFriendConfig') {
+            elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
+                $upgradeCap = $object.objectId
+                $dataMap | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
+                "UpgradeCap Id:" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+            }
+            elseif ($object.objectType -like '*map_friend_config::MapFriendConfig') {
                 $mapFriendConfigId = $object.objectId;
                 $dataMap | Add-Member -MemberType NoteProperty -Name "MapFriendConfig" -Value $mapFriendConfigId
                 "MapFriendConfig ID: $mapFriendConfigId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
@@ -1010,7 +1036,6 @@ $MainDigest = $publishMainObj.digest
 "摘要 digest: $MainDigest"  |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
 $dataMain | Add-Member -MemberType NoteProperty -Name "Digest" -Value $MainDigest 
 
-$upgradeCap = ""
 $skillProcessTableId = ""
 $mainPublisherId = ""
 $mainPackageId = ""
@@ -1028,7 +1053,7 @@ foreach ($object in $publishMainObj.objectChanges) {
         elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
             $upgradeCap = $object.objectId
             $dataMain | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
-            "infinite-sea contract UpgradeCap:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+            "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
         }
         elseif ($object.objectType -like '*skill_process::SkillProcessTable') {
             $skillProcessTableId = $object.objectId
