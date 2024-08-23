@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.github.wubuku.sui.bean.EventId;
 import com.github.wubuku.sui.bean.Page;
+import com.github.wubuku.sui.bean.PaginatedMoveEvents;
+import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
 import com.github.wubuku.sui.bean.PaginatedEvents;
 import com.github.wubuku.sui.bean.SuiEventEnvelope;
 import com.github.wubuku.sui.bean.SuiEventFilter;
@@ -42,12 +44,6 @@ public class ShipBattleEventService {
     @Transactional
     public void updateStatusToProcessed(AbstractShipBattleEvent event) {
         event.setEventStatus("D");
-        shipBattleEventRepository.save(event);
-    }
-
-    @Transactional
-    public void updateStatusToE(AbstractShipBattleEvent event) {
-        event.setEventStatus("E");
         shipBattleEventRepository.save(event);
     }
 

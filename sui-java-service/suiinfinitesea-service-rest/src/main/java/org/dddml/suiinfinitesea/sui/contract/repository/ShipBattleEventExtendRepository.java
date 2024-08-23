@@ -20,7 +20,7 @@ public interface ShipBattleEventExtendRepository extends JpaRepository<AbstractS
 
 
     @Query(value = "select * from ship_battle_event " +
-            " where event_status='D' and event_type in('ShipBattleInitiated','ShipBattleMoveMade','ShipBattleLootTaken')",
+            " where event_status='D' and event_type in (:eventTypes)",
             nativeQuery = true)
-    List<AbstractShipBattleEvent> getByStatusEqualDAndEventType();
+    List<AbstractShipBattleEvent> getByStatusEqualDAndEventTypeIn(@Param("eventTypes") List<String> eventTypes);
 }
