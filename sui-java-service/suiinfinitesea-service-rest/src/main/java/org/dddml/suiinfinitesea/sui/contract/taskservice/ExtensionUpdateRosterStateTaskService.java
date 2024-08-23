@@ -47,6 +47,15 @@ public class ExtensionUpdateRosterStateTaskService {
         shipBattleEventRepository.save(event);
     }
 
+//    @Transactional
+//    public List<AbstractShipBattleEvent> getByStatusEqualDAndEventTypeIn(){
+//        List<String> eventTypes = new ArrayList<>();
+//        eventTypes.add("ShipBattleInitiated");
+//        eventTypes.add("ShipBattleMoveMade");
+//        eventTypes.add("ShipBattleLootTaken");
+//        return shipBattleEventExtendRepository.getByStatusEqualDAndEventTypeIn(eventTypes);
+//    }
+
 //    @Scheduled(fixedDelayString = "${sui.contract.update-all-roster-states.fixed-delay:50000}")
 //    @Transactional
 //    public void updateAllRosterStates() {
@@ -62,20 +71,18 @@ public class ExtensionUpdateRosterStateTaskService {
     @Scheduled(fixedDelayString = "${sui.contract.update-all-ship-battle-roster-states.fixed-delay:50000}")
     public void updateAllShipBattleRosterStates() {
         List<String> eventTypes = new ArrayList<>();
-        //'ShipBattleInitiated','ShipBattleMoveMade','ShipBattleLootTaken'
         eventTypes.add("ShipBattleInitiated");
         eventTypes.add("ShipBattleMoveMade");
         eventTypes.add("ShipBattleLootTaken");
         List<AbstractShipBattleEvent> shipBattleEvents = shipBattleEventExtendRepository.getByStatusEqualDAndEventTypeIn(eventTypes);
         List<String> processedBattleIds = new ArrayList<>();
         shipBattleEvents.forEach(event -> {
-            if (processedBattleIds.contains(event.getId())) {
-                return;
-            }
-            ShipBattleState shipBattleState = shipBattleStateRepository.get(event.getId(), false);
-            if (shipBattleState != null) {
-                suiRosterService.updateRosterState(shipBattleState.getInitiator());
-                suiRosterService.updateRosterState(shipBattleState.getResponder());
+            if (!processedBattleIds.contains(event.getId())) {
+                ShipBattleState shipBattleState = shipBattleStateRepository.get(event.getId(), false);
+                if (shipBattleState != null) {
+                    suiRosterService.updateRosterState(shipBattleState.getInitiator());
+                    suiRosterService.updateRosterState(shipBattleState.getResponder());
+                }
             }
             updateStatusToProcessedSecondTime(event);
             processedBattleIds.add(event.getId());

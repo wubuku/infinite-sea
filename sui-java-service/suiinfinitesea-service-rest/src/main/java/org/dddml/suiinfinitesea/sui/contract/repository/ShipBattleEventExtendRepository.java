@@ -5,6 +5,7 @@ import org.dddml.suiinfinitesea.domain.shipbattle.ShipBattleEventId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,5 +23,6 @@ public interface ShipBattleEventExtendRepository extends JpaRepository<AbstractS
     @Query(value = "select * from ship_battle_event " +
             " where event_status='D' and event_type in (:eventTypes)",
             nativeQuery = true)
+    @Transactional
     List<AbstractShipBattleEvent> getByStatusEqualDAndEventTypeIn(@Param("eventTypes") List<String> eventTypes);
 }
