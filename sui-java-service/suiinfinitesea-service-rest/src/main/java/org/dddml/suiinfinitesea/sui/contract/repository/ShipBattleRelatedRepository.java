@@ -1,5 +1,6 @@
 package org.dddml.suiinfinitesea.sui.contract.repository;
 
+import org.dddml.suiinfinitesea.domain.shipbattle.AbstractShipBattleEvent;
 import org.dddml.suiinfinitesea.domain.shipbattle.AbstractShipBattleState;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -100,4 +101,6 @@ public interface ShipBattleRelatedRepository extends JpaRepository<AbstractShipB
     List<PlayerVsPlayer> batchGetPlayerVsPlayerEvents(@Param("startAt") Long startAt,
                                                       @Param("endAt") Long endAt,
                                                       @Param("suiSenderAddresses") List<String> suiSenderAddresses);
+
+
 }
