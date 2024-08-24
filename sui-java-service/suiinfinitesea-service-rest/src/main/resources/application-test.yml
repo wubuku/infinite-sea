@@ -17,16 +17,16 @@ server:
 sui:
   contract:
     package-id:
-      faucet: "0x8bcd56d3a279fe5d33f3fd3ded4d3dd8a7a1c610abd3b30640d69d09c6c22b6a"
+      faucet: "0xa8d77845bb23ef5eb0ab320106b1849d1f13844906d4405a7dfb3038da9efa1b"
     jsonrpc:
       #url: "https://devnet.baku.movementlabs.xyz"
       #url: "https://fullnode.devnet.sui.io/"
       url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "GQrhECt8CXF68XKPmrw8pj43c9YTQQeyktsqmtwArJLE"
-      default: "FCFoTqQuBxah4WfWZfcsWD6X5dHXUiKmV2Rkicv4ojen"
-      nft: "25d4PmcvHLp2YsGgWxM4cvShLrA6duJrrhiSxzBvCSwh"
-      map: "A2kSEQtae9pL1SZkmab1iGYsETZQfHEBexjNgEpsH9j9"
+      common: "8P9h1p8in3Myoxg37Q6ZbE27WRjKvzKrRbx34XXhUh64"
+      default: "vZTVEAppFCSsiXze2k9HaNVJnyXu9S1gUNpoYng7Gxg"
+      nft: "2TnypJioEuxHMhNMVXvPb2W6ovuEJcjJniNXMWDgkFr2"
+      map: "GgvuTjwY4dGubU3YmwBBiTEKKi1F1crnuxvvManqsK4"
 
 
     pull-avatar-change-events:
@@ -182,5 +182,5 @@ sui:
       fixed-delay: 10000 # 10 seconds
     update-whitelist-states:
       fixed-delay: 30000 # 30 seconds
-    update-all-roster-states:
+    update-all-ship-battle-roster-states:
       fixed-delay: 3600000 # 3600 seconds

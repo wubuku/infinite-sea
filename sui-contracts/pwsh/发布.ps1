@@ -53,493 +53,493 @@ $mintAmout = 600000 * 1000 * 1000 * 1000
 
 
 
-"------------------------------------- 发布 infinite-sea-nft -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
+# "------------------------------------- 发布 infinite-sea-nft -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-# 重新发布 infinite_sea_nft
-$nftPath = Join-Path $startLocation "..\infinite-sea-nft"
-#加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-ntf
-$nftPath = Get-Item -Path $nftPath
-#$coinPath 其实是个对象
-"切换目录到 $nftPath" | Tee-Object -FilePath $logFile -Append | Write-Host
-if (-not (Test-Path -Path $nftPath)) {
-    "目录 $nftPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    return
-}
-Set-Location $nftPath
+# # 重新发布 infinite_sea_nft
+# $nftPath = Join-Path $startLocation "..\infinite-sea-nft"
+# #加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-ntf
+# $nftPath = Get-Item -Path $nftPath
+# #$coinPath 其实是个对象
+# "切换目录到 $nftPath" | Tee-Object -FilePath $logFile -Append | Write-Host
+# if (-not (Test-Path -Path $nftPath)) {
+#     "目录 $nftPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#     return
+# }
+# Set-Location $nftPath
 
-"发布之前将 Move.toml 文件恢复到初始状态" | Tee-Object -FilePath $logFile -Append | Write-Host
-$file = "$nftPath\Move.toml"
-if (-not (Test-Path -Path $file -PathType Leaf)) {
-    "文件 $file 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    return
-}
-$fileContent = Get-Content -Path $file 
-for ($i = 0; $i -lt $fileContent.Count; $i++) {
-    #Write-Host $fileContent[$i]
-    if ($fileContent[$i].Contains('published-at')) {
-        if ($fileContent[$i] -like "#*") {            
-        }
-        else {
-            $fileContent[$i] = "#" + $fileContent[$i]
-        }
-    }
-    if ($fileContent[$i].Contains('infinite_sea_nft =')) {
-        $fileContent[$i] = 'infinite_sea_nft = "0x0"'
-    }
-}
-$fileContent | Set-Content $file
-"Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
+# "发布之前将 Move.toml 文件恢复到初始状态" | Tee-Object -FilePath $logFile -Append | Write-Host
+# $file = "$nftPath\Move.toml"
+# if (-not (Test-Path -Path $file -PathType Leaf)) {
+#     "文件 $file 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#     return
+# }
+# $fileContent = Get-Content -Path $file 
+# for ($i = 0; $i -lt $fileContent.Count; $i++) {
+#     #Write-Host $fileContent[$i]
+#     if ($fileContent[$i].Contains('published-at')) {
+#         if ($fileContent[$i] -like "#*") {            
+#         }
+#         else {
+#             $fileContent[$i] = "#" + $fileContent[$i]
+#         }
+#     }
+#     if ($fileContent[$i].Contains('infinite_sea_nft =')) {
+#         $fileContent[$i] = 'infinite_sea_nft = "0x0"'
+#     }
+# }
+# $fileContent | Set-Content $file
+# "Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-$lockFile = "$nftPath\Move.lock"
-if (Test-Path -Path $lockFile) {
-    "删除 $lockFile," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
-    try {
-        Remove-Item -Path $lockFile -Force
-        "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-    }
-    catch {
-        "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
-        Set-Location $startLocation
-        return
-    }
-}
+# $lockFile = "$nftPath\Move.lock"
+# if (Test-Path -Path $lockFile) {
+#     "删除 $lockFile," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
+#     try {
+#         Remove-Item -Path $lockFile -Force
+#         "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#     }
+#     catch {
+#         "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
+#         Set-Location $startLocation
+#         return
+#     }
+# }
 
-"开始发布合约 infinite_sea_nft..." | Tee-Object -FilePath $logFile -Append | Write-Host
+# "开始发布合约 infinite_sea_nft..." | Tee-Object -FilePath $logFile -Append | Write-Host
 
-$upgradeCap = ""
-$publishNftJson = ""
-$nftPackingId = ""
-$nftPublisherId = ""
-$avatarChangeTableId = ""
-$avatarDisplayId = ""
+# $upgradeCap = ""
+# $publishNftJson = ""
+# $nftPackingId = ""
+# $nftPublisherId = ""
+# $avatarChangeTableId = ""
+# $avatarDisplayId = ""
 
-try {
-    $publishNftJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --gas-budget 491000000  --json
-    if (-not ('System.Object[]' -eq $publishNftJson.GetType())) {
-        "发布 infinite_sea_nft 合约失败: $publishNftJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    $publishNftJsonObj = $publishNftJson | ConvertFrom-Json
-    try {
-        foreach ($object in $publishNftJsonObj.objectChanges) {
-            if ($null -ne $object.packageId -and $object.packageId -ne "") {
-                $nftPackingId = $object.packageId;
-                $dataNft | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $nftPackingId
-                "NFT PackageID: $nftPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
-                $upgradeCap = $object.objectId
-                $dataNft | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
-                "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-            }
-            elseif ($object.objectType -eq '0x2::package::Publisher') {
-                $nftPublisherId = $object.objectId;
-                $dataNft | Add-Member -MemberType NoteProperty -Name "Publisher" -Value $nftPublisherId
-                "Publisher ID: $nftPublisherId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            elseif ($object.objectType -like '*avatar_change::AvatarChangeTable') {
-                $avatarChangeTableId = $object.objectId;
-                $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarChangeTable" -Value $avatarChangeTableId
-                "AvatarChangeTable ID: $avatarChangeTableId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            elseif ($object.ObjectType -like '*Display*avatar::Avatar*') {                
-                $avatarDisplayId = $object.objectId;
-                $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarDisplay" -Value $avatarDisplayId
-                "Display<Avatar> ID: $avatarDisplayId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            elseif ($object.objectType -like '*whitelist::Whitelist') {
-                $whitelistId = $object.objectId;
-                $dataNft | Add-Member -MemberType NoteProperty -Name "Whitelist" -Value $whitelistId
-                "Whitelist ID: $whitelistId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-        }
-        $nftDigest = $publishNftJsonObj.digest
-        $dataNft | Add-Member -MemberType NoteProperty -Name "Digest" -Value $nftDigest
-        "NFT digest: $nftDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-    }
-    catch {
-        "解析 NFT 返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    if ($nftPackingId -eq "") {
-        "Cant find NFT package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-}
-catch {
-    "发布 infinite_sea_nft 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    "返回的结果为:$publishNftJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLocation
-    return
-}
-"更新 Move.toml 文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
-$fileContent = Get-Content -Path $file 
-for ($i = 0; $i -lt $fileContent.Count; $i++) {
-    #Write-Host $fileContent[$i]
-    if ($fileContent[$i].Contains('published-at')) {
-        $fileContent[$i] = 'published-at = "' + $nftPackingId + '"'
-    }
-    if ($fileContent[$i].Contains('infinite_sea_nft =')) {
-        $fileContent[$i] = 'infinite_sea_nft = "' + $nftPackingId + '"'
-    }
-}
-$fileContent | Set-Content $file
-"NFT Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
+# try {
+#     $publishNftJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --gas-budget 491000000  --json
+#     if (-not ('System.Object[]' -eq $publishNftJson.GetType())) {
+#         "发布 infinite_sea_nft 合约失败: $publishNftJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     $publishNftJsonObj = $publishNftJson | ConvertFrom-Json
+#     try {
+#         foreach ($object in $publishNftJsonObj.objectChanges) {
+#             if ($null -ne $object.packageId -and $object.packageId -ne "") {
+#                 $nftPackingId = $object.packageId;
+#                 $dataNft | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $nftPackingId
+#                 "NFT PackageID: $nftPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#             }
+#             elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
+#                 $upgradeCap = $object.objectId
+#                 $dataNft | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
+#                 "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+#             }
+#             elseif ($object.objectType -eq '0x2::package::Publisher') {
+#                 $nftPublisherId = $object.objectId;
+#                 $dataNft | Add-Member -MemberType NoteProperty -Name "Publisher" -Value $nftPublisherId
+#                 "Publisher ID: $nftPublisherId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#             }
+#             elseif ($object.objectType -like '*avatar_change::AvatarChangeTable') {
+#                 $avatarChangeTableId = $object.objectId;
+#                 $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarChangeTable" -Value $avatarChangeTableId
+#                 "AvatarChangeTable ID: $avatarChangeTableId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#             }
+#             elseif ($object.ObjectType -like '*Display*avatar::Avatar*') {                
+#                 $avatarDisplayId = $object.objectId;
+#                 $dataNft | Add-Member -MemberType NoteProperty -Name "AvatarDisplay" -Value $avatarDisplayId
+#                 "Display<Avatar> ID: $avatarDisplayId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#             }
+#             elseif ($object.objectType -like '*whitelist::Whitelist') {
+#                 $whitelistId = $object.objectId;
+#                 $dataNft | Add-Member -MemberType NoteProperty -Name "Whitelist" -Value $whitelistId
+#                 "Whitelist ID: $whitelistId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#             }
+#         }
+#         $nftDigest = $publishNftJsonObj.digest
+#         $dataNft | Add-Member -MemberType NoteProperty -Name "Digest" -Value $nftDigest
+#         "NFT digest: $nftDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+#     }
+#     catch {
+#         "解析 NFT 返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     if ($nftPackingId -eq "") {
+#         "Cant find NFT package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+# }
+# catch {
+#     "发布 infinite_sea_nft 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#     "返回的结果为:$publishNftJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+#     Set-Location $startLocation
+#     return
+# }
+# "更新 Move.toml 文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
+# $fileContent = Get-Content -Path $file 
+# for ($i = 0; $i -lt $fileContent.Count; $i++) {
+#     #Write-Host $fileContent[$i]
+#     if ($fileContent[$i].Contains('published-at')) {
+#         $fileContent[$i] = 'published-at = "' + $nftPackingId + '"'
+#     }
+#     if ($fileContent[$i].Contains('infinite_sea_nft =')) {
+#         $fileContent[$i] = 'infinite_sea_nft = "' + $nftPackingId + '"'
+#     }
+# }
+# $fileContent | Set-Content $file
+# "NFT Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-"`n休息一下,以免不能及时同步..." | Write-Host
-Start-Sleep -Seconds 3
-"休息完成，继续干活..." | Write-Host
+# "`n休息一下,以免不能及时同步..." | Write-Host
+# Start-Sleep -Seconds 3
+# "休息完成，继续干活..." | Write-Host
 
-Set-Location $startLocation
-
-
-"------------------------------------- 发布 infinite-sea-coin -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
-
-# 重新发布infinite-sea-coin
-$coinPath = Join-Path $startLocation "..\infinite-sea-coin"
-#加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-coin
-$coinPath = Get-Item -Path $coinPath
-#$coinPath 其实是个对象
-"切换目录到 $coinPath" | Tee-Object -FilePath $logFile -Append | Write-Host
-if (-not (Test-Path -Path $coinPath)) {
-    "目录 $coinPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    return
-}
-Set-Location $coinPath
-
-"发布之前将Move.toml文件恢复到初始状态" | Tee-Object -FilePath $logFile -Append | Write-Host
-$file = "$coinPath\Move.toml"
-if (-not (Test-Path -Path $file -PathType Leaf)) {
-    "文件 $file 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    return
-}
-$fileContent = Get-Content -Path $file 
-for ($i = 0; $i -lt $fileContent.Count; $i++) {
-    #Write-Host $fileContent[$i]
-    if ($fileContent[$i].Contains('published-at')) {
-        if ($fileContent[$i] -like "#*") {            
-        }
-        else {
-            $fileContent[$i] = "#" + $fileContent[$i]
-        }
-    }
-    if ($fileContent[$i].Contains('infinite_sea_coin =')) {
-        $fileContent[$i] = 'infinite_sea_coin = "0x0"'
-    }
-}
-$fileContent | Set-Content $file
-"Move.toml文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
-
-$lockFile = "$coinPath\Move.lock"
-if (Test-Path -Path $file -PathType Leaf) {
-    "删除 $lockFile," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
-    try {
-        Remove-Item -Path $lockFile
-        "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-    }
-    catch {
-        "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
-        Set-Location $startLocation
-        return
-    }
-}
-
-"开始发布合约 infinite_sea_coin..." | Tee-Object -FilePath $logFile -Append | Write-Host
-
-$publishCoinJson = ""
-$publishCoinJsonObj = $null
-try {
-    $publishCoinJson = sui client publish --gas-budget 100000000 --skip-fetch-latest-git-deps --skip-dependency-verification --json
-    #发布成功之后返回的类型是 System.Object[]
-    #Write-Host $publishCoinJson.GetType()
-    #if ('System.String' -eq $publishCommonJson.GetType()-and $publishCommonJson | Test-Json) {}
-    if (-not ('System.Object[]' -eq $publishCoinJson.GetType())) {
-        "发布 infinite_sea_coin 合约失败: $publishCoinJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    $publishCoinJsonObj = $publishCoinJson | ConvertFrom-Json
-    #$temp_json = $publishCoinJsonObj | ConvertTo-Json
-    #Write-Host $temp_json;
-}
-catch {
-    "发布 infinite_sea_coin 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    "返回的结果为:$publishCoinJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLocation
-    return
-}
-
-"休息一下，以免不能及时同步..." | Write-Host
-Start-Sleep -Seconds 5
-"休息完成，继续干活..." | Write-Host
-
-$coinPackingId = ""
-$treasuryCap = ""
-try {
-    foreach ($object in $publishCoinJsonObj.objectChanges) {
-        if ($null -ne $object.packageId -and $object.packageId -ne "") {
-            $coinPackingId = $object.packageId;
-            $dataCoin | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $coinPackingId
-            "Coin PackageID: $coinPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-        }
-        elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
-            $upgradeCap = $object.objectId
-            $dataCoin | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
-            "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-        }
-        elseif ($null -ne $object.ObjectType -and $object.ObjectType -like "*TreasuryCap*") {
-            $treasuryCap = $object.ObjectID
-            $dataCoin | Add-Member -MemberType NoteProperty -Name "TreasuryCap" -Value $treasuryCap
-            "Coin TreasuryCap ObjectID: $treasuryCap" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-        }
-    }
-}
-catch {
-    "解析Coin返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    Set-Location $startLocation
-    return
-}
-if ($coinPackingId -eq "") {
-    "Cant find coin package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    Set-Location $startLocation
-    return
-}
-if ($treasuryCap -eq "") {
-    "没能获取TreasuryCap ObjectID" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    Set-Location $startLocation  
-    return;
-}
-
-$coinDigest = $publishCoinJsonObj.digest
-$dataCoin | Add-Member -MemberType NoteProperty -Name "Digest" -Value $coinDigest
-
-"Coin digest: $coinDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+# Set-Location $startLocation
 
 
-"更新Move.toml文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
-$fileContent = Get-Content -Path $file 
-for ($i = 0; $i -lt $fileContent.Count; $i++) {
-    #Write-Host $fileContent[$i]
-    if ($fileContent[$i].Contains('published-at')) {
-        $fileContent[$i] = 'published-at = "' + $coinPackingId + '"'
-    }
-    if ($fileContent[$i].Contains('infinite_sea_coin =')) {
-        $fileContent[$i] = 'infinite_sea_coin = "' + $coinPackingId + '"'
-    }
-}
-$fileContent | Set-Content $file
-"Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
+# "------------------------------------- 发布 infinite-sea-coin -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-"先给自己分配 Mint $mintAmount ENERGY..." | Tee-Object -FilePath $logFile -Append | Write-Host
-$mintJson = ""
-$energyId = ""
-try {
-    $mintJson = sui client call --package $coinPackingId --module energy --function mint --args $treasuryCap $mintAmout --json
-    if (-not ('System.Object[]' -eq $mintJson.GetType())) {
-        "分配 Mint 失败: $mintJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    $mintResultObject = $mintJson | ConvertFrom-Json;
-    #$mintResultObjectToJson = $mintResultObject | ConvertTo-Json;
-    #Write-Host $mintResultObjectToJson
-    foreach ($object in $mintResultObject.objectChanges) {
-        if ($object.ObjectType -like '0x2::coin::Coin*energy::ENERGY*') {
-            $energyId = $object.objectId
-            "得到了一个Coin<ENERGY> Id: $energyId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            $dataCoin | Add-Member -MemberType NoteProperty -Name "EnergyId" -Value $energyId
-            break
-        }
-    }
+# # 重新发布infinite-sea-coin
+# $coinPath = Join-Path $startLocation "..\infinite-sea-coin"
+# #加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-coin
+# $coinPath = Get-Item -Path $coinPath
+# #$coinPath 其实是个对象
+# "切换目录到 $coinPath" | Tee-Object -FilePath $logFile -Append | Write-Host
+# if (-not (Test-Path -Path $coinPath)) {
+#     "目录 $coinPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#     return
+# }
+# Set-Location $coinPath
 
-    $mintedAmount = ''
-    foreach ($object in $mintResultObject.balanceChanges) {
-        if ($object.CoinType -like '*ENERGY*') {
-            $mintedAmount = $object.Amount
-            break
-        }
-    }
-    if ($mintAmout -ne $mintedAmount) {
-        'Mint ENERGY Failed?' | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    "分配成功 Mint OK! `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-}
-catch {   
-    "分配 Mint 失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red 
-    Set-Location $startLocation
-    return
-}
+# "发布之前将Move.toml文件恢复到初始状态" | Tee-Object -FilePath $logFile -Append | Write-Host
+# $file = "$coinPath\Move.toml"
+# if (-not (Test-Path -Path $file -PathType Leaf)) {
+#     "文件 $file 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#     return
+# }
+# $fileContent = Get-Content -Path $file 
+# for ($i = 0; $i -lt $fileContent.Count; $i++) {
+#     #Write-Host $fileContent[$i]
+#     if ($fileContent[$i].Contains('published-at')) {
+#         if ($fileContent[$i] -like "#*") {            
+#         }
+#         else {
+#             $fileContent[$i] = "#" + $fileContent[$i]
+#         }
+#     }
+#     if ($fileContent[$i].Contains('infinite_sea_coin =')) {
+#         $fileContent[$i] = 'infinite_sea_coin = "0x0"'
+#     }
+# }
+# $fileContent | Set-Content $file
+# "Move.toml文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-if ($energyId -eq "") {
-    "未能获取Coin<ENERGY> Id, 请停下来检查一下什么情况。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-}
+# $lockFile = "$coinPath\Move.lock"
+# if (Test-Path -Path $lockFile -PathType Leaf) {
+#     "删除 $lockFile," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
+#     try {
+#         Remove-Item -Path $lockFile
+#         "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#     }
+#     catch {
+#         "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
+#         Set-Location $startLocation
+#         return
+#     }
+# }
 
-"`n休息一下,以免不能及时同步..." | Write-Host
-Start-Sleep -Seconds 3
-"休息完成，继续干活..." | Write-Host
+# "开始发布合约 infinite_sea_coin..." | Tee-Object -FilePath $logFile -Append | Write-Host
 
-Set-Location $startLocation
+# $publishCoinJson = ""
+# $publishCoinJsonObj = $null
+# try {
+#     $publishCoinJson = sui client publish --gas-budget 100000000 --skip-fetch-latest-git-deps --skip-dependency-verification --json
+#     #发布成功之后返回的类型是 System.Object[]
+#     #Write-Host $publishCoinJson.GetType()
+#     #if ('System.String' -eq $publishCommonJson.GetType()-and $publishCommonJson | Test-Json) {}
+#     if (-not ('System.Object[]' -eq $publishCoinJson.GetType())) {
+#         "发布 infinite_sea_coin 合约失败: $publishCoinJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     $publishCoinJsonObj = $publishCoinJson | ConvertFrom-Json
+#     #$temp_json = $publishCoinJsonObj | ConvertTo-Json
+#     #Write-Host $temp_json;
+# }
+# catch {
+#     "发布 infinite_sea_coin 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#     "返回的结果为:$publishCoinJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+#     Set-Location $startLocation
+#     return
+# }
 
-"------------------------------------- 发布 infinite-sea-faucet -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
+# "休息一下，以免不能及时同步..." | Write-Host
+# Start-Sleep -Seconds 5
+# "休息完成，继续干活..." | Write-Host
 
-# 重新发布 infinite-sea-faucet
-$faucetPath = Join-Path $startLocation "..\infinite-sea-faucet"
-#加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-faucet
-$faucetPath = Get-Item -Path $faucetPath
-#$coinPath 其实是个对象
-"切换目录到 $faucetPath" | Tee-Object -FilePath $logFile -Append | Write-Host
-if (-not (Test-Path -Path $faucetPath)) {
-    "目录 $faucetPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    return
-}
-Set-Location $faucetPath
+# $coinPackingId = ""
+# $treasuryCap = ""
+# try {
+#     foreach ($object in $publishCoinJsonObj.objectChanges) {
+#         if ($null -ne $object.packageId -and $object.packageId -ne "") {
+#             $coinPackingId = $object.packageId;
+#             $dataCoin | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $coinPackingId
+#             "Coin PackageID: $coinPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#         }
+#         elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
+#             $upgradeCap = $object.objectId
+#             $dataCoin | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
+#             "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+#         }
+#         elseif ($null -ne $object.ObjectType -and $object.ObjectType -like "*TreasuryCap*") {
+#             $treasuryCap = $object.ObjectID
+#             $dataCoin | Add-Member -MemberType NoteProperty -Name "TreasuryCap" -Value $treasuryCap
+#             "Coin TreasuryCap ObjectID: $treasuryCap" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#         }
+#     }
+# }
+# catch {
+#     "解析Coin返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#     Set-Location $startLocation
+#     return
+# }
+# if ($coinPackingId -eq "") {
+#     "Cant find coin package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#     Set-Location $startLocation
+#     return
+# }
+# if ($treasuryCap -eq "") {
+#     "没能获取TreasuryCap ObjectID" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#     Set-Location $startLocation  
+#     return;
+# }
 
-"发布之前将 Move.toml 文件恢复到初始状态" | Tee-Object -FilePath $logFile -Append | Write-Host
-$file = "$faucetPath\Move.toml"
-if (-not (Test-Path -Path $file -PathType Leaf)) {
-    "文件 $file 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    return
-}
-$fileContent = Get-Content -Path $file 
-for ($i = 0; $i -lt $fileContent.Count; $i++) {
-    #Write-Host $fileContent[$i]
-    if ($fileContent[$i].Contains('published-at')) {
-        if ($fileContent[$i] -like "#*") {            
-        }
-        else {
-            $fileContent[$i] = "#" + $fileContent[$i]
-        }
-    }
-    if ($fileContent[$i].Contains('infinite_sea_faucet =')) {
-        $fileContent[$i] = 'infinite_sea_faucet = "0x0"'
-    }
-}
-$fileContent | Set-Content $file
-"Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
+# $coinDigest = $publishCoinJsonObj.digest
+# $dataCoin | Add-Member -MemberType NoteProperty -Name "Digest" -Value $coinDigest
 
-$lockFile = "$faucetPath\Move.lock"
-if (Test-Path -Path $file -PathType Leaf) {
-    "删除 $lockFile ," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
-    try {
-        Remove-Item -Path $lockFile
-        "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-    }
-    catch {
-        "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
-        Set-Location $startLocation
-        return
-    }
-}
+# "Coin digest: $coinDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
 
-"开始发布合约 infinite-sea-faucet..." | Tee-Object -FilePath $logFile -Append | Write-Host
 
-$publishFaucetJson = ""
-$faucetPackingId = ""
-$energyFaucetId = ""
+# "更新Move.toml文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
+# $fileContent = Get-Content -Path $file 
+# for ($i = 0; $i -lt $fileContent.Count; $i++) {
+#     #Write-Host $fileContent[$i]
+#     if ($fileContent[$i].Contains('published-at')) {
+#         $fileContent[$i] = 'published-at = "' + $coinPackingId + '"'
+#     }
+#     if ($fileContent[$i].Contains('infinite_sea_coin =')) {
+#         $fileContent[$i] = 'infinite_sea_coin = "' + $coinPackingId + '"'
+#     }
+# }
+# $fileContent | Set-Content $file
+# "Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
 
-try {
-    $publishFaucetJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --json
-    if (-not ('System.Object[]' -eq $publishFaucetJson.GetType())) {
-        "发布 infinite_sea_coin 合约失败: $publishFaucetJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    $publishFaucetJsonObj = $publishFaucetJson | ConvertFrom-Json
-    try {
-        foreach ($object in $publishFaucetJsonObj.objectChanges) {
-            if ($null -ne $object.packageId -and $object.packageId -ne "") {
-                $faucetPackingId = $object.packageId;
-                $dataFaucet | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $faucetPackingId
-                "Faucet PackageID: $faucetPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
-                $upgradeCap = $object.objectId
-                $dataFaucet | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
-                "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-            }
-            elseif ($object.objectType -like "*energy_faucet::EnergyFaucet") {
-                $energyFaucetId = $object.objectId;
-                $dataFaucet | Add-Member -MemberType NoteProperty -Name "EnergyFaucet" -Value $energyFaucetId
-                "EnergyFaucet ID: $energyFaucetId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-        }
-        $faucetDigest = $publishFaucetJsonObj.digest
-        $dataFaucet | Add-Member -MemberType NoteProperty -Name "Digest" -Value $faucetDigest
-        "Faucet digest: $faucetDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
-    }
-    catch {
-        "解析 Faucet 返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    if ($faucetPackingId -eq "") {
-        "Cant find Faucet package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-}
-catch {
-    "发布 infinite-sea-faucet 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    "返回的结果为:$publishFaucetJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLocation
-    return
-}
+# "先给自己分配 Mint $mintAmount ENERGY..." | Tee-Object -FilePath $logFile -Append | Write-Host
+# $mintJson = ""
+# $energyId = ""
+# try {
+#     $mintJson = sui client call --package $coinPackingId --module energy --function mint --args $treasuryCap $mintAmout --json
+#     if (-not ('System.Object[]' -eq $mintJson.GetType())) {
+#         "分配 Mint 失败: $mintJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     $mintResultObject = $mintJson | ConvertFrom-Json;
+#     #$mintResultObjectToJson = $mintResultObject | ConvertTo-Json;
+#     #Write-Host $mintResultObjectToJson
+#     foreach ($object in $mintResultObject.objectChanges) {
+#         if ($object.ObjectType -like '0x2::coin::Coin*energy::ENERGY*') {
+#             $energyId = $object.objectId
+#             "得到了一个Coin<ENERGY> Id: $energyId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#             $dataCoin | Add-Member -MemberType NoteProperty -Name "EnergyId" -Value $energyId
+#             break
+#         }
+#     }
 
-"更新 Move.toml 文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
-$fileContent = Get-Content -Path $file 
-for ($i = 0; $i -lt $fileContent.Count; $i++) {
-    #Write-Host $fileContent[$i]
-    if ($fileContent[$i].Contains('published-at')) {
-        $fileContent[$i] = 'published-at = "' + $faucetPackingId + '"'
-    }
-    if ($fileContent[$i].Contains('infinite_sea_faucet =')) {
-        $fileContent[$i] = 'infinite_sea_faucet = "' + $faucetPackingId + '"'
-    }
-}
-$fileContent | Set-Content $file
-"Faucet Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
+#     $mintedAmount = ''
+#     foreach ($object in $mintResultObject.balanceChanges) {
+#         if ($object.CoinType -like '*ENERGY*') {
+#             $mintedAmount = $object.Amount
+#             break
+#         }
+#     }
+#     if ($mintAmout -ne $mintedAmount) {
+#         'Mint ENERGY Failed?' | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     "分配成功 Mint OK! `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+# }
+# catch {   
+#     "分配 Mint 失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red 
+#     Set-Location $startLocation
+#     return
+# }
 
-"`n休息一下,以免不能及时同步..." | Write-Host
-Start-Sleep -Seconds 3
-"休息完成，继续干活..." | Write-Host
+# if ($energyId -eq "") {
+#     "未能获取Coin<ENERGY> Id, 请停下来检查一下什么情况。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+# }
 
-$replenishAmount = $mintAmout / 2;
-$replenishedAmount = 0;
-"用自己的 Coin<ENERGY> 给水龙头补水..." | Tee-Object -FilePath $logFile -Append | Write-Host
-$replenishJson = ""
-try {
-    $replenishJson = sui client call --package $faucetPackingId --module energy_faucet --function replenish_faucet --args $energyFaucetId $energyId $replenishAmount --json
-    if (-not ('System.Object[]' -eq $replenishJson.GetType())) {
-        "给水龙头补充 Coin<ENERGY> 失败: $replenishJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        Set-Location $startLocation
-        return
-    }
-    $replenishObj = $replenishJson | ConvertFrom-Json
-    foreach ($object in $replenishObj.balanceChanges) {
-        if ($object.coinType -like '*energy::ENERGY') {
-            $replenishedAmount = - $object.amount; #这是个负值
-            if ($replenishedAmount -eq $replenishAmount) {                
-                "给水龙头补充 Coin<ENERGY> 成功，数量: $replenishedAmount `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            break
-        }
-    }
-}
-catch {
-    "给水龙头补充 Coin<ENERGY> 失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
-    "返回的结果为:$replenishJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    Set-Location $startLocation
-    return    
-}
-if ($replenishedAmount -le 0) {    
-    "给水龙头补充 Coin<ENERGY> 的数量为 $replenishedAmount ,请检查: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
-}
-Set-Location $startLocation
+# "`n休息一下,以免不能及时同步..." | Write-Host
+# Start-Sleep -Seconds 3
+# "休息完成，继续干活..." | Write-Host
+
+# Set-Location $startLocation
+
+# "------------------------------------- 发布 infinite-sea-faucet -------------------------------------" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+# # 重新发布 infinite-sea-faucet
+# $faucetPath = Join-Path $startLocation "..\infinite-sea-faucet"
+# #加下面这一句主要是为了后面不出现这样的目录：D:\git\infinite-sea\sui-contracts\pwsh\..\infinite-sea-faucet
+# $faucetPath = Get-Item -Path $faucetPath
+# #$coinPath 其实是个对象
+# "切换目录到 $faucetPath" | Tee-Object -FilePath $logFile -Append | Write-Host
+# if (-not (Test-Path -Path $faucetPath)) {
+#     "目录 $faucetPath 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#     return
+# }
+# Set-Location $faucetPath
+
+# "发布之前将 Move.toml 文件恢复到初始状态" | Tee-Object -FilePath $logFile -Append | Write-Host
+# $file = "$faucetPath\Move.toml"
+# if (-not (Test-Path -Path $file -PathType Leaf)) {
+#     "文件 $file 不存在 " | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#     return
+# }
+# $fileContent = Get-Content -Path $file 
+# for ($i = 0; $i -lt $fileContent.Count; $i++) {
+#     #Write-Host $fileContent[$i]
+#     if ($fileContent[$i].Contains('published-at')) {
+#         if ($fileContent[$i] -like "#*") {            
+#         }
+#         else {
+#             $fileContent[$i] = "#" + $fileContent[$i]
+#         }
+#     }
+#     if ($fileContent[$i].Contains('infinite_sea_faucet =')) {
+#         $fileContent[$i] = 'infinite_sea_faucet = "0x0"'
+#     }
+# }
+# $fileContent | Set-Content $file
+# "Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+# $lockFile = "$faucetPath\Move.lock"
+# if (Test-Path -Path $lockFile -PathType Leaf) {
+#     "删除 $lockFile ," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
+#     try {
+#         Remove-Item -Path $lockFile
+#         "成功。" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#     }
+#     catch {
+#         "发生异常: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red 
+#         Set-Location $startLocation
+#         return
+#     }
+# }
+
+# "开始发布合约 infinite-sea-faucet..." | Tee-Object -FilePath $logFile -Append | Write-Host
+
+# $publishFaucetJson = ""
+# $faucetPackingId = ""
+# $energyFaucetId = ""
+
+# try {
+#     $publishFaucetJson = sui client publish --skip-fetch-latest-git-deps --skip-dependency-verification --json
+#     if (-not ('System.Object[]' -eq $publishFaucetJson.GetType())) {
+#         "发布 infinite_sea_coin 合约失败: $publishFaucetJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     $publishFaucetJsonObj = $publishFaucetJson | ConvertFrom-Json
+#     try {
+#         foreach ($object in $publishFaucetJsonObj.objectChanges) {
+#             if ($null -ne $object.packageId -and $object.packageId -ne "") {
+#                 $faucetPackingId = $object.packageId;
+#                 $dataFaucet | Add-Member -MemberType NoteProperty -Name "PackageId" -Value $faucetPackingId
+#                 "Faucet PackageID: $faucetPackingId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#             }
+#             elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
+#                 $upgradeCap = $object.objectId
+#                 $dataFaucet | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
+#                 "UpgradeCap Id:  $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+#             }
+#             elseif ($object.objectType -like "*energy_faucet::EnergyFaucet") {
+#                 $energyFaucetId = $object.objectId;
+#                 $dataFaucet | Add-Member -MemberType NoteProperty -Name "EnergyFaucet" -Value $energyFaucetId
+#                 "EnergyFaucet ID: $energyFaucetId" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#             }
+#         }
+#         $faucetDigest = $publishFaucetJsonObj.digest
+#         $dataFaucet | Add-Member -MemberType NoteProperty -Name "Digest" -Value $faucetDigest
+#         "Faucet digest: $faucetDigest" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+#     }
+#     catch {
+#         "解析 Faucet 返回信息失败: $($_.Exception.Message)"   | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     if ($faucetPackingId -eq "") {
+#         "Cant find Faucet package id" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+# }
+# catch {
+#     "发布 infinite-sea-faucet 合约失败: $($_.Exception.Message)" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+#     "返回的结果为:$publishFaucetJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+#     Set-Location $startLocation
+#     return
+# }
+
+# "更新 Move.toml 文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
+# $fileContent = Get-Content -Path $file 
+# for ($i = 0; $i -lt $fileContent.Count; $i++) {
+#     #Write-Host $fileContent[$i]
+#     if ($fileContent[$i].Contains('published-at')) {
+#         $fileContent[$i] = 'published-at = "' + $faucetPackingId + '"'
+#     }
+#     if ($fileContent[$i].Contains('infinite_sea_faucet =')) {
+#         $fileContent[$i] = 'infinite_sea_faucet = "' + $faucetPackingId + '"'
+#     }
+# }
+# $fileContent | Set-Content $file
+# "Faucet Move.toml文件更新完成`n" | Tee-Object -FilePath $logFile -Append | Write-Host
+
+# "`n休息一下,以免不能及时同步..." | Write-Host
+# Start-Sleep -Seconds 3
+# "休息完成，继续干活..." | Write-Host
+
+# $replenishAmount = $mintAmout / 2;
+# $replenishedAmount = 0;
+# "用自己的 Coin<ENERGY> 给水龙头补水..." | Tee-Object -FilePath $logFile -Append | Write-Host
+# $replenishJson = ""
+# try {
+#     $replenishJson = sui client call --package $faucetPackingId --module energy_faucet --function replenish_faucet --args $energyFaucetId $energyId $replenishAmount --json
+#     if (-not ('System.Object[]' -eq $replenishJson.GetType())) {
+#         "给水龙头补充 Coin<ENERGY> 失败: $replenishJson `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+#         Set-Location $startLocation
+#         return
+#     }
+#     $replenishObj = $replenishJson | ConvertFrom-Json
+#     foreach ($object in $replenishObj.balanceChanges) {
+#         if ($object.coinType -like '*energy::ENERGY') {
+#             $replenishedAmount = - $object.amount; #这是个负值
+#             if ($replenishedAmount -eq $replenishAmount) {                
+#                 "给水龙头补充 Coin<ENERGY> 成功，数量: $replenishedAmount `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+#             }
+#             break
+#         }
+#     }
+# }
+# catch {
+#     "给水龙头补充 Coin<ENERGY> 失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+#     "返回的结果为:$replenishJson" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+#     Set-Location $startLocation
+#     return    
+# }
+# if ($replenishedAmount -le 0) {    
+#     "给水龙头补充 Coin<ENERGY> 的数量为 $replenishedAmount ,请检查: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+# }
+# Set-Location $startLocation
 
 
 
@@ -582,7 +582,7 @@ $fileContent | Set-Content $file
 
 
 $lockFile = "$commonPath\Move.lock"
-if (Test-Path -Path $file -PathType Leaf) {
+if (Test-Path -Path $lockFile -PathType Leaf) {
     "删除 $lockFile ," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
     try {
         Remove-Item -Path $lockFile
@@ -823,7 +823,7 @@ $fileContent | Set-Content $file
 "Move.toml 文件恢复完成。" | Tee-Object -FilePath $logFile -Append | Write-Host
 
 $lockFile = "$mapPath\Move.lock"
-if (Test-Path -Path $file -PathType Leaf) {
+if (Test-Path -Path $lockFile -PathType Leaf) {
     "删除 $lockFile ," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
     try {
         Remove-Item -Path $lockFile
@@ -869,7 +869,7 @@ try {
             elseif ('0x2::package::UpgradeCap' -eq $object.objectType) {
                 $upgradeCap = $object.objectId
                 $dataMap | Add-Member -MemberType NoteProperty -Name "UpgradeCap" -Value $upgradeCap 
-                "UpgradeCap Id:" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+                "UpgradeCap Id: $upgradeCap" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
             }
             elseif ($object.objectType -like '*map_friend_config::MapFriendConfig') {
                 $mapFriendConfigId = $object.objectId;
@@ -986,7 +986,7 @@ $fileContent | Set-Content $file
 "Move.toml文件恢复完成。`n" | Tee-Object -FilePath $logFile -Append | Write-Host
 
 $lockFile = "$mainPath\Move.lock"
-if (Test-Path -Path $file -PathType Leaf) {
+if (Test-Path -Path $lockFile -PathType Leaf) {
     "删除 $lockFile ," | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue -NoNewline
     try {
         Remove-Item -Path $lockFile
@@ -1387,150 +1387,157 @@ if ($testSkillProcessMining) {
         Set-Location $startLocation 
         return    
     }
-    
-    "挖矿开始前，先看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-    $payerMiningResouceQuantityBeforeStart = 0
-    $playerCopperOreQuantityBeforeStart = 0
-    try {
-        $result = sui client object $playId --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "获取Player信息失败: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+    if ($false -eq $energyId -or $energyId -eq "") {
+        "没有设置 energyId 就先不挖矿了." |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+    }
+    else {
+        "挖矿开始前，先看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+        $payerMiningResouceQuantityBeforeStart = 0
+        $playerCopperOreQuantityBeforeStart = 0
+        try {
+            $result = sui client object $playId --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "获取Player信息失败: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json   
+            #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+            foreach ($object in $resultObj.content.fields.inventory) {
+                if ($($object.fields.item_id -eq $itemData.ResourceTypeMining.ItemId)) {
+                    $payerMiningResouceQuantityBeforeStart = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeMining.ChineseName)[$($itemData.ResourceTypeMining.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+                }
+                elseif ($($object.fields.item_id -eq $itemData.ItemCopperOre.ItemId)) {
+                    $playerCopperOreQuantityBeforeStart = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemCopperOre.ChineseName)[$($itemData.ItemCopperOre.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+                }
+                else {
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+                }
+            } 
         }
-        $resultObj = $result | ConvertFrom-Json   
-        #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-        foreach ($object in $resultObj.content.fields.inventory) {
-            if ($($object.fields.item_id -eq $itemData.ResourceTypeMining.ItemId)) {
-                $payerMiningResouceQuantityBeforeStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeMining.ChineseName)[$($itemData.ResourceTypeMining.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
-            }
-            elseif ($($object.fields.item_id -eq $itemData.ItemCopperOre.ItemId)) {
-                $playerCopperOreQuantityBeforeStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemCopperOre.ChineseName)[$($itemData.ItemCopperOre.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            else {
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-            }
-        } 
-    }
-    catch {
-        "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
-
-    $batchSize = 1
-    "`n开始挖矿..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    try {
-        $result = sui client call --package $mainPackageId --module skill_process_service --function start_creation --args $SkillProcessMiningId $batchSize $playId $itemCreationMiningId $clock $energyId --gas-budget 11000000 --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "开始挖矿时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+        catch {
+            "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
         }
-        $resultObj = $result | ConvertFrom-Json    
-        "挖矿已经开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    }
-    catch {
-        "开始挖矿失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
 
 
-    "挖矿开始后，再看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-    $payerMiningResouceQuantityAfterStart = 0
-    $playerCopperOreQuantityAfterStart = 0
-    try {
-        $result = sui client object $playId --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+        $batchSize = 1
+        "`n开始挖矿..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        try {
+            $command = "sui client call --package $mainPackageId --module skill_process_service --function start_creation --args $SkillProcessMiningId $batchSize $playId $itemCreationMiningId $clock $energyId --gas-budget 11000000 --json"
+            $command | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+            $result = Invoke-Expression -Command $command 
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "开始挖矿时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json    
+            "挖矿已经开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
         }
-        $resultObj = $result | ConvertFrom-Json   
-        #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-        foreach ($object in $resultObj.content.fields.inventory) {
-            if ($($object.fields.item_id -eq $itemData.ResourceTypeMining.ItemId)) {
-                $payerMiningResouceQuantityAfterStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeMining.ChineseName)[$($itemData.ResourceTypeMining.Name)]，" +
-                "可以看到数量减少了: " + ($payerMiningResouceQuantityBeforeStart - $payerMiningResouceQuantityAfterStart ) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
-            }
-            elseif ($($object.fields.item_id -eq $itemData.ItemCopperOre.ItemId)) {
-                $playerCopperOreQuantityAfterStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemCopperOre.ChineseName)[$($itemData.ItemCopperOre.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            else {
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-            }
-        } 
-    }
-    catch {
-        "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
-
-    "`n挖矿中...需要等待 ($miningTime * $batchSize) 秒钟..." | Write-Host
-    Start-Sleep -Seconds ($miningTime * $batchSize)
-    "该收工了...· `n" | Write-Host
-
-
-    "`n来，现在结束挖矿..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    try {
-        $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_creation --args $SkillProcessMiningId $playId $itemCreationMiningId $experienceTableId $clock --gas-budget 42000000 --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "结束挖矿流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+        catch {
+            "开始挖矿失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
         }
-        $resultObj = $result | ConvertFrom-Json    
-        "挖矿流程已经结束。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    }
-    catch {
-        "结束挖矿流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
 
 
-    "挖矿结束后，再来看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-    $payerMiningResouceQuantityAfterFinish = 0
-    $playerCopperOreQuantityAfterFinish = 0
-    try {
-        $result = sui client object $playId --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
-        }
-        $resultObj = $result | ConvertFrom-Json   
-        foreach ($object in $resultObj.content.fields.inventory) {
-            if ($($object.fields.item_id -eq $itemData.ResourceTypeMining.ItemId)) {
-                $payerMiningResouceQuantityAfterFinish = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeMining.ChineseName)[$($itemData.ResourceTypeMining.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+        "挖矿开始后，再看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+        $payerMiningResouceQuantityAfterStart = 0
+        $playerCopperOreQuantityAfterStart = 0
+        try {
+            $result = sui client object $playId --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
             }
-            elseif ($($object.fields.item_id -eq $itemData.ItemCopperOre.ItemId)) {
-                $playerCopperOreQuantityAfterFinish = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemCopperOre.ChineseName)[$($itemData.ItemCopperOre.Name)]，" + 
-                "可以看到数量增加了: " + ($playerCopperOreQuantityAfterFinish - $playerCopperOreQuantityBeforeStart) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            $resultObj = $result | ConvertFrom-Json   
+            #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+            foreach ($object in $resultObj.content.fields.inventory) {
+                if ($($object.fields.item_id -eq $itemData.ResourceTypeMining.ItemId)) {
+                    $payerMiningResouceQuantityAfterStart = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeMining.ChineseName)[$($itemData.ResourceTypeMining.Name)]，" +
+                    "可以看到数量减少了: " + ($payerMiningResouceQuantityBeforeStart - $payerMiningResouceQuantityAfterStart ) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+                }
+                elseif ($($object.fields.item_id -eq $itemData.ItemCopperOre.ItemId)) {
+                    $playerCopperOreQuantityAfterStart = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemCopperOre.ChineseName)[$($itemData.ItemCopperOre.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+                }
+                else {
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+                }
+            } 
+        }
+        catch {
+            "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
+        }
+
+        "`n挖矿中...需要等待 ($miningTime * $batchSize) 秒钟..." | Write-Host
+        Start-Sleep -Seconds ($miningTime * $batchSize)
+        "该收工了...· `n" | Write-Host
+
+
+        "`n来，现在结束挖矿..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        try {
+            $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_creation --args $SkillProcessMiningId $playId $itemCreationMiningId $experienceTableId $clock --gas-budget 42000000 --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "结束挖矿流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json    
+            "挖矿流程已经结束。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        }
+        catch {
+            "结束挖矿流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
+        }
+
+
+        "挖矿结束后，再来看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+        $payerMiningResouceQuantityAfterFinish = 0
+        $playerCopperOreQuantityAfterFinish = 0
+        try {
+            $result = sui client object $playId --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json   
+            foreach ($object in $resultObj.content.fields.inventory) {
+                if ($($object.fields.item_id -eq $itemData.ResourceTypeMining.ItemId)) {
+                    $payerMiningResouceQuantityAfterFinish = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeMining.ChineseName)[$($itemData.ResourceTypeMining.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+                }
+                elseif ($($object.fields.item_id -eq $itemData.ItemCopperOre.ItemId)) {
+                    $playerCopperOreQuantityAfterFinish = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemCopperOre.ChineseName)[$($itemData.ItemCopperOre.Name)]，" + 
+                    "可以看到数量增加了: " + ($playerCopperOreQuantityAfterFinish - $playerCopperOreQuantityBeforeStart) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             
-            }
-            else {
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-            }
-        } 
-    }
-    catch {
-        "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
+                }
+                else {
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+                }
+            } 
+        }
+        catch {
+            "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
+        }
     }
 
 }
@@ -1601,47 +1608,52 @@ if ($testSkillProcessFarming) {
     #     return    
     # }
 
-    $batchSize = 1
+    if ($false -eq $energyId -or $energyId -eq "") {
+        "没有设置 energyId 就先不种棉花了." |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+    }
+    else {
+        $batchSize = 1
 
-    "`n开始种棉花流程..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    try {
-        $result = sui client call --package $mainPackageId --module skill_process_service --function start_production --args $SkillProcessFarming1Id $batchSize $playId $itemProductionCottonSeedsToCottonId $clock $energyId --gas-budget 11000000 --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "开始种棉花流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+        "`n开始种棉花流程..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        try {
+            $result = sui client call --package $mainPackageId --module skill_process_service --function start_production --args $SkillProcessFarming1Id $batchSize $playId $itemProductionCottonSeedsToCottonId $clock $energyId --gas-budget 11000000 --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "开始种棉花流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json    
+            "种棉花流程已经开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
         }
-        $resultObj = $result | ConvertFrom-Json    
-        "种棉花流程已经开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    }
-    catch {
-        "开始种棉花流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
-
-
-    "休息一下，因为结束种棉花流程需要等待$costTime 秒钟..." | Write-Host
-    Start-Sleep -Seconds ($costTime * $batchSize)
-    "休息完成，继续干活...· `n" | Write-Host
-
-    "`n结束种棉花流程..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    try {
-        $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_production --args $SkillProcessFarming1Id $playId $itemProductionCottonSeedsToCottonId $experienceTableId $clock --gas-budget 42000000 --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "结束种棉花流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+        catch {
+            "开始种棉花流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
         }
-        $resultObj = $result | ConvertFrom-Json    
-        "种棉花流程已经结束。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    }
-    catch {
-        "结束种棉花流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
+
+
+        "休息一下，因为结束种棉花流程需要等待$costTime 秒钟..." | Write-Host
+        Start-Sleep -Seconds ($costTime * $batchSize)
+        "休息完成，继续干活...· `n" | Write-Host
+
+        "`n结束种棉花流程..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        try {
+            $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_production --args $SkillProcessFarming1Id $playId $itemProductionCottonSeedsToCottonId $experienceTableId $clock --gas-budget 42000000 --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "结束种棉花流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json    
+            "种棉花流程已经结束。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        }
+        catch {
+            "结束种棉花流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
+        }
     }
 }
 
@@ -1679,182 +1691,187 @@ if ($testSkillProcessWooding) {
         return    
     }
 
-    "`nPlayer获得了小岛之后，他拥有了一些伐木资源，他打算伐木...." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
-    "那么首先创建一个伐木的Skill Process吧...." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
+    if ($false -eq $energyId -or $energyId -eq "") {
+        "没有设置 energyId 就先不种伐木了." |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
+    }
+    else {
+        "`nPlayer获得了小岛之后，他拥有了一些伐木资源，他打算伐木...." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
+        "那么首先创建一个伐木的Skill Process吧...." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
 
-    # $skillProcessWoodingId = $null
-    # try {
-    #     $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $woodcutting $playId '0' $playId $skillProcessTableId --gas-budget 11000000 --json
-    #     if (-not ('System.Object[]' -eq $result.GetType())) {
-    #         "创建伐木训练过程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    #         Set-Location $startLocation
-    #         return
-    #     }
-    #     $resultObj = $result | ConvertFrom-Json   
-    #     foreach ($object in $resultObj.objectChanges) {
-    #         if ($object.objectType -like "*::skill_process::SkillProcess") {
-    #             $skillProcessWoodingId = $object.objectId
-    #             $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessWooding" -Value $skillProcessWoodingId 
-    #             "伐木训练过程制作完成。 SkillProcessWoodingId Id: $skillProcessWoodingId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-    #             break;   
-    #         }
-    #     } 
-    # }
-    # catch {
-    #     "伐木训练过程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    #     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-    #     Set-Location $startLocation 
-    #     return    
-    # }
-    # if ($null -eq $skillProcessWoodingId) {
-    #     "SkillProcessWoodingId Id 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-    #     Set-Location $startLocation 
-    #     return    
-    # }
+        # $skillProcessWoodingId = $null
+        # try {
+        #     $result = sui client call --package $mainPackageId --module skill_process_aggregate --function create --args $woodcutting $playId '0' $playId $skillProcessTableId --gas-budget 11000000 --json
+        #     if (-not ('System.Object[]' -eq $result.GetType())) {
+        #         "创建伐木训练过程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        #         Set-Location $startLocation
+        #         return
+        #     }
+        #     $resultObj = $result | ConvertFrom-Json   
+        #     foreach ($object in $resultObj.objectChanges) {
+        #         if ($object.objectType -like "*::skill_process::SkillProcess") {
+        #             $skillProcessWoodingId = $object.objectId
+        #             $dataMain | Add-Member -MemberType NoteProperty -Name "SkillProcessWooding" -Value $skillProcessWoodingId 
+        #             "伐木训练过程制作完成。 SkillProcessWoodingId Id: $skillProcessWoodingId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
+        #             break;   
+        #         }
+        #     } 
+        # }
+        # catch {
+        #     "伐木训练过程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        #     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+        #     Set-Location $startLocation 
+        #     return    
+        # }
+        # if ($null -eq $skillProcessWoodingId) {
+        #     "SkillProcessWoodingId Id 没有值，一定发生了什么。 `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        #     Set-Location $startLocation 
+        #     return    
+        # }
 
-    "伐木开始前，先看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-    $payerWoodingResouceQuantityBeforeStart = 0
-    $playerLogsQuantityBeforeStart = 0
-    try {
-        $result = sui client object $playId --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+        "伐木开始前，先看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+        $payerWoodingResouceQuantityBeforeStart = 0
+        $playerLogsQuantityBeforeStart = 0
+        try {
+            $result = sui client object $playId --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json   
+            #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+            foreach ($object in $resultObj.content.fields.inventory) {
+                if ($($object.fields.item_id -eq $itemData.ResourceTypeWoodcutting.ItemId)) {
+                    $payerWoodingResouceQuantityBeforeStart = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeWoodcutting.ChineseName)[$($itemData.ResourceTypeWoodcutting.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+                }
+                elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
+                    $playerLogsQuantityBeforeStart = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.ItemNormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+                }
+                else {
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+                }
+            } 
         }
-        $resultObj = $result | ConvertFrom-Json   
-        #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-        foreach ($object in $resultObj.content.fields.inventory) {
-            if ($($object.fields.item_id -eq $itemData.ResourceTypeWoodcutting.ItemId)) {
-                $payerWoodingResouceQuantityBeforeStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeWoodcutting.ChineseName)[$($itemData.ResourceTypeWoodcutting.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
-            }
-            elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
-                $playerLogsQuantityBeforeStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.ItemNormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            else {
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-            }
-        } 
-    }
-    catch {
-        "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
-
-    $batchSize = 1
-    "`n伐木开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    try {
-        $result = sui client call --package $mainPackageId --module skill_process_service --function start_creation --args $SkillProcessWoodingId $batchSize $playId $itemCreationWoodingId $clock $energyId --gas-budget 11000000 --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "开始伐木时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+        catch {
+            "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
         }
-        $resultObj = $result | ConvertFrom-Json    
-        "伐木已经开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    }
-    catch {
-        "伐木失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
 
-
-    "伐木开始后，再看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-    $payerWoodingResouceQuantityAfterStart = 0
-    $playerLogsQuantityAfterStart = 0
-    try {
-        $result = sui client object $playId --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+        $batchSize = 1
+        "`n伐木开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        try {
+            $result = sui client call --package $mainPackageId --module skill_process_service --function start_creation --args $SkillProcessWoodingId $batchSize $playId $itemCreationWoodingId $clock $energyId --gas-budget 11000000 --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "开始伐木时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json    
+            "伐木已经开始..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
         }
-        $resultObj = $result | ConvertFrom-Json   
-        #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-        foreach ($object in $resultObj.content.fields.inventory) {
-            if ($($object.fields.item_id -eq $itemData.ResourceTypeWoodcutting.ItemId)) {
-                $payerWoodingResouceQuantityAfterStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeWoodcutting.ChineseName)[$($itemData.ResourceTypeWoodcutting.Name)]，" +
-                "可以看到数量减少了: " + ($payerWoodingResouceQuantityBeforeStart - $payerWoodingResouceQuantityAfterStart ) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
-            }
-            elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
-                $playerLogsQuantityAfterStart = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.ItemNormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
-            }
-            else {
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-            }
-        } 
-    }
-    catch {
-        "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
-
-    "`n伐木中...需要等待$woodcuttingTime 秒钟..." | Write-Host
-    Start-Sleep -Seconds ($woodcuttingTime * $batchSize)
-    "该收工了...· `n" | Write-Host
-
-
-    "`n来，现在结束伐木..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    try {
-        $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_creation --args $skillProcessWoodingId $playId $itemCreationWoodingId $experienceTableId $clock --gas-budget 42000000 --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "结束伐木流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
+        catch {
+            "伐木失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
         }
-        $resultObj = $result | ConvertFrom-Json    
-        "伐木流程已经结束。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-    }
-    catch {
-        "结束伐木流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
-    }
 
 
-    "伐木结束后，再来看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-    $payerWoodingResouceQuantityAfterFinish = 0
-    $playerLogsQuantityAfterFinish = 0
-    try {
-        $result = sui client object $playId --json
-        if (-not ('System.Object[]' -eq $result.GetType())) {
-            "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-            Set-Location $startLocation
-            return
-        }
-        $resultObj = $result | ConvertFrom-Json   
-        foreach ($object in $resultObj.content.fields.inventory) {
-            if ($($object.fields.item_id -eq $itemData.ResourceTypeWoodcutting.ItemId)) {
-                $payerWoodingResouceQuantityAfterFinish = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeWoodcutting.ChineseName)[$($itemData.ResourceTypeWoodcutting.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+        "伐木开始后，再看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+        $payerWoodingResouceQuantityAfterStart = 0
+        $playerLogsQuantityAfterStart = 0
+        try {
+            $result = sui client object $playId --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
             }
-            elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
-                $playerLogsQuantityAfterFinish = $($object.fields.quantity)
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.ItemNormalLogs.Name)]，" + 
-                "可以看到数量增加了: " + ($playerLogsQuantityAfterFinish - $playerLogsQuantityBeforeStart) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+            $resultObj = $result | ConvertFrom-Json   
+            #"Player 手上有如下资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+            foreach ($object in $resultObj.content.fields.inventory) {
+                if ($($object.fields.item_id -eq $itemData.ResourceTypeWoodcutting.ItemId)) {
+                    $payerWoodingResouceQuantityAfterStart = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeWoodcutting.ChineseName)[$($itemData.ResourceTypeWoodcutting.Name)]，" +
+                    "可以看到数量减少了: " + ($payerWoodingResouceQuantityBeforeStart - $payerWoodingResouceQuantityAfterStart ) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+                }
+                elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
+                    $playerLogsQuantityAfterStart = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.ItemNormalLogs.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
+                }
+                else {
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+                }
+            } 
+        }
+        catch {
+            "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
+        }
+
+        "`n伐木中...需要等待$woodcuttingTime 秒钟..." | Write-Host
+        Start-Sleep -Seconds ($woodcuttingTime * $batchSize)
+        "该收工了...· `n" | Write-Host
+
+
+        "`n来，现在结束伐木..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        try {
+            $result = sui client call --package $mainPackageId --module skill_process_aggregate --function complete_creation --args $skillProcessWoodingId $playId $itemCreationWoodingId $experienceTableId $clock --gas-budget 42000000 --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "结束伐木流程返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json    
+            "伐木流程已经结束。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+        }
+        catch {
+            "结束伐木流程失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
+        }
+
+
+        "伐木结束后，再来看一下Player当前拥有的资源：" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+        $payerWoodingResouceQuantityAfterFinish = 0
+        $playerLogsQuantityAfterFinish = 0
+        try {
+            $result = sui client object $playId --json
+            if (-not ('System.Object[]' -eq $result.GetType())) {
+                "获取Player信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+                Set-Location $startLocation
+                return
+            }
+            $resultObj = $result | ConvertFrom-Json   
+            foreach ($object in $resultObj.content.fields.inventory) {
+                if ($($object.fields.item_id -eq $itemData.ResourceTypeWoodcutting.ItemId)) {
+                    $payerWoodingResouceQuantityAfterFinish = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ResourceTypeWoodcutting.ChineseName)[$($itemData.ResourceTypeWoodcutting.Name)]" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
+                }
+                elseif ($($object.fields.item_id -eq $itemData.ItemNormalLogs.ItemId)) {
+                    $playerLogsQuantityAfterFinish = $($object.fields.quantity)
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity), $($itemData.ItemNormalLogs.ChineseName)[$($itemData.ItemNormalLogs.Name)]，" + 
+                    "可以看到数量增加了: " + ($playerLogsQuantityAfterFinish - $playerLogsQuantityBeforeStart) |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Green
             
-            }
-            else {
-                "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
-            }
-        } 
-    }
-    catch {
-        "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-        "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-        Set-Location $startLocation 
-        return    
+                }
+                else {
+                    "Item Id: $($object.fields.item_id) ,数量:$($object.fields.quantity)" |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor White
+                }
+            } 
+        }
+        catch {
+            "获取Player信息失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+            "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+            Set-Location $startLocation 
+            return    
+        }
     }
 }
 

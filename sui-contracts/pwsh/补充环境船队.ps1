@@ -25,8 +25,8 @@ $formattedNow = $now.ToString('yyyyMMddHHmmss')
 $logFile = "$startLocation\environment_roster_rebirth_$formattedNow.log"
 
 #链下服务相关配置
-$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090"
-#$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8092"
+#$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090"
+$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8092"
 #$serverUrl = "http://ec2-18-236-242-218.us-west-2.compute.amazonaws.com:8091"
 #$serverUrl = "http://localhost:1023"
 
@@ -48,8 +48,8 @@ $environmentQuntityPerIsland = 3
 #添加船队时，最大出错次数不能超过$maxErrorTimes
 $maxErrorTimes = 5
 
-$node = "https://fullnode.testnet.sui.io/"
-#$node = "https://devnet.baku.movementlabs.xyz/"
+#$node = "https://fullnode.testnet.sui.io/"
+$node = "https://devnet.baku.movementlabs.xyz/"
 $getMapResult = $null
 $dynamicFiledsId = $null;
 
@@ -136,11 +136,11 @@ try {
         return
     }
     $getAllEnviornmentRostersResultObj = $getAllEnviornmentRostersResult.Content | ConvertFrom-Json
-    "目前一共有 $($getAllEnviornmentRostersResultObj.Count) 个活着的环境船队..." | Tee-Object -FilePath $logFile -Append  |  Write-Host     
+    "目前一共有 $($getAllEnviornmentRostersResultObj.Count) 个活着的环境船队..." | Tee-Object -FilePath $logFile -Append  |  Write-Host  -ForegroundColor Yellow   
     foreach ($roster in $getAllEnviornmentRostersResultObj) {
         $rosterCoordinates += $roster
         $rosterIdsFromIndexer += $roster
-        "coordinates:($($roster.x),$($roster.y))" |  Write-Host 
+        #"coordinates:($($roster.x),$($roster.y))" |  Write-Host 
         #"coordinates:($($roster.updatedCoordinates.x-$u32MaxHalf),$($roster.updatedCoordinates.y-$u32MaxHalf))" |  Write-Host 
     }
 }
@@ -471,6 +471,7 @@ foreach ($equipment in $equipments) {
             $command = "sui client call --package $($dataInfo.main.PackageId) --module roster_aggregate --function create_environment_roster --args  $($dataInfo.main.EnvironmentPlayId) $LastRosterIdSequenceNumber $($dataInfo.main.Publisher) $($randomPoint.X) $($randomPoint.Y) $ship_resource_quantity $ship_base_resource_quantity $base_experience $clock $($dataInfo.main.RosterTable) --gas-budget 42000000 --json"
             $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
             $createEnvironmentRosterResult = Invoke-Expression -Command $command
+            $LastRosterIdSequenceNumber++ #只要执行过就加1
             if (-not ('System.Object[]' -eq $createEnvironmentRosterResult.GetType())) {
                 "创建环境船队时返回信息 $createEnvironmentRosterResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
                 $errorTimes++
@@ -492,7 +493,6 @@ foreach ($equipment in $equipments) {
             "船队RosterId={$($dataInfo.main.EnvironmentPlayId),$LastRosterIdSequenceNumber}" | Write-Host -ForegroundColor Blue
             "已经补充 $($roster_id_sequence_number) 只环境船队" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
             $roster_id_sequence_number++;
-            $LastRosterIdSequenceNumber++
             $equipment.Rosters.Add($randomPoint)
         }
         catch {
