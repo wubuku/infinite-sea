@@ -11,7 +11,6 @@ import org.dddml.suiinfinitesea.sui.contract.service.SuiRosterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,37 +23,13 @@ public class ExtensionUpdateRosterStateTaskService {
     private SuiRosterService suiRosterService;
 
     @Autowired
-    private RosterStateQueryRepository rosterStateQueryRepository;
-
-    @Autowired
     private ShipBattleEventExtendRepository shipBattleEventExtendRepository;
-    @Autowired
-    private ShipBattleEventService shipBattleEventService;
+
     @Autowired
     private ShipBattleStateRepository shipBattleStateRepository;
 
     @Autowired
     private ShipBattleEventRepository shipBattleEventRepository;
-
-    /**
-     * Update the event status to "processed a second time".
-     *
-     * @param event
-     */
-    @Transactional
-    public void updateStatusToProcessedSecondTime(AbstractShipBattleEvent event) {
-        event.setEventStatus("E");
-        shipBattleEventRepository.save(event);
-    }
-
-//    @Transactional
-//    public List<AbstractShipBattleEvent> getByStatusEqualDAndEventTypeIn(){
-//        List<String> eventTypes = new ArrayList<>();
-//        eventTypes.add("ShipBattleInitiated");
-//        eventTypes.add("ShipBattleMoveMade");
-//        eventTypes.add("ShipBattleLootTaken");
-//        return shipBattleEventExtendRepository.getByStatusEqualDAndEventTypeIn(eventTypes);
-//    }
 
 //    @Scheduled(fixedDelayString = "${sui.contract.update-all-roster-states.fixed-delay:50000}")
 //    @Transactional
@@ -84,7 +59,8 @@ public class ExtensionUpdateRosterStateTaskService {
                     suiRosterService.updateRosterState(shipBattleState.getResponder());
                 }
             }
-            updateStatusToProcessedSecondTime(event);
+            event.setEventStatus("E");
+            shipBattleEventRepository.save(event);
             processedBattleIds.add(event.getId());
         });
     }
