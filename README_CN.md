@@ -3609,7 +3609,8 @@ When the following functions are called and the specified conditions are met:
 * Take-loot: will update the coordinates_updated_at field of the defeated Roster (and not the environment Roster).
 
 
-[TBD]
+
+
 
 ### 关于 Move Table 或者 ObjectTable 内容的查询
 
