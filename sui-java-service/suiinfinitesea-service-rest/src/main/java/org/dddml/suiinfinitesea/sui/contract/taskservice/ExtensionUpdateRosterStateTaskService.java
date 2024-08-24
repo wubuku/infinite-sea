@@ -43,7 +43,7 @@ public class ExtensionUpdateRosterStateTaskService {
 //        });
 //    }
 
-    @Scheduled(fixedDelayString = "${sui.contract.update-all-ship-battle-roster-states.fixed-delay:50000}")
+    @Scheduled(fixedDelayString = "${sui.contract.update-all-ship-battle-roster-states.fixed-delay:5000}")
     public void updateAllShipBattleRosterStates() {
         List<String> eventTypes = new ArrayList<>();
         eventTypes.add("ShipBattleInitiated");
@@ -59,9 +59,14 @@ public class ExtensionUpdateRosterStateTaskService {
                     suiRosterService.updateRosterState(shipBattleState.getResponder());
                 }
             }
-            event.setEventStatus("E");
-            shipBattleEventRepository.save(event);
+            updateStatusToProcessedSecondTime(event);
             processedBattleIds.add(event.getId());
         });
     }
+
+    private void updateStatusToProcessedSecondTime(AbstractShipBattleEvent event) {
+        event.setEventStatus("E");
+        shipBattleEventRepository.save(event);
+    }
+
 }

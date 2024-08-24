@@ -16,6 +16,7 @@ public interface ShipBattleEventExtendRepository extends JpaRepository<AbstractS
      * @return
      */
     @Query(value = "select * from ship_battle_event where event_status='D' and event_type=:eventType", nativeQuery = true)
+    @Transactional // <- Don't delete this, it's intentional
     List<AbstractShipBattleEvent> getByStatusEqualDAndEventType(@Param("eventType") String eventType);
 
 
@@ -23,6 +24,6 @@ public interface ShipBattleEventExtendRepository extends JpaRepository<AbstractS
     @Query(value = "select * from ship_battle_event " +
             " where event_status='D' and event_type in (:eventTypes)",
             nativeQuery = true)
-    @Transactional
+    @Transactional // <- Don't delete this, it's intentional
     List<AbstractShipBattleEvent> getByStatusEqualDAndEventTypeIn(@Param("eventTypes") List<String> eventTypes);
 }
