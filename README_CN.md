@@ -3596,7 +3596,21 @@ Input parameter description:
 * `claim_island_setting` 为 2 时表示允许加入`认领岛屿白名单`的钱包地址可以认领岛屿。（与 NFT 持有者无关，他们仍然可以通过 `nft_holder_claim_island` 认领）；
 * `claim_island_setting` 为 3 时表示任何人都可以认领岛屿。
 
-[TBD]
+### When will Roster's coordinates_updated_at field be updated
+
+When the following functions are called and the specified conditions are met:
+
+* Set_stail (sailing): Roster is in sailing state (1), and the parameters updated_coordinates_x and updated_coordinates_y are both non-zero;
+* Put_in_Ship_inventory (transferring resources from the island to Roster): Roster is in sailing state (1), and the parameters updated_coordinates_x and updated_coordinates_y are both non-zero;
+* Take_out_sthip_inventory (transferring resources from Roster to the island): Roster is in sailing state (1), and the parameters updated_coordinates_x and updated_coordinates_y are both non-zero;
+* Initiate_base_dand_outo_play_till_dend (battle):
+  1. If the attacking Roster is in sailing state (1) and the parameters initiator_coordinates_x and initiator_coordinates_y are both non-zero, then update the coordinates_updated_at field of the attacking Roster.;
+  2. If the attacked Roster is in sailing state (1) and the parameters responsive_coordinates_x and responsive_coordinates_y are both non-zero, then update the coordinates_updated_at field of the attacked Roster.
+* Take-loot: will update the coordinates_updated_at field of the defeated Roster (and not the environment Roster).
+
+
+
+
 
 ### 关于 Move Table 或者 ObjectTable 内容的查询
 
