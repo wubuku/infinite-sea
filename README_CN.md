@@ -217,7 +217,7 @@ wubuku/dddappp-sui:master \
 5. Faucet 合约项目 
 6. Map 合约项目
 
-#### Sui Testnet[Test] (From 2024/8/16)
+#### Sui Testnet[Test] (From 2024/8/30)
 
 对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090/api
 
@@ -233,33 +233,33 @@ wubuku/dddappp-sui:master \
     "EnergyId": "0x5c037639a155c18acfbe6ae35653e127432318298b7df9ba62346083f820633d"
   },
   "common": {
-    "Digest": "8P9h1p8in3Myoxg37Q6ZbE27WRjKvzKrRbx34XXhUh64",
-    "ItemProductionTable": "0x0e644fe096f993524a36fb9ceedd8cbd00088e4f594471970eeb1094da7066cd",
-    "ItemCreationTable": "0x113839ec2b60b1b522b117cf2ef4c4d2362ec48014833c07773999f260a10e74",
-    "ExperienceTable": "0x1f515564a2bf889c101afe4fb8416f992b56ef633ed9e2403bbf9a8f5d9a45b8",
-    "Publisher": "0x92f2beed6d873399dc0f5c642c6414e369edc8a314ce568eb9ae40bc3ed665e6",
-    "PackageId": "0xafbcaae3a8c15402064f7e779177c76f2fe8da052f55838834b6e711cfb04617",
-    "UpgradeCap": "0xb13491fabd75c94b63820e65f247d74bbeb6f46857c0123c02fdb1f8428085e6",
-    "ItemTable": "0xfd703c18e0643a0c5b1505d5d23611f98342d763796ddf57b69af72b10c8c8a7",
-    "ItemCreationMining": "0x34c32be1f2115fcf97187925be8a8d01cedb9a5b166bf989d199e4b8059a580f",
-    "ItemProductionFarming": "0xeb1b75ccd48261929dac4d4824f9204e5c6644278a191172a29be6a4efa13b51",
-    "ItemCreationWooding": "0xa5f8d52179ebfe6bd4a2b3055f47a825ad077adb124eeef25d96fbce2749d4dc",
-    "ItemProductionCrafting": "0x98fcada9b3aa9fc57b650e9f6baf141a12b2fe2cf657b0a85b015ada9161333d"
+    "Digest": "9F4sfoTHPDJiDgXvEcQ5nzPi4MdJxXH4WtuuxyyhHUJb",
+    "Publisher": "0x21a3d42a9abfce69a1c0568b3d38e920d34712b3b6de8f6f645953ea45c47a96",
+    "ItemTable": "0x3bf82372009c6001c446ea5409fd8430d556005bb58e7ad15bfcab5f822112cf",
+    "ItemProductionTable": "0x3e82432ae9c8aa3eb4e3306c3ca5543680e9896851b5a9a4c29fa599056b8e87",
+    "PackageId": "0xa3323d07d054ae9508d160ece6ab407f992b8e75bff4507a1a873344cad423e2",
+    "ItemCreationTable": "0xba020bd72eeeae8e21fb203df2124f2c1b516d09cc7fc57a1fc35abc7ddcfcad",
+    "UpgradeCap": "0xdb6d96c40bc90a20b36d894bf447ae0d2c2784647c5bc9b7bd8882921d486948",
+    "ExperienceTable": "0xe80024120fb06733ad858638537c265276e4aee822051c48229855f62fc7396d",
+    "ItemCreationMining": "0x4618b8463e9d5cb0a2fbc3eec9c6ed05e2d217b1e9f58aa1d92f31812a4c40fa",
+    "ItemProductionFarming": "0x9c27da63b2c33bfb7bde357a99819b85b2b6ddfc0fb974135df375901e2332f0",
+    "ItemCreationWooding": "0x800a20fef037e22f9a43f530516b2c19a72a2730cfca76c57d62a27b522f5cda",
+    "ItemProductionCrafting": "0xc00dd3eee376169030885ba27ce29fca365cbf824318f983422b847f916f4af2"
   },
   "main": {
-    "Digest": "vZTVEAppFCSsiXze2k9HaNVJnyXu9S1gUNpoYng7Gxg",
-    "Publisher": "0x0fc3a8c4d85e415cb054686076f277ab6277a45ecad3ff74c4b24cafc2cffdba",
-    "RosterTable": "0x3734d696fa033f05242bf7ffa24292fc5c5b2f3a02bb20d45904e50f831575de",
-    "SkillProcessTable": "0x3e17670ecea817448c653630c405787306ca1ae574244165c45a9bf56eb5c8f6",
-    "PackageId": "0xce65a6768605452553c4d4047128cf7838439143741fcb71388ec033d2aa5628",
-    "UpgradeCap": "0xf98e07a07b6af2196ef145ba05ec9e5fd165788d0b0e0cbcff267bb347f99f0d",
-    "Player": "0xd483a7e4d58a69f9cf65f24b974bad03a3ebefb34d4e6eb7bc51a38e331995b9",
-    "EnvironmentPlayId": "0x20f6002c9c6adc497e7767eb10b5c16f200e6bdce3b31773360c21d48cb01045",
-    "SkillProcessCrafting": "0x18484267363b69800ad0ad86be4c6d07c7308c8b219dc3f46bee6656c36fea65",
-    "SkillProcessFarming2": "0x57a0f9c429ee29b67b83f9c28e7ad66ef27df659916e9531cfeff5c40ea580e8",
-    "SkillProcessWooding": "0x8918c7e2ec055f9c5b293d44e9576dd75cbc01f5ffeb0a4fb2a47cd5cb5e3def",
-    "SkillProcessMining": "0xa35b2063165dbbfff1e34ef9bcae871b0f2cb209ee728c004274d87861288970",
-    "SkillProcessFarming1": "0xe9306ba326fd681a4b6236f571f1f917bbe7c86d651b65afd6d1a1578daf64aa"
+    "Digest": "9gfkLq9hznaCqvwMUKvA3JR9M9afnjDxD9pG7NaXNUFu",
+    "UpgradeCap": "0x0496c3169382bf987453c208ac1450c748a8c21fcb69e9961429b6af49ce284d",
+    "PackageId": "0x1a312f7d041d8051037219e82d9a910182acf836dbad7ac8f7cc90a073440c6d",
+    "SkillProcessTable": "0x22b6235ac558081b0ace0b52b4e7ec9dc1a1d5022a39759427e32c32d664960f",
+    "Publisher": "0x7bae30f0a6a727029cef6eb4dd68a08dcc8231746f972dd682848e0f4e984a7d",
+    "RosterTable": "0xade587927982074b72ff500f130e66bca613ffe8e74423115e5e66ebd5266932",
+    "Player": "0x5ade8b31976ca5bf3dda1ccc174722dcb587d92c2821a14d8ba0dac5df7d6958",
+    "EnvironmentPlayId": "0xf16fec2e63319841a79ef61c6158800af2cfb13fbbcac120dc00106ed7b33ff8",
+    "SkillProcessCrafting": "0x024c8187cd5e761510a9339ff5b00c0f8b313eccca6d80c266e6e8b059863f6b",
+    "SkillProcessMining": "0x4e0a96f30cbe4bfc44ff7fa634564293004405c7f9f04d40120ae7a648bbba0a",
+    "SkillProcessFarming2": "0x7af804665b4d35465f03cc16638232d61b47c086c40b65e0eba2064cde2abadf",
+    "SkillProcessFarming1": "0xac41e3d9df934f6d8262f0c722be250297246e8dc8fedfb48dddb20eba0b763f",
+    "SkillProcessWooding": "0xdff2a2479e02c0ca2d8e87c55971f8867d224775424eac6059eb442e84e5348c"
   },
   "faucet": {
     "EnergyFaucet": "0x0fcb3075af0fb4ae97c3320f350a40ec374c31dc355af4ea606a35a226fe95db",
@@ -277,18 +277,15 @@ wubuku/dddappp-sui:master \
     "Digest": "2TnypJioEuxHMhNMVXvPb2W6ovuEJcjJniNXMWDgkFr2"
   },
   "map": {
-    "UpgradeCap": "0x16d2447f4dad40e6027105e70df5c31d3db2d8ce8895a71be41d29a249519427",
-    "Map": "0x18d8c122d2fea3d52a13ba0f72508faa5e1173dc98455349af9ec338194d2966",
-    "Publisher": "0x3257c363a8121a5dba2827ee73d5dd7ea1082a01807861be93b24133f6b7d339",
-    "AdminCap": "0x8de8b44cefc3689a24b2ed16d24a1018f8efd118b8062316482e736a829900fa",
-    "PackageId": "0x8fb2bf64ad8d3466543afdd12a59f62000bd42503fdff711148a5db6ef047b31",
-    "MapFriendConfig": "0x9faed897b2773b305b783f0524bb2f210076af3d8d2061ccf6d137c1f7d74124",
-    "Digest": "GgvuTjwY4dGubU3YmwBBiTEKKi1F1crnuxvvManqsK4"
+    "Publisher": "0x1aedaf24ac6980463da3f1dbda4ba301f97aaaef11aa2fbdfda324c4ff7beb4b",
+    "Map": "0x492cb4402b6f33dbe25ec1581588898b7a1c706c9335965ac7e5f1b6813e5c0c",
+    "MapFriendConfig": "0x8255dedde057cb64663628df1dae2e6216ec2198b5ffddfa281fdf30c8cca9eb",
+    "AdminCap": "0xa47a39ef86cc89d94b286fd60c792475fe8d827ff62b93b04d7bbeec5c498bfd",
+    "PackageId": "0xe25805ba48baa5097bff68188d6f6cc3dcc097afdad18e616de2c50a1be70e3d",
+    "UpgradeCap": "0xfe3a6f223ae0afb6237660b51bd45d87ce8ca419f43687818be20481246d8584",
+    "Digest": "6PrN9hmPfZuSN49HAo6LLqXdD5DQNfC4j2vaukL1dpQG"
   }
 }
-
-
-
 
 ```
 
@@ -2379,6 +2376,7 @@ sui client call --package {main.PackageId} \
 {shipId}  \
 {targetRoster} \
 {targetPosition} \
+{clock}  \
  --gas-budget 42000000 --json
 ```
 
@@ -2390,12 +2388,13 @@ sui client call --package {main.PackageId} \
 * `{shipId}`：类型为 `ID`。CLI 中可传入被添加船只的对象 ID。
 * `{targetRoster}`： 类型为 `&mut Roster`。CLI 中可传入目标船队的对象 ID。必须是编号 1-4 的船队对象 ID 之一。
 * `{targetPosition}`： 类型为 `Option<u64>`。表示将船只添加到目标船队的位置，格式 `[{Number}]`。 `{Number}`的取值范围为 0-3 或者空。如果为空，也就是`[]`，表示将船只添加到船队末尾位置。
+* `{clock}`： 类型为 `&Clock`。Added time. CLI 中可传入固定值：0x6。
 
-### 从船队中“取消”船只
+### 从船队中“移除”船只
 
-可以将编号 1-4 的船队中的指定船只取消，被取消的船只自动回到编号为 0 的“unassigned roster”船队。
+可以将编号 1-4 的船队中的指定船只移除，被移除的船只自动回到编号为 0 的“unassigned roster”船队。
 
-船队“添加船只”和“取消船只”是同一个接口。
+船队“添加船只”和“移除船只”是同一个接口。
 
 通过以下 Sui CLI 命令执行取消命令：
 
@@ -2408,6 +2407,7 @@ sui client call --package {main.PackageId} \
 {shipId}  \
 {targetRoster} \
 {targetPosition} \
+{clock}  \
  --gas-budget 42000000 --json
 ```
 
@@ -2416,9 +2416,10 @@ sui client call --package {main.PackageId} \
 * `{main.PackageId}`：Main 合约包的 ID。
 * `{sourceRoster}`：类型为 `&mut Roster`。CLI 中可传入编号为 1-4 的玩家船队的 Move 对象 ID。
 * `{playerId}`： 类型为 `&Player`。CLI 中可传入玩家对象 ID。
-* `{shipId}`：类型为 `ID`。CLI 中可传入被取消船只的对象 ID。
+* `{shipId}`：类型为 `ID`。CLI 中可传入被移除船只的对象 ID。
 * `{targetRoster}`： 类型为 `&mut Roster`。CLI 中可传入编号为 0 的玩家船队的 Move 对象 ID。
-* `{targetPosition}`： 类型为 `Option<u64>`。CLI 中传入直接传入值 `[]`。意为将取消船只置于“unassigned roster”船队的末尾。
+* `{targetPosition}`： 类型为 `Option<u64>`。CLI 中传入直接传入值 `[]`。意为将移除船只置于“unassigned roster”船队的末尾。
+* `{clock}`： 类型为 `&Clock`。Removed time. CLI 中可传入固定值：0x6。
 
 ### 调整船只顺序
 

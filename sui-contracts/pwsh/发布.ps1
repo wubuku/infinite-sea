@@ -48,6 +48,7 @@ $playerName = 'Li Dahai'
 #用于生成环境用户的用户名
 $environmentPlayName = "@Environment Player@"
 
+$energyId = ""
 # Mint Energy Amount 600万
 $mintAmout = 600000 * 1000 * 1000 * 1000
 
@@ -335,7 +336,6 @@ $mintAmout = 600000 * 1000 * 1000 * 1000
 
 # "先给自己分配 Mint $mintAmount ENERGY..." | Tee-Object -FilePath $logFile -Append | Write-Host
 # $mintJson = ""
-# $energyId = ""
 # try {
 #     $mintJson = sui client call --package $coinPackingId --module energy --function mint --args $treasuryCap $mintAmout --json
 #     if (-not ('System.Object[]' -eq $mintJson.GetType())) {
@@ -1007,6 +1007,9 @@ try {
     #发布成功之后返回的类型是 System.Object[]
     #Write-Host $publishMainJson.GetType()
     #if ('System.String' -eq $publishCommonJson.GetType()-and $publishCommonJson | Test-Json) {}
+    "`n发不完先休息一下,以免不能获取完整信息..." | Write-Host
+    Start-Sleep -Seconds 5
+    "休息完成，继续干活...· `n" | Write-Host
     if (-not ('System.Object[]' -eq $publishMainJson.GetType())) {
         "Publish infinite-sea contract failed: $publishMainJson" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
         Set-Location $startLocation
@@ -1074,6 +1077,8 @@ foreach ($object in $publishMainObj.objectChanges) {
 }
 if ($mainPackageId -eq '') {
     "没能获取PackageId,发布失败" | Tee-Object -FilePath $logFile -Append | Write-Host -BackgroundColor Red -ForegroundColor Black
+    Set-Location $startLocation
+    return;
 }
 
 "更新Move.toml文件..." | Tee-Object -FilePath $logFile -Append | Write-Host
@@ -1387,7 +1392,7 @@ if ($testSkillProcessMining) {
         Set-Location $startLocation 
         return    
     }
-    if ($false -eq $energyId -or $energyId -eq "") {
+    if ($null -eq $energyId -or $energyId -eq "") {
         "没有设置 energyId 就先不挖矿了." |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
     }
     else {
@@ -1423,7 +1428,6 @@ if ($testSkillProcessMining) {
             Set-Location $startLocation 
             return    
         }
-
 
         $batchSize = 1
         "`n开始挖矿..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
@@ -1608,7 +1612,7 @@ if ($testSkillProcessFarming) {
     #     return    
     # }
 
-    if ($false -eq $energyId -or $energyId -eq "") {
+    if ($null -eq $energyId -or $energyId -eq "") {
         "没有设置 energyId 就先不种棉花了." |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
     }
     else {
@@ -1691,7 +1695,7 @@ if ($testSkillProcessWooding) {
         return    
     }
 
-    if ($false -eq $energyId -or $energyId -eq "") {
+    if ($null -eq $energyId -or $energyId -eq "") {
         "没有设置 energyId 就先不种伐木了." |  Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
     }
     else {
