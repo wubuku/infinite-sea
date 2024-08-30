@@ -27,6 +27,8 @@ public class RosterShipTransferred {
 
     private BigInteger toPosition;
 
+    private BigInteger transferredAt;
+
     public String getId() {
         return id;
     }
@@ -75,6 +77,14 @@ public class RosterShipTransferred {
         this.toPosition = toPosition;
     }
 
+    public BigInteger getTransferredAt() {
+        return transferredAt;
+    }
+
+    public void setTransferredAt(BigInteger transferredAt) {
+        this.transferredAt = transferredAt;
+    }
+
     @Override
     public String toString() {
         return "RosterShipTransferred{" +
@@ -84,6 +94,7 @@ public class RosterShipTransferred {
                 ", shipId=" + '\'' + shipId + '\'' +
                 ", toRosterId=" + toRosterId +
                 ", toPosition=" + toPosition +
+                ", transferredAt=" + transferredAt +
                 '}';
     }
 

@@ -11,17 +11,29 @@ public class ContractConstants {
     public static final String COMMON_SUI_PACKAGE_NAME = "COMMON_SUI_PACKAGE";
     public static final String DEFAULT_SUI_PACKAGE_NAME = "DEFAULT_SUI_PACKAGE";
 
+    public static final String ITEM_MODULE_ITEM_TABLE = "item::ItemTable";
+
+    public static final String ITEM_CREATION_MODULE_ITEM_CREATION_TABLE = "item_creation::ItemCreationTable";
+
+    public static final String ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_TABLE = "item_production::ItemProductionTable";
+
     public static final String AVATAR_CHANGE_MODULE_AVATAR_CHANGE_TABLE = "avatar_change::AvatarChangeTable";
 
     public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_TABLE = "skill_process::SkillProcessTable";
 
     public static final String ROSTER_MODULE_ROSTER_TABLE = "roster::RosterTable";
 
-    public static final String ITEM_MODULE_ITEM_TABLE = "item::ItemTable";
+    public static final String ITEM_MODULE_ITEM_CREATED = "item::ItemCreated";
 
-    public static final String ITEM_CREATION_MODULE_ITEM_CREATION_TABLE = "item_creation::ItemCreationTable";
+    public static final String ITEM_MODULE_ITEM_UPDATED = "item::ItemUpdated";
 
-    public static final String ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_TABLE = "item_production::ItemProductionTable";
+    public static final String ITEM_CREATION_MODULE_ITEM_CREATION_CREATED = "item_creation::ItemCreationCreated";
+
+    public static final String ITEM_CREATION_MODULE_ITEM_CREATION_UPDATED = "item_creation::ItemCreationUpdated";
+
+    public static final String ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_CREATED = "item_production::ItemProductionCreated";
+
+    public static final String ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_UPDATED = "item_production::ItemProductionUpdated";
 
     public static final String AVATAR_MODULE_AVATAR_MINTED = "avatar::AvatarMinted";
 
@@ -36,6 +48,16 @@ public class ContractConstants {
     public static final String AVATAR_CHANGE_MODULE_AVATAR_CHANGE_UPDATED = "avatar_change::AvatarChangeUpdated";
 
     public static final String AVATAR_CHANGE_MODULE_AVATAR_CHANGE_DELETED = "avatar_change::AvatarChangeDeleted";
+
+    public static final String PLAYER_MODULE_PLAYER_CREATED = "player::PlayerCreated";
+
+    public static final String PLAYER_MODULE_ISLAND_CLAIMED = "player::IslandClaimed";
+
+    public static final String PLAYER_MODULE_NFT_HOLDER_ISLAND_CLAIMED = "player::NftHolderIslandClaimed";
+
+    public static final String PLAYER_MODULE_PLAYER_AIRDROPPED = "player::PlayerAirdropped";
+
+    public static final String PLAYER_MODULE_PLAYER_ISLAND_RESOURCES_GATHERED = "player::PlayerIslandResourcesGathered";
 
     public static final String SKILL_PROCESS_MODULE_SKILL_PROCESS_CREATED = "skill_process::SkillProcessCreated";
 
@@ -79,39 +101,11 @@ public class ContractConstants {
 
     public static final String SHIP_BATTLE_MODULE_SHIP_BATTLE_LOOT_TAKEN = "ship_battle::ShipBattleLootTaken";
 
-    public static final String ITEM_MODULE_ITEM_CREATED = "item::ItemCreated";
+    public static final String EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT = "experience_table::InitExperienceTableEvent";
 
-    public static final String ITEM_MODULE_ITEM_UPDATED = "item::ItemUpdated";
+    public static final String EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_ADDED = "experience_table::ExperienceLevelAdded";
 
-    public static final String ITEM_CREATION_MODULE_ITEM_CREATION_CREATED = "item_creation::ItemCreationCreated";
-
-    public static final String ITEM_CREATION_MODULE_ITEM_CREATION_UPDATED = "item_creation::ItemCreationUpdated";
-
-    public static final String ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_CREATED = "item_production::ItemProductionCreated";
-
-    public static final String ITEM_PRODUCTION_MODULE_ITEM_PRODUCTION_UPDATED = "item_production::ItemProductionUpdated";
-
-    public static final String PLAYER_MODULE_PLAYER_CREATED = "player::PlayerCreated";
-
-    public static final String PLAYER_MODULE_ISLAND_CLAIMED = "player::IslandClaimed";
-
-    public static final String PLAYER_MODULE_NFT_HOLDER_ISLAND_CLAIMED = "player::NftHolderIslandClaimed";
-
-    public static final String PLAYER_MODULE_PLAYER_AIRDROPPED = "player::PlayerAirdropped";
-
-    public static final String PLAYER_MODULE_PLAYER_ISLAND_RESOURCES_GATHERED = "player::PlayerIslandResourcesGathered";
-
-    public static final String WHITELIST_MODULE_INIT_WHITELIST_EVENT = "whitelist::InitWhitelistEvent";
-
-    public static final String WHITELIST_MODULE_WHITELIST_UPDATED = "whitelist::WhitelistUpdated";
-
-    public static final String WHITELIST_MODULE_WHITELIST_ENTRY_ADDED = "whitelist::WhitelistEntryAdded";
-
-    public static final String WHITELIST_MODULE_WHITELIST_ENTRY_UPDATED = "whitelist::WhitelistEntryUpdated";
-
-    public static final String WHITELIST_MODULE_WHITELIST_CLAIMED = "whitelist::WhitelistClaimed";
-
-    public static final String WHITELIST_MODULE_WHITELIST_CREATED = "whitelist::WhitelistCreated";
+    public static final String EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_UPDATED = "experience_table::ExperienceLevelUpdated";
 
     public static final String MAP_MODULE_INIT_MAP_EVENT = "map::InitMapEvent";
 
@@ -127,11 +121,17 @@ public class ContractConstants {
 
     public static final String MAP_MODULE_UN_WHITELISTED_FOR_CLAIMING_ISLAND = "map::UnWhitelistedForClaimingIsland";
 
-    public static final String EXPERIENCE_TABLE_MODULE_INIT_EXPERIENCE_TABLE_EVENT = "experience_table::InitExperienceTableEvent";
+    public static final String WHITELIST_MODULE_INIT_WHITELIST_EVENT = "whitelist::InitWhitelistEvent";
 
-    public static final String EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_ADDED = "experience_table::ExperienceLevelAdded";
+    public static final String WHITELIST_MODULE_WHITELIST_UPDATED = "whitelist::WhitelistUpdated";
 
-    public static final String EXPERIENCE_TABLE_MODULE_EXPERIENCE_LEVEL_UPDATED = "experience_table::ExperienceLevelUpdated";
+    public static final String WHITELIST_MODULE_WHITELIST_ENTRY_ADDED = "whitelist::WhitelistEntryAdded";
+
+    public static final String WHITELIST_MODULE_WHITELIST_ENTRY_UPDATED = "whitelist::WhitelistEntryUpdated";
+
+    public static final String WHITELIST_MODULE_WHITELIST_CLAIMED = "whitelist::WhitelistClaimed";
+
+    public static final String WHITELIST_MODULE_WHITELIST_CREATED = "whitelist::WhitelistCreated";
 
 
     public static String[] getNftPackageIdGeneratorObjectTypes(String packageId) {

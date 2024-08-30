@@ -13,6 +13,15 @@ import com.github.wubuku.sui.bean.MoveEvent;
 import com.github.wubuku.sui.bean.SuiMoveEventEnvelope;
 import com.github.wubuku.sui.bean.Table;
 import com.github.wubuku.sui.bean.ObjectTable;
+import org.dddml.suiinfinitesea.domain.item.AbstractItemEvent;
+import org.dddml.suiinfinitesea.sui.contract.item.ItemCreated;
+import org.dddml.suiinfinitesea.sui.contract.item.ItemUpdated;
+import org.dddml.suiinfinitesea.domain.itemcreation.AbstractItemCreationEvent;
+import org.dddml.suiinfinitesea.sui.contract.itemcreation.ItemCreationCreated;
+import org.dddml.suiinfinitesea.sui.contract.itemcreation.ItemCreationUpdated;
+import org.dddml.suiinfinitesea.domain.itemproduction.AbstractItemProductionEvent;
+import org.dddml.suiinfinitesea.sui.contract.itemproduction.ItemProductionCreated;
+import org.dddml.suiinfinitesea.sui.contract.itemproduction.ItemProductionUpdated;
 import org.dddml.suiinfinitesea.domain.avatar.AbstractAvatarEvent;
 import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarMinted;
 import org.dddml.suiinfinitesea.sui.contract.avatar.AvatarUpdated;
@@ -22,6 +31,12 @@ import org.dddml.suiinfinitesea.domain.avatarchange.AbstractAvatarChangeEvent;
 import org.dddml.suiinfinitesea.sui.contract.avatarchange.AvatarChangeCreated;
 import org.dddml.suiinfinitesea.sui.contract.avatarchange.AvatarChangeUpdated;
 import org.dddml.suiinfinitesea.sui.contract.avatarchange.AvatarChangeDeleted;
+import org.dddml.suiinfinitesea.domain.player.AbstractPlayerEvent;
+import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
+import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
+import org.dddml.suiinfinitesea.sui.contract.player.NftHolderIslandClaimed;
+import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
+import org.dddml.suiinfinitesea.sui.contract.player.PlayerIslandResourcesGathered;
 import org.dddml.suiinfinitesea.domain.skillprocess.AbstractSkillProcessEvent;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.SkillProcessCreated;
 import org.dddml.suiinfinitesea.sui.contract.skillprocess.ProductionProcessStarted;
@@ -47,28 +62,10 @@ import org.dddml.suiinfinitesea.domain.shipbattle.AbstractShipBattleEvent;
 import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleInitiated;
 import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleMoveMade;
 import org.dddml.suiinfinitesea.sui.contract.shipbattle.ShipBattleLootTaken;
-import org.dddml.suiinfinitesea.domain.item.AbstractItemEvent;
-import org.dddml.suiinfinitesea.sui.contract.item.ItemCreated;
-import org.dddml.suiinfinitesea.sui.contract.item.ItemUpdated;
-import org.dddml.suiinfinitesea.domain.itemcreation.AbstractItemCreationEvent;
-import org.dddml.suiinfinitesea.sui.contract.itemcreation.ItemCreationCreated;
-import org.dddml.suiinfinitesea.sui.contract.itemcreation.ItemCreationUpdated;
-import org.dddml.suiinfinitesea.domain.itemproduction.AbstractItemProductionEvent;
-import org.dddml.suiinfinitesea.sui.contract.itemproduction.ItemProductionCreated;
-import org.dddml.suiinfinitesea.sui.contract.itemproduction.ItemProductionUpdated;
-import org.dddml.suiinfinitesea.domain.player.AbstractPlayerEvent;
-import org.dddml.suiinfinitesea.sui.contract.player.PlayerCreated;
-import org.dddml.suiinfinitesea.sui.contract.player.IslandClaimed;
-import org.dddml.suiinfinitesea.sui.contract.player.NftHolderIslandClaimed;
-import org.dddml.suiinfinitesea.sui.contract.player.PlayerAirdropped;
-import org.dddml.suiinfinitesea.sui.contract.player.PlayerIslandResourcesGathered;
-import org.dddml.suiinfinitesea.domain.whitelist.AbstractWhitelistEvent;
-import org.dddml.suiinfinitesea.sui.contract.whitelist.InitWhitelistEvent;
-import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistUpdated;
-import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistEntryAdded;
-import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistEntryUpdated;
-import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistClaimed;
-import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistCreated;
+import org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableEvent;
+import org.dddml.suiinfinitesea.sui.contract.experiencetable.InitExperienceTableEvent;
+import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelAdded;
+import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelUpdated;
 import org.dddml.suiinfinitesea.domain.map.AbstractMapEvent;
 import org.dddml.suiinfinitesea.sui.contract.map.InitMapEvent;
 import org.dddml.suiinfinitesea.sui.contract.map.IslandAdded;
@@ -77,10 +74,13 @@ import org.dddml.suiinfinitesea.sui.contract.map.IslandResourcesGathered;
 import org.dddml.suiinfinitesea.sui.contract.map.MapSettingsUpdated;
 import org.dddml.suiinfinitesea.sui.contract.map.WhitelistedForClaimingIsland;
 import org.dddml.suiinfinitesea.sui.contract.map.UnWhitelistedForClaimingIsland;
-import org.dddml.suiinfinitesea.domain.experiencetable.AbstractExperienceTableEvent;
-import org.dddml.suiinfinitesea.sui.contract.experiencetable.InitExperienceTableEvent;
-import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelAdded;
-import org.dddml.suiinfinitesea.sui.contract.experiencetable.ExperienceLevelUpdated;
+import org.dddml.suiinfinitesea.domain.whitelist.AbstractWhitelistEvent;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.InitWhitelistEvent;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistUpdated;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistEntryAdded;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistEntryUpdated;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistClaimed;
+import org.dddml.suiinfinitesea.sui.contract.whitelist.WhitelistCreated;
 
 /**
  * Utils that convert beans in the contract package to domain beans.
@@ -272,6 +272,130 @@ public class DomainBeanUtils {
     }
 
 
+    public static AbstractItemEvent.ItemCreated toItemCreated(SuiMoveEventEnvelope<ItemCreated> eventEnvelope) {
+        ItemCreated contractEvent = eventEnvelope.getParsedJson();
+        AbstractItemEvent.ItemCreated itemCreated = toItemCreated(contractEvent);
+        setItemEventEnvelopeProperties(itemCreated, eventEnvelope);
+        return itemCreated;
+    }
+
+    public static AbstractItemEvent.ItemCreated toItemCreated(ItemCreated contractEvent) {
+        AbstractItemEvent.ItemCreated itemCreated = new AbstractItemEvent.ItemCreated();
+        itemCreated.setId_(contractEvent.getId());
+        itemCreated.setItemId(contractEvent.getItemId());
+        itemCreated.setName(contractEvent.getName());
+        itemCreated.setRequiredForCompletion(contractEvent.getRequiredForCompletion());
+        itemCreated.setSellsFor(contractEvent.getSellsFor());
+        itemCreated.setVersion(BigInteger.valueOf(-1));
+        return itemCreated;
+    }
+
+    public static AbstractItemEvent.ItemUpdated toItemUpdated(SuiMoveEventEnvelope<ItemUpdated> eventEnvelope) {
+        ItemUpdated contractEvent = eventEnvelope.getParsedJson();
+        AbstractItemEvent.ItemUpdated itemUpdated = toItemUpdated(contractEvent);
+        setItemEventEnvelopeProperties(itemUpdated, eventEnvelope);
+        return itemUpdated;
+    }
+
+    public static AbstractItemEvent.ItemUpdated toItemUpdated(ItemUpdated contractEvent) {
+        AbstractItemEvent.ItemUpdated itemUpdated = new AbstractItemEvent.ItemUpdated();
+        itemUpdated.setId_(contractEvent.getId());
+        itemUpdated.setItemId(contractEvent.getItemId());
+        itemUpdated.setName(contractEvent.getName());
+        itemUpdated.setRequiredForCompletion(contractEvent.getRequiredForCompletion());
+        itemUpdated.setSellsFor(contractEvent.getSellsFor());
+        itemUpdated.setVersion(contractEvent.getVersion());
+        return itemUpdated;
+    }
+
+    public static AbstractItemCreationEvent.ItemCreationCreated toItemCreationCreated(SuiMoveEventEnvelope<ItemCreationCreated> eventEnvelope) {
+        ItemCreationCreated contractEvent = eventEnvelope.getParsedJson();
+        AbstractItemCreationEvent.ItemCreationCreated itemCreationCreated = toItemCreationCreated(contractEvent);
+        setItemCreationEventEnvelopeProperties(itemCreationCreated, eventEnvelope);
+        return itemCreationCreated;
+    }
+
+    public static AbstractItemCreationEvent.ItemCreationCreated toItemCreationCreated(ItemCreationCreated contractEvent) {
+        AbstractItemCreationEvent.ItemCreationCreated itemCreationCreated = new AbstractItemCreationEvent.ItemCreationCreated();
+        itemCreationCreated.setId_(contractEvent.getId());
+        itemCreationCreated.setItemCreationId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemCreationId()));
+        itemCreationCreated.setResourceCost(contractEvent.getResourceCost());
+        itemCreationCreated.setRequirementsLevel(contractEvent.getRequirementsLevel());
+        itemCreationCreated.setBaseQuantity(contractEvent.getBaseQuantity());
+        itemCreationCreated.setBaseExperience(contractEvent.getBaseExperience());
+        itemCreationCreated.setBaseCreationTime(contractEvent.getBaseCreationTime());
+        itemCreationCreated.setEnergyCost(contractEvent.getEnergyCost());
+        itemCreationCreated.setSuccessRate(contractEvent.getSuccessRate());
+        itemCreationCreated.setVersion(BigInteger.valueOf(-1));
+        return itemCreationCreated;
+    }
+
+    public static AbstractItemCreationEvent.ItemCreationUpdated toItemCreationUpdated(SuiMoveEventEnvelope<ItemCreationUpdated> eventEnvelope) {
+        ItemCreationUpdated contractEvent = eventEnvelope.getParsedJson();
+        AbstractItemCreationEvent.ItemCreationUpdated itemCreationUpdated = toItemCreationUpdated(contractEvent);
+        setItemCreationEventEnvelopeProperties(itemCreationUpdated, eventEnvelope);
+        return itemCreationUpdated;
+    }
+
+    public static AbstractItemCreationEvent.ItemCreationUpdated toItemCreationUpdated(ItemCreationUpdated contractEvent) {
+        AbstractItemCreationEvent.ItemCreationUpdated itemCreationUpdated = new AbstractItemCreationEvent.ItemCreationUpdated();
+        itemCreationUpdated.setId_(contractEvent.getId());
+        itemCreationUpdated.setItemCreationId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemCreationId()));
+        itemCreationUpdated.setResourceCost(contractEvent.getResourceCost());
+        itemCreationUpdated.setRequirementsLevel(contractEvent.getRequirementsLevel());
+        itemCreationUpdated.setBaseQuantity(contractEvent.getBaseQuantity());
+        itemCreationUpdated.setBaseExperience(contractEvent.getBaseExperience());
+        itemCreationUpdated.setBaseCreationTime(contractEvent.getBaseCreationTime());
+        itemCreationUpdated.setEnergyCost(contractEvent.getEnergyCost());
+        itemCreationUpdated.setSuccessRate(contractEvent.getSuccessRate());
+        itemCreationUpdated.setVersion(contractEvent.getVersion());
+        return itemCreationUpdated;
+    }
+
+    public static AbstractItemProductionEvent.ItemProductionCreated toItemProductionCreated(SuiMoveEventEnvelope<ItemProductionCreated> eventEnvelope) {
+        ItemProductionCreated contractEvent = eventEnvelope.getParsedJson();
+        AbstractItemProductionEvent.ItemProductionCreated itemProductionCreated = toItemProductionCreated(contractEvent);
+        setItemProductionEventEnvelopeProperties(itemProductionCreated, eventEnvelope);
+        return itemProductionCreated;
+    }
+
+    public static AbstractItemProductionEvent.ItemProductionCreated toItemProductionCreated(ItemProductionCreated contractEvent) {
+        AbstractItemProductionEvent.ItemProductionCreated itemProductionCreated = new AbstractItemProductionEvent.ItemProductionCreated();
+        itemProductionCreated.setId_(contractEvent.getId());
+        itemProductionCreated.setItemProductionId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemProductionId()));
+        itemProductionCreated.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
+        itemProductionCreated.setRequirementsLevel(contractEvent.getRequirementsLevel());
+        itemProductionCreated.setBaseQuantity(contractEvent.getBaseQuantity());
+        itemProductionCreated.setBaseExperience(contractEvent.getBaseExperience());
+        itemProductionCreated.setBaseCreationTime(contractEvent.getBaseCreationTime());
+        itemProductionCreated.setEnergyCost(contractEvent.getEnergyCost());
+        itemProductionCreated.setSuccessRate(contractEvent.getSuccessRate());
+        itemProductionCreated.setVersion(BigInteger.valueOf(-1));
+        return itemProductionCreated;
+    }
+
+    public static AbstractItemProductionEvent.ItemProductionUpdated toItemProductionUpdated(SuiMoveEventEnvelope<ItemProductionUpdated> eventEnvelope) {
+        ItemProductionUpdated contractEvent = eventEnvelope.getParsedJson();
+        AbstractItemProductionEvent.ItemProductionUpdated itemProductionUpdated = toItemProductionUpdated(contractEvent);
+        setItemProductionEventEnvelopeProperties(itemProductionUpdated, eventEnvelope);
+        return itemProductionUpdated;
+    }
+
+    public static AbstractItemProductionEvent.ItemProductionUpdated toItemProductionUpdated(ItemProductionUpdated contractEvent) {
+        AbstractItemProductionEvent.ItemProductionUpdated itemProductionUpdated = new AbstractItemProductionEvent.ItemProductionUpdated();
+        itemProductionUpdated.setId_(contractEvent.getId());
+        itemProductionUpdated.setItemProductionId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemProductionId()));
+        itemProductionUpdated.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
+        itemProductionUpdated.setRequirementsLevel(contractEvent.getRequirementsLevel());
+        itemProductionUpdated.setBaseQuantity(contractEvent.getBaseQuantity());
+        itemProductionUpdated.setBaseExperience(contractEvent.getBaseExperience());
+        itemProductionUpdated.setBaseCreationTime(contractEvent.getBaseCreationTime());
+        itemProductionUpdated.setEnergyCost(contractEvent.getEnergyCost());
+        itemProductionUpdated.setSuccessRate(contractEvent.getSuccessRate());
+        itemProductionUpdated.setVersion(contractEvent.getVersion());
+        return itemProductionUpdated;
+    }
+
     public static AbstractAvatarEvent.AvatarMinted toAvatarMinted(SuiMoveEventEnvelope<AvatarMinted> eventEnvelope) {
         AvatarMinted contractEvent = eventEnvelope.getParsedJson();
         AbstractAvatarEvent.AvatarMinted avatarMinted = toAvatarMinted(contractEvent);
@@ -423,6 +547,84 @@ public class DomainBeanUtils {
         avatarChangeDeleted.setAvatarId(contractEvent.getAvatarId());
         avatarChangeDeleted.setVersion(contractEvent.getVersion());
         return avatarChangeDeleted;
+    }
+
+    public static AbstractPlayerEvent.PlayerCreated toPlayerCreated(SuiMoveEventEnvelope<PlayerCreated> eventEnvelope) {
+        PlayerCreated contractEvent = eventEnvelope.getParsedJson();
+        AbstractPlayerEvent.PlayerCreated playerCreated = toPlayerCreated(contractEvent);
+        setPlayerEventEnvelopeProperties(playerCreated, eventEnvelope);
+        return playerCreated;
+    }
+
+    public static AbstractPlayerEvent.PlayerCreated toPlayerCreated(PlayerCreated contractEvent) {
+        AbstractPlayerEvent.PlayerCreated playerCreated = new AbstractPlayerEvent.PlayerCreated();
+        playerCreated.setId(contractEvent.getId());
+        playerCreated.setName(contractEvent.getName());
+        playerCreated.setOwner(contractEvent.getOwner());
+        playerCreated.setVersion(BigInteger.valueOf(-1));
+        return playerCreated;
+    }
+
+    public static AbstractPlayerEvent.IslandClaimed toIslandClaimed(SuiMoveEventEnvelope<IslandClaimed> eventEnvelope) {
+        IslandClaimed contractEvent = eventEnvelope.getParsedJson();
+        AbstractPlayerEvent.IslandClaimed islandClaimed = toIslandClaimed(contractEvent);
+        setPlayerEventEnvelopeProperties(islandClaimed, eventEnvelope);
+        return islandClaimed;
+    }
+
+    public static AbstractPlayerEvent.IslandClaimed toIslandClaimed(IslandClaimed contractEvent) {
+        AbstractPlayerEvent.IslandClaimed islandClaimed = new AbstractPlayerEvent.IslandClaimed();
+        islandClaimed.setId(contractEvent.getId());
+        islandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        islandClaimed.setClaimedAt(contractEvent.getClaimedAt());
+        islandClaimed.setVersion(contractEvent.getVersion());
+        return islandClaimed;
+    }
+
+    public static AbstractPlayerEvent.NftHolderIslandClaimed toNftHolderIslandClaimed(SuiMoveEventEnvelope<NftHolderIslandClaimed> eventEnvelope) {
+        NftHolderIslandClaimed contractEvent = eventEnvelope.getParsedJson();
+        AbstractPlayerEvent.NftHolderIslandClaimed nftHolderIslandClaimed = toNftHolderIslandClaimed(contractEvent);
+        setPlayerEventEnvelopeProperties(nftHolderIslandClaimed, eventEnvelope);
+        return nftHolderIslandClaimed;
+    }
+
+    public static AbstractPlayerEvent.NftHolderIslandClaimed toNftHolderIslandClaimed(NftHolderIslandClaimed contractEvent) {
+        AbstractPlayerEvent.NftHolderIslandClaimed nftHolderIslandClaimed = new AbstractPlayerEvent.NftHolderIslandClaimed();
+        nftHolderIslandClaimed.setId(contractEvent.getId());
+        nftHolderIslandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        nftHolderIslandClaimed.setClaimedAt(contractEvent.getClaimedAt());
+        nftHolderIslandClaimed.setVersion(contractEvent.getVersion());
+        return nftHolderIslandClaimed;
+    }
+
+    public static AbstractPlayerEvent.PlayerAirdropped toPlayerAirdropped(SuiMoveEventEnvelope<PlayerAirdropped> eventEnvelope) {
+        PlayerAirdropped contractEvent = eventEnvelope.getParsedJson();
+        AbstractPlayerEvent.PlayerAirdropped playerAirdropped = toPlayerAirdropped(contractEvent);
+        setPlayerEventEnvelopeProperties(playerAirdropped, eventEnvelope);
+        return playerAirdropped;
+    }
+
+    public static AbstractPlayerEvent.PlayerAirdropped toPlayerAirdropped(PlayerAirdropped contractEvent) {
+        AbstractPlayerEvent.PlayerAirdropped playerAirdropped = new AbstractPlayerEvent.PlayerAirdropped();
+        playerAirdropped.setId(contractEvent.getId());
+        playerAirdropped.setItemId(contractEvent.getItemId());
+        playerAirdropped.setQuantity(contractEvent.getQuantity());
+        playerAirdropped.setVersion(contractEvent.getVersion());
+        return playerAirdropped;
+    }
+
+    public static AbstractPlayerEvent.PlayerIslandResourcesGathered toPlayerIslandResourcesGathered(SuiMoveEventEnvelope<PlayerIslandResourcesGathered> eventEnvelope) {
+        PlayerIslandResourcesGathered contractEvent = eventEnvelope.getParsedJson();
+        AbstractPlayerEvent.PlayerIslandResourcesGathered playerIslandResourcesGathered = toPlayerIslandResourcesGathered(contractEvent);
+        setPlayerEventEnvelopeProperties(playerIslandResourcesGathered, eventEnvelope);
+        return playerIslandResourcesGathered;
+    }
+
+    public static AbstractPlayerEvent.PlayerIslandResourcesGathered toPlayerIslandResourcesGathered(PlayerIslandResourcesGathered contractEvent) {
+        AbstractPlayerEvent.PlayerIslandResourcesGathered playerIslandResourcesGathered = new AbstractPlayerEvent.PlayerIslandResourcesGathered();
+        playerIslandResourcesGathered.setId(contractEvent.getId());
+        playerIslandResourcesGathered.setVersion(contractEvent.getVersion());
+        return playerIslandResourcesGathered;
     }
 
     public static AbstractSkillProcessEvent.SkillProcessCreated toSkillProcessCreated(SuiMoveEventEnvelope<SkillProcessCreated> eventEnvelope) {
@@ -700,6 +902,7 @@ public class DomainBeanUtils {
         rosterShipTransferred.setShipId(contractEvent.getShipId());
         rosterShipTransferred.setToRosterId(DomainBeanUtils.toRosterId(contractEvent.getToRosterId()));
         rosterShipTransferred.setToPosition(contractEvent.getToPosition());
+        rosterShipTransferred.setTransferredAt(contractEvent.getTransferredAt());
         rosterShipTransferred.setVersion(contractEvent.getVersion());
         return rosterShipTransferred;
     }
@@ -841,206 +1044,162 @@ public class DomainBeanUtils {
         return shipBattleLootTaken;
     }
 
-    public static AbstractItemEvent.ItemCreated toItemCreated(SuiMoveEventEnvelope<ItemCreated> eventEnvelope) {
-        ItemCreated contractEvent = eventEnvelope.getParsedJson();
-        AbstractItemEvent.ItemCreated itemCreated = toItemCreated(contractEvent);
-        setItemEventEnvelopeProperties(itemCreated, eventEnvelope);
-        return itemCreated;
+    public static AbstractExperienceTableEvent.InitExperienceTableEvent toInitExperienceTableEvent(SuiMoveEventEnvelope<InitExperienceTableEvent> eventEnvelope) {
+        InitExperienceTableEvent contractEvent = eventEnvelope.getParsedJson();
+        AbstractExperienceTableEvent.InitExperienceTableEvent initExperienceTableEvent = toInitExperienceTableEvent(contractEvent);
+        setExperienceTableEventEnvelopeProperties(initExperienceTableEvent, eventEnvelope);
+        return initExperienceTableEvent;
     }
 
-    public static AbstractItemEvent.ItemCreated toItemCreated(ItemCreated contractEvent) {
-        AbstractItemEvent.ItemCreated itemCreated = new AbstractItemEvent.ItemCreated();
-        itemCreated.setId_(contractEvent.getId());
-        itemCreated.setItemId(contractEvent.getItemId());
-        itemCreated.setName(contractEvent.getName());
-        itemCreated.setRequiredForCompletion(contractEvent.getRequiredForCompletion());
-        itemCreated.setSellsFor(contractEvent.getSellsFor());
-        itemCreated.setVersion(BigInteger.valueOf(-1));
-        return itemCreated;
+    public static AbstractExperienceTableEvent.InitExperienceTableEvent toInitExperienceTableEvent(InitExperienceTableEvent contractEvent) {
+        AbstractExperienceTableEvent.InitExperienceTableEvent initExperienceTableEvent = new AbstractExperienceTableEvent.InitExperienceTableEvent();
+        initExperienceTableEvent.setId(contractEvent.getId());
+        initExperienceTableEvent.setVersion(BigInteger.valueOf(-1));
+        return initExperienceTableEvent;
     }
 
-    public static AbstractItemEvent.ItemUpdated toItemUpdated(SuiMoveEventEnvelope<ItemUpdated> eventEnvelope) {
-        ItemUpdated contractEvent = eventEnvelope.getParsedJson();
-        AbstractItemEvent.ItemUpdated itemUpdated = toItemUpdated(contractEvent);
-        setItemEventEnvelopeProperties(itemUpdated, eventEnvelope);
-        return itemUpdated;
+    public static AbstractExperienceTableEvent.ExperienceLevelAdded toExperienceLevelAdded(SuiMoveEventEnvelope<ExperienceLevelAdded> eventEnvelope) {
+        ExperienceLevelAdded contractEvent = eventEnvelope.getParsedJson();
+        AbstractExperienceTableEvent.ExperienceLevelAdded experienceLevelAdded = toExperienceLevelAdded(contractEvent);
+        setExperienceTableEventEnvelopeProperties(experienceLevelAdded, eventEnvelope);
+        return experienceLevelAdded;
     }
 
-    public static AbstractItemEvent.ItemUpdated toItemUpdated(ItemUpdated contractEvent) {
-        AbstractItemEvent.ItemUpdated itemUpdated = new AbstractItemEvent.ItemUpdated();
-        itemUpdated.setId_(contractEvent.getId());
-        itemUpdated.setItemId(contractEvent.getItemId());
-        itemUpdated.setName(contractEvent.getName());
-        itemUpdated.setRequiredForCompletion(contractEvent.getRequiredForCompletion());
-        itemUpdated.setSellsFor(contractEvent.getSellsFor());
-        itemUpdated.setVersion(contractEvent.getVersion());
-        return itemUpdated;
+    public static AbstractExperienceTableEvent.ExperienceLevelAdded toExperienceLevelAdded(ExperienceLevelAdded contractEvent) {
+        AbstractExperienceTableEvent.ExperienceLevelAdded experienceLevelAdded = new AbstractExperienceTableEvent.ExperienceLevelAdded();
+        experienceLevelAdded.setId(contractEvent.getId());
+        experienceLevelAdded.setLevel(contractEvent.getLevel());
+        experienceLevelAdded.setExperience(contractEvent.getExperience());
+        experienceLevelAdded.setDifference(contractEvent.getDifference());
+        experienceLevelAdded.setVersion(contractEvent.getVersion());
+        return experienceLevelAdded;
     }
 
-    public static AbstractItemCreationEvent.ItemCreationCreated toItemCreationCreated(SuiMoveEventEnvelope<ItemCreationCreated> eventEnvelope) {
-        ItemCreationCreated contractEvent = eventEnvelope.getParsedJson();
-        AbstractItemCreationEvent.ItemCreationCreated itemCreationCreated = toItemCreationCreated(contractEvent);
-        setItemCreationEventEnvelopeProperties(itemCreationCreated, eventEnvelope);
-        return itemCreationCreated;
+    public static AbstractExperienceTableEvent.ExperienceLevelUpdated toExperienceLevelUpdated(SuiMoveEventEnvelope<ExperienceLevelUpdated> eventEnvelope) {
+        ExperienceLevelUpdated contractEvent = eventEnvelope.getParsedJson();
+        AbstractExperienceTableEvent.ExperienceLevelUpdated experienceLevelUpdated = toExperienceLevelUpdated(contractEvent);
+        setExperienceTableEventEnvelopeProperties(experienceLevelUpdated, eventEnvelope);
+        return experienceLevelUpdated;
     }
 
-    public static AbstractItemCreationEvent.ItemCreationCreated toItemCreationCreated(ItemCreationCreated contractEvent) {
-        AbstractItemCreationEvent.ItemCreationCreated itemCreationCreated = new AbstractItemCreationEvent.ItemCreationCreated();
-        itemCreationCreated.setId_(contractEvent.getId());
-        itemCreationCreated.setItemCreationId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemCreationId()));
-        itemCreationCreated.setResourceCost(contractEvent.getResourceCost());
-        itemCreationCreated.setRequirementsLevel(contractEvent.getRequirementsLevel());
-        itemCreationCreated.setBaseQuantity(contractEvent.getBaseQuantity());
-        itemCreationCreated.setBaseExperience(contractEvent.getBaseExperience());
-        itemCreationCreated.setBaseCreationTime(contractEvent.getBaseCreationTime());
-        itemCreationCreated.setEnergyCost(contractEvent.getEnergyCost());
-        itemCreationCreated.setSuccessRate(contractEvent.getSuccessRate());
-        itemCreationCreated.setVersion(BigInteger.valueOf(-1));
-        return itemCreationCreated;
+    public static AbstractExperienceTableEvent.ExperienceLevelUpdated toExperienceLevelUpdated(ExperienceLevelUpdated contractEvent) {
+        AbstractExperienceTableEvent.ExperienceLevelUpdated experienceLevelUpdated = new AbstractExperienceTableEvent.ExperienceLevelUpdated();
+        experienceLevelUpdated.setId(contractEvent.getId());
+        experienceLevelUpdated.setLevel(contractEvent.getLevel());
+        experienceLevelUpdated.setExperience(contractEvent.getExperience());
+        experienceLevelUpdated.setDifference(contractEvent.getDifference());
+        experienceLevelUpdated.setVersion(contractEvent.getVersion());
+        return experienceLevelUpdated;
     }
 
-    public static AbstractItemCreationEvent.ItemCreationUpdated toItemCreationUpdated(SuiMoveEventEnvelope<ItemCreationUpdated> eventEnvelope) {
-        ItemCreationUpdated contractEvent = eventEnvelope.getParsedJson();
-        AbstractItemCreationEvent.ItemCreationUpdated itemCreationUpdated = toItemCreationUpdated(contractEvent);
-        setItemCreationEventEnvelopeProperties(itemCreationUpdated, eventEnvelope);
-        return itemCreationUpdated;
+    public static AbstractMapEvent.InitMapEvent toInitMapEvent(SuiMoveEventEnvelope<InitMapEvent> eventEnvelope) {
+        InitMapEvent contractEvent = eventEnvelope.getParsedJson();
+        AbstractMapEvent.InitMapEvent initMapEvent = toInitMapEvent(contractEvent);
+        setMapEventEnvelopeProperties(initMapEvent, eventEnvelope);
+        return initMapEvent;
     }
 
-    public static AbstractItemCreationEvent.ItemCreationUpdated toItemCreationUpdated(ItemCreationUpdated contractEvent) {
-        AbstractItemCreationEvent.ItemCreationUpdated itemCreationUpdated = new AbstractItemCreationEvent.ItemCreationUpdated();
-        itemCreationUpdated.setId_(contractEvent.getId());
-        itemCreationUpdated.setItemCreationId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemCreationId()));
-        itemCreationUpdated.setResourceCost(contractEvent.getResourceCost());
-        itemCreationUpdated.setRequirementsLevel(contractEvent.getRequirementsLevel());
-        itemCreationUpdated.setBaseQuantity(contractEvent.getBaseQuantity());
-        itemCreationUpdated.setBaseExperience(contractEvent.getBaseExperience());
-        itemCreationUpdated.setBaseCreationTime(contractEvent.getBaseCreationTime());
-        itemCreationUpdated.setEnergyCost(contractEvent.getEnergyCost());
-        itemCreationUpdated.setSuccessRate(contractEvent.getSuccessRate());
-        itemCreationUpdated.setVersion(contractEvent.getVersion());
-        return itemCreationUpdated;
+    public static AbstractMapEvent.InitMapEvent toInitMapEvent(InitMapEvent contractEvent) {
+        AbstractMapEvent.InitMapEvent initMapEvent = new AbstractMapEvent.InitMapEvent();
+        initMapEvent.setId(contractEvent.getId());
+        initMapEvent.setVersion(BigInteger.valueOf(-1));
+        return initMapEvent;
     }
 
-    public static AbstractItemProductionEvent.ItemProductionCreated toItemProductionCreated(SuiMoveEventEnvelope<ItemProductionCreated> eventEnvelope) {
-        ItemProductionCreated contractEvent = eventEnvelope.getParsedJson();
-        AbstractItemProductionEvent.ItemProductionCreated itemProductionCreated = toItemProductionCreated(contractEvent);
-        setItemProductionEventEnvelopeProperties(itemProductionCreated, eventEnvelope);
-        return itemProductionCreated;
+    public static AbstractMapEvent.IslandAdded toIslandAdded(SuiMoveEventEnvelope<IslandAdded> eventEnvelope) {
+        IslandAdded contractEvent = eventEnvelope.getParsedJson();
+        AbstractMapEvent.IslandAdded islandAdded = toIslandAdded(contractEvent);
+        setMapEventEnvelopeProperties(islandAdded, eventEnvelope);
+        return islandAdded;
     }
 
-    public static AbstractItemProductionEvent.ItemProductionCreated toItemProductionCreated(ItemProductionCreated contractEvent) {
-        AbstractItemProductionEvent.ItemProductionCreated itemProductionCreated = new AbstractItemProductionEvent.ItemProductionCreated();
-        itemProductionCreated.setId_(contractEvent.getId());
-        itemProductionCreated.setItemProductionId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemProductionId()));
-        itemProductionCreated.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
-        itemProductionCreated.setRequirementsLevel(contractEvent.getRequirementsLevel());
-        itemProductionCreated.setBaseQuantity(contractEvent.getBaseQuantity());
-        itemProductionCreated.setBaseExperience(contractEvent.getBaseExperience());
-        itemProductionCreated.setBaseCreationTime(contractEvent.getBaseCreationTime());
-        itemProductionCreated.setEnergyCost(contractEvent.getEnergyCost());
-        itemProductionCreated.setSuccessRate(contractEvent.getSuccessRate());
-        itemProductionCreated.setVersion(BigInteger.valueOf(-1));
-        return itemProductionCreated;
+    public static AbstractMapEvent.IslandAdded toIslandAdded(IslandAdded contractEvent) {
+        AbstractMapEvent.IslandAdded islandAdded = new AbstractMapEvent.IslandAdded();
+        islandAdded.setId(contractEvent.getId());
+        islandAdded.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        islandAdded.setResources(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getResources()));
+        islandAdded.setVersion(contractEvent.getVersion());
+        return islandAdded;
     }
 
-    public static AbstractItemProductionEvent.ItemProductionUpdated toItemProductionUpdated(SuiMoveEventEnvelope<ItemProductionUpdated> eventEnvelope) {
-        ItemProductionUpdated contractEvent = eventEnvelope.getParsedJson();
-        AbstractItemProductionEvent.ItemProductionUpdated itemProductionUpdated = toItemProductionUpdated(contractEvent);
-        setItemProductionEventEnvelopeProperties(itemProductionUpdated, eventEnvelope);
-        return itemProductionUpdated;
+    public static AbstractMapEvent.MapIslandClaimed toMapIslandClaimed(SuiMoveEventEnvelope<MapIslandClaimed> eventEnvelope) {
+        MapIslandClaimed contractEvent = eventEnvelope.getParsedJson();
+        AbstractMapEvent.MapIslandClaimed mapIslandClaimed = toMapIslandClaimed(contractEvent);
+        setMapEventEnvelopeProperties(mapIslandClaimed, eventEnvelope);
+        return mapIslandClaimed;
     }
 
-    public static AbstractItemProductionEvent.ItemProductionUpdated toItemProductionUpdated(ItemProductionUpdated contractEvent) {
-        AbstractItemProductionEvent.ItemProductionUpdated itemProductionUpdated = new AbstractItemProductionEvent.ItemProductionUpdated();
-        itemProductionUpdated.setId_(contractEvent.getId());
-        itemProductionUpdated.setItemProductionId(DomainBeanUtils.toSkillTypeItemIdPair(contractEvent.getItemProductionId()));
-        itemProductionUpdated.setProductionMaterials(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getProductionMaterials()));
-        itemProductionUpdated.setRequirementsLevel(contractEvent.getRequirementsLevel());
-        itemProductionUpdated.setBaseQuantity(contractEvent.getBaseQuantity());
-        itemProductionUpdated.setBaseExperience(contractEvent.getBaseExperience());
-        itemProductionUpdated.setBaseCreationTime(contractEvent.getBaseCreationTime());
-        itemProductionUpdated.setEnergyCost(contractEvent.getEnergyCost());
-        itemProductionUpdated.setSuccessRate(contractEvent.getSuccessRate());
-        itemProductionUpdated.setVersion(contractEvent.getVersion());
-        return itemProductionUpdated;
+    public static AbstractMapEvent.MapIslandClaimed toMapIslandClaimed(MapIslandClaimed contractEvent) {
+        AbstractMapEvent.MapIslandClaimed mapIslandClaimed = new AbstractMapEvent.MapIslandClaimed();
+        mapIslandClaimed.setId(contractEvent.getId());
+        mapIslandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        mapIslandClaimed.setClaimedBy(contractEvent.getClaimedBy());
+        mapIslandClaimed.setClaimedAt(contractEvent.getClaimedAt());
+        mapIslandClaimed.setVersion(contractEvent.getVersion());
+        return mapIslandClaimed;
     }
 
-    public static AbstractPlayerEvent.PlayerCreated toPlayerCreated(SuiMoveEventEnvelope<PlayerCreated> eventEnvelope) {
-        PlayerCreated contractEvent = eventEnvelope.getParsedJson();
-        AbstractPlayerEvent.PlayerCreated playerCreated = toPlayerCreated(contractEvent);
-        setPlayerEventEnvelopeProperties(playerCreated, eventEnvelope);
-        return playerCreated;
+    public static AbstractMapEvent.IslandResourcesGathered toIslandResourcesGathered(SuiMoveEventEnvelope<IslandResourcesGathered> eventEnvelope) {
+        IslandResourcesGathered contractEvent = eventEnvelope.getParsedJson();
+        AbstractMapEvent.IslandResourcesGathered islandResourcesGathered = toIslandResourcesGathered(contractEvent);
+        setMapEventEnvelopeProperties(islandResourcesGathered, eventEnvelope);
+        return islandResourcesGathered;
     }
 
-    public static AbstractPlayerEvent.PlayerCreated toPlayerCreated(PlayerCreated contractEvent) {
-        AbstractPlayerEvent.PlayerCreated playerCreated = new AbstractPlayerEvent.PlayerCreated();
-        playerCreated.setId(contractEvent.getId());
-        playerCreated.setName(contractEvent.getName());
-        playerCreated.setOwner(contractEvent.getOwner());
-        playerCreated.setVersion(BigInteger.valueOf(-1));
-        return playerCreated;
+    public static AbstractMapEvent.IslandResourcesGathered toIslandResourcesGathered(IslandResourcesGathered contractEvent) {
+        AbstractMapEvent.IslandResourcesGathered islandResourcesGathered = new AbstractMapEvent.IslandResourcesGathered();
+        islandResourcesGathered.setId(contractEvent.getId());
+        islandResourcesGathered.setPlayerId(contractEvent.getPlayerId());
+        islandResourcesGathered.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
+        islandResourcesGathered.setResources(java.util.Arrays.stream(contractEvent.getResources()).map(DomainBeanUtils::toItemIdQuantityPair).toArray(org.dddml.suiinfinitesea.domain.ItemIdQuantityPair[]::new));
+        islandResourcesGathered.setGatheredAt(contractEvent.getGatheredAt());
+        islandResourcesGathered.setVersion(contractEvent.getVersion());
+        return islandResourcesGathered;
     }
 
-    public static AbstractPlayerEvent.IslandClaimed toIslandClaimed(SuiMoveEventEnvelope<IslandClaimed> eventEnvelope) {
-        IslandClaimed contractEvent = eventEnvelope.getParsedJson();
-        AbstractPlayerEvent.IslandClaimed islandClaimed = toIslandClaimed(contractEvent);
-        setPlayerEventEnvelopeProperties(islandClaimed, eventEnvelope);
-        return islandClaimed;
+    public static AbstractMapEvent.MapSettingsUpdated toMapSettingsUpdated(SuiMoveEventEnvelope<MapSettingsUpdated> eventEnvelope) {
+        MapSettingsUpdated contractEvent = eventEnvelope.getParsedJson();
+        AbstractMapEvent.MapSettingsUpdated mapSettingsUpdated = toMapSettingsUpdated(contractEvent);
+        setMapEventEnvelopeProperties(mapSettingsUpdated, eventEnvelope);
+        return mapSettingsUpdated;
     }
 
-    public static AbstractPlayerEvent.IslandClaimed toIslandClaimed(IslandClaimed contractEvent) {
-        AbstractPlayerEvent.IslandClaimed islandClaimed = new AbstractPlayerEvent.IslandClaimed();
-        islandClaimed.setId(contractEvent.getId());
-        islandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
-        islandClaimed.setClaimedAt(contractEvent.getClaimedAt());
-        islandClaimed.setVersion(contractEvent.getVersion());
-        return islandClaimed;
+    public static AbstractMapEvent.MapSettingsUpdated toMapSettingsUpdated(MapSettingsUpdated contractEvent) {
+        AbstractMapEvent.MapSettingsUpdated mapSettingsUpdated = new AbstractMapEvent.MapSettingsUpdated();
+        mapSettingsUpdated.setId(contractEvent.getId());
+        mapSettingsUpdated.setClaimIslandSetting(contractEvent.getClaimIslandSetting());
+        mapSettingsUpdated.setVersion(contractEvent.getVersion());
+        return mapSettingsUpdated;
     }
 
-    public static AbstractPlayerEvent.NftHolderIslandClaimed toNftHolderIslandClaimed(SuiMoveEventEnvelope<NftHolderIslandClaimed> eventEnvelope) {
-        NftHolderIslandClaimed contractEvent = eventEnvelope.getParsedJson();
-        AbstractPlayerEvent.NftHolderIslandClaimed nftHolderIslandClaimed = toNftHolderIslandClaimed(contractEvent);
-        setPlayerEventEnvelopeProperties(nftHolderIslandClaimed, eventEnvelope);
-        return nftHolderIslandClaimed;
+    public static AbstractMapEvent.WhitelistedForClaimingIsland toWhitelistedForClaimingIsland(SuiMoveEventEnvelope<WhitelistedForClaimingIsland> eventEnvelope) {
+        WhitelistedForClaimingIsland contractEvent = eventEnvelope.getParsedJson();
+        AbstractMapEvent.WhitelistedForClaimingIsland whitelistedForClaimingIsland = toWhitelistedForClaimingIsland(contractEvent);
+        setMapEventEnvelopeProperties(whitelistedForClaimingIsland, eventEnvelope);
+        return whitelistedForClaimingIsland;
     }
 
-    public static AbstractPlayerEvent.NftHolderIslandClaimed toNftHolderIslandClaimed(NftHolderIslandClaimed contractEvent) {
-        AbstractPlayerEvent.NftHolderIslandClaimed nftHolderIslandClaimed = new AbstractPlayerEvent.NftHolderIslandClaimed();
-        nftHolderIslandClaimed.setId(contractEvent.getId());
-        nftHolderIslandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
-        nftHolderIslandClaimed.setClaimedAt(contractEvent.getClaimedAt());
-        nftHolderIslandClaimed.setVersion(contractEvent.getVersion());
-        return nftHolderIslandClaimed;
+    public static AbstractMapEvent.WhitelistedForClaimingIsland toWhitelistedForClaimingIsland(WhitelistedForClaimingIsland contractEvent) {
+        AbstractMapEvent.WhitelistedForClaimingIsland whitelistedForClaimingIsland = new AbstractMapEvent.WhitelistedForClaimingIsland();
+        whitelistedForClaimingIsland.setId(contractEvent.getId());
+        whitelistedForClaimingIsland.setAccountAddress(contractEvent.getAccountAddress());
+        whitelistedForClaimingIsland.setVersion(contractEvent.getVersion());
+        return whitelistedForClaimingIsland;
     }
 
-    public static AbstractPlayerEvent.PlayerAirdropped toPlayerAirdropped(SuiMoveEventEnvelope<PlayerAirdropped> eventEnvelope) {
-        PlayerAirdropped contractEvent = eventEnvelope.getParsedJson();
-        AbstractPlayerEvent.PlayerAirdropped playerAirdropped = toPlayerAirdropped(contractEvent);
-        setPlayerEventEnvelopeProperties(playerAirdropped, eventEnvelope);
-        return playerAirdropped;
+    public static AbstractMapEvent.UnWhitelistedForClaimingIsland toUnWhitelistedForClaimingIsland(SuiMoveEventEnvelope<UnWhitelistedForClaimingIsland> eventEnvelope) {
+        UnWhitelistedForClaimingIsland contractEvent = eventEnvelope.getParsedJson();
+        AbstractMapEvent.UnWhitelistedForClaimingIsland unWhitelistedForClaimingIsland = toUnWhitelistedForClaimingIsland(contractEvent);
+        setMapEventEnvelopeProperties(unWhitelistedForClaimingIsland, eventEnvelope);
+        return unWhitelistedForClaimingIsland;
     }
 
-    public static AbstractPlayerEvent.PlayerAirdropped toPlayerAirdropped(PlayerAirdropped contractEvent) {
-        AbstractPlayerEvent.PlayerAirdropped playerAirdropped = new AbstractPlayerEvent.PlayerAirdropped();
-        playerAirdropped.setId(contractEvent.getId());
-        playerAirdropped.setItemId(contractEvent.getItemId());
-        playerAirdropped.setQuantity(contractEvent.getQuantity());
-        playerAirdropped.setVersion(contractEvent.getVersion());
-        return playerAirdropped;
-    }
-
-    public static AbstractPlayerEvent.PlayerIslandResourcesGathered toPlayerIslandResourcesGathered(SuiMoveEventEnvelope<PlayerIslandResourcesGathered> eventEnvelope) {
-        PlayerIslandResourcesGathered contractEvent = eventEnvelope.getParsedJson();
-        AbstractPlayerEvent.PlayerIslandResourcesGathered playerIslandResourcesGathered = toPlayerIslandResourcesGathered(contractEvent);
-        setPlayerEventEnvelopeProperties(playerIslandResourcesGathered, eventEnvelope);
-        return playerIslandResourcesGathered;
-    }
-
-    public static AbstractPlayerEvent.PlayerIslandResourcesGathered toPlayerIslandResourcesGathered(PlayerIslandResourcesGathered contractEvent) {
-        AbstractPlayerEvent.PlayerIslandResourcesGathered playerIslandResourcesGathered = new AbstractPlayerEvent.PlayerIslandResourcesGathered();
-        playerIslandResourcesGathered.setId(contractEvent.getId());
-        playerIslandResourcesGathered.setVersion(contractEvent.getVersion());
-        return playerIslandResourcesGathered;
+    public static AbstractMapEvent.UnWhitelistedForClaimingIsland toUnWhitelistedForClaimingIsland(UnWhitelistedForClaimingIsland contractEvent) {
+        AbstractMapEvent.UnWhitelistedForClaimingIsland unWhitelistedForClaimingIsland = new AbstractMapEvent.UnWhitelistedForClaimingIsland();
+        unWhitelistedForClaimingIsland.setId(contractEvent.getId());
+        unWhitelistedForClaimingIsland.setAccountAddress(contractEvent.getAccountAddress());
+        unWhitelistedForClaimingIsland.setVersion(contractEvent.getVersion());
+        return unWhitelistedForClaimingIsland;
     }
 
     public static AbstractWhitelistEvent.InitWhitelistEvent toInitWhitelistEvent(SuiMoveEventEnvelope<InitWhitelistEvent> eventEnvelope) {
@@ -1155,162 +1314,19 @@ public class DomainBeanUtils {
         return whitelistCreated;
     }
 
-    public static AbstractMapEvent.InitMapEvent toInitMapEvent(SuiMoveEventEnvelope<InitMapEvent> eventEnvelope) {
-        InitMapEvent contractEvent = eventEnvelope.getParsedJson();
-        AbstractMapEvent.InitMapEvent initMapEvent = toInitMapEvent(contractEvent);
-        setMapEventEnvelopeProperties(initMapEvent, eventEnvelope);
-        return initMapEvent;
+    public static void setItemEventEnvelopeProperties(AbstractItemEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
+        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
+        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
     }
 
-    public static AbstractMapEvent.InitMapEvent toInitMapEvent(InitMapEvent contractEvent) {
-        AbstractMapEvent.InitMapEvent initMapEvent = new AbstractMapEvent.InitMapEvent();
-        initMapEvent.setId(contractEvent.getId());
-        initMapEvent.setVersion(BigInteger.valueOf(-1));
-        return initMapEvent;
+    public static void setItemCreationEventEnvelopeProperties(AbstractItemCreationEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
+        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
+        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
     }
 
-    public static AbstractMapEvent.IslandAdded toIslandAdded(SuiMoveEventEnvelope<IslandAdded> eventEnvelope) {
-        IslandAdded contractEvent = eventEnvelope.getParsedJson();
-        AbstractMapEvent.IslandAdded islandAdded = toIslandAdded(contractEvent);
-        setMapEventEnvelopeProperties(islandAdded, eventEnvelope);
-        return islandAdded;
-    }
-
-    public static AbstractMapEvent.IslandAdded toIslandAdded(IslandAdded contractEvent) {
-        AbstractMapEvent.IslandAdded islandAdded = new AbstractMapEvent.IslandAdded();
-        islandAdded.setId(contractEvent.getId());
-        islandAdded.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
-        islandAdded.setResources(DomainBeanUtils.toItemIdQuantityPairs(contractEvent.getResources()));
-        islandAdded.setVersion(contractEvent.getVersion());
-        return islandAdded;
-    }
-
-    public static AbstractMapEvent.MapIslandClaimed toMapIslandClaimed(SuiMoveEventEnvelope<MapIslandClaimed> eventEnvelope) {
-        MapIslandClaimed contractEvent = eventEnvelope.getParsedJson();
-        AbstractMapEvent.MapIslandClaimed mapIslandClaimed = toMapIslandClaimed(contractEvent);
-        setMapEventEnvelopeProperties(mapIslandClaimed, eventEnvelope);
-        return mapIslandClaimed;
-    }
-
-    public static AbstractMapEvent.MapIslandClaimed toMapIslandClaimed(MapIslandClaimed contractEvent) {
-        AbstractMapEvent.MapIslandClaimed mapIslandClaimed = new AbstractMapEvent.MapIslandClaimed();
-        mapIslandClaimed.setId(contractEvent.getId());
-        mapIslandClaimed.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
-        mapIslandClaimed.setClaimedBy(contractEvent.getClaimedBy());
-        mapIslandClaimed.setClaimedAt(contractEvent.getClaimedAt());
-        mapIslandClaimed.setVersion(contractEvent.getVersion());
-        return mapIslandClaimed;
-    }
-
-    public static AbstractMapEvent.IslandResourcesGathered toIslandResourcesGathered(SuiMoveEventEnvelope<IslandResourcesGathered> eventEnvelope) {
-        IslandResourcesGathered contractEvent = eventEnvelope.getParsedJson();
-        AbstractMapEvent.IslandResourcesGathered islandResourcesGathered = toIslandResourcesGathered(contractEvent);
-        setMapEventEnvelopeProperties(islandResourcesGathered, eventEnvelope);
-        return islandResourcesGathered;
-    }
-
-    public static AbstractMapEvent.IslandResourcesGathered toIslandResourcesGathered(IslandResourcesGathered contractEvent) {
-        AbstractMapEvent.IslandResourcesGathered islandResourcesGathered = new AbstractMapEvent.IslandResourcesGathered();
-        islandResourcesGathered.setId(contractEvent.getId());
-        islandResourcesGathered.setPlayerId(contractEvent.getPlayerId());
-        islandResourcesGathered.setCoordinates(DomainBeanUtils.toCoordinates(contractEvent.getCoordinates()));
-        islandResourcesGathered.setResources(java.util.Arrays.stream(contractEvent.getResources()).map(DomainBeanUtils::toItemIdQuantityPair).toArray(org.dddml.suiinfinitesea.domain.ItemIdQuantityPair[]::new));
-        islandResourcesGathered.setGatheredAt(contractEvent.getGatheredAt());
-        islandResourcesGathered.setVersion(contractEvent.getVersion());
-        return islandResourcesGathered;
-    }
-
-    public static AbstractMapEvent.MapSettingsUpdated toMapSettingsUpdated(SuiMoveEventEnvelope<MapSettingsUpdated> eventEnvelope) {
-        MapSettingsUpdated contractEvent = eventEnvelope.getParsedJson();
-        AbstractMapEvent.MapSettingsUpdated mapSettingsUpdated = toMapSettingsUpdated(contractEvent);
-        setMapEventEnvelopeProperties(mapSettingsUpdated, eventEnvelope);
-        return mapSettingsUpdated;
-    }
-
-    public static AbstractMapEvent.MapSettingsUpdated toMapSettingsUpdated(MapSettingsUpdated contractEvent) {
-        AbstractMapEvent.MapSettingsUpdated mapSettingsUpdated = new AbstractMapEvent.MapSettingsUpdated();
-        mapSettingsUpdated.setId(contractEvent.getId());
-        mapSettingsUpdated.setClaimIslandSetting(contractEvent.getClaimIslandSetting());
-        mapSettingsUpdated.setVersion(contractEvent.getVersion());
-        return mapSettingsUpdated;
-    }
-
-    public static AbstractMapEvent.WhitelistedForClaimingIsland toWhitelistedForClaimingIsland(SuiMoveEventEnvelope<WhitelistedForClaimingIsland> eventEnvelope) {
-        WhitelistedForClaimingIsland contractEvent = eventEnvelope.getParsedJson();
-        AbstractMapEvent.WhitelistedForClaimingIsland whitelistedForClaimingIsland = toWhitelistedForClaimingIsland(contractEvent);
-        setMapEventEnvelopeProperties(whitelistedForClaimingIsland, eventEnvelope);
-        return whitelistedForClaimingIsland;
-    }
-
-    public static AbstractMapEvent.WhitelistedForClaimingIsland toWhitelistedForClaimingIsland(WhitelistedForClaimingIsland contractEvent) {
-        AbstractMapEvent.WhitelistedForClaimingIsland whitelistedForClaimingIsland = new AbstractMapEvent.WhitelistedForClaimingIsland();
-        whitelistedForClaimingIsland.setId(contractEvent.getId());
-        whitelistedForClaimingIsland.setAccountAddress(contractEvent.getAccountAddress());
-        whitelistedForClaimingIsland.setVersion(contractEvent.getVersion());
-        return whitelistedForClaimingIsland;
-    }
-
-    public static AbstractMapEvent.UnWhitelistedForClaimingIsland toUnWhitelistedForClaimingIsland(SuiMoveEventEnvelope<UnWhitelistedForClaimingIsland> eventEnvelope) {
-        UnWhitelistedForClaimingIsland contractEvent = eventEnvelope.getParsedJson();
-        AbstractMapEvent.UnWhitelistedForClaimingIsland unWhitelistedForClaimingIsland = toUnWhitelistedForClaimingIsland(contractEvent);
-        setMapEventEnvelopeProperties(unWhitelistedForClaimingIsland, eventEnvelope);
-        return unWhitelistedForClaimingIsland;
-    }
-
-    public static AbstractMapEvent.UnWhitelistedForClaimingIsland toUnWhitelistedForClaimingIsland(UnWhitelistedForClaimingIsland contractEvent) {
-        AbstractMapEvent.UnWhitelistedForClaimingIsland unWhitelistedForClaimingIsland = new AbstractMapEvent.UnWhitelistedForClaimingIsland();
-        unWhitelistedForClaimingIsland.setId(contractEvent.getId());
-        unWhitelistedForClaimingIsland.setAccountAddress(contractEvent.getAccountAddress());
-        unWhitelistedForClaimingIsland.setVersion(contractEvent.getVersion());
-        return unWhitelistedForClaimingIsland;
-    }
-
-    public static AbstractExperienceTableEvent.InitExperienceTableEvent toInitExperienceTableEvent(SuiMoveEventEnvelope<InitExperienceTableEvent> eventEnvelope) {
-        InitExperienceTableEvent contractEvent = eventEnvelope.getParsedJson();
-        AbstractExperienceTableEvent.InitExperienceTableEvent initExperienceTableEvent = toInitExperienceTableEvent(contractEvent);
-        setExperienceTableEventEnvelopeProperties(initExperienceTableEvent, eventEnvelope);
-        return initExperienceTableEvent;
-    }
-
-    public static AbstractExperienceTableEvent.InitExperienceTableEvent toInitExperienceTableEvent(InitExperienceTableEvent contractEvent) {
-        AbstractExperienceTableEvent.InitExperienceTableEvent initExperienceTableEvent = new AbstractExperienceTableEvent.InitExperienceTableEvent();
-        initExperienceTableEvent.setId(contractEvent.getId());
-        initExperienceTableEvent.setVersion(BigInteger.valueOf(-1));
-        return initExperienceTableEvent;
-    }
-
-    public static AbstractExperienceTableEvent.ExperienceLevelAdded toExperienceLevelAdded(SuiMoveEventEnvelope<ExperienceLevelAdded> eventEnvelope) {
-        ExperienceLevelAdded contractEvent = eventEnvelope.getParsedJson();
-        AbstractExperienceTableEvent.ExperienceLevelAdded experienceLevelAdded = toExperienceLevelAdded(contractEvent);
-        setExperienceTableEventEnvelopeProperties(experienceLevelAdded, eventEnvelope);
-        return experienceLevelAdded;
-    }
-
-    public static AbstractExperienceTableEvent.ExperienceLevelAdded toExperienceLevelAdded(ExperienceLevelAdded contractEvent) {
-        AbstractExperienceTableEvent.ExperienceLevelAdded experienceLevelAdded = new AbstractExperienceTableEvent.ExperienceLevelAdded();
-        experienceLevelAdded.setId(contractEvent.getId());
-        experienceLevelAdded.setLevel(contractEvent.getLevel());
-        experienceLevelAdded.setExperience(contractEvent.getExperience());
-        experienceLevelAdded.setDifference(contractEvent.getDifference());
-        experienceLevelAdded.setVersion(contractEvent.getVersion());
-        return experienceLevelAdded;
-    }
-
-    public static AbstractExperienceTableEvent.ExperienceLevelUpdated toExperienceLevelUpdated(SuiMoveEventEnvelope<ExperienceLevelUpdated> eventEnvelope) {
-        ExperienceLevelUpdated contractEvent = eventEnvelope.getParsedJson();
-        AbstractExperienceTableEvent.ExperienceLevelUpdated experienceLevelUpdated = toExperienceLevelUpdated(contractEvent);
-        setExperienceTableEventEnvelopeProperties(experienceLevelUpdated, eventEnvelope);
-        return experienceLevelUpdated;
-    }
-
-    public static AbstractExperienceTableEvent.ExperienceLevelUpdated toExperienceLevelUpdated(ExperienceLevelUpdated contractEvent) {
-        AbstractExperienceTableEvent.ExperienceLevelUpdated experienceLevelUpdated = new AbstractExperienceTableEvent.ExperienceLevelUpdated();
-        experienceLevelUpdated.setId(contractEvent.getId());
-        experienceLevelUpdated.setLevel(contractEvent.getLevel());
-        experienceLevelUpdated.setExperience(contractEvent.getExperience());
-        experienceLevelUpdated.setDifference(contractEvent.getDifference());
-        experienceLevelUpdated.setVersion(contractEvent.getVersion());
-        return experienceLevelUpdated;
+    public static void setItemProductionEventEnvelopeProperties(AbstractItemProductionEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
+        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
+        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
     }
 
     public static void setAvatarEventEnvelopeProperties(AbstractAvatarEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
@@ -1319,6 +1335,11 @@ public class DomainBeanUtils {
     }
 
     public static void setAvatarChangeEventEnvelopeProperties(AbstractAvatarChangeEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
+        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
+        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
+    }
+
+    public static void setPlayerEventEnvelopeProperties(AbstractPlayerEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
         setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
         setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
     }
@@ -1343,27 +1364,7 @@ public class DomainBeanUtils {
         setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
     }
 
-    public static void setItemEventEnvelopeProperties(AbstractItemEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
-        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
-        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
-    }
-
-    public static void setItemCreationEventEnvelopeProperties(AbstractItemCreationEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
-        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
-        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
-    }
-
-    public static void setItemProductionEventEnvelopeProperties(AbstractItemProductionEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
-        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
-        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
-    }
-
-    public static void setPlayerEventEnvelopeProperties(AbstractPlayerEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
-        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
-        setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
-    }
-
-    public static void setWhitelistEventEnvelopeProperties(AbstractWhitelistEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
+    public static void setExperienceTableEventEnvelopeProperties(AbstractExperienceTableEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
         setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
         setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
     }
@@ -1373,7 +1374,7 @@ public class DomainBeanUtils {
         setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
     }
 
-    public static void setExperienceTableEventEnvelopeProperties(AbstractExperienceTableEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
+    public static void setWhitelistEventEnvelopeProperties(AbstractWhitelistEvent event, AbstractSuiEventEnvelope<?> eventEnvelope) {
         setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiEventEnvelope.MutableSuiEventEnvelope) event, eventEnvelope);
         setEventEnvelopeProperties((org.dddml.suiinfinitesea.domain.SuiMoveEvent.MutableSuiMoveEvent) event, eventEnvelope);
     }

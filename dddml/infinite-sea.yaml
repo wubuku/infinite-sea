@@ -397,9 +397,15 @@ aggregates:
             eventPropertyName: ToRosterId
           ToPosition:
             type: u64
-            optional: true
+            optional: true          
+          Clock:
+            referenceType: Clock
+            isIgnoredInEvent: true
         event:
           name: RosterShipTransferred
+          properties:
+            TransferredAt:
+              type: u64
 
       TransferShipInventory:
         parameters:

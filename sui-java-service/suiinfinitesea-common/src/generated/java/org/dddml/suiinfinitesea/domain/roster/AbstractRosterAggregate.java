@@ -99,8 +99,8 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
         }
 
         @Override
-        public void transferShip(String player, String shipId, RosterId toRoster, BigInteger toPosition, Long offChainVersion, String commandId, String requesterId, RosterCommands.TransferShip c) {
-            java.util.function.Supplier<RosterEvent.RosterShipTransferred> eventFactory = () -> newRosterShipTransferred(player, shipId, toRoster, toPosition, offChainVersion, commandId, requesterId);
+        public void transferShip(String player, String shipId, RosterId toRoster, BigInteger toPosition, String clock, Long offChainVersion, String commandId, String requesterId, RosterCommands.TransferShip c) {
+            java.util.function.Supplier<RosterEvent.RosterShipTransferred> eventFactory = () -> newRosterShipTransferred(player, shipId, toRoster, toPosition, clock, offChainVersion, commandId, requesterId);
             RosterEvent.RosterShipTransferred e;
             try {
                 e = verifyTransferShip(eventFactory, player, shipId, toRoster, toPosition, c);
@@ -498,13 +498,14 @@ public abstract class AbstractRosterAggregate extends AbstractAggregate implemen
             return e;
         }
 
-        protected AbstractRosterEvent.RosterShipTransferred newRosterShipTransferred(String player, String shipId, RosterId toRoster, BigInteger toPosition, Long offChainVersion, String commandId, String requesterId) {
+        protected AbstractRosterEvent.RosterShipTransferred newRosterShipTransferred(String player, String shipId, RosterId toRoster, BigInteger toPosition, String clock, Long offChainVersion, String commandId, String requesterId) {
             RosterEventId eventId = new RosterEventId(getState().getRosterId(), null);
             AbstractRosterEvent.RosterShipTransferred e = new AbstractRosterEvent.RosterShipTransferred();
 
             e.getDynamicProperties().put("shipId", shipId);
             e.setToRosterId(null);
             e.getDynamicProperties().put("toPosition", toPosition);
+            e.setTransferredAt(null);
             e.setSuiTimestamp(null);
             e.setSuiTxDigest(null);
             e.setSuiEventSeq(null);

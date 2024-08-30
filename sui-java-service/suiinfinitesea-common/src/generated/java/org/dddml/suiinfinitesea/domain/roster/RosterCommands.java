@@ -566,6 +566,19 @@ public class RosterCommands {
         }
 
         /**
+         * Clock
+         */
+        private String clock;
+
+        public String getClock() {
+            return this.clock;
+        }
+
+        public void setClock(String clock) {
+            this.clock = clock;
+        }
+
+        /**
          * Off Chain Version
          */
         private Long offChainVersion;

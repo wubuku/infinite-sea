@@ -530,6 +530,7 @@ module infinite_sea::roster {
         ship_id: ID,
         to_roster_id: RosterId,
         to_position: Option<u64>,
+        transferred_at: u64,
     }
 
     public fun roster_ship_transferred_id(roster_ship_transferred: &RosterShipTransferred): object::ID {
@@ -556,11 +557,16 @@ module infinite_sea::roster {
         roster_ship_transferred.to_position = to_position;
     }
 
+    public fun roster_ship_transferred_transferred_at(roster_ship_transferred: &RosterShipTransferred): u64 {
+        roster_ship_transferred.transferred_at
+    }
+
     public(friend) fun new_roster_ship_transferred(
         roster: &Roster,
         ship_id: ID,
         to_roster_id: RosterId,
         to_position: Option<u64>,
+        transferred_at: u64,
     ): RosterShipTransferred {
         RosterShipTransferred {
             id: id(roster),
@@ -569,6 +575,7 @@ module infinite_sea::roster {
             ship_id,
             to_roster_id,
             to_position,
+            transferred_at,
         }
     }
 

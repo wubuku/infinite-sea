@@ -215,6 +215,7 @@ module infinite_sea::roster_aggregate {
         ship_id: ID,
         to_roster: &mut Roster,
         to_position: Option<u64>,
+        clock: &Clock,
         ctx: &mut tx_context::TxContext,
     ) {
         let roster_ship_transferred = roster_transfer_ship_logic::verify(
@@ -222,6 +223,7 @@ module infinite_sea::roster_aggregate {
             ship_id,
             to_roster,
             to_position,
+            clock,
             roster,
             ctx,
         );

@@ -129,6 +129,10 @@ public interface RosterEvent extends Event, SuiEventEnvelope, SuiMoveEvent, HasE
 
         void setToPosition(BigInteger value);
 
+        BigInteger getTransferredAt();
+
+        void setTransferredAt(BigInteger value);
+
     }
 
     interface RosterShipInventoryTransferred extends RosterEvent {

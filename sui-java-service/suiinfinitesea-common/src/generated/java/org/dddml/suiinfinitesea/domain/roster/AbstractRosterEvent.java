@@ -562,6 +562,18 @@ public abstract class AbstractRosterEvent extends AbstractEvent implements Roste
             getDynamicProperties().put("toPosition", value);
         }
 
+        public BigInteger getTransferredAt() {
+            Object val = getDynamicProperties().get("transferredAt");
+            if (val instanceof BigInteger) {
+                return (BigInteger) val;
+            }
+            return ApplicationContext.current.getTypeConverter().convertValue(val, BigInteger.class);
+        }
+
+        public void setTransferredAt(BigInteger value) {
+            getDynamicProperties().put("transferredAt", value);
+        }
+
     }
 
     public static class RosterShipInventoryTransferred extends RosterLobEvent implements RosterEvent.RosterShipInventoryTransferred {

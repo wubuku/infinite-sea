@@ -59,7 +59,7 @@ public abstract class AbstractRosterApplicationService implements RosterApplicat
     }
 
     public void when(RosterCommands.TransferShip c) {
-        update(c, ar -> ar.transferShip(c.getPlayer(), c.getShipId(), c.getToRoster(), c.getToPosition(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
+        update(c, ar -> ar.transferShip(c.getPlayer(), c.getShipId(), c.getToRoster(), c.getToPosition(), c.getClock(), c.getOffChainVersion(), c.getCommandId(), c.getRequesterId(), c));
     }
 
     public void when(RosterCommands.TransferShipInventory c) {

@@ -4,12 +4,14 @@ module infinite_sea::roster_transfer_ship_logic {
     use std::option::Option;
     use std::vector;
 
+    use sui::clock;
+    use sui::clock::Clock;
     use sui::object::ID;
     use sui::object_table;
     use sui::tx_context::TxContext;
-    use infinite_sea_common::ship_util;
     use infinite_sea_common::roster_id;
     use infinite_sea_common::roster_sequence_number;
+    use infinite_sea_common::ship_util;
 
     use infinite_sea::permission_util;
     use infinite_sea::player::Player;
@@ -28,6 +30,7 @@ module infinite_sea::roster_transfer_ship_logic {
         ship_id: ID,
         to_roster: &mut Roster,
         to_position: Option<u64>,
+        clock: &Clock,
         roster: &roster::Roster,
         ctx: &TxContext,
     ): roster::RosterShipTransferred {
@@ -42,7 +45,8 @@ module infinite_sea::roster_transfer_ship_logic {
         assert!(option::is_none(&roster::ship_battle_id(roster)), ERosterInBattle);
         assert!(option::is_none(&roster::ship_battle_id(to_roster)), EToRosterInBattle);
         //todo more checks?
-        roster::new_roster_ship_transferred(roster, ship_id, to_roster_id, to_position)
+        let transferred_at = clock::timestamp_ms(clock) / 1000;
+        roster::new_roster_ship_transferred(roster, ship_id, to_roster_id, to_position, transferred_at)
     }
 
     public(friend) fun mutate(
@@ -53,6 +57,7 @@ module infinite_sea::roster_transfer_ship_logic {
     ) {
         let ship_id = roster::roster_ship_transferred_ship_id(roster_ship_transferred);
         let to_position = roster::roster_ship_transferred_to_position(roster_ship_transferred);
+        let transferred_at = roster::roster_ship_transferred_transferred_at(roster_ship_transferred);
         //let to_roster_id = roster::roster_ship_transferred_to_roster_id(roster_ship_transferred);
         //let roster_id = roster::roster_id(roster);
 
@@ -82,5 +87,8 @@ module infinite_sea::roster_transfer_ship_logic {
 
         let speed = roster_util::calculate_roster_speed(to_roster);
         roster::set_speed(to_roster, speed);
+        //将roster的最后一次更新位置时间更改为当前时间（其实这里是借用了此字段）
+        roster::set_coordinates_updated_at(roster, transferred_at);
+        roster::set_coordinates_updated_at(to_roster, transferred_at);
     }
 }

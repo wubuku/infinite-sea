@@ -701,6 +701,8 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         RosterId ToRosterId = toRosterId;
         BigInteger toPosition = e.getToPosition();
         BigInteger ToPosition = toPosition;
+        BigInteger transferredAt = e.getTransferredAt();
+        BigInteger TransferredAt = transferredAt;
         Long suiTimestamp = e.getSuiTimestamp();
         Long SuiTimestamp = suiTimestamp;
         String suiTxDigest = e.getSuiTxDigest();
@@ -730,14 +732,14 @@ public abstract class AbstractRosterState implements RosterState.SqlRosterState,
         RosterState updatedRosterState = (RosterState) ReflectUtils.invokeStaticMethod(
                     "org.dddml.suiinfinitesea.domain.roster.TransferShipLogic",
                     "mutate",
-                    new Class[]{RosterState.class, String.class, RosterId.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
-                    new Object[]{this, shipId, toRosterId, toPosition, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
+                    new Class[]{RosterState.class, String.class, RosterId.class, BigInteger.class, BigInteger.class, Long.class, String.class, BigInteger.class, String.class, String.class, String.class, String.class, String.class, MutationContext.class},
+                    new Object[]{this, shipId, toRosterId, toPosition, transferredAt, suiTimestamp, suiTxDigest, suiEventSeq, suiPackageId, suiTransactionModule, suiSender, suiType, eventStatus, MutationContext.forEvent(e, s -> {if (s == this) {return this;} else {throw new UnsupportedOperationException();}})}
             );
 
 //package org.dddml.suiinfinitesea.domain.roster;
 //
 //public class TransferShipLogic {
-//    public static RosterState mutate(RosterState rosterState, String shipId, RosterId toRosterId, BigInteger toPosition, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
+//    public static RosterState mutate(RosterState rosterState, String shipId, RosterId toRosterId, BigInteger toPosition, BigInteger transferredAt, Long suiTimestamp, String suiTxDigest, BigInteger suiEventSeq, String suiPackageId, String suiTransactionModule, String suiSender, String suiType, String eventStatus, MutationContext<RosterState, RosterState.MutableRosterState> mutationContext) {
 //    }
 //}
 

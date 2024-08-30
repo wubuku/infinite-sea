@@ -25,7 +25,7 @@ public interface RosterAggregate {
 
     void adjustShipsPosition(String player, BigInteger[] positions, String[] shipIds, Long offChainVersion, String commandId, String requesterId, RosterCommands.AdjustShipsPosition c);
 
-    void transferShip(String player, String shipId, RosterId toRoster, BigInteger toPosition, Long offChainVersion, String commandId, String requesterId, RosterCommands.TransferShip c);
+    void transferShip(String player, String shipId, RosterId toRoster, BigInteger toPosition, String clock, Long offChainVersion, String commandId, String requesterId, RosterCommands.TransferShip c);
 
     void transferShipInventory(String player, String fromShipId, String toShipId, ItemIdQuantityPairs itemIdQuantityPairs, Long offChainVersion, String commandId, String requesterId, RosterCommands.TransferShipInventory c);
 
