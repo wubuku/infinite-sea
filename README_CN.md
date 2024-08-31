@@ -432,7 +432,7 @@ wubuku/dddappp-sui:master \
 ```
 
 
-#### Movement Baku "production"(8-23)
+#### Movement Baku "production"(8-31)
 
 对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8092/api
 
@@ -445,33 +445,33 @@ wubuku/dddappp-sui:master \
     "EnergyId": "0xf4c51f989a57f31574a96ae8f065f9515bf150f860621237de40bc17326f8790"
   },
   "common": {
-    "Digest": "AdN26qemfpFXGgtkkFr6nooN77RCwF5aSNuRBKrEYxTh",
-    "UpgradeCap": "0x039b924caa00f5f0a0f09458d9c5ba1bfc1414f259a07537a4c01ad641c588db",
-    "ExperienceTable": "0x1e74f5eb9112192c63342a7adb180eb37693ece9049633810765efd76a38973e",
-    "Publisher": "0x425601101bdafb3fbed1e4a1f4537357e26a90d071f7004c574f63b8b2480c20",
-    "PackageId": "0x49b4cc8891e887a615a39decc5197bbf605858ff537a0ab0cef67af90d59c536",
-    "ItemCreationTable": "0x829891c032e515ddf7c0f4ad535158fc117d06b9b88bde42724a91e3da8fa60e",
-    "ItemTable": "0xeeaec9e51aa67d453a679e151c809a3ea2b3864efc4b03200a5cc4539fe13ee4",
-    "ItemProductionTable": "0xfc58dd0be45edb2e80b04a80a5d560b1f584ec20ef7e312f851daa7e734ed8d3",
-    "ItemCreationMining": "0x72327bb1e04de538c6ac8253e27972058a21ca09f7b9312dd5219329eae69212",
-    "ItemProductionFarming": "0xce6d14172928ad9a58d37e9aa6ad1558b1d3940da3755e786786b061d6196ae2",
-    "ItemCreationWooding": "0x37881767fec45803d424a0e7676adda945ef03e3fb56e83b86e353f842814259",
-    "ItemProductionCrafting": "0x30e2336ac28fab984e256149b0d6ccd6c07f4600c219a4065dbce841d14b0d30"
+    "Digest": "AYqRdXWTpu2empydrpK4LVJXMQYtLCHS7LW8kTgAdyik",
+    "PackageId": "0x1e658a85f8ec569ac93e51c9e5b85155d28b3e923b86bc3eff306d631fff5b9d",
+    "ExperienceTable": "0x200d696afd5e2ab98f404db7e2c8a2c7da860498e50abdca4b5d4b2972b9af62",
+    "ItemProductionTable": "0x2a74e73357642771684dae40b819501b88323a6d59b019c58ba36d63e1bdece9",
+    "Publisher": "0x50ffd26a8e877ed2266e6b3545112abf7304bd5bb7cd95762379321bd36e2328",
+    "ItemTable": "0x8765cc231365f62a33c27a53d4257fe69a7dd5f95824ea14fd75e7192b9502b1",
+    "ItemCreationTable": "0xd40132fe6073839e21dfed7639769db00a6ff7bf579a1360f48ecdcd6e217b43",
+    "UpgradeCap": "0xe70f6df2e9f4c4613082e61347de292a5f0fb6f09ece8fae8b320c4b63c06b7f",
+    "ItemCreationMining": "0x4138b922f29c7ce8bb53e8d2d304a2726b85efb9f77e17c611ba79187234faea",
+    "ItemProductionFarming": "0xe0a569c67919dbd9905587e3f1d0d8e9a456761641dc9d11b143fc8f36184bc8",
+    "ItemCreationWooding": "0x8765633bf7c9c2d16495262bb05d45a1cc688ff37174d254fb25a5a4e9abf5d1",
+    "ItemProductionCrafting": "0xd749e5e9d891242147bedbc7df5746729f5891aff7129dfc2106a66296843fab"
   },
   "main": {
-    "Digest": "Ecdg1xvFS6d51B73m66vSLevRCV3kFEW27seY3mmSzW4",
-    "Publisher": "0x0a2c814a1dbfaec3b823eee96ea5a41b8f787b8fed332a15a15c7074636a336e",
-    "UpgradeCap": "0x560d4979be3f531fb1528e00d59a0cb109978e6458c95e211b7c7c1fc3842eb4",
-    "PackageId": "0x80eb92cc30e21caabeb8cee5237a52bed82c0802808c4ad51a834d9a9cba49a2",
-    "RosterTable": "0x997a3155697dfc9ebb186befbac7c3aaf30cd88ba216168fb870e115cf2a4063",
-    "SkillProcessTable": "0xf1e93d065da5932cf065e71d770e3e04c788dfea2afc29d57610e30124907748",
-    "Player": "0x792ba6db0b35208f4c2641b6c99b828dc4f3e51e815db9752bc386127f147d19",
-    "EnvironmentPlayId": "0x4f9b110d5749f7565aab3645bc441cccf55ee76061c97c1ab68c8e597b2e89b5",
-    "SkillProcessCrafting": "0x1346ba88e96c504de39d907eb9268e01326ae8f66ec9b6c5fcef1bd311326031",
-    "SkillProcessWooding": "0x18790b70ee42a30ceef658f6c73a224567c44e2232cb1baa9d6079350c1d1c24",
-    "SkillProcessFarming1": "0x2f20ac37810e57449fc860a0ee21cdc792b744707db63ada74c327e172b64d02",
-    "SkillProcessMining": "0x83d2c2c78b16e6388fbac950eead4cc41c7761d8e2a56cf99246de25ebf554d2",
-    "SkillProcessFarming2": "0xbfe84d96a37afc66ee77d253d8794e1c6d13a8c2b6d95008858bee29b86c4ae0"
+    "Digest": "3R5cbauQA76fqmFU9DZRxpuEbpT86XuG3uofcqL1ifSa",
+    "Publisher": "0x2384fdc497a0a9f2416be56c0b8bbea3fb8dfe1020147c6bab6abdcd80218d61",
+    "SkillProcessTable": "0x25005c7073c2c2f4c48ace0c2fe27ab75f84df2fc736ae63c7c1ec49c6cfc63e",
+    "UpgradeCap": "0x61dfd03f45c4b3230be21daec8397766d25c39890d27e21023a0c18f99ad499a",
+    "RosterTable": "0x67ee77b01d2d3b64f7cbbc92212aa4927819a8e1efbcbe1f6712e0a18749b863",
+    "PackageId": "0xb8cd1b37f69c9742578fca3bd8a51416404224bb745dd353b048e97b1259aa48",
+    "Player": "0xc579fb69ce1cea5ec3887b5898bf0d17a0bddb4b0101c236d25bce5b1ae4758c",
+    "EnvironmentPlayId": "0x85f5281e63ceadda6fcbd996ce07060f2841be10d21866e7a626fa25f37ab8a7",
+    "SkillProcessCrafting": "0x340db14537144439df4b628f5764077bdb3bb43dab86ba3d3154aa9ac17f5e6d",
+    "SkillProcessFarming2": "0x46e216b894afaeb8ae1aee77bebd7799cd393d2331d7a0da9dfbcf23ae5dc4e5",
+    "SkillProcessMining": "0x64bdff717a470605275441dd2a0e6919a0b31d5f85bdd0063f3fe594c2f72b20",
+    "SkillProcessWooding": "0x8ad1154f020e9c9082a9d3e28d643a1b5e996bf6124596244bb87b320a8debfc",
+    "SkillProcessFarming1": "0xcc9389d0f7199bdc5b14c145e17e8759912fcdbeb9f6d40e75e2955f4a8de03a"
   },
   "faucet": {
     "EnergyFaucet": "0x3fb72a6823a727d307171d9ad0e33d9d8aca3dd55c7681e8e6d8e79e80670290",
@@ -487,13 +487,13 @@ wubuku/dddappp-sui:master \
     "Digest": "FrRzJF9jbvjNrXqVKi2LtoZcc1x1ZhAhSGVzTp94PVLF"
   },
   "map": {
-    "AdminCap": "0x2e5c5776eec0d6b6d347209cf179b872b2596fa023feeb448eafbe0aac602cc6",
-    "PackageId": "0x32b0d788d19bc2bd01b081e345bcbb74f1927c2ae6fdcbdaa39fab79967badd9",
-    "Map": "0x60d95b0fc31262720359ace7ab6f5627356f5b07be20bbbb16b1d05d21099f20",
-    "Publisher": "0x973ded9337b06fcd324a9d2a1577a9dbffa0b2aa541008873bb3bb2cdbf011c2",
-    "UpgradeCap": "0xb927bb71900afebef531886e334ad3e788807f7a607c2baf46d8d7dca25d4030",
-    "MapFriendConfig": "0xe79f7a3512958e78080dce28389faa5fb465f071be017811f001043c63559ab2",
-    "Digest": "GeqFaJE4JRyTbb4VZPiPmBHsBavexbrrDTSuftbJBDKX"
+    "PackageId": "0x023283ceb91522e21677740b1c3e3200207a14b0832a3a14dabc77e53442391f",
+    "Map": "0x0c048200428ed780ea96d16837438285226367d0cd142d628f789434510735d6",
+    "UpgradeCap": "0x9fe2c07cfe358f0d4c049dc1cd0de371215d90414d83d5ee6ca586f4a0be9663",
+    "Publisher": "0xc8c61b3fbafd9a8f1367cc0ce25a2630315e09931973aaf11054ebd3132f8e06",
+    "MapFriendConfig": "0xe10af566ab7aab2525e290c1085eab9b6081c98707e9184d1c753833ebd1cdef",
+    "AdminCap": "0xee5c6ac25b9e80a11abc478caa4cfa34a3065bcfecde7c62cfe6dd7577e992b6",
+    "Digest": "4xhNHqRVSKutXFou9SXpJVZuKfHgBDHmWrf37zCHkB6f"
   }
 }
 
