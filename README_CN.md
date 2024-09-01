@@ -219,7 +219,7 @@ wubuku/dddappp-sui:master \
 
 #### Sui Testnet[Test] (From 2024/8/30)
 
-对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090/api
+对应后端 indexer 为：http://ec2-34-212-167-187.us-west-2.compute.amazonaws.com:8090/api
 
 我们在 Sui testnet 上发布以上 6 个合约包，相关信息记录如下：
 
@@ -291,7 +291,7 @@ wubuku/dddappp-sui:master \
 
 #### Sui Testnet[Prod] (From 2024/8/31)
 
-对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8093/api
+对应后端 indexer 为：http://ec2-34-212-167-187.us-west-2.compute.amazonaws.com:8093/api
 
 我们在 Sui testnet 上发布以上 6 个合约包，相关信息记录如下：
 
@@ -434,7 +434,7 @@ wubuku/dddappp-sui:master \
 
 #### Movement Baku "production"(8-31)
 
-对应后端 indexer 为：http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8092/api
+对应后端 indexer 为：http://ec2-34-212-167-187.us-west-2.compute.amazonaws.com:8092/api
 
 ```json
 {
