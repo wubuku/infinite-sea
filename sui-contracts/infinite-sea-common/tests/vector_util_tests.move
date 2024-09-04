@@ -31,15 +31,15 @@ module infinite_sea_common::vector_util_tests {
         let i = 0;
         while (i < l) {
             let item_id_quantity_pair = vector::borrow(&item_id_quantity_pair_vector, i);
-            debug::print(&item_id_quantity_pair::item_id(item_id_quantity_pair));
-            debug::print(&item_id_quantity_pair::quantity(item_id_quantity_pair));
+            //debug::print(&item_id_quantity_pair::item_id(item_id_quantity_pair));
+            //debug::print(&item_id_quantity_pair::quantity(item_id_quantity_pair));
             i = i + 1;
         };
 
         let idx_2 = sorted_vector_util::find_item_id_quantity_pair_by_item_id(&item_id_quantity_pair_vector, 2);
-        debug::print(&option::is_some(&idx_2));
+        //debug::print(&option::is_some(&idx_2));
         let idx_3 = sorted_vector_util::find_item_id_quantity_pair_by_item_id(&item_id_quantity_pair_vector, 3);
-        debug::print(&option::is_some(&idx_3));
+        //debug::print(&option::is_some(&idx_3));
 
         let item_id_quantity_pair_3 = item_id_quantity_pair::new(3, 3);
         sorted_vector_util::insert_item_id_quantity_pair(&mut item_id_quantity_pair_vector, item_id_quantity_pair_3);

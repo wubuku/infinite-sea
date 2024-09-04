@@ -24,7 +24,7 @@ module infinite_sea_common::ts_random_util_tests {
             let l = vector::length(&random_ints);
             while (i < l) {
                 let random_int = vector::borrow(&random_ints, i);
-                debug::print(random_int);
+                //debug::print(random_int);
                 i = i + 1;
             }
         };
@@ -43,7 +43,7 @@ module infinite_sea_common::ts_random_util_tests {
             let ctx = test_scenario::ctx(&mut scenario);
             let clock = clock::create_for_testing(ctx);
             let random_u32_vector = ts_random_util::get_8_u32_vector(&clock, b"hxelssxgagdslso");
-            debug::print(&random_u32_vector);
+            //debug::print(&random_u32_vector);
             clock::destroy_for_testing(clock);
         };
         test_scenario::end(scenario);
