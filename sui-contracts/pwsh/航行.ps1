@@ -134,9 +134,6 @@ else {
         "返回的结果为:$environmentRosterResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
         return    
     }
-    if ($null -eq $environmentRosterResult) {    
-        "没能获取目标船队当前坐标，请先检查一下。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-    }
 }
 if ($null -eq $targetCoordinates) {
     "必须指定目的地坐标" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
@@ -204,10 +201,6 @@ $secondsSinceEpoch = [math]::Floor((New-TimeSpan -Start $epoch -End $now).TotalS
 
 # 输出结果
 "船队从出发到现在经过了: $($secondsSinceEpoch-$set_sail_at) 秒，距离上一次更新位置经过了 $($secondsSinceEpoch-$coordinates_updated_at) 秒" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
-
-
-
-return
 
 #将 updated_coordinates_x 和 updated_coordinates_y 设置的离目标船队很近，节省时间
 # $updated_coordinates_x = $targetCoordinates.x - 50

@@ -21,15 +21,42 @@ if (-not (Test-Path -Path $playerRostersFile -PathType Leaf)) {
 $playerRostersJson = Get-Content -Raw -Path $playerRostersFile
 $rosters = $playerRostersJson | ConvertFrom-Json
 
+#被攻击方船队Id，要么直接指定，要么来自 environment_roster.json 
+$targetRosterId = "0xc858c3711f76652b7c6ee2342c06f35fb20c3578991f9d0ac9e382e846bab599"
 
-$environmentRosterJsonFile = "$startLocation\environment_roster.json"
-if (-not (Test-Path -Path $environmentRosterJsonFile -PathType Leaf)) {
-    "环境船队信息文件 $playerRostersFile 不存在 " | Write-Host  -ForegroundColor Red
-    return
+if ($null -eq $targetRosterId -or $targetRosterId -eq "") {
+    $environmentRosterJsonFile = "$startLocation\environment_roster.json"
+    if (-not (Test-Path -Path $environmentRosterJsonFile -PathType Leaf)) {
+        "环境船队信息文件 $playerRostersFile 不存在 " | Write-Host  -ForegroundColor Red
+        return
+    }
+    $environmentRosterJson = Get-Content -Raw -Path $environmentRosterJsonFile
+    $environmentRoster = $environmentRosterJson | ConvertFrom-Json
+    $targetRosterId = $environmentRoster.RosterId
 }
 
-$environmentRosterJson = Get-Content -Raw -Path $environmentRosterJsonFile
-$environmentRoster = $environmentRosterJson | ConvertFrom-Json
+$targetCoordinates = $null
+$targetRosterPlayer = $null
+try {
+    $environmentRosterResult = sui client object $targetRosterId --json 
+    if (-not ('System.Object[]' -eq $environmentRosterResult.GetType())) {
+        "获取目标船队 $targetRosterId 信息时返回: $environmentRosterResult" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
+        return
+    }
+    $environmentRosterObj = $environmentRosterResult | ConvertFrom-Json
+    $targetCoordinates = $environmentRosterObj.content.fields.updated_coordinates.fields
+    $targetRosterPlayer = $environmentRosterObj.content.fields.roster_id.fields.player_id
+    "`n将要攻击的目标船队当前坐标：($($targetCoordinates.x),$($targetCoordinates.y))" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Green
+}
+catch {
+    "获取目标船队 $targetRosterId 信息失败: $($_.Exception.Message)" | Write-Host -ForegroundColor Red
+    "返回的结果为:$environmentRosterResult" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+    return    
+}
+if ($null -eq $targetCoordinates) {    
+    "没能获取目标船队当前坐标，请先检查一下。" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
+    return;
+}
 
 #发起战斗的船队？3表示编号
 $roster = $rosters.2
@@ -38,11 +65,18 @@ $roster = $rosters.2
 $onlyCheckShipBattleResult = $false
 $shipBattleId = $null
 #$shipBattleId = "0x81bbcfd91d256076af4e633ec704eb009fc0524187368682fc936f80cbb6f050"
+
+$initiator_coordinates_x = $targetCoordinates.x
+$initiator_coordinates_y = $targetCoordinates.y
+$responder_coordinates_x = 0
+$responder_coordinates_y = 0
+
+
 $result = ""
 if (-not $onlyCheckShipBattleResult) {
     try {
         "`n开始交战..." | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-        $command = "sui client call --package $($dataInfo.main.PackageId)  --module ship_battle_service --function initiate_battle_and_auto_play_till_end --args $($dataInfo.main.Player) $roster  $($environmentRoster.RosterId) '0x6' --gas-budget 4999000000 --json"
+        $command = "sui client call --package $($dataInfo.main.PackageId)  --module ship_battle_service --function initiate_battle_and_auto_play_till_end --args $($dataInfo.main.Player) $roster  $targetRosterId '0x6' $initiator_coordinates_x $initiator_coordinates_y $responder_coordinates_x $responder_coordinates_y --gas-budget 4999000000 --json"
         $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
         $result = Invoke-Expression -Command $command
         if (-not ('System.Object[]' -eq $result.GetType())) {
@@ -143,10 +177,10 @@ if ($status -eq 1) {
     $loser_player = ""
     if ($winner -eq 1) {
         $player = $dataInfo.main.Player
-        $loser_player = $environmentRoster.PlayerId
+        $loser_player = $targetRosterPlayer
     }
     else {
-        $player = $environmentRoster.PlayerId
+        $player = $targetRosterPlayer
         $loser_player = $dataInfo.main.Player
     }
     $takeLootResult = "" 
