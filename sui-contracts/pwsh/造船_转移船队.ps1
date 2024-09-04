@@ -14,16 +14,14 @@ if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
 $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
-
-
 $itemDataFile = "$startLocation\item.json"
 if (-not (Test-Path -Path $itemDataFile -PathType Leaf)) {
     "文件 $itemDataFile 不存在 " | Write-Host  -ForegroundColor Red
     Set-Location $startLocation
     return
 }
-$itemData | ConvertTo-Json | Set-Content -Path $itemDataFile 
-
+$itemDataJson = Get-Content -Raw -Path $itemDataFile
+$itemData = $itemDataJson | ConvertFrom-Json
 
 $playerRostersFile = ".\rosters.json"
 if (-not (Test-Path -Path $playerRostersFile -PathType Leaf)) {
@@ -45,6 +43,7 @@ $cratingCount = 4
 $rosterId0 = $rosters.0
 #造船所消耗的时间 这个时间应该大于等于Item Production中的时间
 $craftingTime = 15
+$clock = '0x6'
 
 $shipIds = @()
 
@@ -70,7 +69,10 @@ if ($craft -and $cratingCount -ge 1) {
         $crafingResourceIds_ = "[" + ($crafingResourceIds -join ",") + "]"
         $crafingResourceQuantities_ = "[" + ($crafingResourceQuantities -join ",") + "]"
         try {
-            $result = sui client call --package $dataInfo.main.PackageId --module skill_process_service --function start_ship_production --args  $dataInfo.main.SkillProcessCrafting  $crafingResourceIds_ $crafingResourceQuantities_  $dataInfo.main.Player  $dataInfo.common.ItemProductionCrafting $clock  $dataInfo.coin.EnergyId --gas-budget 42000000 --json
+            $command = "sui client call --package $($dataInfo.main.PackageId) --module skill_process_service --function start_ship_production --args  $($dataInfo.main.SkillProcessCrafting)  $crafingResourceIds_ $crafingResourceQuantities_  $($dataInfo.main.Player)  $($dataInfo.common.ItemProductionCrafting) $clock $($dataInfo.coin.EnergyId) --gas-budget 42000000 --json"
+            #$result = sui client call --package $dataInfo.main.PackageId --module skill_process_service --function start_ship_production --args  $dataInfo.main.SkillProcessCrafting  $crafingResourceIds_ $crafingResourceQuantities_  $dataInfo.main.Player  $dataInfo.common.ItemProductionCrafting $clock  $dataInfo.coin.EnergyId --gas-budget 42000000 --json
+            $command | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Blue
+            $result = Invoke-Expression -Command $command 
             if (-not ('System.Object[]' -eq $result.GetType())) {
                 "建造第 $i 艘船时返回信息: $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
                 Set-Location $startLocation
@@ -163,8 +165,11 @@ if ($transferShip -and $shipIds.Length -gt 0) {
             #if ($true) {
             "`现在将船只 $shipId 加入目标船队。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow  
             try {
-                $tranferResult =
-                sui client call --package $dataInfo.main.PackageId --module roster_aggregate --function transfer_ship --args  $sourceRoster $dataInfo.main.Player $shipId  $targetRoster  [0] --gas-budget 42000000 --json
+                $command = "sui client call --package $($dataInfo.main.PackageId) --module roster_aggregate --function transfer_ship --args  $sourceRoster $($dataInfo.main.Player) $shipId  $targetRoster [0] $clock --gas-budget 42000000 --json"
+                #$tranferResult =
+                #sui client call --package $dataInfo.main.PackageId --module roster_aggregate --function transfer_ship --args  $sourceRoster $dataInfo.main.Player $shipId  $targetRoster [0] $clock --gas-budget 42000000 --json
+                $command | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Blue                
+                $tranferResult = Invoke-Expression -Command $command
                 if (-not ('System.Object[]' -eq $tranferResult.GetType())) {
                     "转移船只 $shipId 时返回信息： $tranferResult" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Red
                     Set-Location $startLocation
