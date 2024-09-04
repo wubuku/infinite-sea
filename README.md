@@ -2,40 +2,38 @@
 
 English | [中文版](./README_CN.md)
 
-We are creating a maritime trading, managing, and battling diplomatic fully on-chain game. 
-we believe the best fully onchain games should be fun and infinite (define by games that are non-session and infinitely large map) with an open economy design. 
+We are creating a maritime trading, managing, and battling diplomatic fully on-chain game: [Infinite Seas](https://game.infiniteseas.io/).
+we believe the best fully on-chain games should be fun and infinite (define by games that are non-session and infinitely large map) with an open economy design. 
 ![image](https://hackmd.io/_uploads/H1yiNQVkA.jpg)
 
-why open economy?
--
+## Why open economy?
+
 * blockchain offers a great environment for microtransactions between players. We aim to create a game that players are encouraged to trade game assets with each other just like real world maritime trading between ports and ports. Ports trading are building with our AMM infrastructure. 
 * players are required to stake chain native coins to get ownership of islands. Players can make diplomatic treaty with others to join the alliance. Winners take the orignal stakes of the loser stakes. and game continues.
 * The game is designed with mmorpg elements in mind. Our goal is to create a world that players want to live in. We have planting, mining, fishing, cooking, crafting, smithing, building for the pve parts, as well as trading, battling, thieving, and sailing for the pvp parts. 
 ![WechatIMG189-2](https://hackmd.io/_uploads/Hk2vS7V1R.jpg)
 
-why infnite game?
--
-* non-session: blockchain as a autonomous backend should be used to create games that are running continously and in a trustless way. 
+## Why infinite game?
+
+* non-session: blockchain as an autonomous backend should be used to create games that are running continuously and in a trustless way. 
 * infinitely big map: infinite big map works like cross-sever games in traditional gaming. Infinitely big map is the cornerstone of creating a new-comer friendly open world pvp game. New-comers are able to join games anywhere on the map. they can choose a island coordinates that they feel secure to start the journey. 
 ![WechatIMG181-2](https://hackmd.io/_uploads/S1P5HmVkC.jpg)
 
-What types of players fit into our game? 
--
+## What types of players fit into our game? 
+
 ![image](https://hackmd.io/_uploads/H1qdwXEkC.png)
 * achievers, motivated mainly by increasing their skill levels, achieving goals, and collecting craftables. 
-* explorers, motivated by exploring the game world and learning how it works. They may interested in thieving which involves to explore hidden information. 
+* explorers, motivated by exploring the game world and learning how it works. They may be interested in thieving which involves to explore hidden information. 
 * socializers, motivated by trading, working with other players, joining alliance, creating treaty
 * killers, motivated by competition, victory, domination, and also trolling
 
-what's fun about our game?
--
-* we believe the fun comes from 4 aspects: inter-player social, backstabbing, hidden information, randomness, and deep game system
+## What's fun about our game?
 
+* we believe the fun comes from 4 aspects: inter-player social, backstabbing, hidden information, randomness, and deep game system
 
 * social elements: the core game loop is truly "diplomatic" game, by which we mean one in which negotiation and alliances are vital important during play. Because the infinite map and all the islands are roughly equal resources and power at the start, **no player can reasonably expect to conquer the entire island section alone. To overcome another power, player need an ally**. And because units may support moves by other players, alliances are effective. 
 
 * Backstabbing: The game also supports backstabbing. **Players can break the alliance treaty at any time with a cost.** Thus, gamers can never be certain that, one the next move, the ally will do as he has promised.
-
 
 * Hidden Information: When the player A arrives on players B island or ships, they can choose from 3 game actions - battle, trade, and thieve. Among the 3 pvp actions, thieving is the most cost efficient way of gaining resources; **thieving records are hidden information; however, if thieving is failed, it will reveal the record and increase aggression.** 
 
@@ -47,7 +45,8 @@ what's fun about our game?
 ## The dddappp engine we built
 
 We used dddappp, a low-code platform, to develop this game.
-Dddappp is a low-code framework with built-in indexer for general purpose Dapp development. You can say it is like a game engine which can significantly accelerate our development process. 
+Dddappp is a low-code framework with built-in indexer for general purpose Dapp development.
+You can say it is like a game engine which can significantly accelerate our development process. 
 
 All we need to do is do requirements analysis and domain modeling, then write the DDDML model files, 
 then run the dddappp builder to generate most of the code, 
@@ -139,6 +138,8 @@ Refer to [Chinese version](./README_CN.md) for more information.
 
 
 ### Test off-chain service (indexer)
+
+You don't even have to write a single line of code to get an out-of-the-box indexer!
 
 #### Configuring off-chain service
 
