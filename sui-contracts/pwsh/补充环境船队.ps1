@@ -1,16 +1,5 @@
 $startLocation = $PSScriptRoot
 
-# $environmentRosterJsonFile = "$startLocation\island_environment_roster.json"
-# $islandEnvironmentRosterInfo = $null
-# if (Test-Path -Path $environmentRosterJsonFile -PathType Leaf) {    
-#     $islandEnvironmentRosterInfoFileContent = Get-Content -Raw -Path $environmentRosterJsonFile
-#     $islandEnvironmentRosterInfo = $islandEnvironmentRosterInfoFileContent | ConvertFrom-Json
-# }
-# else {    
-#     $islandEnvironmentRosterInfo = New-Object -TypeName PSObject
-#     $islandEnvironmentRosterInfo | Add-Member -MemberType NoteProperty -Name "LastRosterIdSequenceNumber" -Value 0
-# }
-
 $dataFile = "$startLocation\data.json"
 if (-not (Test-Path -Path $dataFile -PathType Leaf)) {
     "文件 $dataFile 不存在 " | Write-Host  -ForegroundColor Red
@@ -25,9 +14,14 @@ $formattedNow = $now.ToString('yyyyMMddHHmmss')
 $logFile = "$startLocation\environment_roster_rebirth_$formattedNow.log"
 
 #链下服务相关配置
-#$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090"
-$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8092"
+#[sui testnet test]
+#serverUrl = "http://ec2-34-212-167-187.us-west-2.compute.amazonaws.com:8090"
+#[sui testnet prod]
+$serverUrl = "http://ec2-34-212-167-187.us-west-2.compute.amazonaws.com:8093"
+#[Movement baku test]
 #$serverUrl = "http://ec2-18-236-242-218.us-west-2.compute.amazonaws.com:8091"
+#[Movement baku prod]
+#$serverUrl = "http://ec2-34-212-167-187.us-west-2.compute.amazonaws.com:8092"
 #$serverUrl = "http://localhost:1023"
 
 # 目前岛屿所占海域大小
@@ -48,8 +42,11 @@ $environmentQuntityPerIsland = 3
 #添加船队时，最大出错次数不能超过$maxErrorTimes
 $maxErrorTimes = 5
 
-#$node = "https://fullnode.testnet.sui.io/"
-$node = "https://devnet.baku.movementlabs.xyz/"
+#[sui test fullnode]
+$node = "https://fullnode.testnet.sui.io/"
+
+#[Movement baku fullnode]
+#$node = "https://devnet.baku.movementlabs.xyz/"
 $getMapResult = $null
 $dynamicFiledsId = $null;
 
@@ -121,6 +118,7 @@ if ($islandCoordinates.Count -ne $quntity) {
 
 $getAllEnviornmentRostersResult = $null
 $rosterCoordinates = @()
+#从Indexer获得的所有的【未损毁的】环境船队
 $rosterIdsFromIndexer = @()
 try {
     $getAllEnviornmentRostersUrl = $serverUrl + "/api/rosterExtends/getAllEnvironmentRosters"
@@ -132,7 +130,7 @@ try {
     $command | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Blue
     $getAllEnviornmentRostersResult = Invoke-Expression -Command $command 
     if ($getAllEnviornmentRostersResult.StatusCode -ne 200) {
-        "请求失败，状态码: $($response.StatusCode),返回信息:$($getAllEnviornmentRostersResult.Content)" | Write-Host  -ForegroundColor Red
+        "请求失败，状态码: $($getAllEnviornmentRostersResult.StatusCode),返回信息:$($getAllEnviornmentRostersResult.Content)" | Write-Host  -ForegroundColor Red
         return
     }
     $getAllEnviornmentRostersResultObj = $getAllEnviornmentRostersResult.Content | ConvertFrom-Json
@@ -313,7 +311,8 @@ if ($null -eq $dataInfo.main.EnvironmentPlayId) {
     return
 }
 
-#从Indexer中获取环境船队的最大编号
+#从Indexer中获取环境船队的最大编号，
+#【这个不准确其实是未损毁的环境船队的最大编号】
 $maxSequnceNumberFromIndexer = 0
 foreach ($rosterId in $rosterIdsFromIndexer) {
     if ($dataInfo.main.EnvironmentPlayId -eq $rosterId.playerId -and $rosterId.sequenceNumber -gt $maxSequnceNumberFromIndexer) {
@@ -371,9 +370,9 @@ catch {
     return    
 }
 "从 Full Node 一共得到了 $($rosterIdsFromFullNode.Count) 个环境船队。" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-if ($rosterIdsFromFullNode.Count -ne $rosterIdsFromIndexer.Count) {
-    "两种方式得到的环境船队数量不同,从节点处得到： $($rosterIdsFromFullNode.Count),从 Indexer 处得到：$($rosterIdsFromIndexer.Count)" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Red
-}
+# if ($rosterIdsFromFullNode.Count -ne $rosterIdsFromIndexer.Count) {
+"两种方式得到环境船队数量,从节点 FullNode 处得到（包括已经被消灭）： $($rosterIdsFromFullNode.Count)，从 Indexer 处得到（目前仍然存活的）：$($rosterIdsFromIndexer.Count)" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+# }
 
 $maxSequnceNumberInFullNode = 0
 foreach ($rosterId in $rosterIdsFromFullNode) {
@@ -382,11 +381,12 @@ foreach ($rosterId in $rosterIdsFromFullNode) {
     }
 }
 
-if ($maxSequnceNumberFromIndexer -ne $maxSequnceNumberInFullNode) {
-    "从FullNode 和 Indexer 得到的环境船队最大编号不同， 来自Full Node： $maxSequnceNumberInFullNode , 来自Indexer： $maxSequnceNumberFromIndexer" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Red
+"从 FullNode 和 Indexer 得到的环境船队最大编号分别是： 来自Full Node： $maxSequnceNumberInFullNode , 来自Indexer： $maxSequnceNumberFromIndexer" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+"两者可以不同，但是必须 maxSequnceNumberFromIndexer<=maxSequnceNumberInFullNode,因为最大序列号的环境船队可能被消灭，而 maxSequnceNumberFromIndexer 中不包含被消灭的环境船队" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+if ($maxSequnceNumberFromIndexer -gt $maxSequnceNumberInFullNode) {
+    "maxSequnceNumberFromIndexer 不能大于 maxSequnceNumberInFullNode" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Red
     return 
 }
-
 
 
 
@@ -446,7 +446,7 @@ $clock = '0x6'
 $roster_id_sequence_number = 1
 
 
-
+#最大序列号应该以 maxSequnceNumberInFullNode 为准，因为最大序列号的环境船队可能被消灭，而maxSequnceNumberFromIndexer 中不包含被消灭的环境船队
 $LastRosterIdSequenceNumber = $maxSequnceNumberInFullNode + 1
 
 "本次造船队将从序列号 $LastRosterIdSequenceNumber 开始" | Write-Host -ForegroundColor Green
