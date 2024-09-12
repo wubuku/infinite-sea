@@ -1,4 +1,5 @@
 [package]
+published-at = "0xda80d2c8c648a579fc5f9f4272acfc529a30018305bc5057bd0a2057e778bc1d"
 name = "infinite_sea_faucet"
 version = "0.0.1"
 
@@ -8,4 +9,4 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 infinite_sea_coin = { local = "../infinite-sea-coin" }
 
 [addresses]
-infinite_sea_faucet = "0xc066d95330f4e9ef7a4d463056c2acb1d25b29354db39f0fcf9378d3f0d26972"
+infinite_sea_faucet = "0xda80d2c8c648a579fc5f9f4272acfc529a30018305bc5057bd0a2057e778bc1d"

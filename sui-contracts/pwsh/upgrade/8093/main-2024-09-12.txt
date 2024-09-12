@@ -1,0 +1,2 @@
+sui client upgrade  --upgrade-capability 0x56475c75ab256c0075babf10fd51af44ebcf26450573d5aae7b81155155ebcf7 --json
+

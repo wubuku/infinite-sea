@@ -26,7 +26,7 @@ module infinite_sea_common::fight_to_death {
         if (self_health == 1 && opponent_health > 2
             || opponent_health == 1 && self_health > 2
         ) {
-            return (1, 1);
+            return (1, 1)
         };
         let self_damage_probabilities: vector<u32> = vector::empty<u32>();//vector[25, 50, 75, 100];
         let opponent_damage_probabilities: vector<u32> = vector::empty<u32>();//vector[25, 50, 75, 100];

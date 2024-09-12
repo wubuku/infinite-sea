@@ -1,4 +1,5 @@
 [package]
+published-at = "0xd091224910d874f7a6e838acdd8a90c462dd386ff922ac80b7754fc52dd0413c"
 name = "infinite_sea_nft"
 version = "0.0.1"
 
@@ -7,4 +8,4 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 #Sui = { local = "../../../../MystenLabs/sui/crates/sui-framework/packages/sui-framework" }
 
 [addresses]
-infinite_sea_nft = "0x0"
+infinite_sea_nft = "0xd091224910d874f7a6e838acdd8a90c462dd386ff922ac80b7754fc52dd0413c"

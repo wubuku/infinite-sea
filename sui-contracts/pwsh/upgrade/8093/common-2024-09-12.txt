@@ -1,0 +1,2 @@
+sui client upgrade  --upgrade-capability 0xd3a993cea5d0c60aac7699dd0b5563d2c1685e5c5a7832959eb27af43f338a49
+

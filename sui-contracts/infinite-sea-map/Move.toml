@@ -1,4 +1,5 @@
 [package]
+published-at = "0x0c10e315b5985f2a2bcb495bc8d34534923ad3f205de51a476f505b8a0b24bcd"
 name = "infinite_sea_map"
 version = "0.0.1"
 
@@ -8,4 +9,4 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 infinite_sea_common = { local = "../infinite-sea-common" }
 
 [addresses]
-infinite_sea_map = "0x0"
+infinite_sea_map = "0x0c10e315b5985f2a2bcb495bc8d34534923ad3f205de51a476f505b8a0b24bcd"
