@@ -447,7 +447,7 @@ wubuku/dddappp-sui:master \
   },
   "common": {
     "Digest": "AYqRdXWTpu2empydrpK4LVJXMQYtLCHS7LW8kTgAdyik",
-    "PackageId": "0x1e658a85f8ec569ac93e51c9e5b85155d28b3e923b86bc3eff306d631fff5b9d",
+    "PackageId": "0x9dc1d099e0b6079a220df7704582bc8d6a3ae327b7964cb1d3e2345b095ea8d5",
     "ExperienceTable": "0x200d696afd5e2ab98f404db7e2c8a2c7da860498e50abdca4b5d4b2972b9af62",
     "ItemProductionTable": "0x2a74e73357642771684dae40b819501b88323a6d59b019c58ba36d63e1bdece9",
     "Publisher": "0x50ffd26a8e877ed2266e6b3545112abf7304bd5bb7cd95762379321bd36e2328",
@@ -465,7 +465,7 @@ wubuku/dddappp-sui:master \
     "SkillProcessTable": "0x25005c7073c2c2f4c48ace0c2fe27ab75f84df2fc736ae63c7c1ec49c6cfc63e",
     "UpgradeCap": "0x61dfd03f45c4b3230be21daec8397766d25c39890d27e21023a0c18f99ad499a",
     "RosterTable": "0x67ee77b01d2d3b64f7cbbc92212aa4927819a8e1efbcbe1f6712e0a18749b863",
-    "PackageId": "0xb8cd1b37f69c9742578fca3bd8a51416404224bb745dd353b048e97b1259aa48",
+    "PackageId": "0x3f55dfda7b0ff6e4efe52d3cec14ec2414b1e2ceaa80c37cd482fed4e6f8c35c",
     "Player": "0xc579fb69ce1cea5ec3887b5898bf0d17a0bddb4b0101c236d25bce5b1ae4758c",
     "EnvironmentPlayId": "0x85f5281e63ceadda6fcbd996ce07060f2841be10d21866e7a626fa25f37ab8a7",
     "SkillProcessCrafting": "0x340db14537144439df4b628f5764077bdb3bb43dab86ba3d3154aa9ac17f5e6d",
