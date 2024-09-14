@@ -2,7 +2,7 @@
 
 English | [中文版](./README_CN.md)
 
-We are creating a maritime trading, managing, and battling diplomatic fully on-chain game: [Infinite Seas](https://game.infiniteseas.io/).
+We are creating a maritime trading, managing, and battling diplomatic fully on-chain game: [Infinite Seas](https://infiniteseas.io/).
 we believe the best fully on-chain games should be fun and infinite (define by games that are non-session and infinitely large map) with an open economy design. 
 ![image](https://hackmd.io/_uploads/H1yiNQVkA.jpg)
 
@@ -53,6 +53,10 @@ then run the dddappp builder to generate most of the code,
 and then fill in a small amount of business logic in specific places, 
 and we're done with the development of a fully on-chain game.
 
+> We are currently [porting Infinite Seas to EVM](https://github.com/wubuku/hello-mud).
+> We use almost identical model files to drive the development of three versions of Infinite Seas: Sui, Aptos, and EVM.
+> In the current Web3 development landscape, only a highly abstract and concise DSL like DDDML allows us to port a complex decentralized application so effortlessly.
+
 
 ## Requirements analysis and domain modeling
 
@@ -71,7 +75,7 @@ and we're done with the development of a fully on-chain game.
 
 ### Writing DDDML model files
 
-The model files are located in the directory `. /dddml`.
+The model files are located in the directory `./dddml`.
 
 > **Tip**
 >

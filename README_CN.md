@@ -2,12 +2,17 @@
 
 [English](./README.md) | 中文版
 
-[Infinite Seas](https://game.infiniteseas.io/) 是使用 dddappp 低代码平台来开发的全链游戏。
+[Infinite Seas](https://infiniteseas.io/) 是使用 dddappp 低代码平台来开发的全链游戏。
 虽然 dddappp 并不是专门为游戏开发设计的，但是它完全可以作为一个“全链游戏引擎”来使用。
 
 使用 dddappp 开发全链游戏令人难以置信地简单。
 
 我们只要先做好需求分析和领域建模，然后编写 DDDML 模型文件，再运行 dddappp 创建工具，生成大部分代码，然后在某些特定地方填充少量的业务逻辑的实现，就可以完成一个全链游戏的开发。
+
+> 我们正在将 Infinite Seas [移植到 EVM](https://github.com/wubuku/hello-mud)。
+> 我们使用几乎完全相同的模型文件来驱动 Infinite Seas 的 Sui、Aptos 以及 EVM 三个版本的开发。
+> 在当前的 Web3 开发领域，唯有 DDDML 这样高度抽象、凝练的 DSL 可以让我们如此从容地完成一个复杂去中心化应用的移植工作。
+
 
 ## 需求分析与领域建模
 
@@ -157,7 +162,7 @@ wubuku/dddappp-sui:master \
 
 > **提示**
 >
-> 有时候，你可能需要移除旧的容器和镜像：
+> 有时候，你可能需要移除旧的容器和镜像，以确保使用的是最新的镜像：
 >
 > ```shell
 > docker rm $(docker ps -aq --filter "ancestor=wubuku/dddappp-sui:master")
@@ -2969,6 +2974,7 @@ Input parameter description:
 After successful command execution, you will receive an output with a JSON structure similar to the following:
 
 ```json
+{
 
   "objectChanges": [
     {
@@ -2985,6 +2991,8 @@ After successful command execution, you will receive an output with a JSON struc
       "digest": "3JpwaEb9yNGZzmqLjjbgL5F9aZFiMK9VsvqU96rPG61D"
     }
   ]
+
+}
 ```
 从上述结果中，可以看到类型为 `{nft.packageId}::avatar_change::AvatarChange` 的元素，我们将其 `objectId` 记录为 `{avatarChangeId}`。
 我们将在 `更新 AvatarChange` 以及 `更新 NFT(PFP)`接口函数中使用它。
@@ -3195,7 +3203,9 @@ Input parameter description:
 
 If executed successfully, similar output information can be obtained as follows:
 ```json
-"objectChanges": [
+{
+  
+    "objectChanges": [
     {
       "type": "created",
       "sender": "0x18c9efc771fb402058703ec5842981e515dcc3bcf8c4ce05f1a4bc5f50d1a32b",
@@ -3208,6 +3218,8 @@ If executed successfully, similar output information can be obtained as follows:
       "digest": "8eZMiHUnCqzRgQqn6Cso2anvscNQ357CjAr3Gx3vkjkS"
     }
   ]
+  
+}
 ```
 可以看到 `objectType` 为 `{nft.packageId}::avatar::Avatar` 的元素，其 `objectId` 即为用户认领到的 NFT(PFP) 对象的 ID。
 我们可以将其记录为 `{AvatarId}`，以供在其他地方使用。
@@ -3740,7 +3752,7 @@ sui client object 0x970ccbbd1b5670c4f1e13c8a8eafddf53c0a579b158129e961046ee6c321
 
 ### 测试链下服务（indexer）
 
-#### Configuring off-chain service
+#### 配置链下服务
 
 Open the `application-test.yml` file located in the directory `sui-java-service/suiinfinitesea-service-rest/src/main/resources` and set the publishing transaction digests.
 
@@ -3758,7 +3770,7 @@ sui:
 
 This is the only place where off-chain service need to be configured, and it's that simple.
 
-#### Creating a database for off-chain service
+#### 创建链下服务的数据库
 
 Use a MySQL client to connect to the local MySQL server and execute the following script to create an empty database (assuming the name is `test7`):
 
@@ -3778,7 +3790,7 @@ Then, run a command-line tool to initialize the database:
 java -jar ./suiinfinitesea-service-cli/target/suiinfinitesea-service-cli-0.0.1-SNAPSHOT.jar ddl -d "./scripts" -c "jdbc:mysql://127.0.0.1:3306/test7?enabledTLSProtocols=TLSv1.2&characterEncoding=utf8&serverTimezone=GMT%2b0&useLegacyDatetimeCode=false" -u root -p 123456
 ```
 
-#### Starting off-chain service
+#### 启动链下服务
 
 In the `sui-java-service` directory, execute the following command to start the off-chain service:
 
