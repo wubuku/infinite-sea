@@ -29,7 +29,8 @@ module infinite_sea_faucet::energy_faucet {
     const EInvalidPublisher: u64 = 50;
     const EInsufficientTimeInterval: u64 = 60;
     const EInsufficientBalance: u64 = 70;
-    const A_DROP_AMOUNT: u64 = 50_000_000_000;
+    //const A_DROP_AMOUNT: u64 = 50_000_000_000;
+    const A_DROP_AMOUNT: u64 = 100_000_000_000;
 
 
     struct ENERGY_FAUCET has drop {}

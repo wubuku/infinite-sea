@@ -6,10 +6,10 @@ module infinite_sea_common::speed_util {
     #[test_only]
     use infinite_sea_common::coordinates;
 
-    const STANDARD_SPEED_NUMERATOR: u32 = 11784;
+    const STANDARD_SPEED_NUMERATOR: u32 = 23568;
     const STANDARD_SPEED_DENOMINATOR: u32 = 1000;
 
-    const SPEED_NUMERATOR_DELTA: u32 = 1178;
+    const SPEED_NUMERATOR_DELTA: u32 = 2356;
 
     /// Convert the speed property value to "coordinate units / second".
     public fun speed_property_to_coordinate_units_per_second(speed_property: u32): (u32, u32) {
@@ -38,9 +38,9 @@ module infinite_sea_common::speed_util {
     #[test]
     public fun test_calculate_total_time()
     {
-        let original = coordinates::new(2147481827, 2147482947);
-        let destination = coordinates::new(2147482142, 2147482601);
-        let speed = 5;
+        let original = coordinates::new(2147529765,2147506919);
+        let destination = coordinates::new(2147533552, 2147504949);
+        let speed = 9;
         let total_time = calculate_total_time(original, destination, speed);
         debug::print(&total_time);
     }
