@@ -9,6 +9,7 @@ module infinite_sea::ship_battle_make_move_logic {
     use sui::object::ID;
     use sui::object_table;
     use sui::tx_context::TxContext;
+    use infinite_sea::permission_util;
     use infinite_sea_common::battle_status;
     use infinite_sea_common::fight_to_death;
     use infinite_sea_common::item_id_quantity_pairs;
@@ -70,6 +71,14 @@ module infinite_sea::ship_battle_make_move_logic {
             attacker_roster = responder;
             defender_roster = initiator;
         };
+        //TODO: Check if the attacker owner is the player
+        // if (!roster::environment_owned(attacker_roster)
+        //     && now_time < ship_battle::round_started_at(ship_battle) + 10 // some seconds
+        // ) {
+        //     permission_util::assert_sender_is_player_owner(player, ctx);
+        //     permission_util::assert_player_is_roster_owner(player, attacker_roster);
+        // };
+
         let attacker_ships = roster::borrow_ships(attacker_roster);
         let defender_ships = roster::borrow_ships(defender_roster);
         let attacker_ship = object_table::borrow(attacker_ships, *option::borrow(&attacker_ship_id));
