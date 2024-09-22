@@ -96,6 +96,7 @@ module infinite_sea::ship_battle_take_loot_logic {
                 // Anyone can trigger the loot taking after the time limit using the default choice.
                 choice = CHOICE_TAKE_ALL;
             } else {
+                //TODO permission_util::assert_sender_is_player_owner(player, ctx);
                 permission_util::assert_player_is_roster_owner(player, winner_roster);
             };
         };
