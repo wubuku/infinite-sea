@@ -1553,7 +1553,7 @@ if ($testSkillProcessFarming) {
     $itemProductionCottonSeedsToCottonId = ''
     $costTime = 15
     try {
-        $result = sui client call --package $commonPackageId --module item_production_aggregate --function create --args '0' $itemData.ItemCottons.ItemId $commonPublisherId $itemCottonSeedsId '[1]' '1' '5' '0' $costTime '5000000000' '100' $ItemProductionTableId --gas-budget 11000000 --json
+        $result = sui client call --package $commonPackageId --module item_production_aggregate --function create --args '0' $itemData.ItemCottons.ItemId $commonPublisherId $itemCottonSeedsId '[1]' '1' '1' '0' $costTime '5000000000' '100' $ItemProductionTableId --gas-budget 11000000 --json
         if (-not ('System.Object[]' -eq $result.GetType())) {
             "添加配方Item Production(种植棉花)时返回信息: $result `n" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
             Set-Location $startLocation

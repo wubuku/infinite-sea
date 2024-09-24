@@ -25,19 +25,27 @@ $formattedNow = $now.ToString('yyyyMMddHHmmss')
 $logFile = "$startLocation\environment_roster_rebirth_$formattedNow.log"
 
 #链下服务相关配置
-$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8091"
+$serverUrl = "http://ec2-34-222-163-11.us-west-2.compute.amazonaws.com:8090"
 
 # 目前岛屿所占海域大小
+# $islandWidth = 10000
+# $islandHeight = 10000
 $islandWidth = 5000
 $islandHeight = 5000
+$u32MaxHalf = 2147483647
 # 在岛屿周边查找环境船队，以岛屿的中心坐标为准做一个矩形，矩形的大小 $islandWidth*$range,$islandHeight*$range
-$range = 0.2
+#$range = 0.2
+#改为距离岛屿中心点 1800-3000之间的矩形带
+$innerDistince = 1800
+$outerDistince = 3000
+
+#每个岛屿有多少个环境船队
 $environmentQuntityPerIsland = 3
 
 #添加船队时，最大出错次数不能超过$maxErrorTimes
 $maxErrorTimes = 5
 
-$node = "https://devnet.baku.movementlabs.xyz/"
+$node = "https://fullnode.testnet.sui.io/"
 $getMapResult = $null
 $dynamicFiledsId = $null;
 try {
@@ -74,7 +82,8 @@ while ($hasNextPage) {
     }
     foreach ($coordinate in $resultObj.result.data) {
         $islandCoordinates += $coordinate.name.value
-        "($($coordinate.name.value.x),$($coordinate.name.value.y))" |  Write-Host -ForegroundColor White
+        #"($($coordinate.name.value.x),$($coordinate.name.value.y))" |  Write-Host -ForegroundColor White 
+        "($($coordinate.name.value.x-$u32MaxHalf),$($coordinate.name.value.y-$u32MaxHalf))" |  Write-Host -ForegroundColor White 
     }
     $hasNextPage = $resultObj.result.hasNextPage
     $nextCursor = $resultObj.result.nextCursor;
@@ -98,7 +107,8 @@ try {
     "目前一共有 $($getAllEnviornmentRostersResultObj.Count) 个活着的环境船队..." | Tee-Object -FilePath $logFile -Append  |  Write-Host     
     foreach ($roster in $getAllEnviornmentRostersResultObj) {
         $rosterCoordinates += $roster.updatedCoordinates;
-        "coordinates:($($roster.updatedCoordinates.x),$($roster.updatedCoordinates.y))" |  Write-Host 
+        #"coordinates:($($roster.updatedCoordinates.x),$($roster.updatedCoordinates.y))" |  Write-Host 
+        "coordinates:($($roster.updatedCoordinates.x-$u32MaxHalf),$($roster.updatedCoordinates.y-$u32MaxHalf))" |  Write-Host 
     }
 }
 catch {
@@ -109,10 +119,11 @@ catch {
 
 
 "目前岛屿所占海域大小为:{$islandWidth,$islandHeight}" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-"我们认为岛屿周边的环境船队不超过岛屿所占海域面积的$($range*100)%，也就是($($islandWidth*0.2),$($islandHeight*0.2))" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+#"我们认为岛屿周边的环境船队不超过岛屿所占海域面积的$($range*100)%，也就是($($islandWidth*0.2),$($islandHeight*0.2))" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
+"我们认为岛屿周边的环境船队分布在距离岛屿中心点 $innerDistince 与 $outerDistince 的矩形带中。" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
 
-$widthSpan = $islandWidth * 0.2
-$heightSpan = $islandHeight * 0.2
+#$widthSpan = $islandWidth * 0.2
+#$heightSpan = $islandHeight * 0.2
 
 Add-Type -TypeDefinition @"
 public class Requirement{
@@ -124,17 +135,57 @@ public class Requirement{
 
 $requirements = @();
 $needAddTotal = 0
+
+
+function IsPointInAnnulus {
+    param (
+        [long]$px,
+        [long]$py,
+        [long]$left,
+        [long]$bottom,
+        [long]$right,
+        [long]$top,
+        [long]$outerLeft,
+        [long]$outerBottom,
+        [long]$outerRight,
+        [long]$outerTop
+    )
+
+    # 检查点是否在外部矩形之内
+    $inOuterRectangle = ($px -ge $outerLeft) -and ($px -le $outerRight) -and ($py -ge $outerBottom) -and ($py -le $outerTop)
+
+    # 检查点是否在内部矩形之外
+    $outInnerRectangle = ($px -lt $left) -or ($px -gt $right) -or ($py -lt $bottom) -or ($py -gt $top)
+
+    # 如果在外部矩形内且在内部矩形外，则返回 $true
+    return $inOuterRectangle -and $outInnerRectangle
+}
+
+#循环每个岛屿-$u32MaxHalf
 foreach ($islandCoordinate in $islandCoordinates) {
-    $left = $islandCoordinate.x - $widthSpan
-    $bottom = $islandCoordinate.y - $heightSpan
-    $right = $islandCoordinate.x + $widthSpan
-    $top = $islandCoordinate.y + $heightSpan
-    "($($islandCoordinate.x),$($islandCoordinate.y))->左下角:($left,$bottom)，右上角:($right,$top)" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
+    $left = $islandCoordinate.x - $innerDistince
+    $bottom = $islandCoordinate.y - $innerDistince
+    $right = $islandCoordinate.x + $innerDistince
+    $top = $islandCoordinate.y + $innerDistince
+    #"岛屿坐标：($($islandCoordinate.x),$($islandCoordinate.y))" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    "岛屿坐标：($($islandCoordinate.x-$u32MaxHalf),$($islandCoordinate.y-$u32MaxHalf))" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
+    #"   内矩形：左下角:($left,$bottom)，右上角:($right,$top)" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
+    "   内矩形：左下角:($($left-$u32MaxHalf),$($bottom-$u32MaxHalf))，右上角:($($right-$u32MaxHalf),$($top-$u32MaxHalf))" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
+    $outerLeft = $islandCoordinate.x - $outerDistince
+    $outerBottom = $islandCoordinate.y - $outerDistince
+    $outerRight = $islandCoordinate.x + $outerDistince
+    $outerTop = $islandCoordinate.y + $outerDistince
+    #"   外矩形：左下角:($outerLeft,$outerBottom)，右上角:($outerRight,$outerTop)" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
+    "   外矩形：左下角:($($outerLeft-$u32MaxHalf),$($outerBottom-$u32MaxHalf))，右上角:($($outerRight-$u32MaxHalf),$($outerTop-$u32MaxHalf))" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor White
     #查询这个区域内有没有环境船队
     $inRange = 0
+    #循环所有的环境船队，看那个船队属于哪个岛屿
     foreach ($rosterCoordinate in $rosterCoordinates) {
-        if ($rosterCoordinate.x -ge $left -and $rosterCoordinate.x -le $right -and $rosterCoordinate.y -ge $bottom -and $rosterCoordinate.y -le $top) {
-            "   坐标为($($rosterCoordinate.x),$($rosterCoordinate.y) 的船队处于岛屿范围之内,距离分别是" | Tee-Object -FilePath $logFile -Append  |  Write-Host -NoNewline
+        $pointBetweenRectangles = IsPointInAnnulus -px $rosterCoordinate.x -py $rosterCoordinate.y -left $left -bottom $bottom -right $right -top $top -outerLeft $outerLeft -outerBottom $outerBottom -outerRight $outerRight -outerTop $outerTop
+        if ($pointBetweenRectangles) {
+            #if ($rosterCoordinate.x -le $left -and $rosterCoordinate.x -ge $right -and $rosterCoordinate.y -ge $bottom -and $rosterCoordinate.y -le $top) {
+            #"   坐标为($($rosterCoordinate.x),$($rosterCoordinate.y) 的船队处于岛屿范围之内,横纵距离分别是" | Tee-Object -FilePath $logFile -Append  |  Write-Host -NoNewline
+            "   坐标为($($rosterCoordinate.x-$u32MaxHalf),$($rosterCoordinate.y-$u32MaxHalf)) 的船队处于岛屿范围之内,横纵距离分别是" | Tee-Object -FilePath $logFile -Append  |  Write-Host -NoNewline
             "($($rosterCoordinate.x - $islandCoordinate.x), $($rosterCoordinate.y - $islandCoordinate.y))" | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
             $inRange = $inRange + 1;
         }
@@ -153,35 +204,6 @@ if ($needAddTotal -lt 1) {
     return;
 }
 "需要补充 $needAddTotal 个环境船队..." | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Yellow
-
-# $uuid = New-Guid
-# $playName = $uuid.Guid.ToString()
-# $newPlayId = ""
-# "`n创建一个PLAYER..." | Tee-Object -FilePath $logFile -Append  |  Write-Host -ForegroundColor Yellow
-# $result = ""
-# try {
-#     $result = sui client call --package $dataInfo.main.PackageId --module player_aggregate --function create --args $playName --gas-budget 11000000 --json
-#     if (-not ('System.Object[]' -eq $result.GetType())) {
-#         "创建Player时返回信息 $result" | Tee-Object -FilePath $logFile -Append | Write-Host  -ForegroundColor Red
-#         Set-Location $startLocation
-#         return
-#     }
-#     $resultObj = $result | ConvertFrom-Json
-#     foreach ($object in $resultObj.objectChanges) {
-#         if ($object.objectType -like "*player::Player") {
-#             $newPlayId = $object.objectId
-#             #$dataMain | Add-Member -MemberType NoteProperty -Name "Player" -Value $newPlayId 
-#             "创建成功,Player Id: $newPlayId`n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Yellow
-#             break;   
-#         }
-#     }
-# }
-# catch {
-#     "创建Player失败: $($_.Exception.Message) `n" | Tee-Object -FilePath $logFile -Append | Write-Host -ForegroundColor Red
-#     "返回的结果为:$result" | Tee-Object -FilePath $logFile -Append  |  Write-Host 
-#     Set-Location $startLocation
-#     return    
-# }
 
 $random = New-Object System.Random  
 $errorTimes = 0

@@ -457,7 +457,9 @@ wubuku/dddappp-sui:master \
   },
   "common": {
     "Digest": "AYqRdXWTpu2empydrpK4LVJXMQYtLCHS7LW8kTgAdyik",
-    "PackageId": "0x9dc1d099e0b6079a220df7704582bc8d6a3ae327b7964cb1d3e2345b095ea8d5",
+    "PackageId(Origin)": "0x1e658a85f8ec569ac93e51c9e5b85155d28b3e923b86bc3eff306d631fff5b9d",
+    "PackageId(1st upgrade)": "0x9dc1d099e0b6079a220df7704582bc8d6a3ae327b7964cb1d3e2345b095ea8d5",
+    "packageId(0924)": "0xd0b7f7ae473371d18d3abc5362ab8bda0d21f7dc5741fa63424a1c05de4819c7",
     "ExperienceTable": "0x200d696afd5e2ab98f404db7e2c8a2c7da860498e50abdca4b5d4b2972b9af62",
     "ItemProductionTable": "0x2a74e73357642771684dae40b819501b88323a6d59b019c58ba36d63e1bdece9",
     "Publisher": "0x50ffd26a8e877ed2266e6b3545112abf7304bd5bb7cd95762379321bd36e2328",
@@ -475,7 +477,9 @@ wubuku/dddappp-sui:master \
     "SkillProcessTable": "0x25005c7073c2c2f4c48ace0c2fe27ab75f84df2fc736ae63c7c1ec49c6cfc63e",
     "UpgradeCap": "0x61dfd03f45c4b3230be21daec8397766d25c39890d27e21023a0c18f99ad499a",
     "RosterTable": "0x67ee77b01d2d3b64f7cbbc92212aa4927819a8e1efbcbe1f6712e0a18749b863",
-    "PackageId": "0x3f55dfda7b0ff6e4efe52d3cec14ec2414b1e2ceaa80c37cd482fed4e6f8c35c",
+    "PackageId(Origin)": "0x1e658a85f8ec569ac93e51c9e5b85155d28b3e923b86bc3eff306d631fff5b9d",
+    "PackageId(1st upgrade)": "0x3f55dfda7b0ff6e4efe52d3cec14ec2414b1e2ceaa80c37cd482fed4e6f8c35c",
+    "PackageId(0924)": "0x46c34d750861f88b8ac4afa4e43077e4264207297d947886fb690d45188395f4",
     "Player": "0xc579fb69ce1cea5ec3887b5898bf0d17a0bddb4b0101c236d25bce5b1ae4758c",
     "EnvironmentPlayId": "0x85f5281e63ceadda6fcbd996ce07060f2841be10d21866e7a626fa25f37ab8a7",
     "SkillProcessCrafting": "0x340db14537144439df4b628f5764077bdb3bb43dab86ba3d3154aa9ac17f5e6d",
@@ -486,8 +490,10 @@ wubuku/dddappp-sui:master \
   },
   "faucet": {
     "EnergyFaucet": "0x3fb72a6823a727d307171d9ad0e33d9d8aca3dd55c7681e8e6d8e79e80670290",
-    "PackageId": "0x8df8e907959827fc85bad5f875939959e65a365b802fdad36ea2dfd9aa729b00",
-    "Digest": "DtYai2FnKtsxqp2kipX8rMezo2zSg6QCHEbHuYNhvcwq"
+    "PackageId(Origin)": "0x8df8e907959827fc85bad5f875939959e65a365b802fdad36ea2dfd9aa729b00",
+    "PackageId(0924)": "0x9bc2348d1ff8ddc7492fe631b54383457a5384cdcb5b3bec971a88193c883da1",
+    "Digest": "DtYai2FnKtsxqp2kipX8rMezo2zSg6QCHEbHuYNhvcwq",
+    "UpgradeCap": "0xc6cb352183e3eadd5d159abb33d7c29c9402d6f594eaf5d42d271759a578aa29"
   },
   "nft": {
     "Whitelist": "0x120ff3ca22143114e9f46374cf9a2fdfc48bf1abd08de3eb07c653f046518cf5",

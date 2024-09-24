@@ -13,11 +13,12 @@ $ComeFromFile = Get-Content -Raw -Path $dataFile
 $dataInfo = $ComeFromFile | ConvertFrom-Json
 
 
-$rosterId = "0xe665e744dd218ee577d996facd7645d2f9a2005008fadcaf0e52896f5db43ecc"
+$rosterId = "0xb97a70c0c4d38cf2ae3f16ca4d80edd2d0540b60bc05610b4975c8480f28e915"
 
 
 $formattedNow = $now.ToString('yyyyMMddHHmmss')
 $logFile = "$startLocation\roster_$rosterId.log"
+"Roster Id: $rosterId" | Tee-Object -FilePath $logFile -Append  | Write-Host  -ForegroundColor Green
 
 $getRosterResult = ""
 $shipIds = @()
