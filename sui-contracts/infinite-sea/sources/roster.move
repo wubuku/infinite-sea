@@ -65,6 +65,25 @@ module infinite_sea::roster {
         });
     }
 
+    #[test_only]
+    public fun create_roster_table(ctx: &mut TxContext):RosterTable{
+        let id_generator_table = RosterTable {
+            id: object::new(ctx),
+            table: table::new(ctx),
+        };
+        id_generator_table
+    }
+
+
+    public(friend) fun drop_roster_table(rosterTable: RosterTable) {
+        let RosterTable {
+            id,
+            table
+        } = rosterTable;
+        table::drop(table);
+        object::delete(id);
+    }
+
     struct Roster has key {
         id: UID,
         roster_id: RosterId,

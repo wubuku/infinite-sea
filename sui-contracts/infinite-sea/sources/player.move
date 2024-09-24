@@ -26,6 +26,7 @@ module infinite_sea::player {
     friend infinite_sea::roster_take_out_ship_inventory_logic;
     friend infinite_sea::ship_battle_take_loot_logic;
     friend infinite_sea::player_properties;
+    friend infinite_sea::roster_aggregate;
 
     #[allow(unused_const)]
     const EDataTooLong: u64 = 102;

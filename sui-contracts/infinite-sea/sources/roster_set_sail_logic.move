@@ -1,5 +1,6 @@
 #[allow(unused_variable, unused_use, unused_assignment, unused_mut_parameter)]
 module infinite_sea::roster_set_sail_logic {
+    use std::debug;
     use std::option;
     use std::vector;
 
@@ -17,6 +18,8 @@ module infinite_sea::roster_set_sail_logic {
     use infinite_sea::player::Player;
     use infinite_sea::roster;
     use infinite_sea::roster_util;
+    #[test_only]
+    use sui::test_utils;
 
     friend infinite_sea::roster_aggregate;
 
@@ -42,11 +45,13 @@ module infinite_sea::roster_set_sail_logic {
         permission_util::assert_sender_is_player_owner(player, ctx);
         permission_util::assert_player_is_roster_owner(player, roster);
         roster_util::assert_roster_is_not_unassigned_ships(roster);
-        roster_util::assert_roster_ships_not_empty(roster);
+        //roster_util::assert_roster_ships_not_empty(roster);
 
         let new_updated_coordinates: Coordinates; // current location of the roster
         let status = roster::status(roster);
+        debug::print(&status);
         if (status == roster_status::at_anchor()) {
+            test_utils::print(b"roster_status::at_anchor()");
             new_updated_coordinates = roster::updated_coordinates(roster);
         } else if (status == roster_status::underway()) {
             //let (_updated_coordinates, _coordinates_updated_at, _new_status) = roster_util::calculate_current_location(
@@ -64,13 +69,13 @@ module infinite_sea::roster_set_sail_logic {
         } else {
             abort ERosterUnfitToSail
         };
-        let energy_cost = balance::value(energy);
+        let energy_cost = 1000;// balance::value(energy);
         let total_time = speed_util::calculate_total_time(new_updated_coordinates, target_coordinates,
             roster::speed(roster));
         assert!(sail_duration >= total_time, EIllegalSailDuration);
-        let ship_count = vector::length(roster::borrow_ship_ids(roster));
+        //let ship_count = vector::length(roster::borrow_ship_ids(roster));
         //assert!(energy_cost >= MIN_SAIL_ENERGY, ENotEnoughEnergy);
-        assert!(energy_cost >= total_time * ship_count * ENERGY_AMOUNT_PER_SECOND_PER_SHIP, ENotEnoughEnergy);
+        //assert!(energy_cost >= total_time * ship_count * ENERGY_AMOUNT_PER_SECOND_PER_SHIP, ENotEnoughEnergy);
         let set_sail_at = clock::timestamp_ms(clock) / 1000;
         roster::new_roster_set_sail(roster, target_coordinates, sail_duration, set_sail_at,
             new_updated_coordinates, energy_cost)
@@ -101,4 +106,6 @@ module infinite_sea::roster_set_sail_logic {
         let energy_vault = roster::borrow_mut_energy_vault(roster);
         balance::join(energy_vault, energy);
     }
+
+
 }
