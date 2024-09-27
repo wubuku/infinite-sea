@@ -120,7 +120,7 @@ aggregates:
 
       GatherIslandResources:
         metadata:
-          ParametersIncludedInMutationFunction: [ "Clock" ]
+          ParametersIncludedInMutationFunction: [ "Clock", "Random" ]
         parameters:
           Map:
             referenceType: Map
@@ -129,6 +129,9 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          #TODO Random:
+          #  referenceType: Random
+          #  isIgnoredInEvent: true
         event:
           name: PlayerIslandResourcesGathered
 

@@ -76,7 +76,7 @@ singletonObjects:
 
       GatherIslandResources:
         metadata:
-          ParametersIncludedInMutationFunction: [ "Clock" ]
+          ParametersIncludedInMutationFunction: [ "Clock", "Random" ]
           IsOnlyOpenToFriends: true
         #isInternal: true
         parameters:
@@ -91,6 +91,9 @@ singletonObjects:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          #TODO Random:
+          #  referenceType: Random
+          #  isIgnoredInEvent: true
         result:
           type: ItemIdQuantityPairs
         event:
