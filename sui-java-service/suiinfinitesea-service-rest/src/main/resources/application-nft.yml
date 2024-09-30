@@ -18,7 +18,7 @@ server:
 sui:
   contract:
     package-id:
-      faucet: "0x9bc2348d1ff8ddc7492fe631b54383457a5384cdcb5b3bec971a88193c883da1"
+      faucet: "0x8df8e907959827fc85bad5f875939959e65a365b802fdad36ea2dfd9aa729b00"
     jsonrpc:
       url: "https://devnet.baku.movementlabs.xyz"
       #url: "https://fullnode.devnet.sui.io/"
