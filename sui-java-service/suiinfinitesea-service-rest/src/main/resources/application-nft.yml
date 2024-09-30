@@ -18,16 +18,16 @@ server:
 sui:
   contract:
     package-id:
-      faucet: "0x8df8e907959827fc85bad5f875939959e65a365b802fdad36ea2dfd9aa729b00"
+      faucet: "0x9bc2348d1ff8ddc7492fe631b54383457a5384cdcb5b3bec971a88193c883da1"
     jsonrpc:
       url: "https://devnet.baku.movementlabs.xyz"
       #url: "https://fullnode.devnet.sui.io/"
       #url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "AdN26qemfpFXGgtkkFr6nooN77RCwF5aSNuRBKrEYxTh"
-      default: "Ecdg1xvFS6d51B73m66vSLevRCV3kFEW27seY3mmSzW4"
+      common: "AYqRdXWTpu2empydrpK4LVJXMQYtLCHS7LW8kTgAdyik"
+      default: "3R5cbauQA76fqmFU9DZRxpuEbpT86XuG3uofcqL1ifSa"
       nft: "FrRzJF9jbvjNrXqVKi2LtoZcc1x1ZhAhSGVzTp94PVLF"
-      map: "GeqFaJE4JRyTbb4VZPiPmBHsBavexbrrDTSuftbJBDKX"
+      map: "4xhNHqRVSKutXFou9SXpJVZuKfHgBDHmWrf37zCHkB6f"
 
     pull-avatar-change-events:
       avatar-change-created:
@@ -36,83 +36,79 @@ sui:
         fixed-delay: 20000
       avatar-change-updated:
         fixed-delay: 20000
-      pull-avatar-events:
-        avatar-burned:
-          fixed-delay: 20000
-        avatar-minted:
-          fixed-delay: 5000
-        avatar-updated:
-          fixed-delay: 10000
-        avatar-whitelist-minted:
-          fixed-delay: 5000 # 5 seconds
-      pull-experience-table-events:
-        fixed-delay: 600000 # 10 minutes
-      pull-faucet-request:
-        fixed-delay: 60000 # 1 minute
-      pull-item-creation-events:
-        fixed-delay: 600000 # 10 minutes
-      pull-item-events:
-        fixed-delay: 600000 # 10 minutes
-      pull-item-production-events:
-        fixed-delay: 600000 # 10 minutes
-      pull-map-events:
-        fixed-delay: 60000 # 1 minute
-      pull-player-events:
-        fixed-delay: 10000 # 10 seconds
-      pull-roster-events:
-        fixed-delay: 10000 # 10 seconds
-      pull-ship-battle-events:
-        fixed-delay: 10000 # 10 seconds
-      pull-ship-events:
-        fixed-delay: 10000 # 10 seconds
-      pull-skill-process-events:
-        fixed-delay: 10000 # 10 seconds
-      pull-whitelist-events:
-        init-whitelist-event:
-          fixed-delay: 60000 # 1 minute
-        whitelist-claimed:
-          fixed-delay: 20000 # 20 seconds
-        whitelist-created:
-          fixed-delay: 20000 # 20 seconds
-        whitelist-entry-added:
-          fixed-delay: 20000 # 20 seconds
-        whitelist-entry-updated:
-          fixed-delay: 20000 # 20 seconds
-        whitelist-updated:
-          fixed-delay: 20000 # 20 seconds
-      update-all-player-states:
-        fixed-delay: 6000 # 6 seconds
-      update-all-roster-locations:
-        fixed-delay: 6000 # 6 seconds
-      update-avatar-change-states:
-        fixed-delay: 30000 # 30 seconds
-      update-avatar-states:
-        fixed-delay: 30000 # 30 seconds
-      update-experience-table-states:
-        fixed-delay: 10000 # 10 seconds
-      update-item-creation-states:
-        fixed-delay: 10000 # 10 seconds
-      update-item-production-states:
-        fixed-delay: 10000 # 10 seconds
-      update-item-states:
-        fixed-delay: 10000 # 10 seconds
-      update-map-states:
-        fixed-delay: 30000 # 30 seconds
-      update-player-states:
-        fixed-delay: 10000 # 10 seconds
-      update-roster-states:
-        fixed-delay: 10000 # 10 seconds
-      update-ship-battle-states:
+    pull-avatar-events:
+      avatar-burned:
+        fixed-delay: 20000
+      avatar-minted:
+        fixed-delay: 5000
+      avatar-updated:
+        fixed-delay: 10000
+      avatar-whitelist-minted:
         fixed-delay: 5000 # 5 seconds
-      update-ship-states:
-        fixed-delay: 10000 # 10 seconds
-      update-skill-process-states:
-        fixed-delay: 10000 # 10 seconds
-      update-whitelist-states:
-        fixed-delay: 10000 # 30 seconds
-      update-all-ship-battle-roster-states:
-        fixed-delay: 10000 # 3600 seconds
-
-
-
-
+    pull-experience-table-events:
+      fixed-delay: 600000 # 10 minutes
+    pull-faucet-request:
+      fixed-delay: 60000 # 1 minute
+    pull-item-creation-events:
+      fixed-delay: 600000 # 10 minutes
+    pull-item-events:
+      fixed-delay: 600000 # 10 minutes
+    pull-item-production-events:
+      fixed-delay: 600000 # 10 minutes
+    pull-map-events:
+      fixed-delay: 60000 # 1 minute
+    pull-player-events:
+      fixed-delay: 10000 # 10 seconds
+    pull-roster-events:
+      fixed-delay: 10000 # 10 seconds
+    pull-ship-battle-events:
+      fixed-delay: 10000 # 10 seconds
+    pull-ship-events:
+      fixed-delay: 10000 # 10 seconds
+    pull-skill-process-events:
+      fixed-delay: 10000 # 10 seconds
+    pull-whitelist-events:
+      init-whitelist-event:
+        fixed-delay: 60000 # 1 minute
+      whitelist-claimed:
+        fixed-delay: 20000 # 20 seconds
+      whitelist-created:
+        fixed-delay: 20000 # 20 seconds
+      whitelist-entry-added:
+        fixed-delay: 20000 # 20 seconds
+      whitelist-entry-updated:
+        fixed-delay: 20000 # 20 seconds
+      whitelist-updated:
+        fixed-delay: 20000 # 20 seconds
+    update-all-player-states:
+      fixed-delay: 6000 # 6 seconds
+    update-all-roster-locations:
+      fixed-delay: 6000 # 6 seconds
+    update-avatar-change-states:
+      fixed-delay: 30000 # 30 seconds
+    update-avatar-states:
+      fixed-delay: 30000 # 30 seconds
+    update-experience-table-states:
+      fixed-delay: 10000 # 10 seconds
+    update-item-creation-states:
+      fixed-delay: 10000 # 10 seconds
+    update-item-production-states:
+      fixed-delay: 10000 # 10 seconds
+    update-item-states:
+      fixed-delay: 10000 # 10 seconds
+    update-map-states:
+      fixed-delay: 30000 # 30 seconds
+    update-player-states:
+      fixed-delay: 10000 # 10 seconds
+    update-roster-states:
+      fixed-delay: 10000 # 10 seconds
+    update-ship-battle-states:
+      fixed-delay: 5000 # 5 seconds
+    update-ship-states:
+      fixed-delay: 10000 # 10 seconds
+    update-skill-process-states:
+      fixed-delay: 10000 # 10 seconds
+    update-whitelist-states:
+      fixed-delay: 10000 # 30 seconds
+    update-all-ship-battle-roster-states:
+      fixed-delay: 10000 # 3600 seconds

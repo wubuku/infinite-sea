@@ -17,128 +17,55 @@ server:
 sui:
   contract:
     package-id:
-      faucet: "0xda80d2c8c648a579fc5f9f4272acfc529a30018305bc5057bd0a2057e778bc1d"
+      faucet: "0x2fa64652ba8892074c628353c6411651a2b76bc21cc113fb543be9624edb22d9"
     jsonrpc:
       #url: "https://devnet.baku.movementlabs.xyz"
       #url: "https://fullnode.devnet.sui.io/"
       url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "3DU4cpn21CwKmeSXZVQj8MzQN44y8CzXvnisgWDFWSm7"
-      default: "2YrLnCwLbqnjyo8Qoj7prCsZKuwVUoREjpUos335ypjD"
+      common: "KPvprtMHVniZTeHXzNkPCxNQL3C9LqzHAVA4GQEjLUz"
+      default: "9goES9yDagfzemjrLqzC4Cb9nt1Qbo69KSLkjgQsnNs7"
       nft: "BV4FSb6q9Su5r2EZnesKAy7VVG5bZuAgMEXUWaPfZK4L"
-      map: "GoyL1Cj6Zm96fxWQs5FCpS2qzCfbkS3oQvMfqcPPJBk"
-
+      map: "cWSngBqihSkKTanhmZDuEzJfwj9uUQC467zX6ztc7FF"
 
     pull-avatar-change-events:
       avatar-change-created:
-        fixed-delay: 60000
+        fixed-delay: 20000
       avatar-change-deleted:
-        fixed-delay: 60000
+        fixed-delay: 20000
       avatar-change-updated:
-        fixed-delay: 60000
+        fixed-delay: 20000
     pull-avatar-events:
       avatar-burned:
-        fixed-delay: 60000
+        fixed-delay: 20000
       avatar-minted:
-        fixed-delay: 60000
+        fixed-delay: 5000
       avatar-updated:
-        fixed-delay: 60000
+        fixed-delay: 10000
       avatar-whitelist-minted:
-        fixed-delay: 6000
+        fixed-delay: 5000 # 5 seconds
     pull-experience-table-events:
-      experience-level-added:
-        fixed-delay: 600000 # 10 minutes
-      experience-level-updated:
-        fixed-delay: 600000 # 10 minutes
-      init-experience-table-event:
-        fixed-delay: 600000
+      fixed-delay: 600000 # 10 minutes
     pull-faucet-request:
       fixed-delay: 60000 # 1 minute
     pull-item-creation-events:
-      item-creation-created:
-        fixed-delay: 600000 # 10 minutes
-      item-creation-updated:
-        fixed-delay: 600000 # 10 minutes
+      fixed-delay: 600000 # 10 minutes
     pull-item-events:
-      item-created:
-        fixed-delay: 600000 # 10 minutes
-      item-updated:
-        fixed-delay: 600000 # 10 minutes
+      fixed-delay: 600000 # 10 minutes
     pull-item-production-events:
-      item-production-created:
-        fixed-delay: 600000 # 10 minutes
-      item-production-updated:
-        fixed-delay: 600000 # 10 minutes
+      fixed-delay: 600000 # 10 minutes
     pull-map-events:
-      init-map-event:
-        fixed-delay: 36000000 # 10 hours
-      island-added:
-        fixed-delay: 60000 # 1 minute
-      island-resources-gathered:
-        fixed-delay: 60000 # 1 minute
-      map-island-claimed:
-        fixed-delay: 10000 # 10 seconds
-      map-settings-updated:
-        fixed-delay: 60000 # 1 minute
-      un-whitelisted-for-claiming-island:
-        fixed-delay: 60000 # 1 minute
-      whitelisted-for-claiming-island:
-        fixed-delay: 60000 # 1 minute
+      fixed-delay: 60000 # 1 minute
     pull-player-events:
-      island-claimed:
-        fixed-delay: 10000 # 10 seconds
-      nft-holder-island-claimed:
-        fixed-delay: 10000 # 10 seconds
-      player-airdropped:
-        fixed-delay: 60000 # 1 minute
-      player-created:
-        fixed-delay: 10000 # 10 seconds
-      player-island-resources-gathered:
-        fixed-delay: 10000 # 10 seconds
+      fixed-delay: 10000 # 10 seconds
     pull-roster-events:
-      environment-roster-created:
-        fixed-delay: 10000 # 10 seconds
-      roster-created:
-        fixed-delay: 10000 # 10 seconds
-      roster-set-sail:
-        fixed-delay: 5000 # 5 seconds
-      roster-ship-added:
-        fixed-delay: 10000 # 10 seconds
-      roster-ship-inventory-put-in:
-        fixed-delay: 10000 # 10 seconds
-      roster-ship-inventory-taken-out:
-        fixed-delay: 10000 # 10 seconds
-      roster-ship-inventory-transferred:
-        fixed-delay: 10000 # 10 seconds
-      roster-ship-transferred:
-        fixed-delay: 10000 # 10 seconds
-      roster-ships-position-adjusted:
-        fixed-delay: 10000 # 10 seconds
+      fixed-delay: 10000 # 10 seconds
     pull-ship-battle-events:
-      ship-battle-initiated:
-        fixed-delay: 10000 # 10 seconds
-      ship-battle-loot-taken:
-        fixed-delay: 10000 # 10 seconds
-      ship-battle-move-made:
-        fixed-delay: 60000 # 1 minute
+      fixed-delay: 10000 # 10 seconds
     pull-ship-events:
-      ship-created:
-        fixed-delay: 10000 # 10 seconds
+      fixed-delay: 10000 # 10 seconds
     pull-skill-process-events:
-      creation-process-completed:
-        fixed-delay: 10000 # 10 seconds
-      creation-process-started:
-        fixed-delay: 10000 # 10 seconds
-      production-process-completed:
-        fixed-delay: 10000 # 10 seconds
-      production-process-started:
-        fixed-delay: 10000 # 10 seconds
-      ship-production-process-completed:
-        fixed-delay: 10000 # 10 seconds
-      ship-production-process-started:
-        fixed-delay: 10000 # 10 seconds
-      skill-process-created:
-        fixed-delay: 30000 # 30 seconds
+      fixed-delay: 10000 # 10 seconds
     pull-whitelist-events:
       init-whitelist-event:
         fixed-delay: 60000 # 1 minute
@@ -181,6 +108,6 @@ sui:
     update-skill-process-states:
       fixed-delay: 10000 # 10 seconds
     update-whitelist-states:
-      fixed-delay: 30000 # 30 seconds
+      fixed-delay: 10000 # 30 seconds
     update-all-ship-battle-roster-states:
-      fixed-delay: 3600000 # 3600 seconds
+      fixed-delay: 10000 # 3600 seconds

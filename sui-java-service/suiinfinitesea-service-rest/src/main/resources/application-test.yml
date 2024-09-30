@@ -23,10 +23,10 @@ sui:
       #url: "https://fullnode.devnet.sui.io/"
       url: "https://fullnode.testnet.sui.io/"
     package-publish-transactions:
-      common: "8P9h1p8in3Myoxg37Q6ZbE27WRjKvzKrRbx34XXhUh64"
-      default: "vZTVEAppFCSsiXze2k9HaNVJnyXu9S1gUNpoYng7Gxg"
+      common: "9F4sfoTHPDJiDgXvEcQ5nzPi4MdJxXH4WtuuxyyhHUJb"
+      default: "9gfkLq9hznaCqvwMUKvA3JR9M9afnjDxD9pG7NaXNUFu"
       nft: "2TnypJioEuxHMhNMVXvPb2W6ovuEJcjJniNXMWDgkFr2"
-      map: "GgvuTjwY4dGubU3YmwBBiTEKKi1F1crnuxvvManqsK4"
+      map: "6PrN9hmPfZuSN49HAo6LLqXdD5DQNfC4j2vaukL1dpQG"
 
 
     pull-avatar-change-events:
@@ -183,4 +183,4 @@ sui:
     update-whitelist-states:
       fixed-delay: 30000 # 30 seconds
     update-all-ship-battle-roster-states:
-      fixed-delay: 3600000 # 3600 seconds
+      fixed-delay: 10000 # 3600 seconds
