@@ -296,7 +296,7 @@ aggregates:
         isCreationCommand: true
         requiredPermission: "__Publisher__"
         metadata:
-          ParametersIncludedInMutationFunction: [ "Clock" ]
+          ParametersIncludedInMutationFunction: [ "Clock", "Random" ]
         parameters:
           Coordinates:
             type: Coordinates
@@ -309,6 +309,9 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          #TODO Random:
+          #  referenceType: Random
+          #  isIgnoredInEvent: true
         event:
           name: EnvironmentRosterCreated
           isObjectShared: true
@@ -503,6 +506,9 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          #TODO Random:
+          #  referenceType: Random
+          #  isIgnoredInEvent: true
           InitiatorCoordinates:
             type: Coordinates
           ResponderCoordinates:
@@ -545,6 +551,9 @@ aggregates:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          #TODO Random:
+          #  referenceType: Random
+          #  isIgnoredInEvent: true
           AttackerCommand:
             type: ShipBattleCommand
         event:
@@ -737,6 +746,9 @@ superObjects:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          #TODO Random:
+          #  referenceType: Random
+          #  isIgnoredInEvent: true
         event:
           properties:
             ItemId:
@@ -801,6 +813,9 @@ superObjects:
           Clock:
             referenceType: Clock
             isIgnoredInEvent: true
+          #TODO Random:
+          #  referenceType: Random
+          #  isIgnoredInEvent: true
         event:
           properties:
             ItemId:

@@ -108,6 +108,10 @@ services:
             isMutableReference: true
           Clock:
             referenceType: Clock
+            isIgnoredInEvent: true
+          #TODO Random:
+          #  referenceType: Random
+          #  isIgnoredInEvent: true
           InitiatorCoordinates:
             type: Coordinates
           ResponderCoordinates:
@@ -129,3 +133,7 @@ services:
             isMutableReference: true
           Clock:
             referenceType: Clock
+            isIgnoredInEvent: true
+          #TODO Random:
+          #  referenceType: Random
+          #  isIgnoredInEvent: true

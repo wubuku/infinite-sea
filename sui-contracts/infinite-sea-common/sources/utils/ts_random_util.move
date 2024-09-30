@@ -1,5 +1,7 @@
+/// Warning: use this module with caution in production environments.
+/// Generating random numbers based on timestamps is vulnerable to malicious manipulation.
+/// Consider using the `sui::random` module.
 module infinite_sea_common::ts_random_util {
-
     use std::hash;
     use std::vector;
 
