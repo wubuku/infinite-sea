@@ -22,6 +22,21 @@ public interface FaucetRequestedEventRepository extends JpaRepository<AbstractFa
             "WHERE fr.sui_timestamp BETWEEN :startAt " +
             "AND :endAt AND fr.sui_sender in (:suiSenderAddresses)", nativeQuery = true)
     List<AbstractFaucetRequestedState.SimpleFaucetRequestedState> batchFaucetRequestedEvents(@Param("startAt") Long startAt,
-                                    @Param("endAt") Long endAt,
-                                    @Param("suiSenderAddresses") List<String> suiSenderAddresses);
+                                                                                             @Param("endAt") Long endAt,
+                                                                                             @Param("suiSenderAddresses") List<String> suiSenderAddresses);
+
+
+    @Query(value = "SELECT SUM(fr.requested_amount)/1000000000 FROM faucet_requested fr", nativeQuery = true)
+    Long getEnergyTokenClaimed();
+
+
+    /*
+    number of unique addresses that interacted with faucet
+     */
+    @Query(value = "SELECT COUNT(distinct fr.sui_sender) FROM faucet_requested fr", nativeQuery = true)
+    Long numberOfRequestedFaucetAddress();
+
+
+
+
 }
