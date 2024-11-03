@@ -1,10 +1,7 @@
 package org.dddml.suiinfinitesea.sui.contract.restful.resource;
 
 import io.swagger.annotations.ApiOperation;
-import org.dddml.suiinfinitesea.sui.contract.repository.FaucetRequestedEventRepository;
-import org.dddml.suiinfinitesea.sui.contract.repository.MapLocationRepository;
-import org.dddml.suiinfinitesea.sui.contract.repository.ShipBattleRepository;
-import org.dddml.suiinfinitesea.sui.contract.repository.ShipRepository;
+import org.dddml.suiinfinitesea.sui.contract.repository.*;
 import org.dddml.suiinfinitesea.sui.contract.utils.RosterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,6 +27,17 @@ public class OffChainResource {
     @Autowired
     private ShipBattleRepository shipBattleRepository;
 
+    @Autowired
+    private ShipBattleEventExtendRepository shipBattleEventExtendRepository;
+
+
+
+    @ApiOperation("number of resources that are burned through battle")
+    @GetMapping(path = "numberOfBurnedResources")
+    @Transactional(readOnly = true)
+    public Long numberOfBurnedResources() {
+        return shipBattleEventExtendRepository.numberOfBurnedResources();
+    }
 
     @ApiOperation("number of Battles")
     @GetMapping(path = "numberOfBattles")

@@ -26,4 +26,17 @@ public interface ShipBattleEventExtendRepository extends JpaRepository<AbstractS
             nativeQuery = true)
     @Transactional // <- Don't delete this, it's intentional
     List<AbstractShipBattleEvent> getByStatusEqualDAndEventTypeIn(@Param("eventTypes") List<String> eventTypes);
+
+    /*
+       number of resources that are burned through battle
+   */
+    @Query(value = "SELECT ROUND(SUM(quantity)/4) AS total_quantity\n" +
+            "FROM ship_battle_event\n" +
+            "JOIN JSON_TABLE(dynamic_properties, '$.loot[*]' \n" +
+            "    COLUMNS (\n" +
+            "        quantity INT PATH '$.quantity'\n" +
+            "    )\n" +
+            ") AS loot_items\n" +
+            "WHERE event_type = 'ShipBattleLootTaken'", nativeQuery = true)
+    Long numberOfBurnedResources();
 }
