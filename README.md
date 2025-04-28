@@ -1,5 +1,7 @@
 # Infinite Seas
 
+[![DeepWiki](https://img.shields.io/badge/DeepWiki-Docs-blue?logo=read-the-docs)](https://deepwiki.com/wubuku/infinite-sea)
+
 English | [中文版](./README_CN.md)
 
 We are creating a maritime trading, managing, and battling diplomatic fully on-chain game: [Infinite Seas](https://infiniteseas.io/).
